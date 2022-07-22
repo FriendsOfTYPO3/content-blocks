@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:content_blocks/Resources/Private/Language/locallang_definition.xlf" date="2022-09-05T00:00:00Z" product-name="content_blocks">
+        <header/>
+        <body>
+			<trans-unit id="contentblocks.contentblock.location" resname="contentblocks.contentblock.key">
+				<source>Location</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.title" resname="contentblocks.contentblock.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.title.description" resname="contentblocks.contentblock.title">
+				<source>The Content Block Title is used for ... </source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.description" resname="contentblocks.contentblock.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.description.description" resname="contentblocks.contentblock.description.description">
+				<source>@todo: Some words that we use this in the newContentEW</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.vendor" resname="contentblocks.contentblock.vendor">
+				<source>Vendor</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.vendor.description" resname="contentblocks.contentblock.vendor.description">
+				<source>@todo: Some words about what "vendor" means.</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.packagename" resname="contentblocks.contentblock.packagename">
+				<source>Package Name</source>
+			</trans-unit>
+			<trans-unit id="contentblocks.contentblock.packagename.description" resname="contentblocks.contentblock.packagename.description">
+				<source>@todo: Some words.</source>
+			</trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,23 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <f:be.pageRenderer
+        includeJavaScriptModules="{
+            0: '@typo3/content-blocks/content_blocks-module.js'
+        }"
+    />
+
+    <h1>xlf:edit</h1>
+
+    <f:debug inline="1">{_all}</f:debug>
+
+    <typo3-content_blocks-edit cType="{cType}"></typo3-content_blocks-edit>
+</f:section>
+
+</html>
