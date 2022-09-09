@@ -49,14 +49,6 @@ size
 
    Abstract value for the width of the `<input>` field.
 
-trim
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   If set, the PHP trim function is applied on the field's content.
-
 
 valuePicker
    :sep:`|` :aspect:`Required:` false
@@ -96,7 +88,6 @@ Example
           default: '#0000aa'
           required: false
           size: 5
-          trim: true
           valuePicker:
             items:
               '#FF0000': Red

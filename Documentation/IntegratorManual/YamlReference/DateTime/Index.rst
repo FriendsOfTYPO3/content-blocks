@@ -82,14 +82,6 @@ size
 
    Abstract value for the width of the `<input>` field.
 
-trim
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   If set, the PHP trim function is applied on the field's content.
-
 Example
 =======
 
@@ -107,4 +99,3 @@ Example
             upper: '2040-01-31 12:00:00'
           required: false
           size: 20
-          trim: true

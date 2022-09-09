@@ -103,14 +103,6 @@ required
 
    If set, the field will become mandatory.
 
-trim
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   If set, the PHP trim function is applied on the field's content.
-
 Example
 =======
 
@@ -129,4 +121,3 @@ Example
           richtextConfiguration: default
           rows: 15
           required: false
-          trim: true

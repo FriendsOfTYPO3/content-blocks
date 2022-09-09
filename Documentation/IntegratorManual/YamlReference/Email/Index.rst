@@ -60,14 +60,6 @@ required
 
    If set, the field will become mandatory.
 
-trim
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   If set, the PHP trim function is applied on the field's content.
-
 valuePicker
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` array
@@ -107,7 +99,6 @@ Example
           placeholder: 'Enter your email address'
           size: 20
           required: true
-          trim: true
           valuePicker:
             items:
               'contact_1@example.com': Contact 1
