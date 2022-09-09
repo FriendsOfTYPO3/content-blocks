@@ -28,4 +28,4 @@ Features:
    definition) that is necessary for TYPO3
 *  GUI for creating Content Block composer packages
 
-:ref:`Further information about the registration processes <registration_processes>`.
+:ref:`Further information about the registration processes <cb_explained>`.

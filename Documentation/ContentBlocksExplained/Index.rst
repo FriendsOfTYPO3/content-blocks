@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
-.. _registration_processes:
+.. _cb_explained:
 
-================================
-Registration processes explained
-================================
+=====================================
+Content Blocks Registration Explained
+=====================================
 
 Abstraction Requirements
 ========================
@@ -37,29 +37,12 @@ In composer installations a Content Block needs to be of type `typo3-cms-content
 For non-composer installations the folder `typo3conf/contentBlocks/` is checked
 to detect Content Blocks.
 
-Validating a Content Block
---------------------------
-
-.. note::
-   **Not yet implemented!**
-   See `validation of package files <https://github.com/TYPO3-Initiatives/content-block-registration-api/issues/7>`__
-   and `validation of the editing interface <https://github.com/TYPO3-Initiatives/content-block-registration-api/issues/8>`_.
-   Basically a YAML schema validation (based on JSON schema) is needed here.
-   Exchange with the Form Framework team is targeted.
-
-If a Content Block is invalid, it won’t be available in the TYPO3 backend for
-editors. An error message is available in the “Check for broken Content Blocks”
-tool in the maintenance area. Additional information to composer could be added
-via a composer plugin to validate the definition during installation.
-
-
 Mapping to the database
 -----------------------
 
-There are :ref:`several variants<data_storage_variants>` of how data of a content
-block can be stored and retrieved from the database. Currently, there is no
-decision on the desired storage method, because performance research is still
-in progress.
+The fields defined in the `EditorInterface.yaml` are created in the data base by
+extending the `tt_content` table. Strong defaults are used to map the TCA field
+types to the database column types.
 
 Virtual generation of TCA (ext_tables.php)
 ------------------------------------------

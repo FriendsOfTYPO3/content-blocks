@@ -47,7 +47,7 @@ composer package represents exactly one Content Block.
 **You must**
 
 *  provide this file
-*  set the type property to: `typo3-cms-contentblock`
+*  set the type property to: `typo3-contentblock`
 
 **You may**
 
@@ -67,6 +67,9 @@ refers to: `YAML RFC <https://github.com/yaml/summit.yaml.io/wiki/YAML-RFC-Index
 
 See :ref:`yaml_reference`.
 
+A field is localize-able by default. Setting the localization explicitly is
+only necessary, if a special localization method is required.
+
 
 ContentBlockIcon.(svg|png|gif)
 ------------------------------
@@ -82,38 +85,13 @@ representation.
 *  provide a file with 1:1 dimensions
 
 
-Resources/Private/Language/Default.xlf
-------------------------
+Resources/Private/Language/Labels.xlf
+-------------------------------------
 
 **You may**
 
 *  provide that file
 *  define your labels with the XLF links in the configuration file
-
-
-Configuration of the editing interface
-======================================
-
-See :ref:`yaml_reference`.
-
-
-Templating
-==========
-
-By default the Content Blocks installer expects a fluid template provided as
-an `.html` file.
-
-Localization
-============
-
-Localization of fields
-----------------------
-
-A field is localize-able by default. Setting the localization explicitly is
-only necessary, if a special localization method is required.
-
-Localization of labels
-----------------------
 
 Labels for the editing interface, as well as frontend labels, are stored in the
 `Resources/Private/Language/Labels.xlf`(translated files will be e.g. `de.Labels.xlf`).

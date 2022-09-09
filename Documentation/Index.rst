@@ -42,4 +42,5 @@ blocks as composer packages.
 	Introduction/Index
 	Installation/Index
 	IntegratorManual/Index
+	ContentBlocksExplained/Index
 	FAQ/Index
