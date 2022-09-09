@@ -7,13 +7,22 @@ DateTime
 
 The "DateTime" type generates a simple `<input>` field, which provides a date picker.
 
-It corresponds with the TCA `type='inputDateTime'` (default) and `eval='datetime'`.
+It corresponds with the TCA `type='inputDateTime'` (default) and `eval='date'`,
+`eval='time'` or `eval='datetime'` depending on the sub-type.
 
 
 Properties
 ==========
 
 .. rst-class:: dl-parameters
+
+subType
+   :sep:`|` :aspect:`Required:` true
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` 'datetime'
+   :sep:`|`
+
+    Possible values: `date`, `time` or `datetime`
 
 default
    :sep:`|` :aspect:`Required:` false

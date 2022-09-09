@@ -8,13 +8,22 @@ Number
 The "Number" type generates a simple `<input>` field, which allows only 0-9
 characters in the field.
 
-It corresponds with the TCA `type='input'` (default) and `eval='num'`.
+It corresponds with the TCA `type='input'` (default) and `eval='int'`,
+`eval='float'` or `eval='double'` - depending on the format.
 
 
 Properties
 ==========
 
 .. rst-class:: dl-parameters
+
+format
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` 'int'
+   :sep:`|`
+
+    Possible values: `int`, `float`, `double`.
 
 default
    :sep:`|` :aspect:`Required:` false
@@ -95,6 +104,29 @@ valuePicker
           100: 100
           250: 250
           500: 500
+
+slider
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` array
+   :sep:`|` :aspect:`Default:` ''
+   :sep:`|`
+
+   Render a value slider next to the field. Available keys:
+
+   step (integer / float)
+      Set the step size the slider will use. For floating point values this can
+      itself be a floating point value. Default: 1.
+
+   width (integer, pixels)
+      Define the width of the slider. Default: 100.
+
+   Example:
+
+   .. code-block:: yaml
+
+      range:
+        step: 1
+        width: 100
 
 Example
 =======

@@ -1,11 +1,11 @@
 .. include:: /Includes.rst.txt
-.. _field_type_url:
+.. _field_type_link:
 
-===
-Url
-===
+====
+Link
+====
 
-The "Url" type generates a simple `<input>` field, which handles different kinds
+The "Link" type generates a simple `<input>` field, which handles different kinds
 of links.
 
 It corresponds with the TCA `type='input'` and `renderType='inputLink'`.

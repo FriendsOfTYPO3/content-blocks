@@ -1,13 +1,13 @@
 .. include:: /Includes.rst.txt
-.. _field_type_toggle:
+.. _field_type_radio:
 
-======
-Toggle
-======
+=====
+Radio
+=====
 
-The "Toggle" type generates a number of checkbox fields with toggles.
+The "Radio" type generates a number of radio fields.
 
-It corresponds with the TCA `type='check'` and `renderType='checkboxToggle'`.
+It corresponds with the TCA `type='radio'`.
 
 
 Properties
@@ -29,7 +29,7 @@ items
    :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   Contains the toggle elements. Each item is an array with the first being
+   Contains the checkbox elements. Each item is an array with the first being
    the value transferred to the input field, and the second being the label in
    the select drop-down (LLL reference possible).
 
@@ -42,20 +42,6 @@ items
         'two': 'The second'
         'three': 'The third'
 
-invertStateDisplay
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Inverts the display state (onf/off) of the toggle items.
-
-   Example:
-
-   .. code-block:: yaml
-
-      invertStateDisplay: true
-
 Example
 =======
 
@@ -63,12 +49,11 @@ Example
 
     group: common
     fields:
-      - identifier: toggleInverted
-        type: Toggle
+      - identifier: radioboxes
+        type: Radio
         properties:
-          default: 'one'
+          default: 'two'
           items:
             'one': 'The first'
             'two': 'The second'
             'three': 'The third'
-          invertStateDisplay: true

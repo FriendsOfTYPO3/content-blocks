@@ -56,17 +56,38 @@ prependLabel
 
       prependLabel: 'Please choose'
 
-required
+maxItems
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
+   :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   If set, the field will become mandatory.
+   Maximum number of child items. Defaults to a high value. JavaScript record
+   validation prevents the record from being saved if the limit is not satisfied.
+   If `maxItems` ist set to >1, multiselect is automatically enabled.
 
+minItems
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` ''
+   :sep:`|`
+
+   Minimum number of child items. Defaults to 0. JavaScript record validation
+   prevents the record from being saved if the limit is not satisfied.
+   The field can be set as required by setting `minItems` to at least 1.
+
+size
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` '20'
+   :sep:`|`
+
+   Abstract value for the width of the `<input>` field.
 
 Example
 =======
+
+Select single:
 
 .. code-block:: yaml
 
@@ -82,3 +103,22 @@ Example
             'three': 'The third'
           prependLabel: 'Please choose'
           required: true
+
+Select multiple:
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: selectSideBySide
+        type: MultiSelect
+        properties:
+          default: 'one'
+          items:
+            'one': 'The first'
+            'two': 'The second'
+            'three': 'The third'
+          maxItems: 2
+          minItems: 1
+          required: true
+          size: 5

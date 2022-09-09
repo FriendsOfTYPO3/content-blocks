@@ -64,23 +64,15 @@ Field types
 	Checkbox/Index
 	Collection/Index
 	Color/Index
-	Date/Index
 	DateTime/Index
 	Email/Index
-	Image/Index
-	Integer/Index
-	Money/Index
-	MultiSelect/Index
+	File/Index
 	Number/Index
-	Percent/Index
-	Radiobox/Index
+	Radio/Index
 	Select/Index
-	Tel/Index
 	Text/Index
 	Textarea/Index
-	Time/Index
-	Toggle/Index
-	Url/Index
+	Link/Index
 
 
 Field grouping

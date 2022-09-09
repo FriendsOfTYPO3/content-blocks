@@ -6,7 +6,8 @@
 Checkbox
 ========
 
-The "Checkbox" type generates a number of checkbox fields. Selection of multiple items is enabled by default.
+The "Checkbox" type generates a number of checkbox fields. Selection of multiple
+items is enabled by default.
 
 It corresponds with the TCA `type='check'` (default).
 
@@ -44,6 +45,20 @@ items
         'one': 'The first'
         'two': 'The second'
         'three': 'The third'
+
+invertStateDisplay
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` ''
+   :sep:`|`
+
+   Inverts the display state (onf/off) of the toggle items.
+
+   Example:
+
+   .. code-block:: yaml
+
+      invertStateDisplay: true
 
 Example
 =======
