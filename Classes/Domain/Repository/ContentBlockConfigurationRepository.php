@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Class ContentBlockConfigurationReporitory
@@ -198,7 +199,10 @@ class ContentBlockConfigurationRepository implements SingletonInterface
         $iconPath = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $ext) {
-            if (is_readable($path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'ContentBlockIcon.' . $ext)) {
+            $checkIconPath = GeneralUtility::getFileAbsFileName(
+                $path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'ContentBlockIcon.' . $ext
+            );
+            if (is_readable($checkIconPath)) {
                 $iconPath = $path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'ContentBlockIcon.' . $ext;
                 $iconProviderClass = $ext === 'svg'
                     ? SvgIconProvider::class

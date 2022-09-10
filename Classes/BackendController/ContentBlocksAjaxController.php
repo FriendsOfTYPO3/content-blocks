@@ -19,8 +19,12 @@ namespace TYPO3\CMS\ContentBlocks\BackendController;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Localization\LanguageService;
 
 /**
  * @internal
@@ -44,9 +48,15 @@ class ContentBlocksAjaxController
 
     public function jsonContentBlocksListAction(ServerRequestInterface $request): ResponseInterface
     {
-        return new JsonResponse(
-            $this->cbConfigFixture()
-        );
+        $cbs = $this->contentBlockConfigurationRepository->findAll();
+
+        $this->enrichContentblocksForBackend($cbs);
+
+        return new JsonResponse($cbs);
+
+//        return new JsonResponse(
+//            $this->cbConfigFixture()
+//        );
     }
 
     public function jsonCreateAction(ServerRequestInterface $request): ResponseInterface
@@ -2179,5 +2189,52 @@ class ContentBlocksAjaxController
                         ],
                 ],
         ];
+    }
+
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
+     * @param array<ContentBlockConfiguration> $cbs
+     * @return array<ContentBlockConfiguration>
+     */
+    protected function enrichContentblocksForBackend(array $cbs): array
+    {
+        // @todo use a factory to generate DTO(s)
+        foreach ($cbs as &$cb) {
+            $cb->cType = $cb->getCType();
+            $cb->title = $this->getLanguageService()->sL($cb->editorLLL . '.title');
+
+            $cb->fieldsConfig = $this->enrichFieldsForBackend($cb->fieldsConfig, $cb);
+        }
+
+        return $cbs;
+    }
+
+    /**
+     * @param array<AbstractFieldConfiguration> $fieldsConfig
+     * @return array<AbstractFieldConfiguration>
+     */
+    protected function enrichFieldsForBackend(array $fieldsConfig, ContentBlockConfiguration $cb): array
+    {
+        return array_map(
+            function (AbstractFieldConfiguration $fieldConfig) use ($cb) {
+                if ($fieldConfig->type == FieldType::COLLECTION) {
+                    /*
+                     * @todo: is_a(...)
+                     */
+                    /** @var CollectionFieldConfiguration $fieldConfig->fields */
+                    $fieldConfig->fields = $this->enrichFieldsForBackend($fieldConfig->fields, $cb);
+                }
+                $fieldConfig->title = $this->getLanguageService()->sL(
+                    // @todo: should be uniqueIdentifier
+                    $cb->editorLLL . '.' . $fieldConfig->identifier
+                );
+                return $fieldConfig;
+            },
+            $fieldsConfig
+        );
     }
 }

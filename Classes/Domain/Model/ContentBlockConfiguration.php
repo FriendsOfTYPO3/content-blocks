@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Domain\Model;
 
+use JsonSerializable;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -26,7 +27,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Class ContentBlockConfiguration
  * Contains the configuration of a ContentBlock.
  */
-class ContentBlockConfiguration implements SingletonInterface
+class ContentBlockConfiguration
 {
     public array $composerJson = [];
 
@@ -73,12 +74,14 @@ class ContentBlockConfiguration implements SingletonInterface
     /**
      * @param array<AbstractFieldConfiguration> $fieldsConfig
      */
-    protected array $fieldsConfig = [];
+    public array $fieldsConfig = [];
 
     protected ConfigurationService $configurationService;
 
     public function __construct()
     {
+        // @todo get rid of external dependencies in model
+
         /** @var ConfigurationService */
         $this->configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
         $this->privatePath = $this->configurationService->getContentBlocksPrivatePath();
@@ -117,18 +120,9 @@ class ContentBlockConfiguration implements SingletonInterface
         return $this;
     }
 
-    /**
-     * Get the fieldsConfigs
-     *
-     * @return array<AbstractFieldConfiguration>
-     */
-    public function getFieldsConfig(): array
-    {
-        return $this->fieldsConfig;
-    }
-
     public function toArray(): array
     {
+        // @todo check recursive Collections
         $fieldsList = [];
         if (count($this->fieldsConfig) > 0) {
             foreach ($this->fieldsConfig as $key => $tempFieldsConfig) {

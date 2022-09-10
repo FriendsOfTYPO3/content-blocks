@@ -82,9 +82,8 @@ class ContentBlockConfigurationFactory implements SingletonInterface
             foreach ($config['yaml']['fields'] as $fieldConfigFromYaml) {
                 $fieldType = FieldType::from($fieldConfigFromYaml['type']);
 
-                $cbConf->addFieldConfigs(
-                    $fieldType->getFieldTypeConfiguration($fieldConfigFromYaml)
-                );
+                $fieldConfig = $fieldType->getFieldTypeConfiguration($fieldConfigFromYaml);
+                $cbConf->fieldsConfig[$fieldConfig->identifier] = $fieldConfig;
             }
         }
 

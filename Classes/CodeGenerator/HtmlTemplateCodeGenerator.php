@@ -31,7 +31,7 @@ class HtmlTemplateCodeGenerator
         $editorPreviewTemplate .= "\n";
         $editorPreviewTemplate .= '    <be:link.editRecord uid="{data.uid}" table="tt_content" id="element-tt_content-{data.uid}">' . "\n";
         $editorPreviewTemplate .= '        <div class="' . $contentBlockConfiguration->package . '">' . "\n";
-        $editorPreviewTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->getFieldsConfig()) . "\n";
+        $editorPreviewTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
         $editorPreviewTemplate .= '        </div>' . "\n";
         $editorPreviewTemplate .= '    </be:link.editRecord>' . "\n";
         $editorPreviewTemplate .= '</html>' . "\n";
@@ -54,7 +54,7 @@ class HtmlTemplateCodeGenerator
         $frontendTemplate .= '        <f:asset.script identifier="content-block-' . $contentBlockConfiguration->package . '" src="CB:' . $contentBlockConfiguration->package . '/dist/Frontend.js"/>' . "\n";
         $frontendTemplate .= "\n";
         $frontendTemplate .= '        <div class="' . $contentBlockConfiguration->package . '">' . "\n";
-        $frontendTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->getFieldsConfig()) . "\n";
+        $frontendTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
         $frontendTemplate .= '        </div>' . "\n";
         $frontendTemplate .= "\n";
         $frontendTemplate .= '    </f:section>' . "\n";
