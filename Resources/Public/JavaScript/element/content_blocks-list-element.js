@@ -10,7 +10,7 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-var __decorate=function(t,e,n,o){var i,l=arguments.length,a=l<3?e:null===o?o=Object.getOwnPropertyDescriptor(e,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,n,o);else for(var c=t.length-1;c>=0;c--)(i=t[c])&&(a=(l<3?i(a):l>3?i(e,n,a):i(e,n))||a);return l>3&&a&&Object.defineProperty(e,n,a),a};import{html,LitElement}from"lit";import{customElement}from"lit/decorators.js";import{MainController}from"@typo3/content-blocks/controller/main-controller.js";import{until}from"lit/directives/until.js";import"@typo3/backend/element/spinner-element.js";import"@typo3/backend/element/icon-element.js";let ContentBlocksListElement=class extends LitElement{constructor(){super(...arguments),this._controller=MainController.instance(this)}createRenderRoot(){return this}render(){return html`
+var __decorate=function(t,e,n,o){var i,l=arguments.length,c=l<3?e:null===o?o=Object.getOwnPropertyDescriptor(e,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)c=Reflect.decorate(t,e,n,o);else for(var a=t.length-1;a>=0;a--)(i=t[a])&&(c=(l<3?i(c):l>3?i(e,n,c):i(e,n))||c);return l>3&&c&&Object.defineProperty(e,n,c),c};import{html,LitElement}from"lit";import{customElement}from"lit/decorators.js";import{MainController}from"@typo3/content-blocks/controller/main-controller.js";import{until}from"lit/directives/until.js";import"@typo3/backend/element/spinner-element.js";import"@typo3/backend/element/icon-element.js";let ContentBlocksListElement=class extends LitElement{constructor(){super(...arguments),this._controller=MainController.instance(this)}createRenderRoot(){return this}render(){return html`
       <div class="table-fit">
         <table id="content_blocks-list" class="table table-striped table-hover">
           <thead>
@@ -45,8 +45,10 @@ var __decorate=function(t,e,n,o){var i,l=arguments.length,a=l<3?e:null===o?o=Obj
               </span>
           </td>
           <td class="col-title">
-            <a href="${MainController.urls.contentBlocks.edit}&amp;cType=${e.CType}" title="${TYPO3.lang["contentblocks.action.edit"]}">
-              ${e.key}
+            <a href="${MainController.urls.contentBlocks.edit}&amp;cType=${e.static.cType}"
+              title="${TYPO3.lang["contentblocks.action.edit"]}">
+              ${e.static.title}<br>
+              ${e.static.cType}<br>
             </a>
           </td>
           <td>
@@ -61,7 +63,7 @@ var __decorate=function(t,e,n,o){var i,l=arguments.length,a=l<3?e:null===o?o=Obj
           </td>
           <td>
             <div class="btn-group" role="group">
-              <a href=""
+              <a href="${MainController.urls.contentBlocks.edit}&amp;cType=${e.static.cType}"
                 title="${TYPO3.lang["contentblocks.action.edit"]}"
                 class="btn btn-default form-record-open">
                 <typo3-backend-icon identifier="actions-open" size="small"></typo3-backend-icon>

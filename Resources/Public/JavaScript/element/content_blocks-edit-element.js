@@ -10,7 +10,7 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-var __decorate=function(e,t,o,n){var l,c=arguments.length,i=c<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,o):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)i=Reflect.decorate(e,t,o,n);else for(var r=e.length-1;r>=0;r--)(l=e[r])&&(i=(c<3?l(i):c>3?l(t,o,i):l(t,o))||i);return c>3&&i&&Object.defineProperty(t,o,i),i};import{html,LitElement}from"lit";import{customElement,property,state}from"lit/decorators.js";import{MainController}from"@typo3/content-blocks/controller/main-controller.js";import{until}from"lit/directives/until.js";import"@typo3/backend/element/spinner-element.js";import"@typo3/backend/element/icon-element.js";import"@typo3/content-blocks/element/content_blocks-edit-inspector-element.js";let ContentBlocksEditElement=class extends LitElement{constructor(){super(...arguments),this._controller=MainController.instance(this)}createRenderRoot(){return this}connectedCallback(){super.connectedCallback(),this._controller.loadContentBlock(this.cType)}render(){return html`
+var __decorate=function(e,t,o,n){var c,l=arguments.length,i=l<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,o):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)i=Reflect.decorate(e,t,o,n);else for(var r=e.length-1;r>=0;r--)(c=e[r])&&(i=(l<3?c(i):l>3?c(t,o,i):c(t,o))||i);return l>3&&i&&Object.defineProperty(t,o,i),i};import{html,LitElement}from"lit";import{customElement,property,state}from"lit/decorators.js";import{MainController}from"@typo3/content-blocks/controller/main-controller.js";import{until}from"lit/directives/until.js";import"@typo3/backend/element/spinner-element.js";import"@typo3/backend/element/icon-element.js";import"@typo3/content-blocks/element/content_blocks-edit-inspector-element.js";let ContentBlocksEditElement=class extends LitElement{constructor(){super(...arguments),this._controller=MainController.instance(this)}createRenderRoot(){return this}connectedCallback(){super.connectedCallback(),this._controller.loadContentBlock(this.cType)}render(){return html`
       <main>
 ${until(this._contentBlockFields(),html`
         <tr>
@@ -27,13 +27,13 @@ ${until(this._contentBlockFields(),html`
           field-identifier="${this._activeField?.identifier}"
         ></typo3-content_blocks-edit-inspector>
       </aside>
-    `}async _contentBlockFields(){const e=await this._controller.currentContentBlock;return html`
-      <h2>${e.key}</h2>
+    `}async _contentBlockFields(){const e=this._controller.currentContentBlock;return e?html`
+      <h2>${e.static.title}</h2>
       <p>
         Path: <code>${e.path}</code>
       </p>
       <p>
-        cType: <code>${e.CType}</code>
+        cType: <code>${e.static.cType}</code>
       </p>
       <fieldset>
         <legend>Fields</legend>
@@ -51,4 +51,4 @@ ${until(this._contentBlockFields(),html`
       </a>
     `))}
       </fieldset>
-    `}};__decorate([property()],ContentBlocksEditElement.prototype,"cType",void 0),__decorate([state()],ContentBlocksEditElement.prototype,"_activeField",void 0),ContentBlocksEditElement=__decorate([customElement("typo3-content_blocks-edit")],ContentBlocksEditElement);export{ContentBlocksEditElement};
+    `:html``}};__decorate([property()],ContentBlocksEditElement.prototype,"cType",void 0),__decorate([state()],ContentBlocksEditElement.prototype,"_activeField",void 0),ContentBlocksEditElement=__decorate([customElement("typo3-content_blocks-edit")],ContentBlocksEditElement);export{ContentBlocksEditElement};

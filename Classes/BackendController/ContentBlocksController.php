@@ -27,6 +27,8 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * @internal
@@ -143,6 +145,20 @@ class ContentBlocksController
             'contentblocks/contentBlock/edit',
             (string)$this->uriBuilder->buildUriFromRoute(
                 ContentBlocksController::ROUTE_IDENTIFIER . '/contentBlock/edit'
+            )
+        );
+
+        // We need this in the global (MultiStepWizard) scope but do not want to load it for every TYPO3 module.
+        // Thus we are including the module in the MultiStepWizard slide via <script>.
+        $this->pageRenderer->addInlineSetting(
+            'urls',
+            'EXT:content_blocks/Resources/Public/JavaScript/element/choose-name-element.js',
+            GeneralUtility::createVersionNumberedFilename(
+                PathUtility::getAbsoluteWebPath(
+                    GeneralUtility::getFileAbsFileName(
+                        'EXT:content_blocks/Resources/Public/JavaScript/element/content_blocks-choose-name-element.js'
+                    )
+                )
             )
         );
 
