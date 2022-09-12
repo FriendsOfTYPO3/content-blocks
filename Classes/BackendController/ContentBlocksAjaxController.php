@@ -40,6 +40,8 @@ class ContentBlocksAjaxController
 
     public function jsonContentBlockGetAction(ServerRequestInterface $request): ResponseInterface
     {
+        // @todo
+
         return new JsonResponse(
             $this->cbConfigFixture()['typo3-contentblocks_fluid-styled-content-example-local']
         );
@@ -2204,8 +2206,10 @@ class ContentBlocksAjaxController
     {
         // @todo use a factory to generate DTO(s)
         foreach ($cbs as &$cb) {
-            $cb->cType = $cb->getCType();
-            $cb->title = $this->getLanguageService()->sL($cb->editorLLL . '.title');
+            $cb->static = [
+                'cType' => $cb->getCType(),
+                'title' => $this->getLanguageService()->sL($cb->editorLLL . '.title'),
+            ];
 
             $cb->fieldsConfig = $this->enrichFieldsForBackend($cb->fieldsConfig, $cb);
         }
@@ -2225,13 +2229,16 @@ class ContentBlocksAjaxController
                     /*
                      * @todo: is_a(...)
                      */
-                    /** @var CollectionFieldConfiguration $fieldConfig->fields */
+                    /** @var CollectionFieldConfiguration $fieldConfig- >fields */
                     $fieldConfig->fields = $this->enrichFieldsForBackend($fieldConfig->fields, $cb);
                 }
-                $fieldConfig->title = $this->getLanguageService()->sL(
+                $fieldConfig->static = [
+                    'title' => $this->getLanguageService()->sL(
                     // @todo: should be uniqueIdentifier
-                    $cb->editorLLL . '.' . $fieldConfig->identifier
-                );
+                        $cb->editorLLL . '.' . $fieldConfig->identifier
+                    ),
+                ];
+
                 return $fieldConfig;
             },
             $fieldsConfig
