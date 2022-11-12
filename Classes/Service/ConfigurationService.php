@@ -27,7 +27,7 @@ class ConfigurationService implements SingletonInterface
      */
     public function getBasePath(): string
     {
-        return 'typo3conf/ext/';
+        return 'typo3conf/contentBlocks/';
     }
 
     /**
