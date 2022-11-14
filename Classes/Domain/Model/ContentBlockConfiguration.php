@@ -26,6 +26,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class ContentBlockConfiguration
  * Contains the configuration of a ContentBlock.
+ *
+ * Note: Some objects using this model:
+ * - ContentBlocksDataProcessor
+ * - [TODO: list to be continued]
  */
 class ContentBlockConfiguration
 {
@@ -62,6 +66,7 @@ class ContentBlockConfiguration
 
     /**
      * TODO: evaluate if we still need this
+     * Note: at the moment yes.
      */
     public string $frontendLLL = '';
 
@@ -72,7 +77,7 @@ class ContentBlockConfiguration
     public array $labelsXlfContent = [];
 
     /**
-     * @param array<AbstractFieldConfiguration> $fieldsConfig
+     * @param array<FieldConfigurationInterface> $fieldsConfig
      */
     public array $fieldsConfig = [];
 
@@ -122,7 +127,7 @@ class ContentBlockConfiguration
 
     public function toArray(): array
     {
-        // @todo check recursive Collections
+        // @todo: check recursive Collections
         $fieldsList = [];
         if (count($this->fieldsConfig) > 0) {
             foreach ($this->fieldsConfig as $key => $tempFieldsConfig) {
