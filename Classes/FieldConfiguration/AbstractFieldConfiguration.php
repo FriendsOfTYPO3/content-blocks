@@ -34,6 +34,10 @@ class AbstractFieldConfiguration
 
     public array $path = [];
 
+    public bool $useExistingField = false;
+
+    public bool $isFileField = false;
+
     public function __construct(array $settings)
     {
         $this->createFromArray($settings);
@@ -50,6 +54,7 @@ class AbstractFieldConfiguration
         $this->identifier = $settings['identifier'] ?? '';
         $this->uniqueIdentifier = $settings['_identifier'] ?? '';
         $this->path = $settings['_path'] ?? $this->path;
+        $this->useExistingField = (bool)($settings['properties']['required'] ?? $this->useExistingField);
 
         return $this;
     }
@@ -75,5 +80,34 @@ class AbstractFieldConfiguration
     protected function getRawData(): array
     {
         return $this->rawData;
+    }
+
+    public function combinedIdentifierToArray(string $combinedIdentifier): array
+    {
+        return explode('.', $combinedIdentifier);
+    }
+
+    public function arrayToCombinedIdentifier(array $path): string
+    {
+        return implode('.', $path);
+    }
+
+    public function uniqueCombinedIdentifier(string $cType, string $combinedIdentifier): string
+    {
+        return $cType . '|' . $combinedIdentifier;
+    }
+
+    public function splitUniqueCombinedIdentifier($uniqueCombinedIdentifier): array
+    {
+        return explode('|', $uniqueCombinedIdentifier);
+    }
+
+    /**
+     * Manage to have SQL compatible column names, prefixed with "cb_".
+     * Result: cb_content_blockidentifier_column_path_column_name
+     */
+    public function uniqueColumnName(string $cType, string $combinedIdentifier): string
+    {
+        return 'cb_' . str_replace('-', '_', $cType) . '_' . str_replace('-', '_', str_replace('.', '_', $combinedIdentifier));
     }
 }
