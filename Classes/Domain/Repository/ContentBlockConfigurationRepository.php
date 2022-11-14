@@ -26,7 +26,6 @@ use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Class ContentBlockConfigurationReporitory
@@ -176,6 +175,9 @@ class ContentBlockConfigurationRepository implements SingletonInterface
         return $this;
     }
 
+    /**
+     * Find a ContentBlock by identifier
+     */
     public function findByIdentifier(string $identifier): ?ContentBlockConfiguration
     {
         $cbBasePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR . $this->configurationService->getContentBlockDestinationPath() . $identifier;
@@ -221,5 +223,38 @@ class ContentBlockConfigurationRepository implements SingletonInterface
         $contentBlockConfFactory = GeneralUtility::makeInstance(ContentBlockConfigurationFactory::class);
 
         return $contentBlockConfFactory->createFromArray($cbConf);
+    }
+
+    /**
+     * Find a ContentBlock by CType
+     */
+    public function findContentBlockByCType(string $cType): ?ContentBlockConfiguration
+    {
+        $cbFinder = new Finder();
+        $cbFinder->directories()->depth('== 0')->in($this->hostBasePath);
+
+        foreach ($cbFinder as $splPath) {
+            // directory paths (full)
+            $realPath = $splPath->getPathname() . DIRECTORY_SEPARATOR;
+
+            // composer.json
+            if (!is_readable($realPath . 'composer.json')) {
+                throw new \Exception(sprintf('Cannot read or find composer.json file: %s', $realPath . 'composer.json'));
+            }
+
+            $composerJson = json_decode(file_get_contents($realPath . 'composer.json'), true);
+
+            if ($composerJson['type'] !== $this->configurationService->getComposerType()) {
+                continue;
+            }
+
+            $nameFromComposer = explode('/', $composerJson['name']);
+
+            if ($cType === $nameFromComposer[0] . '_' . $nameFromComposer[0]) {
+                return $this->findByIdentifier($nameFromComposer[1]);
+            }
+        }
+
+        return null;
     }
 }
