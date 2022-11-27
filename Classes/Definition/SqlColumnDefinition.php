@@ -17,12 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+
 final class SqlColumnDefinition
 {
     private string $column = '';
     private string $sqlDefinition = '';
 
-    public function __construct(string $column, string $sqlDefinition)
+    public function __construct(string $column, array $sqlDefinition)
     {
         if ($column === '') {
             throw new \InvalidArgumentException('Column name must not be empty.', 1629291834);
@@ -33,7 +35,10 @@ final class SqlColumnDefinition
         }
 
         $this->column = $column;
-        $this->sqlDefinition = $sqlDefinition;
+
+        $fieldType = FieldType::from($sqlDefinition['type']);
+        $fieldConfiguration = $fieldType->getFieldTypeConfiguration($sqlDefinition);
+        $this->sqlDefinition = $fieldConfiguration->getSql($this->column);
     }
 
     public function getColumn(): string
