@@ -29,6 +29,10 @@ final class TcaFieldDefinition
      * @var array<string, mixed>
      */
     public array $realTca = [];
+    /**
+     * @var array<string, mixed>
+     */
+    public array $config = [];
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
@@ -38,11 +42,14 @@ final class TcaFieldDefinition
         }
 
         $self = new self();
+        //  @todo: validate, which of them are still neccessary
         return $self
             ->withIdentifier($identifier)
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
-            ->withRealTca($array['realTca'] ?? []);
+            ->withRealTca($array['realTca'] ?? [])
+            ->withFieldType($array['type'] ?? 'none')
+            ->withConfig($array);
     }
 
     public function toArray(): array
@@ -106,5 +113,25 @@ final class TcaFieldDefinition
         $clone = clone $this;
         $clone->realTca = $realTca;
         return $clone;
+    }
+
+    public function withConfig(array $config): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->config = $config;
+        return $clone;
+    }
+
+    public function withFieldType(string $type): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->fieldType = FieldType::from($type);
+        return $clone;
+    }
+
+    public function getTca(): array
+    {
+        $fieldTypeConfiguration = $this->fieldType->getFieldTypeConfiguration($this->config);
+        return $fieldTypeConfiguration->getTca();
     }
 }
