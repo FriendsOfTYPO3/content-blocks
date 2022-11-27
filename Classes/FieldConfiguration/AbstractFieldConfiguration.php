@@ -59,14 +59,14 @@ class AbstractFieldConfiguration
         return $this;
     }
 
-    public function getTcaTemplate(array $contentBlock): array
+    public function getTcaTemplate(): array
     {
         return [
             'exclude' => 1,
-            'label' => 'LLL:' . $contentBlock['EditorInterfaceXlf'] . ':' . $contentBlock['vendor']
-                        . '.' . $contentBlock['package'] . '.' . $this->uniqueIdentifier . '.label',
-            'description' => 'LLL:' . $contentBlock['EditorInterfaceXlf'] . ':' . $contentBlock['vendor']
-            . '.' . $contentBlock['package'] . '.' . $this->uniqueIdentifier . '.description',
+            'label' => 'LLL:' . $this->rawData['EditorInterfaceXlf'] . ':' . $this->rawData['vendor']
+                        . '.' . $this->rawData['package'] . '.' . $this->uniqueIdentifier . '.label',
+            'description' => 'LLL:' . $this->rawData['EditorInterfaceXlf'] . ':' . $this->rawData['vendor']
+            . '.' . $this->rawData['package'] . '.' . $this->uniqueIdentifier . '.description',
             'config' => [],
         ];
     }

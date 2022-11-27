@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Enumeration;
 
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\InputFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 
@@ -42,6 +43,7 @@ enum FieldType: String
     case IMAGE = 'Image';
     case LINEBREAK = 'linebreak';
     case URL = 'Url';
+    case NONE = 'None';
 
     /**
      * Checks if this field type is a structure field.
@@ -66,6 +68,7 @@ enum FieldType: String
             self::FILE => 'inline',
             self::LINK => 'input',
             self::NUMBER => 'input',
+            self::NONE => 'none',
             self::RADIO => 'radio',
             self::SELECT => 'select',
             self::REFERENCE => 'input',
@@ -80,33 +83,10 @@ enum FieldType: String
     }
 
     /**
-     * TODO: this method moved to FieldTypeConfiguration!!!
-     */
-    public function getTca(): array
-    {
-        return match ($this) {
-            self::TEXT => [
-                'type' => 'text',
-            ],
-            default => [],
-        };
-    }
-
-    /**
-     * Get SQL Definition
-     */
-    public function getSql(): string
-    {
-        return match ($this) {
-            default => '',
-        };
-    }
-
-    /**
      * Get the matching FieldTypeConfiguration
      * TODO: add the missing field types
      */
-    public function getFieldTypeConfiguration(array $config): AbstractFieldConfiguration
+    public function getFieldTypeConfiguration(array $config): FieldConfigurationInterface
     {
         return match ($this) {
             // self::CATEGORY => 'input',
@@ -127,6 +107,7 @@ enum FieldType: String
             self::IMAGE => new InputFieldConfiguration($config),
             self::LINEBREAK =>  new InputFieldConfiguration($config),
             self::URL =>  new InputFieldConfiguration($config),
+            // @todo: Implement field type none
             default => var_dump($config),
         };
     }

@@ -47,9 +47,9 @@ class EmailFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     /**
      * Get TCA for this inputfield
      */
-    public function getTca(array $contentBlock): array
+    public function getTca(): array
     {
-        $tca = parent::getTcaTemplate($contentBlock);
+        $tca = parent::getTcaTemplate();
         return $tca;
     }
 

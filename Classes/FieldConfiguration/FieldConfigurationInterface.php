@@ -41,7 +41,7 @@ interface FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string;
 
-    public function getTca(array $contentBlock): array;
+    public function getTca(): array;
 
     public function toArray(): array;
 
