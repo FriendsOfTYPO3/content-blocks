@@ -27,12 +27,19 @@ final class ContentElementDefinition extends TypeDefinition
     public static function createFromArray(array $array, string $table = 'tt_content'): static
     {
         $array['typeField'] = 'CType';
-        $self = parent::createFromArray($array, $table);
+        // $self = parent::createFromArray($array, $table);
+        $self = new static();
+        $self->initParentCreateFromArray($array, $table);
         return $self
             ->withDescription($array['description'] ?? '')
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']));
+    }
+
+    protected static function initParentCreateFromArray(array $array, string $table = 'tt_content'): void
+    {
+        parent::createFromArray($array, $table);
     }
 
     public function toArray(): array
