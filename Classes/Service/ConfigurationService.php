@@ -66,4 +66,12 @@ class ConfigurationService implements SingletonInterface
     {
         return 'typo3-contentblock';
     }
+
+    /**
+     * If this should be configurable or things changes in future
+     */
+    public function getDatabaseCollectionTablePrefix(): string
+    {
+        return 'cb_collection_';
+    }
 }
