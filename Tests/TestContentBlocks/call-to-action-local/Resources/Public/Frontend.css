@@ -1,0 +1,41 @@
+.call-to-action__wrapper {
+    font-family: "Source Sans Pro", sans-serif;
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.call-to-action__overlay {
+    box-shadow: 0 0 4px #0003;
+    background: #fffb;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: calc(50px + 40%);
+    padding: 10px 12px;
+}
+
+.call-to-action__overlay p {
+    margin: 0;
+}
+
+.call-to-action__button {
+    float: right;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    touch-action: manipulation;
+    border: 1px solid #fab546;
+    padding: 6px 16px;
+    line-height: 1.5;
+    border-radius: 2px;
+    user-select: none;
+    color: #fff;
+    background-color: #f49700;
+    transition: background-color 0.2s ease-out, border-color 0.1s ease-out;
+}
+
+.call-to-action__button:hover, .call-to-action__button:focus {
+    background-color: #bc790f;
+    border-color: #c48313;
+}

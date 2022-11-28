@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext"
+		  original="messages"
+		  source-language="en"
+		  product-name="counter">
+		<header/>
+		<body>
+			<trans-unit id="typo3-contentblocks.call-to-action-local.title" xml:space="preserve">
+				<source>Call to action</source>
+			</trans-unit>
+			<trans-unit id="typo3-contentblocks.call-to-action-local.description" xml:space="preserve">
+				<source>Banner with text and button.</source>
+			</trans-unit>
+            <trans-unit id="typo3-contentblocks.call-to-action-local.image.label" xml:space="preserve">
+				<source>Image</source>
+			</trans-unit>
+            <trans-unit id="typo3-contentblocks.call-to-action-local.link.label" xml:space="preserve">
+				<source>Button Link</source>
+			</trans-unit>
+            <trans-unit id="typo3-contentblocks.call-to-action-local.text.label" xml:space="preserve">
+				<source>Text</source>
+			</trans-unit>
+            <trans-unit id="typo3-contentblocks.call-to-action-local.buttonText.label" xml:space="preserve">
+				<source>Button Text</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

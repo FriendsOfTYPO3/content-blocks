@@ -1,0 +1,18 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:asset.css identifier="cb-{cb.key}" href="CB:{cb.key}/dist/Frontend.css"/>
+
+<div class="call-to-action__wrapper">
+    <f:if condition="{image}">
+        <f:image image="{image}" height="200" width="800c"/>
+    </f:if>
+    <div class="call-to-action__overlay">
+        <div class="call-to-action__text">
+            <f:link.typolink class="call-to-action__button" parameter="{link}">
+                {buttonText}
+            </f:link.typolink>
+            <f:format.html>{text}</f:format.html>
+        </div>
+    </div>
+</div>
+</html>
