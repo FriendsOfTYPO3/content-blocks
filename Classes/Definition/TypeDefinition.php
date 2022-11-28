@@ -32,7 +32,7 @@ class TypeDefinition
      */
     private array $columns = [];
 
-    public static function createFromArray(array $array, string $table): static
+    public static function createFromArray(array $array, string $table): self
     {
         if (!isset($array['identifier']) || $array['identifier'] === '') {
             throw new \InvalidArgumentException('Type identifier must not be empty.', 1629292395);
@@ -46,7 +46,7 @@ class TypeDefinition
             throw new \InvalidArgumentException('Type table must not be empty.', 1668858103);
         }
 
-        $self = new static();
+        $self = new self();
         return $self
             ->withTable($table)
             ->withIdentifier($array['identifier'])

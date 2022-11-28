@@ -24,7 +24,7 @@ final class ContentElementDefinition extends TypeDefinition
     private string $contentElementIconOverlay = '';
     private bool $saveAndClose = false;
 
-    public static function createFromArray(array $array, string $table = 'tt_content'): static
+    public static function createFromArray(array $array, string $table = 'tt_content'): ContentElementDefinition
     {
         $array['typeField'] = 'CType';
         $self = parent::createFromArray($array, $table);
