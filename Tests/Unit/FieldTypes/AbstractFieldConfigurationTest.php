@@ -28,27 +28,23 @@ class AbstractFieldConfigurationTest extends UnitTestCase
     public function checkAbstractFieldConfigurationDataProvider(): iterable
     {
         yield 'Check abstract field configurations.' => [
-            'contentBlock' => [
+            'config' => [
                 'EditorInterfaceXlf' => 'typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf',
                 'vendor' => 'typo3-contentblocks',
                 'package' => 'example',
-            ],
-            'fieldsList' => [
-                'text' => [
-                    'identifier' => 'text',
-                    'type' => 'Text',
-                    'properties' => [
-                        'autocomplete' => true,
-                        'default' => 'Default value',
-                        'max' => 15,
-                        'placeholder' => 'Placeholder text',
-                        'size' => 20,
-                        'required' => false,
-                        'trim' => true,
-                    ],
-                    '_path' => [],
-                    '_identifier' => 'text',
+                'identifier' => 'text',
+                'type' => 'Text',
+                'properties' => [
+                    'autocomplete' => true,
+                    'default' => 'Default value',
+                    'max' => 15,
+                    'placeholder' => 'Placeholder text',
+                    'size' => 20,
+                    'required' => false,
+                    'trim' => true,
                 ],
+                '_path' => [],
+                '_identifier' => 'text',
             ],
             'expected' => [
                 'create' => 'text', // Create result (create from array via construct)
@@ -68,13 +64,13 @@ class AbstractFieldConfigurationTest extends UnitTestCase
      * @test
      * @dataProvider checkAbstractFieldConfigurationDataProvider
      */
-    public function checkAbstractFieldConfiguration(array $contentBlock, array $fieldsList, array $expected): void
+    public function checkAbstractFieldConfiguration(array $config, array $expected): void
     {
         // AbstractFieldConfiguration Test
 
-        $fieldsConfig = new AbstractFieldConfiguration($fieldsList['text']);
+        $fieldsConfig = new AbstractFieldConfiguration($config);
         self::assertSame($expected['create'], $fieldsConfig->identifier);
 
-        self::assertSame($expected['getTcaTemplate'], $fieldsConfig->getTcaTemplate($contentBlock));
+        self::assertSame($expected['getTcaTemplate'], $fieldsConfig->getTcaTemplate());
     }
 }

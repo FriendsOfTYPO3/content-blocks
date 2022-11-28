@@ -54,7 +54,7 @@ class AbstractFieldConfiguration
         $this->identifier = $settings['identifier'] ?? '';
         $this->uniqueIdentifier = $settings['_identifier'] ?? '';
         $this->path = $settings['_path'] ?? $this->path;
-        $this->useExistingField = (bool)($settings['properties']['required'] ?? $this->useExistingField);
+        $this->useExistingField = (bool)($settings['properties']['useExistingField'] ?? $this->useExistingField);
 
         return $this;
     }
