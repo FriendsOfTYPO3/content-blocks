@@ -30,27 +30,28 @@ class TcaGenerator
      *
      * @param array $contentBlocksConfig    configuration of all ContentBlocks
      */
-    public function setTca(array $contentBlocksConfig = null): array
+    public function setTca(array $contentBlocksConfig = null): bool
     {
-        if ($contentBlocksConfig === null) {
-            /** @param array */
-            $contentBlocksConfig = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class)->findAll();
-        }
-        // result only for unit test purposes.
-        $result = [];
+        // if ($contentBlocksConfig === null) {
+        //     /** @param array */
+        //     $contentBlocksConfig = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class)->findAll();
+        // }
+        // // result only for unit test purposes.
+        // $result = [];
 
-        foreach ($contentBlocksConfig as $contentBlock) {
-            /***************
-             * Add Content Element
-             */
-            if (
-                !isset($GLOBALS['TCA']['tt_content']['types'][$contentBlock['CType']]) ||
-                !is_array($GLOBALS['TCA']['tt_content']['types'][$contentBlock['CType']])
-            ) {
-                $GLOBALS['TCA']['tt_content']['types'][$contentBlock['CType']] = [];
-            }
-        }
+        // foreach ($contentBlocksConfig as $contentBlock) {
+        //     /***************
+        //      * Add Content Element
+        //      */
+        //     if (
+        //         !isset($GLOBALS['TCA']['tt_content']['types'][$contentBlock['CType']]) ||
+        //         !is_array($GLOBALS['TCA']['tt_content']['types'][$contentBlock['CType']])
+        //     ) {
+        //         $GLOBALS['TCA']['tt_content']['types'][$contentBlock['CType']] = [];
+        //     }
+        // }
         // return result only for unit test purposes.
-        return $result;
+        // return $result;
+        return true;
     }
 }
