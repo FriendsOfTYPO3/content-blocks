@@ -24,21 +24,6 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 interface FieldConfigurationInterface
 {
-
-    private array $rawData = [];
-
-    public ?FieldType $type;
-
-    public string $identifier;
-
-    public string $uniqueIdentifier;
-
-    public array $path;
-
-    public bool $useExistingField;
-
-    public bool $isFileField;
-
     public function getSql(string $uniqueColumnName): string;
 
     public function getTca(): array;
