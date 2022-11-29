@@ -22,4 +22,11 @@ services:
     public: true
 
   TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TYPO3\CMS\ContentBlocks\Factory\TableDefinitionFactory:
+    autowire: true
+    autoconfigure: false
     public: true
