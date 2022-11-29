@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 class TextareaFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
-    public int $cols = 50;
+    public int $cols = 24;
 
     public string $default = '';
 
@@ -32,15 +32,13 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
 
     public string $richtextConfiguration = '';
 
-    public ?int $max = null;
+    public int $max = 700;
 
-    public ?int $rows = null;
+    public int $rows = 3;
 
     public bool $enableRichtext = false;
 
     public bool $required = false;
-
-    public bool $trim = false;
 
     /**
      * Construct: setting from yaml file needed to create a field configuration.
@@ -56,6 +54,30 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
     public function getTca(): array
     {
         $tca = parent::getTcaTemplate();
+        $tca['config'] = [
+            'type' => $this->type,
+            'cols' => $this->cols,
+            'max' => $this->max,
+            'rows' => $this->rows,
+        ];
+        if ($this->default !== '') {
+            $tca['config']['default'] = $this->default;
+        }
+        if ($this->enableRichtext) {
+            $tca['config']['enableRichtext'] = $this->enableRichtext;
+        }
+        if ($this->placeholder !== '') {
+            $tca['config']['placeholder'] = $this->placeholder;
+        }
+        if ($this->richtextConfiguration !== '') {
+            $tca['config']['richtextConfiguration'] = $this->richtextConfiguration;
+        }
+        if ($this->max !== null) {
+            $tca['config']['max'] = $this->max;
+        }
+        if ($this->required) {
+            $tca['config']['required'] = $this->required;
+        }
         return $tca;
     }
 
@@ -73,16 +95,15 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
     protected function createFromArray(array $settings): self
     {
         parent::createFromArray($settings);
-        $this->type = FieldType::TEXTAREA;
-        $this->max = (int)($settings['properties']['max'] ?? $this->max);
-        $this->rows = (int)($settings['properties']['rows'] ?? $this->rows);
+        $this->type = FieldType::TEXTAREA->value;
         $this->cols = (int)($settings['properties']['cols'] ?? $this->cols);
         $this->default = $settings['properties']['default'] ?? $this->default;
+        $this->enableRichtext = (bool)($settings['properties']['enableRichtext'] ?? $this->enableRichtext);
+        $this->max = (int)($settings['properties']['max'] ?? $this->max);
         $this->placeholder = $settings['properties']['placeholder'] ?? $this->placeholder;
         $this->richtextConfiguration = $settings['properties']['richtextConfiguration'] ?? $this->richtextConfiguration;
-        $this->enableRichtext = (bool)($settings['properties']['enableRichtext'] ?? $this->enableRichtext);
+        $this->rows = (int)($settings['properties']['rows'] ?? $this->rows);
         $this->required = (bool)($settings['properties']['required'] ?? $this->required);
-        $this->trim = (bool)($settings['properties']['trim'] ?? $this->trim);
 
         return $this;
     }
@@ -94,7 +115,7 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
     {
         return [
             'identifier' => $this->identifier,
-            'type' => $this->type->value,
+            'type' => $this->type,
             'properties' => [
                 'cols' => $this->cols,
                 'default' => $this->default,
@@ -111,8 +132,8 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
         ];
     }
 
-    public function getTemplateHtml(string $indentation): string
+    public function getTemplateHtml(int $indentation): string
     {
-        return $indentation . '<p>{' . $this->uniqueIdentifier . '}</p>' . "\n";
+        return str_repeat(' ', $indentation * 4) . '<p>{' . $this->uniqueIdentifier . '}</p>' . "\n";
     }
 }
