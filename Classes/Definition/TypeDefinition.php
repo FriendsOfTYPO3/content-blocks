@@ -32,7 +32,11 @@ class TypeDefinition
      */
     private array $columns = [];
 
-    public static function createFromArray(array $array, string $table): self
+    public static function createFromArray(array $array, string $table) {
+        return self::fromArray($array, $table);
+    }
+
+    protected static function fromArray(array $array, string $table)
     {
         if (!isset($array['identifier']) || $array['identifier'] === '') {
             throw new \InvalidArgumentException('Type identifier must not be empty.', 1629292395);
@@ -46,7 +50,7 @@ class TypeDefinition
             throw new \InvalidArgumentException('Type table must not be empty.', 1668858103);
         }
 
-        $self = new self();
+        $self = new static();
         return $self
             ->withTable($table)
             ->withIdentifier($array['identifier'])

@@ -28,7 +28,7 @@ final class TcaFieldDefinition
     /**
      * @var array<string, mixed>
      */
-    public array $realTca = [];
+    public array $config = [];
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
@@ -36,13 +36,17 @@ final class TcaFieldDefinition
         if ($identifier === '') {
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty', 1629277138);
         }
+        if (!isset($array['config']['type'])) {
+            throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty', 1629277138);
+        }
 
         $self = new self();
         return $self
             ->withIdentifier($identifier)
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
-            ->withRealTca($array['realTca'] ?? []);
+            ->withConfig($array['config'] ?? [])
+            ->withFieldType($array['config']['type']);
     }
 
     public function toArray(): array
@@ -75,9 +79,15 @@ final class TcaFieldDefinition
         return $this->description;
     }
 
-    public function getRealTca(): array
+    public function getTca(ContentElementDefinition $ceDefinition): array
     {
-        return $this->realTca;
+        $config = $this->config;
+        $config['languageFile'] = $ceDefinition->getPrivatePath() . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf';
+        $config['package'] = $ceDefinition->getPackage();
+        $config['vendor'] = $ceDefinition->getVendor();
+        return $this->fieldType
+            ->getFieldTypeConfiguration($config)
+            ->getTca();
     }
 
     public function withIdentifier(string $identifier): TcaFieldDefinition
@@ -101,10 +111,17 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withRealTca(array $realTca): TcaFieldDefinition
+    public function withConfig(array $config): TcaFieldDefinition
     {
         $clone = clone $this;
-        $clone->realTca = $realTca;
+        $clone->config = $config;
+        return $clone;
+    }
+
+    public function withFieldType(string $type): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->fieldType = FieldType::from($type);
         return $clone;
     }
 }
