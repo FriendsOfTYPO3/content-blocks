@@ -1,0 +1,14 @@
+{
+    "name": "t3-ce/example",
+    "description": "Example ContentBlock for testing purpose.",
+    "type": "typo3-contentblock",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Structured Content Initiative"
+        }
+    ],
+    "require": {
+        "typo3/cms-content-blocks": "*"
+    }
+}

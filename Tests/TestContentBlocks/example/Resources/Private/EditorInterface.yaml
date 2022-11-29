@@ -1,0 +1,204 @@
+group: common
+fields:
+  - identifier: text
+    type: Text
+    properties:
+      autocomplete: false
+      default: 'Default value'
+      max: 15
+      placeholder: 'Placeholder text'
+      required: false
+      size: 20
+      valuePicker:
+        items:
+          'Want to join our team? Take the initiative!': Job offer general
+          'We are looking for ...': Job offer specific
+          # @todo ^^ implement text
+  - identifier: textarea
+    type: Textarea
+    properties:
+      cols: 40
+      default: 'Default value'
+      enableRichtext: true
+      max: 150
+      placeholder: 'Placeholder text'
+      richtextConfiguration: default
+      rows: 15
+      required: false
+      trim: true
+  - identifier: email
+    type: Email
+    properties:
+      autocomplete: true
+      default: 'developer@localhost'
+      placeholder: 'Placeholder text'
+      size: 20
+      required: true
+      trim: true
+  - identifier: integer
+    type: Integer
+    properties:
+      default: 0
+      size: 20
+      required: true
+      trim: true
+  - identifier: money
+    type: Money
+    properties:
+      size: 20
+      required: true
+      trim: true
+  - identifier: number
+    type: Number
+    properties:
+      default: 0
+      size: 20
+      required: true
+      trim: true
+  - identifier: percent
+    type: Percent
+    properties:
+      default: 0
+      range:
+        lower: 0
+        upper: 100
+      required: true
+      size: 20
+      slider:
+        step: 1
+        width: 100
+      trim: true
+  - identifier: url
+    type: Url
+    properties:
+      autocomplete: true
+      default: 'https://typo3.org'
+      linkPopup:
+        allowedExtensions: 'pdf'
+        blindLinkFields: 'target,title'
+        blindLinkOptions: 'folder,spec,telefone,mail'
+      max: 150
+      placeholder: 'Placeholder text'
+      size: 20
+      required: false
+  - identifier: tel
+    type: Tel
+    properties:
+      autocomplete: true
+      default: 0
+      size: 20
+      required: false
+  - identifier: color
+    type: Color
+    properties:
+      autocomplete: true
+      default: '#0000aa'
+      size: 5
+      required: false
+      valuePicker:
+        items:
+          '#FF0000': Red
+          '#008000': Green
+          '#0000FF': Blue
+  - identifier: date
+    type: Date
+    properties:
+      default: '2020-12-12'
+      displayAge: true
+      size: 20
+      range:
+        lower: '2019-12-12'
+        upper: '2035-12-12'
+      required: true
+  - identifier: datetime
+    type: DateTime
+    properties:
+      default: '2020-01-31 12:00:00'
+      displayAge: true
+      size: 20
+      range:
+        lower: '2019-01-31 12:00:00'
+        upper: '2040-01-31 12:00:00'
+      required: true
+  - identifier: time
+    type: Time
+    properties:
+      default: '15:30'
+      displayAge: true
+      size: 20
+      range:
+        lower: '06:01'
+        upper: '17:59'
+      required: true
+  - identifier: select
+    type: Select
+    properties:
+      items:
+        'one': 'The first'
+        'two': 'The second'
+        'three': 'The third'
+      prependLabel: 'Please choose'
+  - identifier: selectSideBySide
+    type: MultiSelect
+    properties:
+      maxItems: 2
+      size: 5
+      items:
+        'one': 'The first'
+        'two': 'The second'
+        'three': 'The third'
+
+  - identifier: checkboxes
+    type: Checkbox
+    properties:
+      items:
+        'one': 'The first'
+        'two': 'The second'
+        'three': 'The third'
+      default: 2
+
+  - identifier: radioboxes
+    type: Radiobox
+    properties:
+      default: 'two'
+      items:
+        'one': 'The first'
+        'two': 'The second'
+        'three': 'The third'
+  - identifier: toggle
+    type: Toggle
+    properties:
+      default: true
+  - identifier: toggleInverted
+    type: Toggle
+    properties:
+      invertStateDisplay: true
+  - identifier: image
+    type: Image
+  - identifier: bodytext
+    type: Textarea
+    properties:
+      useExistingField: true
+      enableRichtext: true
+  - identifier: collection
+    type: Collection
+    properties:
+      useAsLabel: text
+      maxItems: 5
+      required: true
+      fields:
+        - identifier: text
+          type: Text
+        - identifier: collection
+          type: Collection
+          properties:
+            maxItems: 2
+            minItems: 1
+            fields:
+              - identifier: text
+                type: Text
+              - identifier: textarea
+                type: Textarea
+                properties:
+                  enableRichtext: true
+
