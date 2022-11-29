@@ -26,7 +26,7 @@ class AbstractFieldConfiguration
 {
     private array $rawData = [];
 
-    public ?FieldType $type;
+    public string $type;
 
     public string $identifier = '';
 
@@ -61,14 +61,19 @@ class AbstractFieldConfiguration
 
     public function getTcaTemplate(): array
     {
-        return [
-            'exclude' => 1,
+        $tcaTemplate = [
             'label' => 'LLL:' . $this->rawData['EditorInterfaceXlf'] . ':' . $this->rawData['vendor']
-                        . '.' . $this->rawData['package'] . '.' . $this->uniqueIdentifier . '.label',
+                        . '.' . $this->rawData['package'] . '.' . $this->identifier . '.label',
             'description' => 'LLL:' . $this->rawData['EditorInterfaceXlf'] . ':' . $this->rawData['vendor']
-            . '.' . $this->rawData['package'] . '.' . $this->uniqueIdentifier . '.description',
+            . '.' . $this->rawData['package'] . '.' . $this->identifier . '.description',
             'config' => [],
         ];
+
+        if (!$this->useExistingField) {
+            $tcaTemplate['exclude'] = 1;
+        }
+
+        return $tcaTemplate;
     }
 
     /**
