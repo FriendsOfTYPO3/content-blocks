@@ -27,9 +27,14 @@ class ContentBlockConfigurationFactory implements SingletonInterface
 {
     protected ConfigurationService $configurationService;
 
-    public function __construct()
-    {
-        $this->configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
+    protected TableDefinitionFactory $tableDefinitionFactory;
+
+    public function __construct(
+        ConfigurationService $configurationService,
+        TableDefinitionFactory $tableDefinitionFactory
+    ) {
+        $this->configurationService = $configurationService;
+        $this->tableDefinitionFactory = $tableDefinitionFactory;
     }
 
     public function createFromArray(array $config): ContentBlockConfiguration
@@ -52,13 +57,13 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         $cbConf->composerJson = $config['composerJson'];
         $cbConf->yamlConfig = $config['yaml'] ?? $cbConf->yamlConfig;
 
-        $cbConf->publicPath = $cbConf->path . $cbConf->publicPath . DIRECTORY_SEPARATOR;
+        $cbConf->publicPath = $cbConf->path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR;
 
         // Setting the frontendTemplatesPath has to be before re-setting the privatePath.
         // Reason: trailing DIRECTORY_SEPARATOR must not be there for templates path
         $cbConf->frontendTemplatesPath = $cbConf->path . $cbConf->privatePath;
 
-        $cbConf->privatePath = $cbConf->path . $cbConf->privatePath . DIRECTORY_SEPARATOR;
+        $cbConf->privatePath = $cbConf->path . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR;
         $cbConf->frontendPartialsPath = $cbConf->privatePath . 'Partials';
         $cbConf->frontendLayoutsPath = $cbConf->privatePath . 'Layouts';
 
@@ -77,15 +82,25 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         // fill in icon data
         $cbConf->icon = $config['icon'] ?? $cbConf->icon;
 
-        // add fields
-        if (isset($config['yaml']['fields']) && count($config['yaml']['fields']) > 0) {
+        // add fields: Use TableDefinitionCollection
+        /* if (isset($config['yaml']['fields']) && count($config['yaml']['fields']) > 0) {
             foreach ($config['yaml']['fields'] as $fieldConfigFromYaml) {
                 $fieldType = FieldType::from($fieldConfigFromYaml['type']);
 
                 $fieldConfig = $fieldType->getFieldTypeConfiguration($fieldConfigFromYaml);
                 $cbConf->fieldsConfig[$fieldConfig->identifier] = $fieldConfig;
             }
+        } */
+
+        if (isset($config['yaml']['fields']) && count($config['yaml']['fields']) > 0) {
+            $cbConf->tableDefinitions = $this->tableDefinitionFactory
+                ->createFromArray(
+                    $cbConf,
+                    $config['yaml']['fields'],
+                    $cbConf->getCType()
+                );
         }
+
 
         // fill missing data to composerJson
         $cbConf->composerJson['type'] = $cbConf->composerJson['type'] ?? $this->configurationService->getComposerType();
