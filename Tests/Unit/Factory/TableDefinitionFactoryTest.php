@@ -18,10 +18,11 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Factory;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Factory\DefinitionFactory;
+use TYPO3\CMS\ContentBlocks\Factory\TableDefinitionFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class DefinitionFactoryTest extends UnitTestCase
+class TableDefinitionFactoryTest extends UnitTestCase
 {
     /**
      * dataprovider for checking TCA field types
@@ -93,7 +94,7 @@ class DefinitionFactoryTest extends UnitTestCase
         // move to data provider, examples:
         // https://github.com/Gernott/mask/blob/main/Tests/Unit/CodeGenerator/TcaCodeGeneratorTest.php
 
-        $definitionFactory = new DefinitionFactory;
+        $definitionFactory = GeneralUtility::makeInstance(TableDefinitionFactory::class);
         self::assertSame($expected['result'], $definitionFactory->createAll($config) instanceof TableDefinitionCollection);
     }
 }
