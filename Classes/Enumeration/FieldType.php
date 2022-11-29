@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\InputFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 
 enum FieldType: String
@@ -91,7 +92,7 @@ enum FieldType: String
         return match ($this) {
             // self::CATEGORY => 'input',
             // self::CHECKBOX => 'check',
-            self::COLLECTION => new InputFieldConfiguration($config), // For testing
+            // self::COLLECTION => new InputFieldConfiguration($config), // For testing
             // self::COLOR => 'input',
             // self::DATETIME => 'input',
             self::EMAIL => new EmailFieldConfiguration($config),
@@ -104,11 +105,10 @@ enum FieldType: String
             self::TEXT => new InputFieldConfiguration($config),
             self::TEXTAREA => new TextareaFieldConfiguration($config),
             // For testing
-            self::IMAGE => new InputFieldConfiguration($config),
-            self::LINEBREAK =>  new InputFieldConfiguration($config),
-            self::URL =>  new InputFieldConfiguration($config),
-            // @todo: Implement field type none
-            default => var_dump($config),
+            // self::IMAGE => new InputFieldConfiguration($config),
+            // self::LINEBREAK =>  new InputFieldConfiguration($config),
+            // self::URL =>  new InputFieldConfiguration($config),
+            default => new NoneFieldConfiguration($config),
         };
     }
 
