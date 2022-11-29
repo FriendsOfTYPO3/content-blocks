@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
@@ -95,64 +96,78 @@ class TcaGenerator
             $ttContentColumns = [];
             $ttContentColumnsOverrides = [];
             $collectionColumns = [];
-            if (is_array($contentBlock->fieldsConfig)
-                && count($contentBlock->fieldsConfig) > 0
-            ) {
-                $fieldsList = $contentBlock->fieldsConfig;
-                /** @var AbstractFieldConfiguration $field */
-                foreach ($fieldsList as $field) {
-                    $tempUniqueColumnName = $field->uniqueColumnName($contentBlock->getCType(), $field->uniqueIdentifier);
-
-                    // Add fields to tt_content (first level)
-                    if (isset($field->uniqueIdentifier) && isset($field->type ) && count($field->path) == 1) {
-                        // re-use existing
-                        if (
-                            isset($field->useExistingField)
-                            && $field->useExistingField === true
-                            // check if there is a column configuration
-                            && array_key_exists($field->identifier, $GLOBALS['TCA']['tt_content']['columns'])
-                        ) {
-                            // @todo: make use existing field usable
-                            $ttContentShowitemFields .= "\n" . $field->identifier . ',';
-                            // $newConfigForExistingElement = $this->tcaFieldService->getMatchedTcaConfig($contentBlock, $field);
-
-                            // this is not allowed: https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Types/Properties/ColumnsOverrides.html
-                            // unset($newConfigForExistingElement['config']['type']);
-
-                            // if exclude is set, this leads to a unexpected user rights behaviour (e. g. bodytext is not available in cb)
-                            // https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Columns/Properties/Exclude.html?highlight=excl
-                            // unset($newConfigForExistingElement['exclude']);
-
-                            // $ttContentColumnsOverrides[$field->identifier] = $newConfigForExistingElement;
-                        } else {
-                            // The "normal" way to add fields
-                            // @todo: add normal columns
-                            $ttContentShowitemFields .= "\n" . $tempUniqueColumnName . ',';
-                            // $ttContentColumns[$tempUniqueColumnName] = $this->tcaFieldService->getMatchedTcaConfig($contentBlock, $field);
-                        }
+            if ($contentBlock->tableDefinitions instanceof TableDefinitionCollection) {
+                foreach ($contentBlock->tableDefinitions as $tablename => $tableDefinition) {
+                    $tcaColumns = [];
+                    foreach ($tableDefinition->getTcaColumnsDefinition() as $columnName => $columnFieldDefinition) {
+                        $tcaColumns[$columnName] = $columnFieldDefinition->getRealTca();
                     }
-
-                    // Add collection fields
-                    // @todo: add collections
-                    /* elseif (
-                        isset($field['_identifier'])
-                        && isset($field['type'])
-                        && count($field['_path']) > 1
-                        && (
-                            !isset($field['properties']['useExistingField'])
-                            || $field['properties']['useExistingField'] === false
-                            || !array_key_exists($field['identifier'], $GLOBALS['TCA'][Constants::COLLECTION_FOREIGN_TABLE]['columns'])
-                        )
-                    ) {
-                        $collectionColumns[$tempUniqueColumnName] = $this->tcaFieldService->getMatchedTcaConfig($contentBlock, $field);
-                        // TODO: else throw usefull exeption if not supported
-                    } */
+                    $GLOBALS['TCA'][$tablename]['columns'] = array_replace_recursive(
+                        $GLOBALS['TCA'][$tablename]['columns'],
+                        $tcaColumns
+                    );
                 }
             }
-            $GLOBALS['TCA']['tt_content']['columns'] = array_replace_recursive(
-                $GLOBALS['TCA']['tt_content']['columns'],
-                $ttContentColumns
-            );
+
+            // if (is_array($contentBlock->fieldsConfig)
+            //     && count($contentBlock->fieldsConfig) > 0
+            // ) {
+            //     $fieldsList = $contentBlock->fieldsConfig;
+            //     /** @var AbstractFieldConfiguration $field */
+            //     foreach ($fieldsList as $field) {
+            //         $tempUniqueColumnName = $field->uniqueColumnName($contentBlock->getCType(), $field->uniqueIdentifier);
+
+            //         // Add fields to tt_content (first level)
+            //         if (isset($field->uniqueIdentifier) && isset($field->type ) && count($field->path) == 1) {
+            //             // re-use existing
+            //             if (
+            //                 isset($field->useExistingField)
+            //                 && $field->useExistingField === true
+            //                 // check if there is a column configuration
+            //                 && array_key_exists($field->identifier, $GLOBALS['TCA']['tt_content']['columns'])
+            //             ) {
+            //                 // @todo: make use existing field usable
+
+            //                 $ttContentShowitemFields .= "\n" . $field->identifier . ',';
+            //                 // $newConfigForExistingElement = $this->tcaFieldService->getMatchedTcaConfig($contentBlock, $field);
+
+            //                 // this is not allowed: https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Types/Properties/ColumnsOverrides.html
+            //                 // unset($newConfigForExistingElement['config']['type']);
+
+            //                 // if exclude is set, this leads to a unexpected user rights behaviour (e. g. bodytext is not available in cb)
+            //                 // https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Columns/Properties/Exclude.html?highlight=excl
+            //                 // unset($newConfigForExistingElement['exclude']);
+
+            //                 // $ttContentColumnsOverrides[$field->identifier] = $newConfigForExistingElement;
+            //             } else {
+            //                 // The "normal" way to add fields
+            //                 // @todo: add normal columns
+            //                 $ttContentShowitemFields .= "\n" . $tempUniqueColumnName . ',';
+            //                 // $ttContentColumns[$tempUniqueColumnName] = $this->tcaFieldService->getMatchedTcaConfig($contentBlock, $field);
+            //             }
+            //         }
+
+            //         // Add collection fields
+            //         // @todo: add collections
+            //         /* elseif (
+            //             isset($field['_identifier'])
+            //             && isset($field['type'])
+            //             && count($field['_path']) > 1
+            //             && (
+            //                 !isset($field['properties']['useExistingField'])
+            //                 || $field['properties']['useExistingField'] === false
+            //                 || !array_key_exists($field['identifier'], $GLOBALS['TCA'][Constants::COLLECTION_FOREIGN_TABLE]['columns'])
+            //             )
+            //         ) {
+            //             $collectionColumns[$tempUniqueColumnName] = $this->tcaFieldService->getMatchedTcaConfig($contentBlock, $field);
+            //             // TODO: else throw usefull exeption if not supported
+            //         } */
+            //     }
+            // }
+            // $GLOBALS['TCA']['tt_content']['columns'] = array_replace_recursive(
+            //     $GLOBALS['TCA']['tt_content']['columns'],
+            //     $ttContentColumns
+            // );
 
             // @todo: add collection tables
             /* $GLOBALS['TCA'][Constants::COLLECTION_FOREIGN_TABLE]['columns'] = array_replace_recursive(
