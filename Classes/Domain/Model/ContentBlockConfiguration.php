@@ -17,11 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Domain\Model;
 
-use JsonSerializable;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
-use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class ContentBlockConfiguration
@@ -77,20 +74,13 @@ class ContentBlockConfiguration
     public array $labelsXlfContent = [];
 
     /**
-     * @param array<FieldConfigurationInterface> $fieldsConfig
+     * @var TableDefinitionCollection $tableDefinitions
      */
-    public array $fieldsConfig = [];
-
-    protected ConfigurationService $configurationService;
+    public TableDefinitionCollection $tableDefinitions;
 
     public function __construct()
     {
-        // @todo get rid of external dependencies in model
-
-        /** @var ConfigurationService */
-        $this->configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
-        $this->privatePath = $this->configurationService->getContentBlocksPrivatePath();
-        $this->publicPath = $this->configurationService->getContentBlocksPublicPath();
+        $this->tableDefinitions = new TableDefinitionCollection();
     }
 
     /**
@@ -127,13 +117,14 @@ class ContentBlockConfiguration
 
     public function toArray(): array
     {
-        // @todo: check recursive Collections
-        $fieldsList = [];
+        // @todo:
+        // check recursive Collections
+        /* $fieldsList = [];
         if (count($this->fieldsConfig) > 0) {
             foreach ($this->fieldsConfig as $key => $tempFieldsConfig) {
                 $fieldsList[$tempFieldsConfig->identifier] = $tempFieldsConfig->toArray();
             }
-        }
+        } */
         return [
             '__warning' => 'Contents of this "cb" configuration are not API yet and might change!',
             'vendor' => $this->vendor,
@@ -145,9 +136,10 @@ class ContentBlockConfiguration
             'icon' => $this->icon,
             'iconProviderClass' => $this->iconProviderClass,
             'CType' => $this->getCType(),
-            'fields' => $fieldsList,
+            // 'fields' => $fieldsList,
             // 'collectionFields' => $collectionFields,
             // 'fileFields' => $fileFields,
+            'tableDefinition' => $this->tableDefinitions->toArray(),
             'frontendTemplatesPath' => $this->frontendTemplatesPath,
             'frontendPartialsPath' => $this->frontendPartialsPath,
             'frontendLayoutsPath' => $this->frontendLayoutsPath,
