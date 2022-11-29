@@ -50,8 +50,8 @@ final class TableDefinition
         $tableDefinition = new self();
         $tableDefinition = $tableDefinition
             ->withTable($table)
-            ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['tca'] ?? [], $table))
-            ->withSqlDefinition(SqlDefinition::createFromArray($definition['sql'] ?? [], $table))
+            ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
+            ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withTypeDefinitionCollection(TypeDefinitionCollection::createFromArray($definition['elements'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
 
