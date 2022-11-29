@@ -30,7 +30,7 @@ interface FieldConfigurationInterface
 
     public function toArray(): array;
 
-    public function getTemplateHtml(string $indentation): string;
+    public function getTemplateHtml(int $indentation): string;
 
 
     public function combinedIdentifierToArray(string $combinedIdentifier): array;
