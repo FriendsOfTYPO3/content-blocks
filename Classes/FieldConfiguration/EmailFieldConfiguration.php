@@ -24,17 +24,17 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 class EmailFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
-    public int $size = 255;
+    public bool $autocomplete = false;
 
     public string $default = '';
 
     public string $placeholder = '';
 
-    public bool $autocomplete = false;
+    public int $size = 20;
 
     public bool $required = false;
 
-    public bool $trim = false;
+    public array $valuePicker = [];
 
     /**
      * Construct: setting from yaml file needed to create a field configuration.
@@ -50,6 +50,26 @@ class EmailFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     public function getTca(): array
     {
         $tca = parent::getTcaTemplate();
+        $tca['config'] = [
+            'type' => FieldType::EMAIL->value,
+            'size' => $this->size,
+        ];
+        if ($this->autocomplete) {
+            $tca['config']['autocomplete'] = $this->autocomplete;
+        }
+        if ($this->default !== '') {
+            $tca['config']['default'] = $this->default;
+        }
+        if ($this->placeholder !== '') {
+            $tca['config']['placeholder'] = $this->placeholder;
+        }
+        if ($this->required) {
+            $tca['config']['required'] = $this->required;
+        }
+        if (isset($this->valuePicker['items']) && count($this->valuePicker['items']) > 0) {
+            $tca['config']['valuePicker'] = $this->valuePicker;
+        }
+
         return $tca;
     }
 
@@ -67,13 +87,20 @@ class EmailFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     protected function createFromArray(array $settings): self
     {
         parent::createFromArray($settings);
-        $this->type = FieldType::EMAIL;
-        $this->size = $settings['properties']['size'] ?? $this->size;
+        $this->type = FieldType::EMAIL->value;
+        $this->autocomplete = (bool)($settings['properties']['autocomplete'] ?? $this->autocomplete);
         $this->default = $settings['properties']['default'] ?? $this->default;
         $this->placeholder = $settings['properties']['placeholder'] ?? $this->placeholder;
+        $this->size = $settings['properties']['size'] ?? $this->size;
         $this->required = (bool)($settings['properties']['required'] ?? $this->required);
-        $this->trim = (bool)($settings['properties']['trim'] ?? $this->trim);
-        $this->autocomplete = (bool)($settings['properties']['autocomplete'] ?? $this->autocomplete);
+
+        if (isset($settings['properties']['valuePicker']['items']) && is_array($settings['properties']['valuePicker']['items'])) {
+            $tempPickerItems = [];
+            foreach ($settings['properties']['valuePicker']['items'] as $key => $name) {
+                $tempPickerItems[] = [$name, $key];
+            }
+            $this->valuePicker['items'] = $tempPickerItems;
+        }
 
         return $this;
     }
@@ -85,22 +112,21 @@ class EmailFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     {
         return [
             'identifier' => $this->identifier,
-            'type' => $this->type->value,
+            'type' => FieldType::EMAIL->value,
             'properties' => [
                 'autocomplete' => $this->autocomplete,
                 'default' => $this->default,
                 'placeholder' => $this->placeholder,
                 'size' => $this->size,
                 'required' => $this->required,
-                'trim' => $this->trim,
             ],
             '_path' => $this->path,
             '_identifier' =>  $this->uniqueIdentifier,
         ];
     }
 
-    public function getTemplateHtml(string $indentation): string
+    public function getTemplateHtml(int $indentation): string
     {
-        return $indentation . '<p><f:link.email email="{' . $this->uniqueIdentifier . '}" /></p>' . "\n";
+        return str_repeat(' ', $indentation * 4) . '<p><f:link.email email="{' . $this->uniqueIdentifier . '}" /></p>' . "\n";
     }
 }
