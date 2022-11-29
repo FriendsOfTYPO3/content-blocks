@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Domain\Repository;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\CodeGenerator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
@@ -49,10 +50,8 @@ class ContentBlockConfigurationRepository implements SingletonInterface
         GeneralUtility::mkdir_deep($this->hostBasePath);
     }
 
-    /**
-     * @return array<ContentBlockConfiguration>
-     */
-    public function findAll(): array
+
+    public function findAll(): TableDefinitionCollection
     {
         $result = [];
         $cbFinder = new Finder();
@@ -75,12 +74,15 @@ class ContentBlockConfigurationRepository implements SingletonInterface
 
             $nameFromComposer = explode('/', $composerJson['name']);
 
-            /** @var ContentBlockConfiguration $contentBlockConfiguration */
-            $contentBlockConfiguration = $this->findByIdentifier($nameFromComposer[1]);
-            $result[$contentBlockConfiguration->getKey()] = $contentBlockConfiguration;
+            // /** @var ContentBlockConfiguration $contentBlockConfiguration */
+            // $contentBlockConfiguration = $this->findByIdentifier($nameFromComposer[1]);
+            // $result[$contentBlockConfiguration->getKey()] = $contentBlockConfiguration;
+
+            $result[] = $this->findByIdentifier($nameFromComposer[1]);
         }
 
-        return $result;
+        // return $result;
+        return TableDefinitionCollection::createFromArray($result);
     }
 
     /**
@@ -178,7 +180,7 @@ class ContentBlockConfigurationRepository implements SingletonInterface
     /**
      * Find a ContentBlock by identifier
      */
-    public function findByIdentifier(string $identifier): ?ContentBlockConfiguration
+    public function findByIdentifier(string $identifier): array
     {
         $cbBasePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR . $this->configurationService->getContentBlockDestinationPath() . $identifier;
         // check if directory exists, if so, stop.
@@ -219,10 +221,11 @@ class ContentBlockConfigurationRepository implements SingletonInterface
             throw new \Exception(sprintf('No icon found for ContentBlock %s in path %s', $identifier, $path));
         }
 
-        /** @var ContentBlockConfigurationFactory $contentBlockConfFactory */
-        $contentBlockConfFactory = GeneralUtility::makeInstance(ContentBlockConfigurationFactory::class);
+        // /** @var ContentBlockConfigurationFactory $contentBlockConfFactory */
+        // $contentBlockConfFactory = GeneralUtility::makeInstance(ContentBlockConfigurationFactory::class);
 
-        return $contentBlockConfFactory->createFromArray($cbConf);
+        // return $contentBlockConfFactory->createFromArray($cbConf);
+        return $cbConf;
     }
 
     /**
