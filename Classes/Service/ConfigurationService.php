@@ -74,4 +74,12 @@ class ConfigurationService implements SingletonInterface
     {
         return 'cb_collection_';
     }
+
+    /**
+     * If this should be configurable or things changes in future
+     */
+    public function getDatabaseTtContentPrefix(): string
+    {
+        return 'cb_';
+    }
 }
