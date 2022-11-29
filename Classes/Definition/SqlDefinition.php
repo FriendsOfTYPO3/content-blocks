@@ -63,9 +63,8 @@ final class SqlDefinition implements \IteratorAggregate, \Countable
     {
         $sqlDefinition = new self();
         $sqlDefinition->table = $table;
-        foreach ($array as $column => $sql) {
-            $columnDefinition = $sql[$table][$column];
-            $sqlDefinition->addColumn(new SqlColumnDefinition($column, $columnDefinition));
+        foreach ($array as $columnDefinition) {
+            $sqlDefinition->addColumn(new SqlColumnDefinition($columnDefinition));
         }
         return $sqlDefinition;
     }

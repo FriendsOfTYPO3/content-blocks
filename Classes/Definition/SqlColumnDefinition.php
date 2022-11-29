@@ -17,24 +17,27 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+
 final class SqlColumnDefinition
 {
     private string $column = '';
-    private string $sqlDefinition = '';
+    private string $type = '';
+    private array $config = [];
 
-    public function __construct(string $column, string $sqlDefinition)
+    public function __construct(array $columnDefinition)
     {
-        if ($column === '') {
+        if (!isset($columnDefinition['identifier'])) {
             throw new \InvalidArgumentException('Column name must not be empty.', 1629291834);
         }
 
-        if ($sqlDefinition === '') {
-            throw new \InvalidArgumentException('SQL definition must not be empty.', 1629291856);
+        if (count($columnDefinition) < 1) {
+            throw new \InvalidArgumentException('SQL column definition definition must not be empty.', 1629291856);
         }
 
-        $this->column = $column;
-
-        $this->sqlDefinition = $sqlDefinition;
+        $this->config = $columnDefinition['config'];
+        $this->column = $columnDefinition['identifier'];
+        $this->type = $this->config['type'];
     }
 
     public function getColumn(): string
@@ -44,7 +47,9 @@ final class SqlColumnDefinition
 
     public function getSqlDefinition(): string
     {
-        return $this->sqlDefinition;
+        return FieldType::from($this->type)
+            ->getFieldTypeConfiguration($this->config)
+            ->getSql($this->column) ;
     }
 
     public function toArray(): array
