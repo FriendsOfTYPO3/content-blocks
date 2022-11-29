@@ -62,9 +62,9 @@ class AbstractFieldConfiguration
     public function getTcaTemplate(): array
     {
         $tcaTemplate = [
-            'label' => 'LLL:' . $this->rawData['EditorInterfaceXlf'] . ':' . $this->rawData['vendor']
+            'label' => 'LLL:' . $this->rawData['languageFile'] . ':' . $this->rawData['vendor']
                         . '.' . $this->rawData['package'] . '.' . $this->identifier . '.label',
-            'description' => 'LLL:' . $this->rawData['EditorInterfaceXlf'] . ':' . $this->rawData['vendor']
+            'description' => 'LLL:' . $this->rawData['languageFile'] . ':' . $this->rawData['vendor']
             . '.' . $this->rawData['package'] . '.' . $this->identifier . '.description',
             'config' => [],
         ];
