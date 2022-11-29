@@ -38,6 +38,8 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
 
     public bool $trim = false;
 
+    public array $valuePicker = [];
+
     /**
      * Construct: setting from yaml file needed to create a field configuration.
      */
@@ -52,6 +54,28 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     public function getTca(): array
     {
         $tca = parent::getTcaTemplate();
+        $tca['config'] = [
+            'type' => $this->type,
+            'size' => $this->size,
+        ];
+        if ($this->max !== null) {
+            $tca['config']['max'] = $this->max;
+        }
+        if ($this->default !== '') {
+            $tca['config']['default'] = $this->default;
+        }
+        if ($this->placeholder !== '') {
+            $tca['config']['placeholder'] = $this->placeholder;
+        }
+        if ($this->required) {
+            $tca['config']['required'] = $this->required;
+        }
+        if ($this->autocomplete) {
+            $tca['config']['autocomplete'] = $this->autocomplete;
+        }
+        if (isset($this->valuePicker['items']) && count($this->valuePicker['items']) > 0) {
+            $tca['config']['valuePicker'] = $this->valuePicker;
+        }
         return $tca;
     }
 
@@ -69,14 +93,21 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     protected function createFromArray(array $settings): self
     {
         parent::createFromArray($settings);
-        $this->type = FieldType::TEXT;
+        $this->type = FieldType::TEXT->value;
         $this->size = $settings['properties']['size'] ?? $this->size;
         $this->max = $settings['properties']['max'] ?? $this->max;
         $this->default = $settings['properties']['default'] ?? $this->default;
         $this->placeholder = $settings['properties']['placeholder'] ?? $this->placeholder;
         $this->required = (bool)($settings['properties']['required'] ?? $this->required);
-        $this->trim = (bool)($settings['properties']['trim'] ?? $this->trim);
         $this->autocomplete = (bool)($settings['properties']['autocomplete'] ?? $this->autocomplete);
+
+        if (isset($settings['properties']['valuePicker']['items']) && is_array($settings['properties']['valuePicker']['items'])) {
+            $tempPickerItems = [];
+            foreach ($settings['properties']['valuePicker']['items'] as $key => $name) {
+                $tempPickerItems[] = [$name, $key];
+            }
+            $this->valuePicker['items'] = $tempPickerItems;
+        }
 
         return $this;
     }
@@ -88,7 +119,7 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     {
         return [
             'identifier' => $this->identifier,
-            'type' => $this->type->value,
+            'type' => $this->type,
             'properties' => [
                 'autocomplete' => $this->autocomplete,
                 'default' => $this->default,
@@ -96,7 +127,6 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
                 'placeholder' => $this->placeholder,
                 'size' => $this->size,
                 'required' => $this->required,
-                'trim' => $this->trim,
             ],
             '_path' => $this->path,
             '_identifier' =>  $this->uniqueIdentifier,
@@ -115,8 +145,8 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
         ];
     }
 
-    public function getTemplateHtml(string $indentation): string
+    public function getTemplateHtml(int $indentation): string
     {
-        return $indentation . '<p>{' . $this->uniqueIdentifier . '}</p>' . "\n";
+        return str_repeat(' ', $indentation * 4) . '<p>{' . $this->uniqueIdentifier . '}</p>' . "\n";
     }
 }
