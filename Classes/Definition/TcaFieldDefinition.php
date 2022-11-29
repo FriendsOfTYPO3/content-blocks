@@ -32,7 +32,7 @@ final class TcaFieldDefinition
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
-        $identifier = (string)($definition['identifier'] ?? '');
+        $identifier = (string)($array['identifier'] ?? '');
         if ($identifier === '') {
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty', 1629277138);
         }
