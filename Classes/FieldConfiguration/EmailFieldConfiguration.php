@@ -51,7 +51,7 @@ class EmailFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     {
         $tca = parent::getTcaTemplate();
         $tca['config'] = [
-            'type' => FieldType::EMAIL->value,
+            'type' => FieldType::EMAIL->getTcaType(),
             'size' => $this->size,
         ];
         if ($this->autocomplete) {

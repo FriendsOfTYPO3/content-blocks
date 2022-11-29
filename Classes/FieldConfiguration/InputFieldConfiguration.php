@@ -93,7 +93,7 @@ class InputFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     protected function createFromArray(array $settings): self
     {
         parent::createFromArray($settings);
-        $this->type = FieldType::TEXT->value;
+        $this->type = FieldType::TEXT->getTcaType();
         $this->size = $settings['properties']['size'] ?? $this->size;
         $this->max = $settings['properties']['max'] ?? $this->max;
         $this->default = $settings['properties']['default'] ?? $this->default;

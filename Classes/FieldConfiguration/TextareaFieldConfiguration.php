@@ -95,7 +95,7 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
     protected function createFromArray(array $settings): self
     {
         parent::createFromArray($settings);
-        $this->type = FieldType::TEXTAREA->value;
+        $this->type = FieldType::TEXTAREA->getTcaType();
         $this->cols = (int)($settings['properties']['cols'] ?? $this->cols);
         $this->default = $settings['properties']['default'] ?? $this->default;
         $this->enableRichtext = (bool)($settings['properties']['enableRichtext'] ?? $this->enableRichtext);
