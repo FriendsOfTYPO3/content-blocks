@@ -18,9 +18,11 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -54,6 +56,16 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
     protected $record;
 
     /**
+     * @var TableDefinitionCollection $tableDefinitionCollection
+     */
+    protected TableDefinitionCollection $tableDefinitionCollection;
+
+    /**
+     * @var ContentElementDefinition
+     */
+    protected $contentElementDefinition;
+
+    /**
      * @var ContentBlockConfiguration
      */
     protected $cbConf;
@@ -81,22 +93,18 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
         $this->record = $processedData['data'];
         $this->cType = $this->record['CType'];
 
-        /** @param ContentBlockConfiguration */
-        $cbConf = $this->configurationRepository->findContentBlockByCType($processedData['data']['CType']);
-        if ($cbConf === null) {
-            throw new \Exception(sprintf('It seems you try to render a ContentBlock which does not exists. The unknown CType is: %s. Reason: We couldn\'t find the composer package.', $processedData['data']['CType']));
-        }
+        /** @var TableDefinitionCollection $tableDefinition */
+        $this->tableDefinitionCollection = $this->configurationRepository->findContentBlockByCType($this->cType);
 
-        $this->cbConf = $cbConf;
-        $processedData['cb'] = $cbConf->toArray();
+        $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
+
+        $this->contentElementDefinition = $this->configurationRepository->findContentElementDefinition($this->cType);
 
         $cbData = [];
 
-        /** @var FieldConfigurationInterface $field */
-        foreach ($this->cbConf->fieldsConfig as $field) {
-            if (count($field->path) == 1) {
-                $cbData = $this->_processField($field, $this->record, $cbData);
-            }
+        /** @var TcaFieldDefinition $fieldDefinition */
+        foreach ($ttContentDefinition->getTcaColumnsDefinition() as $column => $fieldDefinition) {
+            $cbData = $this->_processField($fieldDefinition, $this->record, $cbData, 'tt_content');
         }
 
         $processedData = array_merge($processedData, $cbData);
@@ -105,122 +113,76 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
 
     /** process a field
      * @throws \Exception
-     * @var FieldConfigurationInterface $fieldConf, configuration of the field
+     * @var TcaFieldDefinition $fieldConf, configuration of the field
      * @var array $record, the data base record (row) with the values inside
      * @var array $cbData, the data stack where to add the data
      * @return array|string|int
     */
-    protected function _processField(FieldConfigurationInterface $fieldConf, array $record, array $cbData)
+    protected function _processField(TcaFieldDefinition $fieldConf, array $record, array $cbData, string $table)
     {
-        $fieldColumnName = $fieldConf->uniqueColumnName($this->cbConf->getKey(), $fieldConf['_identifier']);
+        $fieldType = $fieldConf->getFieldType();
 
-        // Get normal fields
-        if (!array_key_exists($fieldConf->uniqueIdentifier, $this->cbConf->fieldsConfig)
-                && !$fieldConf->isFileField
-        ) {
-            // Feature: reuse of existing fields
-            if (
-                $fieldConf->useExistingField
-                // check if there is a column configuration, otherwice there is a content block field
-                && (
-                    array_key_exists($fieldConf->identifier, $GLOBALS['TCA']['tt_content']['columns'])
-                    // || array_key_exists($fieldConf->identifier, $GLOBALS['TCA'][Constants::COLLECTION_FOREIGN_TABLE]['columns']) // @todo: insert real collection table
-                )
-            ) {
-                if (!array_key_exists($fieldConf['identifier'], $record)) {
-                    throw new \Exception(sprintf('It seems your field %s is missing in the database. Maybe a database compare could help you out.', $fieldConf['identifier']));
-                }
-                $cbData[$fieldConf['identifier']] = $record[$fieldConf['identifier']];
-            } else {
-                if (!array_key_exists($fieldColumnName, $record)) {
-                    throw new \Exception(sprintf('It seems your field %s is missing in the database. Maybe a database compare could help you out.', $fieldColumnName));
-                }
-                // The "normal" way
-                $cbData[$fieldConf['identifier']] = $record[$fieldColumnName];
-            }
+        // feature: use existing field
+        $columnInRecord = (($fieldConf->isUseExistingField()) ? $fieldConf->getName() : $fieldConf->getIdentifier());
+
+        // check if column is available
+        if (!array_key_exists($columnInRecord, $record)) {
+            throw new \Exception(sprintf('It seems your field %s is missing in the database. Maybe a database compare could help you out.', $columnInRecord));
         }
-        // get file fields
-        elseif (array_key_exists($fieldConf['_identifier'], $this->cbConf['fileFields'])) {
-            $files = $this->_getFiles(
-                (($this->_isFrontend()) ? $fieldConf['_identifier'] : $fieldColumnName),
-                ((count($fieldConf['_path']) == 1) ? 'tt_content' : /*  Constants::COLLECTION_FOREIGN_TABLE */ 'tt_content'), // @todo: insert real collection table and remove the second tt_content string
-                $record
-            );
 
+        // columns for direct output without processing
+        if ($fieldType->dataProcessingBehaviour() === 'renderable') {
+            $cbData[$fieldConf->getName()] = $record[$columnInRecord];
+
+        } else if ($fieldType->dataProcessingBehaviour() === 'file') {
+            //process files
+            /** @var FileCollector $fileCollector */
+            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
+
+            $fileCollector->addFilesFromRelation($table, $columnInRecord, $record);
+            $files = $fileCollector->getFiles();
+
+            $fileFieldTcaConfig = $fieldConf->getTca($this->contentElementDefinition);
             if (
-                (isset($fieldConf['properties']['minItems']) && $fieldConf['properties']['minItems'] == 1) &&
-                (isset($fieldConf['properties']['maxItems']) && $fieldConf['properties']['maxItems'] == 1)
+                (isset($fileFieldTcaConfig['config']['minitems']) && $fileFieldTcaConfig['config']['minitems'] == 1) &&
+                (isset($fileFieldTcaConfig['config']['maxitems']) && $fileFieldTcaConfig['config']['maxitems'] == 1)
             ) {
                 $files = array_pop(array_reverse($files));
             }
-            $cbData[$fieldConf['identifier']] = $files;
-        }
-        // handle collections
-        /* @todo: refactor collection handling
-        elseif ($fieldConf['type'] == 'Collection') {
-            $cbData[$fieldConf['identifier']] = $this->_processCollection(
-                ((count($fieldConf['_path']) == 1) ? 'tt_content' : Constants::COLLECTION_FOREIGN_TABLE),
-                $record['_LOCALIZED_UID'] ?? $record['uid'],
-                $fieldConf
+            if ($files instanceof FileReference) {
+                $cbData[$fieldConf->getName()] = [
+                    $files
+                ];
+            } else {
+                $cbData[$fieldConf->getName()] = $files;
+            }
+
+        } else if ($fieldType->dataProcessingBehaviour() === 'collection') {
+            // handle collections
+            $cbData[$fieldConf->getName()] = $this->_processCollection(
+                    $table,
+                    $record['_LOCALIZED_UID'] ?? $record['uid'],
+                    $fieldConf
             );
         }
-        //*/
+
         return $cbData;
     }
 
     /**
-     * find file for a field
-     */
-    protected function _getFiles($fieldName, $table, $record): array
-    {
-        // gather data
-        if ($this->_isFrontend()) {
-            /** @var FileCollector $fileCollector */
-            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
-            $fileCollector->addFilesFromRelation($table, $fieldName, $record);
-            return $fileCollector->getFiles();
-        }
-        // Since bug in FileCollector, we need to handle files the other way in backend to support workspaces.
-        // https://review.typo3.org/c/Packages/TYPO3.CMS/+/74185
-        // This should be removed after dropping support for v10.4
-        // @todo: remove this workaround and check if it works
-        $workspaceId = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('workspace', 'id', 0);
-        $files = BackendUtility::resolveFileReferences(
-            $table,
-            $fieldName,
-            $record,
-            (($workspaceId !== 0) ? $workspaceId : null)
-        );
-        if ($files instanceof FileReference) {
-            return [$files];
-        }
-        $files = array_reverse($files);
-        return $files;
-    }
-
-    /**
      * Manage collections and sub fields.
-     * All collection data is stored in the table tx_contentblocks_reg_api_collection.
      */
-    protected function _processCollection(string $parentTable, int $parentUid, FieldConfigurationInterface $parentFieldConf): array
+    protected function _processCollection(string $parentTable, int $parentUid, TcaFieldDefinition $parentFieldConf): array
     {
-        // @todos here:
-        // [ ] refactor $parentFieldConf to FieldConfigurationInterface
-        // [ ] refactor Constants::COLLECTION_FOREIGN_TABLE to the real colleciton table
+        $parentTca = $parentFieldConf->getTca($this->contentElementDefinition);
+        $table = $parentTca['config']['foreign_table'];
 
-        return []; // TODO
-
-        /*
-        // check if collection can be processed
-        if (!isset($parentFieldConf['properties']['fields']) || !is_array($parentFieldConf['properties']['fields'])) {
-            return [];
-        }
-
+        $collectionDefinition = $this->tableDefinitionCollection->getTable($table);
         // Managing Workspace overlays
         $workspaceId = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('workspace', 'id', 0);
 
         $q = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable(Constants::COLLECTION_FOREIGN_TABLE) // TODO
+            ->getConnectionForTable($table)
             ->createQueryBuilder();
 
         $q->getRestrictions()->add(
@@ -228,15 +190,15 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
         );
 
         $stmt = $q->select('*')
-            ->from(Constants::COLLECTION_FOREIGN_TABLE)
+            ->from($table)
             ->where(
                 $q->expr()->eq(
-                    Constants::COLLECTION_FOREIGN_FIELD, // TODO
+                    $parentTable,
                     $q->createNamedParameter($parentUid, Connection::PARAM_INT)
                 )
             )->andWhere(
                 $q->expr()->eq(
-                    Constants::COLLECTION_FOREIGN_TABLE_FIELD, // TODO
+                    $parentTable,
                     $q->createNamedParameter($parentTable)
                 )
             )
@@ -249,27 +211,29 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
             // overlay workspaces
             if ($this->_isFrontend()) {
                 GeneralUtility::makeInstance(PageRepository::class)
-                    ->versionOL(Constants::COLLECTION_FOREIGN_TABLE, $r); // TODO
+                    ->versionOL($table, $r);
                 if (false === $r) {
                     continue;
                 }
             } else {
-                BackendUtility::workspaceOL(Constants::COLLECTION_FOREIGN_TABLE, $r); // TODO
+                BackendUtility::workspaceOL($table, $r);
                 if (false === $r) {
                     continue;
                 }
             }
 
             // dangling relation: validate relation
-            if ($r[Constants::COLLECTION_FOREIGN_MATCH_FIELD] !== $parentFieldConf->uniqueColumnName($this->cbConf->getKey(), $parentFieldConf->uniqueIdentifier)) { // TODO
+            if ($r[$table] !== $parentFieldConf->getIdentifier()) {
                 continue;
             }
 
             $collectionData = [];
             // add the field infos
-            foreach ($parentFieldConf['properties']['fields'] as $fieldConf) { // TODO
-                $collectionData = $this->_processField($fieldConf, $r, $collectionData); // TODO
+            /** @var TcaFieldDefinition $fieldDefinition */
+            foreach ($collectionDefinition->getTcaColumnsDefinition() as $fieldDefinition) {
+                $collectionData = $this->_processField($fieldDefinition, $r, $collectionData, $table);
             }
+
             // add uid to collection items
             if (!array_key_exists('uid', $collectionData)) {
                 $collectionData['uid'] = $r['uid'];
@@ -278,7 +242,6 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
         }
 
         return $fieldData;
-        //*/
     }
 
     protected function _isFrontend()
