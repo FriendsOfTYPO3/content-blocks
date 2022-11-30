@@ -22,7 +22,10 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class TcaFieldDefinition
 {
     private ?FieldType $fieldType = null;
+    /** the identifier is the name of the columnin TCA and database */
     private string $identifier = '';
+    /** the name is how to call this field in the fluid template */
+    private string $name = '';
     private string $label = '';
     private string $description = '';
     /**
@@ -43,6 +46,7 @@ final class TcaFieldDefinition
         $self = new self();
         return $self
             ->withIdentifier($identifier)
+            ->withName($array['config']['identifier'])
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withConfig($array['config'] ?? [])
@@ -56,6 +60,7 @@ final class TcaFieldDefinition
             'identifier' => $this->identifier,
             'label' => $this->label,
             'description' => $this->description,
+            'name' => $this->name,
         ];
     }
 
@@ -67,6 +72,11 @@ final class TcaFieldDefinition
     public function getIdentifier(): string
     {
         return $this->identifier;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function getLabel(): string
@@ -123,5 +133,19 @@ final class TcaFieldDefinition
         $clone = clone $this;
         $clone->fieldType = FieldType::from($type);
         return $clone;
+    }
+
+    public function withName(string $name): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->name = $name;
+        return $clone;
+    }
+
+    public function isUseExistingField(): bool
+    {
+        return $this->fieldType
+            ->getFieldTypeConfiguration($this->config)
+            ->useExistingField;
     }
 }
