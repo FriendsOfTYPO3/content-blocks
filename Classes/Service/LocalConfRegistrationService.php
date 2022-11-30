@@ -19,6 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\Service;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class LocalConfRegistrationService
@@ -29,5 +31,13 @@ class LocalConfRegistrationService
 
         /** @var TableDefinitionCollection $contentBlocksList */
         $contentBlocksList = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class)->findAll();
+
+        // Icons
+        $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
+        $iconRegistry->registerIcon(
+            'ext-content_blocks',
+            SvgIconProvider::class,
+            ['source' => 'EXT:content_blocks/Resources/Public/Icons/Extension.svg']
+        );
     }
 }
