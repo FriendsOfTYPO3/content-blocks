@@ -84,6 +84,43 @@ enum FieldType: String
     }
 
     /**
+     * Possible values:
+     * - renderable -> means, this can be direct rendered in the fluid template
+     * - file -> means, this field has to be processed as a file
+     * - collection -> means, this field has a list of subfield in another table and hast to processed as inline field
+     * - skip -> means, this field must not be processed by the ContentBlocksDataProcessor
+     *
+     * @return string what to do in the ContentBlocksDataProcessor
+     */
+    public function dataProcessingBehaviour(): string
+    {
+        return match ($this) {
+            self::CATEGORY => 'skip', // @todo: implement field type
+            self::CHECKBOX => 'renderable',
+            self::COLLECTION => 'collection', // @todo: implement field type
+            self::COLOR => 'renderable',
+            self::DATETIME => 'renderable',
+            self::EMAIL => 'renderable',
+            self::FILE => 'file',
+            self::LINK => 'renderable',
+            self::NUMBER => 'renderable',
+            self::NONE => 'skip',
+            self::RADIO => 'renderable',
+            self::SELECT => 'renderable',
+            self::REFERENCE => 'skip', // @todo: implement field type
+            self::TEXT => 'renderable',
+            self::TEXTAREA => 'renderable',
+            // For testing
+            self::IMAGE => 'file',
+            self::LINEBREAK =>  'skip',
+            self::URL =>  'renderable',
+            default => 'skip',
+        };
+    }
+
+
+
+    /**
      * Get the matching FieldTypeConfiguration
      * TODO: add the missing field types
      */
