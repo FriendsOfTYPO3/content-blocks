@@ -121,6 +121,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 'package' => $package,
                 'publicPath' => $path . $configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR,
                 'privatePath' => $path . $configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR,
+                'wizardGroup' => ($contentBlock['yaml']['group'] ?? ''),
             ];
 
         }

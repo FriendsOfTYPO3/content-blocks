@@ -30,6 +30,7 @@ final class ContentElementDefinition extends TypeDefinition
     private string $package = '';
     private string $publicPath = '';
     private string $privatePath = '';
+    private string $wizardGroup = '';
 
     public static function createFromArray(array $array, string $table = 'tt_content'): ContentElementDefinition
     {
@@ -49,7 +50,8 @@ final class ContentElementDefinition extends TypeDefinition
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
             ->withPublicPath($array['publicPath'] ?? '')
-            ->withPrivatePath($array['privatePath'] ?? '');
+            ->withPrivatePath($array['privatePath'] ?? '')
+            ->withWizardGroup($array['wizardGroup'] ?? 'common');
     }
 
     public function toArray(): array
@@ -64,6 +66,7 @@ final class ContentElementDefinition extends TypeDefinition
             'package' => $this->package,
             'publicPath' => $this->publicPath,
             'privatePath' => $this->privatePath,
+            'wizardGroup' => $this->wizardGroup,
         ];
         return $array;
     }
@@ -106,6 +109,11 @@ final class ContentElementDefinition extends TypeDefinition
     public function getPrivatePath(): string
     {
         return $this->privatePath;
+    }
+
+    public function getWizardGroup(): string
+    {
+        return $this->wizardGroup;
     }
 
     public function hasSaveAndClose(): bool
@@ -173,6 +181,13 @@ final class ContentElementDefinition extends TypeDefinition
     {
         $clone = clone $this;
         $clone->privatePath = $privatePath;
+        return $clone;
+    }
+
+    public function withWizardGroup(string $wizardGroup): self
+    {
+        $clone = clone $this;
+        $clone->wizardGroup = $wizardGroup;
         return $clone;
     }
 }
