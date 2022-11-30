@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\InputFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 
 enum FieldType: String
@@ -68,7 +69,7 @@ enum FieldType: String
             self::EMAIL => 'input',
             self::FILE => 'inline',
             self::LINK => 'input',
-            self::NUMBER => 'input',
+            self::NUMBER => 'number',
             self::NONE => 'none',
             self::RADIO => 'radio',
             self::SELECT => 'select',
@@ -135,7 +136,7 @@ enum FieldType: String
             self::EMAIL => new EmailFieldConfiguration($config),
             // self::FILE => 'inline',
             // self::LINK => 'input',
-            // self::NUMBER => 'input',
+            self::NUMBER => new NumberFieldConfiguration($config),
             // self::RADIO => 'radio',
             // self::SELECT => 'select',
             // self::REFERENCE => 'input',
