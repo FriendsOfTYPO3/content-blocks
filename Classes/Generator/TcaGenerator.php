@@ -80,7 +80,7 @@ class TcaGenerator
                     );
                     $GLOBALS['TCA'][$tableName]['types'][$typeDefinition->getCType()] = [
                         'previewRenderer' => PreviewRenderer::class,
-                        'showitems' => $showItems,
+                        'showitem' => $showItems,
                     ];
 
                     /***************
