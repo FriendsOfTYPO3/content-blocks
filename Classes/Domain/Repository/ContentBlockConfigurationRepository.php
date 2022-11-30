@@ -22,9 +22,9 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\CodeGenerator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
