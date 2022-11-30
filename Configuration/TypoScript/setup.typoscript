@@ -2,14 +2,14 @@ lib.contentBlock = FLUIDTEMPLATE
 lib.contentBlock {
     layoutRootPaths {
         # TODO: currently for inter-operability with fluid_styled_content
-        -5 = EXT:contentblocks_reg_api/Resources/Private/Layouts/
+        -5 = EXT:content_blocks/Resources/Private/Layouts/
     }
 
     partialRootPaths {
-        0 = EXT:contentblocks_reg_api/Resources/Private/Partials/
+        0 = EXT:content_blocks/Resources/Private/Partials/
     }
 
     dataProcessing {
-        10 = Typo3Contentblocks\ContentblocksRegApi\DataProcessing\CbProcessor
+        10 = TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor
     }
 }
