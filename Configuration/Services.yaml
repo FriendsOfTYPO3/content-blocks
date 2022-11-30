@@ -36,6 +36,11 @@ services:
     autoconfigure: false
     public: true
 
+  TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
+    autowire: true
+    autoconfigure: false
+    public: true
+
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
     autowire: true
     autoconfigure: false
@@ -45,3 +50,8 @@ services:
         identifier: 'cb-sql-generator'
         event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
         method: addDatabaseTablesDefinition
+
+  TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
+    autowire: true
+    autoconfigure: false
+    public: true
