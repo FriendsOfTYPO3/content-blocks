@@ -18,16 +18,13 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\CodeGenerator\TcaCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
-use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TcaGenerator
 {
@@ -52,6 +49,7 @@ class TcaGenerator
     public function setTca(array $contentBlocksConfig = null): bool
     {
         if ($contentBlocksConfig === null) {
+            /** @var TableDefinitionCollection $contentBlocksConfig */
             $contentBlocksConfig = $this->cbConfigRepository->findAll();
         }
 
@@ -67,7 +65,6 @@ class TcaGenerator
                     !is_array($GLOBALS['TCA'][$tableName]['types'][$typeDefinition->getCType()])
                 ) {
                     $tcaColumns = [];
-                    $showItems = '';
                     foreach ($tableDefinition->getTcaColumnsDefinition() as $columnName => $columnFieldDefinition) {
                         $tcaColumns[$columnName] = $columnFieldDefinition->getTca($typeDefinition);
                     }
@@ -76,15 +73,40 @@ class TcaGenerator
                         $tcaColumns
                     );
 
+                    $showItems = (
+                        ($tableName === 'tt_content')
+                        ? TcaCodeGenerator::getTtContentStandardShowItems($tcaColumns)
+                        : TcaCodeGenerator::getCollectionTableStandardShowItems($tcaColumns)
+                    );
                     $GLOBALS['TCA'][$tableName]['types'][$typeDefinition->getCType()] = [
                         'previewRenderer' => PreviewRenderer::class,
+                        'showitems' => $showItems,
                     ];
+
+                    /***************
+                     * Assign Icon
+                     */
+                    $GLOBALS['TCA'][$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getCType()] = $typeDefinition->getCType();
+
+                    /***************
+                     * Add content element to selector list
+                     */
+                    if ($tableName == 'tt_content') {
+                        ExtensionManagementUtility::addTcaSelectItem(
+                            'tt_content',
+                            'CType',
+                            [
+                                'LLL:' . $typeDefinition->getPrivatePath() . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $typeDefinition->getVendor()
+                                . '.' . $typeDefinition->getPackage() . '.title',
+                                $typeDefinition->getCType(),
+                                $typeDefinition->getCType(),
+                            ],
+                            'header',
+                            'after'
+                        );
+                    }
                 }
             }
-            /***************
-             * Assign Icon
-             */
-            $GLOBALS['TCA'][$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getCType()] = $typeDefinition->getCType();
 
         }
 
