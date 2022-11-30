@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Domain\Repository;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\CodeGenerator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
@@ -231,7 +232,7 @@ class ContentBlockConfigurationRepository implements SingletonInterface
     /**
      * Find a ContentBlock by CType
      */
-    public function findContentBlockByCType(string $cType): ?ContentBlockConfiguration
+    public function findContentBlockByCType(string $cType): TableDefinitionCollection
     {
         $cbFinder = new Finder();
         $cbFinder->directories()->depth('== 0')->in($this->hostBasePath);
@@ -252,12 +253,37 @@ class ContentBlockConfigurationRepository implements SingletonInterface
             }
 
             $nameFromComposer = explode('/', $composerJson['name']);
+            $tempCTypeformContentBlock = 'cb_' . str_replace('/', '-', $composerJson['name']);
 
-            if ($cType === $nameFromComposer[0] . '_' . $nameFromComposer[0]) {
-                return $this->findByIdentifier($nameFromComposer[1]);
+            if ($cType === $tempCTypeformContentBlock) {
+                $result = [
+                    0 => $this->findByIdentifier($nameFromComposer[1]),
+                ];
+                return TableDefinitionCollection::createFromArray($result);
             }
         }
 
-        return null;
+        return new TableDefinitionCollection;
+    }
+
+    public function findContentElementDefinition(string $cType): ContentElementDefinition
+    {
+        /** @var TableDefinitionCollection $cbConfiguration */
+        $tableDefinitionColleciton = $this->findContentBlockByCType($cType);
+
+        $contentElementDefinition = false;
+        /** @var TableDefinition $tableDefinition */
+        foreach ($tableDefinitionColleciton as $tableDefinition) {
+            /** @var TypeDefinition|ContentElementDefinition $typeDefinition */
+            foreach ($tableDefinition->getTypeDefinitionCollection() as $typeDefinition) {
+                if ($typeDefinition instanceof ContentElementDefinition) {
+                    return $typeDefinition;
+                }
+            }
+        }
+
+        if ($contentElementDefinition === false) {
+            throw new \Exception(sprintf('It seems you try to render a ContentBlock which does not exists. The unknown CType is: %s. Reason: We couldn\'t find the composer package.', $cType));
+        }
     }
 }
