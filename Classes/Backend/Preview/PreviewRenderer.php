@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor;
+use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -69,26 +70,23 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     {
         $record = $item->getRecord();
 
-        $cbConfiguration = $this->configurationRepository->findContentBlockByCType($record['CType']);
-        if ($cbConfiguration === null) {
-            throw new \Exception(sprintf('It seems you try to render a ContentBlock which does not exists. The unknown CType is: %s. Reason: We couldn\'t find the composer package.', $record['CType']));
-        }
+        /** @var ContentElementDefinition $cbConfiguration */
+        $contentElementDefinition = $this->configurationRepository->findContentElementDefinition($record['CType']);
 
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename($cbConfiguration->editorPreviewHtml);
+        $view->setTemplatePathAndFilename($contentElementDefinition->getPrivatePath() . 'EditorPreview.html');
 
         // TODO: use TypoScript configuration for paths
-        // TODO: add partialRootPath to cbConf
         $view->setPartialRootPaths(
             [
                 'EXT:content_blocks/Resources/Private/Partials/',
-                $cbConfiguration->privatePath,
+                $contentElementDefinition->getPrivatePath() . 'Partials/',
             ]
         );
         $view->setLayoutRootPaths(
             [
                 'EXT:content_blocks/Resources/Private/Layouts/',
-                $cbConfiguration->privatePath,
+                $contentElementDefinition->getPrivatePath() . 'Layouts/',
             ]
         );
 
