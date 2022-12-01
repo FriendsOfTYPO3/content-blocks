@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Enumeration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\InputFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
@@ -67,7 +68,7 @@ enum FieldType: String
             self::COLOR => 'input',
             self::DATETIME => 'input',
             self::EMAIL => 'input',
-            self::FILE => 'inline',
+            self::FILE => 'file',
             self::LINK => 'input',
             self::NUMBER => 'number',
             self::NONE => 'none',
@@ -77,7 +78,7 @@ enum FieldType: String
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
             // For testing
-            self::IMAGE => 'input',
+            self::IMAGE => 'file',
             self::LINEBREAK =>  'input',
             self::URL =>  'input',
             default => '',
@@ -134,7 +135,7 @@ enum FieldType: String
             // self::COLOR => 'input',
             // self::DATETIME => 'input',
             self::EMAIL => new EmailFieldConfiguration($config),
-            // self::FILE => 'inline',
+            self::FILE => new FileFieldConfiguration($config),
             // self::LINK => 'input',
             self::NUMBER => new NumberFieldConfiguration($config),
             // self::RADIO => 'radio',
@@ -143,7 +144,7 @@ enum FieldType: String
             self::TEXT => new InputFieldConfiguration($config),
             self::TEXTAREA => new TextareaFieldConfiguration($config),
             // For testing
-            // self::IMAGE => new InputFieldConfiguration($config),
+            self::IMAGE => new FileFieldConfiguration($config),
             // self::LINEBREAK =>  new InputFieldConfiguration($config),
             // self::URL =>  new InputFieldConfiguration($config),
             default => new NoneFieldConfiguration($config),
