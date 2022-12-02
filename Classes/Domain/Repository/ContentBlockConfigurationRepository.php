@@ -75,10 +75,6 @@ class ContentBlockConfigurationRepository implements SingletonInterface
 
             $nameFromComposer = explode('/', $composerJson['name']);
 
-            // /** @var ContentBlockConfiguration $contentBlockConfiguration */
-            // $contentBlockConfiguration = $this->findByIdentifier($nameFromComposer[1]);
-            // $result[$contentBlockConfiguration->getKey()] = $contentBlockConfiguration;
-
             $result[] = $this->findByIdentifier($nameFromComposer[1]);
         }
 
@@ -221,11 +217,6 @@ class ContentBlockConfigurationRepository implements SingletonInterface
         if ($iconPath === null) {
             throw new \Exception(sprintf('No icon found for ContentBlock %s in path %s', $identifier, $path));
         }
-
-        // /** @var ContentBlockConfigurationFactory $contentBlockConfFactory */
-        // $contentBlockConfFactory = GeneralUtility::makeInstance(ContentBlockConfigurationFactory::class);
-
-        // return $contentBlockConfFactory->createFromArray($cbConf);
         return $cbConf;
     }
 

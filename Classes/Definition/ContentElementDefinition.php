@@ -34,11 +34,6 @@ final class ContentElementDefinition extends TypeDefinition
 
     public static function createFromArray(array $array, string $table = 'tt_content'): ContentElementDefinition
     {
-
-        // 'vendor' => $vendor,
-        // 'package' => $package,
-        // 'publicPath' => $path . $configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR,
-        // 'privatePath' => $path . $configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR,
         $array['typeField'] = 'CType';
         $self = self::fromArray($array, $table);
         return $self

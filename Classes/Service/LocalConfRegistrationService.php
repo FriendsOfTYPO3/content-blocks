@@ -59,7 +59,7 @@ class LocalConfRegistrationService
 
         /** @var TableDefinitionCollection $contentBlocksList */
         $contentBlocksList = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class)->findAll();
-        foreach ($contentBlocksList as $tableName => $tableDefinition) {
+        foreach ($contentBlocksList as $tableDefinition) {
             /***************
              * Add Content Element
              */
