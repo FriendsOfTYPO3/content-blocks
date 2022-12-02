@@ -193,13 +193,8 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
             ->from($table)
             ->where(
                 $q->expr()->eq(
-                    $parentTable,
+                    'foreign_parent_table_uid',
                     $q->createNamedParameter($parentUid, Connection::PARAM_INT)
-                )
-            )->andWhere(
-                $q->expr()->eq(
-                    $parentTable,
-                    $q->createNamedParameter($parentTable)
                 )
             )
             ->orderBy('sorting')
@@ -220,11 +215,6 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
                 if (false === $r) {
                     continue;
                 }
-            }
-
-            // dangling relation: validate relation
-            if ($r[$table] !== $parentFieldConf->getIdentifier()) {
-                continue;
             }
 
             $collectionData = [];
