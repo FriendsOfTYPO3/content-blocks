@@ -53,7 +53,7 @@ class SqlGenerator implements SingletonInterface
                 $sqlString .= (($sqlString === '') ? '' : ', ') . $column->getSqlDefinition();
             }
             if (strlen($sqlString) > 2) {
-                $sqlString = 'CREATE TABLE ' . $sqlDefinition->getTable() . ' (' . $sqlString . ");\n";
+                $sqlString = 'CREATE TABLE `' . $sqlDefinition->getTable() . '` ' . '  ( ' . $sqlString . " );\n";
                 $sql[] = $sqlString;
             }
         }
