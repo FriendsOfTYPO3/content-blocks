@@ -31,7 +31,9 @@ final class TcaFieldDefinition
     /**
      * @var array<string, mixed>
      */
-    public array $config = [];
+    private array $config = [];
+
+    private string $languagePath = '';
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
@@ -50,6 +52,7 @@ final class TcaFieldDefinition
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withConfig($array['config'] ?? [])
+            ->withLanguagePath($array['config']['languagePath'] ?? '')
             ->withFieldType($array['config']['type']);
     }
 
@@ -61,6 +64,7 @@ final class TcaFieldDefinition
             'label' => $this->label,
             'description' => $this->description,
             'name' => $this->name,
+            'languagePath' => $this->languagePath,
         ];
     }
 
@@ -89,14 +93,10 @@ final class TcaFieldDefinition
         return $this->description;
     }
 
-    public function getTca(ContentElementDefinition $ceDefinition): array
+    public function getTca(): array
     {
-        $config = $this->config;
-        $config['languageFile'] = $ceDefinition->getPrivatePath() . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf';
-        $config['package'] = $ceDefinition->getPackage();
-        $config['vendor'] = $ceDefinition->getVendor();
         return $this->fieldType
-            ->getFieldTypeConfiguration($config)
+            ->getFieldTypeConfiguration($this->config)
             ->getTca();
     }
 
@@ -139,6 +139,13 @@ final class TcaFieldDefinition
     {
         $clone = clone $this;
         $clone->name = $name;
+        return $clone;
+    }
+
+    public function withLanguagePath(string $languagePath): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->languagePath = $languagePath;
         return $clone;
     }
 

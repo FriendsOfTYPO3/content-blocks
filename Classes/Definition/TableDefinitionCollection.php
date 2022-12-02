@@ -86,6 +86,8 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             $cType = str_replace('/', '-', $contentBlock['composerJson']['name']);
             $collectionTablePrefix = $configurationService->getDatabaseCollectionTablePrefix() . $cType; // needed for unique collection table names later
             $ttContentColumnPrefix = $configurationService->getDatabaseTtContentPrefix() . $cType; // needed for unique column names in tt_content later
+            [$vendor, $package] = explode('/', $contentBlock['composerJson']['name']);
+            $path = $configurationService->getBasePath() . $package . DIRECTORY_SEPARATOR;
 
             // collect data for tt_content from each ContentBlock
             if (isset($contentBlock['yaml']['fields']) && count($contentBlock['yaml']['fields']) > 0) {
@@ -93,13 +95,18 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
                     // unique tt_content column name
                     $currentColumnName = $ttContentColumnPrefix . '_' . $ttContentField['identifier'];
+                    $currentColumnName = str_replace('-', '_', $currentColumnName);
+                    $languagePath = $path . $configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $ttContentField['identifier'];
 
                     $ttContentField = $tableDefinitionCollection->processCollections(
                         $ttContentField,
                         'tt_content',
                         $currentColumnName,
+                        $languagePath,
                         $collectionTablePrefix
                     );
+
+                    $ttContentField['languagePath'] = $languagePath;
 
                     // add to tt_content fields
                     $tableDefinition['fields'][$currentColumnName] = [
@@ -110,9 +117,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             }
 
             // elements for TypeDefinition
-            [$vendor, $package] = explode('/', $contentBlock['composerJson']['name']);
-            $path = $configurationService->getBasePath() . $package . DIRECTORY_SEPARATOR;
-
             $tableDefinition['elements'][] = [
                 'composerName' => $contentBlock['composerJson']['name'],
                 'identifier' => $contentBlock['composerJson']['name'],
@@ -140,7 +144,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     /**
      * reduce redundant code by using this method.
      */
-    public function processCollections(array $field, string $table, string $currentColumnName, string $collectionTablePrefix = ''): array
+    public function processCollections(array $field, string $table, string $currentColumnName, string $languagePath, string $collectionTablePrefix = ''): array
     {
         // take care of collections
         if (
@@ -149,24 +153,22 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             && count($field['properties']['fields']) > 0
         ) {
             // unique collection table name
-            $collectionTableName = (($collectionTablePrefix !== '') ? $collectionTablePrefix . '_' : '') . $table . '_' . $field['identifier'];
+            $collectionTableName = (($collectionTablePrefix !== '') ? $collectionTablePrefix . '_' : '') . (($table === 'tt_content') ? '' : $table . '_') . $field['identifier'];
+            $collectionTableName = str_replace('-', '_', $collectionTableName);
 
             // enrich infos for inline relations
-            // enrich infos for inline relations
             $field['properties']['foreign_table'] = $collectionTableName; // The table name of the child records
-            $field['properties']['foreign_field'] = $currentColumnName; // the field of the child record pointing to the parent record. This defines where to store the uid of the parent record.
-            $field['properties']['foreign_table_field'] = $table; // the field of the child record pointing to the parent record. This defines where to store the table name of the parent record.
-            $field['properties']['foreign_match_fields'] = [
-                $table => $currentColumnName
-            ]; // Array of field-value pairs to both insert and match against when writing/reading IRRE relations.
+            $field['properties']['foreign_field'] = 'foreign_parent_table_uid'; // the field of the child record pointing to the parent record. This defines where to store the uid of the parent record.
 
             // add collection table to collection
             $this->createCollectionTables(
                 $collectionTableName,
-                $field['properties']['fields']
+                $field['properties']['fields'],
+                $languagePath
             );
 
         }
+        $field['languagePath'] = $languagePath;
         return $field;
     }
 
@@ -180,6 +182,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     public function createCollectionTables(
         string $table,
         array $fieldsList,
+        string $languagePath,
         string $collectionTablePrefix = ''
     ) {
         $tableDefinition = [];
@@ -187,6 +190,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         // collect data for tt_content from each ContentBlock
         if (count($fieldsList) > 0) {
             foreach ($fieldsList as $field) {
+                $languagePath .= '.' . $field['identifier'];
                 // add to field to table
                 $tableDefinition['fields'][$field['identifier']] = [
                     'identifier' => $field['identifier'], // currentColumnName
@@ -194,11 +198,27 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                         $field,
                         $table,
                         $field['identifier'], // currentColumnName
+                        $languagePath,
                         $collectionTablePrefix
                     ),
                 ];
             }
         }
+        // @todo: find a better way to add this field for collections only
+        $tableDefinition['fields']['foreign_parent_table_uid'] = [
+            'identifier' => 'foreign_parent_table_uid',
+            'config' => [
+                'identifier' => 'foreign_parent_table_uid',
+                'type' => 'Number',
+                'languagePath' => $languagePath,
+            ],
+        ];
+        $tableDefinition['elements'][] = [
+            'identifier' => $table,
+            'columns' => array_keys($tableDefinition['fields']),
+            'typeField' => 'inline',
+        ];
+
 
         $this->addTable(
             TableDefinition::createFromTableArray(

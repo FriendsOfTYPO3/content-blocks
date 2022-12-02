@@ -24,11 +24,13 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 class AbstractFieldConfiguration
 {
-    private array $rawData = [];
+    protected array $rawData = [];
 
     public string $type;
 
     public string $identifier = '';
+
+    public string $languagePath = '';
 
     public string $uniqueIdentifier = '';
 
@@ -54,6 +56,7 @@ class AbstractFieldConfiguration
         $this->identifier = $settings['identifier'] ?? '';
         $this->uniqueIdentifier = $settings['_identifier'] ?? '';
         $this->path = $settings['_path'] ?? $this->path;
+        $this->languagePath = $settings['languagePath'];
         $this->useExistingField = (bool)($settings['properties']['useExistingField'] ?? $this->useExistingField);
 
         return $this;
@@ -62,10 +65,8 @@ class AbstractFieldConfiguration
     public function getTcaTemplate(): array
     {
         $tcaTemplate = [
-            'label' => 'LLL:' . $this->rawData['languageFile'] . ':' . $this->rawData['vendor']
-                        . '.' . $this->rawData['package'] . '.' . $this->identifier . '.label',
-            'description' => 'LLL:' . $this->rawData['languageFile'] . ':' . $this->rawData['vendor']
-            . '.' . $this->rawData['package'] . '.' . $this->identifier . '.description',
+            'label' => 'LLL:' . $this->languagePath . '.label',
+            'description' => 'LLL:' . $this->languagePath . '.description',
             'config' => [],
         ];
 

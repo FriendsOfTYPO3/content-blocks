@@ -55,29 +55,34 @@ class TcaGenerator
 
         /** @var TableDefinition $tableDefinition */
         foreach ($contentBlocksConfig as $tableName => $tableDefinition) {
+            // make sure, TCA entry exists for work with it later
+            if (
+                !isset($GLOBALS['TCA'][$tableName]) ||
+                !is_array($GLOBALS['TCA'][$tableName])
+            ) {
+                $GLOBALS['TCA'][$tableName]= [
+                    'columns' => [],
+                ];
+            }
+
             /***************
              * Add Content Element
              */
             /** @var TypeDefinition|ContentElementDefinition $typeDefinition */
             foreach ($tableDefinition->getTypeDefinitionCollection() as $typeDefinition) {
-                if (
-                    !isset($GLOBALS['TCA'][$tableName]['types'][$typeDefinition->getCType()]) ||
-                    !is_array($GLOBALS['TCA'][$tableName]['types'][$typeDefinition->getCType()])
-                ) {
+
+                if ($tableName == 'tt_content') {
                     $tcaColumns = [];
                     foreach ($tableDefinition->getTcaColumnsDefinition() as $columnName => $columnFieldDefinition) {
-                        $tcaColumns[$columnName] = $columnFieldDefinition->getTca($typeDefinition);
+                        $tcaColumns[$columnName] = $columnFieldDefinition->getTca();
                     }
                     $GLOBALS['TCA'][$tableName]['columns'] = array_replace_recursive(
                         $GLOBALS['TCA'][$tableName]['columns'],
                         $tcaColumns
                     );
 
-                    $showItems = (
-                        ($tableName === 'tt_content')
-                        ? TcaCodeGenerator::getTtContentStandardShowItems($tcaColumns)
-                        : TcaCodeGenerator::getCollectionTableStandardShowItems($tcaColumns)
-                    );
+                    $showItems = TcaCodeGenerator::getTtContentStandardShowItems($tcaColumns);
+
                     $GLOBALS['TCA'][$tableName]['types'][$typeDefinition->getCType()] = [
                         'previewRenderer' => PreviewRenderer::class,
                         'showitem' => $showItems,
@@ -91,20 +96,34 @@ class TcaGenerator
                     /***************
                      * Add content element to selector list
                      */
-                    if ($tableName == 'tt_content') {
-                        ExtensionManagementUtility::addTcaSelectItem(
-                            'tt_content',
-                            'CType',
-                            [
-                                'LLL:' . $typeDefinition->getPrivatePath() . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $typeDefinition->getVendor()
-                                . '.' . $typeDefinition->getPackage() . '.title',
-                                $typeDefinition->getCType(),
-                                $typeDefinition->getCType(),
-                            ],
-                            'header',
-                            'after'
-                        );
+                    ExtensionManagementUtility::addTcaSelectItem(
+                        'tt_content',
+                        'CType',
+                        [
+                            'LLL:' . $typeDefinition->getPrivatePath() . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $typeDefinition->getVendor()
+                            . '.' . $typeDefinition->getPackage() . '.title',
+                            $typeDefinition->getCType(),
+                            $typeDefinition->getCType(),
+                        ],
+                        'header',
+                        'after'
+                    );
+                } else {
+                    // Collection tables
+                    $tcaColumns = [];
+                    $labelFallback = $typeDefinition->getLabel();
+
+                    foreach ($tableDefinition->getTcaColumnsDefinition() as $columnName => $columnFieldDefinition) {
+                        $tcaColumns[$columnName] = $columnFieldDefinition->getTca();
+                        if ($labelFallback === '' && $columnFieldDefinition->getFieldType()->dataProcessingBehaviour() === 'renderable') {
+                            $labelFallback = $columnFieldDefinition->getName();
+                        }
                     }
+                    $GLOBALS['TCA'][$tableName] = TcaCodeGenerator::getCollectionTableStandardTca($tcaColumns, $tableName, $labelFallback);
+                    $GLOBALS['TCA'][$tableName]['columns'] = array_replace_recursive(
+                        $GLOBALS['TCA'][$tableName]['columns'],
+                        $tcaColumns
+                    );
                 }
             }
 

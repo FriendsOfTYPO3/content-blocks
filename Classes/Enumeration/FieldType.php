@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Enumeration;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
@@ -97,9 +97,9 @@ enum FieldType: String
     public function dataProcessingBehaviour(): string
     {
         return match ($this) {
-            self::CATEGORY => 'skip', // @todo: implement field type
+            self::CATEGORY => 'skip',
             self::CHECKBOX => 'renderable',
-            self::COLLECTION => 'collection', // @todo: implement field type
+            self::COLLECTION => 'collection',
             self::COLOR => 'renderable',
             self::DATETIME => 'renderable',
             self::EMAIL => 'renderable',
@@ -109,7 +109,7 @@ enum FieldType: String
             self::NONE => 'skip',
             self::RADIO => 'renderable',
             self::SELECT => 'renderable',
-            self::REFERENCE => 'skip', // @todo: implement field type
+            self::REFERENCE => 'skip',
             self::TEXT => 'renderable',
             self::TEXTAREA => 'renderable',
             // For testing
@@ -131,7 +131,7 @@ enum FieldType: String
         return match ($this) {
             // self::CATEGORY => 'input',
             // self::CHECKBOX => 'check',
-            // self::COLLECTION => new InputFieldConfiguration($config), // For testing
+            self::COLLECTION => new CollectionFieldConfiguration($config),
             // self::COLOR => 'input',
             // self::DATETIME => 'input',
             self::EMAIL => new EmailFieldConfiguration($config),
