@@ -28,46 +28,54 @@ class InputFieldConfigurationTest extends UnitTestCase
     public function checkInputFieldConfigurationDataProvider(): iterable
     {
         yield 'Check input field configurations.' => [
-            'contentBlock' => [
-                'EditorInterfaceXlf' => 'typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf',
-                'vendor' => 'typo3-contentblocks',
-                'package' => 'example',
-            ],
-            'fieldsList' => [
+            'config' => [
                 'text' => [
-                    'identifier' => 'text',
-                    'type' => 'Text',
+                    'identifier' => 'myText',
+                    'languagePath' => 'test-path-for-input.xlf:text',
                     'properties' => [
                         'autocomplete' => true,
                         'default' => 'Default value',
                         'max' => 15,
                         'placeholder' => 'Placeholder text',
                         'size' => 20,
-                        'required' => false,
+                        'required' => true,
                         'trim' => true,
+                        'valuePicker' => [
+                            'items' => [
+                                'Spring' => 'spring',
+                                'Summer' => 'summer',
+                                'Autumn' => 'autumn',
+                                'Winter' => 'winter',
+                            ],
+                        ],
                     ],
-                    '_path' => [],
-                    '_identifier' => 'text',
                 ],
             ],
 
-            'uniqueColumnName' => 'cb_example_text',
+            'uniqueColumnName' => 'cb_example_myText',
             'expected' => [
-                'getSql' => '`cb_example_text` VARCHAR(20) DEFAULT \'\' NOT NULL',
-                'construct' => [
-                    'identifier' => 'text',
-                    'type' => 'Text',
-                    'properties' => [
-                        'autocomplete' => true,
-                        'default' => 'Default value',
-                        'max' => 15,
-                        'placeholder' => 'Placeholder text',
+                'getSql' => '`cb_example_myText` VARCHAR(20) DEFAULT \'\' NOT NULL',
+                'getTca' => [
+                    'label' => 'LLL:test-path-for-input.xlf:text.label',
+                    'description' => 'LLL:test-path-for-input.xlf:text.description',
+                    'config' => [
+                        'type' => 'input',
                         'size' => 20,
-                        'required' => false,
-                        'trim' => true,
+                        'max' => 15,
+                        'default' => 'Default value',
+                        'placeholder' => 'Placeholder text',
+                        'required' => true,
+                        'autocomplete' => true,
+                        'valuePicker' => [
+                           'items' => [
+                              ['spring', 'Spring'],
+                              ['summer', 'Summer'],
+                              ['autumn', 'Autumn'],
+                              ['winter', 'Winter'],
+                           ],
+                        ],
                     ],
-                    '_path' => [],
-                    '_identifier' => 'text',
+                    'exclude' => 1,
                 ],
             ],
         ];
@@ -79,13 +87,13 @@ class InputFieldConfigurationTest extends UnitTestCase
      * @test
      * @dataProvider checkInputFieldConfigurationDataProvider
      */
-    public function checkInputFieldConfiguration(array $contentBlock, array $fieldsList, string $uniqueColumnName, array $expected): void
+    public function checkInputFieldConfiguration(array $config, string $uniqueColumnName, array $expected): void
     {
         // Inputfield test
 
-        $inputfield = new InputFieldConfiguration($fieldsList['text']);
+        $inputfield = new InputFieldConfiguration($config['text']);
         self::assertSame($expected['getSql'], $inputfield->getSql($uniqueColumnName));
 
-        self::assertSame($expected['construct'], $inputfield->toArray());
+        self::assertSame($expected['getTca'], $inputfield->getTca());
     }
 }
