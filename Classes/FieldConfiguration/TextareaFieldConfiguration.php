@@ -72,9 +72,6 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
         if ($this->richtextConfiguration !== '') {
             $tca['config']['richtextConfiguration'] = $this->richtextConfiguration;
         }
-        if ($this->max !== null) {
-            $tca['config']['max'] = $this->max;
-        }
         if ($this->required) {
             $tca['config']['required'] = $this->required;
         }
@@ -125,10 +122,7 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
                 'richtextConfiguration' => $this->richtextConfiguration,
                 'rows' => $this->rows,
                 'required' => $this->required,
-                'trim' => $this->trim,
             ],
-            '_path' => $this->path,
-            '_identifier' => $this->uniqueIdentifier,
         ];
     }
 

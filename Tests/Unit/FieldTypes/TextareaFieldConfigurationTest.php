@@ -28,15 +28,10 @@ class TextareaFieldConfigurationTest extends UnitTestCase
     public function checkTextareaFieldConfigurationDataProvider(): iterable
     {
         yield 'Check textarea field configurations.' => [
-            'contentBlock' => [
-                'EditorInterfaceXlf' => 'typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf',
-                'vendor' => 'typo3-contentblocks',
-                'package' => 'example',
-            ],
-            'fieldsList' => [
+            'config' => [
                 'textarea' => [
                     'identifier' => 'textarea',
-                    'type' => 'Textarea',
+                    'languagePath' => 'test-path-for-textfield.xlf:test',
                     'properties' => [
                         'cols' => 40,
                         'default' => 'Default value',
@@ -45,32 +40,29 @@ class TextareaFieldConfigurationTest extends UnitTestCase
                         'placeholder' => 'Placeholder text',
                         'richtextConfiguration' => 'default',
                         'rows' => 15,
-                        'required' => false,
+                        'required' => true,
                         'trim' => true,
                     ],
-                    '_path' => [],
-                    '_identifier' => 'textarea',
                 ],
             ],
             'uniqueColumnName' => 'cb_example_textarea',
             'expected' => [
                 'getSql' => '`cb_example_textarea` text',
-                'construct' => [
-                    'identifier' => 'textarea',
-                    'type' => 'Textarea',
-                    'properties' => [
+                'getTca' => [
+                    'label' => 'LLL:test-path-for-textfield.xlf:test.label',
+                    'description' => 'LLL:test-path-for-textfield.xlf:test.description',
+                    'config' => [
+                        'type' => 'text',
                         'cols' => 40,
+                        'max' => 150,
+                        'rows' => 15,
                         'default' => 'Default value',
                         'enableRichtext' => true,
-                        'max' => 150,
                         'placeholder' => 'Placeholder text',
                         'richtextConfiguration' => 'default',
-                        'rows' => 15,
-                        'required' => false,
-                        'trim' => true,
+                        'required' => true,
                     ],
-                    '_path' => [],
-                    '_identifier' => 'textarea',
+                    'exclude' => 1,
                 ],
             ],
         ];
@@ -82,13 +74,13 @@ class TextareaFieldConfigurationTest extends UnitTestCase
      * @test
      * @dataProvider checkTextareaFieldConfigurationDataProvider
      */
-    public function checkTextareaFieldConfiguration(array $contentBlock, array $fieldsList, string $uniqueColumnName, array $expected): void
+    public function checkTextareaFieldConfiguration(array $config, string $uniqueColumnName, array $expected): void
     {
         // Textareafield test
 
-        $textareaField = new TextareaFieldConfiguration($fieldsList['textarea']);
+        $textareaField = new TextareaFieldConfiguration($config['textarea']);
         self::assertSame($expected['getSql'], $textareaField->getSql($uniqueColumnName));
 
-        self::assertSame($expected['construct'], $textareaField->toArray());
+        self::assertSame($expected['getTca'], $textareaField->getTca());
     }
 }
