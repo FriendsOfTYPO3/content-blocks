@@ -44,33 +44,32 @@ class FieldTypeTest extends UnitTestCase
 
         yield 'Check Enumaration getTcaType Color.' => [
             'status' => 'Color',
-            'expected' => 'input',
+            'expected' => 'color',
         ];
 
         yield 'Check Enumaration getTcaType DateTime.' => [
             'status' => 'DateTime',
-            'expected' => 'input',
+            'expected' => 'datetime',
         ];
 
         yield 'Check Enumaration getTcaType Email.' => [
             'status' => 'Email',
-            'expected' => 'input',
+            'expected' => 'email',
         ];
 
-        // TODO: How to handle image fields in this case?
         yield 'Check Enumaration getTcaType File.' => [
             'status' => 'File',
-            'expected' => 'inline',
+            'expected' => 'file',
         ];
 
         yield 'Check Enumaration getTcaType Link.' => [
             'status' => 'Link',
-            'expected' => 'input',
+            'expected' => 'link',
         ];
 
         yield 'Check Enumaration getTcaType Number.' => [
             'status' => 'Number',
-            'expected' => 'input',
+            'expected' => 'number',
         ];
 
         yield 'Check Enumaration getTcaType Radio.' => [
@@ -117,6 +116,7 @@ class FieldTypeTest extends UnitTestCase
             'fieldConfiguration' => [
                 'identifier' => 'email',
                 'type' => 'Email',
+                'languagePath' => 'test-path-for-email.xlf:enumeration.test',
                 'properties' =>
                     [
                         'autocomplete' => true,
@@ -139,6 +139,7 @@ class FieldTypeTest extends UnitTestCase
             'fieldConfiguration' => [
                 'identifier' => 'text',
                 'type' => 'Text',
+                'languagePath' => 'test-path-for-text.xlf:enumeration.test',
                 'properties' =>
                     [
                         'autocomplete' => true,
@@ -162,6 +163,7 @@ class FieldTypeTest extends UnitTestCase
             'fieldConfiguration' => [
                 'identifier' => 'textarea',
                 'type' => 'Textarea',
+                'languagePath' => 'test-path-for-textarea.xlf:enumeration.test',
                 'properties' =>
                     [
                         'cols' => 40,
@@ -174,11 +176,6 @@ class FieldTypeTest extends UnitTestCase
                         'required' => false,
                         'trim' => true,
                     ],
-                '_path' =>
-                    [
-                        0 => 'textarea',
-                    ],
-                '_identifier' => 'textarea',
             ],
             'expected' => 'TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration',
         ];
