@@ -29,11 +29,8 @@ class AbstractFieldConfigurationTest extends UnitTestCase
     {
         yield 'Check abstract field configurations.' => [
             'config' => [
-                'EditorInterfaceXlf' => 'typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf',
-                'vendor' => 'typo3-contentblocks',
-                'package' => 'example',
                 'identifier' => 'text',
-                'type' => 'Text',
+                'languagePath' => 'test-path-for-abstract.xlf:test',
                 'properties' => [
                     'autocomplete' => true,
                     'default' => 'Default value',
@@ -49,10 +46,10 @@ class AbstractFieldConfigurationTest extends UnitTestCase
             'expected' => [
                 'create' => 'text', // Create result (create from array via construct)
                 'getTcaTemplate' => [ // Check getTcaTemplate
-                    'exclude' => 1,
-                    'label' => 'LLL:typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf:typo3-contentblocks.example.text.label',
-                    'description' => 'LLL:typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf:typo3-contentblocks.example.text.description',
+                    'label' => 'LLL:test-path-for-abstract.xlf:test.label',
+                    'description' => 'LLL:test-path-for-abstract.xlf:test.description',
                     'config' => [],
+                    'exclude' => 1,
                 ],
             ],
         ];
