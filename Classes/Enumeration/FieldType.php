@@ -67,7 +67,7 @@ enum FieldType: String
             self::COLLECTION => 'inline',
             self::COLOR => 'input',
             self::DATETIME => 'input',
-            self::EMAIL => 'input',
+            self::EMAIL => 'email',
             self::FILE => 'file',
             self::LINK => 'input',
             self::NUMBER => 'number',

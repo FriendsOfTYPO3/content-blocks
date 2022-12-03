@@ -28,15 +28,10 @@ class EmailFieldConfigurationTest extends UnitTestCase
     public function checkEmailFieldConfigurationDataProvider(): iterable
     {
         yield 'Check email field configurations.' => [
-            'contentBlock' => [
-                'EditorInterfaceXlf' => 'typo3conf/contentBlocks/example/src/Language/EditorInterface.xlf',
-                'vendor' => 'typo3-contentblocks',
-                'package' => 'example',
-            ],
-            'fieldsList' => [
+            'config' => [
                 'email' => [
-                    'identifier' => 'email',
-                    'type' => 'Email',
+                    'identifier' => 'myEmail',
+                    'languagePath' => 'test-path-for-email.xlf:test',
                     'properties' => [
                         'autocomplete' => true,
                         'default' => 'developer@localhost.mail',
@@ -53,19 +48,18 @@ class EmailFieldConfigurationTest extends UnitTestCase
             'uniqueColumnName' => 'cb_example_email',
             'expected' => [
                 'getSql' => '`cb_example_email` VARCHAR(20) DEFAULT \'\' NOT NULL',
-                'construct' => [
-                    'identifier' => 'email',
-                    'type' => 'Email',
-                    'properties' => [
+                'getTca' => [
+                    'label' => 'LLL:test-path-for-email.xlf:test.label',
+                    'description' => 'LLL:test-path-for-email.xlf:test.description',
+                    'config' => [
+                        'type' => 'email',
+                        'size' => 20,
                         'autocomplete' => true,
                         'default' => 'developer@localhost.mail',
                         'placeholder' => 'Placeholder text',
-                        'size' => 20,
                         'required' => true,
-                        'trim' => true,
                     ],
-                    '_path' => [],
-                    '_identifier' => 'email',
+                    'exclude' => 1,
                 ],
             ],
         ];
@@ -77,12 +71,12 @@ class EmailFieldConfigurationTest extends UnitTestCase
      * @test
      * @dataProvider checkEmailFieldConfigurationDataProvider
      */
-    public function checkEmailFieldConfiguration(array $contentBlock, array $fieldsList, string $uniqueColumnName, array $expected): void
+    public function checkEmailFieldConfiguration(array $config, string $uniqueColumnName, array $expected): void
     {
         // Email field test
-        $emailField = new EmailFieldConfiguration($fieldsList['email']);
+        $emailField = new EmailFieldConfiguration($config['email']);
         self::assertSame($expected['getSql'], $emailField->getSql($uniqueColumnName));
 
-        self::assertSame($expected['construct'], $emailField->toArray());
+        self::assertSame($expected['getTca'], $emailField->getTca());
     }
 }
