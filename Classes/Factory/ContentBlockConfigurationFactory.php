@@ -27,14 +27,10 @@ class ContentBlockConfigurationFactory implements SingletonInterface
 {
     protected ConfigurationService $configurationService;
 
-    protected TableDefinitionFactory $tableDefinitionFactory;
-
     public function __construct(
-        ConfigurationService $configurationService,
-        TableDefinitionFactory $tableDefinitionFactory
+        ConfigurationService $configurationService
     ) {
         $this->configurationService = $configurationService;
-        $this->tableDefinitionFactory = $tableDefinitionFactory;
     }
 
     public function createFromArray(array $config): ContentBlockConfiguration
