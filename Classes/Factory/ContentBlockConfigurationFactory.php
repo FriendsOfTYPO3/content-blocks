@@ -83,24 +83,14 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         $cbConf->icon = $config['icon'] ?? $cbConf->icon;
 
         // add fields: Use TableDefinitionCollection
-        /* if (isset($config['yaml']['fields']) && count($config['yaml']['fields']) > 0) {
+        if (isset($config['yaml']['fields']) && count($config['yaml']['fields']) > 0) {
             foreach ($config['yaml']['fields'] as $fieldConfigFromYaml) {
                 $fieldType = FieldType::from($fieldConfigFromYaml['type']);
 
                 $fieldConfig = $fieldType->getFieldTypeConfiguration($fieldConfigFromYaml);
                 $cbConf->fieldsConfig[$fieldConfig->identifier] = $fieldConfig;
             }
-        } */
-
-        if (isset($config['yaml']['fields']) && count($config['yaml']['fields']) > 0) {
-            $cbConf->tableDefinitions = $this->tableDefinitionFactory
-                ->createFromArray(
-                    $cbConf,
-                    $config['yaml']['fields'],
-                    $cbConf->getCType()
-                );
         }
-
 
         // fill missing data to composerJson
         $cbConf->composerJson['type'] = $cbConf->composerJson['type'] ?? $this->configurationService->getComposerType();
