@@ -39,6 +39,12 @@ class EmailFieldConfigurationTest extends UnitTestCase
                         'size' => 20,
                         'required' => true,
                         'trim' => true,
+                        'valuePicker' => [
+                            'items' => [
+                                'Contac 1' => 'info1@test.com',
+                                'Contac 2' => 'info2@test2.com',
+                            ],
+                        ],
                     ],
                     '_path' => [],
                     '_identifier' => 'email',
@@ -58,6 +64,12 @@ class EmailFieldConfigurationTest extends UnitTestCase
                         'default' => 'developer@localhost.mail',
                         'placeholder' => 'Placeholder text',
                         'required' => true,
+                        'valuePicker' => [
+                           'items' => [
+                              ['info1@test.com', 'Contac 1'],
+                              ['info2@test2.com', 'Contac 2'],
+                           ],
+                        ],
                     ],
                     'exclude' => 1,
                 ],
