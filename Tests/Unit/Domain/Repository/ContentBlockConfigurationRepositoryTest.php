@@ -17,9 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Domain\Repository;
 
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory;
+use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -46,6 +49,7 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
                                 [
                                     'identifier' => 'text',
                                     'type' => 'Text',
+                                    'languagePath' => 'test-path-for-text.xlf:test',
                                     'properties' =>
                                         [
                                             'autocomplete' => true,
@@ -66,6 +70,7 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
                                 [
                                     'identifier' => 'textarea',
                                     'type' => 'Textarea',
+                                    'languagePath' => 'test-path-for-textarea.xlf:test',
                                     'properties' =>
                                         [
                                             'cols' => 40,
@@ -88,6 +93,7 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
                                 [
                                     'identifier' => 'email',
                                     'type' => 'Email',
+                                    'languagePath' => 'test-path-for-email.xlf:test',
                                     'properties' =>
                                         [
                                             'autocomplete' => true,
@@ -123,8 +129,11 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
         /** @var ContentBlockConfigurationRepository */
         $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class);
 
+        /** @var ContentBlockConfigurationFactory $factory */
+        $factory = new ContentBlockConfigurationFactory(new ConfigurationService);
+
         /** @param ContentBlockConfiguration */
-        $contentBlockConf = GeneralUtility::makeInstance(ContentBlockConfigurationFactory::class)->createFromArray($contentBlock);
+        $contentBlockConf = $factory->createFromArray($contentBlock);
 
         // $contentBlockConfigurationRepository->create($contentBlockConf);
         // self::assertSame($expected['create'], $contentBlockConfiguration->toArray());
@@ -141,8 +150,10 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
         /** @var ContentBlockConfigurationRepository $contentBlockConfigurationRepository */
         $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class);
 
+        /** @var TableDefinitionCollection $contentBlocksList */
         $contentBlocksList = $contentBlockConfigurationRepository->findAll();
-        $result = ((isset($contentBlocksList['call-to-action-local']) ? $contentBlocksList['call-to-action-local']->package : 'ContentBlock call-to-action-local not found!'));
-        self::assertSame('call-to-action-local', $result);
+
+        self::assertSame(true, $contentBlocksList instanceof TableDefinitionCollection);
+        self::assertSame(true, $contentBlocksList->getTable('tt_content') instanceof TableDefinition);
     }
 }
