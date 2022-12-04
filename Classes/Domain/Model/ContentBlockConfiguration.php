@@ -119,12 +119,12 @@ class ContentBlockConfiguration
     {
         // @todo:
         // check recursive Collections
-        /* $fieldsList = [];
+        $fieldsList = [];
         if (count($this->fieldsConfig) > 0) {
             foreach ($this->fieldsConfig as $key => $tempFieldsConfig) {
                 $fieldsList[$tempFieldsConfig->identifier] = $tempFieldsConfig->toArray();
             }
-        } */
+        }
         return [
             '__warning' => 'Contents of this "cb" configuration are not API yet and might change!',
             'vendor' => $this->vendor,
@@ -136,10 +136,11 @@ class ContentBlockConfiguration
             'icon' => $this->icon,
             'iconProviderClass' => $this->iconProviderClass,
             'CType' => $this->getCType(),
-            // 'fields' => $fieldsList,
+            'composerJson' => $this->composerJson,
+            'fields' => $fieldsList,
             // 'collectionFields' => $collectionFields,
             // 'fileFields' => $fileFields,
-            'tableDefinition' => $this->tableDefinitions->toArray(),
+            // 'tableDefinition' => $this->tableDefinitions->toArray(),
             'frontendTemplatesPath' => $this->frontendTemplatesPath,
             'frontendPartialsPath' => $this->frontendPartialsPath,
             'frontendLayoutsPath' => $this->frontendLayoutsPath,
