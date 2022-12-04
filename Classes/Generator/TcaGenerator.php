@@ -44,9 +44,9 @@ class TcaGenerator
      *
      * $contentBlocksConfig as method param mainly for unti test purposes.
      *
-     * @param array $contentBlocksConfig    configuration of all ContentBlocks
+     * @param TableDefinitionCollection $contentBlocksConfig    configuration of all ContentBlocks
      */
-    public function setTca(array $contentBlocksConfig = null): bool
+    public function setTca(TableDefinitionCollection $contentBlocksConfig = null): array
     {
         if ($contentBlocksConfig === null) {
             /** @var TableDefinitionCollection $contentBlocksConfig */
@@ -129,6 +129,7 @@ class TcaGenerator
 
         }
 
-        return true;
+        // return TCA config for testing
+        return $GLOBALS['TCA'];
     }
 }

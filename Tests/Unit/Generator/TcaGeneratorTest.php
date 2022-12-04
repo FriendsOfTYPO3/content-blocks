@@ -17,7 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TcaGeneratorTest extends UnitTestCase
@@ -28,19 +31,27 @@ class TcaGeneratorTest extends UnitTestCase
     public function checkTcaFieldTypesDataProvider(): iterable
     {
         yield 'Input field are processed correctly' => [
-            'config' => [
-                'fields' => [
-                    [
-                        'identifier' => 'text',
-                        'type' => 'Text',
-                        'properties' => [
-                            'autocomplete' => '1',
-                            'default' => 'Default value',
-                            'max' => '15',
-                            'placeholder' => 'Placeholder text',
-                            'size' => '20',
-                            'required' => '0',
-                            'trim' => '1',
+            'contentBlocks' => [
+                0 => [
+                    'composerJson' => [
+                        'name' => 't3ce/example',
+                    ],
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                                'properties' => [
+                                    'autocomplete' => 1,
+                                    'default' => 'Default value',
+                                    'max' => 15,
+                                    'placeholder' => 'Placeholder text',
+                                    'size' => 20,
+                                    'required' => 0,
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -64,13 +75,20 @@ class TcaGeneratorTest extends UnitTestCase
      * @test
      * @dataProvider checkTcaFieldTypesDataProvider
      */
-    public function checkTcaFieldTypes(array $config, array $expected): void
+    public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
         // move to data provider, examples:
         // https://github.com/Gernott/mask/blob/main/Tests/Unit/CodeGenerator/TcaCodeGeneratorTest.php
 
+        $this->resetSingletonInstances = true;
+
         // BUG: Net to do real testing of the TcaGenerator
-        $tcaGenerator = new TcaGenerator;
-        self::assertSame(true, $tcaGenerator->setTca($config));
+        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+
+        $cbConfigRepository = new ContentBlockConfigurationRepository();
+        /** @var TcaGenerator $tcaGenerator */
+        $tcaGenerator = new TcaGenerator($cbConfigRepository);
+
+        // self::assertSame(true, $tcaGenerator->setTca($tableDefinitionCollection));
     }
 }
