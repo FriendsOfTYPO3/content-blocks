@@ -94,6 +94,54 @@ class ContentBlocksController
             $view->assign('cType', $cType);
         }
 
+        $buttonBar = $view->getDocHeaderComponent()->getButtonBar();
+        $closeButton = $buttonBar->makeLinkButton()
+            ->setDataAttributes(['identifier' => 'closeButton'])
+            ->setHref((string)$this->uriBuilder->buildUriFromRoute('web_FormFormbuilder'))
+            ->setClasses('t3-form-element-close-form-button hidden')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:rm.closeDoc'))
+            ->setIcon($this->iconFactory->getIcon('actions-close', Icon::SIZE_SMALL));
+
+        $saveButton = $buttonBar->makeInputButton()
+            ->setDataAttributes(['identifier' => 'saveButton'])
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:form/Resources/Private/Language/Database.xlf:formEditor.save_button'))
+            ->setName('formeditor-save-form')
+            ->setValue('save')
+            ->setClasses('t3-form-element-save-form-button hidden')
+            ->setIcon($this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL))
+            ->setShowLabelText(true);
+
+        $formSettingsButton = $buttonBar->makeInputButton()
+            ->setDataAttributes(['identifier' => 'formSettingsButton'])
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:form/Resources/Private/Language/Database.xlf:formEditor.form_settings_button'))
+            ->setName('formeditor-form-settings')
+            ->setValue('settings')
+            ->setClasses('t3-form-element-form-settings-button hidden')
+            ->setIcon($this->iconFactory->getIcon('actions-system-extension-configure', Icon::SIZE_SMALL))
+            ->setShowLabelText(true);
+
+        $undoButton = $buttonBar->makeInputButton()
+            ->setDataAttributes(['identifier' => 'undoButton'])
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:form/Resources/Private/Language/Database.xlf:formEditor.undo_button'))
+            ->setName('formeditor-undo-form')
+            ->setValue('undo')
+            ->setClasses('t3-form-element-undo-form-button hidden disabled')
+            ->setIcon($this->iconFactory->getIcon('actions-edit-undo', Icon::SIZE_SMALL));
+
+        $redoButton = $buttonBar->makeInputButton()
+            ->setDataAttributes(['identifier' => 'redoButton'])
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:form/Resources/Private/Language/Database.xlf:formEditor.redo_button'))
+            ->setName('formeditor-redo-form')
+            ->setValue('redo')
+            ->setClasses('t3-form-element-redo-form-button hidden disabled')
+            ->setIcon($this->iconFactory->getIcon('actions-edit-redo', Icon::SIZE_SMALL));
+
+        $buttonBar->addButton($closeButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
+        $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
+        $buttonBar->addButton($formSettingsButton, ButtonBar::BUTTON_POSITION_LEFT, 4);
+        $buttonBar->addButton($undoButton, ButtonBar::BUTTON_POSITION_LEFT, 5);
+        $buttonBar->addButton($redoButton, ButtonBar::BUTTON_POSITION_LEFT, 5);
+
         return $view->renderResponse('Edit');
     }
 
