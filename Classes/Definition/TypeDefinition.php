@@ -33,11 +33,7 @@ class TypeDefinition
      */
     private array $columns = [];
 
-    public static function createFromArray(array $array, string $table) {
-        return self::fromArray($array, $table);
-    }
-
-    protected static function fromArray(array $array, string $table)
+    public static function createFromArray(array $array, string $table): TypeDefinition
     {
         if (!isset($array['identifier']) || $array['identifier'] === '') {
             throw new \InvalidArgumentException('Type identifier must not be empty.', 1629292395);
