@@ -19,18 +19,15 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\SqlColumnDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\SqlDefinition;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 use TYPO3\CMS\Core\SingletonInterface;
 
 class SqlGenerator implements SingletonInterface
 {
-    protected ContentBlockConfigurationRepository $cbConfigRepository;
-
     public function __construct(
-        ContentBlockConfigurationRepository $cbConfigRepository
+        protected readonly TableDefinitionCollection $tableDefinitionCollection
     ) {
-       $this->cbConfigRepository = $cbConfigRepository;
     }
 
     /**
@@ -38,13 +35,8 @@ class SqlGenerator implements SingletonInterface
      */
     protected function getSqlByConfiguration(): array
     {
-        /** @var TableDefinitionCollection $contentBlocksConfig */
-        $contentBlocksConfig = $this->cbConfigRepository->findAll();
-
         $sql = [];
-
-        /** @var TableDefinition $tableDefinition */
-        foreach ($contentBlocksConfig as $tableDefinition) {
+        foreach ($this->tableDefinitionCollection as $tableDefinition) {
             /** @var SqlDefinition $sqlDefinition */
             $sqlDefinition = $tableDefinition->getSqlDefinition();
             $sqlString = '';

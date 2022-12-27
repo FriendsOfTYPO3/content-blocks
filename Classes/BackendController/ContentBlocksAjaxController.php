@@ -19,8 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\BackendController;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 use TYPO3\CMS\Core\Http\JsonResponse;
@@ -34,7 +34,7 @@ class ContentBlocksAjaxController
     const ROUTE_IDENTIFIER = 'tools_contentblocks/ajax';
 
     public function __construct(
-        protected readonly ContentBlockConfigurationRepository $contentBlockConfigurationRepository
+        protected readonly TableDefinitionCollection $tableDefinitionCollection
     ) {
     }
 
@@ -50,8 +50,7 @@ class ContentBlocksAjaxController
 
     public function jsonContentBlocksListAction(ServerRequestInterface $request): ResponseInterface
     {
-        $cbs = $this->contentBlockConfigurationRepository->findAll();
-
+        $cbs = $this->tableDefinitionCollection->toArray();
         $this->enrichContentblocksForBackend($cbs);
 
         return new JsonResponse($cbs);

@@ -17,11 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Service;
 
-use TYPO3\CMS\ContentBlocks\CodeGenerator\PageTsConfigCodeGenerator;
-use TYPO3\CMS\ContentBlocks\CodeGenerator\TypoScriptCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
+use TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator;
+use TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
@@ -30,7 +29,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class LocalConfRegistrationService
 {
-    public static function setup(): void
+    public function __construct(
+        protected TableDefinitionCollection $tableDefinitionCollection
+    ) {
+    }
+
+    public function setup(): void
     {
         // @todo: Configure the caching
 
@@ -57,18 +61,12 @@ class LocalConfRegistrationService
             );
         }
 
-        /** @var TableDefinitionCollection $contentBlocksList */
-        $contentBlocksList = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class)->findAll();
-        foreach ($contentBlocksList as $tableDefinition) {
-            /***************
-             * Add Content Element
-             */
-            /** @var TypeDefinition|ContentElementDefinition $typeDefinition */
+        foreach ($this->tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getTypeDefinitionCollection() as $typeDefinition) {
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     // add PageTsConfig
                     ExtensionManagementUtility::addPageTSConfig(
-                        PageTsConfigCodeGenerator::getStandardPageTsConfig($typeDefinition)
+                        PageTsConfigGenerator::getStandardPageTsConfig($typeDefinition)
                     );
 
                     // add icon for ContentElement
@@ -80,7 +78,7 @@ class LocalConfRegistrationService
 
                     // add typoscript for ContentElement
                     ExtensionManagementUtility::addTypoScriptSetup(
-                        TypoScriptCodeGenerator::typoScriptForContentElementDefinition($typeDefinition)
+                        TypoScriptGenerator::typoScriptForContentElementDefinition($typeDefinition)
                     );
                 }
             }

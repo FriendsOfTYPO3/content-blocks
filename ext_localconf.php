@@ -3,9 +3,6 @@
 declare(strict_types=1);
 
 use TYPO3\CMS\ContentBlocks\Service\LocalConfRegistrationService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-defined('TYPO3') or die();
-
-(static function () {
-    LocalConfRegistrationService::setup();
-})();
+GeneralUtility::makeInstance(LocalConfRegistrationService::class)->setup();

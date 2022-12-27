@@ -22,7 +22,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -38,42 +37,16 @@ use TYPO3\CMS\Frontend\Resource\FileCollector;
 /**
  * Adds information about the current content block to variable "cb".
  */
-class ContentBlocksDataProcessor  implements DataProcessorInterface
+class ContentBlocksDataProcessor implements DataProcessorInterface
 {
-    /**
-     * @var ContentBlockConfigurationRepository
-     */
-    protected $configurationRepository;
-
-    /**
-     * @var string
-     */
-    protected $cType;
-
-    /**
-     * @var array
-     */
-    protected $record;
-
-    /**
-     * @var TableDefinitionCollection $tableDefinitionCollection
-     */
-    protected TableDefinitionCollection $tableDefinitionCollection;
-
-    /**
-     * @var ContentElementDefinition
-     */
-    protected $contentElementDefinition;
-
-    /**
-     * @var ContentBlockConfiguration
-     */
-    protected $cbConf;
+    protected string $cType;
+    protected array $record;
+    protected ContentElementDefinition $contentElementDefinition;
+    protected ContentBlockConfiguration $cbConf;
 
     public function __construct(
-        ContentBlockConfigurationRepository $configurationRepository
+        protected readonly TableDefinitionCollection $tableDefinitionCollection
     ) {
-        $this->configurationRepository = $configurationRepository;
     }
 
     /**
@@ -93,12 +66,10 @@ class ContentBlocksDataProcessor  implements DataProcessorInterface
         $this->record = $processedData['data'];
         $this->cType = $this->record['CType'];
 
-        /** @var TableDefinitionCollection $tableDefinition */
-        $this->tableDefinitionCollection = $this->configurationRepository->findContentBlockByCType($this->cType);
-
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
 
-        $this->contentElementDefinition = $this->configurationRepository->findContentElementDefinition($this->cType);
+        // @todo implement
+//        $this->contentElementDefinition = $this->tableDefinitionCollection->findContentElementDefinition($this->cType);
 
         $cbData = [];
 

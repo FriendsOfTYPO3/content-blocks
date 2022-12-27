@@ -10,42 +10,25 @@ services:
   TYPO3\CMS\ContentBlocks\BackendController\ContentBlocksController:
     public: true
 
-  TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository:
-    public: true
-
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
-    autowire: true
-    autoconfigure: false
     public: true
 
   TYPO3\CMS\ContentBlocks\Service\ConfigurationService:
-    autowire: true
-    autoconfigure: false
     public: true
 
   TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory:
-    autowire: true
-    autoconfigure: false
     public: true
 
   TYPO3\CMS\ContentBlocks\Factory\TableDefinitionFactory:
-    autowire: true
-    autoconfigure: false
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
-    autowire: true
-    autoconfigure: false
     public: true
 
   TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
-    autowire: true
-    autoconfigure: false
+    public: true
+
+  TYPO3\CMS\ContentBlocks\Service\LocalConfRegistrationService:
     public: true
 
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
-    autowire: true
-    autoconfigure: false
     public: true
     tags:
       - name: event.listener
@@ -54,6 +37,29 @@ services:
         method: addDatabaseTablesDefinition
 
   TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
-    autowire: true
     autoconfigure: false
     public: true
+
+  TYPO3\CMS\ContentBlocks\Loader\ComposerLoader:
+    tags:
+      - name: cb.loader
+        identifier: composer
+
+  TYPO3\CMS\ContentBlocks\Loader\LegacyLoader:
+    tags:
+      - name: cb.loader
+        identifier: legacy
+
+  TYPO3\CMS\ContentBlocks\Loader\LoaderFactory:
+    public: true
+
+  TYPO3\CMS\ContentBlocks\Loader\LoaderInterface:
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderFactory'
+      - 'create'
+
+  TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
+    shared: false
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderFactory'
+      - 'load'

@@ -15,26 +15,26 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\CodeGenerator;
+namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 
-class TypoScriptCodeGenerator
+class TypoScriptGenerator
 {
-    public static function typoScriptForContentElementDefinition(ContentElementDefinition $ceDefinition): string
+    public static function typoScriptForContentElementDefinition(ContentElementDefinition $contentElementDefinition): string
     {
         return '
-            tt_content.' . $ceDefinition->getCType() . ' < lib.contentBlock
-            tt_content.' . $ceDefinition->getCType() . '{
+            tt_content.' . $contentElementDefinition->getCType() . ' < lib.contentBlock
+            tt_content.' . $contentElementDefinition->getCType() . '{
                 templateName = Frontend
                 templateRootPaths {
-                    20 = ' . $ceDefinition->getPrivatePath() . '
+                    20 = ' . $contentElementDefinition->getPrivatePath() . '
                 }
                 partialRootPaths {
-                    20 = ' . $ceDefinition->getPrivatePath() . 'Partials/
+                    20 = ' . $contentElementDefinition->getPrivatePath() . 'Partials/
                 }
                 layoutRootPaths {
-                    20 = ' . $ceDefinition->getPrivatePath() . 'Layouts/
+                    20 = ' . $contentElementDefinition->getPrivatePath() . 'Layouts/
                 }
             }
             ';

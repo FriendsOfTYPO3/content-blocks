@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Domain\Repository;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
+use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockBuilder;
 use TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -125,8 +125,8 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
     {
         $this->resetSingletonInstances = true;
 
-        /** @var ContentBlockConfigurationRepository */
-        $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class);
+        /** @var ContentBlockBuilder */
+        $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockBuilder::class);
 
         /** @var ContentBlockConfigurationFactory $factory */
         $factory = new ContentBlockConfigurationFactory();
@@ -146,8 +146,8 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
     {
         $this->resetSingletonInstances = true;
 
-        /** @var ContentBlockConfigurationRepository $contentBlockConfigurationRepository */
-        $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class);
+        /** @var ContentBlockBuilder $contentBlockConfigurationRepository */
+        $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockBuilder::class);
 
         /** @var TableDefinitionCollection $contentBlocksList */
         $contentBlocksList = $contentBlockConfigurationRepository->findAll();

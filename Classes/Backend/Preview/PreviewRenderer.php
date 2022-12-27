@@ -21,7 +21,7 @@ use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -32,47 +32,28 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class PreviewRenderer extends StandardContentPreviewRenderer
 {
-    /**
-     * @var ContentBlocksDataProcessor
-     */
-    protected $cbProcessor;
-
-    /**
-     * @var ContentObjectRenderer
-     */
-    protected $cObj;
-
-    /**
-     * @var ContentBlockConfigurationRepository
-     */
-    protected $configurationRepository;
-
-    /**
-     * @var CbContentProcessor
-    */
-    protected $contentProcessor;
+    protected ContentBlocksDataProcessor $cbProcessor;
+    protected ContentObjectRenderer $cObj;
+    protected TableDefinitionCollection $tableDefinitionCollection;
 
     public function __construct(
         ContentObjectRenderer $cObj,
         ContentBlocksDataProcessor $cbProcessor,
-        ContentBlockConfigurationRepository $configurationRepository
+        TableDefinitionCollection $tableDefinitionCollection
     ) {
         $this->cObj = $cObj;
         $this->cbProcessor = $cbProcessor;
-        $this->configurationRepository = $configurationRepository;
+        $this->tableDefinitionCollection = $tableDefinitionCollection;
     }
 
-    /** render PageModule preview content
-     *
-     * @throws \Exception
-     */
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         $record = $item->getRecord();
 
         /** @var ContentElementDefinition $cbConfiguration */
-        $contentElementDefinition = $this->configurationRepository->findContentElementDefinition($record['CType']);
-
+        // @todo implement find by cType (and table).
+//        $contentElementDefinition = $this->tableDefinitionCollection->findContentElementDefinition($record['CType']);
+        return '';
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename($contentElementDefinition->getPrivatePath() . 'EditorPreview.html');
 
