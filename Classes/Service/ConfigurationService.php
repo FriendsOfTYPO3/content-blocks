@@ -58,20 +58,4 @@ class ConfigurationService
     {
         return 'typo3-contentblock';
     }
-
-    /**
-     * If this should be configurable or things changes in future
-     */
-    public static function getDatabaseCollectionTablePrefix(): string
-    {
-        return 'cb_collection_';
-    }
-
-    /**
-     * If this should be configurable or things changes in future
-     */
-    public static function getDatabaseTtContentPrefix(): string
-    {
-        return 'cb_';
-    }
 }

@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
-use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\Converter\NamingConverter;
 
 final class ContentElementDefinition extends TypeDefinition
 {
@@ -83,7 +83,7 @@ final class ContentElementDefinition extends TypeDefinition
 
     public function getCType(): string
     {
-        return 'cb_' . str_replace('/', '-', $this->composerName);
+        return NamingConverter::composerNameToCType($this->composerName);
     }
 
     public function getVendor(): string
