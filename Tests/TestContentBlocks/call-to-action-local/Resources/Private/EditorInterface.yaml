@@ -4,7 +4,7 @@ fields:
     type: Collection
     properties:
       label: My Pics
-      descirption: Here you can insert some images
+      description: Here you can insert some images
       fields:
         - identifier: image
           type: Image
