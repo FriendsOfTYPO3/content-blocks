@@ -25,14 +25,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentBlockConfigurationFactory implements SingletonInterface
 {
-    protected ConfigurationService $configurationService;
-
-    public function __construct(
-        ConfigurationService $configurationService
-    ) {
-        $this->configurationService = $configurationService;
-    }
-
     public function createFromArray(array $config): ContentBlockConfiguration
     {
         // basic check the $config array
@@ -48,25 +40,25 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         $cbConf = GeneralUtility::makeInstance(ContentBlockConfiguration::class);
 
         [$cbConf->vendor, $cbConf->package] = explode('/', $config['composerJson']['name']);
-        $cbConf->path = $this->configurationService->getBasePath() . $cbConf->package . DIRECTORY_SEPARATOR;
+        $cbConf->path = ConfigurationService::getContentBlockLegacyPath() . $cbConf->package . '/';
         $cbConf->wizardGroup = $config['yaml']['group'] ?? $cbConf->wizardGroup;
         $cbConf->composerJson = $config['composerJson'];
         $cbConf->yamlConfig = $config['yaml'] ?? $cbConf->yamlConfig;
 
-        $cbConf->publicPath = $cbConf->path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR;
+        $cbConf->publicPath = $cbConf->path . ConfigurationService::getContentBlocksPublicPath() . '/';
 
         // Setting the frontendTemplatesPath has to be before re-setting the privatePath.
-        // Reason: trailing DIRECTORY_SEPARATOR must not be there for templates path
+        // Reason: trailing '/' must not be there for templates path
         $cbConf->frontendTemplatesPath = $cbConf->path . $cbConf->privatePath;
 
-        $cbConf->privatePath = $cbConf->path . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR;
+        $cbConf->privatePath = $cbConf->path . ConfigurationService::getContentBlocksPrivatePath() . '/';
         $cbConf->frontendPartialsPath = $cbConf->privatePath . 'Partials';
         $cbConf->frontendLayoutsPath = $cbConf->privatePath . 'Layouts';
 
         $cbConf->editorPreviewHtml = $cbConf->privatePath . 'EditorPreview.html';
 
         // translations
-        $cbConf->labelsXlfPath = $cbConf->privatePath . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf';
+        $cbConf->labelsXlfPath = $cbConf->privatePath . 'Language' . '/' . 'Labels.xlf';
 
         $cbConf->editorLLL = 'LLL:' . $cbConf->labelsXlfPath . ':' . $cbConf->vendor . '.' . $cbConf->package;
         $cbConf->frontendLLL = 'LLL:' . $cbConf->labelsXlfPath . ':' . $cbConf->vendor . '.' . $cbConf->package;
@@ -89,7 +81,7 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         }
 
         // fill missing data to composerJson
-        $cbConf->composerJson['type'] = $cbConf->composerJson['type'] ?? $this->configurationService->getComposerType();
+        $cbConf->composerJson['type'] = $cbConf->composerJson['type'] ?? ConfigurationService::getComposerType();
         $cbConf->composerJson['license'] = $cbConf->composerJson['license'] ?? 'GPL-2.0-or-later';
         $cbConf->composerJson['require'] = $cbConf->composerJson['require'] ?? ['typo3/cms-content-blocks' => '*'];
 

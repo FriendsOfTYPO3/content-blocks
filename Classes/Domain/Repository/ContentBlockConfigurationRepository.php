@@ -24,31 +24,23 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
-use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class ContentBlockConfigurationReporitory
  * Finds the configuration of all ContentBlocks or a single ContentBlock.
  */
 class ContentBlockConfigurationRepository implements SingletonInterface
 {
-    protected ConfigurationService $configurationService;
-
-    protected string $hostBasePath = '';
-
     protected string $publicPath = '';
-
     protected string $privatePath = '';
 
     public function __construct()
     {
-        $this->configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
-        $this->hostBasePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR . $this->configurationService->getBasePath();
         // create dir if not exists
-        GeneralUtility::mkdir_deep($this->hostBasePath);
+        GeneralUtility::mkdir_deep(ConfigurationService::getContentBlockLegacyPath());
     }
 
 
@@ -56,29 +48,20 @@ class ContentBlockConfigurationRepository implements SingletonInterface
     {
         $result = [];
         $cbFinder = new Finder();
-        $cbFinder->directories()->depth('== 0')->in($this->hostBasePath);
+        $cbFinder->directories()->depth(0)->in(ConfigurationService::getContentBlockLegacyPath());
 
         foreach ($cbFinder as $splPath) {
-            // directory paths (full)
-            $realPath = $splPath->getPathname() . DIRECTORY_SEPARATOR;
-
-            // composer.json
-            if (!is_readable($realPath . 'composer.json')) {
-                throw new \Exception(sprintf('Cannot read or find composer.json file: %s', $realPath . 'composer.json'));
+            if (!is_readable($splPath->getPathname() . '/composer.json')) {
+                throw new \RuntimeException('Cannot read or find composer.json file in "' . $splPath->getPathname() . '"' . '/composer.json');
             }
-
-            $composerJson = json_decode(file_get_contents($realPath . 'composer.json'), true);
-
-            if ($composerJson['type'] !== $this->configurationService->getComposerType()) {
+            $composerJson = json_decode(file_get_contents($splPath->getPathname() . '/composer.json'), true);
+            if ($composerJson['type'] !== ConfigurationService::getComposerType()) {
                 continue;
             }
-
             $nameFromComposer = explode('/', $composerJson['name']);
-
             $result[] = $this->findByIdentifier($nameFromComposer[1]);
         }
 
-        // return $result;
         return TableDefinitionCollection::createFromArray($result);
     }
 
@@ -87,18 +70,18 @@ class ContentBlockConfigurationRepository implements SingletonInterface
      */
     public function create(ContentBlockConfiguration $contentBlockConf): self
     {
-        $cbBasePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR . $this->configurationService->getContentBlockDestinationPath() . $contentBlockConf->package;
+        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . $contentBlockConf->package;
         // check if directory exists, if so, stop.
-        if (is_dir($cbBasePath)) {
-            throw new \Exception(sprintf('It seems your ContentBlock %s exists. Please make sure you create a new one.', $contentBlockConf->package));
+        if (file_exists($cbBasePath)) {
+            throw new \RuntimeException('A content block with the identifier "' . $contentBlockConf->package . '" already exists.');
         }
         $htmlTemplateGenerator = GeneralUtility::makeInstance(HtmlTemplateCodeGenerator::class);
 
         // create directory structure
         mkdir($cbBasePath);
-        $cbBasePath .= DIRECTORY_SEPARATOR;
-        mkdir($cbBasePath . $this->configurationService->getContentBlocksPublicPath(), 0777, true);
-        mkdir($cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'Language', 0777, true);
+        $cbBasePath .= '/';
+        mkdir($cbBasePath . ConfigurationService::getContentBlocksPublicPath(), 0777, true);
+        mkdir($cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Language', 0777, true);
 
         // create files
         file_put_contents(
@@ -106,36 +89,36 @@ class ContentBlockConfigurationRepository implements SingletonInterface
             json_encode($contentBlockConf->composerJson, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
         );
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'EditorInterface.yaml',
+            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorInterface.yaml',
             Yaml::dump($contentBlockConf->yamlConfig, 10)
         );
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'EditorPreview.html',
+            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorPreview.html',
             $htmlTemplateGenerator->getHtmlTemplateEditorPreview($contentBlockConf)
         );
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'Frontend.html',
+            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Frontend.html',
             $htmlTemplateGenerator->getHtmlTemplateFrontend($contentBlockConf)
         );
         if (count($contentBlockConf->labelsXlfContent) > 0) {
             foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
                 $localLangPrefix = ($key === 'default' ? '' : $key . '.');
                 file_put_contents(
-                    $cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'Language/' . $localLangPrefix . 'Labels.xlf',
+                    $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Language/' . $localLangPrefix . 'Labels.xlf',
                     $translation
                 );
             }
         }
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'EditorPreview.css',
+            $cbBasePath . ConfigurationService::getContentBlocksPublicPath() . '/' . 'EditorPreview.css',
             '/* Created by Content BlockWizard */'
         );
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'Frontend.css',
+            $cbBasePath . ConfigurationService::getContentBlocksPublicPath() . '/' . 'Frontend.css',
             '/* Created by Content BlockWizard */'
         );
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'Frontend.js',
+            $cbBasePath . ConfigurationService::getContentBlocksPublicPath() . '/' . 'Frontend.js',
             '/* Created by Content BlockWizard */'
         );
 
@@ -148,63 +131,58 @@ class ContentBlockConfigurationRepository implements SingletonInterface
      */
     public function update(ContentBlockConfiguration $contentBlockConf): self
     {
-        $cbBasePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR . $this->configurationService->getContentBlockDestinationPath() . $contentBlockConf->package;
+        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . '/' . $contentBlockConf->package;
 
         // check if directory exists, if not, create a new ContentBlock.
-        if (!is_dir($cbBasePath)) {
+        if (!file_exists($cbBasePath)) {
             return $this->create($contentBlockConf);
         }
 
         // update the yaml file
         file_put_contents(
-            $cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'EditorInterface.yaml',
+            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorInterface.yaml',
             Yaml::dump($contentBlockConf->yamlConfig, 10)
         );
 
-        // udate translations
+        // Update translations
         if (count($contentBlockConf->labelsXlfContent) > 0) {
             foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
                 $localLangPrefix = ($key === 'default' ? '' : $key . '.');
                 file_put_contents(
-                    $cbBasePath . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'Language/' . $localLangPrefix . 'Labels.xlf',
+                    $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Language/' . $localLangPrefix . 'Labels.xlf',
                     $translation
                 );
             }
         }
         return $this;
     }
-
-    /**
-     * Find a ContentBlock by identifier
-     */
     public function findByIdentifier(string $identifier): array
     {
-        $cbBasePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR . $this->configurationService->getContentBlockDestinationPath() . $identifier;
-        // check if directory exists, if so, stop.
-        if (!is_dir($cbBasePath)) {
-            throw new \Exception(sprintf('You have tried to find a ContentBlock which does not exists: %s', $identifier));
+        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . '/' . $identifier;
+        if (!file_exists($cbBasePath)) {
+            throw new \RuntimeException('Content block "' . $identifier . '" could not be found in "' . $cbBasePath . '".');
         }
         // TODO: Validator check if the content block can be processed
         $cbConf = [];
         $cbConf['composerJson'] = json_decode(
-            file_get_contents($cbBasePath . DIRECTORY_SEPARATOR . 'composer.json'),
+            file_get_contents($cbBasePath . '/' . 'composer.json'),
             true
         );
         $cbConf['yaml'] = Yaml::parseFile(
-            $cbBasePath . DIRECTORY_SEPARATOR . $this->configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR . 'EditorInterface.yaml',
+            $cbBasePath . '/' . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorInterface.yaml',
         );
 
         // icon
         // directory paths (relative to publicPath())
-        $path = $this->configurationService->getContentBlockDestinationPath() . $identifier . DIRECTORY_SEPARATOR;
+        $path = ConfigurationService::getContentBlockLegacyPath() . '/' . $identifier;
         $iconPath = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $ext) {
             $checkIconPath = GeneralUtility::getFileAbsFileName(
-                $path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'ContentBlockIcon.' . $ext
+                $path . '/' . ConfigurationService::getContentBlocksPublicPath() . '/' . 'ContentBlockIcon.' . $ext
             );
             if (is_readable($checkIconPath)) {
-                $iconPath = $path . $this->configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'ContentBlockIcon.' . $ext;
+                $iconPath = $path . '/' . ConfigurationService::getContentBlocksPublicPath() . '/' . 'ContentBlockIcon.' . $ext;
                 $iconProviderClass = $ext === 'svg'
                     ? SvgIconProvider::class
                     : BitmapIconProvider::class;
@@ -215,7 +193,7 @@ class ContentBlockConfigurationRepository implements SingletonInterface
         $cbConf['iconProvider'] = $iconProviderClass;
 
         if ($iconPath === null) {
-            throw new \Exception(sprintf('No icon found for ContentBlock %s in path %s', $identifier, $path));
+            throw new \RuntimeException('No icon could be found for content block "' . $identifier . '" in path "' . $path . '".');
         }
         return $cbConf;
     }
@@ -230,7 +208,7 @@ class ContentBlockConfigurationRepository implements SingletonInterface
 
         foreach ($cbFinder as $splPath) {
             // directory paths (full)
-            $realPath = $splPath->getPathname() . DIRECTORY_SEPARATOR;
+            $realPath = $splPath->getPathname() . '/';
 
             // composer.json
             if (!is_readable($realPath . 'composer.json')) {
@@ -239,7 +217,7 @@ class ContentBlockConfigurationRepository implements SingletonInterface
 
             $composerJson = json_decode(file_get_contents($realPath . 'composer.json'), true);
 
-            if ($composerJson['type'] !== $this->configurationService->getComposerType()) {
+            if ($composerJson['type'] !== ConfigurationService::getComposerType()) {
                 continue;
             }
 

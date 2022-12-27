@@ -100,7 +100,7 @@ class TcaGenerator
                         'tt_content',
                         'CType',
                         [
-                            'LLL:' . $typeDefinition->getPrivatePath() . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $typeDefinition->getVendor()
+                            'LLL:' . $typeDefinition->getPrivatePath() . 'Language' . '/' . 'Labels.xlf:' . $typeDefinition->getVendor()
                             . '.' . $typeDefinition->getPackage() . '.title',
                             $typeDefinition->getCType(),
                             $typeDefinition->getCType(),

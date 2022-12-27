@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class TableDefinitionCollection implements \IteratorAggregate, SingletonInterface
 {
@@ -73,10 +72,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     public static function createFromArray(array $contentBlocksList): TableDefinitionCollection
     {
         $tableDefinitionCollection = new self();
-
-        /** @var ConfigurationService $configurationService */
-        $configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
-
         $tableDefinition = [];
 
         // Since we need to sum up all lvl 0 ContentBlock fields to tt_content,
@@ -84,10 +79,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         foreach ($contentBlocksList as $contentBlock) {
             // basic ContentBlock / CType data
             $cType = str_replace('/', '-', $contentBlock['composerJson']['name']);
-            $collectionTablePrefix = $configurationService->getDatabaseCollectionTablePrefix() . $cType; // needed for unique collection table names later
-            $ttContentColumnPrefix = $configurationService->getDatabaseTtContentPrefix() . $cType; // needed for unique column names in tt_content later
+            $collectionTablePrefix = ConfigurationService::getDatabaseCollectionTablePrefix() . $cType; // needed for unique collection table names later
+            $ttContentColumnPrefix = ConfigurationService::getDatabaseTtContentPrefix() . $cType; // needed for unique column names in tt_content later
             [$vendor, $package] = explode('/', $contentBlock['composerJson']['name']);
-            $path = $configurationService->getBasePath() . $package . DIRECTORY_SEPARATOR;
+            $path = ConfigurationService::getContentBlockLegacyPath() . '/' . $package;
 
             // collect data for tt_content from each ContentBlock
             if (isset($contentBlock['yaml']['fields']) && count($contentBlock['yaml']['fields']) > 0) {
@@ -96,7 +91,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                     // unique tt_content column name
                     $currentColumnName = $ttContentColumnPrefix . '_' . $ttContentField['identifier'];
                     $currentColumnName = str_replace('-', '_', $currentColumnName);
-                    $languagePath = $path . $configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $ttContentField['identifier'];
+                    $languagePath = $path . '/' . ConfigurationService::getContentBlocksPublicPath() . '/' . 'Language' . '/' . 'Labels.xlf:' . $ttContentField['identifier'];
 
                     $ttContentField = $tableDefinitionCollection->processCollections(
                         $ttContentField,
@@ -123,8 +118,8 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 'columns' => array_keys($tableDefinition['fields']),
                 'vendor' => $vendor,
                 'package' => $package,
-                'publicPath' => $path . $configurationService->getContentBlocksPublicPath() . DIRECTORY_SEPARATOR,
-                'privatePath' => $path . $configurationService->getContentBlocksPrivatePath() . DIRECTORY_SEPARATOR,
+                'publicPath' => $path . '/' . ConfigurationService::getContentBlocksPublicPath() . '/',
+                'privatePath' => $path . '/' . ConfigurationService::getContentBlocksPrivatePath() . '/',
                 'wizardGroup' => ($contentBlock['yaml']['group'] ?? ''),
                 'icon' => $contentBlock['icon'],
                 'iconProvider' => $contentBlock['iconProvider'],

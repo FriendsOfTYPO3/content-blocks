@@ -17,35 +17,27 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Service;
 
-use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Core\Environment;
 
-class ConfigurationService implements SingletonInterface
+/**
+ * @todo paths for composer packages
+ */
+class ConfigurationService
 {
     /**
-     * TODO: make base path for ContentBlocks configurable and
-     * deliver it due to the configuration
+     * @todo make base path for ContentBlocks configurable and
+     * @todo deliver it due to the configuration
      */
-    public function getBasePath(): string
+    public static function getContentBlockLegacyPath(): string
     {
-        return 'typo3conf/content-blocks/';
-    }
-
-    /**
-     * Return the destination path where to write the ContentBlocks.
-     * E.g. the 'contentBlocksPackageDirectory'
-     *
-     * TODO: make the destination path configurable.
-     */
-    public function getContentBlockDestinationPath(): string
-    {
-        return $this->getBasePath();
+        return Environment::getLegacyConfigPath() . '/content-blocks';
     }
 
     /**
      * Since there are dicussions of making/using 'src' or 'Resources/Private',
      * or if it should be configurable, this could be a configurable constant.
      */
-    public function getContentBlocksPrivatePath()
+    public static function getContentBlocksPrivatePath()
     {
         return 'Resources/Private';
     }
@@ -54,7 +46,7 @@ class ConfigurationService implements SingletonInterface
      * Since there are dicussions of making/using 'dist' or 'Resources/Public',
      * or if it should be configurable, this could be a configurable constant.
      */
-    public function getContentBlocksPublicPath()
+    public static function getContentBlocksPublicPath()
     {
         return 'Resources/Public';
     }
@@ -62,7 +54,7 @@ class ConfigurationService implements SingletonInterface
     /**
      * If somebody wants to change that anyway in future.
      */
-    public function getComposerType(): string
+    public static function getComposerType(): string
     {
         return 'typo3-contentblock';
     }
@@ -70,7 +62,7 @@ class ConfigurationService implements SingletonInterface
     /**
      * If this should be configurable or things changes in future
      */
-    public function getDatabaseCollectionTablePrefix(): string
+    public static function getDatabaseCollectionTablePrefix(): string
     {
         return 'cb_collection_';
     }
@@ -78,7 +70,7 @@ class ConfigurationService implements SingletonInterface
     /**
      * If this should be configurable or things changes in future
      */
-    public function getDatabaseTtContentPrefix(): string
+    public static function getDatabaseTtContentPrefix(): string
     {
         return 'cb_';
     }

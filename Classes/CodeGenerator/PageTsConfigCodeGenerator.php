@@ -28,8 +28,8 @@ class PageTsConfigCodeGenerator
                 elements {
                     ' . $ceDefinition->getCType() . ' {
                         iconIdentifier = ' . $ceDefinition->getCType() . '
-                        title = LLL:' . $ceDefinition->getPrivatePath()  . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $ceDefinition->getVendor() . '.' . $ceDefinition->getPackage() . '.title
-                        description = LLL:' . $ceDefinition->getPrivatePath()  . 'Language' . DIRECTORY_SEPARATOR . 'Labels.xlf:' . $ceDefinition->getVendor() . '.' . $ceDefinition->getPackage() . '.description
+                        title = LLL:' . $ceDefinition->getPrivatePath()  . 'Language' . '/' . 'Labels.xlf:' . $ceDefinition->getVendor() . '.' . $ceDefinition->getPackage() . '.title
+                        description = LLL:' . $ceDefinition->getPrivatePath()  . 'Language' . '/' . 'Labels.xlf:' . $ceDefinition->getVendor() . '.' . $ceDefinition->getPackage() . '.description
                         tt_content_defValues {
                             CType = ' . $ceDefinition->getCType() . '
                         }

@@ -17,10 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Domain\Model;
 
-use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory;
-use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class ContentBlockConfigurationTest extends UnitTestCase
@@ -293,13 +290,10 @@ class ContentBlockConfigurationTest extends UnitTestCase
     public function checkContentBlockConfiguration(array $contentBlock, array $expected)
     {
         $this->resetSingletonInstances = true;
-        $configurationService = new ConfigurationService();
 
         /** @var ContentBlockConfigurationFactory $contentBlockConfigurationFactory */
         // $contentBlockConfigurationFactory = GeneralUtility::makeInstance(ContentBlockConfigurationFactory::class);
-        $contentBlockConfigurationFactory = new ContentBlockConfigurationFactory(
-            $configurationService
-        );
+        $contentBlockConfigurationFactory = new ContentBlockConfigurationFactory();
 
         $contentBlockConfiguration = $contentBlockConfigurationFactory->createFromArray($contentBlock);
         // self::assertSame($expected['create'], $contentBlockConfiguration->toArray());

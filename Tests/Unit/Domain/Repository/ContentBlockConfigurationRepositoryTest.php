@@ -22,7 +22,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockConfigurationRepository;
 use TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory;
-use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -130,7 +129,7 @@ class ContentBlockConfigurationRepositoryTest extends UnitTestCase
         $contentBlockConfigurationRepository = GeneralUtility::makeInstance(ContentBlockConfigurationRepository::class);
 
         /** @var ContentBlockConfigurationFactory $factory */
-        $factory = new ContentBlockConfigurationFactory(new ConfigurationService);
+        $factory = new ContentBlockConfigurationFactory();
 
         /** @param ContentBlockConfiguration */
         $contentBlockConf = $factory->createFromArray($contentBlock);
