@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Builder;
 
 use Symfony\Component\Yaml\Yaml;
-use TYPO3\CMS\ContentBlocks\CodeGenerator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
