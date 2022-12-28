@@ -17,19 +17,18 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
+use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Domain\Repository\ContentBlockBuilder;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
+use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TcaGeneratorTest extends UnitTestCase
 {
-    /**
-     * dataprovider for checking TCA field types
-     */
     public function checkTcaFieldTypesDataProvider(): iterable
     {
-        yield 'Input field are processed correctly' => [
+        yield 'Two simple content block create two types and two columns in tt_content table' => [
             'contentBlocks' => [
                 [
                     'composerJson' => [
@@ -43,12 +42,27 @@ class TcaGeneratorTest extends UnitTestCase
                                 'identifier' => 'text',
                                 'type' => 'Text',
                                 'properties' => [
-                                    'autocomplete' => 1,
                                     'default' => 'Default value',
-                                    'max' => 15,
                                     'placeholder' => 'Placeholder text',
-                                    'size' => 20,
-                                    'required' => 0,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'composerJson' => [
+                        'name' => 't3ce/testblock',
+                    ],
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                                'properties' => [
+                                    'default' => '',
+                                    'placeholder' => '',
                                 ],
                             ],
                         ],
@@ -56,14 +70,42 @@ class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                [
-                    'tt_content' => [
-                        'columns' => [],
-                        'showItemFields' => '',
-                        'columnsOverrides' => [],
+                'tt_content' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            't3ce_example' => 't3ce_example',
+                            't3ce_testblock' => 't3ce_testblock',
+                        ],
                     ],
-                    'collections' => [
-                        'columns' => [],
+                    'types' => [
+                        't3ce_example' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,cb_t3ce_example_text,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.frames;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                        ],
+                        't3ce_testblock' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,cb_t3ce_testblock_text,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.frames;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                        ],
+                    ],
+                    'columns' => [
+                        'cb_t3ce_example_text' => [
+                            'label' => 'LLL:' . Environment::getProjectPath() . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:' . Environment::getProjectPath() . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:text.description',
+                            'config' => [
+                                'type' => 'input',
+                                'default' => 'Default value',
+                                'placeholder' => 'Placeholder text',
+                            ],
+                            'exclude' => true,
+                        ],
+                        'cb_t3ce_testblock_text' => [
+                            'label' => 'LLL:' . Environment::getProjectPath() . '/typo3conf/content-blocks/testblock/Resources/Private/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:' . Environment::getProjectPath() . '/typo3conf/content-blocks/testblock/Resources/Private/Language/Labels.xlf:text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'exclude' => true,
+                        ],
                     ],
                 ],
             ],
@@ -77,8 +119,11 @@ class TcaGeneratorTest extends UnitTestCase
     public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+        $tcaGenerator = new TcaGenerator($tableDefinitionCollection);
+        $afterTcaCompilationEvent = new AfterTcaCompilationEvent([]);
 
-        $cbConfigRepository = new ContentBlockBuilder();
-        $tcaGenerator = new TcaGenerator($cbConfigRepository);
+        $tcaGenerator->generate($afterTcaCompilationEvent);
+
+        self::assertEquals($expected, $afterTcaCompilationEvent->getTca());
     }
 }

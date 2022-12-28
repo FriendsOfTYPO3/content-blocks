@@ -1,3 +1,0 @@
-# @todo Move this to a more generic option in EditorInterface.yaml
-# cat=Features; type=boolean; label=enableLayoutOptions: Show layout (frame) options palette known from fluid_styled_content and bootstrap_package
-enableLayoutOptions = 0

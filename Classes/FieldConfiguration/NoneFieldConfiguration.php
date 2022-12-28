@@ -17,19 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
-/**
- * class NoneFieldConfiguration
- */
 class NoneFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
-
     /**
      * Get TCA for this inputfield
      */
@@ -51,14 +40,9 @@ class NoneFieldConfiguration extends AbstractFieldConfiguration implements Field
         return "`$uniqueColumnName` VARCHAR(55) DEFAULT '' NOT NULL";
     }
 
-    /**
-     * Fills the properties from array infos
-     */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-
-        return $this;
+        return parent::createFromArray($settings);
     }
 
     /**

@@ -19,38 +19,17 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
-/**
- * class TextareaFieldConfiguration
- */
 class TextareaFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
     public int $cols = 24;
-
     public string $default = '';
-
     public string $placeholder = '';
-
     public string $richtextConfiguration = '';
-
     public int $max = 700;
-
     public int $rows = 3;
-
     public bool $enableRichtext = false;
-
     public bool $required = false;
 
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
-
-    /**
-     * Get TCA for this inputfield
-     */
     public function getTca(): array
     {
         $tca = parent::getTcaTemplate();
@@ -78,36 +57,27 @@ class TextareaFieldConfiguration extends AbstractFieldConfiguration implements F
         return $tca;
     }
 
-    /**
-     * Get SQL definition for this inputfield
-     */
     public function getSql(string $uniqueColumnName): string
     {
         return "`$uniqueColumnName` text";
     }
 
-    /**
-     * Fills the properties from array infos
-     */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-        $this->type = FieldType::TEXTAREA->getTcaType();
-        $this->cols = (int)($settings['properties']['cols'] ?? $this->cols);
-        $this->default = $settings['properties']['default'] ?? $this->default;
-        $this->enableRichtext = (bool)($settings['properties']['enableRichtext'] ?? $this->enableRichtext);
-        $this->max = (int)($settings['properties']['max'] ?? $this->max);
-        $this->placeholder = $settings['properties']['placeholder'] ?? $this->placeholder;
-        $this->richtextConfiguration = $settings['properties']['richtextConfiguration'] ?? $this->richtextConfiguration;
-        $this->rows = (int)($settings['properties']['rows'] ?? $this->rows);
-        $this->required = (bool)($settings['properties']['required'] ?? $this->required);
+        $self = parent::createFromArray($settings);
+        $self->type = FieldType::TEXTAREA->getTcaType();
+        $self->cols = (int)($settings['properties']['cols'] ?? $self->cols);
+        $self->default = $settings['properties']['default'] ?? $self->default;
+        $self->enableRichtext = (bool)($settings['properties']['enableRichtext'] ?? $self->enableRichtext);
+        $self->max = (int)($settings['properties']['max'] ?? $self->max);
+        $self->placeholder = $settings['properties']['placeholder'] ?? $self->placeholder;
+        $self->richtextConfiguration = $settings['properties']['richtextConfiguration'] ?? $self->richtextConfiguration;
+        $self->rows = (int)($settings['properties']['rows'] ?? $self->rows);
+        $self->required = (bool)($settings['properties']['required'] ?? $self->required);
 
-        return $this;
+        return $self;
     }
 
-    /**
-     * Get the TextareaFieldConfiguration as array
-     */
     public function toArray(): array
     {
         return [

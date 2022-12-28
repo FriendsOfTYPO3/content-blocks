@@ -88,10 +88,12 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             $contentBlockPath = ConfigurationService::getContentBlockLegacyPath() . '/' . $package;
 
             // collect data for tt_content from each ContentBlock
+            $columns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $ttContentField) {
                 // unique tt_content column name
                 $column = $ttContentColumnPrefix . '_' . $ttContentField['identifier'];
-                $languagePath = $contentBlockPath . '/' . ConfigurationService::getContentBlocksPublicPath() . '/Language/Labels.xlf:' . $ttContentField['identifier'];
+                $columns[] = $column;
+                $languagePath = $contentBlockPath . '/' . ConfigurationService::getContentBlocksPrivatePath() . '/Language/Labels.xlf:' . $ttContentField['identifier'];
 
                 $ttContentField = $tableDefinitionCollection->processCollections(
                     $ttContentField,
@@ -112,7 +114,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             $tableDefinition['elements'][] = [
                 'composerName' => $contentBlock['composerJson']['name'],
                 'identifier' => $contentBlock['composerJson']['name'],
-                'columns' => array_keys($tableDefinition['fields']),
+                'columns' => $columns,
                 'vendor' => $vendor,
                 'package' => $package,
                 'publicPath' => $contentBlockPath . '/' . ConfigurationService::getContentBlocksPublicPath() . '/',

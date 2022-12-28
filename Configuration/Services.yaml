@@ -12,6 +12,11 @@ services:
 
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-tca'
+        event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
+        method: generate
 
   TYPO3\CMS\ContentBlocks\Service\ConfigurationService:
     public: true
@@ -32,9 +37,8 @@ services:
     public: true
     tags:
       - name: event.listener
-        identifier: 'cb-sql-generator'
+        identifier: 'content-blocks-sql'
         event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
-        method: addDatabaseTablesDefinition
 
   TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
     autoconfigure: false

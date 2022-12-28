@@ -17,28 +17,16 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
-use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
-
-/**
- * Defines basic stuff for FieldConfigurations
- */
 interface FieldConfigurationInterface
 {
     public function getSql(string $uniqueColumnName): string;
-
     public function getTca(): array;
-
     public function toArray(): array;
-
     public function getTemplateHtml(int $indentation): string;
 
-
     public function combinedIdentifierToArray(string $combinedIdentifier): array;
-
     public function arrayToCombinedIdentifier(array $path): string;
-
     public function uniqueCombinedIdentifier(string $cType, string $combinedIdentifier): string;
-
     public function splitUniqueCombinedIdentifier($uniqueCombinedIdentifier): array;
 
     /**

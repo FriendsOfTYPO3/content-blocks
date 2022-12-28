@@ -55,10 +55,8 @@ class SqlGenerator implements SingletonInterface
 
     /**
      * Adds the SQL for all elements to the psr-14 AlterTableDefinitionStatementsEvent event.
-     *
-     * @param AlterTableDefinitionStatementsEvent $event
      */
-    public function addDatabaseTablesDefinition(AlterTableDefinitionStatementsEvent $event): void
+    public function __invoke(AlterTableDefinitionStatementsEvent $event): void
     {
         $event->setSqlData(array_merge($event->getSqlData(), $this->getSqlByConfiguration()));
     }

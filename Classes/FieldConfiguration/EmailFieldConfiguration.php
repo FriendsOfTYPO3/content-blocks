@@ -19,30 +19,14 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
-/**
- * class InputFieldConfiguration
- */
 class EmailFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
     public bool $autocomplete = false;
-
     public string $default = '';
-
     public string $placeholder = '';
-
     public int $size = 20;
-
     public bool $required = false;
-
     public array $valuePicker = [];
-
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
 
     /**
      * Get TCA for this inputfield
@@ -84,25 +68,25 @@ class EmailFieldConfiguration extends AbstractFieldConfiguration implements Fiel
     /**
      * Fills the properties from array infos
      */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-        $this->type = FieldType::EMAIL->value;
-        $this->autocomplete = (bool)($settings['properties']['autocomplete'] ?? $this->autocomplete);
-        $this->default = $settings['properties']['default'] ?? $this->default;
-        $this->placeholder = $settings['properties']['placeholder'] ?? $this->placeholder;
-        $this->size = $settings['properties']['size'] ?? $this->size;
-        $this->required = (bool)($settings['properties']['required'] ?? $this->required);
+        $self = parent::createFromArray($settings);
+        $self->type = FieldType::EMAIL->value;
+        $self->autocomplete = (bool)($settings['properties']['autocomplete'] ?? $self->autocomplete);
+        $self->default = $settings['properties']['default'] ?? $self->default;
+        $self->placeholder = $settings['properties']['placeholder'] ?? $self->placeholder;
+        $self->size = $settings['properties']['size'] ?? $self->size;
+        $self->required = (bool)($settings['properties']['required'] ?? $self->required);
 
         if (isset($settings['properties']['valuePicker']['items']) && is_array($settings['properties']['valuePicker']['items'])) {
             $tempPickerItems = [];
             foreach ($settings['properties']['valuePicker']['items'] as $key => $name) {
                 $tempPickerItems[] = [$name, $key];
             }
-            $this->valuePicker['items'] = $tempPickerItems;
+            $self->valuePicker['items'] = $tempPickerItems;
         }
 
-        return $this;
+        return $self;
     }
 
     /**

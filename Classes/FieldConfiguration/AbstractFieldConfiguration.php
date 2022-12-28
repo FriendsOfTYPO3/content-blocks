@@ -17,49 +17,33 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
-use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
-
-/**
- * Class AbstractFieldConfiguration
- */
 class AbstractFieldConfiguration
 {
     protected array $rawData = [];
-
-    public string $type;
-
+    public string $type = '';
     public string $identifier = '';
-
     public string $languagePath = '';
-
     public string $uniqueIdentifier = '';
-
     public array $path = [];
-
     public bool $useExistingField = false;
-
     public bool $isFileField = false;
-
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
 
     /**
      * Fills the properties from array infos
      *
      * (This the createFromArray method is mainly used by the constructor.)
      */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        $this->rawData = $settings;
-        $this->identifier = $settings['identifier'] ?? '';
-        $this->uniqueIdentifier = $settings['_identifier'] ?? '';
-        $this->path = $settings['_path'] ?? $this->path;
-        $this->languagePath = $settings['languagePath'];
-        $this->useExistingField = (bool)($settings['properties']['useExistingField'] ?? $this->useExistingField);
+        $self = new static();
+        $self->rawData = $settings;
+        $self->identifier = $settings['identifier'] ?? '';
+        $self->uniqueIdentifier = $settings['_identifier'] ?? '';
+        $self->path = $settings['_path'] ?? $self->path;
+        $self->languagePath = $settings['languagePath'];
+        $self->useExistingField = (bool)($settings['properties']['useExistingField'] ?? $self->useExistingField);
 
-        return $this;
+        return $self;
     }
 
     public function getTcaTemplate(): array
@@ -71,7 +55,7 @@ class AbstractFieldConfiguration
         ];
 
         if (!$this->useExistingField) {
-            $tcaTemplate['exclude'] = 1;
+            $tcaTemplate['exclude'] = true;
         }
 
         return $tcaTemplate;

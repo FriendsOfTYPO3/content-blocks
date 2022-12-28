@@ -25,18 +25,8 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 class CheckboxFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
     public string $default = '';
-
     public array $items = [];
-
     public bool $invertStateDisplay = false;
-
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
 
     /**
      * Get TCA for this inputfield
@@ -67,22 +57,22 @@ class CheckboxFieldConfiguration extends AbstractFieldConfiguration implements F
     /**
      * Fills the properties from array infos
      */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-        $this->type = FieldType::CHECKBOX->getTcaType();
-        $this->default = $settings['properties']['default'] ?? $this->default;
-        $this->invertStateDisplay = (bool)($settings['properties']['invertStateDisplay'] ?? $this->invertStateDisplay);
+        $self = parent::createFromArray($settings);
+        $self->type = FieldType::CHECKBOX->getTcaType();
+        $self->default = $settings['properties']['default'] ?? $self->default;
+        $self->invertStateDisplay = (bool)($settings['properties']['invertStateDisplay'] ?? $self->invertStateDisplay);
 
         if (isset($settings['properties']['items']) && is_array($settings['properties']['items'])) {
             $items = [];
             foreach ($settings['properties']['items'] as $key => $value) {
                 $items[] = [ $value, $key];
             }
-            $this->items = $items;
+            $self->items = $items;
         }
 
-        return $this;
+        return $self;
     }
 
     /**

@@ -25,31 +25,13 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 class NumberFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
     public int $size = 20;
-
-    public $default = 0.0;
-
+    public float $default = 0.0;
     public string $format = 'int';
-
     public array $range = [];
-
     public bool $required = false;
-
     public array $valuePicker = [];
-
     public array $slider = [];
 
-
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
-
-    /**
-     * Get TCA for this inputfield
-     */
     public function getTca(): array
     {
         $formatTranslate = [
@@ -97,30 +79,24 @@ class NumberFieldConfiguration extends AbstractFieldConfiguration implements Fie
     /**
      * Fills the properties from array infos
      */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-        $this->type = FieldType::NUMBER->getTcaType();
-        $this->size = $settings['properties']['size'] ?? $this->size;
-        $this->default = $settings['properties']['default'] ?? $this->default;
-        $this->format = $settings['properties']['format'] ?? $this->format;
-        $this->required = (bool)($settings['properties']['required'] ?? $this->required);
+        $self = parent::createFromArray($settings);
+        $self->type = FieldType::NUMBER->getTcaType();
+        $self->size = $settings['properties']['size'] ?? $self->size;
+        $self->default = $settings['properties']['default'] ?? $self->default;
+        $self->format = $settings['properties']['format'] ?? $self->format;
+        $self->required = (bool)($settings['properties']['required'] ?? $self->required);
+        $self->valuePicker = $settings['properties']['valuePicker'] ?? $self->valuePicker;
 
-        if (isset($settings['properties']['valuePicker']['items']) && is_array($settings['properties']['valuePicker']['items'])) {
-            $tempPickerItems = [];
-            foreach ($settings['properties']['valuePicker']['items'] as $key => $name) {
-                $tempPickerItems[] = [$name, $key];
-            }
-            $this->valuePicker['items'] = $tempPickerItems;
-        }
         if (isset($settings['properties']['range'])) {
-            $this->range = $settings['properties']['range'];
+            $self->range = $settings['properties']['range'];
         }
         if (isset($settings['properties']['slider'])) {
-            $this->slider = $settings['properties']['slider'];
+            $self->slider = $settings['properties']['slider'];
         }
 
-        return $this;
+        return $self;
     }
 
     /**

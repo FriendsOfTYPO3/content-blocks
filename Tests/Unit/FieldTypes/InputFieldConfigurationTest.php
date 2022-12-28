@@ -22,78 +22,122 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class InputFieldConfigurationTest extends UnitTestCase
 {
-    /**
-     * dataprovider for checking InputFieldConfiguration
-     */
-    public function checkInputFieldConfigurationDataProvider(): iterable
+    public function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
-        yield 'Check input field configurations.' => [
+        yield 'Input field with truthy values' => [
             'config' => [
-                'text' => [
-                    'identifier' => 'myText',
-                    'languagePath' => 'test-path-for-input.xlf:text',
-                    'properties' => [
-                        'autocomplete' => true,
-                        'default' => 'Default value',
-                        'max' => 15,
-                        'placeholder' => 'Placeholder text',
-                        'size' => 20,
-                        'required' => true,
-                        'trim' => true,
-                        'valuePicker' => [
-                            'items' => [
-                                'Spring' => 'spring',
-                                'Summer' => 'summer',
-                                'Autumn' => 'autumn',
-                                'Winter' => 'winter',
-                            ],
-                        ],
+                'identifier' => 'myText',
+                'languagePath' => 'test-path-for-input.xlf:text',
+                'properties' => [
+                    'default' => 'Default value',
+                    'placeholder' => 'Placeholder text',
+                    'max' => 15,
+                    'size' => 20,
+                    'autocomplete' => 1,
+                    'required' => 1,
+                    'readOnly' => 1,
+                    'nullable' => 1,
+                    'mode' => 'useOrOverridePlaceholder',
+                    'is_in' => 'abc',
+                    'valuePicker' => [
+                        'items' => [
+                            ['One', '1'],
+                            ['Two', '2'],
+                        ]
                     ],
+                    'eval' => ['trim', 'lower'],
                 ],
             ],
-
-            'uniqueColumnName' => 'cb_example_myText',
-            'expected' => [
-                'getSql' => '`cb_example_myText` VARCHAR(20) DEFAULT \'\' NOT NULL',
-                'getTca' => [
-                    'label' => 'LLL:test-path-for-input.xlf:text.label',
-                    'description' => 'LLL:test-path-for-input.xlf:text.description',
-                    'config' => [
-                        'type' => 'input',
-                        'size' => 20,
-                        'max' => 15,
-                        'default' => 'Default value',
-                        'placeholder' => 'Placeholder text',
-                        'required' => true,
-                        'autocomplete' => true,
-                        'valuePicker' => [
-                           'items' => [
-                              ['spring', 'Spring'],
-                              ['summer', 'Summer'],
-                              ['autumn', 'Autumn'],
-                              ['winter', 'Winter'],
-                           ],
-                        ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path-for-input.xlf:text.label',
+                'description' => 'LLL:test-path-for-input.xlf:text.description',
+                'config' => [
+                    'type' => 'input',
+                    'default' => 'Default value',
+                    'placeholder' => 'Placeholder text',
+                    'max' => 15,
+                    'size' => 20,
+                    'autocomplete' => true,
+                    'required' => true,
+                    'readOnly' => true,
+                    'nullable' => true,
+                    'mode' => 'useOrOverridePlaceholder',
+                    'is_in' => 'abc',
+                    'valuePicker' => [
+                        'items' => [
+                            ['One', '1'],
+                            ['Two', '2'],
+                        ]
                     ],
-                    'exclude' => 1,
+                    'eval' => 'trim,lower',
+                ],
+            ],
+        ];
+
+        yield 'Input field with falsy values' => [
+            'config' => [
+                'identifier' => 'myText',
+                'languagePath' => 'test-path-for-input.xlf:text',
+                'properties' => [
+                    'default' => '',
+                    'placeholder' => '',
+                    'max' => 0,
+                    'size' => 0,
+                    'autocomplete' => 0,
+                    'required' => 0,
+                    'readOnly' => 0,
+                    'nullable' => 0,
+                    'mode' => '',
+                    'is_in' => '',
+                    'valuePicker' => [
+                        'items' => []
+                    ],
+                    'eval' => [],
+                ],
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path-for-input.xlf:text.label',
+                'description' => 'LLL:test-path-for-input.xlf:text.description',
+                'config' => [
+                    'type' => 'input',
                 ],
             ],
         ];
     }
 
     /**
-     * InputFieldConfiguration Test
-     *
      * @test
-     * @dataProvider checkInputFieldConfigurationDataProvider
+     * @dataProvider getTcaReturnsExpectedTcaDataProvider
      */
-    public function checkInputFieldConfiguration(array $config, string $uniqueColumnName, array $expected): void
+    public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        // Inputfield test
+        $inputFieldConfiguration = InputFieldConfiguration::createFromArray($config);
 
-        $inputfield = new InputFieldConfiguration($config['text']);
-        self::assertSame($expected['getSql'], $inputfield->getSql($uniqueColumnName));
+        self::assertEquals($expectedTca, $inputFieldConfiguration->getTca());
+    }
 
-        self::assertSame($expected['getTca'], $inputfield->getTca());
+    public function getSqlReturnsExpectedSqlDataProvider(): iterable
+    {
+        yield 'Simple input field' => [
+            'config' => [
+                'identifier' => 'myText',
+                'languagePath' => 'test-path-for-input.xlf:text',
+            ],
+            'uniqueColumnName' => 'cb_example_myText',
+            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider getSqlReturnsExpectedSqlDataProvider
+     */
+    public function getTcaReturnsExpectedSql(array $config, string $uniqueColumnName, string $expectedSql): void
+    {
+        $inputFieldConfiguration = InputFieldConfiguration::createFromArray($config);
+
+        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }
 }

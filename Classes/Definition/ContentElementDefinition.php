@@ -81,6 +81,9 @@ final class ContentElementDefinition extends TypeDefinition
         return $this->contentElementIconOverlay;
     }
 
+    /**
+     * @todo this should be saved in the initialization
+     */
     public function getCType(): string
     {
         return NamingConverter::composerNameToCType($this->composerName);

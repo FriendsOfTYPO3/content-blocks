@@ -25,30 +25,13 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 class FileFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
     public string $fileTypes = 'mixed';
-
     public string $allowedFileExtensions = '';
-
     public bool $enableImaManipulation = false;
-
     public int $maxItems = 0;
-
     public int $minItems = 0;
 
-
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
-
-    /**
-     * Get TCA for this inputfield
-     */
     public function getTca(): array
     {
-
         $tca = parent::getTcaTemplate();
         $tca['config'] = [
             'type' => $this->type,
@@ -96,23 +79,23 @@ class FileFieldConfiguration extends AbstractFieldConfiguration implements Field
     /**
      * Fills the properties from array infos
      */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-        $this->type = FieldType::FILE->getTcaType();
-        $this->fileTypes = $settings['properties']['fileTypes'] ?? $this->fileTypes;
-        $this->allowedFileExtensions = $settings['properties']['allowedFileExtensions'] ?? $this->allowedFileExtensions;
-        $this->enableImaManipulation = $settings['properties']['enableImaManipulation'] ?? $this->enableImaManipulation;
+        $self = parent::createFromArray($settings);
+        $self->type = FieldType::FILE->getTcaType();
+        $self->fileTypes = $settings['properties']['fileTypes'] ?? $self->fileTypes;
+        $self->allowedFileExtensions = $settings['properties']['allowedFileExtensions'] ?? $self->allowedFileExtensions;
+        $self->enableImaManipulation = $settings['properties']['enableImaManipulation'] ?? $self->enableImaManipulation;
 
         if (isset($settings['properties']['maxItems']) && is_int($settings['properties']['maxItems'])) {
-            $this->maxItems = (int)$settings['properties']['maxItems'];
+            $self->maxItems = (int)$settings['properties']['maxItems'];
         }
 
         if (isset($settings['properties']['minItems']) && is_int($settings['properties']['minItems'])) {
-            $this->minItems = (int)$settings['properties']['minItems'];
+            $self->minItems = (int)$settings['properties']['minItems'];
         }
 
-        return $this;
+        return $self;
     }
 
     /**

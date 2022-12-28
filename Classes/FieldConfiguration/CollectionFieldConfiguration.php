@@ -25,28 +25,13 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 class CollectionFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
 {
     public bool $collapseAll = true;
-
     public array|bool $enabledControls = true;
-
     public bool $enableSorting = true;
-
     public bool $expandSingle = true;
-
     public array $fields = [];
-
     public int $maxItems = 0;
-
     public int $minItems = 0;
-
     public string $useAsLabel = '';
-
-    /**
-     * Construct: setting from yaml file needed to create a field configuration.
-     */
-    public function __construct(array $settings)
-    {
-        $this->createFromArray($settings);
-    }
 
     /**
      * Get TCA for this inputfield
@@ -106,25 +91,25 @@ class CollectionFieldConfiguration extends AbstractFieldConfiguration implements
     /**
      * Fills the properties from array infos
      */
-    protected function createFromArray(array $settings): self
+    public static function createFromArray(array $settings): static
     {
-        parent::createFromArray($settings);
-        $this->type = FieldType::COLLECTION->getTcaType();
-        $this->collapseAll = $settings['properties']['collapseAll'] ?? $this->collapseAll;
-        $this->enabledControls = $settings['properties']['enabledControls'] ?? $this->enabledControls;
-        $this->enableSorting = $settings['properties']['enableSorting'] ?? $this->enableSorting;
-        $this->expandSingle = $settings['properties']['expandSingle'] ?? $this->expandSingle;
-        $this->fields = ($settings['properties']['fields'] ?? $this->fields);
-        $this->useAsLabel = ($settings['properties']['useAsLabel'] ?? $this->useAsLabel);
+        $self = parent::createFromArray($settings);
+        $self->type = FieldType::COLLECTION->getTcaType();
+        $self->collapseAll = $settings['properties']['collapseAll'] ?? $self->collapseAll;
+        $self->enabledControls = $settings['properties']['enabledControls'] ?? $self->enabledControls;
+        $self->enableSorting = $settings['properties']['enableSorting'] ?? $self->enableSorting;
+        $self->expandSingle = $settings['properties']['expandSingle'] ?? $self->expandSingle;
+        $self->fields = ($settings['properties']['fields'] ?? $self->fields);
+        $self->useAsLabel = ($settings['properties']['useAsLabel'] ?? $self->useAsLabel);
 
         if (isset($settings['properties']['maxItems']) && is_int($settings['properties']['maxItems'])) {
-            $this->maxItems = (int)$settings['properties']['maxItems'];
+            $self->maxItems = (int)$settings['properties']['maxItems'];
         }
 
         if (isset($settings['properties']['minItems']) && is_int($settings['properties']['minItems'])) {
-            $this->minItems = (int)$settings['properties']['minItems'];
+            $self->minItems = (int)$settings['properties']['minItems'];
         }
-        return $this;
+        return $self;
     }
 
     /**
