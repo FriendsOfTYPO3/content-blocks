@@ -81,9 +81,10 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         }
 
         // fill missing data to composerJson
-        $cbConf->composerJson['type'] = $cbConf->composerJson['type'] ?? ConfigurationService::getComposerType();
-        $cbConf->composerJson['license'] = $cbConf->composerJson['license'] ?? 'GPL-2.0-or-later';
-        $cbConf->composerJson['require'] = $cbConf->composerJson['require'] ?? ['typo3/cms-content-blocks' => '*'];
+        // @todo what is the benefit to fill it here? This MUST be correct in the original composer.json file.
+        $cbConf->composerJson['type'] ??= ConfigurationService::getComposerType();
+        $cbConf->composerJson['license'] ??= 'GPL-2.0-or-later';
+        $cbConf->composerJson['require'] ??= ['typo3/cms-content-blocks' => '*'];
 
         return $cbConf;
     }

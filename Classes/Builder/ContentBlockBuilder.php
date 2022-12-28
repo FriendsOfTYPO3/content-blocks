@@ -23,68 +23,65 @@ use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Finds the configuration of all ContentBlocks or a single ContentBlock.
- */
 class ContentBlockBuilder
 {
-    protected string $publicPath = '';
-    protected string $privatePath = '';
+    public function __construct(
+        protected HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
+    ) {
+    }
 
     /**
      * Writes a ContentBlock to file system.
      */
-    public function create(ContentBlockConfiguration $contentBlockConf): self
+    public function create(ContentBlockConfiguration $contentBlockConfiguration): self
     {
-        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . $contentBlockConf->package;
-        // check if directory exists, if so, stop.
-        if (file_exists($cbBasePath)) {
-            throw new \RuntimeException('A content block with the identifier "' . $contentBlockConf->package . '" already exists.');
+        $basePath = ConfigurationService::getContentBlockLegacyPath() . '/' .  $contentBlockConfiguration->package;
+        if (file_exists($basePath)) {
+            throw new \RuntimeException('A content block with the identifier "' . $contentBlockConfiguration->package . '" already exists.');
         }
-        $htmlTemplateGenerator = GeneralUtility::makeInstance(HtmlTemplateCodeGenerator::class);
 
         // create directory structure
-        mkdir($cbBasePath);
-        $cbBasePath .= '/';
-        mkdir($cbBasePath . ConfigurationService::getContentBlocksPublicPath(), 0777, true);
-        mkdir($cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Language', 0777, true);
+        $privatePath = $basePath . '/' . ConfigurationService::getContentBlocksPrivatePath();
+        $publicPath = $basePath . '/' . ConfigurationService::getContentBlocksPublicPath();
+        GeneralUtility::mkdir_deep($publicPath);
+        GeneralUtility::mkdir_deep($privatePath . '/Language');
 
         // create files
         file_put_contents(
-            $cbBasePath . 'composer.json',
-            json_encode($contentBlockConf->composerJson, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+            $basePath . '/composer.json',
+            json_encode($contentBlockConfiguration->composerJson, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
         );
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorInterface.yaml',
-            Yaml::dump($contentBlockConf->yamlConfig, 10)
+            $privatePath . '/EditorInterface.yaml',
+            Yaml::dump($contentBlockConfiguration->yamlConfig, 10)
         );
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorPreview.html',
-            $htmlTemplateGenerator->getHtmlTemplateEditorPreview($contentBlockConf)
+            $privatePath . '/EditorPreview.html',
+            $this->htmlTemplateCodeGenerator->getHtmlTemplateEditorPreview($contentBlockConfiguration)
         );
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Frontend.html',
-            $htmlTemplateGenerator->getHtmlTemplateFrontend($contentBlockConf)
+            $privatePath . '/Frontend.html',
+            $this->htmlTemplateCodeGenerator->getHtmlTemplateFrontend($contentBlockConfiguration)
         );
-        if (count($contentBlockConf->labelsXlfContent) > 0) {
-            foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
+        if (count($contentBlockConfiguration->labelsXlfContent) > 0) {
+            foreach ($contentBlockConfiguration->labelsXlfContent as $key => $translation) {
                 $localLangPrefix = ($key === 'default' ? '' : $key . '.');
                 file_put_contents(
-                    $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Language/' . $localLangPrefix . 'Labels.xlf',
+                    $privatePath . '/Language/' . $localLangPrefix . 'Labels.xlf',
                     $translation
                 );
             }
         }
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPublicPath() . '/' . 'EditorPreview.css',
+            $publicPath . '/EditorPreview.css',
             '/* Created by Content BlockWizard */'
         );
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPublicPath() . '/' . 'Frontend.css',
+            $publicPath . '/Frontend.css',
             '/* Created by Content BlockWizard */'
         );
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPublicPath() . '/' . 'Frontend.js',
+            $publicPath . '/Frontend.js',
             '/* Created by Content BlockWizard */'
         );
 
@@ -97,7 +94,7 @@ class ContentBlockBuilder
      */
     public function update(ContentBlockConfiguration $contentBlockConf): self
     {
-        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . 'ContentBlockBuilder.php/' . $contentBlockConf->package;
+        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . '/' . $contentBlockConf->package;
 
         // check if directory exists, if not, create a new ContentBlock.
         if (!file_exists($cbBasePath)) {
@@ -106,19 +103,17 @@ class ContentBlockBuilder
 
         // update the yaml file
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'EditorInterface.yaml',
+            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/EditorInterface.yaml',
             Yaml::dump($contentBlockConf->yamlConfig, 10)
         );
 
         // Update translations
-        if (count($contentBlockConf->labelsXlfContent) > 0) {
-            foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
-                $localLangPrefix = ($key === 'default' ? '' : $key . '.');
-                file_put_contents(
-                    $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/' . 'Language/' . $localLangPrefix . 'Labels.xlf',
-                    $translation
-                );
-            }
+        foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
+            $localLangPrefix = ($key === 'default' ? '' : $key . '.');
+            file_put_contents(
+                $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/Language/' . $localLangPrefix . 'Labels.xlf',
+                $translation
+            );
         }
         return $this;
     }

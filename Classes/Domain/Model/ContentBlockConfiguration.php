@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Domain\Model;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
 /**
  * Class ContentBlockConfiguration
@@ -31,47 +32,29 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\AbstractFieldConfiguration;
 class ContentBlockConfiguration
 {
     public array $composerJson = [];
-
     public string $package = '';
-
     public string $path = '';
-
     public string $vendor = '';
-
     public array $yamlConfig = [];
-
-    public string $iconProviderClass = 'TYPO3\\CMS\\Core\\Imaging\\IconProvider\\SvgIconProvider';
-
     public string $wizardGroup = 'common';
-
     public string $publicPath = '';
-
     public string $privatePath = '';
-
     public string $frontendTemplatesPath = '';
-
     public string $frontendPartialsPath = '';
-
     public string $frontendLayoutsPath = '';
-
     public string $editorPreviewHtml = '';
-
+    public string $labelsXlfPath = '';
+    public string $icon = '';
+    public array $labelsXlfContent = [];
     /**
      * What to write in the TCA label of the ContentBlock
      */
     public string $editorLLL = '';
-
     /**
      * TODO: evaluate if we still need this
      * Note: at the moment yes.
      */
     public string $frontendLLL = '';
-
-    public string $labelsXlfPath = '';
-
-    public string $icon = '';
-
-    public array $labelsXlfContent = [];
 
     /**
      * @var TableDefinitionCollection $tableDefinitions
@@ -134,7 +117,7 @@ class ContentBlockConfiguration
             'privatePath' => $this->privatePath,
             'publicPath' => $this->publicPath,
             'icon' => $this->icon,
-            'iconProviderClass' => $this->iconProviderClass,
+            'iconProviderClass' => SvgIconProvider::class,
             'CType' => $this->getCType(),
             'composerJson' => $this->composerJson,
             'fields' => $fieldsList,
