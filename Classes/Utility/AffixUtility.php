@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 
 namespace TYPO3\CMS\ContentBlocks\Utility;
+
 class AffixUtility
 {
     private const COLLECTION_PREFIX = 'cb_collection_';
