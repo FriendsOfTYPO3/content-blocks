@@ -17,8 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Definition\SqlColumnDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\SqlDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -30,34 +28,22 @@ class SqlGenerator implements SingletonInterface
     ) {
     }
 
-    /**
-     * returns sql statements of all elements
-     */
-    protected function getSqlByConfiguration(): array
+    public function __invoke(AlterTableDefinitionStatementsEvent $event): void
+    {
+        $event->setSqlData(array_merge($event->getSqlData(), $this->generate()));
+    }
+
+    public function generate(): array
     {
         $sql = [];
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            /** @var SqlDefinition $sqlDefinition */
-            $sqlDefinition = $tableDefinition->getSqlDefinition();
-            $sqlString = '';
-            /** @var SqlColumnDefinition $column */
-            foreach($sqlDefinition as $column) {
-                $sqlString .= (($sqlString === '') ? '' : ', ') . $column->getSqlDefinition();
+            foreach ($tableDefinition->getSqlDefinition() as $column) {
+                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
             }
-            if (strlen($sqlString) > 2) {
-                $sqlString = 'CREATE TABLE `' . $sqlDefinition->getTable() . '` ' . '  ( ' . $sqlString . " );\n";
-                $sql[] = $sqlString;
+            if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
+                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`foreign_table_parent_uid` int(11) DEFAULT \'0\' NOT NULL);';
             }
         }
-
         return $sql;
-    }
-
-    /**
-     * Adds the SQL for all elements to the psr-14 AlterTableDefinitionStatementsEvent event.
-     */
-    public function __invoke(AlterTableDefinitionStatementsEvent $event): void
-    {
-        $event->setSqlData(array_merge($event->getSqlData(), $this->getSqlByConfiguration()));
     }
 }

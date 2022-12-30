@@ -19,22 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Utility;
 
 class AffixUtility
 {
-    private const COLLECTION_PREFIX = 'cb_collection_';
     private const DB_COLUMN_PREFIX = 'cb_';
-
-    public static function hasCollectionPrefix(string $table): bool
-    {
-        return str_starts_with($table, self::COLLECTION_PREFIX);
-    }
-
-    public static function prefixCollection(string $table): string
-    {
-        if (self::hasCollectionPrefix($table)) {
-            return $table;
-        }
-
-        return self::COLLECTION_PREFIX . $table;
-    }
 
     public static function hasDbColumnPrefix(string $column): bool
     {
@@ -46,7 +31,6 @@ class AffixUtility
         if (self::hasDbColumnPrefix($column)) {
             return $column;
         }
-
         return self::DB_COLUMN_PREFIX . $column;
     }
 }

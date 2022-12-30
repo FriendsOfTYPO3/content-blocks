@@ -18,23 +18,25 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
 class TypoScriptGenerator
 {
-    public static function typoScriptForContentElementDefinition(ContentElementDefinition $contentElementDefinition): string
+    public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
+        $privatePath = ContentBlockPathUtility::getContentBlocksPrivatePath($contentElementDefinition->getPackage());
         return '
             tt_content.' . $contentElementDefinition->getCType() . ' < lib.contentBlock
             tt_content.' . $contentElementDefinition->getCType() . '{
                 templateName = Frontend
                 templateRootPaths {
-                    20 = ' . $contentElementDefinition->getPrivatePath() . '
+                    20 = ' . $privatePath . '
                 }
                 partialRootPaths {
-                    20 = ' . $contentElementDefinition->getPrivatePath() . 'Partials/
+                    20 = ' . $privatePath . '/Partials
                 }
                 layoutRootPaths {
-                    20 = ' . $contentElementDefinition->getPrivatePath() . 'Layouts/
+                    20 = ' . $privatePath . '/Layouts
                 }
             }
             ';

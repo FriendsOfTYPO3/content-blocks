@@ -164,7 +164,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
             ->from($table)
             ->where(
                 $q->expr()->eq(
-                    'foreign_parent_table_uid',
+                    'foreign_table_parent_uid',
                     $q->createNamedParameter($parentUid, Connection::PARAM_INT)
                 )
             )

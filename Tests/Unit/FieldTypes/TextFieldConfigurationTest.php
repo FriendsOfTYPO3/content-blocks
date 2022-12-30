@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class EmailFieldConfigurationTest extends UnitTestCase
+class TextFieldConfigurationTest extends UnitTestCase
 {
     public function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -30,11 +30,21 @@ class EmailFieldConfigurationTest extends UnitTestCase
                     'non_available_field' => 'foo',
                     'default' => 'Default value',
                     'placeholder' => 'Placeholder text',
+                    'max' => 15,
+                    'min' => 3,
+                    'size' => 20,
                     'autocomplete' => 1,
                     'required' => 1,
                     'readOnly' => 1,
                     'nullable' => 1,
                     'mode' => 'useOrOverridePlaceholder',
+                    'is_in' => 'abc',
+                    'valuePicker' => [
+                        'items' => [
+                            ['One', '1'],
+                            ['Two', '2'],
+                        ]
+                    ],
                     'eval' => ['trim', 'lower'],
                 ],
             ],
@@ -43,15 +53,25 @@ class EmailFieldConfigurationTest extends UnitTestCase
                 'label' => 'LLL:test-path.xlf:foo.label',
                 'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
-                    'type' => 'email',
+                    'type' => 'input',
+                    'size' => 20,
                     'default' => 'Default value',
                     'readOnly' => true,
+                    'max' => 15,
+                    'min' => 3,
                     'nullable' => true,
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
+                    'is_in' => 'abc',
                     'required' => true,
                     'eval' => 'trim,lower',
                     'autocomplete' => true,
+                    'valuePicker' => [
+                        'items' => [
+                            ['One', '1'],
+                            ['Two', '2'],
+                        ]
+                    ],
                 ],
             ],
         ];
@@ -62,12 +82,18 @@ class EmailFieldConfigurationTest extends UnitTestCase
                     'non_available_field' => 'foo',
                     'default' => '',
                     'placeholder' => '',
+                    'max' => 0,
+                    'min' => 0,
                     'size' => 0,
                     'autocomplete' => 0,
                     'required' => 0,
                     'readOnly' => 0,
                     'nullable' => 0,
                     'mode' => '',
+                    'is_in' => '',
+                    'valuePicker' => [
+                        'items' => []
+                    ],
                     'eval' => [],
                 ],
             ],
@@ -76,7 +102,7 @@ class EmailFieldConfigurationTest extends UnitTestCase
                 'label' => 'LLL:test-path.xlf:foo.label',
                 'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
-                    'type' => 'email',
+                    'type' => 'input',
                     'autocomplete' => false,
                 ],
             ],
@@ -89,7 +115,7 @@ class EmailFieldConfigurationTest extends UnitTestCase
      */
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = EmailFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = TextFieldConfiguration::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
     }
@@ -108,7 +134,7 @@ class EmailFieldConfigurationTest extends UnitTestCase
      */
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = EmailFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = TextFieldConfiguration::createFromArray([]);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }

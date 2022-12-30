@@ -15,15 +15,17 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Converter;
+namespace TYPO3\CMS\ContentBlocks\Utility;
 
-class NamingConverter
+class UniqueNameUtility
 {
-    public static function composerNameToCType(string $composerName): string
+    public static function composerNameToTypeIdentifier(string $composerName): string
     {
-        [$vendor, $package] = explode('/', $composerName);
-        $vendorUnderscored = str_replace('-', '_', $vendor);
-        $packageUnderscored = str_replace('-', '_', $package);
-        return $vendorUnderscored . '_' . $packageUnderscored;
+        return implode('_', array_map(fn($name) => str_replace('-', '', $name), explode('/', $composerName)));
+    }
+
+    public static function createUniqueColumnName(string $composerName, string $identifier): string
+    {
+        return self::composerNameToTypeIdentifier($composerName) . '_' . $identifier;
     }
 }

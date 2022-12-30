@@ -18,22 +18,19 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 
 final class TcaFieldDefinition
 {
-    private ?FieldType $fieldType = null;
     /** the identifier is the name of the columnin TCA and database */
     private string $identifier = '';
     /** the name is how to call this field in the fluid template */
     private string $name = '';
     private string $label = '';
     private string $description = '';
-    /**
-     * @var array<string, mixed>
-     */
-    private array $config = [];
-
     private string $languagePath = '';
+    private bool $useExistingField = false;
+    private ?FieldConfigurationInterface $fieldConfiguration = null;
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
@@ -51,15 +48,15 @@ final class TcaFieldDefinition
             ->withName($array['config']['identifier'])
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
-            ->withConfig($array['config'] ?? [])
             ->withLanguagePath($array['config']['languagePath'] ?? '')
-            ->withFieldType($array['config']['type']);
+            ->withUseExistingField($array['config']['useExistingField'] ?? false)
+            ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
     }
 
     public function toArray(): array
     {
         return [
-            'fieldType' => $this->fieldType->name,
+            'fieldType' => $this->fieldConfiguration->getFieldType()->name,
             'identifier' => $this->identifier,
             'label' => $this->label,
             'description' => $this->description,
@@ -70,7 +67,7 @@ final class TcaFieldDefinition
 
     public function getFieldType(): FieldType
     {
-        return $this->fieldType;
+        return $this->fieldConfiguration->getFieldType();
     }
 
     public function getIdentifier(): string
@@ -95,9 +92,10 @@ final class TcaFieldDefinition
 
     public function getTca(): array
     {
-        return $this->fieldType
-            ->getFieldTypeConfiguration($this->config)
-            ->getTca();
+        if ($this->fieldConfiguration instanceof FieldConfigurationInterface) {
+            return $this->fieldConfiguration->getTca($this->languagePath, $this->useExistingField);
+        }
+        return [];
     }
 
     public function withIdentifier(string $identifier): TcaFieldDefinition
@@ -121,20 +119,6 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withConfig(array $config): TcaFieldDefinition
-    {
-        $clone = clone $this;
-        $clone->config = $config;
-        return $clone;
-    }
-
-    public function withFieldType(string $type): TcaFieldDefinition
-    {
-        $clone = clone $this;
-        $clone->fieldType = FieldType::from($type);
-        return $clone;
-    }
-
     public function withName(string $name): TcaFieldDefinition
     {
         $clone = clone $this;
@@ -149,10 +133,23 @@ final class TcaFieldDefinition
         return $clone;
     }
 
+    public function withUseExistingField(bool $useExistingField): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->useExistingField = $useExistingField;
+        return $clone;
+    }
+
+    public function withFieldConfiguration(FieldConfigurationInterface $fieldConfiguration): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->fieldConfiguration = $fieldConfiguration;
+        return $clone;
+    }
+
     public function isUseExistingField(): bool
     {
-        return $this->fieldType
-            ->getFieldTypeConfiguration($this->config)
-            ->useExistingField;
+        // @todo overthink "useExistingField" approach
+        return $this->useExistingField;
     }
 }

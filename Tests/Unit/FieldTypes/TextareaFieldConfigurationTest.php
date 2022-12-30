@@ -22,65 +22,126 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TextareaFieldConfigurationTest extends UnitTestCase
 {
-    /**
-     * dataprovider for checking TextareaFieldConfiguration
-     */
-    public function checkTextareaFieldConfigurationDataProvider(): iterable
+    public function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
-        yield 'Check textarea field configurations.' => [
+        yield 'truthy values' => [
             'config' => [
-                'textarea' => [
-                    'identifier' => 'textarea',
-                    'languagePath' => 'test-path-for-textfield.xlf:test',
-                    'properties' => [
-                        'cols' => 40,
-                        'default' => 'Default value',
-                        'enableRichtext' => true,
-                        'max' => 150,
-                        'placeholder' => 'Placeholder text',
-                        'richtextConfiguration' => 'default',
-                        'rows' => 15,
-                        'required' => true,
-                        'trim' => true,
-                    ],
+                'properties' => [
+                    'non_available_field' => 'foo',
+                    'default' => 'Default value',
+                    'placeholder' => 'Placeholder text',
+                    'max' => 15,
+                    'min' => 3,
+                    'size' => 20,
+                    'rows' => 10,
+                    'cols' => 20,
+                    'autocomplete' => 1,
+                    'required' => 1,
+                    'readOnly' => 1,
+                    'nullable' => 1,
+                    'enableTabulator' => 1,
+                    'fixedFont' => 1,
+                    'mode' => 'useOrOverridePlaceholder',
+                    'is_in' => 'abc',
+                    'wrap' => 'off',
+                    'eval' => ['trim', 'lower'],
+                    'enableRichtext' => 1,
+                    'richtextConfiguration' => 'default',
                 ],
             ],
-            'uniqueColumnName' => 'cb_example_textarea',
-            'expected' => [
-                'getSql' => '`cb_example_textarea` text',
-                'getTca' => [
-                    'label' => 'LLL:test-path-for-textfield.xlf:test.label',
-                    'description' => 'LLL:test-path-for-textfield.xlf:test.description',
-                    'config' => [
-                        'type' => 'text',
-                        'cols' => 40,
-                        'max' => 150,
-                        'rows' => 15,
-                        'default' => 'Default value',
-                        'enableRichtext' => true,
-                        'placeholder' => 'Placeholder text',
-                        'richtextConfiguration' => 'default',
-                        'required' => true,
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path.xlf:foo.label',
+                'description' => 'LLL:test-path.xlf:foo.description',
+                'config' => [
+                    'type' => 'text',
+                    'default' => 'Default value',
+                    'readOnly' => true,
+                    'required' => true,
+                    'max' => 15,
+                    'min' => 3,
+                    'nullable' => true,
+                    'mode' => 'useOrOverridePlaceholder',
+                    'placeholder' => 'Placeholder text',
+                    'is_in' => 'abc',
+                    'eval' => 'trim,lower',
+                    'rows' => 10,
+                    'cols' => 20,
+                    'enableTabulator' => true,
+                    'fixedFont' => true,
+                    'wrap' => 'off',
+                    'enableRichtext' => true,
+                    'richtextConfiguration' => 'default',
+                ],
+            ],
+        ];
+
+        yield 'falsy values' => [
+            'config' => [
+                'properties' => [
+                    'non_available_field' => 'foo',
+                    'default' => '',
+                    'placeholder' => '',
+                    'max' => 0,
+                    'min' => 0,
+                    'rows' => 0,
+                    'cols' => 0,
+                    'size' => 0,
+                    'autocomplete' => 0,
+                    'required' => 0,
+                    'readOnly' => 0,
+                    'nullable' => 0,
+                    'mode' => '',
+                    'is_in' => '',
+                    'wrap' => '',
+                    'valuePicker' => [
+                        'items' => []
                     ],
-                    'exclude' => 1,
+                    'eval' => [],
+                    'enableTabulator' => 0,
+                    'fixedFont' => 0,
+                    'enableRichtext' => 0,
+                    'richtextConfiguration' => '',
+                ],
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path.xlf:foo.label',
+                'description' => 'LLL:test-path.xlf:foo.description',
+                'config' => [
+                    'type' => 'text',
                 ],
             ],
         ];
     }
 
     /**
-     * TextareaFieldConfiguration Test
-     *
      * @test
-     * @dataProvider checkTextareaFieldConfigurationDataProvider
+     * @dataProvider getTcaReturnsExpectedTcaDataProvider
      */
-    public function checkTextareaFieldConfiguration(array $config, string $uniqueColumnName, array $expected): void
+    public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        // Textareafield test
+        $fieldConfiguration = TextareaFieldConfiguration::createFromArray($config);
 
-        $textareaField = new TextareaFieldConfiguration($config['textarea']);
-        self::assertSame($expected['getSql'], $textareaField->getSql($uniqueColumnName));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
+    }
 
-        self::assertSame($expected['getTca'], $textareaField->getTca());
+    public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
+    {
+        yield 'default text column' => [
+            'uniqueColumnName' => 'cb_example_myText',
+            'expectedSql' => '`cb_example_myText` text',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider getSqlReturnsExpectedSqlDefinitionDataProvider
+     */
+    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
+    {
+        $inputFieldConfiguration = TextareaFieldConfiguration::createFromArray([]);
+
+        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }
 }

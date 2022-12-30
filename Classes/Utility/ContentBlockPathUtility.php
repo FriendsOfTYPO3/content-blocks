@@ -15,14 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Service;
+namespace TYPO3\CMS\ContentBlocks\Utility;
 
 use TYPO3\CMS\Core\Core\Environment;
 
 /**
  * @todo paths for composer packages
  */
-class ConfigurationService
+class ContentBlockPathUtility
 {
     /**
      * @todo make base path for ContentBlocks configurable and
@@ -33,22 +33,27 @@ class ConfigurationService
         return Environment::getLegacyConfigPath() . '/content-blocks';
     }
 
+    public static function getPackagePath(string $package): string
+    {
+        return self::getContentBlockLegacyPath() . '/' . $package;
+    }
+
     /**
      * Since there are dicussions of making/using 'src' or 'Resources/Private',
      * or if it should be configurable, this could be a configurable constant.
      */
-    public static function getContentBlocksPrivatePath()
+    public static function getContentBlocksPrivatePath(string $package)
     {
-        return 'Resources/Private';
+        return self::getPackagePath($package) . '/Resources/Private';
     }
 
     /**
      * Since there are dicussions of making/using 'dist' or 'Resources/Public',
      * or if it should be configurable, this could be a configurable constant.
      */
-    public static function getContentBlocksPublicPath()
+    public static function getContentBlocksPublicPath(string $package)
     {
-        return 'Resources/Public';
+        return self::getPackagePath($package) . '/Resources/Public';
     }
 
     /**

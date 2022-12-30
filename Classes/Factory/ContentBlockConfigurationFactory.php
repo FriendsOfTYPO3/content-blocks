@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Factory;
 
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
-use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
+use TYPO3\CMS\ContentBlocks\Service\ContentBlockPathUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -40,18 +40,18 @@ class ContentBlockConfigurationFactory implements SingletonInterface
         $cbConf = GeneralUtility::makeInstance(ContentBlockConfiguration::class);
 
         [$cbConf->vendor, $cbConf->package] = explode('/', $config['composerJson']['name']);
-        $cbConf->path = ConfigurationService::getContentBlockLegacyPath() . $cbConf->package . '/';
+        $cbConf->path = ContentBlockPathUtility::getContentBlockLegacyPath() . $cbConf->package . '/';
         $cbConf->wizardGroup = $config['yaml']['group'] ?? $cbConf->wizardGroup;
         $cbConf->composerJson = $config['composerJson'];
         $cbConf->yamlConfig = $config['yaml'] ?? $cbConf->yamlConfig;
 
-        $cbConf->publicPath = $cbConf->path . ConfigurationService::getContentBlocksPublicPath() . '/';
+        $cbConf->publicPath = $cbConf->path . ContentBlockPathUtility::getContentBlocksPublicPath() . '/';
 
         // Setting the frontendTemplatesPath has to be before re-setting the privatePath.
         // Reason: trailing '/' must not be there for templates path
         $cbConf->frontendTemplatesPath = $cbConf->path . $cbConf->privatePath;
 
-        $cbConf->privatePath = $cbConf->path . ConfigurationService::getContentBlocksPrivatePath() . '/';
+        $cbConf->privatePath = $cbConf->path . ContentBlockPathUtility::getContentBlocksPrivatePath() . '/';
         $cbConf->frontendPartialsPath = $cbConf->privatePath . 'Partials';
         $cbConf->frontendLayoutsPath = $cbConf->privatePath . 'Layouts';
 
@@ -75,14 +75,14 @@ class ContentBlockConfigurationFactory implements SingletonInterface
             foreach ($config['yaml']['fields'] as $fieldConfigFromYaml) {
                 $fieldType = FieldType::from($fieldConfigFromYaml['type']);
 
-                $fieldConfig = $fieldType->getFieldTypeConfiguration($fieldConfigFromYaml);
+                $fieldConfig = $fieldType->getFieldConfiguration($fieldConfigFromYaml);
                 $cbConf->fieldsConfig[$fieldConfig->identifier] = $fieldConfig;
             }
         }
 
         // fill missing data to composerJson
         // @todo what is the benefit to fill it here? This MUST be correct in the original composer.json file.
-        $cbConf->composerJson['type'] ??= ConfigurationService::getComposerType();
+        $cbConf->composerJson['type'] ??= ContentBlockPathUtility::getComposerType();
         $cbConf->composerJson['license'] ??= 'GPL-2.0-or-later';
         $cbConf->composerJson['require'] ??= ['typo3/cms-content-blocks' => '*'];
 

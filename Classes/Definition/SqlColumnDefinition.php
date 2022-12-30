@@ -18,12 +18,12 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 
 final class SqlColumnDefinition
 {
     private string $column = '';
-    private string $type = '';
-    private array $config = [];
+    private FieldConfigurationInterface $fieldConfiguration;
 
     public function __construct(array $columnDefinition)
     {
@@ -31,13 +31,9 @@ final class SqlColumnDefinition
             throw new \InvalidArgumentException('Column name must not be empty.', 1629291834);
         }
 
-        if (count($columnDefinition) < 1) {
-            throw new \InvalidArgumentException('SQL column definition definition must not be empty.', 1629291856);
-        }
-
-        $this->config = $columnDefinition['config'];
         $this->column = $columnDefinition['identifier'];
-        $this->type = $this->config['type'];
+        $this->fieldConfiguration = FieldType::from($columnDefinition['config']['type'])
+            ->getFieldConfiguration($columnDefinition['config']);
     }
 
     public function getColumn(): string
@@ -45,17 +41,18 @@ final class SqlColumnDefinition
         return $this->column;
     }
 
-    public function getSqlDefinition(): string
+    public function getSql(): string
     {
-        return FieldType::from($this->type)
-            ->getFieldTypeConfiguration($this->config)
-            ->getSql($this->column) ;
+        return $this->fieldConfiguration->getSql($this->column);
+    }
+
+    public function getFieldType(): FieldType
+    {
+        return $this->fieldConfiguration->getFieldType();
     }
 
     public function toArray(): array
     {
-        return [
-            $this->column => $this->sqlDefinition,
-        ];
+        return [];
     }
 }

@@ -156,7 +156,7 @@ class FieldTypeTest extends UnitTestCase
                     ],
                 '_identifier' => 'text',
             ],
-            'expected' => 'TYPO3\CMS\ContentBlocks\FieldConfiguration\InputFieldConfiguration',
+            'expected' => 'TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration',
         ];
 
         yield 'Check Enumaration getFieldTypeConfiguration Textarea.' => [
@@ -190,6 +190,6 @@ class FieldTypeTest extends UnitTestCase
     public function checkGetFieldTypeConfiguration(array $fieldConfiguration, string $expected)
     {
         $testEnum = FieldType::tryFrom($fieldConfiguration['type']);
-        self::assertSame($expected, get_class($testEnum->getFieldTypeConfiguration($fieldConfiguration)));
+        self::assertSame($expected, get_class($testEnum->getFieldConfiguration($fieldConfiguration)));
     }
 }

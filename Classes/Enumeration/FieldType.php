@@ -17,11 +17,13 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Enumeration;
 
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\CheckboxFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\ColorFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\InputFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
@@ -42,8 +44,6 @@ enum FieldType: String
     case REFERENCE = 'Reference';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
-    // For testing
-    case IMAGE = 'Image';
     case LINEBREAK = 'linebreak';
     case URL = 'Url';
     case NONE = 'None';
@@ -77,8 +77,6 @@ enum FieldType: String
             self::REFERENCE => 'input',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
-            // For testing
-            self::IMAGE => 'file',
             self::LINEBREAK =>  'input',
             self::URL =>  'input',
             default => '',
@@ -112,27 +110,19 @@ enum FieldType: String
             self::REFERENCE => 'skip',
             self::TEXT => 'renderable',
             self::TEXTAREA => 'renderable',
-            // For testing
-            self::IMAGE => 'file',
             self::LINEBREAK =>  'skip',
             self::URL =>  'renderable',
             default => 'skip',
         };
     }
 
-
-
-    /**
-     * Get the matching FieldTypeConfiguration
-     * TODO: add the missing field types
-     */
-    public function getFieldTypeConfiguration(array $config): FieldConfigurationInterface
+    public function getFieldConfiguration(array $config): FieldConfigurationInterface
     {
         return match ($this) {
             // self::CATEGORY => 'input',
-            // self::CHECKBOX => 'check',
+            self::CHECKBOX => CheckboxFieldConfiguration::createFromArray($config),
             self::COLLECTION => CollectionFieldConfiguration::createFromArray($config),
-            // self::COLOR => 'input',
+            self::COLOR => ColorFieldConfiguration::createFromArray($config),
             // self::DATETIME => 'input',
             self::EMAIL => EmailFieldConfiguration::createFromArray($config),
             self::FILE => FileFieldConfiguration::createFromArray($config),
@@ -141,19 +131,11 @@ enum FieldType: String
             // self::RADIO => 'radio',
             // self::SELECT => 'select',
             // self::REFERENCE => 'input',
-            self::TEXT => InputFieldConfiguration::createFromArray($config),
+            self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
-            // For testing
-            self::IMAGE => FileFieldConfiguration::createFromArray($config),
             // self::LINEBREAK =>  new InputFieldConfiguration($config),
             // self::URL =>  new InputFieldConfiguration($config),
-            default => new NoneFieldConfiguration($config),
+            default => NoneFieldConfiguration::createFromArray($config),
         };
     }
-
-    /*
-     * TODO:
-     * - Add all of the types
-     * - helper functions: look at EXT:mask
-     */
 }

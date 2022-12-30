@@ -17,23 +17,26 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+
 interface FieldConfigurationInterface
 {
     public function getSql(string $uniqueColumnName): string;
-    public function getTca(): array;
+    public function getTca(string $languagePath, bool $useExistingField): array;
     public function toArray(): array;
-    public function getTemplateHtml(int $indentation): string;
+    public function getFieldType(): FieldType;
+    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string;
 
-    public function combinedIdentifierToArray(string $combinedIdentifier): array;
-    public function arrayToCombinedIdentifier(array $path): string;
-    public function uniqueCombinedIdentifier(string $cType, string $combinedIdentifier): string;
-    public function splitUniqueCombinedIdentifier($uniqueCombinedIdentifier): array;
+//    public function combinedIdentifierToArray(string $combinedIdentifier): array;
+//    public function arrayToCombinedIdentifier(array $path): string;
+//    public function uniqueCombinedIdentifier(string $cType, string $combinedIdentifier): string;
+//    public function splitUniqueCombinedIdentifier($uniqueCombinedIdentifier): array;
 
     /**
      * Manage to have SQL compatible column names, prefixed with "cb_".
      * Result: cb_content_blockidentifier_column_path_column_name
      */
-    public function uniqueColumnName(string $cType, string $combinedIdentifier): string;
+//    public function uniqueColumnName(string $cType, string $combinedIdentifier): string;
 
     /** TODO:
      *  - getAllowedSettings: allowed properties and values for the backend module

@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
+use TYPO3\CMS\ContentBlocks\Service\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentBlockBuilder
@@ -35,14 +35,14 @@ class ContentBlockBuilder
      */
     public function create(ContentBlockConfiguration $contentBlockConfiguration): self
     {
-        $basePath = ConfigurationService::getContentBlockLegacyPath() . '/' .  $contentBlockConfiguration->package;
+        $basePath = ContentBlockPathUtility::getContentBlockLegacyPath() . '/' .  $contentBlockConfiguration->package;
         if (file_exists($basePath)) {
             throw new \RuntimeException('A content block with the identifier "' . $contentBlockConfiguration->package . '" already exists.');
         }
 
         // create directory structure
-        $privatePath = $basePath . '/' . ConfigurationService::getContentBlocksPrivatePath();
-        $publicPath = $basePath . '/' . ConfigurationService::getContentBlocksPublicPath();
+        $privatePath = $basePath . '/' . ContentBlockPathUtility::getContentBlocksPrivatePath();
+        $publicPath = $basePath . '/' . ContentBlockPathUtility::getContentBlocksPublicPath();
         GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($privatePath . '/Language');
 
@@ -94,7 +94,7 @@ class ContentBlockBuilder
      */
     public function update(ContentBlockConfiguration $contentBlockConf): self
     {
-        $cbBasePath = ConfigurationService::getContentBlockLegacyPath() . '/' . $contentBlockConf->package;
+        $cbBasePath = ContentBlockPathUtility::getContentBlockLegacyPath() . '/' . $contentBlockConf->package;
 
         // check if directory exists, if not, create a new ContentBlock.
         if (!file_exists($cbBasePath)) {
@@ -103,7 +103,7 @@ class ContentBlockBuilder
 
         // update the yaml file
         file_put_contents(
-            $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/EditorInterface.yaml',
+            $cbBasePath . ContentBlockPathUtility::getContentBlocksPrivatePath() . '/EditorInterface.yaml',
             Yaml::dump($contentBlockConf->yamlConfig, 10)
         );
 
@@ -111,7 +111,7 @@ class ContentBlockBuilder
         foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
             $localLangPrefix = ($key === 'default' ? '' : $key . '.');
             file_put_contents(
-                $cbBasePath . ConfigurationService::getContentBlocksPrivatePath() . '/Language/' . $localLangPrefix . 'Labels.xlf',
+                $cbBasePath . ContentBlockPathUtility::getContentBlocksPrivatePath() . '/Language/' . $localLangPrefix . 'Labels.xlf',
                 $translation
             );
         }

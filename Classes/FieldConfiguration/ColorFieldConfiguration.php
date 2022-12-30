@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
-final class NumberFieldConfiguration implements FieldConfigurationInterface
+final class ColorFieldConfiguration implements FieldConfigurationInterface
 {
-    private FieldType $fieldType = FieldType::NUMBER;
-    private int|float $default = 0;
+    private FieldType $fieldType = FieldType::COLOR;
+    private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
     private bool $required = false;
@@ -31,29 +31,22 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
     private string $placeholder = '';
     private array $valuePicker = [];
     private ?bool $autocomplete = null;
-    private array $range = [];
-    private array $slider = [];
-    private string $format = '';
 
-    public static function createFromArray(array $settings): NumberFieldConfiguration
+    public static function createFromArray(array $settings): ColorFieldConfiguration
     {
         $self = new self();
         $properties = $settings['properties'] ?? [];
-        $self->format = (string)($properties['format'] ?? $self->format);
-        $default = $properties['default'] ?? $self->default;
-        $self->default = $self->format === 'decimal' ? (float)$default : (int)$default;
+        $self->default = (string)($properties['default'] ?? $self->default);
         $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($settings['properties']['size'] ?? $self->size);
-        $self->required = (bool)($properties['required'] ?? $self->required);
+        $self->size = (int)($properties['size'] ?? $self->size);
+        $self->required = (bool)(($properties['required'] ?? $self->required));
         $self->nullable = (bool)($properties['nullable'] ?? $self->nullable);
         $self->mode = (string)($properties['mode'] ?? $self->mode);
         $self->placeholder = (string)($properties['placeholder'] ?? $self->placeholder);
-        $self->valuePicker = (array)($properties['valuePicker'] ?? $self->valuePicker);
         if (isset($properties['autocomplete'])) {
             $self->autocomplete = (bool)($properties['autocomplete'] ?? $self->autocomplete);
         }
-        $self->range = (array)($properties['range'] ?? $self->range);
-        $self->slider = (array)($properties['slider'] ?? $self->slider);
+        $self->valuePicker = (array)($properties['valuePicker'] ?? $self->valuePicker);
 
         return $self;
     }
@@ -69,7 +62,7 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
-        if ($this->default !== 0 && $this->default !== 0.0) {
+        if ($this->default !== '') {
             $config['default'] = $this->default;
         }
         if ($this->readOnly) {
@@ -93,26 +86,13 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
         if (($this->valuePicker['items'] ?? []) !== []) {
             $config['valuePicker'] = $this->valuePicker;
         }
-        if ($this->range !== []) {
-            $config['range'] = $this->range;
-        }
-        if ($this->slider !== []) {
-            $config['slider'] = $this->slider;
-        }
-        if ($this->format !== '') {
-            $config['format'] = $this->format;
-        }
         $tca['config'] = $config;
         return $tca;
     }
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->format === 'decimal') {
-            return "`$uniqueColumnName` float DEFAULT '0' NOT NULL";
-        }
-
-        return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
+        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
     public function toArray(): array

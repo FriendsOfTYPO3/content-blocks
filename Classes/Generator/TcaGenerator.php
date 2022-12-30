@@ -20,7 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\TcaColumnsDefinition;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
+use TYPO3\CMS\Core\Preparations\TcaPreparation;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TcaGenerator
 {
@@ -29,41 +32,40 @@ class TcaGenerator
     ) {
     }
 
-    public function generate(AfterTcaCompilationEvent $event): void
+    public function __invoke(AfterTcaCompilationEvent $event): void
+    {
+        $event->setTca(array_replace_recursive($event->getTca(), $this->generate()));
+    }
+
+    public function generate(): array
     {
         $tca = [];
         foreach ($this->tableDefinitionCollection as $tableName => $tableDefinition) {
-            foreach ($tableDefinition->getTypeDefinitionCollection() as $typeDefinition) {
-                $tca[$tableName]['columns'] ??= [];
-                $tcaColumns = [];
+            if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
+                $labelFallback = '';
+                foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
+                    if ($columnFieldDefinition->getFieldType()->dataProcessingBehaviour() === 'renderable') {
+                        $labelFallback = $columnFieldDefinition->getIdentifier();
+                    }
+                }
+                $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelFallback);
+            }
+            $tca[$tableName]['columns'] ??= [];
+            foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
+                $tca[$tableName]['columns'][$column->getIdentifier()] = $column->getTca();
+            }
+            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 // @todo right now only tt_content elements are supported.
                 if ($typeDefinition instanceof ContentElementDefinition) {
-                    foreach ($typeDefinition->getColumns() as $column) {
-                        $tcaFieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField($column);
-                        $tcaColumns[$column] = $tcaFieldDefinition->getTca();
-                    }
-                    $tca[$tableName]['columns'] = array_replace($tca[$tableName]['columns'], $tcaColumns);
                     $tca[$tableName]['types'][$typeDefinition->getCType()] = [
                         'previewRenderer' => PreviewRenderer::class,
                         'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
                     ];
                     $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getCType()] = $typeDefinition->getCType();
-                } else {
-                    // Collection tables
-                    $labelFallback = $typeDefinition->getLabel();
-
-                    foreach ($tableDefinition->getTcaColumnsDefinition() as $columnName => $columnFieldDefinition) {
-                        $tcaColumns[$columnName] = $columnFieldDefinition->getTca();
-                        if ($labelFallback === '' && $columnFieldDefinition->getFieldType()->dataProcessingBehaviour() === 'renderable') {
-                            $labelFallback = $columnFieldDefinition->getName();
-                        }
-                    }
-                    $tca[$tableName] = $this->getCollectionTableStandardTca($tcaColumns, $tableName, $labelFallback);
-                    $tca[$tableName]['columns'] = $tcaColumns;
                 }
             }
         }
-        $event->setTca(array_replace_recursive($event->getTca(), $tca));
+        return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
     }
 
     protected function getTtContentStandardShowItem(array $columns): string
@@ -91,15 +93,15 @@ class TcaGenerator
         return implode(',', $parts);
     }
 
-    protected function getCollectionTableStandardShowItems(array $columns): string
+    protected function getCollectionTableStandardShowItems(TcaColumnsDefinition $columns): string
     {
         $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,';
         $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
         $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
-        return $generalTab . implode(',', $columns) . $appendLanguageTab . $appendAccessTab;
+        return $generalTab . implode(',', $columns->getKeys()) . $appendLanguageTab . $appendAccessTab;
     }
 
-    protected function getCollectionTableStandardTca(array $columns, string $table, string $labelField): array
+    protected function getCollectionTableStandardTca(TcaColumnsDefinition $columns, string $table, string $labelField): array
     {
         return [
             'ctrl' => [
@@ -108,6 +110,7 @@ class TcaGenerator
                 'tstamp' => 'tstamp',
                 'crdate' => 'crdate',
                 'delete' => 'deleted',
+                'editlock' => 'editlock',
                 'versioningWS' => true,
                 'origUid' => 't3_origuid',
                 'hideTable' => true,
@@ -131,7 +134,7 @@ class TcaGenerator
             ],
             'types' => [
                 '1' => [
-                    'showitem' => $this->getCollectionTableStandardShowItems(array_keys($columns)),
+                    'showitem' => $this->getCollectionTableStandardShowItems($columns),
                 ],
             ],
             'palettes' => [
@@ -162,12 +165,6 @@ class TcaGenerator
                     'config' => [
                         'type' => 'check',
                         'renderType' => 'checkboxToggle',
-                        'items' => [
-                            [
-                                0 => '',
-                                1 => '',
-                            ],
-                        ],
                     ],
                 ],
                 'hidden' => [
@@ -176,12 +173,6 @@ class TcaGenerator
                     'config' => [
                         'type' => 'check',
                         'renderType' => 'checkboxToggle',
-                        'items' => [
-                            [
-                                0 => '',
-                                1 => '',
-                            ],
-                        ],
                     ],
                 ],
                 'fe_group' => [
@@ -267,7 +258,7 @@ class TcaGenerator
                         'type' => 'passthrough',
                     ],
                 ],
-                'foreign_parent_table_uid' => [
+                'foreign_table_parent_uid' => [
                     'config' => [
                         'type' => 'passthrough'
                     ]

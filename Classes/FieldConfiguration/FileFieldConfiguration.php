@@ -18,126 +18,121 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\Core\Resource\AbstractFile;
 
-/**
- * class FileFieldConfiguration
- */
-class FileFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
+final class FileFieldConfiguration implements FieldConfigurationInterface
 {
-    public string $fileTypes = 'mixed';
-    public string $allowedFileExtensions = '';
-    public bool $enableImaManipulation = false;
-    public int $maxItems = 0;
-    public int $minItems = 0;
+    private FieldType $fieldType = FieldType::FILE;
+    private array|string $allowed = [];
+    private array|string $disallowed = [];
+    private array $appearance = [];
+    private array $behaviour = [];
+    private bool $readOnly = false;
+    private int $minitems = 0;
+    private int $maxitems = 0;
+    private bool $enableImageManipulation = true;
 
-    public function getTca(): array
+    public static function createFromArray(array $settings): FileFieldConfiguration
     {
-        $tca = parent::getTcaTemplate();
-        $tca['config'] = [
-            'type' => $this->type,
-        ];
+        $self = new self();
+        $properties = $settings['properties'] ?? [];
+        $allowed = $properties['allowed'] ?? $self->allowed;
+        if (is_array($allowed) || is_string($allowed)) {
+            $self->allowed = $allowed;
+        }
+        $disallowed = $properties['disallowed'] ?? $self->disallowed;
+        if (is_array($disallowed) || is_string($disallowed)) {
+            $self->disallowed = $disallowed;
+        }
+        $self->appearance = (array)($properties['appearance'] ?? $self->appearance);
+        $self->behaviour = (array)($properties['behaviour'] ?? $self->behaviour);
+        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
+        $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
+        $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
+        $self->enableImageManipulation = (bool)($properties['enableImageManipulation'] ?? $self->enableImageManipulation);
+        return $self;
+    }
 
-        if ($this->allowedFileExtensions !== '') {
-            $tca['config']['allowed'] = explode(',', $this->allowedFileExtensions);
-        } else {
-            $validatedFileTypes = ((in_array($this->fileTypes, ['image', 'video', 'audio', 'document', 'mixed']) ? $this->fileTypes : 'mixed'));
-            $fileTypesTranslation = [
-                'image' => 'common-image-types',
-                'video' => 'common-media-types',
-                'audio' => 'common-media-types',
-                'document' => 'common-text-types',
-                'mixed' => '',
+    public function getTca(string $languagePath, bool $useExistingField): array
+    {
+        if (!$useExistingField) {
+            $tca['exclude'] = true;
+        }
+        $tca['label'] = 'LLL:' . $languagePath . '.label';
+        $tca['description'] = 'LLL:' . $languagePath . '.description';
+        $config['type'] = $this->fieldType->getTcaType();
+        if ($this->allowed !== [] && $this->allowed !== '') {
+            $config['allowed'] = $this->allowed;
+        }
+        if ($this->disallowed !== [] && $this->disallowed !== '') {
+            $config['disallowed'] = $this->disallowed;
+        }
+        if ($this->appearance !== []) {
+            $config['appearance'] = $this->appearance;
+        }
+        if ($this->behaviour !== []) {
+            $config['behaviour'] = $this->behaviour;
+        }
+        if ($this->readOnly) {
+            $config['readOnly'] = true;
+        }
+        if ($this->minitems > 0) {
+            $config['minitems'] = $this->minitems;
+        }
+        if ($this->maxitems > 0) {
+            $config['maxitems'] = $this->maxitems;
+        }
+        if ($this->enableImageManipulation) {
+            $config['overrideChildTca'] = [
+                'types' => [
+                    '0' => [
+                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
+                    ],
+                    AbstractFile::FILETYPE_TEXT => [
+                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
+                    ],
+                    AbstractFile::FILETYPE_IMAGE => [
+                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
+                    ],
+                    AbstractFile::FILETYPE_AUDIO => [
+                        'showitem' => '--palette--;;audioOverlayPalette,--palette--;;filePalette',
+                    ],
+                    AbstractFile::FILETYPE_VIDEO => [
+                        'showitem' => '--palette--;;videoOverlayPalette,--palette--;;filePalette',
+                    ],
+                    AbstractFile::FILETYPE_APPLICATION => [
+                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
+                    ],
+                ],
             ];
-            $allowed = $fileTypesTranslation[$validatedFileTypes];
-            if ($validatedFileTypes !== 'mixed') {
-                $tca['config']['allowed'] = $allowed;
-            }
         }
-
-        // @todo: what to do with enableImaManipulation?
-        if ($this->enableImaManipulation) {
-            $tca['config']['fieldWizard']['type'] = 'imageManipulation';
-        }
-
-        if ( $this->maxItems !== 0) {
-            $tca['config']['maxitems'] = $this->maxItems;
-        }
-        if ( $this->minItems !== 0) {
-            $tca['config']['minitems'] = $this->minItems;
-        }
+        $tca['config'] = $config;
         return $tca;
     }
 
-    /**
-     * Get SQL definition for this inputfield
-     */
     public function getSql(string $uniqueColumnName): string
     {
         return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
     }
 
-    /**
-     * Fills the properties from array infos
-     */
-    public static function createFromArray(array $settings): static
-    {
-        $self = parent::createFromArray($settings);
-        $self->type = FieldType::FILE->getTcaType();
-        $self->fileTypes = $settings['properties']['fileTypes'] ?? $self->fileTypes;
-        $self->allowedFileExtensions = $settings['properties']['allowedFileExtensions'] ?? $self->allowedFileExtensions;
-        $self->enableImaManipulation = $settings['properties']['enableImaManipulation'] ?? $self->enableImaManipulation;
-
-        if (isset($settings['properties']['maxItems']) && is_int($settings['properties']['maxItems'])) {
-            $self->maxItems = (int)$settings['properties']['maxItems'];
-        }
-
-        if (isset($settings['properties']['minItems']) && is_int($settings['properties']['minItems'])) {
-            $self->minItems = (int)$settings['properties']['minItems'];
-        }
-
-        return $self;
-    }
-
-    /**
-     * Get the InputFieldConfiguration as array
-     */
     public function toArray(): array
     {
-        return [
-            'identifier' => $this->identifier,
-            'type' => $this->type,
-            'properties' => [
-                'fileTypes' => $this->fileTypes,
-                'allowedFileExtensions' => $this->allowedFileExtensions,
-                'enableImaManipulation' => $this->enableImaManipulation,
-                'maxItems' => $this->maxItems,
-                'minItems' => $this->minItems,
-            ],
-            '_path' => $this->path,
-            '_identifier' =>  $this->uniqueIdentifier,
-        ];
+        return [];
     }
 
-    /**
-     * TODO: Idea: say what is allowed (properties and values) e.g. for backend modul inspektor of a input field.
-     */
-    public function getAllowedSettings(): array
+    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
     {
-        return [
-            'rows' => 'double',
-            // property "required" is a "boolean" -> e.g. should be rendered as a checkbox
-            'required' => 'boolean',
-        ];
-    }
-
-    public function getTemplateHtml(int $indentation): string
-    {
-        if ($this->maxItems === 1 && $this->minItems === 1) {
-            return str_repeat(' ', $indentation * 4) . '<f:image image="{' . $this->uniqueIdentifier . '}"/>' . "\n";
+        if ($this->maxitems === 1 && $this->minitems === 1) {
+            return str_repeat(' ', $indentation * 4) . '<f:image image="{' . $uniqueIdentifier . '}"/>' . "\n";
         }
-        $imageTemplate = str_repeat(' ', $indentation * 4) .  '<f:for each="{' . $this->uniqueIdentifier . '}" as="i" iteration="iteration">' . "\n";
-        $imageTemplate .= str_repeat(' ', ($indentation * 4) + 4) . '<f:image image="{i}" />' . "\n";
+        $imageTemplate = str_repeat(' ', $indentation * 4) .  '<f:for each="{' . $uniqueIdentifier . '}" as="image">' . "\n";
+        $imageTemplate .= str_repeat(' ', ($indentation * 4) + 4) . '<f:image image="{image}" />' . "\n";
         $imageTemplate .= str_repeat(' ', $indentation * 4) . '</f:for>' . "\n";
         return $imageTemplate;
+    }
+
+    public function getFieldType(): FieldType
+    {
+        return $this->fieldType;
     }
 }

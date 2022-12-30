@@ -16,7 +16,6 @@ services:
       - name: event.listener
         identifier: 'content-blocks-tca'
         event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
-        method: generate
 
   TYPO3\CMS\ContentBlocks\Service\ConfigurationService:
     public: true

@@ -11,9 +11,8 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
-$tableDefinitionCollection = GeneralUtility::makeInstance(LoaderFactory::class)->load();
-foreach ($tableDefinitionCollection as $tableDefinition) {
-    foreach ($tableDefinition->getTypeDefinitionCollection() as $typeDefinition) {
+foreach (GeneralUtility::makeInstance(LoaderFactory::class)->load() as $tableDefinition) {
+    foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
         if (!$typeDefinition instanceof ContentElementDefinition) {
             continue;
         }
@@ -22,11 +21,7 @@ foreach ($tableDefinitionCollection as $tableDefinition) {
             iconProviderClassName: $typeDefinition->getIconProviderClassName(),
             options: ['source' => $typeDefinition->getIcon()],
         );
-        ExtensionManagementUtility::addPageTSConfig(
-            PageTsConfigGenerator::getStandardPageTsConfig($typeDefinition)
-        );
-        ExtensionManagementUtility::addTypoScriptSetup(
-            TypoScriptGenerator::typoScriptForContentElementDefinition($typeDefinition)
-        );
+        ExtensionManagementUtility::addPageTSConfig(PageTsConfigGenerator::generate($typeDefinition));
+        ExtensionManagementUtility::addTypoScriptSetup(TypoScriptGenerator::generate($typeDefinition));
     }
 }

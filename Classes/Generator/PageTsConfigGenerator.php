@@ -18,18 +18,20 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 
 class PageTsConfigGenerator
 {
-    public static function getStandardPageTsConfig(ContentElementDefinition $contentElementDefinition): string
+    public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
+        $partialLanguagePath = LanguagePathUtility::getPartialLanguageIdentifierPath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor());
         return '
             mod.wizards.newContentElement.wizardItems.' . $contentElementDefinition->getWizardGroup() . '  {
                 elements {
                     ' . $contentElementDefinition->getCType() . ' {
                         iconIdentifier = ' . $contentElementDefinition->getCType() . '
-                        title = LLL:' . $contentElementDefinition->getPrivatePath()  . 'Language' . '/' . 'Labels.xlf:' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage() . '.title
-                        description = LLL:' . $contentElementDefinition->getPrivatePath()  . 'Language' . '/' . 'Labels.xlf:' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage() . '.description
+                        title = LLL:' . $partialLanguagePath . '.' . $contentElementDefinition->getPackage() . '.title' . '
+                        description = LLL:' . $partialLanguagePath . '.' . $contentElementDefinition->getPackage() . '.description' . '
                         tt_content_defValues {
                             CType = ' . $contentElementDefinition->getCType() . '
                         }

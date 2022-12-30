@@ -19,94 +19,93 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
-/**
- * class CheckboxFieldConfiguration
- */
-class CheckboxFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
+final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 {
-    public string $default = '';
-    public array $items = [];
-    public bool $invertStateDisplay = false;
+    private FieldType $fieldType = FieldType::CHECKBOX;
+    private string $renderType = '';
+    private int $default = 0;
+    private bool $readOnly = false;
+    private bool $invertStateDisplay = false;
+    private string $itemsProcFunc = '';
+    private int|string $cols = 0;
+    private string $eval = '';
+    private array $validation = [];
+    private array $items = [];
 
-    /**
-     * Get TCA for this inputfield
-     */
-    public function getTca(): array
+    public static function createFromArray(array $settings): CheckboxFieldConfiguration
     {
-        $tca = parent::getTcaTemplate();
-        $tca['config'] = [
-            'type' => $this->type,
-        ];
-        if ($this->invertStateDisplay) {
-            $tca['config']['invertStateDisplay'] = $this->invertStateDisplay;
-        }
-        if (isset($this->items) && count($this->items) > 0) {
-            $tca['config']['items'] = $this->items;
-        }
-        return $tca;
-    }
-
-    /**
-     * Get SQL definition for this inputfield
-     */
-    public function getSql(string $uniqueColumnName): string
-    {
-        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
-    }
-
-    /**
-     * Fills the properties from array infos
-     */
-    public static function createFromArray(array $settings): static
-    {
-        $self = parent::createFromArray($settings);
-        $self->type = FieldType::CHECKBOX->getTcaType();
-        $self->default = $settings['properties']['default'] ?? $self->default;
-        $self->invertStateDisplay = (bool)($settings['properties']['invertStateDisplay'] ?? $self->invertStateDisplay);
-
-        if (isset($settings['properties']['items']) && is_array($settings['properties']['items'])) {
-            $items = [];
-            foreach ($settings['properties']['items'] as $key => $value) {
-                $items[] = [ $value, $key];
-            }
-            $self->items = $items;
-        }
+        $self = new self();
+        $properties = $settings['properties'] ?? [];
+        $self->renderType = (string)($properties['renderType'] ?? $self->renderType);
+        $self->default = (int)($properties['default'] ?? $self->default);
+        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
+        $self->itemsProcFunc = (string)($properties['itemsProcFunc'] ?? $self->itemsProcFunc);
+        $self->cols = $properties['cols'] ?? $self->cols;
+        $self->eval = (string)($properties['eval'] ?? $self->eval);
+        $self->validation = (array)($properties['validation'] ?? $self->validation);
+        $self->items = (array)($properties['items'] ?? $self->items);
+        $self->invertStateDisplay = (bool)($properties['invertStateDisplay'] ?? $self->invertStateDisplay);
 
         return $self;
     }
 
-    /**
-     * Get the InputFieldConfiguration as array
-     */
+    public function getTca(string $languagePath, bool $useExistingField): array
+    {
+        if (!$useExistingField) {
+            $tca['exclude'] = true;
+        }
+        $tca['label'] = 'LLL:' . $languagePath . '.label';
+        $tca['description'] = 'LLL:' . $languagePath . '.description';
+
+        $config['type'] = $this->fieldType->getTcaType();
+        if ($this->renderType !== '') {
+            $config['renderType'] = $this->renderType;
+        }
+        if ($this->default > 0) {
+            $config['default'] = $this->default;
+        }
+        if ($this->readOnly) {
+            $config['readOnly'] = true;
+        }
+        if ($this->itemsProcFunc !== '') {
+            $config['itemsProcFunc'] = $this->itemsProcFunc;
+        }
+        if ($this->cols !== 0 && $this->cols !== '') {
+            $config['cols'] = $this->cols;
+        }
+        if ($this->eval !== '') {
+            $config['eval'] = $this->eval;
+        }
+        if ($this->validation !== []) {
+            $config['validation'] = $this->validation;
+        }
+        if ($this->items !== []) {
+            $config['items'] = $this->items;
+        }
+        if ($this->invertStateDisplay) {
+            $config['items'][0]['invertStateDisplay'] = true;
+        }
+        $tca['config'] = $config;
+        return $tca;
+    }
+
+    public function getSql(string $uniqueColumnName): string
+    {
+        return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
+    }
+
     public function toArray(): array
     {
-        return [
-            'identifier' => $this->identifier,
-            'type' => $this->type,
-            'properties' => [
-                'default' => $this->default,
-                'invertStateDisplay' => $this->invertStateDisplay,
-                'items' => $this->items,
-            ],
-            '_path' => $this->path,
-            '_identifier' =>  $this->uniqueIdentifier,
-        ];
+        return [];
     }
 
-    /**
-     * TODO: Idea: say what is allowed (properties and values) e.g. for backend modul inspektor of a input field.
-     */
-    public function getAllowedSettings(): array
+    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
     {
-        return [
-            'rows' => 'double',
-            // property "required" is a "boolean" -> e.g. should be rendered as a checkbox
-            'required' => 'boolean',
-        ];
+        return str_repeat(' ', $indentation * 4) . '<p>{' . $uniqueIdentifier . '}</p>' . "\n";
     }
 
-    public function getTemplateHtml(int $indentation): string
+    public function getFieldType(): FieldType
     {
-        return str_repeat(' ', $indentation * 4) . '<p>{' . $this->uniqueIdentifier . '}</p>' . "\n";
+        return $this->fieldType;
     }
 }

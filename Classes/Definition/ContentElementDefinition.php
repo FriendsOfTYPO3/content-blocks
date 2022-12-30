@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
-use TYPO3\CMS\ContentBlocks\Converter\NamingConverter;
+use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
 final class ContentElementDefinition extends TypeDefinition
 {
@@ -28,8 +28,6 @@ final class ContentElementDefinition extends TypeDefinition
     private string $composerName = '';
     private string $vendor = '';
     private string $package = '';
-    private string $publicPath = '';
-    private string $privatePath = '';
     private string $wizardGroup = '';
 
     public static function createFromArray(array $array, string $table = 'tt_content'): ContentElementDefinition
@@ -44,8 +42,6 @@ final class ContentElementDefinition extends TypeDefinition
             ->withComposerName($array['composerName'] ?? '')
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
-            ->withPublicPath($array['publicPath'] ?? '')
-            ->withPrivatePath($array['privatePath'] ?? '')
             ->withWizardGroup($array['wizardGroup'] ?? 'common');
     }
 
@@ -59,8 +55,6 @@ final class ContentElementDefinition extends TypeDefinition
             'saveAndClose' => $this->saveAndClose,
             'vendor' => $this->vendor,
             'package' => $this->package,
-            'publicPath' => $this->publicPath,
-            'privatePath' => $this->privatePath,
             'wizardGroup' => $this->wizardGroup,
         ];
         return $array;
@@ -86,7 +80,7 @@ final class ContentElementDefinition extends TypeDefinition
      */
     public function getCType(): string
     {
-        return NamingConverter::composerNameToCType($this->composerName);
+        return UniqueNameUtility::composerNameToTypeIdentifier($this->composerName);
     }
 
     public function getVendor(): string
@@ -97,16 +91,6 @@ final class ContentElementDefinition extends TypeDefinition
     public function getPackage(): string
     {
         return $this->package;
-    }
-
-    public function getPublicPath(): string
-    {
-        return $this->publicPath;
-    }
-
-    public function getPrivatePath(): string
-    {
-        return $this->privatePath;
     }
 
     public function getWizardGroup(): string
@@ -165,20 +149,6 @@ final class ContentElementDefinition extends TypeDefinition
     {
         $clone = clone $this;
         $clone->package = $package;
-        return $clone;
-    }
-
-    public function withPublicPath(string $publicPath): self
-    {
-        $clone = clone $this;
-        $clone->publicPath = $publicPath;
-        return $clone;
-    }
-
-    public function withPrivatePath(string $privatePath): self
-    {
-        $clone = clone $this;
-        $clone->privatePath = $privatePath;
         return $clone;
     }
 

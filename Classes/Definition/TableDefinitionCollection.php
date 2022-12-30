@@ -17,10 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
-use TYPO3\CMS\ContentBlocks\Converter\NamingConverter;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
-use TYPO3\CMS\ContentBlocks\Service\ConfigurationService;
-use TYPO3\CMS\ContentBlocks\Utility\AffixUtility;
+use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
+use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 
 final class TableDefinitionCollection implements \IteratorAggregate, SingletonInterface
@@ -29,6 +28,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
      * @var TableDefinition[]
      */
     private array $definitions = [];
+    private array $customTables = [];
 
     public function __clone()
     {
@@ -37,11 +37,19 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         }, $this->definitions);
     }
 
-    public function addTable(TableDefinition $tableDefinition): void
+    public function addTable(TableDefinition $tableDefinition, $isCustomTable = false): void
     {
         if (!$this->hasTable($tableDefinition->getTable())) {
             $this->definitions[$tableDefinition->getTable()] = $tableDefinition;
+            if ($isCustomTable) {
+                $this->customTables[] = $tableDefinition->getTable();
+            }
         }
+    }
+
+    public function isCustomTable(TableDefinition $tableDefinition): bool
+    {
+        return in_array($tableDefinition->getTable(), $this->customTables, true);
     }
 
     public function getTable(string $table): TableDefinition
@@ -75,122 +83,86 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     public static function createFromArray(array $contentBlocks): TableDefinitionCollection
     {
         $tableDefinitionCollection = new self();
-        $tableDefinition = [];
+        $tableDefinitionList = [];
 
         // Since we need to sum up all lvl 0 ContentBlock fields to tt_content,
         // we have to handle the tt_content table a bit different from collection tables.
         foreach ($contentBlocks as $contentBlock) {
+            // @todo define table in content blocks
+            $table = 'tt_content';
             $composerName = $contentBlock['composerJson']['name'];
             [$vendor, $package] = explode('/', $composerName);
-            $cType = NamingConverter::composerNameToCType($composerName);
-            $collectionTablePrefix = AffixUtility::prefixCollection($cType);
-            $ttContentColumnPrefix = AffixUtility::prefixDbColumn($cType);
-            $contentBlockPath = ConfigurationService::getContentBlockLegacyPath() . '/' . $package;
 
-            // collect data for tt_content from each ContentBlock
             $columns = [];
-            foreach ($contentBlock['yaml']['fields'] ?? [] as $ttContentField) {
-                // unique tt_content column name
-                $column = $ttContentColumnPrefix . '_' . $ttContentField['identifier'];
+            foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
+                $column = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
                 $columns[] = $column;
-                $languagePath = $contentBlockPath . '/' . ConfigurationService::getContentBlocksPrivatePath() . '/Language/Labels.xlf:' . $ttContentField['identifier'];
 
-                $ttContentField = $tableDefinitionCollection->processCollections(
-                    $ttContentField,
-                    'tt_content',
+                $field = $tableDefinitionCollection->processCollections(
+                    $field,
                     $column,
-                    $languagePath,
-                    $collectionTablePrefix
+                    LanguagePathUtility::getPartialLanguageIdentifierPath($package, $field['identifier']),
+                    $composerName
                 );
 
-                // add to tt_content fields
-                $tableDefinition['fields'][$column] = [
+                $tableDefinitionList[$table]['fields'][$column] = [
                     'identifier' => $column,
-                    'config' => $ttContentField,
+                    'config' => $field,
                 ];
             }
 
-            // elements for TypeDefinition
-            $tableDefinition['elements'][] = [
-                'composerName' => $contentBlock['composerJson']['name'],
-                'identifier' => $contentBlock['composerJson']['name'],
+            $tableDefinitionList[$table]['elements'][] = [
+                'composerName' => $composerName,
+                'identifier' => $composerName,
                 'columns' => $columns,
                 'vendor' => $vendor,
                 'package' => $package,
-                'publicPath' => $contentBlockPath . '/' . ConfigurationService::getContentBlocksPublicPath() . '/',
-                'privatePath' => $contentBlockPath . '/' . ConfigurationService::getContentBlocksPrivatePath() . '/',
-                'wizardGroup' => ($contentBlock['yaml']['group'] ?? ''),
-                'icon' => $contentBlock['icon'],
-                'iconProvider' => $contentBlock['iconProvider'],
+                'wizardGroup' => $contentBlock['yaml']['group'] ?? '',
+                'icon' => $contentBlock['icon'] ?? '',
+                'iconProvider' => $contentBlock['iconProvider'] ?? '',
             ];
-
         }
-        // add tt_content definition
-        $tableDefinitionCollection->addTable(
-            TableDefinition::createFromTableArray(
-                'tt_content',
-                $tableDefinition,
-            )
-        );
+
+        foreach ($tableDefinitionList as $table => $tableDefinition) {
+            $tableDefinitionCollection->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
+        }
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $table, string $currentColumnName, string $languagePath, string $collectionTablePrefix = ''): array
+    private function processCollections(array $field, string $column, string $languagePath, string $composerName): array
     {
+        $originalLanguagePath = $languagePath;
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
-            $field['languagePath'] = $languagePath;
+            $field['languagePath'] = $originalLanguagePath;
             return $field;
         }
 
-        // unique collection table name
-        $collectionTableName = (($collectionTablePrefix !== '') ? $collectionTablePrefix . '_' : '') . (($table === 'tt_content') ? '' : $table . '_') . $field['identifier'];
-        $collectionTableName = str_replace('-', '_', $collectionTableName);
-
         // enrich infos for inline relations
         // @todo move to TcaGenerator, foreign_field should be moved to a constant somewhere, as it is also used in SqlGenerator.
-        $field['properties']['foreign_table'] = $collectionTableName; // The table name of the child records
-        $field['properties']['foreign_field'] = 'foreign_parent_table_uid'; // the field of the child record pointing to the parent record. This defines where to store the uid of the parent record.
+        $field['properties']['foreign_table'] = $column;
+        $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
         $tableDefinition = [];
 
-        // collect data for tt_content from each ContentBlock
         foreach ($field['properties']['fields'] as $collectionField) {
             $languagePath .= '.' . $collectionField['identifier'];
-            // add to field to table
             $tableDefinition['fields'][$collectionField['identifier']] = [
-                'identifier' => $collectionField['identifier'], // currentColumnName
+                'identifier' => $collectionField['identifier'],
                 'config' => $this->processCollections(
                     $collectionField,
-                    $collectionTableName,
-                    $collectionField['identifier'], // currentColumnName
+                    UniqueNameUtility::createUniqueColumnName($composerName, $collectionField['identifier']),
                     $languagePath,
-                    $collectionTablePrefix
+                    $composerName
                 ),
             ];
         }
-        // @todo: find a better way to add this field for collections only
-        $tableDefinition['fields']['foreign_parent_table_uid'] = [
-            'identifier' => 'foreign_parent_table_uid',
-            'config' => [
-                'identifier' => 'foreign_parent_table_uid',
-                'type' => 'Number',
-                'languagePath' => $languagePath,
-            ],
-        ];
-        $tableDefinition['elements'][] = [
-            'identifier' => $collectionTableName,
-            'columns' => array_keys($tableDefinition['fields']),
-            'typeField' => 'inline',
-        ];
 
         $this->addTable(
-            TableDefinition::createFromTableArray(
-                $collectionTableName,
-                $tableDefinition,
-            )
+            tableDefinition: TableDefinition::createFromTableArray($column, $tableDefinition),
+            isCustomTable: true
         );
 
-        $field['languagePath'] = $languagePath;
+        $field['languagePath'] = $originalLanguagePath;
         return $field;
     }
 

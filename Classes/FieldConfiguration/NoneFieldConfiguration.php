@@ -17,14 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
-class NoneFieldConfiguration extends AbstractFieldConfiguration implements FieldConfigurationInterface
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+
+class NoneFieldConfiguration implements FieldConfigurationInterface
 {
-    /**
-     * Get TCA for this inputfield
-     */
-    public function getTca(): array
+    use UniqueIdentifierTrait;
+
+    public function getTca(string $languagePath, bool $useExistingField): array
     {
-        $tca = parent::getTcaTemplate();
         $tca['config'] = [
             'type' => 'none',
             'pass_content' => true,
@@ -42,7 +42,7 @@ class NoneFieldConfiguration extends AbstractFieldConfiguration implements Field
 
     public static function createFromArray(array $settings): static
     {
-        return parent::createFromArray($settings);
+        return new self();
     }
 
     /**
@@ -50,28 +50,27 @@ class NoneFieldConfiguration extends AbstractFieldConfiguration implements Field
      */
     public function toArray(): array
     {
-        return [
-            'identifier' => $this->identifier,
-            'type' => 'none',
-            'properties' => [
-                'type' => 'none',
-                'pass_content' => true,
-            ],
-            '_path' => $this->path,
-            '_identifier' =>  $this->uniqueIdentifier,
-        ];
-    }
-
-    /**
-     * TODO: Idea: say what is allowed (properties and values) e.g. for backend modul inspektor of a input field.
-     */
-    public function getAllowedSettings(): array
-    {
         return [];
+//        return [
+//            'identifier' => $this->identifier,
+//            'type' => 'none',
+//            'properties' => [
+//                'type' => 'none',
+//                'pass_content' => true,
+//            ],
+//            '_path' => $this->path,
+//            '_identifier' =>  $this->uniqueIdentifier,
+//        ];
     }
 
-    public function getTemplateHtml(int $indentation): string
+
+    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
     {
-        return "";
+        return '';
+    }
+
+    public function getFieldType(): FieldType
+    {
+        return FieldType::NONE;
     }
 }
