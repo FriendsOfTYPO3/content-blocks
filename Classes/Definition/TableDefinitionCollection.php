@@ -85,8 +85,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         $tableDefinitionCollection = new self();
         $tableDefinitionList = [];
 
-        // Since we need to sum up all lvl 0 ContentBlock fields to tt_content,
-        // we have to handle the tt_content table a bit different from collection tables.
         foreach ($contentBlocks as $contentBlock) {
             // @todo define table in content blocks
             $table = 'tt_content';
@@ -131,8 +129,8 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
     private function processCollections(array $field, string $table, array $languagePath, string $composerName): array
     {
+        $field['languagePath'] = implode('.', $languagePath);
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
-            $field['languagePath'] = implode('.', $languagePath);
             return $field;
         }
 
@@ -140,18 +138,17 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
         $tableDefinition = [];
-
         foreach ($field['properties']['fields'] as $collectionField) {
-            $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $collectionField['identifier']);
-            $languagePath[] = $collectionField['identifier'];
+            $identifier = $collectionField['identifier'];
+            $languagePath[] = $identifier;
             $childField = $this->processCollections(
                 field: $collectionField,
-                table: $uniqueColumnName,
+                table: UniqueNameUtility::createUniqueColumnName($composerName, $identifier),
                 languagePath: $languagePath,
                 composerName: $composerName
             );
-            $tableDefinition['fields'][$childField['identifier']] = [
-                'uniqueIdentifier' => $childField['identifier'],
+            $tableDefinition['fields'][$identifier] = [
+                'uniqueIdentifier' => $identifier,
                 'config' => $childField,
             ];
             array_pop($languagePath);
@@ -160,13 +157,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         if ($this->hasTable($table)) {
             throw new \InvalidArgumentException('A Collection field with the identifier "' . $field['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
         }
-
         $this->addTable(
             tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
             isCustomTable: true
         );
-
-        $field['languagePath'] = implode('.', $languagePath);
         return $field;
     }
 
