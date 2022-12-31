@@ -79,6 +79,18 @@ class TcaGeneratorTest extends UnitTestCase
                                         [
                                             'identifier' => 'text',
                                             'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'collection2',
+                                            'type' => 'Collection',
+                                            'properties' => [
+                                                'fields' => [
+                                                    [
+                                                        'identifier' => 'text',
+                                                        'type' => 'Text'
+                                                    ]
+                                                ]
+                                            ]
                                         ]
                                     ]
                                 ],
@@ -239,11 +251,10 @@ class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
-
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,collection2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -376,6 +387,186 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                             'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.text.label',
                             'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        'collection2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.description',
+                            'config' => [
+                                'type' => 'inline',
+                                'foreign_table' => 't3ce_example_collection2',
+                                'foreign_field' => 'foreign_table_parent_uid',
+                            ]
+                        ]
+                    ],
+                ],
+                't3ce_example_collection2' => [
+                    'ctrl' => [
+                        'label' => 'text',
+                        'sortby' => 'sorting',
+                        'tstamp' => 'tstamp',
+                        'crdate' => 'crdate',
+                        'delete' => 'deleted',
+                        'editlock' => 'editlock',
+                        'versioningWS' => true,
+                        'origUid' => 't3_origuid',
+                        'hideTable' => true,
+                        'transOrigPointerField' => 'l10n_parent',
+                        'translationSource' => 'l10n_source',
+                        'transOrigDiffSourceField' => 'l10n_diffsource',
+                        'languageField' => 'sys_language_uid',
+                        'enablecolumns' => [
+                            'disabled' => 'hidden',
+                            'starttime' => 'starttime',
+                            'endtime' => 'endtime',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'typeicon_classes' => [
+                            'default' => 'ext-content_blocks',
+                        ],
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
+
+                    ],
+                    'types' => [
+                        '1' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                        ],
+                    ],
+                    'palettes' => [
+                        'language' => [
+                            'showitem' => '
+                        sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,l18n_parent
+                    ',
+                        ],
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => '
+                        starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
+                        endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
+                        --linebreak--,
+                        fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
+                        --linebreak--,editlock
+                    ',
+                        ],
+                    ],
+                    'columns' => [
+                        'editlock' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        'hidden' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        'fe_group' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectMultipleSideBySide',
+                                'size' => 5,
+                                'maxitems' => 20,
+                                'items' => [
+                                    [
+                                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                                        -1,
+                                    ],
+                                    [
+                                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                                        -2,
+                                    ],
+                                    [
+                                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                                        '--div--',
+                                    ],
+                                ],
+                                'exclusiveKeys' => '-1,-2',
+                                'foreign_table' => 'fe_groups',
+                            ],
+                        ],
+                        'starttime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'endtime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                                'range' => [
+                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
+                                ],
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'sys_language_uid' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
+                            'config' => [
+                                'type' => 'language',
+                            ]
+                        ],
+                        'l10n_parent' => [
+                            'displayCond' => 'FIELD:sys_language_uid:>:0',
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectSingle',
+                                'items' => [
+                                    [
+                                        '',
+                                        0
+                                    ]
+                                ],
+                                'foreign_table' => 't3ce_example_collection2',
+                                'foreign_table_where' => 'AND t3ce_example_collection2.pid=###CURRENT_PID### AND t3ce_example_collection2.sys_language_uid IN (-1,0)',
+                                'default' => 0
+                            ]
+                        ],
+                        'l10n_diffsource' => [
+                            'config' => [
+                                'type' => 'passthrough'
+                            ]
+                        ],
+                        'sorting' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'foreign_table_parent_uid' => [
+                            'config' => [
+                                'type' => 'passthrough'
+                            ]
+                        ],
+                        'text' => [
+                            'exclude' => true,
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.description',
                             'config' => [
                                 'type' => 'input',
                             ],

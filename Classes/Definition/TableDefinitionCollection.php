@@ -99,10 +99,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 $columns[] = $column;
 
                 $field = $tableDefinitionCollection->processCollections(
-                    $field,
-                    $column,
-                    LanguagePathUtility::getPartialLanguageIdentifierPath($package, $field['identifier']),
-                    $composerName
+                    field: $field,
+                    column: $column,
+                    languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $field['identifier'])],
+                    composerName: $composerName
                 );
 
                 $tableDefinitionList[$table]['fields'][$column] = [
@@ -129,11 +129,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $column, string $languagePath, string $composerName): array
+    private function processCollections(array $field, string $column, array $languagePath, string $composerName): array
     {
-        $originalLanguagePath = $languagePath;
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
-            $field['languagePath'] = $originalLanguagePath;
+            $field['languagePath'] = implode('.', $languagePath);
             return $field;
         }
 
@@ -145,16 +144,23 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         $tableDefinition = [];
 
         foreach ($field['properties']['fields'] as $collectionField) {
-            $languagePath .= '.' . $collectionField['identifier'];
+            $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $collectionField['identifier']);
+            $languagePath[] = $collectionField['identifier'];
+            $childField = $this->processCollections(
+                field: $collectionField,
+                column: $uniqueColumnName,
+                languagePath: $languagePath,
+                composerName: $composerName
+            );
             $tableDefinition['fields'][$collectionField['identifier']] = [
                 'identifier' => $collectionField['identifier'],
-                'config' => $this->processCollections(
-                    $collectionField,
-                    UniqueNameUtility::createUniqueColumnName($composerName, $collectionField['identifier']),
-                    $languagePath,
-                    $composerName
-                ),
+                'config' => $childField,
             ];
+            array_pop($languagePath);
+        }
+
+        if ($this->hasTable($column)) {
+            throw new \InvalidArgumentException('A Collection field with the identifier "' . $field['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
         }
 
         $this->addTable(
@@ -162,7 +168,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             isCustomTable: true
         );
 
-        $field['languagePath'] = $originalLanguagePath;
+        $field['languagePath'] = implode('.', $languagePath);
         return $field;
     }
 
