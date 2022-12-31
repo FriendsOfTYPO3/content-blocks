@@ -24,43 +24,55 @@ use TYPO3\CMS\Core\Core\Environment;
  */
 class ContentBlockPathUtility
 {
-    /**
-     * @todo make base path for ContentBlocks configurable and
-     * @todo deliver it due to the configuration
-     */
-    public static function getContentBlockLegacyPath(): string
+    public static function getAbsoluteContentBlockLegacyPath(): string
     {
         return Environment::getLegacyConfigPath() . '/content-blocks';
     }
 
-    public static function getPackagePath(string $package): string
+    /**
+     * @todo make base path for ContentBlocks configurable and
+     * @todo deliver it due to the configuration
+     */
+    public static function getRelativeContentBlockLegacyPath(): string
     {
-        return self::getContentBlockLegacyPath() . '/' . $package;
+        return str_replace(Environment::getPublicPath() . '/', '', self::getAbsoluteContentBlockLegacyPath());
+    }
+
+    public static function getAbsolutePackagePath(string $package): string
+    {
+        return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
+    }
+
+    public static function getRelativePackagePath(string $package): string
+    {
+        return self::getRelativeContentBlockLegacyPath() . '/' . $package;
+    }
+
+    public static function getAbsoluteContentBlocksPrivatePath(string $package): string
+    {
+        return self::getAbsolutePackagePath($package) . '/Resources/Private';
     }
 
     /**
      * Since there are dicussions of making/using 'src' or 'Resources/Private',
      * or if it should be configurable, this could be a configurable constant.
      */
-    public static function getContentBlocksPrivatePath(string $package)
+    public static function getRelativeContentBlocksPrivatePath(string $package): string
     {
-        return self::getPackagePath($package) . '/Resources/Private';
+        return self::getRelativePackagePath($package) . '/Resources/Private';
+    }
+
+    public static function getAbsoluteContentBlocksPublicPath(string $package): string
+    {
+        return self::getAbsolutePackagePath($package) . '/Resources/Public';
     }
 
     /**
      * Since there are dicussions of making/using 'dist' or 'Resources/Public',
      * or if it should be configurable, this could be a configurable constant.
      */
-    public static function getContentBlocksPublicPath(string $package)
+    public static function getRelativeContentBlocksPublicPath(string $package): string
     {
-        return self::getPackagePath($package) . '/Resources/Public';
-    }
-
-    /**
-     * If somebody wants to change that anyway in future.
-     */
-    public static function getComposerType(): string
-    {
-        return 'typo3-contentblock';
+        return self::getRelativePackagePath($package) . '/Resources/Public';
     }
 }

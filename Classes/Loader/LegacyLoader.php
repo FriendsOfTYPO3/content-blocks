@@ -34,21 +34,21 @@ class LegacyLoader implements LoaderInterface
         if ($this->tableDefinitionCollection instanceof TableDefinitionCollection) {
             return $this->tableDefinitionCollection;
         }
-        GeneralUtility::mkdir_deep(ContentBlockPathUtility::getContentBlockLegacyPath());
+        GeneralUtility::mkdir_deep(ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath());
         $result = [];
         $cbFinder = new Finder();
-        $cbFinder->directories()->depth(0)->in(ContentBlockPathUtility::getContentBlockLegacyPath());
+        $cbFinder->directories()->depth(0)->in(ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath());
 
         foreach ($cbFinder as $splPath) {
             if (!is_readable($splPath->getPathname() . '/composer.json')) {
                 throw new \RuntimeException('Cannot read or find composer.json file in "' . $splPath->getPathname() . '"' . '/composer.json');
             }
             $composerJson = json_decode(file_get_contents($splPath->getPathname() . '/composer.json'), true);
-            if ($composerJson['type'] !== ContentBlockPathUtility::getComposerType()) {
+            if ($composerJson['type'] !== 'typo3-contentblock') {
                 continue;
             }
-            $composerName = explode('/', $composerJson['name'])[1];
-            $result[] = $this->findByIdentifier($composerName);
+            $package = explode('/', $composerJson['name'])[1];
+            $result[] = $this->findByPackageName($package);
         }
 
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($result);
@@ -56,9 +56,9 @@ class LegacyLoader implements LoaderInterface
         return $this->tableDefinitionCollection;
     }
 
-    protected function findByIdentifier(string $package): array
+    protected function findByPackageName(string $package): array
     {
-        $packagePath = ContentBlockPathUtility::getPackagePath($package);
+        $packagePath = ContentBlockPathUtility::getAbsolutePackagePath($package);
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".');
         }
@@ -68,19 +68,16 @@ class LegacyLoader implements LoaderInterface
             file_get_contents($packagePath . '/' . 'composer.json'),
             true
         );
-        $cbConf['yaml'] = Yaml::parseFile(
-            ContentBlockPathUtility::getContentBlocksPrivatePath($package) . '/' . 'EditorInterface.yaml',
-        );
+        $cbConf['yaml'] = Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($package) . '/' . 'EditorInterface.yaml');
 
         $iconPath = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $checkIconPath = ContentBlockPathUtility::getContentBlocksPublicPath($package) . '/' . 'ContentBlockIcon.' . $fileExtension;
+            $iconName = 'ContentBlockIcon.' . $fileExtension;
+            $checkIconPath = ContentBlockPathUtility::getAbsoluteContentBlocksPublicPath($package) . '/' . $iconName;
             if (is_readable($checkIconPath)) {
-                $iconPath = $checkIconPath;
-                $iconProviderClass = $fileExtension === 'svg'
-                    ? SvgIconProvider::class
-                    : BitmapIconProvider::class;
+                $iconPath = ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package) . '/' . $iconName;
+                $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
                 break;
             }
         }

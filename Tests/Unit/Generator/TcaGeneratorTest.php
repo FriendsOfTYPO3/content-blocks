@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TcaGeneratorTest extends UnitTestCase
@@ -127,10 +126,8 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'columns' => [
                         't3ce_example_text' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:text.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:text.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:text.description',
                             'config' => [
                                 'type' => 'input',
                                 'default' => 'Default value',
@@ -139,60 +136,48 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_textarea' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:textarea.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:textarea.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:textarea.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:textarea.description',
                             'config' => [
                                 'type' => 'text',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_number' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:number.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:number.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:number.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:number.description',
                             'config' => [
                                 'type' => 'number',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_email' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:email.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:email.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:email.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:email.description',
                             'config' => [
                                 'type' => 'email',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_check' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:check.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:check.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:check.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:check.description',
                             'config' => [
                                 'type' => 'check',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_color' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:color.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:color.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:color.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:color.description',
                             'config' => [
                                 'type' => 'color',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_file' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:file.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:file.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:file.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:file.description',
                             'config' => [
                                 'type' => 'file',
                                 'foreign_table' => 'sys_file_reference',
@@ -208,10 +193,8 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_collection' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.description',
                             'config' => [
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection',
@@ -220,10 +203,8 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_testblock_text' => [
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/testblock/Resources/Private/Language/Labels.xlf:text.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/testblock/Resources/Private/Language/Labels.xlf:text.description',
+                            'label' => 'LLL:typo3conf/content-blocks/testblock/Resources/Private/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:typo3conf/content-blocks/testblock/Resources/Private/Language/Labels.xlf:text.description',
                             'config' => [
                                 'type' => 'input',
                             ],
@@ -393,10 +374,8 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'text' => [
                             'exclude' => true,
-                            'label' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.text.label',
-                            'description' => 'LLL:' . Environment::getProjectPath(
-                                ) . '/typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.text.description',
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.text.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:collection.text.description',
                             'config' => [
                                 'type' => 'input',
                             ],
