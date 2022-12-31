@@ -25,20 +25,20 @@ class TypoScriptGenerator
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $privatePath = ContentBlockPathUtility::getContentBlocksPrivatePath($contentElementDefinition->getPackage());
-        return '
-            tt_content.' . $contentElementDefinition->getCType() . ' < lib.contentBlock
-            tt_content.' . $contentElementDefinition->getCType() . '{
-                templateName = Frontend
-                templateRootPaths {
-                    20 = ' . $privatePath . '
-                }
-                partialRootPaths {
-                    20 = ' . $privatePath . '/Partials
-                }
-                layoutRootPaths {
-                    20 = ' . $privatePath . '/Layouts
-                }
-            }
-            ';
+        return <<<HEREDOC
+tt_content.{$contentElementDefinition->getCType()} < lib.contentBlock
+tt_content.{$contentElementDefinition->getCType()} {
+    templateName = Frontend
+    templateRootPaths {
+        20 = $privatePath
+    }
+    partialRootPaths {
+        20 = $privatePath/Partials
+    }
+    layoutRootPaths {
+        20 = $privatePath/Layouts
+    }
+}
+HEREDOC;
     }
 }
