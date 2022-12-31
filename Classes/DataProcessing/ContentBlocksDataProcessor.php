@@ -94,7 +94,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $fieldType = $fieldConf->getFieldType();
 
         // feature: use existing field
-        $columnInRecord = (($fieldConf->isUseExistingField()) ? $fieldConf->getName() : $fieldConf->getIdentifier());
+        $columnInRecord = (($fieldConf->isUseExistingField()) ? $fieldConf->getIdentifier() : $fieldConf->getUniqueIdentifier());
 
         // check if column is available
         if (!array_key_exists($columnInRecord, $record)) {
@@ -103,7 +103,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
 
         // columns for direct output without processing
         if ($fieldType->dataProcessingBehaviour() === 'renderable') {
-            $cbData[$fieldConf->getName()] = $record[$columnInRecord];
+            $cbData[$fieldConf->getIdentifier()] = $record[$columnInRecord];
 
         } else if ($fieldType->dataProcessingBehaviour() === 'file') {
             //process files
@@ -121,16 +121,16 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
                 $files = array_pop(array_reverse($files));
             }
             if ($files instanceof FileReference) {
-                $cbData[$fieldConf->getName()] = [
+                $cbData[$fieldConf->getIdentifier()] = [
                     $files
                 ];
             } else {
-                $cbData[$fieldConf->getName()] = $files;
+                $cbData[$fieldConf->getIdentifier()] = $files;
             }
 
         } else if ($fieldType->dataProcessingBehaviour() === 'collection') {
             // handle collections
-            $cbData[$fieldConf->getName()] = $this->_processCollection(
+            $cbData[$fieldConf->getIdentifier()] = $this->_processCollection(
                     $table,
                     $record['_LOCALIZED_UID'] ?? $record['uid'],
                     $fieldConf

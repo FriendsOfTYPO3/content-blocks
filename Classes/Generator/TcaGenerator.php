@@ -45,14 +45,13 @@ class TcaGenerator
                 $labelFallback = '';
                 foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
                     if ($columnFieldDefinition->getFieldType()->dataProcessingBehaviour() === 'renderable') {
-                        $labelFallback = $columnFieldDefinition->getIdentifier();
+                        $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
                     }
                 }
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelFallback);
             }
-            $tca[$tableName]['columns'] ??= [];
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                $tca[$tableName]['columns'][$column->getIdentifier()] = $column->getTca();
+                $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 // @todo right now only tt_content elements are supported.

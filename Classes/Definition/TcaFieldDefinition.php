@@ -22,10 +22,8 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 
 final class TcaFieldDefinition
 {
-    /** the identifier is the name of the columnin TCA and database */
     private string $identifier = '';
-    /** the name is how to call this field in the fluid template */
-    private string $name = '';
+    private string $uniqueIdentifier = '';
     private string $label = '';
     private string $description = '';
     private string $languagePath = '';
@@ -34,8 +32,8 @@ final class TcaFieldDefinition
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
-        $identifier = (string)($array['identifier'] ?? '');
-        if ($identifier === '') {
+        $uniqueIdentifier = (string)($array['uniqueIdentifier'] ?? '');
+        if ($uniqueIdentifier === '') {
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty', 1629277138);
         }
         if (!isset($array['config']['type'])) {
@@ -44,8 +42,8 @@ final class TcaFieldDefinition
 
         $self = new self();
         return $self
-            ->withIdentifier($identifier)
-            ->withName($array['config']['identifier'])
+            ->withUniqueIdentifier($uniqueIdentifier)
+            ->withIdentifier($array['config']['identifier'])
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'] ?? '')
@@ -60,7 +58,6 @@ final class TcaFieldDefinition
             'identifier' => $this->identifier,
             'label' => $this->label,
             'description' => $this->description,
-            'name' => $this->name,
             'languagePath' => $this->languagePath,
         ];
     }
@@ -70,14 +67,14 @@ final class TcaFieldDefinition
         return $this->fieldConfiguration->getFieldType();
     }
 
+    public function getUniqueIdentifier(): string
+    {
+        return $this->uniqueIdentifier;
+    }
+
     public function getIdentifier(): string
     {
         return $this->identifier;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getLabel(): string
@@ -96,6 +93,18 @@ final class TcaFieldDefinition
             return $this->fieldConfiguration->getTca($this->languagePath, $this->useExistingField);
         }
         return [];
+    }
+
+    public function getFieldConfiguration(): FieldConfigurationInterface
+    {
+        return $this->fieldConfiguration;
+    }
+
+    public function withUniqueIdentifier(string $uniqueIdentifier): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->uniqueIdentifier = $uniqueIdentifier;
+        return $clone;
     }
 
     public function withIdentifier(string $identifier): TcaFieldDefinition

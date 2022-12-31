@@ -27,11 +27,11 @@ final class SqlColumnDefinition
 
     public function __construct(array $columnDefinition)
     {
-        if (!isset($columnDefinition['identifier'])) {
+        if (!isset($columnDefinition['uniqueIdentifier'])) {
             throw new \InvalidArgumentException('Column name must not be empty.', 1629291834);
         }
 
-        $this->column = $columnDefinition['identifier'];
+        $this->column = $columnDefinition['uniqueIdentifier'];
         $this->fieldConfiguration = FieldType::from($columnDefinition['config']['type'])
             ->getFieldConfiguration($columnDefinition['config']);
     }

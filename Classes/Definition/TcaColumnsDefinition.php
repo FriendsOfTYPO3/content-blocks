@@ -34,8 +34,8 @@ final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
 
     public function addField(TcaFieldDefinition $definition): void
     {
-        if (!$this->hasField($definition->getIdentifier())) {
-            $this->definitions[$definition->getIdentifier()] = $definition;
+        if (!$this->hasField($definition->getUniqueIdentifier())) {
+            $this->definitions[$definition->getUniqueIdentifier()] = $definition;
         }
     }
 
@@ -85,7 +85,7 @@ final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
     {
         $fields = [];
         foreach ($this->definitions as $definition) {
-            $fields[$definition->getIdentifier()] = $definition->toArray();
+            $fields[$definition->getUniqueIdentifier()] = $definition->toArray();
         }
         return $fields;
     }

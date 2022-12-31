@@ -95,18 +95,18 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
             $columns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
-                $column = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
-                $columns[] = $column;
+                $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
+                $columns[] = $uniqueColumnName;
 
                 $field = $tableDefinitionCollection->processCollections(
                     field: $field,
-                    column: $column,
+                    table: $uniqueColumnName,
                     languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $field['identifier'])],
                     composerName: $composerName
                 );
 
-                $tableDefinitionList[$table]['fields'][$column] = [
-                    'identifier' => $column,
+                $tableDefinitionList[$table]['fields'][$uniqueColumnName] = [
+                    'uniqueIdentifier' => $uniqueColumnName,
                     'config' => $field,
                 ];
             }
@@ -129,16 +129,14 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $column, array $languagePath, string $composerName): array
+    private function processCollections(array $field, string $table, array $languagePath, string $composerName): array
     {
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
             $field['languagePath'] = implode('.', $languagePath);
             return $field;
         }
 
-        // enrich infos for inline relations
-        // @todo move to TcaGenerator, foreign_field should be moved to a constant somewhere, as it is also used in SqlGenerator.
-        $field['properties']['foreign_table'] = $column;
+        $field['properties']['foreign_table'] = $table;
         $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
         $tableDefinition = [];
@@ -148,23 +146,23 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             $languagePath[] = $collectionField['identifier'];
             $childField = $this->processCollections(
                 field: $collectionField,
-                column: $uniqueColumnName,
+                table: $uniqueColumnName,
                 languagePath: $languagePath,
                 composerName: $composerName
             );
-            $tableDefinition['fields'][$collectionField['identifier']] = [
-                'identifier' => $collectionField['identifier'],
+            $tableDefinition['fields'][$childField['identifier']] = [
+                'uniqueIdentifier' => $childField['identifier'],
                 'config' => $childField,
             ];
             array_pop($languagePath);
         }
 
-        if ($this->hasTable($column)) {
+        if ($this->hasTable($table)) {
             throw new \InvalidArgumentException('A Collection field with the identifier "' . $field['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
         }
 
         $this->addTable(
-            tableDefinition: TableDefinition::createFromTableArray($column, $tableDefinition),
+            tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
             isCustomTable: true
         );
 
