@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
 interface FieldConfigurationInterface
 {
+    public static function createFromArray(array $settings): FieldConfigurationInterface;
     public function getTca(string $languagePath, bool $useExistingField): array;
     public function getSql(string $uniqueColumnName): string;
     public function toArray(): array;

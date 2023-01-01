@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\CategoryFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\CheckboxFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ColorFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
@@ -124,7 +125,7 @@ enum FieldType: string
             self::CHECKBOX => CheckboxFieldConfiguration::createFromArray($config),
             self::COLLECTION => CollectionFieldConfiguration::createFromArray($config),
             self::COLOR => ColorFieldConfiguration::createFromArray($config),
-            // self::DATETIME => 'input',
+            self::DATETIME => DateTimeFieldConfiguration::createFromArray($config),
             self::EMAIL => EmailFieldConfiguration::createFromArray($config),
             self::FILE => FileFieldConfiguration::createFromArray($config),
             // self::LINK => 'input',

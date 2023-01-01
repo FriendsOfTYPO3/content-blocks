@@ -19,19 +19,22 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
-final class CategoryFieldConfiguration implements FieldConfigurationInterface
+final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 {
-    private FieldType $fieldType = FieldType::CATEGORY;
+    private FieldType $fieldType = FieldType::DATETIME;
     private string|int $default = '';
     private bool $readOnly = false;
     private int $size = 0;
-    private int $maxitems = 0;
-    private int $minitems = 0;
-    private string $exclusiveKeys = '';
-    private array $treeConfig = [];
-    private string $relationship = '';
+    private bool $required = false;
+    private bool $nullable = false;
+    private string $mode = '';
+    private string $placeholder = '';
+    private array $range = [];
+    private string $dbType = '';
+    private bool $disableAgeDisplay = false;
+    private string $format = '';
 
-    public static function createFromArray(array $settings): CategoryFieldConfiguration
+    public static function createFromArray(array $settings): DateTimeFieldConfiguration
     {
         $self = new self();
         $properties = $settings['properties'] ?? [];
@@ -41,11 +44,14 @@ final class CategoryFieldConfiguration implements FieldConfigurationInterface
         }
         $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
         $self->size = (int)($properties['size'] ?? $self->size);
-        $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
-        $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
-        $self->exclusiveKeys = (string)($properties['exclusiveKeys'] ?? $self->exclusiveKeys);
-        $self->treeConfig = (array)($properties['treeConfig'] ?? $self->treeConfig);
-        $self->relationship = (string)($properties['relationship'] ?? $self->relationship);
+        $self->required = (bool)($properties['required'] ?? $self->required);
+        $self->nullable = (bool)($properties['nullable'] ?? $self->nullable);
+        $self->mode = (string)($properties['mode'] ?? $self->mode);
+        $self->placeholder = (string)($properties['placeholder'] ?? $self->placeholder);
+        $self->range = (array)($properties['range'] ?? $self->range);
+        $self->dbType = (string)($properties['dbType'] ?? $self->dbType);
+        $self->disableAgeDisplay = (bool)($properties['disableAgeDisplay'] ?? $self->disableAgeDisplay);
+        $self->format = (string)($properties['format'] ?? $self->format);
 
         return $self;
     }
@@ -68,20 +74,29 @@ final class CategoryFieldConfiguration implements FieldConfigurationInterface
         if ($this->size > 0) {
             $config['size'] = $this->size;
         }
-        if ($this->maxitems > 0) {
-            $config['maxitems'] = $this->maxitems;
+        if ($this->required) {
+            $config['required'] = true;
         }
-        if ($this->minitems > 0) {
-            $config['minitems'] = $this->minitems;
+        if ($this->nullable) {
+            $config['nullable'] = true;
         }
-        if ($this->exclusiveKeys !== '') {
-            $config['exclusiveKeys'] = $this->exclusiveKeys;
+        if ($this->mode !== '') {
+            $config['mode'] = $this->mode;
         }
-        if ($this->treeConfig !== []) {
-            $config['treeConfig'] = $this->treeConfig;
+        if ($this->placeholder !== '') {
+            $config['placeholder'] = $this->placeholder;
         }
-        if ($this->relationship !== '') {
-            $config['relationship'] = $this->relationship;
+        if ($this->range !== []) {
+            $config['range'] = $this->range;
+        }
+        if ($this->dbType !== '') {
+            $config['dbType'] = $this->dbType;
+        }
+        if ($this->disableAgeDisplay) {
+            $config['disableAgeDisplay'] = true;
+        }
+        if ($this->format !== '') {
+            $config['format'] = $this->format;
         }
         $tca['config'] = $config;
         return $tca;
