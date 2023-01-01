@@ -72,6 +72,10 @@ class TcaGeneratorTest extends UnitTestCase
                                 ]
                             ],
                             [
+                                'identifier' => 'category',
+                                'type' => 'Category',
+                            ],
+                            [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'properties' => [
@@ -128,7 +132,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,t3ce_example_text,t3ce_example_textarea,t3ce_example_number,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.frames;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,t3ce_example_text,t3ce_example_textarea,t3ce_example_number,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.frames;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'previewRenderer' => PreviewRenderer::class,
                         ],
                         't3ce_testblock' => [
@@ -201,6 +205,26 @@ class TcaGeneratorTest extends UnitTestCase
                                 ],
                                 'foreign_label' => 'uid_local',
                                 'foreign_selector' => 'uid_local',
+                            ],
+                            'exclude' => true,
+                        ],
+                        't3ce_example_category' => [
+                            'label' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:category.label',
+                            'description' => 'LLL:typo3conf/content-blocks/example/Resources/Private/Language/Labels.xlf:category.description',
+                            'config' => [
+                                'type' => 'category',
+                                'foreign_table' => 'sys_category',
+                                'size' => 20,
+                                'foreign_table_where' => ' AND {#sys_category}.{#sys_language_uid} IN (-1, 0)',
+                                'relationship' => 'manyToMany',
+                                'maxitems' => 99999,
+                                'default' => 0,
+                                'MM' => 'sys_category_record_mm',
+                                'MM_opposite_field' => 'items',
+                                'MM_match_fields' => [
+                                    'tablenames' => 'tt_content',
+                                    'fieldname' => 't3ce_example_category',
+                                ]
                             ],
                             'exclude' => true,
                         ],
@@ -573,7 +597,20 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                 ],
-            ]
+                'sys_category' => [
+                    'columns' => [
+                        'items' => [
+                            'config' => [
+                                'MM_oppositeUsage' => [
+                                    'tt_content' => [
+                                        't3ce_example_category',
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 

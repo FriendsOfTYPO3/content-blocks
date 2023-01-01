@@ -87,6 +87,10 @@ class SqlGeneratorTest extends UnitTestCase
                                 'type' => 'Text',
                             ],
                             [
+                                'identifier' => 'catgeory',
+                                'type' => 'Category',
+                            ],
+                            [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'properties' => [

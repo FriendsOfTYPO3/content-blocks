@@ -38,6 +38,9 @@ class SqlGenerator implements SingletonInterface
         $sql = [];
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getSqlDefinition() as $column) {
+                if ($column->getSql() === '') {
+                    continue;
+                }
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
             }
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Enumeration;
 
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\CategoryFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\CheckboxFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ColorFieldConfiguration;
@@ -28,7 +29,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 
-enum FieldType: String
+enum FieldType: string
 {
     case CATEGORY = 'Category';
     case CHECKBOX = 'Checkbox';
@@ -62,7 +63,7 @@ enum FieldType: String
     public function getTcaType(): string
     {
         return match ($this) {
-            self::CATEGORY => 'input',
+            self::CATEGORY => 'category',
             self::CHECKBOX => 'check',
             self::COLLECTION => 'inline',
             self::COLOR => 'color',
@@ -77,8 +78,8 @@ enum FieldType: String
             self::REFERENCE => 'input',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
-            self::LINEBREAK =>  'input',
-            self::URL =>  'input',
+            self::LINEBREAK => 'input',
+            self::URL => 'input',
             default => '',
         };
     }
@@ -110,8 +111,8 @@ enum FieldType: String
             self::REFERENCE => 'skip',
             self::TEXT => 'renderable',
             self::TEXTAREA => 'renderable',
-            self::LINEBREAK =>  'skip',
-            self::URL =>  'renderable',
+            self::LINEBREAK => 'skip',
+            self::URL => 'renderable',
             default => 'skip',
         };
     }
@@ -119,7 +120,7 @@ enum FieldType: String
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
     {
         return match ($this) {
-            // self::CATEGORY => 'input',
+            self::CATEGORY => CategoryFieldConfiguration::createFromArray($config),
             self::CHECKBOX => CheckboxFieldConfiguration::createFromArray($config),
             self::COLLECTION => CollectionFieldConfiguration::createFromArray($config),
             self::COLOR => ColorFieldConfiguration::createFromArray($config),

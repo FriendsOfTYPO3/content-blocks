@@ -21,11 +21,11 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
 interface FieldConfigurationInterface
 {
-    public function getSql(string $uniqueColumnName): string;
     public function getTca(string $languagePath, bool $useExistingField): array;
+    public function getSql(string $uniqueColumnName): string;
     public function toArray(): array;
-    public function getFieldType(): FieldType;
     public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string;
+    public function getFieldType(): FieldType;
 
 //    public function combinedIdentifierToArray(string $combinedIdentifier): array;
 //    public function arrayToCombinedIdentifier(array $path): string;
