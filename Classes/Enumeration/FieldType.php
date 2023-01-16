@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
@@ -131,7 +132,7 @@ enum FieldType: string
             // self::LINK => 'input',
             self::NUMBER => NumberFieldConfiguration::createFromArray($config),
             // self::RADIO => 'radio',
-            // self::SELECT => 'select',
+             self::SELECT => SelectFieldConfiguration::createFromArray($config),
             // self::REFERENCE => 'input',
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
