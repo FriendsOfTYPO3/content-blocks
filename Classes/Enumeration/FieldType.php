@@ -49,7 +49,6 @@ enum FieldType: string
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
     case LINEBREAK = 'linebreak';
-    case URL = 'Url';
     case NONE = 'None';
 
     /**
@@ -138,7 +137,6 @@ enum FieldType: string
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             // self::LINEBREAK =>  new InputFieldConfiguration($config),
-            // self::URL =>  new InputFieldConfiguration($config),
             default => NoneFieldConfiguration::createFromArray($config),
         };
     }
