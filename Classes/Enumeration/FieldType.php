@@ -27,6 +27,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
@@ -78,7 +79,7 @@ enum FieldType: string
             self::NONE => 'none',
             self::RADIO => 'radio',
             self::SELECT => 'select',
-            self::REFERENCE => 'input',
+            self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
             self::LINEBREAK => 'input',
@@ -132,7 +133,7 @@ enum FieldType: string
             self::NUMBER => NumberFieldConfiguration::createFromArray($config),
             self::RADIO => RadioFieldConfiguration::createFromArray($config),
             self::SELECT => SelectFieldConfiguration::createFromArray($config),
-            // self::REFERENCE => 'input',
+            self::REFERENCE => ReferenceFieldConfiguration::createFromArray($config),
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             // self::LINEBREAK =>  new InputFieldConfiguration($config),
