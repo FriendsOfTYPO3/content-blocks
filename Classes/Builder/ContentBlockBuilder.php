@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Service\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentBlockBuilder
@@ -35,14 +35,14 @@ class ContentBlockBuilder
      */
     public function create(ContentBlockConfiguration $contentBlockConfiguration): self
     {
-        $basePath = ContentBlockPathUtility::getContentBlockLegacyPath() . '/' .  $contentBlockConfiguration->package;
+        $basePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' .  $contentBlockConfiguration->package;
         if (file_exists($basePath)) {
             throw new \RuntimeException('A content block with the identifier "' . $contentBlockConfiguration->package . '" already exists.');
         }
 
         // create directory structure
-        $privatePath = $basePath . '/' . ContentBlockPathUtility::getContentBlocksPrivatePath();
-        $publicPath = $basePath . '/' . ContentBlockPathUtility::getContentBlocksPublicPath();
+        $privatePath = ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConfiguration->package);
+        $publicPath = ContentBlockPathUtility::getAbsoluteContentBlocksPublicPath($contentBlockConfiguration->package);
         GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($privatePath . '/Language');
 
@@ -63,14 +63,12 @@ class ContentBlockBuilder
             $privatePath . '/Frontend.html',
             $this->htmlTemplateCodeGenerator->getHtmlTemplateFrontend($contentBlockConfiguration)
         );
-        if (count($contentBlockConfiguration->labelsXlfContent) > 0) {
-            foreach ($contentBlockConfiguration->labelsXlfContent as $key => $translation) {
-                $localLangPrefix = ($key === 'default' ? '' : $key . '.');
-                file_put_contents(
-                    $privatePath . '/Language/' . $localLangPrefix . 'Labels.xlf',
-                    $translation
-                );
-            }
+        foreach ($contentBlockConfiguration->labelsXlfContent as $key => $translation) {
+            $localLangPrefix = ($key === 'default' ? '' : $key . '.');
+            file_put_contents(
+                $privatePath . '/Language/' . $localLangPrefix . 'Labels.xlf',
+                $translation
+            );
         }
         file_put_contents(
             $publicPath . '/EditorPreview.css',
@@ -94,7 +92,7 @@ class ContentBlockBuilder
      */
     public function update(ContentBlockConfiguration $contentBlockConf): self
     {
-        $cbBasePath = ContentBlockPathUtility::getContentBlockLegacyPath() . '/' . $contentBlockConf->package;
+        $cbBasePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' . $contentBlockConf->package;
 
         // check if directory exists, if not, create a new ContentBlock.
         if (!file_exists($cbBasePath)) {
@@ -103,7 +101,7 @@ class ContentBlockBuilder
 
         // update the yaml file
         file_put_contents(
-            $cbBasePath . ContentBlockPathUtility::getContentBlocksPrivatePath() . '/EditorInterface.yaml',
+            ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConf->package) . '/EditorInterface.yaml',
             Yaml::dump($contentBlockConf->yamlConfig, 10)
         );
 
@@ -111,7 +109,7 @@ class ContentBlockBuilder
         foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
             $localLangPrefix = ($key === 'default' ? '' : $key . '.');
             file_put_contents(
-                $cbBasePath . ContentBlockPathUtility::getContentBlocksPrivatePath() . '/Language/' . $localLangPrefix . 'Labels.xlf',
+                ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConf->package) . '/Language/' . $localLangPrefix . 'Labels.xlf',
                 $translation
             );
         }
