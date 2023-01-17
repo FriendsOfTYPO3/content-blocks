@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
@@ -81,7 +82,6 @@ enum FieldType: string
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
             self::LINEBREAK => 'input',
-            self::URL => 'input',
             default => '',
         };
     }
@@ -114,7 +114,6 @@ enum FieldType: string
             self::TEXT => 'renderable',
             self::TEXTAREA => 'renderable',
             self::LINEBREAK => 'skip',
-            self::URL => 'renderable',
             default => 'skip',
         };
     }
@@ -131,7 +130,7 @@ enum FieldType: string
             self::FILE => FileFieldConfiguration::createFromArray($config),
             self::LINK => LinkFieldConfiguration::createFromArray($config),
             self::NUMBER => NumberFieldConfiguration::createFromArray($config),
-            // self::RADIO => 'radio',
+            self::RADIO => RadioFieldConfiguration::createFromArray($config),
             self::SELECT => SelectFieldConfiguration::createFromArray($config),
             // self::REFERENCE => 'input',
             self::TEXT => TextFieldConfiguration::createFromArray($config),
