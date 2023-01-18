@@ -18,10 +18,8 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -41,8 +39,6 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
 {
     protected string $cType;
     protected array $record;
-    protected ContentElementDefinition $contentElementDefinition;
-    protected ContentBlockConfiguration $cbConf;
 
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection
@@ -74,9 +70,9 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $cbData = [];
 
         /** @var TcaFieldDefinition $fieldDefinition */
-        foreach ($ttContentDefinition->getTcaColumnsDefinition() as $column => $fieldDefinition) {
-            $cbData = $this->_processField($fieldDefinition, $this->record, $cbData, 'tt_content');
-        }
+//        foreach ($ttContentDefinition->getTcaColumnsDefinition() as $column => $fieldDefinition) {
+//            $cbData = $this->_processField($fieldDefinition, $this->record, $cbData, 'tt_content');
+//        }
 
         $processedData = array_merge($processedData, $cbData);
         return $processedData;

@@ -17,7 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
+
+use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 
 class HtmlTemplateCodeGenerator
 {
@@ -26,12 +27,13 @@ class HtmlTemplateCodeGenerator
      */
     public function getHtmlTemplateEditorPreview(ContentBlockConfiguration $contentBlockConfiguration): string
     {
+        $package = $contentBlockConfiguration->getPackage();
         $editorPreviewTemplate = '<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">' . "\n";
-        $editorPreviewTemplate .= '    <f:asset.css identifier="content-block-' . $contentBlockConfiguration->package . '-be" href="CB:' . $contentBlockConfiguration->package . '/dist/EditorPreview.css"/>' . "\n";
+        $editorPreviewTemplate .= '    <f:asset.css identifier="content-block-' . $package . '-be" href="CB:' . $package . '/dist/EditorPreview.css"/>' . "\n";
         $editorPreviewTemplate .= "\n";
         $editorPreviewTemplate .= '    <be:link.editRecord uid="{data.uid}" table="tt_content" id="element-tt_content-{data.uid}">' . "\n";
-        $editorPreviewTemplate .= '        <div class="' . $contentBlockConfiguration->package . '">' . "\n";
-        $editorPreviewTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
+        $editorPreviewTemplate .= '        <div class="' . $package . '">' . "\n";
+//        $editorPreviewTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
         $editorPreviewTemplate .= '        </div>' . "\n";
         $editorPreviewTemplate .= '    </be:link.editRecord>' . "\n";
         $editorPreviewTemplate .= '</html>' . "\n";
@@ -43,18 +45,19 @@ class HtmlTemplateCodeGenerator
      */
     public function getHtmlTemplateFrontend(ContentBlockConfiguration $contentBlockConfiguration): string
     {
+        $package = $contentBlockConfiguration->getPackage();
         $frontendTemplate = '<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">' . "\n";
         $frontendTemplate .= "\n";
         $frontendTemplate .= '    <f:layout name="Default" />' . "\n";
         $frontendTemplate .= "\n";
         $frontendTemplate .= '    <f:section name="Main">' . "\n";
         $frontendTemplate .= "\n";
-        $frontendTemplate .= '        <f:asset.css identifier="content-block-' . $contentBlockConfiguration->package . '-be" href="CB:' . $contentBlockConfiguration->package . '/dist/EditorPreview.css"/>' . "\n";
-        $frontendTemplate .= '        <f:asset.css identifier="content-block-' . $contentBlockConfiguration->package . '" href="CB:' . $contentBlockConfiguration->package . '/dist/Frontend.css"/>' . "\n";
-        $frontendTemplate .= '        <f:asset.script identifier="content-block-' . $contentBlockConfiguration->package . '" src="CB:' . $contentBlockConfiguration->package . '/dist/Frontend.js"/>' . "\n";
+        $frontendTemplate .= '        <f:asset.css identifier="content-block-' . $package . '-be" href="CB:' . $package . '/dist/EditorPreview.css"/>' . "\n";
+        $frontendTemplate .= '        <f:asset.css identifier="content-block-' . $package . '" href="CB:' . $package . '/dist/Frontend.css"/>' . "\n";
+        $frontendTemplate .= '        <f:asset.script identifier="content-block-' . $package . '" src="CB:' . $package . '/dist/Frontend.js"/>' . "\n";
         $frontendTemplate .= "\n";
-        $frontendTemplate .= '        <div class="' . $contentBlockConfiguration->package . '">' . "\n";
-        $frontendTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
+        $frontendTemplate .= '        <div class="' . $package . '">' . "\n";
+//        $frontendTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
         $frontendTemplate .= '        </div>' . "\n";
         $frontendTemplate .= "\n";
         $frontendTemplate .= '    </f:section>' . "\n";

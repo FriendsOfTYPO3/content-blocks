@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
-use TYPO3\CMS\ContentBlocks\Domain\Model\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -33,27 +32,29 @@ class ContentBlockBuilder
     /**
      * Writes a ContentBlock to file system.
      */
-    public function create(ContentBlockConfiguration $contentBlockConfiguration): self
+    public function create(ContentBlockConfiguration $contentBlockConfiguration): void
     {
-        $basePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' .  $contentBlockConfiguration->package;
+        $vendor = $contentBlockConfiguration->getVendor();
+        $package = $contentBlockConfiguration->getPackage();
+        $basePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' .  $package;
         if (file_exists($basePath)) {
-            throw new \RuntimeException('A content block with the identifier "' . $contentBlockConfiguration->package . '" already exists.');
+            throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.');
         }
 
         // create directory structure
-        $privatePath = ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConfiguration->package);
-        $publicPath = ContentBlockPathUtility::getAbsoluteContentBlocksPublicPath($contentBlockConfiguration->package);
+        $privatePath = ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($package);
+        $publicPath = ContentBlockPathUtility::getAbsoluteContentBlocksPublicPath($package);
         GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($privatePath . '/Language');
 
         // create files
         file_put_contents(
             $basePath . '/composer.json',
-            json_encode($contentBlockConfiguration->composerJson, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+            json_encode($contentBlockConfiguration->getComposerJson(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
         );
         file_put_contents(
             $privatePath . '/EditorInterface.yaml',
-            Yaml::dump($contentBlockConfiguration->yamlConfig, 10)
+            Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10)
         );
         file_put_contents(
             $privatePath . '/EditorPreview.html',
@@ -63,13 +64,28 @@ class ContentBlockBuilder
             $privatePath . '/Frontend.html',
             $this->htmlTemplateCodeGenerator->getHtmlTemplateFrontend($contentBlockConfiguration)
         );
-        foreach ($contentBlockConfiguration->labelsXlfContent as $key => $translation) {
-            $localLangPrefix = ($key === 'default' ? '' : $key . '.');
-            file_put_contents(
-                $privatePath . '/Language/' . $localLangPrefix . 'Labels.xlf',
-                $translation
-            );
-        }
+
+        $languageContent = <<<HEREDOC
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
+		<header/>
+		<body>
+			<trans-unit id="$vendor.$package.title" xml:space="preserve">
+				<source>Content Block title</source>
+			</trans-unit>
+			<trans-unit id="$vendor.$package.description" xml:space="preserve">
+				<source>This is your content block description</source>
+			</trans-unit>
+        </body>
+	</file>
+</xliff>
+HEREDOC;
+
+        file_put_contents(
+            $privatePath . '/Language/Labels.xlf',
+            $languageContent
+        );
         file_put_contents(
             $publicPath . '/EditorPreview.css',
             '/* Created by Content BlockWizard */'
@@ -82,37 +98,38 @@ class ContentBlockBuilder
             $publicPath . '/Frontend.js',
             '/* Created by Content BlockWizard */'
         );
-
-        // TODO: "transfer" the icon file
-        return $this;
+        copy(
+            GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
+            $publicPath . '/ContentBlockIcon.svg'
+        );
     }
 
     /**
      * At the moment: updates only the yaml file and the translations.
      */
-    public function update(ContentBlockConfiguration $contentBlockConf): self
+    public function update(ContentBlockConfiguration $contentBlockConf): void
     {
-        $cbBasePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' . $contentBlockConf->package;
-
-        // check if directory exists, if not, create a new ContentBlock.
-        if (!file_exists($cbBasePath)) {
-            return $this->create($contentBlockConf);
-        }
-
-        // update the yaml file
-        file_put_contents(
-            ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConf->package) . '/EditorInterface.yaml',
-            Yaml::dump($contentBlockConf->yamlConfig, 10)
-        );
-
-        // Update translations
-        foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
-            $localLangPrefix = ($key === 'default' ? '' : $key . '.');
-            file_put_contents(
-                ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConf->package) . '/Language/' . $localLangPrefix . 'Labels.xlf',
-                $translation
-            );
-        }
-        return $this;
+//        $cbBasePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' . $contentBlockConf->package;
+//
+//        // check if directory exists, if not, create a new ContentBlock.
+//        if (!file_exists($cbBasePath)) {
+//            $this->create($contentBlockConf);
+//            return;
+//        }
+//
+//        // update the yaml file
+//        file_put_contents(
+//            ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConf->package) . '/EditorInterface.yaml',
+//            Yaml::dump($contentBlockConf->yamlConfig, 10)
+//        );
+//
+//        // Update translations
+//        foreach ($contentBlockConf->labelsXlfContent as $key => $translation) {
+//            $localLangPrefix = ($key === 'default' ? '' : $key . '.');
+//            file_put_contents(
+//                ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($contentBlockConf->package) . '/Language/' . $localLangPrefix . 'Labels.xlf',
+//                $translation
+//            );
+//        }
     }
 }

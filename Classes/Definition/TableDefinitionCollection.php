@@ -115,7 +115,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 'columns' => $columns,
                 'vendor' => $vendor,
                 'package' => $package,
-                'wizardGroup' => $contentBlock['yaml']['group'] ?? '',
+                'wizardGroup' => $contentBlock['yaml']['group'] ?? null,
                 'icon' => $contentBlock['icon'] ?? '',
                 'iconProvider' => $contentBlock['iconProvider'] ?? '',
             ];

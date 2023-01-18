@@ -26,7 +26,7 @@ class TypoScriptGenerator
     {
         $privatePath = ContentBlockPathUtility::getRelativeContentBlocksPrivatePath($contentElementDefinition->getPackage());
         return <<<HEREDOC
-tt_content.{$contentElementDefinition->getCType()} < lib.contentBlock
+tt_content.{$contentElementDefinition->getCType()} =< lib.contentBlock
 tt_content.{$contentElementDefinition->getCType()} {
     templateName = Frontend
     templateRootPaths {

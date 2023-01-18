@@ -44,7 +44,7 @@ class LegacyLoader implements LoaderInterface
                 throw new \RuntimeException('Cannot read or find composer.json file in "' . $splPath->getPathname() . '"' . '/composer.json');
             }
             $composerJson = json_decode(file_get_contents($splPath->getPathname() . '/composer.json'), true);
-            if ($composerJson['type'] !== 'typo3-contentblock') {
+            if (($composerJson['type'] ?? '') !== 'typo3-contentblock') {
                 continue;
             }
             $package = explode('/', $composerJson['name'])[1];
