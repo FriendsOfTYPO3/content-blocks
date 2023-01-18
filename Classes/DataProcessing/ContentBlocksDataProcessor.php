@@ -92,7 +92,30 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
             return $this->processReference($tcaFieldDefinition, $table, $record);
         }
 
+        if ($fieldType === FieldType::SELECT) {
+            return $this->processSelect($tcaFieldDefinition, $table, $record);
+        }
+
         return $data;
+    }
+
+    protected function processSelect(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): mixed
+    {
+        $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
+        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
+        if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
+            return $this->getRelations(
+                uidList: (string)($record[$uniqueIdentifier] ?? ''),
+                allowed: $tcaFieldConfig['config']['foreign_table'] ?? '',
+                mmTable: $tcaFieldConfig['config']['MM'] ?? '',
+                uid: (int)$record['uid'],
+                table: $parentTable,
+                tcaFieldConf: $tcaFieldConfig['config'] ?? []
+            );
+        } elseif (in_array(($tcaFieldConfig['config']['renderType'] ?? ''), ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'], true)) {
+            return ($record[$uniqueIdentifier] ?? '') !== '' ? explode(',', $record[$uniqueIdentifier]) : [];
+        }
+        return $record[$uniqueIdentifier] ?? '';
     }
 
     protected function processReference(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): array
