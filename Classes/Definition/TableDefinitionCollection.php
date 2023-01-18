@@ -164,6 +164,22 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         return $field;
     }
 
+    public function getContentElementDefinition(string $CType): ?ContentElementDefinition
+    {
+        if (!$this->hasTable('tt_content')) {
+            return null;
+        }
+        foreach ($this->getTable('tt_content')->getTypeDefinitionCollection() as $typeDefinition) {
+            if (!$typeDefinition instanceof ContentElementDefinition) {
+                continue;
+            }
+            if ($typeDefinition->getCType() === $CType) {
+                return $typeDefinition;
+            }
+        }
+        return null;
+    }
+
     /**
      * @return \Traversable|TableDefinition[]
      */

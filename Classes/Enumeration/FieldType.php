@@ -30,7 +30,6 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\NoneFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 
@@ -50,8 +49,6 @@ enum FieldType: string
     case REFERENCE = 'Reference';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
-    case LINEBREAK = 'linebreak';
-    case NONE = 'None';
 
     /**
      * Checks if this field type is a structure field.
@@ -76,14 +73,11 @@ enum FieldType: string
             self::FILE => 'file',
             self::LINK => 'link',
             self::NUMBER => 'number',
-            self::NONE => 'none',
             self::RADIO => 'radio',
             self::SELECT => 'select',
             self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
-            self::LINEBREAK => 'input',
-            default => '',
         };
     }
 
@@ -108,14 +102,11 @@ enum FieldType: string
             self::FILE => 'file',
             self::LINK => 'renderable',
             self::NUMBER => 'renderable',
-            self::NONE => 'skip',
             self::RADIO => 'renderable',
             self::SELECT => 'renderable',
             self::REFERENCE => 'skip',
             self::TEXT => 'renderable',
             self::TEXTAREA => 'renderable',
-            self::LINEBREAK => 'skip',
-            default => 'skip',
         };
     }
 
@@ -136,8 +127,6 @@ enum FieldType: string
             self::REFERENCE => ReferenceFieldConfiguration::createFromArray($config),
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
-            // self::LINEBREAK =>  new InputFieldConfiguration($config),
-            default => NoneFieldConfiguration::createFromArray($config),
         };
     }
 }

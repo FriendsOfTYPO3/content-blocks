@@ -60,6 +60,11 @@ final class ContentElementDefinition extends TypeDefinition
         return $array;
     }
 
+    public function getComposerName(): string
+    {
+        return $this->vendor . '/' . $this->package;
+    }
+
     public function getDescription(): string
     {
         return $this->description;

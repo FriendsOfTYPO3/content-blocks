@@ -17,19 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Resource\FileCollector;
 
 /**
@@ -37,172 +32,87 @@ use TYPO3\CMS\Frontend\Resource\FileCollector;
  */
 class ContentBlocksDataProcessor implements DataProcessorInterface
 {
-    protected string $cType;
-    protected array $record;
-
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection
     ) {
     }
 
-    /**
-     * @throws \Exception
-     * @param ContentObjectRenderer $cObj The data of the content element or page
-     * @param array $contentObjectConfiguration The configuration of Content Object
-     * @param array $processorConfiguration The configuration of this processor
-     * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
-     * @return array the processed data as key/value store
-     */
     public function process(
         ContentObjectRenderer $cObj,
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
     ) {
-        $this->record = $processedData['data'];
-        $this->cType = $this->record['CType'];
-
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
+        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($processedData['data']['CType']);
 
-        // @todo implement
-//        $this->contentElementDefinition = $this->tableDefinitionCollection->findContentElementDefinition($this->cType);
+        $contentBlockData = [];
+        foreach ($contentElementDefinition->getColumns() as $column) {
+            $tcaFieldDefinition = $ttContentDefinition->getTcaColumnsDefinition()->getField($column);
+            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->processField($tcaFieldDefinition, $processedData['data'], $contentBlockData, 'tt_content', $contentElementDefinition);
+        }
 
-        $cbData = [];
-
-        /** @var TcaFieldDefinition $fieldDefinition */
-//        foreach ($ttContentDefinition->getTcaColumnsDefinition() as $column => $fieldDefinition) {
-//            $cbData = $this->_processField($fieldDefinition, $this->record, $cbData, 'tt_content');
-//        }
-
-        $processedData = array_merge($processedData, $cbData);
-        return $processedData;
+        return array_merge($processedData, $contentBlockData);
     }
 
-    /** process a field
-     * @throws \Exception
-     * @var TcaFieldDefinition $fieldConf, configuration of the field
-     * @var array $record, the data base record (row) with the values inside
-     * @var array $cbData, the data stack where to add the data
-     * @return array|string|int
-    */
-    protected function _processField(TcaFieldDefinition $fieldConf, array $record, array $cbData, string $table)
+    protected function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, array $contentBlocksData, string $table, ContentElementDefinition $contentElementDefinition): mixed
     {
-        $fieldType = $fieldConf->getFieldType();
+        $fieldType = $tcaFieldDefinition->getFieldType();
 
         // feature: use existing field
-        $columnInRecord = (($fieldConf->isUseExistingField()) ? $fieldConf->getIdentifier() : $fieldConf->getUniqueIdentifier());
+        $recordIdentifier = $tcaFieldDefinition->isUseExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
 
         // check if column is available
-        if (!array_key_exists($columnInRecord, $record)) {
-            throw new \Exception(sprintf('It seems your field %s is missing in the database. Maybe a database compare could help you out.', $columnInRecord));
+        if (!array_key_exists($recordIdentifier, $record)) {
+            throw new \RuntimeException('The field ' . $recordIdentifier . ' is missing in the tt_content table. Try to compare your database schema.');
         }
 
-        // columns for direct output without processing
-        if ($fieldType->dataProcessingBehaviour() === 'renderable') {
-            $cbData[$fieldConf->getIdentifier()] = $record[$columnInRecord];
-
-        } else if ($fieldType->dataProcessingBehaviour() === 'file') {
-            //process files
-            /** @var FileCollector $fileCollector */
-            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
-
-            $fileCollector->addFilesFromRelation($table, $columnInRecord, $record);
-            $files = $fileCollector->getFiles();
-
-            $fileFieldTcaConfig = $fieldConf->getTca($this->contentElementDefinition);
-            if (
-                (isset($fileFieldTcaConfig['config']['minitems']) && $fileFieldTcaConfig['config']['minitems'] == 1) &&
-                (isset($fileFieldTcaConfig['config']['maxitems']) && $fileFieldTcaConfig['config']['maxitems'] == 1)
-            ) {
-                $files = array_pop(array_reverse($files));
-            }
-            if ($files instanceof FileReference) {
-                $cbData[$fieldConf->getIdentifier()] = [
-                    $files
-                ];
-            } else {
-                $cbData[$fieldConf->getIdentifier()] = $files;
-            }
-
-        } else if ($fieldType->dataProcessingBehaviour() === 'collection') {
-            // handle collections
-            $cbData[$fieldConf->getIdentifier()] = $this->_processCollection(
-                    $table,
-                    $record['_LOCALIZED_UID'] ?? $record['uid'],
-                    $fieldConf
-            );
+        if ($fieldType->dataProcessingBehaviour() === 'skip') {
+            return $contentBlocksData;
         }
 
-        return $cbData;
+        $data = $record[$recordIdentifier];
+
+        if ($fieldType === FieldType::FILE) {
+            $fileCollector = new FileCollector();
+            $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
+            $data = $fileCollector->getFiles();
+        }
+
+        if ($fieldType === FieldType::COLLECTION) {
+            $data = $this->processCollection($tcaFieldDefinition->getUniqueIdentifier(), $record, $tcaFieldDefinition, $contentElementDefinition);
+        }
+
+        return $data;
     }
 
-    /**
-     * Manage collections and sub fields.
-     */
-    protected function _processCollection(string $parentTable, int $parentUid, TcaFieldDefinition $parentFieldConf): array
+    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, ContentElementDefinition $contentElementDefinition): array
     {
-        $parentTca = $parentFieldConf->getTca($this->contentElementDefinition);
-        $table = $parentTca['config']['foreign_table'];
+        $table = UniqueNameUtility::createUniqueColumnName($contentElementDefinition->getComposerName(), $tcaFieldDefinition->getIdentifier());
+        $cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $cObj->start($record, $parentTable);
+        $data = $cObj->getRecords($table, [
+            'table' => $table,
+            'select.' => [
+                'pidInList' => 'this',
+                'where' => '{#foreign_table_parent_uid} = ' . $record['uid'],
+            ]
+        ]);
 
-        $collectionDefinition = $this->tableDefinitionCollection->getTable($table);
-        // Managing Workspace overlays
-        $workspaceId = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('workspace', 'id', 0);
-
-        $q = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable($table)
-            ->createQueryBuilder();
-
-        $q->getRestrictions()->add(
-            GeneralUtility::makeInstance(WorkspaceRestriction::class, $workspaceId)
-        );
-
-        $stmt = $q->select('*')
-            ->from($table)
-            ->where(
-                $q->expr()->eq(
-                    'foreign_table_parent_uid',
-                    $q->createNamedParameter($parentUid, Connection::PARAM_INT)
-                )
-            )
-            ->orderBy('sorting')
-            ->execute();
-
-        $fieldData = [];
-
-        while ($r = $stmt->fetch()) {
-            // overlay workspaces
-            if ($this->_isFrontend()) {
-                GeneralUtility::makeInstance(PageRepository::class)
-                    ->versionOL($table, $r);
-                if (false === $r) {
-                    continue;
-                }
-            } else {
-                BackendUtility::workspaceOL($table, $r);
-                if (false === $r) {
-                    continue;
-                }
+        $tableDefinition = $this->tableDefinitionCollection->getTable($table);
+        $contentBlockData = [];
+        foreach ($data as $index => $row) {
+            foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
+                $data[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
+                    tcaFieldDefinition: $childTcaFieldDefinition,
+                    record: $row,
+                    contentBlocksData: $contentBlockData,
+                    table: $table,
+                    contentElementDefinition: $contentElementDefinition
+                );
             }
-
-            $collectionData = [];
-            // add the field infos
-            /** @var TcaFieldDefinition $fieldDefinition */
-            foreach ($collectionDefinition->getTcaColumnsDefinition() as $fieldDefinition) {
-                $collectionData = $this->_processField($fieldDefinition, $r, $collectionData, $table);
-            }
-
-            // add uid to collection items
-            if (!array_key_exists('uid', $collectionData)) {
-                $collectionData['uid'] = $r['uid'];
-            }
-            $fieldData[] = $collectionData;
         }
 
-        return $fieldData;
-    }
-
-    protected function _isFrontend()
-    {
-        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController;
+        return $data;
     }
 }

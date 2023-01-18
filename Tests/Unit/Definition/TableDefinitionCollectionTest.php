@@ -73,4 +73,64 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
+
+    /**
+     * @test
+     */
+    public function contentElementDefinitionIsFoundByCType(): void
+    {
+        $contentBlocks = [
+            [
+                'composerJson' => [
+                    'name' => 'foo/bar',
+                ],
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => []
+                ]
+            ],
+            [
+                'composerJson' => [
+                    'name' => 't3ce/example',
+                ],
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => []
+                ]
+            ],
+        ];
+
+        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+        $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
+
+        self::assertNotNull($contentElementDefinition);
+        self::assertSame('t3ce', $contentElementDefinition->getVendor());
+        self::assertSame('example', $contentElementDefinition->getPackage());
+    }
+
+    /**
+     * @test
+     */
+    public function nonExistingContentElementReturnsNull(): void
+    {
+        $contentBlocks = [
+            [
+                'composerJson' => [
+                    'name' => 't3ce/example',
+                ],
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => []
+                ]
+            ]
+        ];
+
+        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+        $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
+
+        self::assertNull($contentElementDefinition);
+    }
 }

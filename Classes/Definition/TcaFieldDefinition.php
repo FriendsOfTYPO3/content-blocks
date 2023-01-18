@@ -34,10 +34,10 @@ final class TcaFieldDefinition
     {
         $uniqueIdentifier = (string)($array['uniqueIdentifier'] ?? '');
         if ($uniqueIdentifier === '') {
-            throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty', 1629277138);
+            throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty.', 1629277138);
         }
         if (!isset($array['config']['type'])) {
-            throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty', 1629277138);
+            throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty.', 1629277138);
         }
 
         $self = new self();
@@ -125,13 +125,6 @@ final class TcaFieldDefinition
     {
         $clone = clone $this;
         $clone->description = $description;
-        return $clone;
-    }
-
-    public function withName(string $name): TcaFieldDefinition
-    {
-        $clone = clone $this;
-        $clone->name = $name;
         return $clone;
     }
 
