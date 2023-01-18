@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
+use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -49,26 +50,26 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $contentBlockData = [];
         foreach ($contentElementDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $ttContentDefinition->getTcaColumnsDefinition()->getField($column);
-            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->processField($tcaFieldDefinition, $processedData['data'], $contentBlockData, 'tt_content', $contentElementDefinition);
+            if ($tcaFieldDefinition->getFieldType()->shouldBeSkippedInDataProcessing()) {
+                continue;
+            }
+            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->processField($tcaFieldDefinition, $processedData['data'], 'tt_content', $contentElementDefinition);
         }
 
         return array_merge($processedData, $contentBlockData);
     }
 
-    protected function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, array $contentBlocksData, string $table, ContentElementDefinition $contentElementDefinition): mixed
+    protected function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table, ContentElementDefinition $contentElementDefinition): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
 
         // feature: use existing field
+        // @todo think about existing fields
         $recordIdentifier = $tcaFieldDefinition->isUseExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
 
         // check if column is available
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException('The field ' . $recordIdentifier . ' is missing in the tt_content table. Try to compare your database schema.');
-        }
-
-        if ($fieldType->dataProcessingBehaviour() === 'skip') {
-            return $contentBlocksData;
         }
 
         $data = $record[$recordIdentifier];
@@ -83,7 +84,26 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
             $data = $this->processCollection($tcaFieldDefinition->getUniqueIdentifier(), $record, $tcaFieldDefinition, $contentElementDefinition);
         }
 
+        if ($fieldType === FieldType::CATEGORY) {
+            $data = $this->processCategory($tcaFieldDefinition, $table, $record);
+        }
+
         return $data;
+    }
+
+    protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): array
+    {
+        $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
+        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
+        $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$uniqueIdentifier] ?? '');
+        return $this->getRelations(
+            uidList: $uidList,
+            allowed: ($tcaFieldConfig['config']['foreign_table'] ?? ''),
+            mmTable: $tcaFieldConfig['config']['MM'] ?? '',
+            uid: (int)$record['uid'],
+            table: $parentTable,
+            tcaFieldConf: $tcaFieldConfig['config'] ?? []
+        );
     }
 
     protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, ContentElementDefinition $contentElementDefinition): array
@@ -100,19 +120,39 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         ]);
 
         $tableDefinition = $this->tableDefinitionCollection->getTable($table);
-        $contentBlockData = [];
         foreach ($data as $index => $row) {
             foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
                 $data[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
                     tcaFieldDefinition: $childTcaFieldDefinition,
                     record: $row,
-                    contentBlocksData: $contentBlockData,
                     table: $table,
                     contentElementDefinition: $contentElementDefinition
                 );
             }
         }
-
         return $data;
+    }
+
+    /**
+     * @param array<string, mixed> $tcaFieldConf
+     *
+     * Returns the selected relations of select or group element
+     */
+    protected function getRelations(string $uidList, string $allowed, string $mmTable, int $uid, string $table, array $tcaFieldConf = []): array
+    {
+        $pageRepository = $GLOBALS['TSFE']->sys_page;
+        $relationHandler = GeneralUtility::makeInstance(RelationHandler::class);
+        $relationHandler->start($uidList, $allowed, $mmTable, $uid, $table, $tcaFieldConf);
+        $relationHandler->getFromDB();
+        $relations = $relationHandler->getResolvedItemArray();
+        $records = [];
+        foreach ($relations as $relation) {
+            $tableName = $relation['table'];
+            $translatedRecord = $pageRepository->getLanguageOverlay($tableName, $relation['record']);
+            if ($translatedRecord !== null) {
+                $records[] = $translatedRecord;
+            }
+        }
+        return $records;
     }
 }

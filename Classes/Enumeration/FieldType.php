@@ -81,33 +81,9 @@ enum FieldType: string
         };
     }
 
-    /**
-     * Possible values:
-     * - renderable -> means, this can be direct rendered in the fluid template
-     * - file -> means, this field has to be processed as a file
-     * - collection -> means, this field has a list of subfield in another table and hast to processed as inline field
-     * - skip -> means, this field must not be processed by the ContentBlocksDataProcessor
-     *
-     * @return string what to do in the ContentBlocksDataProcessor
-     */
-    public function dataProcessingBehaviour(): string
+    public function shouldBeSkippedInDataProcessing(): bool
     {
-        return match ($this) {
-            self::CATEGORY => 'skip',
-            self::CHECKBOX => 'renderable',
-            self::COLLECTION => 'collection',
-            self::COLOR => 'renderable',
-            self::DATETIME => 'renderable',
-            self::EMAIL => 'renderable',
-            self::FILE => 'file',
-            self::LINK => 'renderable',
-            self::NUMBER => 'renderable',
-            self::RADIO => 'renderable',
-            self::SELECT => 'renderable',
-            self::REFERENCE => 'skip',
-            self::TEXT => 'renderable',
-            self::TEXTAREA => 'renderable',
-        };
+        return false;
     }
 
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
