@@ -77,18 +77,36 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         if ($fieldType === FieldType::FILE) {
             $fileCollector = new FileCollector();
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
-            $data = $fileCollector->getFiles();
+            return $fileCollector->getFiles();
         }
 
         if ($fieldType === FieldType::COLLECTION) {
-            $data = $this->processCollection($tcaFieldDefinition->getUniqueIdentifier(), $record, $tcaFieldDefinition, $contentElementDefinition);
+            return $this->processCollection($tcaFieldDefinition->getUniqueIdentifier(), $record, $tcaFieldDefinition, $contentElementDefinition);
         }
 
         if ($fieldType === FieldType::CATEGORY) {
-            $data = $this->processCategory($tcaFieldDefinition, $table, $record);
+            return $this->processCategory($tcaFieldDefinition, $table, $record);
+        }
+
+        if ($fieldType === FieldType::REFERENCE) {
+            return $this->processReference($tcaFieldDefinition, $table, $record);
         }
 
         return $data;
+    }
+
+    protected function processReference(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): array
+    {
+        $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
+        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
+        return $this->getRelations(
+            uidList: (string)($record[$uniqueIdentifier] ?? ''),
+            allowed: $tcaFieldConfig['config']['allowed'] ?? '',
+            mmTable: $tcaFieldConfig['config']['MM'] ?? '',
+            uid: (int)$record['uid'],
+            table: $parentTable,
+            tcaFieldConf: $tcaFieldConfig['config'] ?? []
+        );
     }
 
     protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): array
@@ -98,7 +116,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$uniqueIdentifier] ?? '');
         return $this->getRelations(
             uidList: $uidList,
-            allowed: ($tcaFieldConfig['config']['foreign_table'] ?? ''),
+            allowed: $tcaFieldConfig['config']['foreign_table'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: (int)$record['uid'],
             table: $parentTable,
