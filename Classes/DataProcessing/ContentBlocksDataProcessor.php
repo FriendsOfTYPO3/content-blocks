@@ -50,7 +50,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $contentBlockData = [];
         foreach ($contentElementDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $ttContentDefinition->getTcaColumnsDefinition()->getField($column);
-            if ($tcaFieldDefinition->getFieldType()->shouldBeSkippedInDataProcessing()) {
+            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
             $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->processField($tcaFieldDefinition, $processedData['data'], 'tt_content', $contentElementDefinition);

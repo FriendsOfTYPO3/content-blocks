@@ -44,7 +44,7 @@ class TcaGenerator
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelFallback = '';
                 foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
-                    if ($columnFieldDefinition->getFieldType()->shouldBeSkippedInDataProcessing() === 'renderable') {
+                    if ($columnFieldDefinition->getFieldType()->isRenderable()) {
                         $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
                     }
                 }

@@ -81,9 +81,9 @@ enum FieldType: string
         };
     }
 
-    public function shouldBeSkippedInDataProcessing(): bool
+    public function isRenderable(): bool
     {
-        return false;
+        return true;
     }
 
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
