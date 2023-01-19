@@ -8,11 +8,9 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
-use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Resource\FileCollector;
 
@@ -45,7 +43,7 @@ class RelationResolver
         }
 
         if ($fieldType === FieldType::COLLECTION) {
-            return $this->processCollection($tcaFieldDefinition->getUniqueIdentifier(), $record, $tcaFieldDefinition, $contentElementDefinition);
+            return $this->processCollection($table, $record, $tcaFieldDefinition, $contentElementDefinition);
         }
 
         if ($fieldType === FieldType::CATEGORY) {
@@ -70,10 +68,10 @@ class RelationResolver
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
             return $this->getRelations(
                 uidList: (string)($record[$uniqueIdentifier] ?? ''),
-                allowed: $tcaFieldConfig['config']['foreign_table'] ?? '',
+                tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
                 mmTable: $tcaFieldConfig['config']['MM'] ?? '',
                 uid: (int)$record['uid'],
-                table: $parentTable,
+                currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
         } elseif (in_array(($tcaFieldConfig['config']['renderType'] ?? ''), ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'], true)) {
@@ -88,10 +86,10 @@ class RelationResolver
         $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
         return $this->getRelations(
             uidList: (string)($record[$uniqueIdentifier] ?? ''),
-            allowed: $tcaFieldConfig['config']['allowed'] ?? '',
+            tableList: $tcaFieldConfig['config']['allowed'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: (int)$record['uid'],
-            table: $parentTable,
+            currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
     }
@@ -103,35 +101,35 @@ class RelationResolver
         $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$uniqueIdentifier] ?? '');
         return $this->getRelations(
             uidList: $uidList,
-            allowed: $tcaFieldConfig['config']['foreign_table'] ?? '',
+            tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: (int)$record['uid'],
-            table: $parentTable,
+            currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
     }
 
     protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, ContentElementDefinition $contentElementDefinition): array
     {
-        $table = UniqueNameUtility::createUniqueColumnName($contentElementDefinition->getComposerName(), $tcaFieldDefinition->getIdentifier());
-        $cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-        $cObj->start($record, $parentTable);
-        // @todo works only in Frontend context
-        $data = $cObj->getRecords($table, [
-            'table' => $table,
-            'select.' => [
-                'pidInList' => 'this',
-                'where' => '{#foreign_table_parent_uid} = ' . $record['uid'],
-            ]
-        ]);
+        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
+        $collectionTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
+        $uid = (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
+        $data = $this->getRelations(
+            uidList: $uid,
+            tableList: $collectionTable,
+            mmTable: $tcaFieldConfig['config']['MM'] ?? '',
+            uid: (int)$record['uid'],
+            currentTable: $parentTable,
+            tcaFieldConf: $tcaFieldConfig['config'] ?? []
+        );
 
-        $tableDefinition = $this->tableDefinitionCollection->getTable($table);
+        $tableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
         foreach ($data as $index => $row) {
             foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
                 $data[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
                     tcaFieldDefinition: $childTcaFieldDefinition,
                     record: $row,
-                    table: $table,
+                    table: $collectionTable,
                     contentElementDefinition: $contentElementDefinition
                 );
             }
@@ -141,14 +139,12 @@ class RelationResolver
 
     /**
      * @param array<string, mixed> $tcaFieldConf
-     *
-     * Returns the selected relations of select or group element
      */
-    protected function getRelations(string $uidList, string $allowed, string $mmTable, int $uid, string $table, array $tcaFieldConf = []): array
+    protected function getRelations(string $uidList, string $tableList, string $mmTable, int $uid, string $currentTable, array $tcaFieldConf = []): array
     {
         $pageRepository = $this->getPageRepository();
         $relationHandler = GeneralUtility::makeInstance(RelationHandler::class);
-        $relationHandler->start($uidList, $allowed, $mmTable, $uid, $table, $tcaFieldConf);
+        $relationHandler->start($uidList, $tableList, $mmTable, $uid, $currentTable, $tcaFieldConf);
         $relationHandler->getFromDB();
         $relations = $relationHandler->getResolvedItemArray();
         $records = [];
