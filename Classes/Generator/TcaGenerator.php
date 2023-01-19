@@ -124,7 +124,7 @@ class TcaGenerator
                     'fe_group' => 'fe_group',
                 ],
                 'typeicon_classes' => [
-                    'default' => 'ext-content_blocks',
+                    'default' => 'content-blocks',
                 ],
                 'security' => [
                     'ignorePageTypeRestriction' => true,
