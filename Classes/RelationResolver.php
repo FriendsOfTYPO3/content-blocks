@@ -37,14 +37,14 @@ class RelationResolver
     public function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table, ContentElementDefinition $contentElementDefinition): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
-
-        // feature: use existing field
         // @todo think about existing fields
         $recordIdentifier = $tcaFieldDefinition->isUseExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
 
-        // check if column is available
         if (!array_key_exists($recordIdentifier, $record)) {
-            throw new \RuntimeException('The field ' . $recordIdentifier . ' is missing in the tt_content table. Try to compare your database schema.');
+            throw new \RuntimeException(
+                'The field "' . $recordIdentifier . '" is missing in the "' . $table . '" table. Probably a database schema update is needed.',
+                1674222293
+            );
         }
 
         $data = $record[$recordIdentifier];
