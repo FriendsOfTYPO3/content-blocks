@@ -17,67 +17,25 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
 class HtmlTemplateCodeGenerator
 {
-    /**
-     * Get HTML Template for EditorPreview in create method
-     */
-    public function getHtmlTemplateEditorPreview(ContentBlockConfiguration $contentBlockConfiguration): string
+    public function generateEditorPreviewTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getPackage();
-        $editorPreviewTemplate = '<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">' . "\n";
-        $editorPreviewTemplate .= '    <f:asset.css identifier="content-block-' . $package . '-be" href="CB:' . $package . '/dist/EditorPreview.css"/>' . "\n";
-        $editorPreviewTemplate .= "\n";
-        $editorPreviewTemplate .= '    <be:link.editRecord uid="{data.uid}" table="tt_content" id="element-tt_content-{data.uid}">' . "\n";
-        $editorPreviewTemplate .= '        <div class="' . $package . '">' . "\n";
-//        $editorPreviewTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
-        $editorPreviewTemplate .= '        </div>' . "\n";
-        $editorPreviewTemplate .= '    </be:link.editRecord>' . "\n";
-        $editorPreviewTemplate .= '</html>' . "\n";
-        return $editorPreviewTemplate;
+        $vendor = $contentBlockConfiguration->getVendor();
+        return '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="' . ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/EditorPreview.css"/>' . "\n";
     }
 
-    /**
-     * Get HTML Template for Frontend in create method
-     */
-    public function getHtmlTemplateFrontend(ContentBlockConfiguration $contentBlockConfiguration): string
+    public function generateFrontendTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getPackage();
-        $frontendTemplate = '<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">' . "\n";
-        $frontendTemplate .= "\n";
-        $frontendTemplate .= '    <f:layout name="Default" />' . "\n";
-        $frontendTemplate .= "\n";
-        $frontendTemplate .= '    <f:section name="Main">' . "\n";
-        $frontendTemplate .= "\n";
-        $frontendTemplate .= '        <f:asset.css identifier="content-block-' . $package . '-be" href="CB:' . $package . '/dist/EditorPreview.css"/>' . "\n";
-        $frontendTemplate .= '        <f:asset.css identifier="content-block-' . $package . '" href="CB:' . $package . '/dist/Frontend.css"/>' . "\n";
-        $frontendTemplate .= '        <f:asset.script identifier="content-block-' . $package . '" src="CB:' . $package . '/dist/Frontend.js"/>' . "\n";
-        $frontendTemplate .= "\n";
-        $frontendTemplate .= '        <div class="' . $package . '">' . "\n";
-//        $frontendTemplate .= $this->getFieldsHtmlTemplate($contentBlockConfiguration->fieldsConfig) . "\n";
-        $frontendTemplate .= '        </div>' . "\n";
-        $frontendTemplate .= "\n";
-        $frontendTemplate .= '    </f:section>' . "\n";
-        $frontendTemplate .= '</html>' . "\n";
-        return $frontendTemplate;
-    }
-
-    /**
-     * get HTML template from all fields.
-     */
-    protected function getFieldsHtmlTemplate(array $fieldsConfig): string
-    {
-        $fieldsForTemplate = '';
-        $indentation = '            '; // indentation to get a well formated html template file
-
-        if (count($fieldsConfig) > 0) {
-            foreach ($fieldsConfig as $tempFieldsConfig) {
-                $fieldsForTemplate .= $tempFieldsConfig->getTemplateHtml($indentation);
-            }
-        }
-        return $fieldsForTemplate;
+        $vendor = $contentBlockConfiguration->getVendor();
+        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="' . ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/Frontend.css"/>';
+        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="' . ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/Frontend.js"/>';
+        $frontendTemplate[] = '';
+        return implode("\n", $frontendTemplate);
     }
 }

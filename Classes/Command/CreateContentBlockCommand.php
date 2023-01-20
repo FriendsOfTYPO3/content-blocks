@@ -9,14 +9,14 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use TYPO3\CMS\ContentBlocks\Builder\ContentBlockBuilder;
+use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 
 class CreateContentBlockCommand extends Command
 {
-    protected ContentBlockBuilder $contentBlockBuilder;
+    protected ContentBlockSkeletonBuilder $contentBlockBuilder;
 
-    public function injectContentBlockBuilder(ContentBlockBuilder $contentBlockBuilder)
+    public function injectContentBlockBuilder(ContentBlockSkeletonBuilder $contentBlockBuilder)
     {
         $this->contentBlockBuilder = $contentBlockBuilder;
     }
