@@ -33,9 +33,6 @@ final class LoaderPass implements CompilerPassInterface
         $this->tagName = $tagName;
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container): void
     {
         $loaderFactoryDefinition = $container->findDefinition(LoaderFactory::class);

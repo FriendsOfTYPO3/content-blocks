@@ -7,11 +7,9 @@ services:
   TYPO3\CMS\ContentBlocks\:
     resource: '../Classes/*'
 
-  TYPO3\CMS\ContentBlocks\BackendController\ContentBlocksAjaxController:
-    public: true
-
   TYPO3\CMS\ContentBlocks\BackendController\ContentBlocksController:
-    public: true
+    tags:
+      - name: backend.controller
 
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
@@ -20,27 +18,15 @@ services:
         identifier: 'content-blocks-tca'
         event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
 
-  TYPO3\CMS\ContentBlocks\Service\ConfigurationService:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Factory\ContentBlockConfigurationFactory:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Factory\TableDefinitionFactory:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Service\LocalConfRegistrationService:
-    public: true
-
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
     public: true
     tags:
       - name: event.listener
         identifier: 'content-blocks-sql'
         event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
+
+  TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
+    public: true
 
   TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
     autoconfigure: false

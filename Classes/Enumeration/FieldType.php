@@ -50,17 +50,6 @@ enum FieldType: string
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
 
-    /**
-     * Checks if this field type is a structure field.
-     */
-    public function isStructure(): bool
-    {
-        return match ($this) {
-            self::COLLECTION => true,
-            default => false,
-        };
-    }
-
     public function getTcaType(): string
     {
         return match ($this) {

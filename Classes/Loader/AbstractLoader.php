@@ -16,7 +16,6 @@ class AbstractLoader
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".');
         }
-        // @todo Validator check if the content block can be processed
         $packageConfiguration = [];
         $packageConfiguration['composerJson'] = json_decode(
             file_get_contents($packagePath . '/' . 'composer.json'),

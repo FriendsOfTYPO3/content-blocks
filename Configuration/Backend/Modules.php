@@ -1,13 +1,9 @@
 <?php
 
-/**
- * Definitions for modules provided by EXT:content_blocks
- */
-
 use TYPO3\CMS\ContentBlocks\BackendController\ContentBlocksController;
 
 return [
-    ContentBlocksController::ROUTE_IDENTIFIER => [
+    'tools_contentblocks' => [
         'parent' => 'tools',
         'access' => 'admin',
         'path' => '/module/tools/content_blocks',
@@ -18,15 +14,6 @@ return [
             '_default' => [
                 'target' => ContentBlocksController::class . '::overviewAction',
             ],
-            // Hey, this would be cool
-//            'new' => [
-//                'path' => '/module/tools/content_blocks/new',
-//                'target' => ContentBlocksController::class . '::editAction',
-//            ],
-//            'edit' => [
-//                'path' => '/module/tools/content_blocks/edit/%\d+%',
-//                'target' => ContentBlocksController::class . '::editAction',
-//            ],
         ],
     ],
 ];
