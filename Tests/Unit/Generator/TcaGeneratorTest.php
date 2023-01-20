@@ -69,7 +69,7 @@ class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'File',
                                 'properties' => [
                                     'enableImageManipulation' => 0,
-                                ]
+                                ],
                             ],
                             [
                                 'identifier' => 'category',
@@ -111,12 +111,12 @@ class TcaGeneratorTest extends UnitTestCase
                                                 'fields' => [
                                                     [
                                                         'identifier' => 'text',
-                                                        'type' => 'Text'
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]
+                                                        'type' => 'Text',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -244,7 +244,7 @@ class TcaGeneratorTest extends UnitTestCase
                                 'MM_match_fields' => [
                                     'tablenames' => 'tt_content',
                                     'fieldname' => 't3ce_example_category',
-                                ]
+                                ],
                             ],
                             'exclude' => true,
                         ],
@@ -433,7 +433,7 @@ class TcaGeneratorTest extends UnitTestCase
                             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
                             'config' => [
                                 'type' => 'language',
-                            ]
+                            ],
                         ],
                         'l10n_parent' => [
                             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -444,18 +444,18 @@ class TcaGeneratorTest extends UnitTestCase
                                 'items' => [
                                     [
                                         '',
-                                        0
-                                    ]
+                                        0,
+                                    ],
                                 ],
                                 'foreign_table' => 't3ce_example_collection',
                                 'foreign_table_where' => 'AND t3ce_example_collection.pid=###CURRENT_PID### AND t3ce_example_collection.sys_language_uid IN (-1,0)',
-                                'default' => 0
-                            ]
+                                'default' => 0,
+                            ],
                         ],
                         'l10n_diffsource' => [
                             'config' => [
-                                'type' => 'passthrough'
-                            ]
+                                'type' => 'passthrough',
+                            ],
                         ],
                         'sorting' => [
                             'config' => [
@@ -464,8 +464,8 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'foreign_table_parent_uid' => [
                             'config' => [
-                                'type' => 'passthrough'
-                            ]
+                                'type' => 'passthrough',
+                            ],
                         ],
                         'text' => [
                             'exclude' => true,
@@ -483,8 +483,8 @@ class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection2',
                                 'foreign_field' => 'foreign_table_parent_uid',
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
                 't3ce_example_collection2' => [
@@ -613,7 +613,7 @@ class TcaGeneratorTest extends UnitTestCase
                             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
                             'config' => [
                                 'type' => 'language',
-                            ]
+                            ],
                         ],
                         'l10n_parent' => [
                             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -624,18 +624,18 @@ class TcaGeneratorTest extends UnitTestCase
                                 'items' => [
                                     [
                                         '',
-                                        0
-                                    ]
+                                        0,
+                                    ],
                                 ],
                                 'foreign_table' => 't3ce_example_collection2',
                                 'foreign_table_where' => 'AND t3ce_example_collection2.pid=###CURRENT_PID### AND t3ce_example_collection2.sys_language_uid IN (-1,0)',
-                                'default' => 0
-                            ]
+                                'default' => 0,
+                            ],
                         ],
                         'l10n_diffsource' => [
                             'config' => [
-                                'type' => 'passthrough'
-                            ]
+                                'type' => 'passthrough',
+                            ],
                         ],
                         'sorting' => [
                             'config' => [
@@ -644,8 +644,8 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'foreign_table_parent_uid' => [
                             'config' => [
-                                'type' => 'passthrough'
-                            ]
+                                'type' => 'passthrough',
+                            ],
                         ],
                         'text' => [
                             'exclude' => true,
@@ -664,12 +664,12 @@ class TcaGeneratorTest extends UnitTestCase
                                 'MM_oppositeUsage' => [
                                     'tt_content' => [
                                         't3ce_example_category',
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
     }

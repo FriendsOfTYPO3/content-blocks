@@ -34,9 +34,8 @@ class ContentBlockPathUtility
                 throw new \InvalidArgumentException('`$vendor` must be set to retrieve absolute path of package.', 1674170723);
             }
             return realpath(InstalledVersions::getInstallPath($vendor . '/' . $package));
-        } else {
-            return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
         }
+        return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
     }
 
     public static function getAbsoluteContentBlocksPrivatePath(string $package, string $vendor = ''): string

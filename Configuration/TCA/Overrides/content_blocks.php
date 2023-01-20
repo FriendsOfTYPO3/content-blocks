@@ -29,7 +29,7 @@ foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
                     $typeDefinition->getCType(),
                     // @todo not sure about icon name = Ctype
                     $typeDefinition->getCType(),
-                    'content_blocks'
+                    'content_blocks',
                 ]
             );
         }

@@ -40,7 +40,7 @@ class ColorFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -62,7 +62,7 @@ class ColorFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -81,7 +81,7 @@ class ColorFieldConfigurationTest extends UnitTestCase
                     'nullable' => 0,
                     'mode' => '',
                     'valuePicker' => [
-                        'items' => []
+                        'items' => [],
                     ],
                 ],
             ],

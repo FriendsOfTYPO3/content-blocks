@@ -71,7 +71,7 @@ class SelectFieldConfigurationTest extends UnitTestCase
                         'foo' => 'bar',
                     ],
                     'treeConfig' => [
-                        'foo' => 'bar'
+                        'foo' => 'bar',
                     ],
                 ],
             ],
@@ -124,7 +124,7 @@ class SelectFieldConfigurationTest extends UnitTestCase
                         'foo' => 'bar',
                     ],
                     'treeConfig' => [
-                        'foo' => 'bar'
+                        'foo' => 'bar',
                     ],
                 ],
             ],

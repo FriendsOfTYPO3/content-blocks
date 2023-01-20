@@ -9,8 +9,8 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
+use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 
 class CreateContentBlockCommand extends Command
 {

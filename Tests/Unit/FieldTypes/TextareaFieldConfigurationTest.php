@@ -95,7 +95,7 @@ class TextareaFieldConfigurationTest extends UnitTestCase
                     'is_in' => '',
                     'wrap' => '',
                     'valuePicker' => [
-                        'items' => []
+                        'items' => [],
                     ],
                     'eval' => [],
                     'enableTabulator' => 0,

@@ -43,7 +43,7 @@ class TextFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                     'eval' => ['trim', 'lower'],
                 ],
@@ -70,7 +70,7 @@ class TextFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -92,7 +92,7 @@ class TextFieldConfigurationTest extends UnitTestCase
                     'mode' => '',
                     'is_in' => '',
                     'valuePicker' => [
-                        'items' => []
+                        'items' => [],
                     ],
                     'eval' => [],
                 ],

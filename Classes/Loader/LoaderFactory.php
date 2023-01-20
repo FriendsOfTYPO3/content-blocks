@@ -36,9 +36,8 @@ class LoaderFactory
     {
         if (Environment::isComposerMode()) {
             return $this->loaders['composer'];
-        } else {
-            return $this->loaders['legacy'];
         }
+        return $this->loaders['legacy'];
     }
 
     public function load(): TableDefinitionCollection

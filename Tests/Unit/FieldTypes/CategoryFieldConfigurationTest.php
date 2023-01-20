@@ -34,7 +34,7 @@ class CategoryFieldConfigurationTest extends UnitTestCase
                     'minitems' => 1,
                     'exclusiveKeys' => 'key',
                     'treeConfig' => [
-                        'foo' => 'bar'
+                        'foo' => 'bar',
                     ],
                     'relationship' => 'foo',
                 ],
@@ -51,7 +51,7 @@ class CategoryFieldConfigurationTest extends UnitTestCase
                     'minitems' => 1,
                     'exclusiveKeys' => 'key',
                     'treeConfig' => [
-                        'foo' => 'bar'
+                        'foo' => 'bar',
                     ],
                     'relationship' => 'foo',
                 ],

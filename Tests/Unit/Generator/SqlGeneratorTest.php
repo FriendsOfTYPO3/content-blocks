@@ -27,15 +27,15 @@ class SqlGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'number',
                                 'type' => 'Number',
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'expected' => [
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `tt_content`(`foo_bar_number` int(11) DEFAULT '0' NOT NULL);"
-            ]
+                "CREATE TABLE `tt_content`(`foo_bar_number` int(11) DEFAULT '0' NOT NULL);",
+            ],
         ];
 
         yield 'inline field on root level' => [
@@ -59,19 +59,19 @@ class SqlGeneratorTest extends UnitTestCase
                                             'identifier' => 'text',
                                             'type' => 'Text',
                                         ],
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'expected' => [
                 "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_collection` int(11) DEFAULT '0' NOT NULL);",
-            ]
+            ],
         ];
 
         yield 'inline field on second level' => [
@@ -108,15 +108,15 @@ class SqlGeneratorTest extends UnitTestCase
                                                         'identifier' => 'text',
                                                         'type' => 'Text',
                                                     ],
-                                                ]
-                                            ]
+                                                ],
+                                            ],
                                         ],
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'expected' => [
                 "CREATE TABLE `foo_bar_collection2`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
@@ -126,7 +126,7 @@ class SqlGeneratorTest extends UnitTestCase
                 "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_collection` int(11) DEFAULT '0' NOT NULL);",
-            ]
+            ],
         ];
     }
 

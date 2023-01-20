@@ -41,7 +41,7 @@ class NumberFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                     'range' => [
                         'lower' => 10,
@@ -69,7 +69,7 @@ class NumberFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                     'range' => [
                         'lower' => 10,
@@ -96,7 +96,7 @@ class NumberFieldConfigurationTest extends UnitTestCase
                     'mode' => '',
                     'is_in' => '',
                     'valuePicker' => [
-                        'items' => []
+                        'items' => [],
                     ],
                     'range' => [],
                     'slider' => [],
@@ -175,7 +175,7 @@ class NumberFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'properties' => [
                     'format' => 'decimal',
-                ]
+                ],
             ],
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '`cb_example_myText` float DEFAULT \'0\' NOT NULL',

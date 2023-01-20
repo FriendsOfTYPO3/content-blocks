@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class LinkFieldConfigurationTest extends UnitTestCase
@@ -41,14 +40,14 @@ class LinkFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                     'allowedTypes' => [
                         'foo',
                     ],
                     'appearance' => [
                         'foo',
-                    ]
+                    ],
                 ],
             ],
             'expectedTca' => [
@@ -69,14 +68,14 @@ class LinkFieldConfigurationTest extends UnitTestCase
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
-                        ]
+                        ],
                     ],
                     'allowedTypes' => [
                         'foo',
                     ],
                     'appearance' => [
                         'foo',
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -95,7 +94,7 @@ class LinkFieldConfigurationTest extends UnitTestCase
                     'mode' => '',
                     'valuePicker' => [],
                     'allowedTypes' => [],
-                    'appearance' => []
+                    'appearance' => [],
                 ],
             ],
             'expectedTca' => [

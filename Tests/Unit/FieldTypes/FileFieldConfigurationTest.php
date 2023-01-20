@@ -81,7 +81,7 @@ class FileFieldConfigurationTest extends UnitTestCase
                                 'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

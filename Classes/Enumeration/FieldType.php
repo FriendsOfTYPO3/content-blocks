@@ -26,12 +26,12 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 
 enum FieldType: string
 {

@@ -104,7 +104,7 @@ class CheckboxFieldConfigurationTest extends UnitTestCase
                     'type' => 'check',
                     'items' => [
                         ['invertStateDisplay' => true],
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -115,7 +115,7 @@ class CheckboxFieldConfigurationTest extends UnitTestCase
                     'invertStateDisplay' => 1,
                     'items' => [
                         ['Item1'],
-                    ]
+                    ],
                 ],
             ],
             'expectedTca' => [
@@ -126,7 +126,7 @@ class CheckboxFieldConfigurationTest extends UnitTestCase
                     'type' => 'check',
                     'items' => [
                         [0 => 'Item1', 'invertStateDisplay' => true],
-                    ]
+                    ],
                 ],
             ],
         ];

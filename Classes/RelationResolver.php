@@ -74,7 +74,8 @@ class RelationResolver
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
-        } elseif (in_array(($tcaFieldConfig['config']['renderType'] ?? ''), ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'], true)) {
+        }
+        if (in_array(($tcaFieldConfig['config']['renderType'] ?? ''), ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'], true)) {
             return ($record[$uniqueIdentifier] ?? '') !== '' ? explode(',', $record[$uniqueIdentifier]) : [];
         }
         return $record[$uniqueIdentifier] ?? '';

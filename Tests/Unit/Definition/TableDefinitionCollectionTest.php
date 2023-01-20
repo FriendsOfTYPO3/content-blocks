@@ -46,18 +46,18 @@ class TableDefinitionCollectionTest extends UnitTestCase
                                                 'fields' => [
                                                     [
                                                         'identifier' => 'text',
-                                                        'type' => 'Text'
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                                        'type' => 'Text',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -87,8 +87,8 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'icon' => '',
                 'iconProvider' => '',
                 'yaml' => [
-                    'fields' => []
-                ]
+                    'fields' => [],
+                ],
             ],
             [
                 'composerJson' => [
@@ -97,8 +97,8 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'icon' => '',
                 'iconProvider' => '',
                 'yaml' => [
-                    'fields' => []
-                ]
+                    'fields' => [],
+                ],
             ],
         ];
 
@@ -123,9 +123,9 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'icon' => '',
                 'iconProvider' => '',
                 'yaml' => [
-                    'fields' => []
-                ]
-            ]
+                    'fields' => [],
+                ],
+            ],
         ];
 
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);

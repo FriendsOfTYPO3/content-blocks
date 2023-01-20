@@ -21,7 +21,7 @@ class UniqueNameUtility
 {
     public static function composerNameToTypeIdentifier(string $composerName): string
     {
-        return implode('_', array_map(fn($name) => str_replace('-', '', $name), explode('/', $composerName)));
+        return implode('_', array_map(fn ($name) => str_replace('-', '', $name), explode('/', $composerName)));
     }
 
     public static function createUniqueColumnName(string $composerName, string $identifier): string
