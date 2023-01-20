@@ -1,0 +1,156 @@
+group: common
+fields:
+  - identifier: text
+    type: Text
+    properties:
+      autocomplete: false
+      default: 'Default value'
+      max: 15
+      placeholder: 'Placeholder text'
+      required: false
+      size: 50
+      valuePicker:
+        items:
+          - [ 'Want to join our team? Take the initiative!', 'Job offer general' ]
+          - [ 'We are looking for ...', 'Job offer specific' ]
+  - identifier: textarea
+    type: Textarea
+    properties:
+      cols: 40
+      default: 'Default value'
+      max: 150
+      placeholder: 'Placeholder text'
+      rows: 15
+      required: false
+  - identifier: richtext
+    type: Textarea
+    properties:
+      enableRichtext: 1
+      richtextConfiguration: 'minimal'
+  - identifier: email
+    type: Email
+    properties:
+      autocomplete: true
+      default: 'developer@localhost.de'
+      placeholder: 'Enter your email address'
+      size: 50
+      required: true
+  - identifier: number
+    type: Number
+    properties:
+      format: integer
+      default: 10
+      size: 20
+      range:
+        lower: 10
+        upper: 999
+      required: true
+      slider:
+        range:
+          step: 1
+          width: 100
+      valuePicker:
+        items:
+          - [ 100, 100 ]
+          - [ 250, 250 ]
+          - [ 500, 500 ]
+  - identifier: category
+    type: Category
+
+  - identifier: reference
+    type: Reference
+    properties:
+      allowed: pages
+      hideMoveIcons: true
+  - identifier: link
+    type: Link
+    properties:
+      autocomplete: true
+      default: 'https://typo3.org'
+      placeholder: 'Placeholder text'
+      size: 20
+  - identifier: color
+    type: Color
+    properties:
+      autocomplete: true
+      default: '#0000aa'
+      size: 5
+      required: false
+      valuePicker:
+        items:
+          - [Red, '#FF0000']
+          - [Green, '#008000']
+          - [Blue, '#0000FF']
+  - identifier: date
+    type: DateTime
+  - identifier: datetime
+    type: DateTime
+    properties:
+      dbType: datetime
+  - identifier: select
+    type: Select
+    properties:
+      renderType: selectSingle
+      items:
+        - ['Please choose', '']
+        - ['The first', 'one']
+        - ['The second', 'two']
+        - ['The third', 'three']
+  - identifier: selectPages
+    type: Select
+    properties:
+      renderType: selectSingle
+      foreign_table: pages
+  - identifier: selectMultiple
+    type: Select
+    properties:
+      renderType: selectMultipleSideBySide
+      items:
+        - [ 'Please choose', '' ]
+        - [ 'The first', 'one' ]
+        - [ 'The second', 'two' ]
+        - [ 'The third', 'three' ]
+  - identifier: checkboxes
+    type: Checkbox
+    properties:
+      items:
+        - ['The first']
+        - ['The second']
+        - ['The third']
+      default: 2
+  - identifier: radioboxes
+    type: Radio
+    properties:
+      default: 'two'
+      items:
+        - ['The first', 'one']
+        - ['The second', 'two']
+        - ['The third', 'three']
+  - identifier: image
+    type: File
+    properties:
+      maxitems: 5
+  - identifier: collection
+    type: Collection
+    properties:
+      foreign_label: text
+      maxitems: 5
+      fields:
+        - identifier: category
+          type: Category
+          properties:
+            relationShip: oneToOne
+        - identifier: text
+          type: Text
+        - identifier: collection2
+          type: Collection
+          properties:
+            maxitems: 2
+            minitems: 1
+            fields:
+              - identifier: text
+                type: Text
+              - identifier: textarea
+                type: Textarea
+                properties:
+                  enableRichtext: true

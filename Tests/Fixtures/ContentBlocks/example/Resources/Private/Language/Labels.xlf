@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
+		<header/>
+		<body>
+			<trans-unit id="t3-ce.example.title" xml:space="preserve">
+				<source>Example</source>
+			</trans-unit>
+			<trans-unit id="t3-ce.example.description" xml:space="preserve">
+				<source>An element that provides examples for all field types.</source>
+			</trans-unit>
+			<trans-unit id="text.label" xml:space="preserve">
+				<source>Text</source>
+			</trans-unit>
+			<trans-unit id="text.description" xml:space="preserve">
+				<source>Simple text field.</source>
+			</trans-unit>
+			<trans-unit id="textarea.label" xml:space="preserve">
+                <source>Textarea</source>
+            </trans-unit>
+			<trans-unit id="richtext.label" xml:space="preserve">
+                <source>Richtext</source>
+            </trans-unit>
+			<trans-unit id="textarea.description" xml:space="preserve">
+                <source>Simple text area.</source>
+            </trans-unit>
+			<trans-unit id="amount.label" xml:space="preserve">
+				<source>Number/ amount</source>
+			</trans-unit>
+			<trans-unit id="icon.label" xml:space="preserve">
+				<source>Icon</source>
+			</trans-unit>
+			<trans-unit id="icon.description" xml:space="preserve">
+				<source>Icon for visualization of the example topic.</source>
+			</trans-unit>
+			<trans-unit id="email.label" xml:space="preserve">
+				<source>E-Mail</source>
+			</trans-unit>
+			<trans-unit id="integer.label" xml:space="preserve">
+				<source>Integer</source>
+			</trans-unit>
+			<trans-unit id="money.label" xml:space="preserve">
+				<source>Money</source>
+			</trans-unit>
+			<trans-unit id="number.label" xml:space="preserve">
+				<source>Number</source>
+			</trans-unit>
+			<trans-unit id="category.label" xml:space="preserve">
+				<source>Category</source>
+			</trans-unit>
+			<trans-unit id="percent.label" xml:space="preserve">
+				<source>Percentage</source>
+			</trans-unit>
+			<trans-unit id="url.label" xml:space="preserve">
+				<source>URL</source>
+			</trans-unit>
+			<trans-unit id="tel.label" xml:space="preserve">
+				<source>Telephone</source>
+			</trans-unit>
+			<trans-unit id="color.label" xml:space="preserve">
+				<source>Color</source>
+			</trans-unit>
+			<trans-unit id="date.label" xml:space="preserve">
+				<source>Date</source>
+			</trans-unit>
+			<trans-unit id="datetime.label" xml:space="preserve">
+				<source>Date and Time</source>
+			</trans-unit>
+			<trans-unit id="time.label" xml:space="preserve">
+				<source>Time</source>
+			</trans-unit>
+			<trans-unit id="select.label" xml:space="preserve">
+				<source>Select</source>
+			</trans-unit>
+			<trans-unit id="selectSideBySide.label" xml:space="preserve">
+				<source>Select Side by Side</source>
+			</trans-unit>
+			<trans-unit id="checkboxes.label" xml:space="preserve">
+				<source>Checkboxes</source>
+			</trans-unit>
+			<trans-unit id="radioboxes.label" xml:space="preserve">
+				<source>Radioboxes</source>
+			</trans-unit>
+			<trans-unit id="toggle.label" xml:space="preserve">
+				<source>Toggle checkbox</source>
+			</trans-unit>
+			<trans-unit id="toggleInverted.label" xml:space="preserve">
+				<source>Toggle checkbox inverted</source>
+			</trans-unit>
+			<trans-unit id="toggleInverted.description" xml:space="preserve">
+				<source>You can invert state display on toggle checkboxes.</source>
+			</trans-unit>
+			<trans-unit id="image.label" xml:space="preserve">
+				<source>Image</source>
+			</trans-unit>
+			<trans-unit id="bodytext.label" xml:space="preserve">
+				<source>Bodytext reuse example</source>
+			</trans-unit>
+			<trans-unit id="bodytext.description" xml:space="preserve">
+				<source>This is an example how to reuse an existing field like the TYPO3 cores bodytext.</source>
+			</trans-unit>
+			<trans-unit id="collection.label" xml:space="preserve">
+				<source>Collection</source>
+			</trans-unit>
+			<trans-unit id="collection.text.label" xml:space="preserve">
+				<source>Text in Collection</source>
+			</trans-unit>
+			<trans-unit id="collection.collection2.label" xml:space="preserve">
+				<source>Collection in Collection</source>
+			</trans-unit>
+			<trans-unit id="collection.collection2.text.label" xml:space="preserve">
+				<source>Text in Collection in Collection</source>
+			</trans-unit>
+			<trans-unit id="collection.collection2.cb_slider_local_slides_text.label" xml:space="preserve">
+				<source>Reused text field slider collection</source>
+			</trans-unit>
+			<trans-unit id="collection.collection2.cb_slider_local_slides_text.description" xml:space="preserve">
+				<source>This an example how to reuse a field from another collection. It is the reused textfield from the slider collection.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
