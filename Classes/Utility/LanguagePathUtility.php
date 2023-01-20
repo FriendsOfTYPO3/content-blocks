@@ -19,18 +19,18 @@ namespace TYPO3\CMS\ContentBlocks\Utility;
 
 class LanguagePathUtility
 {
-    public static function getLanguageFolderPath(string $package): string
+    protected static function getLanguageFolderPath(string $package, string $vendor): string
     {
-        return ContentBlockPathUtility::getRelativeContentBlocksPrivatePath($package). '/Language';
+        return ContentBlockPathUtility::getRelativeContentBlocksPrivatePath($package, $vendor). '/Language';
     }
 
-    public static function getPartialLanguageIdentifierPath(string $package, string $identifier): string
+    public static function getPartialLanguageIdentifierPath(string $package, string $vendor, string $identifier): string
     {
-        return self::getLanguageFolderPath($package) . '/Labels.xlf:' . $identifier;
+        return self::getLanguageFolderPath($package, $vendor) . '/Labels.xlf:' . $identifier;
     }
 
-    public static function getFullLanguageIdentifierPath(string $package, string $identifier, string $suffix): string
+    public static function getFullLanguageIdentifierPath(string $package, string $vendor, string $identifier, string $suffix): string
     {
-        return self::getPartialLanguageIdentifierPath($package, $identifier) . '.' . $suffix;
+        return self::getPartialLanguageIdentifierPath($package, $vendor, $identifier) . '.' . $suffix;
     }
 }

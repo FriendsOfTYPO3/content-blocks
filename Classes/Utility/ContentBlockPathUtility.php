@@ -17,11 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Utility;
 
+use Composer\InstalledVersions;
 use TYPO3\CMS\Core\Core\Environment;
 
-/**
- * @todo paths for composer packages
- */
 class ContentBlockPathUtility
 {
     public static function getAbsoluteContentBlockLegacyPath(): string
@@ -29,50 +27,40 @@ class ContentBlockPathUtility
         return Environment::getLegacyConfigPath() . '/content-blocks';
     }
 
-    /**
-     * @todo make base path for ContentBlocks configurable and
-     * @todo deliver it due to the configuration
-     */
-    public static function getRelativeContentBlockLegacyPath(): string
+    public static function getAbsolutePackagePath(string $package, string $vendor = ''): string
     {
-        return str_replace(Environment::getPublicPath() . '/', '', self::getAbsoluteContentBlockLegacyPath());
+        if (Environment::isComposerMode()) {
+            if ($vendor === '') {
+                throw new \InvalidArgumentException('`$vendor` must be set to retrieve absolute path of package.', 1674170723);
+            }
+            return realpath(InstalledVersions::getInstallPath($vendor . '/' . $package));
+        } else {
+            return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
+        }
     }
 
-    public static function getAbsolutePackagePath(string $package): string
+    public static function getAbsoluteContentBlocksPrivatePath(string $package, string $vendor = ''): string
     {
-        return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
+        return self::getAbsolutePackagePath($package, $vendor) . '/Resources/Private';
     }
 
-    public static function getRelativePackagePath(string $package): string
+    public static function getRelativeContentBlocksPrivatePath(string $package, string $vendor = ''): string
     {
-        return self::getRelativeContentBlockLegacyPath() . '/' . $package;
+        return self::getRelativePackagePath($package, $vendor) . '/Resources/Private';
     }
 
-    public static function getAbsoluteContentBlocksPrivatePath(string $package): string
+    public static function getAbsoluteContentBlocksPublicPath(string $package, string $vendor = ''): string
     {
-        return self::getAbsolutePackagePath($package) . '/Resources/Private';
+        return self::getAbsolutePackagePath($package, $vendor) . '/Resources/Public';
     }
 
-    /**
-     * Since there are dicussions of making/using 'src' or 'Resources/Private',
-     * or if it should be configurable, this could be a configurable constant.
-     */
-    public static function getRelativeContentBlocksPrivatePath(string $package): string
+    public static function getRelativeContentBlocksPublicPath(string $package, string $vendor = ''): string
     {
-        return self::getRelativePackagePath($package) . '/Resources/Private';
+        return self::getRelativePackagePath($package, $vendor) . '/Resources/Public';
     }
 
-    public static function getAbsoluteContentBlocksPublicPath(string $package): string
+    protected static function getRelativePackagePath(string $package, string $vendor): string
     {
-        return self::getAbsolutePackagePath($package) . '/Resources/Public';
-    }
-
-    /**
-     * Since there are dicussions of making/using 'dist' or 'Resources/Public',
-     * or if it should be configurable, this could be a configurable constant.
-     */
-    public static function getRelativeContentBlocksPublicPath(string $package): string
-    {
-        return self::getRelativePackagePath($package) . '/Resources/Public';
+        return 'CB:' . $vendor . '/' . $package;
     }
 }

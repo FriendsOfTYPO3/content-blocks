@@ -24,7 +24,7 @@ class PageTsConfigGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $partialLanguagePath = LanguagePathUtility::getPartialLanguageIdentifierPath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor());
+        $partialLanguagePath = LanguagePathUtility::getPartialLanguageIdentifierPath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor(), $contentElementDefinition->getVendor());
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
     elements {

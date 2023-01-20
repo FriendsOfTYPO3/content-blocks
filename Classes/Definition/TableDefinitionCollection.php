@@ -99,7 +99,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 $field = $tableDefinitionCollection->processCollections(
                     field: $field,
                     table: $uniqueColumnName,
-                    languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $field['identifier'])],
+                    languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $vendor, $field['identifier'])],
                     composerName: $composerName
                 );
 

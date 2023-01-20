@@ -17,12 +17,26 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use Composer\InstalledVersions;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 
-class ComposerLoader implements LoaderInterface
+class ComposerLoader extends AbstractLoader implements LoaderInterface
 {
+    protected ?TableDefinitionCollection $tableDefinitionCollection = null;
+
     public function load(): TableDefinitionCollection
     {
-        return new TableDefinitionCollection();
+        if ($this->tableDefinitionCollection instanceof TableDefinitionCollection) {
+            return $this->tableDefinitionCollection;
+        }
+        $result = [];
+        $contentBlocks = InstalledVersions::getInstalledPackagesByType('typo3-content-block');
+        foreach ($contentBlocks as $contentBlock) {
+            [$vendor, $package] = explode('/', $contentBlock);
+            $result[] = $this->loadPackageConfiguration($package, $vendor);
+        }
+        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($result);
+        $this->tableDefinitionCollection = $tableDefinitionCollection;
+        return $this->tableDefinitionCollection;
     }
 }

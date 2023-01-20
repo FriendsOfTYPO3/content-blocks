@@ -36,7 +36,7 @@ class ContentBlockBuilder
     {
         $vendor = $contentBlockConfiguration->getVendor();
         $package = $contentBlockConfiguration->getPackage();
-        $basePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath() . '/' .  $package;
+        $basePath = ContentBlockPathUtility::getAbsolutePackagePath($package, $vendor);
         if (file_exists($basePath)) {
             throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.');
         }
