@@ -25,22 +25,6 @@ final class TableDefinition
     private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
     private ?PaletteDefinitionCollection $paletteDefinitionCollection = null;
 
-    public function __clone()
-    {
-        if ($this->typeDefinitionCollection instanceof TypeDefinitionCollection) {
-            $this->typeDefinitionCollection = clone $this->typeDefinitionCollection;
-        }
-        if ($this->sqlDefinition instanceof SqlDefinition) {
-            $this->sqlDefinition = clone $this->sqlDefinition;
-        }
-        if ($this->tcaColumnsDefinition instanceof TcaColumnsDefinition) {
-            $this->tcaColumnsDefinition = clone $this->tcaColumnsDefinition;
-        }
-        if ($this->paletteDefinitionCollection instanceof PaletteDefinitionCollection) {
-            $this->paletteDefinitionCollection = clone $this->paletteDefinitionCollection;
-        }
-    }
-
     public static function createFromTableArray(string $table, array $definition): TableDefinition
     {
         if ($table === '') {
@@ -59,25 +43,6 @@ final class TableDefinition
         }
 
         return $tableDefinition;
-    }
-
-    public function toArray(): array
-    {
-        $definitionArray = [];
-        if ($this->typeDefinitionCollection instanceof TypeDefinitionCollection && $this->typeDefinitionCollection->count() > 0) {
-            $definitionArray['elements'] = $this->typeDefinitionCollection->toArray();
-        }
-        if ($this->sqlDefinition instanceof SqlDefinition && $this->sqlDefinition->count() > 0) {
-            $definitionArray['sql'] = $this->sqlDefinition->toArray();
-        }
-        if ($this->tcaColumnsDefinition instanceof TcaColumnsDefinition && $this->tcaColumnsDefinition->count() > 0) {
-            $definitionArray['tca'] = $this->tcaColumnsDefinition->toArray();
-        }
-        if ($this->paletteDefinitionCollection instanceof PaletteDefinitionCollection && $this->paletteDefinitionCollection->count() > 0) {
-            $definitionArray['palettes'] = $this->paletteDefinitionCollection->toArray();
-        }
-
-        return $definitionArray;
     }
 
     public function getTable(): string

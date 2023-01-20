@@ -50,9 +50,4 @@ final class SqlColumnDefinition
     {
         return $this->fieldConfiguration->getFieldType();
     }
-
-    public function toArray(): array
-    {
-        return [];
-    }
 }

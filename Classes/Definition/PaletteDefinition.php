@@ -22,9 +22,8 @@ final class PaletteDefinition
     private string $identifier = '';
     private string $label = '';
     private string $description = '';
-    /**
-     * @var string[]
-     */
+
+    /** @var string[] */
     public array $showitem = [];
 
     public function __construct(string $identifier, string $label, string $description, array $showitem)
@@ -37,15 +36,6 @@ final class PaletteDefinition
         $this->label = $label;
         $this->description = $description;
         $this->showitem = $showitem;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'label' => $this->label,
-            'description' => $this->description,
-            'showitem' => $this->showitem,
-        ];
     }
 
     public function getIdentifier(): string

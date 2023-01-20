@@ -19,18 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
 {
-    /**
-     * @var TcaFieldDefinition[]
-     */
+    /** @var TcaFieldDefinition[] */
     private array $definitions = [];
     private string $table = '';
-
-    public function __clone()
-    {
-        $this->definitions = array_map(function (TcaFieldDefinition $tcaFieldDefinition) {
-            return clone $tcaFieldDefinition;
-        }, $this->definitions);
-    }
 
     public function addField(TcaFieldDefinition $definition): void
     {
@@ -74,20 +65,11 @@ final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \Traversable|TcaFieldDefinition[]
+     * @return \Traversable<TcaFieldDefinition>
      */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
-    }
-
-    public function toArray(): array
-    {
-        $fields = [];
-        foreach ($this->definitions as $definition) {
-            $fields[$definition->getUniqueIdentifier()] = $definition->toArray();
-        }
-        return $fields;
     }
 
     public function count(): int

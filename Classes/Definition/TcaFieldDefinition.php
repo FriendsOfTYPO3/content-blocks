@@ -51,17 +51,6 @@ final class TcaFieldDefinition
             ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
     }
 
-    public function toArray(): array
-    {
-        return [
-            'fieldType' => $this->fieldConfiguration->getFieldType()->name,
-            'identifier' => $this->identifier,
-            'label' => $this->label,
-            'description' => $this->description,
-            'languagePath' => $this->languagePath,
-        ];
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldConfiguration->getFieldType();

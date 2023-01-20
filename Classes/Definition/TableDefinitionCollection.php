@@ -24,18 +24,10 @@ use TYPO3\CMS\Core\SingletonInterface;
 
 final class TableDefinitionCollection implements \IteratorAggregate, SingletonInterface
 {
-    /**
-     * @var TableDefinition[]
-     */
+    /** @var TableDefinition[] */
     private array $definitions = [];
+    /** @var list<string> */
     private array $customTables = [];
-
-    public function __clone()
-    {
-        $this->definitions = array_map(function (TableDefinition $tableDefinition) {
-            return clone $tableDefinition;
-        }, $this->definitions);
-    }
 
     public function addTable(TableDefinition $tableDefinition, $isCustomTable = false): void
     {
@@ -63,21 +55,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     public function hasTable(string $table): bool
     {
         return isset($this->definitions[$table]);
-    }
-
-    public function toArray(): array
-    {
-        $tablesArray = array_merge([], ...$this->getTablesAsArray());
-        return [
-            'tables' => $tablesArray,
-        ];
-    }
-
-    public function getTablesAsArray(): iterable
-    {
-        foreach ($this->definitions as $definition) {
-            yield [$definition->getTable() => $definition->toArray()];
-        }
     }
 
     public static function createFromArray(array $contentBlocks): TableDefinitionCollection
@@ -181,7 +158,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     }
 
     /**
-     * @return \Traversable|TableDefinition[]
+     * @return \Traversable<TableDefinition>
      */
     public function getIterator(): \Traversable
     {

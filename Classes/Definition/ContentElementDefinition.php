@@ -45,21 +45,6 @@ final class ContentElementDefinition extends TypeDefinition
             ->withWizardGroup($array['wizardGroup'] ?? 'common');
     }
 
-    public function toArray(): array
-    {
-        $array = parent::toArray();
-        $array += [
-            'description' => $this->description,
-            'contentElementIcon' => $this->contentElementIcon,
-            'contentElementIconOverlay' => $this->contentElementIconOverlay,
-            'saveAndClose' => $this->saveAndClose,
-            'vendor' => $this->vendor,
-            'package' => $this->package,
-            'wizardGroup' => $this->wizardGroup,
-        ];
-        return $array;
-    }
-
     public function getComposerName(): string
     {
         return $this->vendor . '/' . $this->package;

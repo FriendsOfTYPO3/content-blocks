@@ -19,23 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
 {
-    /**
-     * @var TypeDefinition[]
-     */
+    /** @var TypeDefinition[] */
     private array $definitions = [];
     private string $table = '';
-
-    public function __construct(string $table = '')
-    {
-        $this->table = $table;
-    }
-
-    public function __clone()
-    {
-        $this->definitions = array_map(function (TypeDefinition $typeDefinition) {
-            return clone $typeDefinition;
-        }, $this->definitions);
-    }
 
     public function addType(TypeDefinition $definition): void
     {
@@ -73,20 +59,11 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \Traversable|TypeDefinition[]
+     * @return \Traversable<TypeDefinition>
      */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
-    }
-
-    public function toArray(): array
-    {
-        $elements = [];
-        foreach ($this->definitions as $type) {
-            $elements[$type->getIdentifier()] = $type->toArray();
-        }
-        return $elements;
     }
 
     public function count(): int

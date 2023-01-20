@@ -25,12 +25,7 @@ class TypeDefinition
     private string $label = '';
     private string $icon = '';
     private string $iconProviderClassName = '';
-
-    /**
-     * Array of column identifiers.
-     *
-     * @var string[]
-     */
+    /** @var string[] */
     private array $columns = [];
 
     public static function createFromArray(array $array, string $table): TypeDefinition
@@ -56,18 +51,6 @@ class TypeDefinition
             ->withIcon($array['icon'] ?? '')
             ->withColumns($array['columns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '');
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'identifier' => $this->identifier,
-            'typeField' => $this->typeField,
-            'label' => $this->label,
-            'icon' => $this->icon,
-            'showItems' => $this->columns,
-            'iconProviderClassName' => $this->iconProviderClassName,
-        ];
     }
 
     public function getIdentifier(): string
@@ -100,9 +83,6 @@ class TypeDefinition
         return $this->iconProviderClassName;
     }
 
-    /**
-     * @return string[]
-     */
     public function getColumns(): array
     {
         return $this->columns;

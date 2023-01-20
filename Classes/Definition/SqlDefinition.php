@@ -20,10 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 final class SqlDefinition implements \IteratorAggregate, \Countable
 {
     private string $table = '';
-
-    /**
-     * @var SqlColumnDefinition[]
-     */
+    /** @var SqlColumnDefinition[] */
     private array $definitions = [];
 
     public function __clone()
@@ -70,20 +67,11 @@ final class SqlDefinition implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \Traversable|SqlColumnDefinition[]
+     * @return \Traversable<SqlColumnDefinition>
      */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
-    }
-
-    public function toArray(): array
-    {
-        $sqlColumnDefinitions = [];
-        foreach ($this->definitions as $sqlColumnDefinition) {
-            $sqlColumnDefinitions[$sqlColumnDefinition->getColumn()][$this->table] = $sqlColumnDefinition->toArray();
-        }
-        return $sqlColumnDefinitions;
     }
 
     public function count(): int

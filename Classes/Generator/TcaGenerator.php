@@ -43,10 +43,10 @@ class TcaGenerator
         foreach ($this->tableDefinitionCollection as $tableName => $tableDefinition) {
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelFallback = '';
+                // Use first field as label.
                 foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
-                    if ($columnFieldDefinition->getFieldType()->isRenderable()) {
-                        $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
-                    }
+                    $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
+                    break;
                 }
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelFallback);
             }

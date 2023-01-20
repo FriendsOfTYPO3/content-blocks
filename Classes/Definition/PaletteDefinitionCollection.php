@@ -25,13 +25,6 @@ final class PaletteDefinitionCollection implements \IteratorAggregate, \Countabl
     private array $definitions = [];
     public string $table = '';
 
-    public function __clone()
-    {
-        $this->definitions = array_map(function (PaletteDefinition $paletteDefinition) {
-            return clone $paletteDefinition;
-        }, $this->definitions);
-    }
-
     public function addPalette(PaletteDefinition $definition): void
     {
         if (!$this->hasPalette($definition->getIdentifier())) {
@@ -66,20 +59,11 @@ final class PaletteDefinitionCollection implements \IteratorAggregate, \Countabl
     }
 
     /**
-     * @return \Traversable|PaletteDefinition[]
+     * @return \Traversable<PaletteDefinition>
      */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
-    }
-
-    public function toArray(): array
-    {
-        $palettes = [];
-        foreach ($this->definitions as $palette) {
-            $palettes[$palette->getIdentifier()] = $palette->toArray();
-        }
-        return $palettes;
     }
 
     public function count(): int
