@@ -27,7 +27,7 @@ class AbstractLoader
     {
         $packagePath = ContentBlockPathUtility::getAbsolutePackagePath($package, $vendor);
         if (!file_exists($packagePath)) {
-            throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".');
+            throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".', 1674225340);
         }
         $packageConfiguration = [];
         $packageConfiguration['composerJson'] = json_decode(

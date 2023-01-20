@@ -38,7 +38,7 @@ class ContentBlockSkeletonBuilder
         $package = $contentBlockConfiguration->getPackage();
         $basePath = ContentBlockPathUtility::getAbsolutePackagePath($package, $vendor);
         if (file_exists($basePath)) {
-            throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.');
+            throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.', 1674225339);
         }
 
         // create directory structure

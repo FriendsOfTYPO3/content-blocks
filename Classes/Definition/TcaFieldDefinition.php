@@ -37,7 +37,7 @@ final class TcaFieldDefinition
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty.', 1629277138);
         }
         if (!isset($array['config']['type'])) {
-            throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty.', 1629277138);
+            throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty.', 1629277139);
         }
 
         $self = new self();

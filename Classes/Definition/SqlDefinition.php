@@ -41,7 +41,7 @@ final class SqlDefinition implements \IteratorAggregate, \Countable
             return $this->definitions[$column];
         }
 
-        throw new \OutOfBoundsException('The column "' . $column . '" does not exist in table "' . $this->table . '".', 1629276302);
+        throw new \OutOfBoundsException('The column "' . $column . '" does not exist in table "' . $this->table . '".', 1629276303);
     }
 
     public function getTable(): string
