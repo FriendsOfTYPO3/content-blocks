@@ -28,7 +28,11 @@ class TypeDefinition
     /** @var string[] */
     private array $columns = [];
 
-    public static function createFromArray(array $array, string $table): TypeDefinition
+    final public function __construct()
+    {
+    }
+
+    public static function createFromArray(array $array, string $table): static
     {
         if (!isset($array['identifier']) || $array['identifier'] === '') {
             throw new \InvalidArgumentException('Type identifier must not be empty.', 1629292395);

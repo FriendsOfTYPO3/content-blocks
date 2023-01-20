@@ -30,7 +30,7 @@ final class ContentElementDefinition extends TypeDefinition
     private string $package = '';
     private string $wizardGroup = '';
 
-    public static function createFromArray(array $array, string $table = 'tt_content'): ContentElementDefinition
+    public static function createFromArray(array $array, string $table = 'tt_content'): static
     {
         $array['typeField'] = 'CType';
         $self = parent::createFromArray($array, $table);
