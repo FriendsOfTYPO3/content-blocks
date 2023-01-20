@@ -135,16 +135,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` text";
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        return str_repeat(' ', $indentation * 4) . '<p>{' . $uniqueIdentifier . '}</p>' . "\n";
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;

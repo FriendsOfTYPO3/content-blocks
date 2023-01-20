@@ -94,16 +94,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        return str_repeat(' ', $indentation * 4) . '<p>{' . $uniqueIdentifier . '}</p>' . "\n";
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;

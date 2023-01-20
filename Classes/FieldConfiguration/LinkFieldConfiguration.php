@@ -105,16 +105,6 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` VARCHAR(1024) DEFAULT '' NOT NULL";
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        return str_repeat(' ', $indentation * 4) . '<f:link.typolink>{' . $uniqueIdentifier . '}</f:link.typolink>' . "\n";
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;

@@ -92,18 +92,8 @@ final class CategoryFieldConfiguration implements FieldConfigurationInterface
         return '';
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        return '';
     }
 }

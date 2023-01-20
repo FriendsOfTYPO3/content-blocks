@@ -94,16 +94,6 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        return str_repeat(' ', $indentation * 4) . '<p><f:link.email email="{' . $uniqueIdentifier . '}" /></p>' . "\n";
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;

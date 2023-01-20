@@ -115,22 +115,6 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        if ($this->maxitems === 1 && $this->minitems === 1) {
-            return str_repeat(' ', $indentation * 4) . '<f:image image="{' . $uniqueIdentifier . '}"/>' . "\n";
-        }
-        $imageTemplate = str_repeat(' ', $indentation * 4) .  '<f:for each="{' . $uniqueIdentifier . '}" as="image">' . "\n";
-        $imageTemplate .= str_repeat(' ', ($indentation * 4) + 4) . '<f:image image="{image}" />' . "\n";
-        $imageTemplate .= str_repeat(' ', $indentation * 4) . '</f:for>' . "\n";
-        return $imageTemplate;
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;

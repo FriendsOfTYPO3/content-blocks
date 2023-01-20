@@ -24,24 +24,5 @@ interface FieldConfigurationInterface
     public static function createFromArray(array $settings): FieldConfigurationInterface;
     public function getTca(string $languagePath, bool $useExistingField): array;
     public function getSql(string $uniqueColumnName): string;
-    public function toArray(): array;
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string;
     public function getFieldType(): FieldType;
-
-//    public function combinedIdentifierToArray(string $combinedIdentifier): array;
-//    public function arrayToCombinedIdentifier(array $path): string;
-//    public function uniqueCombinedIdentifier(string $cType, string $combinedIdentifier): string;
-//    public function splitUniqueCombinedIdentifier($uniqueCombinedIdentifier): array;
-
-    /**
-     * Manage to have SQL compatible column names, prefixed with "cb_".
-     * Result: cb_content_blockidentifier_column_path_column_name
-     */
-//    public function uniqueColumnName(string $cType, string $combinedIdentifier): string;
-
-    /** TODO:
-     *  - getAllowedSettings: allowed properties and values for the backend module
-     *  - (?) validateProperties: removes all not allowed properties from an array
-     *  - (?) getXlfTemplate
-     */
 }

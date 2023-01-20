@@ -72,18 +72,8 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
-    public function toArray(): array
-    {
-        return [];
-    }
-
     public function getFieldType(): FieldType
     {
         return $this->fieldType;
-    }
-
-    public function getHtmlTemplate(int $indentation, string $uniqueIdentifier): string
-    {
-        return '';
     }
 }
