@@ -140,12 +140,12 @@ class CheckboxFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = CheckboxFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
     public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default varchar column' => [
+        yield 'default integer column' => [
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
         ];

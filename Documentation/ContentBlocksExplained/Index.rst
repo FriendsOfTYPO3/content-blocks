@@ -33,7 +33,7 @@ Processes in detail
 Detecting a Content Block
 -------------------------
 
-In composer installations a Content Block needs to be of type `typo3-contentblock`.
+In composer installations a Content Block needs to be of type `typo3-content-block`.
 For non-composer installations the folder `typo3conf/contentBlocks/` is checked
 to detect Content Blocks.
 

@@ -146,8 +146,8 @@ class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 't3ce_example',
-                            't3ce_testblock' => 't3ce_testblock',
+                            't3ce_example' => 't3ce_example-icon',
+                            't3ce_testblock' => 't3ce_testblock-icon',
                         ],
                     ],
                     'types' => [

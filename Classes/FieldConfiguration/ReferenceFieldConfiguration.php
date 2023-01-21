@@ -89,8 +89,8 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
         if (!$useExistingField) {
             $tca['exclude'] = true;
         }
-        $tca['label'] = 'LLL:' . $languagePath . '.label';
-        $tca['description'] = 'LLL:' . $languagePath . '.description';
+        $tca['label'] = $languagePath . '.label';
+        $tca['description'] = $languagePath . '.description';
 
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {

@@ -17,9 +17,9 @@ foreach (GeneralUtility::makeInstance(LoaderFactory::class)->load() as $tableDef
             continue;
         }
         $iconRegistry->registerIcon(
-            identifier: $typeDefinition->getType(),
+            identifier: $typeDefinition->getWizardIconIdentifier(),
             iconProviderClassName: $typeDefinition->getIconProviderClassName(),
-            options: ['source' => $typeDefinition->getIcon()],
+            options: ['source' => $typeDefinition->getWizardIconPath()],
         );
         ExtensionManagementUtility::addPageTSConfig(PageTsConfigGenerator::generate($typeDefinition));
         ExtensionManagementUtility::addTypoScriptSetup(TypoScriptGenerator::generate($typeDefinition));

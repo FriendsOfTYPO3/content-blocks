@@ -117,12 +117,12 @@ class LinkFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = LinkFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
     public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default varchar column' => [
+        yield 'default integer column' => [
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '`cb_example_myText` VARCHAR(1024) DEFAULT \'\' NOT NULL',
         ];

@@ -90,12 +90,12 @@ class CategoryFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = CategoryFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
     public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default varchar column' => [
+        yield 'no sql returned' => [
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '',
         ];

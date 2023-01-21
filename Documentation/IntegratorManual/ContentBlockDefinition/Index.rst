@@ -47,7 +47,7 @@ composer package represents exactly one Content Block.
 **You must**
 
 *  provide this file
-*  set the type property to: `typo3-contentblock`
+*  set the type property to: `typo3-content-block`
 
 **You may**
 

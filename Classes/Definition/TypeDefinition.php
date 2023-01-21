@@ -21,17 +21,16 @@ use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
 class TypeDefinition
 {
-    private string $identifier = '';
-    private string $table = '';
-    private string $typeField = '';
-    private string $type = '';
-    private string $label = '';
-    private string $icon = '';
-    private string $iconProviderClassName = '';
+    protected string $identifier = '';
+    protected string $table = '';
+    protected string $typeField = '';
+    protected string $type = '';
+    protected string $label = '';
+    protected string $iconProviderClassName = '';
     /** @var string[] */
-    private array $columns = [];
-    private string $vendor = '';
-    private string $package = '';
+    protected array $columns = [];
+    protected string $vendor = '';
+    protected string $package = '';
 
     final public function __construct()
     {
@@ -57,7 +56,6 @@ class TypeDefinition
             ->withIdentifier($array['identifier'])
             ->withTypeField($array['typeField'])
             ->withLabel($array['label'] ?? '')
-            ->withIcon($array['icon'] ?? '')
             ->withColumns($array['columns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
@@ -100,11 +98,6 @@ class TypeDefinition
         return $this->label;
     }
 
-    public function getIcon(): string
-    {
-        return $this->icon;
-    }
-
     public function getIconProviderClassName(): string
     {
         return $this->iconProviderClassName;
@@ -140,13 +133,6 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->label = $label;
-        return $clone;
-    }
-
-    public function withIcon(string $icon): static
-    {
-        $clone = clone $this;
-        $clone->icon = $icon;
         return $clone;
     }
 

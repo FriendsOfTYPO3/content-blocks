@@ -26,7 +26,7 @@ class LanguagePathUtility
 
     public static function getPartialLanguageIdentifierPath(string $package, string $vendor, string $identifier): string
     {
-        return self::getLanguageFolderPath($package, $vendor) . '/Labels.xlf:' . $identifier;
+        return 'LLL:' . self::getLanguageFolderPath($package, $vendor) . '/Labels.xlf:' . $identifier;
     }
 
     public static function getFullLanguageIdentifierPath(string $package, string $vendor, string $identifier, string $suffix): string

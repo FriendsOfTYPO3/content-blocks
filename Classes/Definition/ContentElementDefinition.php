@@ -24,17 +24,18 @@ final class ContentElementDefinition extends TypeDefinition
     private string $contentElementIconOverlay = '';
     private bool $saveAndClose = false;
     private string $wizardGroup = '';
+    private string $wizardIconPath = '';
 
     public static function createFromArray(array $array, string $table = 'tt_content'): static
     {
-        $array['typeField'] = 'CType';
         $self = parent::createFromArray($array, $table);
         return $self
             ->withDescription($array['description'] ?? '')
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
-            ->withWizardGroup($array['wizardGroup'] ?? 'common');
+            ->withWizardGroup($array['wizardGroup'] ?? 'common')
+            ->withWizardIconPath($array['icon'] ?? '');
     }
 
     public function getDescription(): string
@@ -55,6 +56,16 @@ final class ContentElementDefinition extends TypeDefinition
     public function getWizardGroup(): string
     {
         return $this->wizardGroup;
+    }
+
+    public function getWizardIconPath(): string
+    {
+        return $this->wizardIconPath;
+    }
+
+    public function getWizardIconIdentifier(): string
+    {
+        return $this->type . '-icon';
     }
 
     public function hasSaveAndClose(): bool
@@ -94,6 +105,13 @@ final class ContentElementDefinition extends TypeDefinition
     {
         $clone = clone $this;
         $clone->wizardGroup = $wizardGroup;
+        return $clone;
+    }
+
+    public function withWizardIconPath(string $icon): self
+    {
+        $clone = clone $this;
+        $clone->wizardIconPath = $icon;
         return $clone;
     }
 }

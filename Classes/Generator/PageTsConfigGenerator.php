@@ -24,14 +24,18 @@ class PageTsConfigGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $partialLanguagePath = LanguagePathUtility::getPartialLanguageIdentifierPath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor(), $contentElementDefinition->getVendor());
+        $partialLanguagePath = LanguagePathUtility::getPartialLanguageIdentifierPath(
+            package: $contentElementDefinition->getPackage(),
+            vendor: $contentElementDefinition->getVendor(),
+            identifier: $contentElementDefinition->getVendor()
+        );
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
     elements {
         {$contentElementDefinition->getType()} {
-            iconIdentifier = {$contentElementDefinition->getType()}
-            title = LLL:$partialLanguagePath.{$contentElementDefinition->getPackage()}.title
-            description = LLL:$partialLanguagePath.{$contentElementDefinition->getPackage()}.description
+            iconIdentifier = {$contentElementDefinition->getWizardIconIdentifier()}
+            title = $partialLanguagePath.{$contentElementDefinition->getPackage()}.title
+            description = $partialLanguagePath.{$contentElementDefinition->getPackage()}.description
             tt_content_defValues {
                 CType = {$contentElementDefinition->getType()}
             }

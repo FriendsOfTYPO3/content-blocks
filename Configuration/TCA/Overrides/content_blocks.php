@@ -11,8 +11,12 @@ defined('TYPO3') or die();
 $tableDefinitionCollection = GeneralUtility::makeInstance(LoaderFactory::class)->load();
 foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
     foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-        // @todo make this more generic and remove instanceof
-        // @todo add own group and or the possibility to define groups.
+        $title = LanguagePathUtility::getFullLanguageIdentifierPath(
+            package: $typeDefinition->getPackage(),
+            vendor: $typeDefinition->getVendor(),
+            identifier: $typeDefinition->getVendor(),
+            suffix: $typeDefinition->getPackage() . '.title'
+        );
         if ($typeDefinition instanceof ContentElementDefinition) {
             ExtensionManagementUtility::addTcaSelectItemGroup(
                 table: $typeDefinition->getTable(),
@@ -21,17 +25,16 @@ foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
                 groupLabel: 'Content Blocks',
                 position: 'after:default',
             );
-            ExtensionManagementUtility::addTcaSelectItem(
-                table: $typeDefinition->getTable(),
-                field: $typeDefinition->getTypeField(),
-                item: [
-                    'LLL:' . LanguagePathUtility::getFullLanguageIdentifierPath($typeDefinition->getPackage(), $typeDefinition->getVendor(), $typeDefinition->getVendor(), $typeDefinition->getPackage() . '.title'),
-                    $typeDefinition->getType(),
-                    // @todo not sure about icon name = Ctype
-                    $typeDefinition->getType(),
-                    'content_blocks',
-                ]
-            );
         }
+        ExtensionManagementUtility::addTcaSelectItem(
+            table: $typeDefinition->getTable(),
+            field: $typeDefinition->getTypeField(),
+            item: [
+                $title,
+                $typeDefinition->getType(),
+                $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
+                $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',
+            ]
+        );
     }
 }

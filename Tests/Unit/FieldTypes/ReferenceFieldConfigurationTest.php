@@ -165,7 +165,7 @@ class ReferenceFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = ReferenceFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
     public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

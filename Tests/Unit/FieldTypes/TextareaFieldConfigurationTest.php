@@ -123,7 +123,7 @@ class TextareaFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = TextareaFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('test-path.xlf:foo', false));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
     public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

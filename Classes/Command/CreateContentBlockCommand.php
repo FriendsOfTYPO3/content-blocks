@@ -47,7 +47,7 @@ class CreateContentBlockCommand extends Command
         $composerJson = [
             'name' => $vendor . '/' . $package,
             'description' => 'This is an empty skeleton to kickstart a new content block',
-            'type' => 'typo3-contentblock',
+            'type' => 'typo3-content-block',
             'license' => 'GPL-2.0-or-later',
         ];
         $contentBlockConfiguration = new ContentBlockConfiguration(

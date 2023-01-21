@@ -54,13 +54,14 @@ class TcaGenerator
                 $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                // @todo right now only tt_content elements are supported.
+                $tca[$tableName]['types'][$typeDefinition->getType()] = [
+                    'previewRenderer' => PreviewRenderer::class,
+                    'showitem' => $typeDefinition instanceof ContentElementDefinition
+                        ? $this->getTtContentStandardShowItem($typeDefinition->getColumns())
+                        : $this->getGenericStandardShowItem($typeDefinition->getColumns()),
+                ];
                 if ($typeDefinition instanceof ContentElementDefinition) {
-                    $tca[$tableName]['types'][$typeDefinition->getType()] = [
-                        'previewRenderer' => PreviewRenderer::class,
-                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
-                    ];
-                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getType()] = $typeDefinition->getType();
+                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getType()] = $typeDefinition->getWizardIconIdentifier();
                 }
             }
         }
@@ -87,6 +88,22 @@ class TcaGenerator
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
             'rowDescription',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+        ];
+
+        return implode(',', $parts);
+    }
+
+    protected function getGenericStandardShowItem(array $columns): string
+    {
+        $parts = [
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+            '--palette--;;general',
+            implode(',', $columns),
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--palette--;;language',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
+            '--palette--;;hidden',
+            '--palette--;;access',
         ];
 
         return implode(',', $parts);

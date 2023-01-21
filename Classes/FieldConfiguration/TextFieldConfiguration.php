@@ -64,8 +64,8 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
         if (!$useExistingField) {
             $tca['exclude'] = true;
         }
-        $tca['label'] = 'LLL:' . $languagePath . '.label';
-        $tca['description'] = 'LLL:' . $languagePath . '.description';
+        $tca['label'] = $languagePath . '.label';
+        $tca['description'] = $languagePath . '.description';
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

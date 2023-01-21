@@ -61,10 +61,8 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     {
         $tableDefinitionCollection = new self();
         $tableDefinitionList = [];
-
         foreach ($contentBlocks as $contentBlock) {
-            // @todo define table in content blocks
-            $table = 'tt_content';
+            $table = $contentBlock['yaml']['table'] ?? 'tt_content';
             $composerName = $contentBlock['composerJson']['name'];
             [$vendor, $package] = explode('/', $composerName);
 
@@ -79,7 +77,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                     languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $vendor, $field['identifier'])],
                     composerName: $composerName
                 );
-
                 $tableDefinitionList[$table]['fields'][$uniqueColumnName] = [
                     'uniqueIdentifier' => $uniqueColumnName,
                     'config' => $field,
@@ -95,6 +92,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 'wizardGroup' => $contentBlock['yaml']['group'] ?? null,
                 'icon' => $contentBlock['icon'] ?? '',
                 'iconProvider' => $contentBlock['iconProvider'] ?? '',
+                'typeField' => $contentBlock['yaml']['typeField'] ?? 'CType',
             ];
         }
 
