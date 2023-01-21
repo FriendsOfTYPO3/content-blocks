@@ -17,17 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
-use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
-
 final class ContentElementDefinition extends TypeDefinition
 {
     private string $description = '';
     private string $contentElementIcon = '';
     private string $contentElementIconOverlay = '';
     private bool $saveAndClose = false;
-    private string $composerName = '';
-    private string $vendor = '';
-    private string $package = '';
     private string $wizardGroup = '';
 
     public static function createFromArray(array $array, string $table = 'tt_content'): static
@@ -39,15 +34,7 @@ final class ContentElementDefinition extends TypeDefinition
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
-            ->withComposerName($array['composerName'] ?? '')
-            ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '')
             ->withWizardGroup($array['wizardGroup'] ?? 'common');
-    }
-
-    public function getComposerName(): string
-    {
-        return $this->vendor . '/' . $this->package;
     }
 
     public function getDescription(): string
@@ -63,24 +50,6 @@ final class ContentElementDefinition extends TypeDefinition
     public function getContentElementIconOverlay(): string
     {
         return $this->contentElementIconOverlay;
-    }
-
-    /**
-     * @todo this should be saved in the initialization
-     */
-    public function getCType(): string
-    {
-        return UniqueNameUtility::composerNameToTypeIdentifier($this->composerName);
-    }
-
-    public function getVendor(): string
-    {
-        return $this->vendor;
-    }
-
-    public function getPackage(): string
-    {
-        return $this->package;
     }
 
     public function getWizardGroup(): string
@@ -118,27 +87,6 @@ final class ContentElementDefinition extends TypeDefinition
     {
         $clone = clone $this;
         $clone->saveAndClose = $saveAndClose;
-        return $clone;
-    }
-
-    public function withComposerName(string $composerName): self
-    {
-        $clone = clone $this;
-        $clone->composerName = $composerName;
-        return $clone;
-    }
-
-    public function withVendor(string $vendor): self
-    {
-        $clone = clone $this;
-        $clone->vendor = $vendor;
-        return $clone;
-    }
-
-    public function withPackage(string $package): self
-    {
-        $clone = clone $this;
-        $clone->package = $package;
         return $clone;
     }
 

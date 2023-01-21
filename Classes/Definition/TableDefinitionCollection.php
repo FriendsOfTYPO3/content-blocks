@@ -150,7 +150,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             if (!$typeDefinition instanceof ContentElementDefinition) {
                 continue;
             }
-            if ($typeDefinition->getCType() === $CType) {
+            if ($typeDefinition->getType() === $CType) {
                 return $typeDefinition;
             }
         }

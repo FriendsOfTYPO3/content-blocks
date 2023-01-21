@@ -56,11 +56,11 @@ class TcaGenerator
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 // @todo right now only tt_content elements are supported.
                 if ($typeDefinition instanceof ContentElementDefinition) {
-                    $tca[$tableName]['types'][$typeDefinition->getCType()] = [
+                    $tca[$tableName]['types'][$typeDefinition->getType()] = [
                         'previewRenderer' => PreviewRenderer::class,
                         'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
                     ];
-                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getCType()] = $typeDefinition->getCType();
+                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getType()] = $typeDefinition->getType();
                 }
             }
         }

@@ -17,16 +17,21 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
+
 class TypeDefinition
 {
     private string $identifier = '';
     private string $table = '';
     private string $typeField = '';
+    private string $type = '';
     private string $label = '';
     private string $icon = '';
     private string $iconProviderClassName = '';
     /** @var string[] */
     private array $columns = [];
+    private string $vendor = '';
+    private string $package = '';
 
     final public function __construct()
     {
@@ -54,7 +59,10 @@ class TypeDefinition
             ->withLabel($array['label'] ?? '')
             ->withIcon($array['icon'] ?? '')
             ->withColumns($array['columns'] ?? [])
-            ->withIconProviderClassName($array['iconProvider'] ?? '');
+            ->withIconProviderClassName($array['iconProvider'] ?? '')
+            ->withVendor($array['vendor'] ?? '')
+            ->withPackage($array['package'] ?? '')
+            ->withType(UniqueNameUtility::composerNameToTypeIdentifier($array['composerName'] ?? ''));
     }
 
     public function getIdentifier(): string
@@ -70,6 +78,21 @@ class TypeDefinition
     public function getTypeField(): string
     {
         return $this->typeField;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getVendor(): string
+    {
+        return $this->vendor;
+    }
+
+    public function getPackage(): string
+    {
+        return $this->package;
     }
 
     public function getLabel(): string
@@ -141,6 +164,27 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->columns = $columns;
+        return $clone;
+    }
+
+    public function withVendor(string $vendor): self
+    {
+        $clone = clone $this;
+        $clone->vendor = $vendor;
+        return $clone;
+    }
+
+    public function withPackage(string $package): self
+    {
+        $clone = clone $this;
+        $clone->package = $package;
+        return $clone;
+    }
+
+    public function withType(string $type): self
+    {
+        $clone = clone $this;
+        $clone->type = $type;
         return $clone;
     }
 }

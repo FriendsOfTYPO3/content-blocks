@@ -26,9 +26,9 @@ foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
                 field: $typeDefinition->getTypeField(),
                 item: [
                     'LLL:' . LanguagePathUtility::getFullLanguageIdentifierPath($typeDefinition->getPackage(), $typeDefinition->getVendor(), $typeDefinition->getVendor(), $typeDefinition->getPackage() . '.title'),
-                    $typeDefinition->getCType(),
+                    $typeDefinition->getType(),
                     // @todo not sure about icon name = Ctype
-                    $typeDefinition->getCType(),
+                    $typeDefinition->getType(),
                     'content_blocks',
                 ]
             );

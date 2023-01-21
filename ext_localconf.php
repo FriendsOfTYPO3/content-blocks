@@ -17,7 +17,7 @@ foreach (GeneralUtility::makeInstance(LoaderFactory::class)->load() as $tableDef
             continue;
         }
         $iconRegistry->registerIcon(
-            identifier: $typeDefinition->getCType(),
+            identifier: $typeDefinition->getType(),
             iconProviderClassName: $typeDefinition->getIconProviderClassName(),
             options: ['source' => $typeDefinition->getIcon()],
         );
