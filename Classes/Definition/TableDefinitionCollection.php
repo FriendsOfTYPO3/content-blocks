@@ -84,7 +84,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             }
 
             $tableDefinitionList[$table]['elements'][] = [
-                'composerName' => $composerName,
                 'identifier' => $composerName,
                 'columns' => $columns,
                 'vendor' => $vendor,
@@ -93,6 +92,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 'icon' => $contentBlock['icon'] ?? '',
                 'iconProvider' => $contentBlock['iconProvider'] ?? '',
                 'typeField' => $contentBlock['yaml']['typeField'] ?? 'CType',
+                'typeName' => $contentBlock['yaml']['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($composerName),
             ];
         }
 
@@ -148,7 +148,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             if (!$typeDefinition instanceof ContentElementDefinition) {
                 continue;
             }
-            if ($typeDefinition->getType() === $CType) {
+            if ($typeDefinition->getTypeName() === $CType) {
                 return $typeDefinition;
             }
         }

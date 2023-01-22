@@ -31,7 +31,7 @@ foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
             field: $typeDefinition->getTypeField(),
             item: [
                 $title,
-                $typeDefinition->getType(),
+                $typeDefinition->getTypeName(),
                 $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
                 $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',
             ]

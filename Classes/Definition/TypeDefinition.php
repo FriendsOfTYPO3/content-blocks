@@ -17,14 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
-use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
-
 class TypeDefinition
 {
     protected string $identifier = '';
     protected string $table = '';
     protected string $typeField = '';
-    protected string $type = '';
+    protected string|int $typeName = '';
     protected string $label = '';
     protected string $iconProviderClassName = '';
     /** @var string[] */
@@ -55,12 +53,12 @@ class TypeDefinition
             ->withTable($table)
             ->withIdentifier($array['identifier'])
             ->withTypeField($array['typeField'])
+            ->withTypeName($array['typeName'])
             ->withLabel($array['label'] ?? '')
             ->withColumns($array['columns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '')
-            ->withType(UniqueNameUtility::composerNameToTypeIdentifier($array['composerName'] ?? ''));
+            ->withPackage($array['package'] ?? '');
     }
 
     public function getIdentifier(): string
@@ -78,9 +76,14 @@ class TypeDefinition
         return $this->typeField;
     }
 
-    public function getType(): string
+    public function getTypeName(): string|int
     {
-        return $this->type;
+        return $this->typeName;
+    }
+
+    public function getTypeIconIdentifier(): string
+    {
+        return $this->typeName . '-icon';
     }
 
     public function getVendor(): string
@@ -167,10 +170,10 @@ class TypeDefinition
         return $clone;
     }
 
-    public function withType(string $type): self
+    public function withTypeName(string|int $type): self
     {
         $clone = clone $this;
-        $clone->type = $type;
+        $clone->typeName = $type;
         return $clone;
     }
 }

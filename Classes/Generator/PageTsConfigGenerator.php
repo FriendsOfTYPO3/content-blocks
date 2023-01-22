@@ -32,16 +32,16 @@ class PageTsConfigGenerator
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
     elements {
-        {$contentElementDefinition->getType()} {
+        {$contentElementDefinition->getTypeName()} {
             iconIdentifier = {$contentElementDefinition->getWizardIconIdentifier()}
             title = $partialLanguagePath.{$contentElementDefinition->getPackage()}.title
             description = $partialLanguagePath.{$contentElementDefinition->getPackage()}.description
             tt_content_defValues {
-                CType = {$contentElementDefinition->getType()}
+                CType = {$contentElementDefinition->getTypeName()}
             }
         }
     }
-    show := addToList({$contentElementDefinition->getType()})
+    show := addToList({$contentElementDefinition->getTypeName()})
 }
 HEREDOC;
     }

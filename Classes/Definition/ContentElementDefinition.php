@@ -65,7 +65,7 @@ final class ContentElementDefinition extends TypeDefinition
 
     public function getWizardIconIdentifier(): string
     {
-        return $this->type . '-icon';
+        return $this->typeName . '-icon';
     }
 
     public function hasSaveAndClose(): bool

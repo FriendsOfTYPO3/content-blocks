@@ -54,15 +54,18 @@ class TcaGenerator
                 $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                $tca[$tableName]['types'][$typeDefinition->getType()] = [
-                    'previewRenderer' => PreviewRenderer::class,
-                    'showitem' => $typeDefinition instanceof ContentElementDefinition
-                        ? $this->getTtContentStandardShowItem($typeDefinition->getColumns())
-                        : $this->getGenericStandardShowItem($typeDefinition->getColumns()),
-                ];
                 if ($typeDefinition instanceof ContentElementDefinition) {
-                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getType()] = $typeDefinition->getWizardIconIdentifier();
+                    $typeDefinitionArray = [
+                        'previewRenderer' => PreviewRenderer::class,
+                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
+                    ];
+                } else {
+                    $typeDefinitionArray = [
+                        'showitem' => $this->getGenericStandardShowItem($typeDefinition->getColumns()),
+                    ];
                 }
+                $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
+                $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
             }
         }
         return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
@@ -109,7 +112,7 @@ class TcaGenerator
         return implode(',', $parts);
     }
 
-    protected function getCollectionTableStandardShowItems(TcaColumnsDefinition $columns): string
+    protected function getCollectionTableStandardShowItem(TcaColumnsDefinition $columns): string
     {
         $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,';
         $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
@@ -150,7 +153,7 @@ class TcaGenerator
             ],
             'types' => [
                 '1' => [
-                    'showitem' => $this->getCollectionTableStandardShowItems($columns),
+                    'showitem' => $this->getCollectionTableStandardShowItem($columns),
                 ],
             ],
             'palettes' => [
