@@ -33,7 +33,7 @@ allowedFileExtensions
     Comma separated list of file extensions that are allowed for this field.
     If no list is specified, system defaults are used.
 
-enableImaManipulation
+enableImageManipulation
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` boolean
    :sep:`|` :aspect:`Default:` 'false'
@@ -71,6 +71,6 @@ Example
         type: File
         properties:
             fileType: image
-            enableImaManipulation: true
+            enableImageManipulation: true
             maxItems: 2
             minItems: 1
