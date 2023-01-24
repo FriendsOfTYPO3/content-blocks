@@ -156,21 +156,21 @@ class TypeDefinition
         return $clone;
     }
 
-    public function withVendor(string $vendor): self
+    public function withVendor(string $vendor): static
     {
         $clone = clone $this;
         $clone->vendor = $vendor;
         return $clone;
     }
 
-    public function withPackage(string $package): self
+    public function withPackage(string $package): static
     {
         $clone = clone $this;
         $clone->package = $package;
         return $clone;
     }
 
-    public function withTypeName(string|int $type): self
+    public function withTypeName(string|int $type): static
     {
         $clone = clone $this;
         $clone->typeName = $type;
