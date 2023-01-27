@@ -66,7 +66,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
-            $config['default'] = $this->default;
+            $config['default'] = $this->timestampConvert($this->default);
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
@@ -87,6 +87,9 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
             $config['placeholder'] = $this->placeholder;
         }
         if ($this->range !== []) {
+            // convert range to timestamp or integer
+            $this->range['lower'] = $this->timestampConvert($this->range['lower'] ?? 0);
+            $this->range['upper'] = $this->timestampConvert($this->range['upper'] ?? 0);
             $config['range'] = $this->range;
         }
         if ($this->dbType !== '') {
@@ -110,5 +113,26 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
     public function getFieldType(): FieldType
     {
         return $this->fieldType;
+    }
+
+    /** Helper function timestampConvert
+     * Returns a timestamp as integer. Returns 0 if it could not create a timestamp.
+     *
+     * @param string|int $input
+     * @param bool $isTime
+     * @return int
+    */
+    protected function timestampConvert($input, bool $isTime = false): int
+    {
+        if (is_int($input)) {
+            return $input;
+        }
+        if ($isTime && strlen($input) > 0) {
+            $input = '1970-01-01 ' . $input;
+        }
+        if ($input !== null && strtotime($input)) {
+            return strtotime($input);
+        }
+        return 0;
     }
 }
