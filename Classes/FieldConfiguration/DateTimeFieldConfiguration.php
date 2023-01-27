@@ -122,8 +122,9 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
      * @param bool $isTime
      * @return int
     */
-    protected function timestampConvert($input, bool $isTime = false): int
+    protected function timestampConvert($input): int
     {
+        $isTime = ($this->format === 'time');
         if (is_int($input)) {
             return $input;
         }
