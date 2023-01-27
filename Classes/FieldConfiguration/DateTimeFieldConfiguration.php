@@ -65,13 +65,8 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         $tca['description'] = $languagePath . '.description';
 
         $config['type'] = $this->fieldType->getTcaType();
-        $isTime = false;
-        if ($this->format !== '') {
-            $config['format'] = $this->format;
-            $isTime = ($this->format === 'time');
-        }
         if ($this->default !== '') {
-            $config['default'] = $this->timestampConvert($this->default, $isTime);
+            $config['default'] = $this->timestampConvert($this->default);
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
@@ -93,8 +88,8 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->range !== []) {
             // convert range to timestamp or integer
-            $this->range['lower'] = $this->timestampConvert($this->range['lower'] ?? 0, $isTime);
-            $this->range['upper'] = $this->timestampConvert($this->range['upper'] ?? 0, $isTime);
+            $this->range['lower'] = $this->timestampConvert($this->range['lower'] ?? 0);
+            $this->range['upper'] = $this->timestampConvert($this->range['upper'] ?? 0);
             $config['range'] = $this->range;
         }
         if ($this->dbType !== '') {
@@ -102,6 +97,9 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->disableAgeDisplay) {
             $config['disableAgeDisplay'] = true;
+        }
+        if ($this->format !== '') {
+            $config['format'] = $this->format;
         }
         $tca['config'] = $config;
         return $tca;
