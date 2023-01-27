@@ -31,6 +31,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
     private string $placeholder = '';
     private array $eval = [];
     private ?bool $autocomplete = null;
+    private array $valuePicker = [];
 
     public static function createFromArray(array $settings): EmailFieldConfiguration
     {
@@ -46,6 +47,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
         if (isset($properties['autocomplete'])) {
             $self->autocomplete = (bool)($properties['autocomplete'] ?? $self->autocomplete);
         }
+        $self->valuePicker = (array)($properties['valuePicker'] ?? $self->valuePicker);
 
         return $self;
     }
@@ -84,6 +86,9 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
         }
         if (isset($this->autocomplete)) {
             $config['autocomplete'] = $this->autocomplete;
+        }
+        if (($this->valuePicker['items'] ?? []) !== []) {
+            $config['valuePicker'] = $this->valuePicker;
         }
         $tca['config'] = $config;
         return $tca;
