@@ -1,6 +1,97 @@
-<f:asset.css identifier="cb-{cb.key}" href="CB:t3-ce/example/dist/EditorPreview.css"/>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
-<div class="cb-call-to-action">
-    <h3>Example Test</h3>
-    <f:debug inline="1">{_all}</f:debug>
+<f:asset.css identifier="cb-example" href="CB:t3-ce/example/Resources/Public/EditorPreview.css"/>
+
+<div class="cb-example">
+    <ul>
+        <li>
+            Text: {cb.text}
+        </li>
+        <li>
+            Textarea: <br />
+            <f:format.raw>{cb.textarea}</f:format.raw>
+        </li>
+        <li>
+            E-Mail: <f:link.email email="{cb.email}" />
+        </li>
+        <li>
+            Number: {cb.number}
+        </li>
+        <li>
+            Link: <f:link.typolink parameter="{cb.url}" />
+        </li>
+        <li>
+            Color: <span class="color" style="background-color: {cb.color};"></span>
+        </li>
+        <li>
+            Date: <f:format.date format="%d. %B %Y">{cb.date}</f:format.date>
+        </li>
+        <li>
+            Datetime: <f:format.date format="d.m.Y - H:i">{cb.datetime}</f:format.date>
+        </li>
+        <li>
+            Time: <f:format.date format="H:i">{cb.time}</f:format.date>
+        </li>
+        <li>
+            Select: {cb.select}
+        </li>
+        <li>
+            SelectSideBySide:
+            <ol>
+                <f:for each="{cb.selectSideBySide}" as="selectedItem">
+                    <li>{selectedItem}</li>
+                </f:for>
+            </ol>
+        </li>
+        <li>
+            Checkboxes:
+            <f:switch expression="{cb.checkboxes}">
+                <f:case value="1">Checkbox 1 is checked</f:case>
+                <f:case value="2">Checkbox 2 is checked</f:case>
+                <f:case value="4">Checkbox 3 is checked</f:case>
+                <f:case value="3">Checkboxes 1 and 2 are checked</f:case>
+                <f:case value="5">Checkboxes 1 and 3 are checked</f:case>
+                <f:case value="6">Checkboxes 2 and 3 are checked</f:case>
+                <f:case value="7">All checkboxes are checked</f:case>
+                <f:defaultCase>No checkboxes are checked</f:defaultCase>
+            </f:switch>
+        </li>
+        <li>
+            Radioboxes: {cb.radioboxes}
+        </li>
+        <li>
+            Toogle: {f:if(condition: '{cb.toggle} == 1', then: 'activated', else: 'deactivated')}
+        </li>
+        <li>
+            ToogleInverted: {f:if(condition: '{cb.toggleInverted} == 0', then: 'activated', else: 'deactivated')}
+        </li>
+        <li>
+            Images: <br />
+            <f:for each="{cb.image}" as="image">
+                <f:image class="preview-image-embed-item" src="{image.uid}" height="100" title="{image.title}" treatIdAsReference="1" />
+            </f:for>
+        </li>
+        <li>
+            Collection: <br />
+            <ol>
+                <f:for each="{cb.collection}" as="collection">
+                    <li>
+                        {collection.text}
+                        <f:for each="{collection.collectionItem}" as="subCollection">
+                            <ul>
+                                <li>
+                                    Text: {subCollection.text}
+                                </li>
+                                <li>
+                                    Textarea: <br />
+                                    <f:format.raw>{subCollection.textarea}</f:format.raw>
+                                </li>
+                            </ul>
+                        </f:for>
+                    </li>
+                </f:for>
+            </ol>
+        </li>
+    </ul>
 </div>
+</html>

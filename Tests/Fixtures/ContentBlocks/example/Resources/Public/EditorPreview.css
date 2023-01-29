@@ -1,0 +1,13 @@
+.cb-example ul li {
+    padding: 0.5rem 0;
+}
+.cb-example .color {
+    margin-left: 0.5rem;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 12px;
+}
+.cb-example img {
+    margin-right: 0.5rem;
+}
