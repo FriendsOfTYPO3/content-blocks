@@ -50,7 +50,7 @@ fields:
   - identifier: number
     type: Number
     properties:
-      format: integer
+      format: int
       default: 10
       size: 20
       range:
