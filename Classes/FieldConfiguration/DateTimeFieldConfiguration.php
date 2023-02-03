@@ -66,7 +66,12 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
-            $config['default'] = $this->timestampConvert($this->default);
+            // If dbType is something else then a integer value, take the default value without parsing it to a timestamp.
+            if ($this->dbType !== '') {
+                $config['default'] = $this->default;
+            } else {
+                $config['default'] = $this->timestampConvert($this->default);
+            }
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
