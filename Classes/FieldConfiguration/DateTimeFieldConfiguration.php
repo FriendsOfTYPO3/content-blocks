@@ -115,23 +115,20 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         return $this->fieldType;
     }
 
-    /** Helper function timestampConvert
+    /**
+     * Helper function timestampConvert
      * Returns a timestamp as integer. Returns 0 if it could not create a timestamp.
-     *
-     * @param string|int $input
-     * @param bool $isTime
-     * @return int
     */
-    protected function timestampConvert($input): int
+    private function timestampConvert(string|int $input): int
     {
         $isTime = ($this->format === 'time');
         if (is_int($input)) {
             return $input;
         }
-        if ($isTime && strlen($input) > 0) {
+        if ($isTime && $input !== '') {
             $input = '1970-01-01 ' . $input;
         }
-        if ($input !== null && strtotime($input)) {
+        if ($input !== '' && strtotime($input)) {
             return strtotime($input);
         }
         return 0;
