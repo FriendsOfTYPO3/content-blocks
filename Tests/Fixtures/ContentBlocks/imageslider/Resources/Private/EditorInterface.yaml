@@ -1,0 +1,8 @@
+group: common
+fields:
+  - identifier: assets
+    type: File
+    properties:
+      # TODO move up one level after editing useExistingField handling
+      useExistingField: true
+      allowed: jpg,jpeg,png,svg,gif

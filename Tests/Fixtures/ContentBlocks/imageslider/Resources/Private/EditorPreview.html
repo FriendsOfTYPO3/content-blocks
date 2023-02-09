@@ -1,0 +1,11 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:asset.css identifier="cbCtaCssFrontend" href="CB:t3-ce/imageslider/Resources/Public/EditorPreview.css"/>
+
+<div class="cb-imageslider">
+    <f:for each="{cb.assets}" as="asset">
+        <f:image src="{asset.uid}" height="75" treatIdAsReference="1"/>
+    </f:for>
+</div>
+
+</html>
