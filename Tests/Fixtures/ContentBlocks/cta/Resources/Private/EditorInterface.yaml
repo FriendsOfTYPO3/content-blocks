@@ -1,0 +1,22 @@
+group: common
+fields:
+  - identifier: bodytext
+    type: Textarea
+    properties:
+      # TODO move up one level after editing useExistingField handling
+      useExistingField: true
+      enableRichtext: true
+  - identifier: link
+    type: Link
+    properties:
+      autocomplete: true
+      linkPopup:
+        allowedExtensions: 'pdf'
+        blindLinkFields: 'target,title'
+        blindLinkOptions: 'folder,spec,telefone,mail'
+      max: 150
+      required: true
+  - identifier: linkTitle
+    type: Text
+    properties:
+      required: true

@@ -1,0 +1,11 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:asset.css identifier="cbCallToActionCssBackend" href="CB:t3-ce/cta/Resources/Public/EditorPreview.css"/>
+
+<div class="cb-cta">
+    <h2>{data.header}</h2>
+    <f:format.raw>{cb.bodytext}</f:format.raw>
+    <f:link.typolink parameter="{cb.link}" class="btn-cta">{cb.linkTitle}</f:link.typolink>
+</div>
+
+</html>
