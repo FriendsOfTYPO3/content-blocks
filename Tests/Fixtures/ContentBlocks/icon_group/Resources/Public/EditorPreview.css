@@ -78,6 +78,12 @@
     margin-bottom: 0.15em;
     margin-top: 0;
 }
+.cb-icon-group .icongroup-item-text-header a {
+    text-decoration: none;
+    color: #f80;
+    font-weight: 600;
+    pointer-events: none;
+}
 .cb-icon-group .icongroup-item-text-subheader {
     font-size: 1em;
 }

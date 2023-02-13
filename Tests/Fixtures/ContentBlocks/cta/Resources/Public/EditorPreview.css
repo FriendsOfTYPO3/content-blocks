@@ -16,6 +16,7 @@
     text-decoration: none;
     border-radius: 2px;
     border: 2px solid #f80;
+    pointer-events: none;
 }
 
 .cb-cta .btn-cta:hover {
