@@ -1,0 +1,46 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:asset.css identifier="cbIconGroupCssBackend" href="CB:t3-ce/icon_group/Resources/Public/EditorPreview.css"/>
+
+<div class="cb-icon-group">
+    <f:if condition="{cb.iconGroupItem}">
+        <div class="icongroup icongroup-align-{cb.alignment} icongroup-columns-{cb.rowItems} icongroup-iconposition-{cb.iconPosition}">
+            <f:for each="{cb.iconGroupItem}" as="item" iteration="iteration">
+                <div class="icongroup-item">
+                    <f:if condition="{item.icon}">
+                        <div class="icongroup-item-icon">
+                            <f:image src="{item.icon.0.uid}" treatIdAsReference="1" height="50"/>
+                        </div>
+                    </f:if>
+                    <div class="icongroup-item-text">
+                        <h4 class="icongroup-item-text-header">
+                            <f:render section="LinkWrap" arguments="{link: item.link, linkTitle: item.linkTitle}" contentAs="content">
+                                {item.title}
+                            </f:render>
+                        </h4>
+                        <f:if condition="{item.bodytext}">
+                            <f:format.raw>{item.bodytext}</f:format.raw>
+                        </f:if>
+                    </div>
+                </div>
+            </f:for>
+        </div>
+    </f:if>
+</div>
+
+<f:section name="LinkWrap">
+
+    <f:if condition="{link}">
+        <f:then>
+            <f:link.typolink parameter="{link}" title="{linkTitle -> f:format.trim()}">
+                {content -> f:format.raw()}
+            </f:link.typolink>
+        </f:then>
+        <f:else>
+            <span>{content -> f:format.raw()}</span>
+        </f:else>
+    </f:if>
+
+</f:section>
+
+</html>

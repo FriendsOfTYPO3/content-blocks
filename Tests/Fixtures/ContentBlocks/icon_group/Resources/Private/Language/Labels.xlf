@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+  <file datatype="plaintext"
+        original="messages"
+        source-language="en"
+        product-name="icon_group">
+    <header/>
+    <body>
+      <trans-unit id="t3-ce.icon_group.title" xml:space="preserve">
+				<source>Icon Group</source>
+			</trans-unit>
+      <trans-unit id="t3-ce.icon_group.description" xml:space="preserve">
+				<source>Add a group with several icons and text</source>
+			</trans-unit>
+      <trans-unit id="iconGroupItem.label" xml:space="preserve">
+			<source>Icon group items</source>
+		</trans-unit>
+	  <trans-unit id="alignment.label" xml:space="preserve">
+			<source>Alignment</source>
+		</trans-unit>
+	  <trans-unit id="rowItems.label" xml:space="preserve">
+			<source>Items per row</source>
+		</trans-unit>
+	  <trans-unit id="iconPosition.label" xml:space="preserve">
+			<source>Icon position</source>
+		</trans-unit>
+	  <trans-unit id="iconGroupItem.icon.label" xml:space="preserve">
+			<source>Icon</source>
+		</trans-unit>
+      <trans-unit id="iconGroupItem.title.label" xml:space="preserve">
+			<source>Title</source>
+		</trans-unit>
+	  <trans-unit id="iconGroupItem.bodytext.label" xml:space="preserve">
+			<source>Bodytext</source>
+		</trans-unit>
+	  <trans-unit id="iconGroupItem.link.label" xml:space="preserve">
+			<source>Link</source>
+		</trans-unit>
+	  <trans-unit id="iconGroupItem.linkTitle.label" xml:space="preserve">
+			<source>Link title</source>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

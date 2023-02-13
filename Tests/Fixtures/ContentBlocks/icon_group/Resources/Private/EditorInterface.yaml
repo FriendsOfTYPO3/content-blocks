@@ -1,0 +1,66 @@
+group: common
+fields:
+  - identifier: alignment
+    type: Select
+    properties:
+      renderType: selectSingle
+      items:
+        [
+          [ 'Left', 'left' ],
+          [ 'Center', 'center' ],
+          [ 'Right', 'right' ],
+        ]
+  - identifier: rowItems
+    type: Select
+    properties:
+      renderType: selectSingle
+      items:
+        [
+          [ '1', '1' ],
+          [ '2', '2' ],
+          [ '3', '3' ],
+          [ '4', '4' ],
+        ]
+  - identifier: iconPosition
+    type: Select
+    properties:
+      renderType: selectSingle
+      items:
+        [
+          [ 'Above', 'above' ],
+          [ 'Below', 'below' ],
+          [ 'Left: Top', 'left-top' ],
+          [ 'Left: Center', 'left-center' ],
+          [ 'Right: Top', 'right-top' ],
+          [ 'Right: Center', 'right-center' ],
+        ]
+  - identifier: iconGroupItem
+    type: Collection
+    properties:
+      # TODO: is currently ignored, label is automatically the first column label
+      useAsLabel: title
+      required: true
+      fields:
+        - identifier: title
+          type: Text
+        - identifier: icon
+          type: File
+          properties:
+            maxitems: 1
+            allowed: png,svg,gif
+        - identifier: bodytext
+          type: Textarea
+          properties:
+            enableRichtext: true
+        - identifier: link
+          type: Link
+          properties:
+            autocomplete: true
+            linkPopup:
+              allowedExtensions: 'pdf'
+              blindLinkFields: 'target,title'
+              blindLinkOptions: 'folder,spec,telefone,mail'
+            max: 150
+        - identifier: linkTitle
+          type: Text
+
