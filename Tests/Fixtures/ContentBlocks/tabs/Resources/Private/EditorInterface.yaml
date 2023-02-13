@@ -1,0 +1,15 @@
+group: common
+fields:
+  - identifier: tabsItem
+    type: Collection
+    properties:
+      useAsLabel: title
+      required: true
+      fields:
+        - identifier: title
+          type: Text
+        - identifier: textarea
+          type: Textarea
+          properties:
+            enableRichtext: true
+
