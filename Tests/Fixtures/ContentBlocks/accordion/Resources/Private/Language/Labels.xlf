@@ -3,7 +3,7 @@
   <file datatype="plaintext"
         original="messages"
         source-language="en"
-        product-name="example">
+        product-name="accordion">
     <header/>
     <body>
       <trans-unit id="t3-ce.accordion.title" xml:space="preserve">

@@ -3,7 +3,7 @@
   <file datatype="plaintext"
         original="messages"
         source-language="en"
-        product-name="example">
+        product-name="imageslider">
     <header/>
     <body>
       <trans-unit id="t3-ce.imageslider.title" xml:space="preserve">

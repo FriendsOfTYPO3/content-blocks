@@ -3,7 +3,7 @@
   <file datatype="plaintext"
         original="messages"
         source-language="en"
-        product-name="example">
+        product-name="cta">
     <header/>
     <body>
       <trans-unit id="t3-ce.cta.title" xml:space="preserve">

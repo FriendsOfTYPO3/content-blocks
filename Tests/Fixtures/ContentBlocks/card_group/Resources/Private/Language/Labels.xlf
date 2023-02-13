@@ -3,7 +3,7 @@
   <file datatype="plaintext"
         original="messages"
         source-language="en"
-        product-name="example">
+        product-name="card_group">
     <header/>
     <body>
       <trans-unit id="t3-ce.card_group.title" xml:space="preserve">
