@@ -58,7 +58,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(string $languagePath, bool $useExistingField): array
     {
-        if (!$useExistingField) {
+        if (!$useExistingField) { // @todo: since use existing is an own FieldConfiguration, this is not needed anymore
             $tca['exclude'] = true;
         }
         $tca['label'] = $languagePath . '.label';

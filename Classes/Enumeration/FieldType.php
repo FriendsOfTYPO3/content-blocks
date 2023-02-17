@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ColorFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\ExistingFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
@@ -49,6 +50,7 @@ enum FieldType: string
     case REFERENCE = 'Reference';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
+    case EXISTING = 'Exisiting';
 
     public function getTcaType(): string
     {
@@ -67,6 +69,7 @@ enum FieldType: string
             self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
+            self::EXISTING => 'exisiting',
         };
     }
 
@@ -92,6 +95,7 @@ enum FieldType: string
             self::REFERENCE => ReferenceFieldConfiguration::createFromArray($config),
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
+            self::EXISTING => ExistingFieldConfiguration::createFromArray($config),
         };
     }
 }

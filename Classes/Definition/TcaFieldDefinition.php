@@ -47,8 +47,8 @@ final class TcaFieldDefinition
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'] ?? '')
-            ->withUseExistingField($array['config']['useExistingField'] ?? false)
-            ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
+            ->withUseExistingField($array['config']['useExistingField'] ?? false) // TODO: Check if this is correct
+            ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config'])); // TODO: handle use exisitng field
     }
 
     public function getFieldType(): FieldType

@@ -68,11 +68,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
             $columns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
-                if (isset($field['properties']) &&
-                    isset($field['properties']['useExistingField']) &&
-                    $field['properties']['useExistingField'] === true
-                ) {
-                    // TODO: do we need to check if the field is already available in TCA here?
+                if (FieldType::from($field['type']) !== FieldType::EXISTING) {
                     $uniqueColumnName = $field['identifier'];
                 } else {
                     $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);

@@ -41,6 +41,7 @@ class TcaGenerator
     {
         $tca = [];
         foreach ($this->tableDefinitionCollection as $tableName => $tableDefinition) {
+            $columnsOverrides = [];
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelFallback = '';
                 // Use first field as label.
@@ -51,7 +52,11 @@ class TcaGenerator
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelFallback);
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
+                if ($column->getFieldConfiguration()->getFieldType()->getTcaType() === 'existing') {
+                    $columnsOverrides[$column->getUniqueIdentifier()] = $column->getTca();
+                } else {
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
+                }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($typeDefinition instanceof ContentElementDefinition) {
@@ -59,6 +64,9 @@ class TcaGenerator
                         'previewRenderer' => PreviewRenderer::class,
                         'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
                     ];
+                    if (count($columnsOverrides) > 0) {
+                        $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+                    }
                 } else {
                     $typeDefinitionArray = [
                         'showitem' => $this->getGenericStandardShowItem($typeDefinition->getColumns()),
