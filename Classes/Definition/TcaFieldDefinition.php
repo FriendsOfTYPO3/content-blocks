@@ -47,8 +47,8 @@ final class TcaFieldDefinition
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'] ?? '')
-            ->withUseExistingField($array['config']['useExistingField'] ?? false) // TODO: Check if this is correct
-            ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config'])); // TODO: handle use exisitng field
+            ->withUseExistingField($array['config']['useExistingField'] ?? false)
+            ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
     }
 
     public function getFieldType(): FieldType
@@ -136,11 +136,5 @@ final class TcaFieldDefinition
         $clone = clone $this;
         $clone->fieldConfiguration = $fieldConfiguration;
         return $clone;
-    }
-
-    public function isUseExistingField(): bool
-    {
-        // @todo overthink "useExistingField" approach
-        return $this->useExistingField;
     }
 }
