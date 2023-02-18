@@ -17,9 +17,8 @@ fields:
           ]
           # @todo ^^ implement text
   - identifier: bodytext
-    type: Textarea
+    type: Existing
     properties:
-      useExistingField: true
       enableRichtext: true
   - identifier: textarea
     type: Textarea
@@ -50,7 +49,7 @@ fields:
   - identifier: number
     type: Number
     properties:
-      format: int
+      format: integer
       default: 10
       size: 20
       range:

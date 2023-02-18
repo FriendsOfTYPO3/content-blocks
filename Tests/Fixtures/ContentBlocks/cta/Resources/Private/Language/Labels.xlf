@@ -12,6 +12,9 @@
       <trans-unit id="t3-ce.cta.description" xml:space="preserve">
 				<source>Add a call to action button with additional information</source>
 			</trans-unit>
+	  <trans-unit id="bodytext.label" xml:space="preserve">
+				<source>Content</source>
+			</trans-unit>
       <trans-unit id="link.label" xml:space="preserve">
 				<source>Link</source>
 			</trans-unit>

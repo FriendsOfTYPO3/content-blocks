@@ -1,10 +1,8 @@
 group: common
 fields:
   - identifier: bodytext
-    type: Textarea
+    type: Existing
     properties:
-      # TODO move up one level after editing useExistingField handling
-      useExistingField: true
       enableRichtext: true
   - identifier: link
     type: Link
