@@ -49,7 +49,8 @@ class RelationResolver
 
         $data = $record[$recordIdentifier];
 
-        if ($fieldType === FieldType::FILE) {
+        if ($fieldType === FieldType::FILE ||
+            ($fieldType === FieldType::EXISTING && $GLOBALS['TCA'][$table]['columns'][$recordIdentifier]['config']['type'] === FieldType::FILE->getTcaType())) {
             $fileCollector = new FileCollector();
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
             return $fileCollector->getFiles();
