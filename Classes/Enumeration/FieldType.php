@@ -50,7 +50,7 @@ enum FieldType: string
     case REFERENCE = 'Reference';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
-    case EXISTING = 'Exisiting';
+    case EXISTING = 'Existing';
 
     public function getTcaType(): string
     {
@@ -69,7 +69,7 @@ enum FieldType: string
             self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
-            self::EXISTING => 'exisiting',
+            self::EXISTING => 'existing',
         };
     }
 

@@ -38,7 +38,7 @@ class RelationResolver
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
         // @todo think about existing fields
-        $recordIdentifier = $tcaFieldDefinition->isUseExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
+        $recordIdentifier = $tcaFieldDefinition->getFieldConfiguration()->getFieldType()->getTcaType() === FieldType::EXISTING->getTcaType() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
 
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(

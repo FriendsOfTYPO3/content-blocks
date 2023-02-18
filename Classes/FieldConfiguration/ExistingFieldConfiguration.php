@@ -206,7 +206,8 @@ final class ExistingFieldConfiguration implements FieldConfigurationInterface
     {
         $tca['label'] = $languagePath . '.label';
         $tca['description'] = $languagePath . '.description';
-        $config['type'] = $this->fieldType->getTcaType();
+        // todo: we don't need the type of the field here because we use the type form the existing one
+        // $config['type'] = $this->fieldType->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

@@ -53,7 +53,7 @@ class TcaGenerator
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
                 if ($column->getFieldConfiguration()->getFieldType()->getTcaType() === 'existing') {
-                    $columnsOverrides[$column->getUniqueIdentifier()] = $column->getTca();
+                    $columnsOverrides[$column->getIdentifier()] = $column->getTca();
                 } else {
                     $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
                 }
