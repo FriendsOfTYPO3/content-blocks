@@ -17,10 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaColumnsDefinition;
+use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -28,13 +30,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TcaGenerator
 {
     public function __construct(
-        protected TableDefinitionCollection $tableDefinitionCollection
+        protected TableDefinitionCollection $tableDefinitionCollection,
+        protected EventDispatcherInterface $eventDispatcher
     ) {
     }
 
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
         $event->setTca(array_replace_recursive($event->getTca(), $this->generate()));
+        $event->setTca(
+            $this->eventDispatcher->dispatch(
+                new AfterContentBlocksTcaCompilationEvent($event->getTca())
+            )->getTca()
+        );
     }
 
     public function generate(): array
@@ -44,7 +52,7 @@ class TcaGenerator
             $columnsOverrides = [];
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelFallback = '';
-                if(!empty($this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel())) {
+                if (!empty($this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel())) {
                     // Use selected field as label.
                     $labelFallback = $this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel();
                 } else {
@@ -81,6 +89,7 @@ class TcaGenerator
                 $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
             }
         }
+
         return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
     }
 
