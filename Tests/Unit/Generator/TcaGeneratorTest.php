@@ -149,6 +149,11 @@ class TcaGeneratorTest extends UnitTestCase
                     'yaml' => [
                         'fields' => [
                             [
+                                'identifier' => 'bodytext',
+                                'type' => 'Textarea',
+                                'useExistingField' => true,
+                            ],
+                            [
                                 'identifier' => 'text',
                                 'type' => 'Text',
                                 'properties' => [
@@ -183,8 +188,15 @@ class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         't3ce_testblock' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,t3ce_testblock_text,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,bodytext,t3ce_testblock_text,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'bodytext' => [
+                                    'label' => 'LLL:CB:t3ce/testblock/Resources/Private/Language/Labels.xlf:bodytext.label',
+                                    'description' => 'LLL:CB:t3ce/testblock/Resources/Private/Language/Labels.xlf:bodytext.description',
+                                    'config' => [],
+                                ],
+                            ],
                         ],
                     ],
                     'columns' => [

@@ -20,9 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
-use TYPO3\CMS\Core\SingletonInterface;
 
-final class TableDefinitionCollection implements \IteratorAggregate, SingletonInterface
+final class TableDefinitionCollection implements \IteratorAggregate
 {
     /** @var TableDefinition[] */
     private array $definitions = [];
@@ -102,9 +101,12 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             [$vendor, $package] = explode('/', $composerName);
 
             $columns = [];
+            $overrideColumns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
+                $useExistingField = false;
                 if (($field['useExistingField'] ?? false) && in_array($field['identifier'], self::$allowedFields[$table], true)) {
                     $uniqueColumnName = $field['identifier'];
+                    $useExistingField = true;
                 } else {
                     $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
                     // Prevent reusing not allowed fields (e.g. system fields).
@@ -112,7 +114,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 }
                 $columns[] = $uniqueColumnName;
 
-                $field = $tableDefinitionCollection->processCollections(
+                $processedField = $tableDefinitionCollection->processCollections(
                     field: $field,
                     table: $uniqueColumnName,
                     languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $vendor, $field['identifier'])],
@@ -120,15 +122,20 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                     parentTable: $table,
                     rootTable: $table,
                 );
-                $tableDefinitionList[$table]['fields'][$uniqueColumnName] = [
+                $fieldArray = [
                     'uniqueIdentifier' => $uniqueColumnName,
-                    'config' => $field,
+                    'config' => $processedField,
                 ];
+                $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
+                if ($useExistingField) {
+                    $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                }
             }
 
             $tableDefinitionList[$table]['elements'][] = [
                 'identifier' => $composerName,
                 'columns' => $columns,
+                'overrideColumns' => $overrideColumns,
                 'vendor' => $vendor,
                 'package' => $package,
                 'wizardGroup' => $contentBlock['yaml']['group'] ?? null,

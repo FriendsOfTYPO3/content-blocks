@@ -61,13 +61,10 @@ class TcaGenerator
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $columnsOverrides = [];
-                foreach ($typeDefinition->getColumns() as $column) {
-                    $columnDefinition = $tableDefinition->getTcaColumnsDefinition()->getField($column);
-                    if ($columnDefinition->useExistingField()) {
-                        $overrideTca = $columnDefinition->getTca();
-                        unset($overrideTca['config']['type']);
-                        $columnsOverrides[$columnDefinition->getIdentifier()] = $overrideTca;
-                    }
+                foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
+                    $overrideTca = $overrideColumn->getTca();
+                    unset($overrideTca['config']['type']);
+                    $columnsOverrides[$overrideColumn->getIdentifier()] = $overrideTca;
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [

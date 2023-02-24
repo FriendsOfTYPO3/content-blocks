@@ -27,6 +27,8 @@ class TypeDefinition
     protected string $iconProviderClassName = '';
     /** @var string[] */
     protected array $columns = [];
+    /** @var array<TcaFieldDefinition> */
+    protected array $overrideColumns = [];
     protected string $vendor = '';
     protected string $package = '';
 
@@ -56,6 +58,7 @@ class TypeDefinition
             ->withTypeName($array['typeName'])
             ->withLabel($array['label'] ?? '')
             ->withColumns($array['columns'] ?? [])
+            ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '');
@@ -111,6 +114,11 @@ class TypeDefinition
         return $this->columns;
     }
 
+    public function getOverrideColumns(): array
+    {
+        return $this->overrideColumns;
+    }
+
     public function withIdentifier(string $identifier): static
     {
         $clone = clone $this;
@@ -153,6 +161,16 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->columns = $columns;
+        return $clone;
+    }
+
+    /**
+     * @param string[] $overrideColumns
+     */
+    public function withOverrideColumns(array $overrideColumns): static
+    {
+        $clone = clone $this;
+        $clone->overrideColumns = $overrideColumns;
         return $clone;
     }
 
