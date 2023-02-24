@@ -29,6 +29,41 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     /** @var list<string> */
     private array $customTables = [];
 
+    private static array $allowedFields = [
+        'tt_content' => [
+            'header',
+            'header_layout',
+            'header_position',
+            'date',
+            'header_link',
+            'subheader',
+            'bodytext',
+            'assets',
+            'image',
+            'media',
+            'imagewidth',
+            'imageheight',
+            'imageborder',
+            'imageorient',
+            'imagecols',
+            'image_zoom',
+            'bullets_type',
+            'table_delimiter',
+            'table_enclosure',
+            'table_caption',
+            'file_collections',
+            'filelink_sorting',
+            'filelink_sorting_direction',
+            'target',
+            'filelink_size',
+            'uploads_description',
+            'uploads_type',
+            'pages',
+            'selected_categories',
+            'category_field',
+        ],
+    ];
+
     public function addTable(TableDefinition $tableDefinition, $isCustomTable = false): void
     {
         if (!$this->hasTable($tableDefinition->getTable())) {
@@ -69,11 +104,14 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             $columns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
                 if (isset($field['useExistingField']) &&
-                    $field['useExistingField'] === true
+                    $field['useExistingField'] === true &&
+                    in_array($field['identifier'], self::$allowedFields['tt_content'])
                 ) {
                     $uniqueColumnName = $field['identifier'];
                 } else {
                     $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
+                    // prevent for reuse not allowed tt_content fields like sorting
+                    $field['useExistingField'] = false;
                 }
                 $columns[] = $uniqueColumnName;
 
@@ -128,6 +166,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 languagePath: $languagePath,
                 composerName: $composerName
             );
+            // Since we can't check TCA and collection tables are individual tables
+            // the useExistingField is not allowed on collections
+            $childField['useExistingField'] = false;
+
             $tableDefinition['fields'][$identifier] = [
                 'uniqueIdentifier' => $identifier,
                 'config' => $childField,
