@@ -16,4 +16,5 @@ the Content Blocks.
 
 	Installation/Index
 	ContentBlockDefinition/Index
+	ParseFunc/Index
 	YamlReference/Index
