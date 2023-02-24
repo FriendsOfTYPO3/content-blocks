@@ -28,8 +28,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     private array $definitions = [];
     /** @var list<string> */
     private array $customTables = [];
-    /** @var list<array> */
-    private array $customCollectionTables = [];
+
     private static array $allowedFields = [
         'tt_content' => [
             'header',
@@ -104,14 +103,11 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
             $columns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
-                if (isset($field['useExistingField']) &&
-                    $field['useExistingField'] === true &&
-                    in_array($field['identifier'], self::$allowedFields['tt_content'])
-                ) {
+                if (($field['useExistingField'] ?? false) && in_array($field['identifier'], self::$allowedFields[$table], true)) {
                     $uniqueColumnName = $field['identifier'];
                 } else {
                     $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
-                    // prevent for reuse not allowed tt_content fields like sorting
+                    // Prevent reusing not allowed fields (e.g. system fields).
                     $field['useExistingField'] = false;
                 }
                 $columns[] = $uniqueColumnName;
@@ -189,6 +185,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
         // Add parent table information.
         $tableDefinition['parentTable'] = $parentTable;
+        // The reason we check for the root table is that only custom (child) tables have the prefixed identifier.
         $tableDefinition['parentField'] = $rootTable === $parentTable ? $table : $field['identifier'];
         $this->addTable(
             tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
