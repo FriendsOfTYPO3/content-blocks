@@ -68,9 +68,8 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
 
             $columns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
-                if (isset($field['properties']) &&
-                    isset($field['properties']['useExistingField']) &&
-                    $field['properties']['useExistingField'] === true
+                if (isset($field['useExistingField']) &&
+                    $field['useExistingField'] === true
                 ) {
                     $uniqueColumnName = $field['identifier'];
                 } else {

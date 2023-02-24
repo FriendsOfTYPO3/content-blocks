@@ -48,7 +48,7 @@ final class TcaFieldDefinition
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'] ?? '')
-            ->withUseExistingField($array['config']['properties']['useExistingField'] ?? false)
+            ->withUseExistingField($array['config']['useExistingField'] ?? false)
             ->withUseAsLabel($array['config']['properties']['useAsLabel'] ?? '')
             ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
     }
