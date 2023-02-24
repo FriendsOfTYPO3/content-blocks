@@ -19,8 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Event;
 
 final class AfterContentBlocksTcaCompilationEvent
 {
-    public function __construct(private array $tca)
-    {
+    public function __construct(
+        private array $tca
+    ) {
     }
 
     public function getTca(): array
