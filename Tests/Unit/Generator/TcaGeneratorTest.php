@@ -107,10 +107,15 @@ class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
+                                'useAsLabel' => 'text2',
                                 'properties' => [
                                     'fields' => [
                                         [
                                             'identifier' => 'text',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'text2',
                                             'type' => 'Text',
                                         ],
                                         [
@@ -120,6 +125,10 @@ class TcaGeneratorTest extends UnitTestCase
                                                 'fields' => [
                                                     [
                                                         'identifier' => 'text',
+                                                        'type' => 'Text',
+                                                    ],
+                                                    [
+                                                        'identifier' => 'text2',
                                                         'type' => 'Text',
                                                     ],
                                                 ],
@@ -328,7 +337,7 @@ class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
-                        'label' => 'text',
+                        'label' => 'text2',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
@@ -356,7 +365,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,collection2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,collection2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -493,6 +502,14 @@ class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'input',
                             ],
                         ],
+                        'text2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.text2.label',
+                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.text2.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
                         'collection2' => [
                             'exclude' => true,
                             'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.label',
@@ -536,7 +553,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -669,6 +686,14 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                             'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.label',
                             'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        'text2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text2.label',
+                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text2.description',
                             'config' => [
                                 'type' => 'input',
                             ],

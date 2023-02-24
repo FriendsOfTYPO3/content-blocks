@@ -160,6 +160,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
         $tableDefinition = [];
+        $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
         foreach ($field['properties']['fields'] as $collectionField) {
             $identifier = $collectionField['identifier'];
             $languagePath[] = $identifier;

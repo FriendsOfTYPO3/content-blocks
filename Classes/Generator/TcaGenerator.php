@@ -52,7 +52,7 @@ class TcaGenerator
         foreach ($this->tableDefinitionCollection as $tableName => $tableDefinition) {
             $columnsOverrides = [];
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
-                $labelField = $this->resolveLabelField($tableDefinition, $tableDefinition->getParentTable(), $tableDefinition->getParentField());
+                $labelField = $this->resolveLabelField($tableDefinition);
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelField);
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
@@ -86,13 +86,11 @@ class TcaGenerator
         return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
     }
 
-    protected function resolveLabelField(TableDefinition $tableDefinition, string $table, string $field): string
+    protected function resolveLabelField(TableDefinition $tableDefinition): string
     {
         $labelFallback = '';
-        $parentTableTcaColumnsDefinition = $this->tableDefinitionCollection->getTable($table)->getTcaColumnsDefinition();
-        $fieldDefinition = $parentTableTcaColumnsDefinition->getField($field);
-        if ($fieldDefinition->hasUseAsLabel()) {
-            $labelFallback = $fieldDefinition->getUseAsLabel();
+        if ($tableDefinition->hasUseAsLabel()) {
+            $labelFallback = $tableDefinition->getUseAsLabel();
         } else {
             // If there is no user-defined label field, use first field as label.
             foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {

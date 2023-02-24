@@ -12,6 +12,34 @@ beyond the image meta fields are required per child item.
 
 It corresponds with the TCA `type='inline'`.
 
+First-level options
+===================
+
+.. rst-class:: dl-parameters
+
+useAsLabel
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` ''
+   :sep:`|`
+
+   Defines which field of the collection item should be used as the title of the
+   inline element. If not defined, the first child field will be used as the
+   label.
+
+   Example:
+
+   .. code-block:: yaml
+
+      identifier: collection
+      type: Collection
+      useAsLabel: text
+      properties:
+          fields:
+            - identifier: image
+              type: Image
+            - identifier: text
+              type: Text
 
 Properties
 ==========
@@ -75,7 +103,7 @@ fields
         - identifier: image
           type: Image
 
-maxItems
+maxitems
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` ''
@@ -84,7 +112,7 @@ maxItems
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
-minItems
+minitems
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` ''
@@ -92,27 +120,6 @@ minItems
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
-
-useAsLabel
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Defines which field of the collection item should be used as the title of the
-   inline element. The given field has to be a string based field type, or at
-   least be convertable to a string.
-
-   Example:
-
-   .. code-block:: yaml
-
-      useAsLabel: text
-      fields:
-        - identifier: text
-          type: Text
-        - identifier: image
-          type: Image
 
 Example
 =======
@@ -123,6 +130,7 @@ Example
     fields:
       - identifier: slides
         type: Collection
+        useAsLabel: title
         properties:
           collapseAll: true
           enabledControls:
@@ -134,6 +142,8 @@ Example
             localize: true
           enableSorting: true
           expandSingle: true
+          maxitems: 5
+          minitems: 1
           fields:
             - identifier: image
               type: Image
@@ -143,6 +153,3 @@ Example
                 required:  true
             - identifier: title
               type: Text
-          maxItems: 5
-          minItems: 1
-          useAsLabel: title
