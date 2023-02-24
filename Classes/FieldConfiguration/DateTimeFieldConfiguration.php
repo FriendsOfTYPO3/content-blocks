@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 {
@@ -66,12 +67,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
-            // If dbType is something else then a integer value, take the default value without parsing it to a timestamp.
-            if ($this->dbType !== '') {
-                $config['default'] = $this->default;
-            } else {
-                $config['default'] = $this->timestampConvert($this->default);
-            }
+            $config['default'] = $this->dbType !== '' ? $this->default : $this->convertDateToTimestamp($this->default);
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
@@ -92,9 +88,14 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
             $config['placeholder'] = $this->placeholder;
         }
         if ($this->range !== []) {
-            // convert range to timestamp or integer
-            $this->range['lower'] = $this->timestampConvert($this->range['lower'] ?? 0);
-            $this->range['upper'] = $this->timestampConvert($this->range['upper'] ?? 0);
+            $lower = $this->convertDateToTimestamp($this->range['lower'] ?? 0);
+            if ($lower > 0) {
+                $this->range['lower'] = $lower;
+            }
+            $upper = $this->convertDateToTimestamp($this->range['upper'] ?? 0);
+            if ($upper > 0) {
+                $this->range['upper'] = $upper;
+            }
             $config['range'] = $this->range;
         }
         if ($this->dbType !== '') {
@@ -121,20 +122,19 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
     }
 
     /**
-     * Helper function timestampConvert
      * Returns a timestamp as integer. Returns 0 if it could not create a timestamp.
     */
-    private function timestampConvert(string|int $input): int
+    private function convertDateToTimestamp(string|int $date): int
     {
-        $isTime = ($this->format === 'time');
-        if (is_int($input)) {
-            return $input;
+        $isTime = $this->format === 'time';
+        if (is_int($date) || MathUtility::canBeInterpretedAsInteger($date)) {
+            return (int)$date;
         }
-        if ($isTime && $input !== '') {
-            $input = '1970-01-01 ' . $input;
+        if ($isTime && $date !== '') {
+            $date = '1970-01-01 ' . $date;
         }
-        if ($input !== '' && strtotime($input)) {
-            return strtotime($input);
+        if ($date !== '' && strtotime($date)) {
+            return strtotime($date);
         }
         return 0;
     }

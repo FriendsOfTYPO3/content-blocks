@@ -92,6 +92,112 @@ class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
         ];
+
+        yield 'default value and ranges converted to timestamps for non native date types' => [
+            'config' => [
+                'properties' => [
+                    'default' => '2023-02-24',
+                    'range' => [
+                        'lower' => '2023-02-24',
+                        'upper' => '2023-12-24',
+                    ],
+                ],
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path.xlf:foo.label',
+                'description' => 'LLL:test-path.xlf:foo.description',
+                'config' => [
+                    'type' => 'datetime',
+                    'default' => (new \DateTime('2023-02-24'))->getTimestamp(),
+                    'range' => [
+                        'lower' => (new \DateTime('2023-02-24'))->getTimestamp(),
+                        'upper' => (new \DateTime('2023-12-24'))->getTimestamp(),
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'default value stays for native date types' => [
+            'config' => [
+                'properties' => [
+                    'dbType' => 'date',
+                    'default' => '2023-02-24',
+                    'range' => [
+                        'lower' => '2023-02-24',
+                        'upper' => '2023-12-24',
+                    ],
+                ],
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path.xlf:foo.label',
+                'description' => 'LLL:test-path.xlf:foo.description',
+                'config' => [
+                    'type' => 'datetime',
+                    'default' => '2023-02-24',
+                    'range' => [
+                        'lower' => (new \DateTime('2023-02-24'))->getTimestamp(),
+                        'upper' => (new \DateTime('2023-12-24'))->getTimestamp(),
+                    ],
+                    'dbType' => 'date',
+                ],
+            ],
+        ];
+
+        yield 'Format time is converted to timestamp in the year 1970' => [
+            'config' => [
+                'properties' => [
+                    'format' => 'time',
+                    'default' => '00:10',
+                    'range' => [
+                        'lower' => '00:10',
+                        'upper' => '01:00',
+                    ],
+                ],
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path.xlf:foo.label',
+                'description' => 'LLL:test-path.xlf:foo.description',
+                'config' => [
+                    'type' => 'datetime',
+                    'default' => (new \DateTime('1970-01-01 00:10'))->getTimestamp(),
+                    'range' => [
+                        'lower' => (new \DateTime('1970-01-01 00:10'))->getTimestamp(),
+                        'upper' => (new \DateTime('1970-01-01 01:00'))->getTimestamp(),
+                    ],
+                    'format' => 'time',
+                ],
+            ],
+        ];
+
+        yield 'Hard coded timestamp passed as is' => [
+            'config' => [
+                'properties' => [
+                    'format' => 'time',
+                    'default' => 1800,
+                    'range' => [
+                        'lower' => 1800,
+                        'upper' => '3600',
+                    ],
+                ],
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'label' => 'LLL:test-path.xlf:foo.label',
+                'description' => 'LLL:test-path.xlf:foo.description',
+                'config' => [
+                    'type' => 'datetime',
+                    'default' => 1800,
+                    'range' => [
+                        'lower' => 1800,
+                        'upper' => 3600,
+                    ],
+                    'format' => 'time',
+                ],
+            ],
+        ];
     }
 
     /**
