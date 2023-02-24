@@ -213,9 +213,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         return null;
     }
 
-    /**
-     * @return \Traversable<TableDefinition>
-     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);

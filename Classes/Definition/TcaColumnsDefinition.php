@@ -64,9 +64,6 @@ final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
         return array_keys($this->definitions);
     }
 
-    /**
-     * @return \Traversable<TcaFieldDefinition>
-     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);

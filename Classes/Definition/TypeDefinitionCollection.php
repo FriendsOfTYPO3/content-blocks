@@ -58,9 +58,6 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
         return $typeDefinitionCollection;
     }
 
-    /**
-     * @return \Traversable<TypeDefinition>
-     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
