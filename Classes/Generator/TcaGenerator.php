@@ -44,15 +44,20 @@ class TcaGenerator
             $columnsOverrides = [];
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelFallback = '';
-                // Use first field as label.
-                foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
-                    $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
-                    break;
+                if(!empty($this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel())) {
+                    // Use selected field as label.
+                    $labelFallback = $this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel();
+                } else {
+                    // Use first field as label.
+                    foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
+                        $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
+                        break;
+                    }
                 }
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelFallback);
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                if ($column->getFieldConfiguration()->getFieldType()->getTcaType() === 'existing') {
+                if ($column->isUseExistingField() === true) {
                     $columnsOverrides[$column->getIdentifier()] = $column->getTca();
                 } else {
                     $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();

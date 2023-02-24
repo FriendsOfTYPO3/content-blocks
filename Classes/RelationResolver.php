@@ -37,8 +37,7 @@ class RelationResolver
     public function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table, ContentElementDefinition $contentElementDefinition): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
-        // @todo think about existing fields
-        $recordIdentifier = $tcaFieldDefinition->getFieldConfiguration()->getFieldType()->getTcaType() === FieldType::EXISTING->getTcaType() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
+        $recordIdentifier = $tcaFieldDefinition->isUseExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
 
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(
@@ -49,8 +48,7 @@ class RelationResolver
 
         $data = $record[$recordIdentifier];
 
-        if ($fieldType === FieldType::FILE ||
-            ($fieldType === FieldType::EXISTING && $GLOBALS['TCA'][$table]['columns'][$recordIdentifier]['config']['type'] === FieldType::FILE->getTcaType())) {
+        if ($fieldType === FieldType::FILE) {
             $fileCollector = new FileCollector();
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
             return $fileCollector->getFiles();

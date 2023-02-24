@@ -54,6 +54,13 @@ final class SqlDefinition implements \IteratorAggregate, \Countable
         $sqlDefinition = new self();
         $sqlDefinition->table = $table;
         foreach ($array as $columnDefinition) {
+            // @todo: Since $GLOBALS['TCA'] is not available think about checking if column exist
+            if (isset($columnDefinition['config']['properties']) &&
+                isset($columnDefinition['config']['properties']['useExistingField']) &&
+                $columnDefinition['config']['properties']['useExistingField'] === true
+            ) {
+                continue;
+            }
             $sqlDefinition->addColumn(new SqlColumnDefinition($columnDefinition));
         }
         return $sqlDefinition;
