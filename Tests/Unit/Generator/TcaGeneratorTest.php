@@ -43,7 +43,7 @@ class TcaGeneratorTest extends UnitTestCase
                                 'useExistingField' => true,
                                 'properties' => [
                                     'enableRichtext' => true,
-                                ]
+                                ],
                             ],
                             [
                                 'identifier' => 'text',
@@ -727,7 +727,7 @@ class TcaGeneratorTest extends UnitTestCase
             'label' => 'Core bodytext field',
             'config' => [
                 'type' => 'text',
-            ]
+            ],
         ];
 
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
