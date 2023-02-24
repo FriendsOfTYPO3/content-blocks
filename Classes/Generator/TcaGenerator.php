@@ -52,7 +52,20 @@ class TcaGenerator
             $columnsOverrides = [];
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelFallback = '';
-                if (!empty($this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel())) {
+                if($this->tableDefinitionCollection->hasCustomCollectionTable($tableName)) {
+                    $customCollectionTable = $this->tableDefinitionCollection->getCustomCollectionTable($tableName);
+                    $customCollectionTableTcaColumnsDefinition = $this->tableDefinitionCollection->getTable($customCollectionTable['parentTable'])->getTcaColumnsDefinition();
+                    if(!empty($this->tableDefinitionCollection->getTable($customCollectionTable['parentTable'])->getTcaColumnsDefinition()->getField($customCollectionTable['identifier'])->getUseAsLabel())) {
+                        $labelFallback = $this->tableDefinitionCollection->getTable($customCollectionTable['parentTable'])->getTcaColumnsDefinition()->getField($customCollectionTable['identifier'])->getUseAsLabel();
+                    } else {
+                        // Use first field as label.
+                        foreach ($customCollectionTableTcaColumnsDefinition as $columnFieldDefinition) {
+                            $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
+                            break;
+                        }
+                    }
+                }
+                else if (!empty($this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel())) {
                     // Use selected field as label.
                     $labelFallback = $this->tableDefinitionCollection->getTable('tt_content')->getTcaColumnsDefinition()->getField($tableName)->getUseAsLabel();
                 } else {
