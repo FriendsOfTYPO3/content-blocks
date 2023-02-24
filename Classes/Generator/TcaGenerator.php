@@ -50,27 +50,31 @@ class TcaGenerator
     {
         $tca = [];
         foreach ($this->tableDefinitionCollection as $tableName => $tableDefinition) {
-            $columnsOverrides = [];
             if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelField = $this->resolveLabelField($tableDefinition);
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelField);
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                if ($column->useExistingField()) {
-                    $overrideTca = $column->getTca();
-                    unset($overrideTca['config']['type']);
-                    $columnsOverrides[$column->getIdentifier()] = $overrideTca;
-                } else {
+                if (!$column->useExistingField()) {
                     $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
                 }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                $columnsOverrides = [];
+                foreach ($typeDefinition->getColumns() as $column) {
+                    $columnDefinition = $tableDefinition->getTcaColumnsDefinition()->getField($column);
+                    if ($columnDefinition->useExistingField()) {
+                        $overrideTca = $columnDefinition->getTca();
+                        unset($overrideTca['config']['type']);
+                        $columnsOverrides[$columnDefinition->getIdentifier()] = $overrideTca;
+                    }
+                }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
                         'previewRenderer' => PreviewRenderer::class,
                         'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
                     ];
-                    if (count($columnsOverrides) > 0) {
+                    if ($columnsOverrides !== []) {
                         $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
                     }
                 } else {
