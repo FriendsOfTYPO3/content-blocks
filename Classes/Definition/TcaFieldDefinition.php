@@ -147,10 +147,16 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function isUseExistingField(): bool
+    public function useExistingField(): bool
     {
         return $this->useExistingField;
     }
+
+    public function hasUseAsLabel(): bool
+    {
+        return $this->useAsLabel !== '';
+    }
+
     public function getUseAsLabel(): string
     {
         return $this->useAsLabel;

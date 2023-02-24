@@ -38,6 +38,14 @@ class TcaGeneratorTest extends UnitTestCase
                     'yaml' => [
                         'fields' => [
                             [
+                                'identifier' => 'bodytext',
+                                'type' => 'Textarea',
+                                'useExistingField' => true,
+                                'properties' => [
+                                    'enableRichtext' => true,
+                                ]
+                            ],
+                            [
                                 'identifier' => 'text',
                                 'type' => 'Text',
                                 'properties' => [
@@ -153,8 +161,17 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,t3ce_example_text,t3ce_example_textarea,t3ce_example_number,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_datetime,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_reference,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,bodytext,t3ce_example_text,t3ce_example_textarea,t3ce_example_number,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_datetime,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_reference,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'bodytext' => [
+                                    'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:bodytext.label',
+                                    'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:bodytext.description',
+                                    'config' => [
+                                        'enableRichtext' => true,
+                                    ],
+                                ],
+                            ],
                         ],
                         't3ce_testblock' => [
                             'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,header,t3ce_testblock_text,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
@@ -681,6 +698,13 @@ class TcaGeneratorTest extends UnitTestCase
      */
     public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
+        $GLOBALS['tt_content']['columns']['bodytext'] = [
+            'label' => 'Core bodytext field',
+            'config' => [
+                'type' => 'text',
+            ]
+        ];
+
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher());
 

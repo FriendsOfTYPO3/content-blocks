@@ -119,9 +119,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
                 $field = $tableDefinitionCollection->processCollections(
                     field: $field,
                     table: $uniqueColumnName,
-                    parentTable: 'tt_content',
                     languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $vendor, $field['identifier'])],
-                    composerName: $composerName
+                    composerName: $composerName,
+                    parentTable: $table,
+                    rootTable: $table,
                 );
                 $tableDefinitionList[$table]['fields'][$uniqueColumnName] = [
                     'uniqueIdentifier' => $uniqueColumnName,
@@ -148,7 +149,7 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $table, string $parentTable, array $languagePath, string $composerName): array
+    private function processCollections(array $field, string $table, array $languagePath, string $composerName, string $parentTable, string $rootTable): array
     {
         $field['languagePath'] = implode('.', $languagePath);
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
@@ -158,14 +159,6 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         $field['properties']['foreign_table'] = $table;
         $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
-        // TODO: added for useAsLabel (collections in collections)
-        if($parentTable !== 'tt_content') {
-            $this->customCollectionTables[$table] = [
-                'parentTable' => $parentTable,
-                'identifier' => $field['identifier']
-            ];
-        }
-
         $tableDefinition = [];
         foreach ($field['properties']['fields'] as $collectionField) {
             $identifier = $collectionField['identifier'];
@@ -173,9 +166,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
             $childField = $this->processCollections(
                 field: $collectionField,
                 table: UniqueNameUtility::createUniqueColumnName($composerName, $identifier),
-                parentTable: $table,
                 languagePath: $languagePath,
-                composerName: $composerName
+                composerName: $composerName,
+                parentTable: $table,
+                rootTable: $rootTable
             );
             // Since we can't check TCA and collection tables are individual tables
             // the useExistingField is not allowed on collections
@@ -191,6 +185,10 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
         if ($this->hasTable($table)) {
             throw new \InvalidArgumentException('A Collection field with the identifier "' . $field['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
         }
+
+        // Add parent table information.
+        $tableDefinition['parentTable'] = $parentTable;
+        $tableDefinition['parentField'] = $rootTable === $parentTable ? $table : $field['identifier'];
         $this->addTable(
             tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
             isCustomTable: true
@@ -220,14 +218,5 @@ final class TableDefinitionCollection implements \IteratorAggregate, SingletonIn
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
-    }
-
-    public function hasCustomCollectionTable(string $tableName): bool
-    {
-        return isset($this->customCollectionTables[$tableName]);
-    }
-    public function getCustomCollectionTable(string $tableName): array
-    {
-        return $this->customCollectionTables[$tableName];
     }
 }

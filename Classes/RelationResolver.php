@@ -37,7 +37,7 @@ class RelationResolver
     public function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table, ContentElementDefinition $contentElementDefinition): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
-        $recordIdentifier = $tcaFieldDefinition->isUseExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
+        $recordIdentifier = $tcaFieldDefinition->useExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
 
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(

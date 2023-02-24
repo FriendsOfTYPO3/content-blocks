@@ -20,6 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 final class TableDefinition
 {
     private string $table = '';
+    private string $parentTable = '';
+    private string $parentField = '';
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
     private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
@@ -34,6 +36,8 @@ final class TableDefinition
         $tableDefinition = new self();
         $tableDefinition = $tableDefinition
             ->withTable($table)
+            ->withParentTable($definition['parentTable'] ?? '')
+            ->withParentField($definition['parentField'] ?? '')
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
@@ -48,6 +52,16 @@ final class TableDefinition
     public function getTable(): string
     {
         return $this->table;
+    }
+
+    public function getParentTable(): string
+    {
+        return $this->parentTable;
+    }
+
+    public function getParentField(): string
+    {
+        return $this->parentField;
     }
 
     public function getTypeDefinitionCollection(): ?TypeDefinitionCollection
@@ -74,6 +88,20 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->table = $table;
+        return $clone;
+    }
+
+    public function withParentTable(string $parentTable): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->parentTable = $parentTable;
+        return $clone;
+    }
+
+    public function withParentField(string $parentField): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->parentField = $parentField;
         return $clone;
     }
 
