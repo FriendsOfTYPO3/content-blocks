@@ -165,7 +165,7 @@ class TypeDefinition
     }
 
     /**
-     * @param string[] $overrideColumns
+     * @param array<TcaFieldDefinition> $overrideColumns
      */
     public function withOverrideColumns(array $overrideColumns): static
     {
