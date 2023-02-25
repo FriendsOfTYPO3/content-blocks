@@ -24,7 +24,7 @@ class TypoScriptGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $privatePath = ContentBlockPathUtility::getRelativeContentBlocksPrivatePath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor());
+        $privatePath = ContentBlockPathUtility::getPrefixedContentBlockPrivatePath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor());
         return <<<HEREDOC
 tt_content.{$contentElementDefinition->getTypeName()} =< lib.contentBlock
 tt_content.{$contentElementDefinition->getTypeName()} {

@@ -21,7 +21,7 @@ class LanguagePathUtility
 {
     protected static function getLanguageFolderPath(string $package, string $vendor): string
     {
-        return ContentBlockPathUtility::getRelativeContentBlocksPrivatePath($package, $vendor) . '/Language';
+        return ContentBlockPathUtility::getPrefixedContentBlockPrivatePath($package, $vendor) . '/Language';
     }
 
     public static function getPartialLanguageIdentifierPath(string $package, string $vendor, string $identifier): string

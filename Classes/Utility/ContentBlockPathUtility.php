@@ -27,7 +27,7 @@ class ContentBlockPathUtility
         return Environment::getLegacyConfigPath() . '/content-blocks';
     }
 
-    public static function getAbsolutePackagePath(string $package, string $vendor = ''): string
+    public static function getAbsoluteContentBlockPath(string $package, string $vendor = ''): string
     {
         if (Environment::isComposerMode()) {
             if ($vendor === '') {
@@ -38,28 +38,33 @@ class ContentBlockPathUtility
         return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
     }
 
-    public static function getAbsoluteContentBlocksPrivatePath(string $package, string $vendor = ''): string
+    public static function getAbsoluteContentBlockPrivatePath(string $package, string $vendor = ''): string
     {
-        return self::getAbsolutePackagePath($package, $vendor) . '/Resources/Private';
+        return self::getAbsoluteContentBlockPath($package, $vendor) . '/Resources/Private';
     }
 
-    public static function getRelativeContentBlocksPrivatePath(string $package, string $vendor = ''): string
+    public static function getPrefixedContentBlockPrivatePath(string $package, string $vendor = ''): string
     {
-        return self::getRelativePackagePath($package, $vendor) . '/Resources/Private';
+        return self::getPrefixedContentBlockPath($package, $vendor) . '/Resources/Private';
     }
 
-    public static function getAbsoluteContentBlocksPublicPath(string $package, string $vendor = ''): string
+    public static function getAbsoluteContentBlockPublicPath(string $package, string $vendor = ''): string
     {
-        return self::getAbsolutePackagePath($package, $vendor) . '/Resources/Public';
+        return self::getAbsoluteContentBlockPath($package, $vendor) . '/Resources/Public';
     }
 
-    public static function getRelativeContentBlocksPublicPath(string $package, string $vendor = ''): string
+    public static function getPrefixedContentBlockPublicPath(string $package, string $vendor = ''): string
     {
-        return self::getRelativePackagePath($package, $vendor) . '/Resources/Public';
+        return self::getPrefixedContentBlockPath($package, $vendor) . '/Resources/Public';
     }
 
-    protected static function getRelativePackagePath(string $package, string $vendor): string
+    protected static function getPrefixedContentBlockPath(string $package, string $vendor): string
     {
         return 'CB:' . $vendor . '/' . $package;
+    }
+
+    public static function isContentBlockPath(string $path): bool
+    {
+        return str_starts_with($path, 'CB:');
     }
 }

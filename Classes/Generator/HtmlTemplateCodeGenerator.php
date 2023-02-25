@@ -26,15 +26,15 @@ class HtmlTemplateCodeGenerator
     {
         $package = $contentBlockConfiguration->getPackage();
         $vendor = $contentBlockConfiguration->getVendor();
-        return '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="' . ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/EditorPreview.css"/>' . "\n";
+        return '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="' . ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/EditorPreview.css"/>' . "\n";
     }
 
     public function generateFrontendTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getPackage();
         $vendor = $contentBlockConfiguration->getVendor();
-        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="' . ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/Frontend.css"/>';
-        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="' . ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/Frontend.js"/>';
+        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="' . ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/Frontend.css"/>';
+        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="' . ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/Frontend.js"/>';
         $frontendTemplate[] = '';
         return implode("\n", $frontendTemplate);
     }

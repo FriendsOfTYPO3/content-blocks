@@ -36,14 +36,14 @@ class ContentBlockSkeletonBuilder
     {
         $vendor = $contentBlockConfiguration->getVendor();
         $package = $contentBlockConfiguration->getPackage();
-        $basePath = ContentBlockPathUtility::getAbsolutePackagePath($package, $vendor);
+        $basePath = ContentBlockPathUtility::getAbsoluteContentBlockPath($package, $vendor);
         if (file_exists($basePath)) {
             throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.', 1674225339);
         }
 
         // create directory structure
-        $privatePath = ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($package);
-        $publicPath = ContentBlockPathUtility::getAbsoluteContentBlocksPublicPath($package);
+        $privatePath = ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package);
+        $publicPath = ContentBlockPathUtility::getAbsoluteContentBlockPublicPath($package);
         GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($privatePath . '/Language');
 

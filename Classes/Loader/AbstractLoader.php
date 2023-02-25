@@ -25,7 +25,7 @@ class AbstractLoader
     // @todo create object for configuration dto.
     protected function loadPackageConfiguration(string $package, string $vendor): array
     {
-        $packagePath = ContentBlockPathUtility::getAbsolutePackagePath($package, $vendor);
+        $packagePath = ContentBlockPathUtility::getAbsoluteContentBlockPath($package, $vendor);
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".', 1674225340);
         }
@@ -34,15 +34,15 @@ class AbstractLoader
             file_get_contents($packagePath . '/' . 'composer.json'),
             true
         );
-        $packageConfiguration['yaml'] = Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlocksPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml');
+        $packageConfiguration['yaml'] = Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml');
 
         $iconPath = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
             $iconName = 'ContentBlockIcon.' . $fileExtension;
-            $checkIconPath = ContentBlockPathUtility::getAbsoluteContentBlocksPublicPath($package, $vendor) . '/' . $iconName;
+            $checkIconPath = ContentBlockPathUtility::getAbsoluteContentBlockPublicPath($package, $vendor) . '/' . $iconName;
             if (is_readable($checkIconPath)) {
-                $iconPath = ContentBlockPathUtility::getRelativeContentBlocksPublicPath($package, $vendor) . '/' . $iconName;
+                $iconPath = ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/' . $iconName;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
                 break;
             }
