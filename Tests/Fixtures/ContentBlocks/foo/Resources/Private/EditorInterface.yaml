@@ -1,0 +1,76 @@
+group: common
+fields:
+  - identifier: image
+    type: File
+    useExistingField: true
+  - identifier: collection
+    type: Collection
+    properties:
+      fields:
+        - identifier: fieldA
+          type: Text
+  - identifier: collection_recursive
+    type: Collection
+    properties:
+      fields:
+        - identifier: fieldA
+          type: Text
+        - identifier: collection_inner
+          type: Collection
+          properties:
+            fields:
+              - identifier: fieldB
+                type: Text
+  - identifier: categories_mm
+    type: Category
+  - identifier: categories_11
+    type: Category
+    properties:
+      relationship: oneToOne
+  - identifier: categories_1m
+    type: Category
+    properties:
+      relationship: oneToMany
+  - identifier: pages_reference
+    type: Reference
+    properties:
+      allowed: pages
+  - identifier: pages_content_reference
+    type: Reference
+    properties:
+      allowed: pages,tt_content
+  - identifier: pages_mm
+    type: Reference
+    properties:
+      allowed: pages
+      MM: block_pages_mm
+  - identifier: select_checkbox
+    type: Select
+    properties:
+      renderType: selectCheckBox
+      items:
+        - ['Foo 1', '1']
+        - ['Foo 2', '2']
+        - ['Foo 3', '3']
+  - identifier: select_single_box
+    type: Select
+    properties:
+      renderType: selectSingleBox
+      items:
+        - ['Foo 1', '1']
+        - ['Foo 2', '2']
+        - ['Foo 3', '3']
+  - identifier: select_multiple
+    type: Select
+    properties:
+      renderType: selectMultipleSideBySide
+      items:
+        - ['Foo 1', '1']
+        - ['Foo 2', '2']
+        - ['Foo 3', '3']
+
+  - identifier: select_foreign
+    type: Select
+    properties:
+      renderType: selectSingle
+      foreign_table: pages

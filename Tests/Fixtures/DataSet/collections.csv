@@ -1,0 +1,4 @@
+"bar_foo_collection"
+,"uid","pid","fieldA","foreign_table_parent_uid"
+,1,1,"lorem foo bar",1
+,2,1,"lorem foo bar 2",1

@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
@@ -34,10 +33,10 @@ class RelationResolver
     ) {
     }
 
-    public function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table, ContentElementDefinition $contentElementDefinition): mixed
+    public function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
-        $recordIdentifier = $tcaFieldDefinition->useExistingField() ? $tcaFieldDefinition->getIdentifier() : $tcaFieldDefinition->getUniqueIdentifier();
+        $recordIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
 
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(
@@ -55,7 +54,7 @@ class RelationResolver
         }
 
         if ($fieldType === FieldType::COLLECTION) {
-            return $this->processCollection($table, $record, $tcaFieldDefinition, $contentElementDefinition);
+            return $this->processCollection($table, $record, $tcaFieldDefinition);
         }
 
         if ($fieldType === FieldType::CATEGORY) {
@@ -122,7 +121,7 @@ class RelationResolver
         );
     }
 
-    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, ContentElementDefinition $contentElementDefinition): array
+    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition): array
     {
         $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
         $collectionTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
@@ -143,7 +142,6 @@ class RelationResolver
                     tcaFieldDefinition: $childTcaFieldDefinition,
                     record: $row,
                     table: $collectionTable,
-                    contentElementDefinition: $contentElementDefinition
                 );
             }
         }

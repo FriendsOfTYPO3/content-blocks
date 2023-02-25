@@ -1,6 +1,0 @@
-group: common
-fields:
-  - identifier: assets
-    type: Existing
-    properties:
-      allowed: jpg,jpeg,png,svg,gif

@@ -1,0 +1,6 @@
+{
+    "name": "bar/foo",
+    "description": "This is an empty skeleton to kickstart a new content block",
+    "type": "typo3-content-block",
+    "license": "GPL-2.0-or-later"
+}
