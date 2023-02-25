@@ -31,7 +31,7 @@ class ContentBlockPathUtility
     {
         if (Environment::isComposerMode()) {
             if ($vendor === '') {
-                throw new \InvalidArgumentException('`$vendor` must be set to retrieve absolute path of package.', 1674170723);
+                throw new \InvalidArgumentException('`$vendor` must be set to retrieve absolute path of package in composer-mode.', 1674170723);
             }
             return realpath(InstalledVersions::getInstallPath($vendor . '/' . $package));
         }
