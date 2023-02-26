@@ -28,7 +28,6 @@ final class TcaFieldDefinition
     private string $description = '';
     private string $languagePath = '';
     private bool $useExistingField = false;
-    private string $useAsLabel = '';
     private ?FieldConfigurationInterface $fieldConfiguration = null;
 
     public static function createFromArray(array $array): TcaFieldDefinition
@@ -49,7 +48,6 @@ final class TcaFieldDefinition
             ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'] ?? '')
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
-            ->withUseAsLabel($array['config']['properties']['useAsLabel'] ?? '')
             ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
     }
 
@@ -133,13 +131,6 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withUseAsLabel(string $useAsLabel): TcaFieldDefinition
-    {
-        $clone = clone $this;
-        $clone->useAsLabel = $useAsLabel;
-        return $clone;
-    }
-
     public function withFieldConfiguration(FieldConfigurationInterface $fieldConfiguration): TcaFieldDefinition
     {
         $clone = clone $this;
@@ -150,15 +141,5 @@ final class TcaFieldDefinition
     public function useExistingField(): bool
     {
         return $this->useExistingField;
-    }
-
-    public function hasUseAsLabel(): bool
-    {
-        return $this->useAsLabel !== '';
-    }
-
-    public function getUseAsLabel(): string
-    {
-        return $this->useAsLabel;
     }
 }
