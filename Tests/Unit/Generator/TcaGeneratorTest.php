@@ -172,6 +172,7 @@ class TcaGeneratorTest extends UnitTestCase
                             't3ce_example' => 't3ce_example-icon',
                             't3ce_testblock' => 't3ce_testblock-icon',
                         ],
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_example_text,t3ce_example_textarea,t3ce_example_email,t3ce_testblock_text',
                     ],
                     'types' => [
                         't3ce_example' => [
@@ -374,6 +375,7 @@ class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
+                        'searchFields' => 'text,text2',
                     ],
                     'types' => [
                         '1' => [
@@ -561,7 +563,7 @@ class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
-
+                        'searchFields' => 'text,text2',
                     ],
                     'types' => [
                         '1' => [
@@ -735,12 +737,13 @@ class TcaGeneratorTest extends UnitTestCase
      */
     public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
-        $GLOBALS['tt_content']['columns']['bodytext'] = [
+        $GLOBALS['TCA']['tt_content']['columns']['bodytext'] = [
             'label' => 'Core bodytext field',
             'config' => [
                 'type' => 'text',
             ],
         ];
+        $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher());

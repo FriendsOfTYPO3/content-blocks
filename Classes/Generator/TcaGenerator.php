@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaColumnsDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
@@ -82,6 +83,7 @@ class TcaGenerator
                 $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
                 $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
             }
+            $tca[$tableName]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
         }
 
         return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
@@ -149,6 +151,28 @@ class TcaGenerator
         $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
         $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
         return $generalTab . implode(',', $columns->getKeys()) . $appendLanguageTab . $appendAccessTab;
+    }
+
+
+    /**
+     * Add search fields to find content elements
+     */
+    public function addSearchFields(TableDefinition $tableDefinition): string
+    {
+        $searchFieldsString = $GLOBALS['TCA'][$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
+        $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
+
+        foreach ($tableDefinition->getTcaColumnsDefinition() as $field) {
+            if ($field->getFieldType()->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
+                $searchFields[] = $field->getUniqueIdentifier();
+            }
+        }
+
+        if ($searchFields === []) {
+            return '';
+        }
+
+        return implode(',', $searchFields);
     }
 
     protected function getCollectionTableStandardTca(TcaColumnsDefinition $columns, string $table, string $labelField): array

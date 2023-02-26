@@ -70,6 +70,11 @@ enum FieldType: string
         };
     }
 
+    public function isSearchable(): bool
+    {
+        return in_array($this, [FieldType::TEXT, FieldType::TEXTAREA, FieldType::EMAIL], true);
+    }
+
     public function isRenderable(): bool
     {
         return true;
