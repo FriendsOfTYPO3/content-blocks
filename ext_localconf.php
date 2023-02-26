@@ -19,7 +19,6 @@ lib.contentBlock {
 }
 ');
 
-
 $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
 foreach (GeneralUtility::makeInstance(LoaderFactory::class)->load() as $tableDefinition) {
     foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
