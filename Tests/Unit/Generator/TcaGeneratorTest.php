@@ -346,6 +346,13 @@ class TcaGeneratorTest extends UnitTestCase
                             ],
                             'exclude' => true,
                         ],
+                        'bodytext' => [
+                            'config' => [
+                                'search' => [
+                                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\' OR {#CType}=\'t3ce_example\' OR {#CType}=\'t3ce_testblock\''
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 't3ce_example_collection' => [
@@ -741,6 +748,9 @@ class TcaGeneratorTest extends UnitTestCase
             'label' => 'Core bodytext field',
             'config' => [
                 'type' => 'text',
+                'search' => [
+                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\'',
+                ],
             ],
         ];
         $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';

@@ -114,6 +114,11 @@ class TypeDefinition
         return $this->columns;
     }
 
+    public function hasColumn(string $column): bool
+    {
+        return in_array($column, $this->columns, true);
+    }
+
     public function getOverrideColumns(): array
     {
         return $this->overrideColumns;

@@ -75,6 +75,8 @@ class TcaGenerator
                     if ($columnsOverrides !== []) {
                         $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
                     }
+                    $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config']['search']['andWhere'];
+                    $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodytextSearchAndWhere($typeDefinition);
                 } else {
                     $typeDefinitionArray = [
                         'showitem' => $this->getGenericStandardShowItem($typeDefinition->getColumns()),
@@ -173,6 +175,16 @@ class TcaGenerator
         }
 
         return implode(',', $searchFields);
+    }
+
+    public function extendBodytextSearchAndWhere(ContentElementDefinition $contentElementDefinition): string
+    {
+        $andWhere = '';
+        if ($contentElementDefinition->hasColumn('bodytext')) {
+            $andWhere .= ' OR {#CType}=\'' . $contentElementDefinition->getTypeName() . '\'';
+        }
+
+        return $andWhere;
     }
 
     protected function getCollectionTableStandardTca(TcaColumnsDefinition $columns, string $table, string $labelField): array
