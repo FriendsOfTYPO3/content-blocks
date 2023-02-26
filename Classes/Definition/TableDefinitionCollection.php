@@ -100,9 +100,17 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $composerName = $contentBlock['composerJson']['name'];
             [$vendor, $package] = explode('/', $composerName);
 
+            $uniqueIdentifiers = [];
             $columns = [];
             $overrideColumns = [];
             foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
+                if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The identifier "' . $field['identifier'] . '" in package ' . $composerName . ' does exist more than once. Please choose unique identifiers.',
+                        1677407941
+                    );
+                }
+                $uniqueIdentifiers[] = $field['identifier'];
                 $useExistingField = false;
                 if (($field['useExistingField'] ?? false) && in_array($field['identifier'], self::$allowedFields[$table], true)) {
                     $uniqueColumnName = $field['identifier'];
@@ -162,10 +170,18 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $field['properties']['foreign_table'] = $table;
         $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
+        $uniqueIdentifiers = [];
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
         foreach ($field['properties']['fields'] as $collectionField) {
             $identifier = $collectionField['identifier'];
+            if (in_array($identifier, $uniqueIdentifiers, true)) {
+                throw new \InvalidArgumentException(
+                    'The identifier "' . $identifier . '" in package ' . $composerName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
+                    1677407942
+                );
+            }
+            $uniqueIdentifiers[] = $identifier;
             $languagePath[] = $identifier;
             $childField = $this->processCollections(
                 field: $collectionField,

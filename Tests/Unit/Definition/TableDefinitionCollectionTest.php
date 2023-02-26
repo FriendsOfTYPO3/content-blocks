@@ -133,4 +133,100 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         self::assertNull($contentElementDefinition);
     }
+
+    public function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
+    {
+        yield 'two collections with the same identifier' => [
+            'contentBlocks' => [
+                [
+                    'composerJson' => [
+                        'name' => 't3ce/example',
+                    ],
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'foo',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'bar',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'foo',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider notUniqueIdentifiersThrowAnExceptionDataProvider
+     * @test
+     */
+    public function notUniqueIdentifiersThrowAnException(array $contentBlocks): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1677407941);
+        $this->expectExceptionMessage('The identifier "foo" in package t3ce/example does exist more than once. Please choose unique identifiers.');
+
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    public function notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider(): iterable
+    {
+        yield 'two collections with the same identifier' => [
+            'contentBlocks' => [
+                [
+                    'composerJson' => [
+                        'name' => 't3ce/example',
+                    ],
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'collection',
+                                'type' => 'Collection',
+                                'properties' => [
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'foo',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'bar',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'foo',
+                                            'type' => 'Text',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider
+     * @test
+     */
+    public function notUniqueIdentifiersWithinCollectionThrowAnException(array $contentBlocks): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1677407942);
+        $this->expectExceptionMessage('The identifier "foo" in package t3ce/example in Collection "collection" does exist more than once. Please choose unique identifiers.');
+
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
 }
