@@ -22,13 +22,11 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
  */
 final class ContentBlockConfiguration
 {
-    private array $composerJson;
-    private array $yamlConfig;
-
-    public function __construct(array $composerJson, array $yamlConfig)
-    {
-        $this->composerJson = $composerJson;
-        $this->yamlConfig = $yamlConfig;
+    public function __construct(
+        private readonly array $composerJson,
+        private readonly array $yamlConfig,
+        private readonly string $basePath,
+    ) {
     }
 
     public function getComposerJson(): array
@@ -49,5 +47,10 @@ final class ContentBlockConfiguration
     public function getPackage(): string
     {
         return explode('/', $this->composerJson['name'] ?? '')[1] ?? '';
+    }
+
+    public function getBasePath(): string
+    {
+        return $this->basePath;
     }
 }

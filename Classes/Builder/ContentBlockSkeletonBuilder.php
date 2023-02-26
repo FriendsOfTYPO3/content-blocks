@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentBlockSkeletonBuilder
@@ -36,14 +37,20 @@ class ContentBlockSkeletonBuilder
     {
         $vendor = $contentBlockConfiguration->getVendor();
         $package = $contentBlockConfiguration->getPackage();
-        $basePath = ContentBlockPathUtility::getAbsoluteContentBlockPath($package, $vendor);
+        $basePath = $contentBlockConfiguration->getBasePath();
+        if ($basePath === '') {
+            $basePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath();
+        } else {
+            $basePath = Environment::getProjectPath() . '/' . $basePath;
+        }
+        $basePath .= '/' . $package;
         if (file_exists($basePath)) {
             throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.', 1674225339);
         }
 
         // create directory structure
-        $privatePath = ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package);
-        $publicPath = ContentBlockPathUtility::getAbsoluteContentBlockPublicPath($package);
+        $privatePath = $basePath . '/Resources/Private';
+        $publicPath = $basePath . '/Resources/Public';
         GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($privatePath . '/Language');
 

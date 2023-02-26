@@ -20,10 +20,12 @@ namespace TYPO3\CMS\ContentBlocks\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
+use TYPO3\CMS\Core\Core\Environment;
 
 class CreateContentBlockCommand extends Command
 {
@@ -34,15 +36,39 @@ class CreateContentBlockCommand extends Command
         $this->contentBlockBuilder = $contentBlockBuilder;
     }
 
+    public function configure()
+    {
+        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor name of the content block.');
+        $this->addOption('package', '', InputOption::VALUE_OPTIONAL, 'The package name of the content block.');
+        $this->addOption('path', '', InputOption::VALUE_OPTIONAL, 'Relative project path for content block packages.');
+    }
+
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
-        $questionVendor = new Question('Enter your vendor name: ');
-        $questionPackage = new Question('Enter your package name: ');
-
-        $vendor = $questionHelper->ask($input, $output, $questionVendor);
-        $package = $questionHelper->ask($input, $output, $questionPackage);
+        if ($input->getOption('vendor')) {
+            $vendor = $input->getOption('vendor');
+        } else {
+            $questionVendor = new Question('Enter your vendor name: ');
+            $vendor = $questionHelper->ask($input, $output, $questionVendor);
+        }
+        if ($input->getOption('package')) {
+            $package = $input->getOption('package');
+        } else {
+            $questionPackage = new Question('Enter your package name: ');
+            $package = $questionHelper->ask($input, $output, $questionPackage);
+        }
+        $basePath = '';
+        if (Environment::isComposerMode()) {
+            if ($input->getOption('path')) {
+                $basePath = $input->getOption('path');
+            } else {
+                $defaultPath = '{publicDir}/typo3conf/content-blocks';
+                $questionBasePath = new Question('Enter your relative path (Default is ' . $defaultPath . '): ');
+                $basePath = $questionHelper->ask($input, $output, $questionBasePath);
+            }
+        }
 
         $composerJson = [
             'name' => $vendor . '/' . $package,
@@ -61,7 +87,8 @@ class CreateContentBlockCommand extends Command
                         'useExistingField' => true,
                     ]
                 ],
-            ]
+            ],
+            basePath: (string)$basePath
         );
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
