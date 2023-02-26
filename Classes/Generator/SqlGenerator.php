@@ -19,9 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
-use TYPO3\CMS\Core\SingletonInterface;
 
-class SqlGenerator implements SingletonInterface
+class SqlGenerator
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection
