@@ -81,7 +81,7 @@ class SqlGeneratorTest extends UnitTestCase
             ],
             'expected' => [
                 "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_collection` int(11) DEFAULT '0' NOT NULL);",
             ],
@@ -133,10 +133,10 @@ class SqlGeneratorTest extends UnitTestCase
             ],
             'expected' => [
                 "CREATE TABLE `foo_bar_collection2`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `foo_bar_collection2`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `foo_bar_collection2`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
                 "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`collection2` int(11) DEFAULT '0' NOT NULL);",
-                "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_collection` int(11) DEFAULT '0' NOT NULL);",
             ],
