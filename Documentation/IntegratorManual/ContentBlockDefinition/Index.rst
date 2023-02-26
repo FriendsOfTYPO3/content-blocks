@@ -98,4 +98,17 @@ Labels for the editing interface, as well as frontend labels, are stored in the
 
 It is recommended to apply the :ref:`coding guidelines for labels <t3coreapi:xliff>`
 to your Content Blocks as well. E.g. for backend labels that would be:
-`<code-block-identifier>.<field-identifier>`.
+`<code-block-identifier>.<field-identifier>.title`
+
+Or the description in the backend, e.g. the description in newContentElementWizard:
+`<code-block-identifier>.<field-identifier>.description`
+
+Example for a label of a field:
+`<field-identifier>.label`
+
+Example for a description of a field:
+`<field-identifier>.description`
+
+This goes analogously for collection fields, in this case the field indentifier
+of the collection field is used as a prefix:
+`<collection-field-identifier>.<field-identifier>.label`
