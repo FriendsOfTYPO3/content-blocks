@@ -33,7 +33,8 @@ identifier
    :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   The field's identifier has to be unique within a Content Block.
+   The field's identifier has to be unique within a Content Block. Exception is
+   within a collections' field array, as this starts a new scope.
 
 type
    :sep:`|` :aspect:`Required:` true
