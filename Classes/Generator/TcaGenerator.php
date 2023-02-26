@@ -23,7 +23,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaColumnsDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
@@ -153,7 +152,6 @@ class TcaGenerator
         $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
         return $generalTab . implode(',', $columns->getKeys()) . $appendLanguageTab . $appendAccessTab;
     }
-
 
     /**
      * Add search fields to find content elements

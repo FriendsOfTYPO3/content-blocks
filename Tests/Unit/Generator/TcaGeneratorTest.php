@@ -349,7 +349,7 @@ class TcaGeneratorTest extends UnitTestCase
                         'bodytext' => [
                             'config' => [
                                 'search' => [
-                                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\' OR {#CType}=\'t3ce_example\' OR {#CType}=\'t3ce_testblock\''
+                                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\' OR {#CType}=\'t3ce_example\' OR {#CType}=\'t3ce_testblock\'',
                                 ],
                             ],
                         ],

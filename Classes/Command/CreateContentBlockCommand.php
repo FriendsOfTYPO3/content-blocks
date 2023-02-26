@@ -85,7 +85,7 @@ class CreateContentBlockCommand extends Command
                         'identifier' => 'header',
                         'type' => 'Text',
                         'useExistingField' => true,
-                    ]
+                    ],
                 ],
             ],
             basePath: (string)$basePath
