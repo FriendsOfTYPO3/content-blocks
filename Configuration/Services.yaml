@@ -7,10 +7,6 @@ services:
   TYPO3\CMS\ContentBlocks\:
     resource: '../Classes/*'
 
-  TYPO3\CMS\ContentBlocks\BackendController\ContentBlocksController:
-    tags:
-      - name: backend.controller
-
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
     tags:
