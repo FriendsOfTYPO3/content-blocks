@@ -54,7 +54,13 @@ class CreateContentBlockCommand extends Command
             composerJson: $composerJson,
             yamlConfig: [
                 'group' => 'common',
-                'fields' => [],
+                'fields' => [
+                    [
+                        'identifier' => 'header',
+                        'type' => 'Text',
+                        'useExistingField' => true,
+                    ]
+                ],
             ]
         );
         $this->contentBlockBuilder->create($contentBlockConfiguration);

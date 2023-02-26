@@ -77,6 +77,9 @@ class ContentBlockSkeletonBuilder
 			<trans-unit id="$vendor.$package.description" xml:space="preserve">
 				<source>This is your content block description</source>
 			</trans-unit>
+            <trans-unit id="header.label" xml:space="preserve">
+				<source>Custom header title</source>
+			</trans-unit>
         </body>
 	</file>
 </xliff>
