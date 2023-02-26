@@ -55,6 +55,6 @@ services:
   TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand:
     tags:
       - name: 'console.command'
-        command: 'cb:create'
+        command: 'make:content-block'
         description: 'Create a content block skeleton.'
         schedulable: false
