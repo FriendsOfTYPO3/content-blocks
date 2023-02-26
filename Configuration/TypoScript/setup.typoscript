@@ -1,6 +1,0 @@
-lib.contentBlock = FLUIDTEMPLATE
-lib.contentBlock {
-    dataProcessing {
-        10 = TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor
-    }
-}

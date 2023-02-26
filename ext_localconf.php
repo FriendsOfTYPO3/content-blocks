@@ -10,6 +10,16 @@ use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+ExtensionManagementUtility::addTypoScriptSetup('
+lib.contentBlock = FLUIDTEMPLATE
+lib.contentBlock {
+    dataProcessing {
+        10 = TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor
+    }
+}
+');
+
+
 $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
 foreach (GeneralUtility::makeInstance(LoaderFactory::class)->load() as $tableDefinition) {
     foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
