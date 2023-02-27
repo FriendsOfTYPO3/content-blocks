@@ -26,5 +26,3 @@ Features:
 *  API to register Content Blocks as composer packages
 *  Generation of all configuration (TCA, TypoScript, TSconfig, database field
    definition) that is necessary for TYPO3
-
-:ref:`Further information about the registration processes <cb_explained>`.
