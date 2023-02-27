@@ -24,17 +24,12 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
 class AbstractLoader
 {
-    protected function loadPackageConfiguration(string $package, string $vendor): ParsedContentBlock
+    protected function loadPackageConfiguration(string $package, string $vendor, ?array $parsedComposerJson = null): ParsedContentBlock
     {
         $packagePath = ContentBlockPathUtility::getAbsoluteContentBlockPath($package, $vendor);
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".', 1674225340);
         }
-        $composerJson = json_decode(
-            file_get_contents($packagePath . '/' . 'composer.json'),
-            true
-        );
-        $yaml = Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml');
 
         $iconPath = null;
         $iconProviderClass = null;
@@ -53,8 +48,10 @@ class AbstractLoader
         }
 
         return new ParsedContentBlock(
-            composerJson: $composerJson,
-            yaml: $yaml,
+            composerJson: $parsedComposerJson === null
+                ? json_decode(file_get_contents($packagePath . '/' . 'composer.json'), true)
+                : $parsedComposerJson,
+            yaml: Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml'),
             icon: $iconPath,
             iconProvider: $iconProviderClass
         );

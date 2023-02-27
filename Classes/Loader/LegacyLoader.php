@@ -61,7 +61,7 @@ class LegacyLoader extends AbstractLoader implements LoaderInterface
                 continue;
             }
             [$vendor, $package] = explode('/', $composerJson['name']);
-            $result[] = $this->loadPackageConfiguration($package, $vendor);
+            $result[] = $this->loadPackageConfiguration($package, $vendor, $composerJson);
         }
         $cache = array_map(fn (ParsedContentBlock $contentBlock) => $contentBlock->toArray(), $result);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
