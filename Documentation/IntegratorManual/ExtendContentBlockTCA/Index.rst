@@ -6,7 +6,7 @@ Extend TCA of Content Blocks
 ==========================
 
 Since TYPO3 v12 the AfterTcaCompilationEvent is established, the Content Blocks TCA
-generation happens after the TCA is completed. This means, TCAOverrides will not work.
+generation happens after the TCA is completed. This means, TCA Overrides will not work.
 
 For this reason, we created the AfterContentBlocksTcaCompilationEvent event, on which you
 can hook in and extend the TCA of the Content Blocks.

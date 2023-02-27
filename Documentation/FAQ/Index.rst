@@ -10,7 +10,7 @@ Overriding of Content Blocks
 
 Because Content Block packages are merely an abstraction layer, you can override
 existing Content Block configurations just like you would override
-a third-party-extension (e.g. by adding corresponging TCA/ TypoScript/ TSconfig
+a third-party-extension (e.g. by adding corresponding TCA/ TypoScript/ TSconfig
 via a sitepackage extension).
 
 

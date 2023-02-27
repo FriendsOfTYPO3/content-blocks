@@ -109,6 +109,6 @@ Example for a label of a field:
 Example for a description of a field:
 `<field-identifier>.description`
 
-This goes analogously for collection fields, in this case the field indentifier
+This goes analogously for collection fields, in this case the field identifier
 of the collection field is used as a prefix:
 `<collection-field-identifier>.<field-identifier>.label`

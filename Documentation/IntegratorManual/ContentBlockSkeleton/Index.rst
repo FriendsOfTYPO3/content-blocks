@@ -38,7 +38,7 @@ This will ask you for the following information:
 
 
 If you do not use ddev, the command will be like this:
-(dependig on your setup where the bin dir is)
+(depending on your setup where the bin directory is)
 
 .. code-block:: bash
 
