@@ -10,7 +10,7 @@ Create a Content Block skeleton	on your terminal
 ====================
 
 This command creates a Content Block skeleton for you.
-It creates the basic structure of a Content Block, by vender, package, and
+It creates the basic structure of a Content Block, by vendor, package, and
 on composer mode with the path to your packages folder.
 If no path is given, it will be created in {publicDir}/typo3conf/content-blocks directory.
 

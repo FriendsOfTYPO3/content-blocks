@@ -37,7 +37,7 @@ First of all you need a class, which do the TCA customisation:
     }
 
 
-Then you need to register the eventlistener for your class:
+Then you need to register the eventlistener for your class in your Configuration/Services.yaml:
 
 .. code-block:: yaml
 
