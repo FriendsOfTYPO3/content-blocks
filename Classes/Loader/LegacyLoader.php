@@ -38,8 +38,7 @@ class LegacyLoader extends AbstractLoader implements LoaderInterface
             return $this->tableDefinitionCollection;
         }
 
-        if ($this->cache->has('content-blocks')) {
-            $contentBlocks = $this->cache->require('content-blocks');
+        if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn ($contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
             $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
             $this->tableDefinitionCollection = $tableDefinitionCollection;
