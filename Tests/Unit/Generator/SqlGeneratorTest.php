@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
+use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class SqlGeneratorTest extends UnitTestCase
@@ -149,7 +150,8 @@ class SqlGeneratorTest extends UnitTestCase
      */
     public function generateReturnsExpectedSqlStatements(array $array, array $expected): void
     {
-        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($array);
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $array);
+        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $sqlGenerator = new SqlGenerator($tableDefinitionCollection);
 
         $result = $sqlGenerator->generate();

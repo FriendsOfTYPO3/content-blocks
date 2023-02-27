@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
+use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -755,6 +756,7 @@ class TcaGeneratorTest extends UnitTestCase
         ];
         $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher());
 

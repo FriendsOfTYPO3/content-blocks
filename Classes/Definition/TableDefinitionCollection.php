@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
@@ -91,19 +92,22 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return isset($this->definitions[$table]);
     }
 
+    /**
+     * @param array<ParsedContentBlock> $contentBlocks
+     */
     public static function createFromArray(array $contentBlocks): TableDefinitionCollection
     {
         $tableDefinitionCollection = new self();
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
-            $table = $contentBlock['yaml']['table'] ?? 'tt_content';
-            $composerName = $contentBlock['composerJson']['name'];
+            $table = $contentBlock->getYaml()['table'] ?? 'tt_content';
+            $composerName = $contentBlock->getComposerJson()['name'];
             [$vendor, $package] = explode('/', $composerName);
 
             $uniqueIdentifiers = [];
             $columns = [];
             $overrideColumns = [];
-            foreach ($contentBlock['yaml']['fields'] ?? [] as $field) {
+            foreach ($contentBlock->getYaml()['fields'] ?? [] as $field) {
                 if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
                     throw new \InvalidArgumentException(
                         'The identifier "' . $field['identifier'] . '" in package ' . $composerName . ' does exist more than once. Please choose unique identifiers.',
@@ -146,11 +150,11 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 'overrideColumns' => $overrideColumns,
                 'vendor' => $vendor,
                 'package' => $package,
-                'wizardGroup' => $contentBlock['yaml']['group'] ?? null,
-                'icon' => $contentBlock['icon'] ?? '',
-                'iconProvider' => $contentBlock['iconProvider'] ?? '',
-                'typeField' => $contentBlock['yaml']['typeField'] ?? 'CType',
-                'typeName' => $contentBlock['yaml']['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($composerName),
+                'wizardGroup' => $contentBlock->getYaml()['group'] ?? null,
+                'icon' => $contentBlock->getIcon(),
+                'iconProvider' => $contentBlock->getIconProvider(),
+                'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
+                'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($composerName),
             ];
         }
 

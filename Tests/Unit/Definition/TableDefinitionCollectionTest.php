@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TableDefinitionCollectionTest extends UnitTestCase
@@ -71,6 +72,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         $this->expectExceptionCode(1672449082);
         $this->expectExceptionMessage('A Collection field with the identifier "foo" exists more than once. Please choose another name.');
 
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
 
@@ -102,6 +104,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
@@ -128,6 +131,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
 
@@ -175,6 +179,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         $this->expectExceptionCode(1677407941);
         $this->expectExceptionMessage('The identifier "foo" in package t3ce/example does exist more than once. Please choose unique identifiers.');
 
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
 
@@ -227,6 +232,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         $this->expectExceptionCode(1677407942);
         $this->expectExceptionMessage('The identifier "foo" in package t3ce/example in Collection "collection" does exist more than once. Please choose unique identifiers.');
 
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
 }

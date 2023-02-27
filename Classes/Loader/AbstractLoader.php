@@ -24,19 +24,17 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
 class AbstractLoader
 {
-    // @todo create object for configuration dto.
-    protected function loadPackageConfiguration(string $package, string $vendor): array
+    protected function loadPackageConfiguration(string $package, string $vendor): ParsedContentBlock
     {
         $packagePath = ContentBlockPathUtility::getAbsoluteContentBlockPath($package, $vendor);
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".', 1674225340);
         }
-        $packageConfiguration = [];
-        $packageConfiguration['composerJson'] = json_decode(
+        $composerJson = json_decode(
             file_get_contents($packagePath . '/' . 'composer.json'),
             true
         );
-        $packageConfiguration['yaml'] = Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml');
+        $yaml = Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml');
 
         $iconPath = null;
         $iconProviderClass = null;
@@ -51,10 +49,14 @@ class AbstractLoader
         }
         if ($iconPath === null) {
             $iconPath = 'EXT:content_block/Resources/Public/Icons/ContentBlockIcon.svg';
+            $iconProviderClass = SvgIconProvider::class;
         }
 
-        $packageConfiguration['icon'] = $iconPath;
-        $packageConfiguration['iconProvider'] = $iconProviderClass;
-        return $packageConfiguration;
+        return new ParsedContentBlock(
+            composerJson: $composerJson,
+            yaml: $yaml,
+            icon: $iconPath,
+            iconProvider: $iconProviderClass
+        );
     }
 }
