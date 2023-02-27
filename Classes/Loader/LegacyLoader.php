@@ -20,17 +20,32 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class LegacyLoader extends AbstractLoader implements LoaderInterface
 {
     protected ?TableDefinitionCollection $tableDefinitionCollection = null;
 
+    public function __construct(
+        protected PhpFrontend $cache
+    ) {
+    }
+
     public function load(): TableDefinitionCollection
     {
         if ($this->tableDefinitionCollection instanceof TableDefinitionCollection) {
             return $this->tableDefinitionCollection;
         }
+
+        if ($this->cache->has('content-blocks')) {
+            $contentBlocks = $this->cache->require('content-blocks');
+            $contentBlocks = array_map(fn ($contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+            $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+            $this->tableDefinitionCollection = $tableDefinitionCollection;
+            return $this->tableDefinitionCollection;
+        }
+
         $legacyPath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath();
         GeneralUtility::mkdir_deep($legacyPath);
         $result = [];
@@ -48,7 +63,8 @@ class LegacyLoader extends AbstractLoader implements LoaderInterface
             [$vendor, $package] = explode('/', $composerJson['name']);
             $result[] = $this->loadPackageConfiguration($package, $vendor);
         }
-
+        $cache = array_map(fn (ParsedContentBlock $contentBlock) => $contentBlock->toArray(), $result);
+        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($result);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
         return $this->tableDefinitionCollection;

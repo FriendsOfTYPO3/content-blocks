@@ -32,11 +32,15 @@ services:
     tags:
       - name: cb.loader
         identifier: composer
+    arguments:
+      $cache: '@cache.core'
 
   TYPO3\CMS\ContentBlocks\Loader\LegacyLoader:
     tags:
       - name: cb.loader
         identifier: legacy
+    arguments:
+      $cache: '@cache.core'
 
   TYPO3\CMS\ContentBlocks\Loader\LoaderFactory:
     public: true
