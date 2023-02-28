@@ -9,6 +9,7 @@ The "Radio" type generates a number of radio fields.
 
 It corresponds with the TCA `type='radio'`.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class NumberFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::NUMBER;
+    private ?string $alternativeSql = null;
     private int|float $default = 0;
     private bool $readOnly = false;
     private int $size = 0;
@@ -38,6 +39,7 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): NumberFieldConfiguration
     {
         $self = new self();
+        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $self->format = (string)($properties['format'] ?? $self->format);
         $default = $properties['default'] ?? $self->default;
@@ -108,6 +110,9 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        if ($this->alternativeSql !== null) {
+            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
+        }
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';

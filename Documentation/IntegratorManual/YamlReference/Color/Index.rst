@@ -9,6 +9,7 @@ The "Color" type generates a simple `<input>` field, which provides a color pick
 
 It corresponds with the TCA `type='input'` and `renderType='colorPicker'`.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

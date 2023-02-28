@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class RadioFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::RADIO;
+    private ?string $alternativeSql = null;
     private string|int $default = '';
     private bool $readOnly = false;
     private string $itemsProcFunc = '';
@@ -30,6 +31,7 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): RadioFieldConfiguration
     {
         $self = new self();
+        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $default = $properties['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -69,6 +71,9 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        if ($this->alternativeSql !== null) {
+            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
+        }
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 

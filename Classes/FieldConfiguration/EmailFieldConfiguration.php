@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class EmailFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::EMAIL;
+    private ?string $alternativeSql = null;
     private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -36,6 +37,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): EmailFieldConfiguration
     {
         $self = new self();
+        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $self->default = (string)($settings['properties']['default'] ?? $self->default);
         $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
@@ -96,6 +98,9 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        if ($this->alternativeSql !== null) {
+            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
+        }
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';

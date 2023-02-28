@@ -81,6 +81,87 @@ class SqlGeneratorTest extends UnitTestCase
             ],
         ];
 
+        yield 'It is possible to override SQL definitions' => [
+            'array' => [
+                [
+                    'composerJson' => [
+                        'name' => 'foo/bar',
+                    ],
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'check',
+                                'type' => 'Checkbox',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'color',
+                                'type' => 'Color',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'email',
+                                'type' => 'Email',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'link',
+                                'type' => 'Link',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'radio',
+                                'type' => 'Radio',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'reference',
+                                'type' => 'Reference',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'select',
+                                'type' => 'Select',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'textfield',
+                                'type' => 'Text',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                            [
+                                'identifier' => 'textarea',
+                                'type' => 'Textarea',
+                                'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_number` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_check` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_color` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_email` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_link` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_radio` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_reference` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_select` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_textfield` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_textarea` tinyint(4) DEFAULT '0' NOT NULL);",
+            ],
+        ];
+
         yield 'inline field on root level' => [
             'array' => [
                 [

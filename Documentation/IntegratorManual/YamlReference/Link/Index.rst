@@ -10,6 +10,7 @@ of links.
 
 It corresponds with the TCA `type='input'` and `renderType='inputLink'`.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

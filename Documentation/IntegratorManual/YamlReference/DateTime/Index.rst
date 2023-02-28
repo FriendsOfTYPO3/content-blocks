@@ -10,6 +10,7 @@ The "DateTime" type generates a simple `<input>` field, which provides a date pi
 It corresponds with the TCA `type='inputDateTime'` (default) and `eval='date'`,
 `eval='time'` or `eval='datetime'` depending on the sub-type.
 
+SQL overrides via `alternativeSql` allowed: no.
 
 Properties
 ==========

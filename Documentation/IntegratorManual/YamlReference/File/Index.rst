@@ -9,6 +9,7 @@ The "File" type generates a field for file relations.
 
 It corresponds with the TCA `type='inline'` with FAL relation.
 
+SQL overrides via `alternativeSql` allowed: no.
 
 Properties
 ==========

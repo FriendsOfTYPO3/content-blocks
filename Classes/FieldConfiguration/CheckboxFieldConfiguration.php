@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::CHECKBOX;
+    private ?string $alternativeSql = null;
     private string $renderType = '';
     private int $default = 0;
     private bool $readOnly = false;
@@ -35,6 +36,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): CheckboxFieldConfiguration
     {
         $self = new self();
+        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $self->renderType = (string)($properties['renderType'] ?? $self->renderType);
         $self->default = (int)($properties['default'] ?? $self->default);
@@ -91,6 +93,9 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        if ($this->alternativeSql !== null) {
+            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
+        }
         return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
     }
 

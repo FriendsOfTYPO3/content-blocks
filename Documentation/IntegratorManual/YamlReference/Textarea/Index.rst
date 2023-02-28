@@ -10,6 +10,7 @@ by property.
 
 It corresponds with the TCA `type='text'` (default).
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

@@ -11,6 +11,7 @@ features applied.
 It corresponds with the TCA `type='input'` (default), however special variants
 are defined as own field types.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

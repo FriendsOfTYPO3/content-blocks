@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class TextFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::TEXT;
+    private ?string $alternativeSql = null;
     private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -39,6 +40,7 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): TextFieldConfiguration
     {
         $self = new self();
+        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $self->default = (string)($properties['default'] ?? $self->default);
         $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
@@ -112,6 +114,9 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        if ($this->alternativeSql !== null) {
+            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
+        }
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 

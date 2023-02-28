@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 final class SelectFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::SELECT;
+    private ?string $alternativeSql = null;
     private string|int $default = '';
     private string $renderType = '';
     private bool $readOnly = false;
@@ -59,6 +60,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): SelectFieldConfiguration
     {
         $self = new self();
+        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $default = $properties['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -198,6 +200,9 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        if ($this->alternativeSql !== null) {
+            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
+        }
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 

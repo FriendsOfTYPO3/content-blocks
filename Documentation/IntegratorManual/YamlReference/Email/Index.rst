@@ -12,6 +12,7 @@ not contain a valid email address, a flash message warning will be displayed.
 
 It corresponds with the TCA `type='input'` (default) and `eval='email'`.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

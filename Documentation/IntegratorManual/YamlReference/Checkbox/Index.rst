@@ -6,11 +6,11 @@
 Checkbox
 ========
 
-The "Checkbox" type generates a number of checkbox fields. Selection of multiple
-items is enabled by default.
+The `Checkbox` type generates one or more checkbox fields.
 
-It corresponds with the TCA `type='check'` (default).
+It corresponds with the TCA :ref:`type='check' <t3tca:columns-check>` (default).
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

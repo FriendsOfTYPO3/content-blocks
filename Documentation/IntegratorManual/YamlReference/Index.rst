@@ -30,7 +30,6 @@ Common field properties
 identifier
    :sep:`|` :aspect:`Required:` true
    :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
    The field's identifier has to be unique within a Content Block. Exception is
@@ -39,19 +38,35 @@ identifier
 type
    :sep:`|` :aspect:`Required:` true
    :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
    The field's type. See :ref:`field_types`.
 
 properties
-   :sep:`|` :aspect:`Required:` true
+   :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
    Array of properties that are dependent on the :ref:`field_types`.
 
+useExistingField
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` bool
+   :sep:`|`
+
+   If set to true, the identifier is treated as an existing field from the Core
+   or your own defined field. **Important**: Make sure `type` matches the actual
+   type in TCA.
+
+alternativeSql
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|`
+
+   It is possible to override the default SQL definition of a field with this
+   option. Example :sql:`tinyint(2) DEFAULT '0' NOT NULL`. Not every field type
+   can be overridden. Have a look at the default SQL in the appropriate field
+   section.
 
 .. _field_types:
 

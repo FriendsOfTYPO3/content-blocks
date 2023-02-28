@@ -12,6 +12,8 @@ beyond the image meta fields are required per child item.
 
 It corresponds with the TCA `type='inline'`.
 
+SQL overrides via `alternativeSql` allowed: no.
+
 First-level options
 ===================
 

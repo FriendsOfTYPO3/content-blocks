@@ -11,6 +11,7 @@ characters in the field.
 It corresponds with the TCA `type='input'` (default) and `eval='int'`,
 `eval='float'` or `eval='double'` - depending on the format.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========

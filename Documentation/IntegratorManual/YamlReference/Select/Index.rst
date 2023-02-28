@@ -9,6 +9,7 @@ The "Select" type generates a simple select field.
 
 It corresponds with the TCA `renderType='selectSingle'`.
 
+SQL overrides via `alternativeSql` allowed: yes.
 
 Properties
 ==========
