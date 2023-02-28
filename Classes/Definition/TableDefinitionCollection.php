@@ -29,41 +29,6 @@ final class TableDefinitionCollection implements \IteratorAggregate
     /** @var list<string> */
     private array $customTables = [];
 
-    private static array $allowedFields = [
-        'tt_content' => [
-            'header',
-            'header_layout',
-            'header_position',
-            'date',
-            'header_link',
-            'subheader',
-            'bodytext',
-            'assets',
-            'image',
-            'media',
-            'imagewidth',
-            'imageheight',
-            'imageborder',
-            'imageorient',
-            'imagecols',
-            'image_zoom',
-            'bullets_type',
-            'table_delimiter',
-            'table_enclosure',
-            'table_caption',
-            'file_collections',
-            'filelink_sorting',
-            'filelink_sorting_direction',
-            'target',
-            'filelink_size',
-            'uploads_description',
-            'uploads_type',
-            'pages',
-            'selected_categories',
-            'category_field',
-        ],
-    ];
-
     public function addTable(TableDefinition $tableDefinition, $isCustomTable = false): void
     {
         if (!$this->hasTable($tableDefinition->getTable())) {
@@ -116,7 +81,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
                 $uniqueIdentifiers[] = $field['identifier'];
                 $useExistingField = false;
-                if (($field['useExistingField'] ?? false) && in_array($field['identifier'], self::$allowedFields[$table], true)) {
+                if ($field['useExistingField'] ?? false) {
                     $uniqueColumnName = $field['identifier'];
                     $useExistingField = true;
                 } else {
