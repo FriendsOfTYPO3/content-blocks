@@ -52,6 +52,35 @@ class SqlGeneratorTest extends UnitTestCase
             ],
         ];
 
+        yield 'nullable option removes NOT NULL statement' => [
+            'array' => [
+                [
+                    'composerJson' => [
+                        'name' => 'foo/bar',
+                    ],
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                                'properties' => [
+                                    'nullable' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_number` int(11) DEFAULT '0');",
+            ],
+        ];
+
         yield 'inline field on root level' => [
             'array' => [
                 [

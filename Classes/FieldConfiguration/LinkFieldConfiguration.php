@@ -102,7 +102,11 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        return "`$uniqueColumnName` VARCHAR(1024) DEFAULT '' NOT NULL";
+        $null = ' NOT NULL';
+        if ($this->nullable) {
+            $null = '';
+        }
+        return "`$uniqueColumnName` VARCHAR(1024) DEFAULT ''" . $null;
     }
 
     public function getFieldType(): FieldType

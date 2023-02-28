@@ -96,7 +96,11 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
+        $null = ' NOT NULL';
+        if ($this->nullable) {
+            $null = '';
+        }
+        return "`$uniqueColumnName` VARCHAR(255) DEFAULT ''" . $null;
     }
 
     public function getFieldType(): FieldType
