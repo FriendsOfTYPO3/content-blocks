@@ -71,8 +71,8 @@ valuePicker
 
    items (array)
       An array with selectable items. Each item is an array with the first being
-      the value transferred to the input field, and the second being the label
-      in the select drop-down (LLL reference possible).
+      the label in the select drop-down (LLL reference possible), and the second
+      being the value transferred to the input field.
 
    Example:
 
@@ -80,9 +80,11 @@ valuePicker
 
       valuePicker:
         items:
-          'contact_1@example.com': Contact 1
-          'contact_2@example.com': Contact 2
-          'contact_3@example.com': Contact 3
+          [
+            [ 'Contact 1', 'contact_1@example.com' ],
+            [ 'Contact 2', 'contact_2@example.com' ],
+            [ 'Contact 3', 'contact_3@example.com' ],
+          ]
 
 Example
 =======
@@ -101,6 +103,8 @@ Example
           required: true
           valuePicker:
             items:
-              'contact_1@example.com': Contact 1
-              'contact_2@example.com': Contact 2
-              'contact_3@example.com': Contact 3
+              [
+                [ 'Contact 1', 'contact_1@example.com' ],
+                [ 'Contact 2', 'contact_2@example.com' ],
+                [ 'Contact 3', 'contact_3@example.com' ],
+              ]

@@ -29,18 +29,20 @@ items
    :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   Contains the elements for the selector box. Each item is an array with
-   the first being the value transferred to the input field, and the second
-   being the label in the select drop-down (LLL reference possible).
+   Contains the elements for the selector box. Each item is an array with the first being
+   the label in the select drop-down (LLL reference possible) and the second
+   being the value transferred to the input field.
 
    Example:
 
    .. code-block:: yaml
 
       items:
-        'one': 'The first'
-        'two': 'The second'
-        'three': 'The third'
+        [
+          [ 'The first', 'one' ],
+          [ 'The second', 'two' ],
+          [ 'The third', 'three' ],
+        ]
 
 prependLabel
    :sep:`|` :aspect:`Required:` false
@@ -98,9 +100,11 @@ Select single:
         properties:
           default: 'one'
           items:
-            'one': 'The first'
-            'two': 'The second'
-            'three': 'The third'
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
+            ]
           prependLabel: 'Please choose'
           required: true
 
@@ -115,9 +119,11 @@ Select multiple:
         properties:
           default: 'one'
           items:
-            'one': 'The first'
-            'two': 'The second'
-            'three': 'The third'
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
+            ]
           maxItems: 2
           minItems: 1
           required: true

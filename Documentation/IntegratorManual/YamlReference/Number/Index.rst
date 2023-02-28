@@ -84,8 +84,8 @@ valuePicker
 
    items (array)
       An array with selectable items. Each item is an array with the first being
-      the value transferred to the input field, and the second being the label
-      in the select drop-down (LLL reference possible).
+      the label in the select drop-down (LLL reference possible), and the second
+      being the value transferred to the input field.
 
    Example:
 
@@ -93,9 +93,11 @@ valuePicker
 
       valuePicker:
         items:
-          100: 100
-          250: 250
-          500: 500
+          [
+            [ 100, '100'],
+            [ 250, '250'],
+            [ 500, '500'],
+          ]
 
 slider
    :sep:`|` :aspect:`Required:` false
@@ -138,6 +140,8 @@ Example
           required: true
           valuePicker:
             items:
-              100: 100
-              250: 250
-              500: 500
+              [
+                [ 100, '100'],
+                [ 250, '250'],
+                [ 500, '500'],
+              ]

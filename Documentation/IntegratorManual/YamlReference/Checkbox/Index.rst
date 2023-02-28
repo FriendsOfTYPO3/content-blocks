@@ -34,17 +34,19 @@ items
    :sep:`|`
 
    Contains the checkbox elements. Each item is an array with the first being
-   the value transferred to the input field, and the second being the label in
-   the select drop-down (LLL reference possible).
+   the label in the select drop-down (LLL reference possible), and the second
+   being the value transferred to the input field.
 
    Example:
 
    .. code-block:: yaml
 
       items:
-        'one': 'The first'
-        'two': 'The second'
-        'three': 'The third'
+        [
+          [ 'The first', 'one' ],
+          [ 'The second', 'two' ],
+          [ 'The third', 'three' ],
+        ]
 
 invertStateDisplay
    :sep:`|` :aspect:`Required:` false
@@ -71,7 +73,9 @@ Example
         type: Checkbox
         properties:
           items:
-            'one': 'The first'
-            'two': 'The second'
-            'three': 'The third'
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
+            ]
           default: 2

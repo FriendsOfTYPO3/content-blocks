@@ -79,8 +79,8 @@ valuePicker
 
    items (array)
       An array with selectable items. Each item is an array with the first being
-      the value transferred to the input field, and the second being the label
-      in the select drop-down (LLL reference possible).
+      the label in the select drop-down (LLL reference possible) and the second
+      being the value transferred to the input field.
 
    Example:
 
@@ -88,8 +88,10 @@ valuePicker
 
       valuePicker:
         items:
-          'Want to join our team? Take the initiative!': Job offer general
-          'We are looking for ...': Job offer specific
+          [
+            [ 'Want to join our team? Take the initiative!', 'Job offer general' ],
+            [ 'We are looking for ...', 'Job offer specific' ],
+          ]
 
 
 Example
@@ -110,5 +112,7 @@ Example
           size: 20
           valuePicker:
             items:
-              'Want to join our team? Take the initiative!': Job offer general
-              'We are looking for ...': Job offer specific
+              [
+                [ 'Want to join our team? Take the initiative!', 'Job offer general' ],
+                [ 'We are looking for ...', 'Job offer specific' ],
+              ]

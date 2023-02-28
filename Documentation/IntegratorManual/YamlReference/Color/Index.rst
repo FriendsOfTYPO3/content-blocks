@@ -61,8 +61,8 @@ valuePicker
 
    items (array)
       An array with selectable items. Each item is an array with the first being
-      the value transferred to the input field, and the second being the label
-      in the select drop-down (LLL reference possible).
+      the label in the select drop-down (LLL reference possible), and the second
+      being the value transferred to the input field.
 
    Example:
 
@@ -70,9 +70,11 @@ valuePicker
 
       valuePicker:
         items:
-          '#FF0000': Red
-          '#008000': Green
-          '#0000FF': Blue
+          [
+            ['Red', '#FF0000'],
+            ['Green', '#008000'],
+            ['Blue', '#0000FF'],
+          ]
 
 Example
 =======
@@ -90,6 +92,8 @@ Example
           size: 5
           valuePicker:
             items:
-              '#FF0000': Red
-              '#008000': Green
-              '#0000FF': Blue
+              [
+                ['Red', '#FF0000'],
+                ['Green', '#008000'],
+                ['Blue', '#0000FF'],
+              ]

@@ -112,8 +112,8 @@ valuePicker
 
    items (array)
       An array with selectable items. Each item is an array with the first being
-      the value transferred to the input field, and the second being the label
-      in the select drop-down (LLL reference possible).
+      the label in the select drop-down (LLL reference possible), and the second
+      being the value transferred to the input field.
 
    Example:
 
@@ -121,8 +121,10 @@ valuePicker
 
       valuePicker:
         items:
-          'https://www.typo3.org': TYPO3 CMS
-          'https://www.typo3.com': TYPO3 GmbH
+          [
+            ['https://www.typo3.org', TYPO3 CMS],
+            ['https://www.typo3.com', TYPO3 GmbH],
+          ]
 
 Example
 =======
@@ -146,5 +148,7 @@ Example
           size: 20
           valuePicker:
             items:
-              'https://www.typo3.org': TYPO3 CMS
-              'https://www.typo3.com': TYPO3 GmbH
+              [
+                ['https://www.typo3.org', TYPO3 CMS],
+                ['https://www.typo3.com', TYPO3 GmbH],
+              ]
