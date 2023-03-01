@@ -135,7 +135,7 @@ Example
     group: common
     fields:
       - identifier: url
-        type: Url
+        type: Link
         properties:
           autocomplete: true
           default: 'https://typo3.org'

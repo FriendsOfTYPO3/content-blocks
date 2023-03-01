@@ -39,7 +39,7 @@ displayAge
    :sep:`|` :aspect:`Default:` true
    :sep:`|`
 
-   If set, enables the display of the age (p.e. “2015-08-30 (-27 days)”)
+   If set, enables the display of the age (e.g. “2015-08-30 (-27 days)”)
    of date fields. Invert state of TCA's disableAgeDisplay property.
 
 

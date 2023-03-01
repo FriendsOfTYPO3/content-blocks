@@ -150,8 +150,8 @@ Example
             - identifier: image
               type: Image
               properties:
-                minItems: 1
-                maxItems: 1
+                minitems: 1
+                maxitems: 1
                 required:  true
             - identifier: title
               type: Text

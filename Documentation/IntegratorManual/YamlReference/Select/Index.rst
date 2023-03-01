@@ -57,9 +57,9 @@ prependLabel
 
    .. code-block:: yaml
 
-      prependLabel: 'Please choose'
+      prependLabel: 'Please choose ...'
 
-maxItems
+maxitems
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` ''
@@ -67,7 +67,7 @@ maxItems
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
-   If `maxItems` ist set to >1, multiselect is automatically enabled.
+   If `maxitems` ist set to >1, multiselect is automatically enabled.
 
 minItems
    :sep:`|` :aspect:`Required:` false
@@ -77,7 +77,7 @@ minItems
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
-   The field can be set as required by setting `minItems` to at least 1.
+   The field can be set as required by setting `minitems` to at least 1.
 
 size
    :sep:`|` :aspect:`Required:` false
@@ -106,7 +106,7 @@ Select single:
               [ 'The second', 'two' ],
               [ 'The third', 'three' ],
             ]
-          prependLabel: 'Please choose'
+          prependLabel: 'Please choose ...'
           required: true
 
 Select multiple:
@@ -125,7 +125,7 @@ Select multiple:
               [ 'The second', 'two' ],
               [ 'The third', 'three' ],
             ]
-          maxItems: 2
-          minItems: 1
+          maxitems: 2
+          minitems: 1
           required: true
           size: 5

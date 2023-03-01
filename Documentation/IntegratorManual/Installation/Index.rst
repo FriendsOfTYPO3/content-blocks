@@ -48,6 +48,6 @@ Security
 
         In nginx::
 
-            location ~ (?:typo3conf/contentBlocks)/[^/]+/(?:src?)/ {
+            location ~ (?:typo3conf/content-blocks)/[^/]+/(?:src?)/ {
                 deny all;
             }

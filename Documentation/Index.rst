@@ -20,7 +20,7 @@ TYPO3 Content Blocks
     en
 
 :Author:
-    `TYPO3 Structured Content Initiative <https://typo3.org/community/teams/typo3-development/initiatives/structured-content/>`__ & TYPO3 contributors
+    `TYPO3 Content Types Team <https://typo3.org/community/teams/typo3-development/initiatives/structured-content/>`__ & TYPO3 contributors
 
 :License:
     This document is published under the

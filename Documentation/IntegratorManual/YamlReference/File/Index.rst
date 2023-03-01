@@ -42,7 +42,7 @@ enableImageManipulation
 
     This option can be used for file types `image` and `mixed`.
 
-maxItems
+maxitems
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` ''
@@ -51,7 +51,7 @@ maxItems
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
-minItems
+minitems
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` ''
@@ -59,7 +59,7 @@ minItems
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
-   The field can be set as required by setting `minItems` to at least 1.
+   The field can be set as required by setting `minitems` to at least 1.
 
 Example
 =======
@@ -73,5 +73,5 @@ Example
         properties:
             fileType: image
             enableImageManipulation: true
-            maxItems: 2
-            minItems: 1
+            maxitems: 2
+            minitems: 1

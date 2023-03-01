@@ -31,7 +31,7 @@ Else, here are some tips to save table row size:
 
 * Reuse existing TYPO3 core and Content Blocks fields as much as possible.
 * Try to minimize the usage of new :ref:`Text <field_type_text>`, :ref:`Link <field_type_link>`, :ref:`Email <field_type_email>`, :ref:`Radio <field_type_radio>`, :ref:`Color <field_type_color>` and :ref:`Select <field_type_select>` fields. They all use `varchar(255)`.
-* You can manually manipulate your yaml definitions and change the sql :sql:`varchar` fields to :sql:`text`, as suggested `here <https://mariadb.com/kb/en/troubleshooting-row-size-too-large-errors-with-innodb/#converting-some-columns-to-blob-or-text>`__.
+* You can manually manipulate your YAML definitions and change the sql :sql:`varchar` fields to :sql:`text`, as suggested `here <https://mariadb.com/kb/en/troubleshooting-row-size-too-large-errors-with-innodb/#converting-some-columns-to-blob-or-text>`__.
 * If applicable, use :ref:`Collections <field_type_collection>`, as they create a new table.
 * Otherwise consider creating an own extension with custom tables if your Content Blocks are getting too complex.
 

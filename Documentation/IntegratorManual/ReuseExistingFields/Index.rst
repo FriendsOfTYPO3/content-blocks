@@ -1,9 +1,10 @@
 .. include:: /Includes.rst.txt
 
-.. _cb_reuseExistingFields:
+.. _cb_reuse_existing_fields:
 
+=====================
 Reuse existing fields
-=================
+=====================
 
 It is possible to reuse already existing fields by using the `useExistingField`
 flag. Currently you can reuse only the standard core fields. Even when reusing
