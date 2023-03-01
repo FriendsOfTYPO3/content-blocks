@@ -19,4 +19,5 @@ the Content Blocks.
 	ContentBlockSkeleton/Index
     ExtendContentBlockTCA/Index
 	ParseFunc/Index
+	ReuseExistingFields/Index
 	YamlReference/Index

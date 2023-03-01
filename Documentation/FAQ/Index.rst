@@ -26,34 +26,3 @@ Availability on platforms
 
 Unlike extensions the Content Blocks won't be available in the TYPO3 extension
 repository (TER). The main registry for Content Blocks is packagist.org.
-
-
-Can I reuse an existing field / column?
-=======================
-
-Yes you can. Currently you can reuse only the standard core fields by using the useExistingField flag.
-
-We highly recommend to use the header field this way, because it is used for the title on different places in the backend.
-
-Please remember that the type of a field is even in this case required.
-
-For example, if you want to use the existing column "bodytext", or "header" or "image" you can do one of the following:
-
-.. code-block:: yaml
-
-    group: common
-    fields:
-        -
-            identifier: header
-            type: Text
-            useExistingField: true
-        -
-            identifier: bodytext
-            type: Textarea
-            useExistingField: true
-            properties:
-                enableRichtext: true
-        -
-            identifier: image
-            type: File
-            useExistingField: true
