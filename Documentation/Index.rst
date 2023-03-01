@@ -43,3 +43,4 @@ blocks as composer packages.
 	Installation/Index
 	IntegratorManual/Index
 	FAQ/Index
+	KnownProblems/Index
