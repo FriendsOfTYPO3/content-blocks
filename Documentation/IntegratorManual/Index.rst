@@ -10,14 +10,14 @@ the Content Blocks.
 
 **Table of Contents**
 
-.. toctree::
-	:maxdepth: 3
-	:titlesonly:
+..  toctree::
+    :maxdepth: 3
+    :titlesonly:
 
-	Installation/Index
-	ContentBlockDefinition/Index
-	ContentBlockSkeleton/Index
+    Installation/Index
+    ContentBlockDefinition/Index
+    ContentBlockSkeleton/Index
     ExtendContentBlockTCA/Index
-	ParseFunc/Index
-	ReuseExistingFields/Index
-	YamlReference/Index
+    ParseFunc/Index
+    ReuseExistingFields/Index
+    YamlReference/Index

@@ -8,39 +8,48 @@ TYPO3 Content Blocks
 .. only:: html
 
 :Extension key:
-   content_blocks
+    content_blocks
+
+:Package name:
+     typo3/cms-content-blocks
 
 :Version:
-   |release|
-
-:Status:
-   beta
+    |release|
 
 :Language:
-   en
+    en
 
 :Author:
-   `TYPO3 Structured Content Initiative <https://typo3.org/community/teams/typo3-development/initiatives/structured-content/>`__ & TYPO3 contributors
+    `TYPO3 Structured Content Initiative <https://typo3.org/community/teams/typo3-development/initiatives/structured-content/>`__ & TYPO3 contributors
 
 :License:
-   This document is published under the
-   `Open Content License <https://www.openhub.net/licenses/opl>`__.
+    This document is published under the
+    `Creative Commons BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`__
+    license.
 
 :Rendered:
-   |today|
+    |today|
 
-The TYPO3 Content Blocks provide a simplified way to register and use content
-blocks as composer packages.
+
+The TYPO3 Content Blocks extension provides a simplified way to register and
+use content types as composer packages.
 
 **Table of Contents**
 
+..  toctree::
+    :maxdepth: 2
+    :titlesonly:
 
-.. toctree::
-	:maxdepth: 2
-	:titlesonly:
+    Introduction/Index
+    Installation/Index
+    IntegratorManual/Index
+    FAQ/Index
+    KnownProblems/Index
 
-	Introduction/Index
-	Installation/Index
-	IntegratorManual/Index
-	FAQ/Index
-	KnownProblems/Index
+..  Meta Menu
+
+..  toctree::
+    :hidden:
+
+    Sitemap
+    genindex

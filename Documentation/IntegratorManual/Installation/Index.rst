@@ -15,7 +15,7 @@ In composer mode, require your Content Block just like any other composer packag
     composer require <your-vendor>/<your-content-block>
 
 For non-composer installations simply put your Content Block into the folder
-`typo3conf/contentBlocks/`.
+`typo3conf/content-blocks/`.
 
 Administration
 ==============
@@ -28,8 +28,8 @@ Security
 ========
 
 .. attention::
-   You'll need to modify your .htaccess or nginx configuration to secure the src
-   folder of your Content Blocks.
+   In non-composer-mode you'll need to modify your `.htaccess` or nginx
+   configuration to secure the src folder of your Content Blocks.
 
 .. tabs::
 
@@ -38,7 +38,7 @@ Security
         In .htaccess::
 
             # Add your own rules here.
-            <If "%{REQUEST_URI} =~ m#^/typo3conf/contentBlocks/.*\.(yaml|html|xlf|json)#">
+            <If "%{REQUEST_URI} =~ m#^/typo3conf/content-blocks/.*\.(yaml|html|xlf|json)#">
                 Order allow,deny
                 Deny from all
                 Satisfy All
