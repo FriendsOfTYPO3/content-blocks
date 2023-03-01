@@ -10,22 +10,20 @@ The `Checkbox` type generates one or more checkbox fields.
 
 It corresponds with the TCA :ref:`type='check' <t3tca:columns-check>` (default).
 
-SQL overrides via `alternativeSql` allowed: yes.
+SQL overrides via :yaml:`alternativeSql` allowed: yes.
 
 Properties
 ==========
 
 default
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
+   :sep:`|` :aspect:`Type:` integer (bit value)
+   :sep:`|` :aspect:`Default:` 0
    :sep:`|`
 
-   Default value set if a new record is created. As example, value 5 enabled
-   first and third checkbox.
-
-   Each bit corresponds to a check box. This is true even if there is only one
-   checkbox which which then maps to bit-0.
+   The default value corresponds to a bit value. If you only have one checkbox
+   having 1 or 0 will work to turn it on or off by default. For more than one
+   checkbox you need to calculate the bit representation.
 
 items
    :sep:`|` :aspect:`Required:` true
@@ -33,9 +31,9 @@ items
    :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   Contains the checkbox elements. Each item is an array with the first being
-   the label in the select drop-down (LLL reference possible), and the second
-   being the value transferred to the input field.
+   Only necessary if more than one checkbox is desired. Contains the checkbox
+   elements as separate array items. The label can also be defined as a
+   LLL-reference.
 
    Example:
 
@@ -43,24 +41,12 @@ items
 
       items:
         [
-          [ 'The first', 'one' ],
-          [ 'The second', 'two' ],
-          [ 'The third', 'three' ],
+          [ 'The first' ],
+          [ 'The second' ],
+          [ 'The third' ],
         ]
 
-invertStateDisplay
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Inverts the display state (onf/off) of the toggle items.
-
-   Example:
-
-   .. code-block:: yaml
-
-      invertStateDisplay: true
+For advanced configuration refer to the :ref:`TCA documentation <columns-check-properties>`.
 
 Example
 =======
@@ -69,13 +55,5 @@ Example
 
     group: common
     fields:
-      - identifier: checkboxes
+      - identifier: checkbox
         type: Checkbox
-        properties:
-          items:
-            [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
-              [ 'The third', 'three' ],
-            ]
-          default: 2
