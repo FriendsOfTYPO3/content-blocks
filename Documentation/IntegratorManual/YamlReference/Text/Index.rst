@@ -5,11 +5,10 @@
 Text
 ====
 
-The "Text" type generates a simple `<input>` field, possibly with additional
+The `Text` type generates a simple input field, possibly with additional
 features applied.
 
-It corresponds with the TCA `type='input'` (default), however special variants
-are defined as own field types.
+It corresponds with the TCA :php:`type => 'input'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
@@ -17,16 +16,6 @@ Properties
 ==========
 
 .. rst-class:: dl-parameters
-
-autocomplete
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   Controls the autocomplete attribute of a given input field. If set to true
-   (default false), adds attribute autocomplete="on" to the input field allowing
-   browser auto filling the field.
 
 default
    :sep:`|` :aspect:`Required:` false
@@ -39,11 +28,22 @@ default
 max
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` ''
+   :sep:`|`
+
+   Value for the `maxlength` attribute of the `<input>` field. Javascript
+   prevents adding more than the given number of characters.
+
+min
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` '700'
    :sep:`|`
 
-   Value for the “maxlength” attribute of the `<input>` field. Javascript
-   prevents adding more than the given number of characters.
+   Value for the `minlength` attribute of the `<input>` field. Javascript
+   prevents adding less than the given number of characters. Note: Empty values
+   are still allowed. Use in combination with :yaml:`required` if this should be
+   a non-empty value.
 
 placeholder
    :sep:`|` :aspect:`Required:` false
@@ -94,9 +94,17 @@ valuePicker
             [ 'We are looking for ...', 'Job offer specific' ],
           ]
 
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-input>`.
 
-Example
-=======
+Examples
+========
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: text
+        type: Text
 
 .. code-block:: yaml
 
@@ -105,15 +113,6 @@ Example
       - identifier: text
         type: Text
         properties:
-          autocomplete: false
-          default: 'Default value'
           max: 15
-          placeholder: 'Placeholder text'
-          required: false
-          size: 20
-          valuePicker:
-            items:
-              [
-                [ 'Want to join our team? Take the initiative!', 'Job offer general' ],
-                [ 'We are looking for ...', 'Job offer specific' ],
-              ]
+          min: 4
+          required: true

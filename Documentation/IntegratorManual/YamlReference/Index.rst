@@ -74,21 +74,23 @@ Field types
 -----------
 
 .. toctree::
-	:maxdepth: 1
-	:titlesonly:
+    :maxdepth: 1
+    :titlesonly:
 
-	Checkbox/Index
-	Collection/Index
-	Color/Index
-	DateTime/Index
-	Email/Index
-	File/Index
-	Number/Index
-	Radio/Index
-	Select/Index
-	Text/Index
-	Textarea/Index
-	Link/Index
+    Category/Index
+    Checkbox/Index
+    Collection/Index
+    Color/Index
+    DateTime/Index
+    Email/Index
+    File/Index
+    Number/Index
+    Radio/Index
+    Reference/Index
+    Select/Index
+    Text/Index
+    Textarea/Index
+    Link/Index
 
 
 Field grouping

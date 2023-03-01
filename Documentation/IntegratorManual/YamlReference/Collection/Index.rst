@@ -5,12 +5,12 @@
 Collection
 ==========
 
-The "Collection" type generates a field for Inline-Relational-Record-Editing
+The `Collection` type generates a field for Inline-Relational-Record-Editing
 (IRRE), which allows nesting of other field types as children.
-This field type allows building structures like image sliders, where properties
-beyond the image meta fields are required per child item.
+This field type allows building structures like image sliders, accordion, tabs
+and so on.
 
-It corresponds with the TCA `type='inline'`.
+It corresponds with the TCA :php:`type => 'inline'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
@@ -48,45 +48,28 @@ Properties
 
 .. rst-class:: dl-parameters
 
-collapseAll
+maxitems
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'true'
+   :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` 0
    :sep:`|`
 
-   Show all child-records collapsed (if false, all are expanded)
+   Maximum number of child items. Defaults to a high value. JavaScript record
+   validation prevents the record from being saved if the limit is not satisfied.
 
-enabledControls
+minitems
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` 'true'
+   :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` 0
    :sep:`|`
 
-   Associative array with the keys ‘info’, ‘new’, ‘dragdrop’, ‘sort’, ‘hide’,
-   ‘delete’, ‘localize’. If the accordant values are set to a boolean value
-   (true or false), the control is shown or hidden in the header of each record.
-
-enableSorting
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'true'
-   :sep:`|`
-
-   Activate drag & drop.
-
-expandSingle
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'true'
-   :sep:`|`
-
-   Show only one child-record expanded each time. If a collapsed record is clicked,
-   the currently open one collapses and the clicked one expands.
+   Minimum number of child items. Defaults to 0. JavaScript record validation
+   prevents the record from being saved if the limit is not satisfied.
 
 fields
    :sep:`|` :aspect:`Required:` true
    :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
+   :sep:`|` :aspect:`Default:` []
    :sep:`|`
 
    Configures a set of fields as repeatable child objects. All fields defined in
@@ -105,23 +88,7 @@ fields
         - identifier: image
           type: Image
 
-maxitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Maximum number of child items. Defaults to a high value. JavaScript record
-   validation prevents the record from being saved if the limit is not satisfied.
-
-minitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Minimum number of child items. Defaults to 0. JavaScript record validation
-   prevents the record from being saved if the limit is not satisfied.
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline>`
 
 Example
 =======
@@ -134,24 +101,14 @@ Example
         type: Collection
         useAsLabel: title
         properties:
-          collapseAll: true
-          enabledControls:
-            delete: true
-            dragdrop: true
-            new: true
-            hide: true
-            info: true
-            localize: true
-          enableSorting: true
-          expandSingle: true
           maxitems: 5
           minitems: 1
           fields:
+            - identifier: title
+              type: Text
             - identifier: image
               type: Image
               properties:
                 minitems: 1
                 maxitems: 1
-                required:  true
-            - identifier: title
-              type: Text
+                required: true

@@ -5,11 +5,11 @@
 Radio
 =====
 
-The "Radio" type generates a number of radio fields.
+The `Radio` type generates a number of radio fields.
 
-It corresponds with the TCA `type='radio'`.
+It corresponds with the TCA :php:`type => 'radio'`.
 
-SQL overrides via `alternativeSql` allowed: yes.
+SQL overrides via :yaml:`alternativeSql` allowed: yes.
 
 Properties
 ==========
@@ -44,6 +44,8 @@ items
           [ 'two', 'two' ],
           [ 'three', 'three' ],
         ]
+
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-radio>`.
 
 Example
 =======

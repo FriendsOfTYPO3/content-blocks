@@ -8,7 +8,7 @@ Checkbox
 
 The `Checkbox` type generates one or more checkbox fields.
 
-It corresponds with the TCA :ref:`type='check' <t3tca:columns-check>` (default).
+It corresponds with the TCA :php:`type => 'check'`.
 
 SQL overrides via :yaml:`alternativeSql` allowed: yes.
 
@@ -46,7 +46,7 @@ items
           [ 'The third' ],
         ]
 
-For advanced configuration refer to the :ref:`TCA documentation <columns-check-properties>`.
+For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 
 Example
 =======

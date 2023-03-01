@@ -5,9 +5,9 @@
 File
 ====
 
-The "File" type generates a field for file relations.
+The `File` type generates a field for file relations.
 
-It corresponds with the TCA `type='inline'` with FAL relation.
+It corresponds with the TCA :php:`type => 'file'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
@@ -16,23 +16,14 @@ Properties
 
 .. rst-class:: dl-parameters
 
-fileTypes
+allowed
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` 'mixed'
-   :sep:`|`
-
-    Possible values: `image`, `video`, `audio`, `document` or `mixed` (all of
-    the other file types).
-
-allowedFileExtensions
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Type:` string|array
    :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-    Comma separated list of file extensions that are allowed for this field.
-    If no list is specified, system defaults are used.
+    Possible values: `common-image-types`, `common-media-types` or your custom
+    list of file types.
 
 enableImageManipulation
    :sep:`|` :aspect:`Required:` false
@@ -40,7 +31,8 @@ enableImageManipulation
    :sep:`|` :aspect:`Default:` 'false'
    :sep:`|`
 
-    This option can be used for file types `image` and `mixed`.
+   If enabled, an additional image palette will be rendered, which consists of
+   the fields `crop`, `title`, `alternative`, `link` and `description`.
 
 maxitems
    :sep:`|` :aspect:`Required:` false
@@ -61,6 +53,8 @@ minitems
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-file>`.
+
 Example
 =======
 
@@ -70,8 +64,13 @@ Example
     fields:
       - identifier: image
         type: File
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: image
+        type: File
         properties:
-            fileType: image
             enableImageManipulation: true
-            maxitems: 2
-            minitems: 1
+            allowed: common-image-types

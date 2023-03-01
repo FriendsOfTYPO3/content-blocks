@@ -5,9 +5,9 @@
 Color
 =====
 
-The "Color" type generates a simple `<input>` field, which provides a color picker.
+The `Color` type provides a simple color picker.
 
-It corresponds with the TCA `type='input'` and `renderType='colorPicker'`.
+It corresponds with the TCA :php:`type => 'color'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
@@ -15,16 +15,6 @@ Properties
 ==========
 
 .. rst-class:: dl-parameters
-
-autocomplete
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   Controls the autocomplete attribute of a given input field. If set to true
-   (default false), adds attribute autocomplete="on" to the input field allowing
-   browser auto filling the field.
 
 default
    :sep:`|` :aspect:`Required:` false
@@ -41,15 +31,6 @@ required
    :sep:`|`
 
    If set, the field will become mandatory.
-
-size
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '20'
-   :sep:`|`
-
-   Abstract value for the width of the `<input>` field.
-
 
 valuePicker
    :sep:`|` :aspect:`Required:` false
@@ -77,6 +58,8 @@ valuePicker
             ['Blue', '#0000FF'],
           ]
 
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-color>`.
+
 Example
 =======
 
@@ -86,15 +69,3 @@ Example
     fields:
       - identifier: color
         type: Color
-        properties:
-          autocomplete: true
-          default: '#0000aa'
-          required: false
-          size: 5
-          valuePicker:
-            items:
-              [
-                ['Red', '#FF0000'],
-                ['Green', '#008000'],
-                ['Blue', '#0000FF'],
-              ]

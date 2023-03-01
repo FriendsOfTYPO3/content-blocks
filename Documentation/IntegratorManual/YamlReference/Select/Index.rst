@@ -5,9 +5,9 @@
 Select
 ======
 
-The "Select" type generates a simple select field.
+The `Select` type generates a simple select field.
 
-It corresponds with the TCA `renderType='selectSingle'`.
+It corresponds with the TCA :php:`type => 'select'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
@@ -16,18 +16,18 @@ Properties
 
 .. rst-class:: dl-parameters
 
-default
-   :sep:`|` :aspect:`Required:` false
+renderType
+   :sep:`|` :aspect:`Required:` yes
    :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   Default value set if a new record is created.
+   Choose from one of the four available select types: :yaml:`selectSingle`,
+   :yaml:`selectCheckBox`, :yaml:`selectSingleBox` or
+   :yaml:`selectMultipleSideBySide`.
 
 items
    :sep:`|` :aspect:`Required:` true
    :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
    Contains the elements for the selector box. Each item is an array with the first being
@@ -45,19 +45,13 @@ items
           [ 'The third', 'three' ],
         ]
 
-prependLabel
+default
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` string
    :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   Label that is prepended before the select items, e.g. "Please choose ..."
-
-   Example:
-
-   .. code-block:: yaml
-
-      prependLabel: 'Please choose ...'
+   Default value set if a new record is created.
 
 maxitems
    :sep:`|` :aspect:`Required:` false
@@ -67,9 +61,9 @@ maxitems
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
-   If `maxitems` ist set to >1, multiselect is automatically enabled.
+   If `maxitems` ist set to greater than 1, multiselect is automatically enabled.
 
-minItems
+minitems
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
    :sep:`|` :aspect:`Default:` ''
@@ -79,13 +73,7 @@ minItems
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
-size
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '20'
-   :sep:`|`
-
-   Abstract value for the width of the `<input>` field.
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-select>`.
 
 Example
 =======
@@ -99,6 +87,7 @@ Select single:
       - identifier: select
         type: Select
         properties:
+          renderType: selectSingle
           default: 'one'
           items:
             [
@@ -106,8 +95,6 @@ Select single:
               [ 'The second', 'two' ],
               [ 'The third', 'three' ],
             ]
-          prependLabel: 'Please choose ...'
-          required: true
 
 Select multiple:
 
@@ -116,8 +103,9 @@ Select multiple:
     group: common
     fields:
       - identifier: selectSideBySide
-        type: MultiSelect
+        type: Select
         properties:
+          renderType: selectMultipleSideBySide
           default: 'one'
           items:
             [
@@ -127,5 +115,3 @@ Select multiple:
             ]
           maxitems: 2
           minitems: 1
-          required: true
-          size: 5

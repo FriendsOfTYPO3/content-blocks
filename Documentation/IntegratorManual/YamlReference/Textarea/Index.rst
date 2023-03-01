@@ -5,10 +5,10 @@
 Textarea
 ========
 
-The "Textarea" is for multi line text input. A Rich Text Editor can be enabled
-by property.
+The `Textarea` type is for multi line text input. A Rich Text Editor can be
+enabled.
 
-It corresponds with the TCA `type='text'` (default).
+It corresponds with the TCA :php:`type => 'text'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
@@ -16,22 +16,6 @@ Properties
 ==========
 
 .. rst-class:: dl-parameters
-
-cols
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '24'
-   :sep:`|`
-
-   Abstract value for the width of the `<textarea>` field.
-
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Default value set if a new record is created.
 
 enableRichtext
    :sep:`|` :aspect:`Required:` false
@@ -41,22 +25,18 @@ enableRichtext
 
    If set to true, the system renders a Rich Text Editor if that is enabled for
    the editor (default: yes), and if a suitable editor extension is loaded
-   (default: rteckeditor).
+   (default: rte_ckeditor).
 
    If either of these requirements is not met, the system falls back to
    a `<textarea>` field.
 
-max
+default
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '700'
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   Adds the HTML5 attribute “maxlength” to a textarea. Prevents the field from
-   adding more than specified number of characters. This is a client side
-   restriction, no server side length restriction is enforced.
-
-   Does not apply for RTE fields.
+   Default value set if a new record is created.
 
 placeholder
    :sep:`|` :aspect:`Required:` false
@@ -66,7 +46,6 @@ placeholder
 
    Placeholder text for the field.
 
-
 richtextConfiguration
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` string
@@ -75,8 +54,8 @@ richtextConfiguration
 
    The value is a key in :php:`$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']`
    array and specifies the YAML configuration source field used for that RTE
-   field. It does not make sense without having property `enableRichtext` set to
-   true.
+   field. It does not make sense without having property :yaml:`enableRichtext`
+   set to true.
 
    Extension `rte_ckeditor` registers three presets: `default`, `minimal` and
    `full` and points to YAML files with configuration details.
@@ -91,10 +70,10 @@ richtextConfiguration
 rows
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '3'
+   :sep:`|` :aspect:`Default:` '5'
    :sep:`|`
 
-   Abstract value for the height of the `<textarea>` field.
+   Abstract value for the height of the `<textarea>` field. Max value is 20.
 
 required
    :sep:`|` :aspect:`Required:` false
@@ -104,8 +83,15 @@ required
 
    If set, the field will become mandatory.
 
-Example
-=======
+Examples
+========
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: textarea
+        type: Textarea
 
 .. code-block:: yaml
 
@@ -114,11 +100,17 @@ Example
       - identifier: textarea
         type: Textarea
         properties:
-          cols: 40
-          default: 'Default value'
           enableRichtext: true
-          max: 150
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: textarea
+        type: Textarea
+        properties:
+          enableRichtext: true
+          richtextConfiguration: full
+          default: 'Default value'
           placeholder: 'Placeholder text'
-          richtextConfiguration: default
           rows: 15
-          required: false
