@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class PageTsConfigGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string

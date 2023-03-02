@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class SqlGenerator
 {
     public function __construct(

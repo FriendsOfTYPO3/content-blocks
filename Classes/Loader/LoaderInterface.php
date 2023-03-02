@@ -19,6 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 interface LoaderInterface
 {
     public function load(): TableDefinitionCollection;

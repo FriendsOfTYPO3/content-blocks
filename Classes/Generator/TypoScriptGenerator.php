@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class TypoScriptGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string

@@ -33,6 +33,9 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 enum FieldType: string
 {
     case CATEGORY = 'Category';

@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::DATETIME;

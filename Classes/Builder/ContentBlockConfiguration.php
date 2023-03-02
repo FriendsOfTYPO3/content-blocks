@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Builder;
 
 /**
- * @internal
+ * @internal Not part of TYPO3's public API.
  */
 final class ContentBlockConfiguration
 {

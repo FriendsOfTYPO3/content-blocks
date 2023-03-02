@@ -30,6 +30,8 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * Sets up Fluid and applies the same DataProcessor as the frontend to the data record.
  * Wraps the backend preview in class="cb-editor".
+ *
+ * @internal Not part of TYPO3's public API.
  */
 class PreviewRenderer extends StandardContentPreviewRenderer
 {

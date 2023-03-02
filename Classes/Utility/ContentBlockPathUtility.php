@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Utility;
 use Composer\InstalledVersions;
 use TYPO3\CMS\Core\Core\Environment;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class ContentBlockPathUtility
 {
     public static function getAbsoluteContentBlockLegacyPath(): string

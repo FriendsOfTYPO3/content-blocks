@@ -19,6 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class CategoryFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::CATEGORY;

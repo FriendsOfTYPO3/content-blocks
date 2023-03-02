@@ -22,6 +22,9 @@ use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class TableDefinitionCollection implements \IteratorAggregate
 {
     /** @var TableDefinition[] */

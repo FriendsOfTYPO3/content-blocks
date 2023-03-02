@@ -21,6 +21,9 @@ use Composer\InstalledVersions;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class ComposerLoader extends AbstractLoader implements LoaderInterface
 {
     protected ?TableDefinitionCollection $tableDefinitionCollection = null;

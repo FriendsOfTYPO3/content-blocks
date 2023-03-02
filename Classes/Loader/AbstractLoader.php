@@ -22,6 +22,9 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class AbstractLoader
 {
     protected function loadPackageConfiguration(string $package, string $vendor, ?array $parsedComposerJson = null): ParsedContentBlock

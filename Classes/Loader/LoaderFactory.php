@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Core\Environment;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class LoaderFactory
 {
     /**

@@ -28,6 +28,9 @@ use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class TcaGenerator
 {
     public function __construct(

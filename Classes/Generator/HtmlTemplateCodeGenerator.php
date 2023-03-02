@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class HtmlTemplateCodeGenerator
 {
     public function generateEditorPreviewTemplate(ContentBlockConfiguration $contentBlockConfiguration): string

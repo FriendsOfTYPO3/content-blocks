@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderFactory;
 
 /**
- * @internal
+ * @internal Not part of TYPO3's public API.
  */
 final class LoaderPass implements CompilerPassInterface
 {

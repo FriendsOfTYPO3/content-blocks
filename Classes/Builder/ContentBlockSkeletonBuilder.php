@@ -23,6 +23,9 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class ContentBlockSkeletonBuilder
 {
     public function __construct(

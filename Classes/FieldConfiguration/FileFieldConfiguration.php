@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class FileFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::FILE;

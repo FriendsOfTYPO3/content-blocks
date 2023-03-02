@@ -26,6 +26,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Resource\FileCollector;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class RelationResolver
 {
     public function __construct(

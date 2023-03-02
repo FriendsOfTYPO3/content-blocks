@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class TcaFieldDefinition
 {
     private string $identifier = '';

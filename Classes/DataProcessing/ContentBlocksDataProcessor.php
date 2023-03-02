@@ -24,6 +24,8 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
 /**
  * Adds information about the current content block to variable "cb".
+ *
+ * @internal Not part of TYPO3's public API.
  */
 class ContentBlocksDataProcessor implements DataProcessorInterface
 {
