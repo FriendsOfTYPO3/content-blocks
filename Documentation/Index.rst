@@ -45,6 +45,7 @@ use content types as composer packages.
     IntegratorManual/Index
     FAQ/Index
     KnownProblems/Index
+    History/Index
 
 ..  Meta Menu
 
