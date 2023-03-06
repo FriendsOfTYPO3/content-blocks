@@ -27,6 +27,7 @@ final class ParsedContentBlock
         private readonly array $yaml,
         private readonly string $icon,
         private readonly string $iconProvider,
+        private readonly string $packagePath,
     ) {
     }
 
@@ -37,6 +38,7 @@ final class ParsedContentBlock
             yaml: (array)($array['yaml'] ?? []),
             icon: (string)($array['icon'] ?? ''),
             iconProvider: (string)($array['iconProvider'] ?? ''),
+            packagePath: (string)($array['packagePath'] ?? '')
         );
     }
 
@@ -47,6 +49,7 @@ final class ParsedContentBlock
             'yaml' => $this->yaml,
             'icon' => $this->icon,
             'iconProvider' => $this->iconProvider,
+            'packagePath' => $this->packagePath,
         ];
     }
 
@@ -68,5 +71,10 @@ final class ParsedContentBlock
     public function getIconProvider(): string
     {
         return $this->iconProvider;
+    }
+
+    public function getPackagePath(): string
+    {
+        return $this->packagePath;
     }
 }

@@ -27,9 +27,8 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
  */
 class AbstractLoader
 {
-    protected function loadPackageConfiguration(string $package, string $vendor, ?array $parsedComposerJson = null): ParsedContentBlock
+    protected function loadPackageConfiguration(string $package, string $vendor, ?array $parsedComposerJson = null, string $packagePath = ''): ParsedContentBlock
     {
-        $packagePath = ContentBlockPathUtility::getAbsoluteContentBlockPath($package, $vendor);
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".', 1674225340);
         }
@@ -38,25 +37,26 @@ class AbstractLoader
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
             $iconName = 'ContentBlockIcon.' . $fileExtension;
-            $checkIconPath = ContentBlockPathUtility::getAbsoluteContentBlockPublicPath($package, $vendor) . '/' . $iconName;
+            $checkIconPath = $packagePath . 'Resources/Public/' . $iconName;
             if (is_readable($checkIconPath)) {
-                $iconPath = ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/' . $iconName;
+                $iconPath = $packagePath . 'Resources/Public/' . $iconName;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
                 break;
             }
         }
         if ($iconPath === null) {
-            $iconPath = 'EXT:content_block/Resources/Public/Icons/ContentBlockIcon.svg';
+            $iconPath = 'EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg';
             $iconProviderClass = SvgIconProvider::class;
         }
 
         return new ParsedContentBlock(
             composerJson: $parsedComposerJson === null
-                ? json_decode(file_get_contents($packagePath . '/' . 'composer.json'), true)
+                ? json_decode(file_get_contents($packagePath . 'composer.json'), true)
                 : $parsedComposerJson,
-            yaml: Yaml::parseFile(ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($package, $vendor) . '/' . 'EditorInterface.yaml'),
+            yaml: Yaml::parseFile($packagePath . 'Resources/Private/' . 'EditorInterface.yaml'),
             icon: $iconPath,
-            iconProvider: $iconProviderClass
+            iconProvider: $iconProviderClass,
+            packagePath: $packagePath
         );
     }
 }

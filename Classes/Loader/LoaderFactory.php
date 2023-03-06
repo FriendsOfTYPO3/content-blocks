@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\Core\Core\Environment;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -37,10 +36,7 @@ class LoaderFactory
 
     public function create(): LoaderInterface
     {
-        if (Environment::isComposerMode()) {
-            return $this->loaders['composer'];
-        }
-        return $this->loaders['legacy'];
+        return $this->loaders['package'];
     }
 
     public function load(): TableDefinitionCollection

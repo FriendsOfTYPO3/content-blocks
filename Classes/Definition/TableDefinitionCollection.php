@@ -97,7 +97,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $processedField = $tableDefinitionCollection->processCollections(
                     field: $field,
                     table: $uniqueColumnName,
-                    languagePath: [LanguagePathUtility::getPartialLanguageIdentifierPath($package, $vendor, $field['identifier'])],
+                    languagePath: [ 'LLL:' . $contentBlock->getPackagePath() . 'Resources/Private/Language/Labels.xlf:' . $field['identifier'] ],
                     composerName: $composerName,
                     parentTable: $table,
                     rootTable: $table,
@@ -123,6 +123,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 'iconProvider' => $contentBlock->getIconProvider(),
                 'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
                 'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($composerName),
+                'packagePath' => $contentBlock->getPackagePath(),
             ];
         }
 

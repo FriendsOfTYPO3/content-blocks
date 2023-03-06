@@ -17,14 +17,18 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
-use Composer\InstalledVersions;
+use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Package\Package;
+use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ComposerLoader extends AbstractLoader implements LoaderInterface
+class PackageLoader extends AbstractLoader implements LoaderInterface
 {
     protected ?TableDefinitionCollection $tableDefinitionCollection = null;
 
@@ -47,15 +51,42 @@ class ComposerLoader extends AbstractLoader implements LoaderInterface
         }
 
         $result = [];
-        $contentBlocks = InstalledVersions::getInstalledPackagesByType('typo3-content-block');
-        foreach ($contentBlocks as $contentBlock) {
-            [$vendor, $package] = explode('/', $contentBlock);
-            $result[] = $this->loadPackageConfiguration($package, $vendor);
+
+        /** @var PackageManager */
+        $packageManager = GeneralUtility::makeInstance(PackageManager::class);
+        /** @var Package $t3Package */
+        foreach($packageManager->getAvailablePackages() as $t3Package) {
+            $cbPathInPackage = $t3Package->getPackagePath() . 'ContentBlocks/';
+            if (is_dir($cbPathInPackage)) {
+                $result = array_merge($result, $this->loadDir($cbPathInPackage));
+            }
         }
+        // @todo: insert asset publishing here when cache is empty
+
         $cache = array_map(fn (ParsedContentBlock $contentBlock) => $contentBlock->toArray(), $result);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($result);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
         return $this->tableDefinitionCollection;
+    }
+
+    protected function loadDir(string $path): array
+    {
+        $result = [];
+        $cbFinder = new Finder();
+        $cbFinder->directories()->depth(0)->in($path);
+
+        foreach ($cbFinder as $splPath) {
+            if (!is_readable($splPath->getPathname() . '/composer.json')) {
+                throw new \RuntimeException('Cannot read or find composer.json file in "' . $splPath->getPathname() . '"' . '/composer.json', 1674224824);
+            }
+            $composerJson = json_decode(file_get_contents($splPath->getPathname() . '/composer.json'), true);
+            if (($composerJson['type'] ?? '') !== 'typo3-content-block') {
+                continue;
+            }
+            [$vendor, $package] = explode('/', $composerJson['name']);
+            $result[] = $this->loadPackageConfiguration($package, $vendor, $composerJson, $splPath->getPathname() . '/');
+        }
+        return $result;
     }
 }

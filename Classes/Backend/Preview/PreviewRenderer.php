@@ -49,7 +49,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateRootPaths([ContentBlockPathUtility::getAbsoluteContentBlockPrivatePath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor())]);
+        $view->setTemplateRootPaths([$contentElementDefinition->getPackagePath() . 'Resources/Private']);
+
         $view->setTemplate('EditorPreview');
         $view->assign('data', $record);
 

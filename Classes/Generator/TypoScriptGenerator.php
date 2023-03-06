@@ -19,6 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -27,7 +29,8 @@ class TypoScriptGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $privatePath = ContentBlockPathUtility::getPrefixedContentBlockPrivatePath($contentElementDefinition->getPackage(), $contentElementDefinition->getVendor());
+        $privatePath = $contentElementDefinition->getPackagePath() . 'Resources/Private';
+
         return <<<HEREDOC
 tt_content.{$contentElementDefinition->getTypeName()} =< lib.contentBlock
 tt_content.{$contentElementDefinition->getTypeName()} {

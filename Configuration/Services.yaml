@@ -28,17 +28,10 @@ services:
     autoconfigure: false
     public: true
 
-  TYPO3\CMS\ContentBlocks\Loader\ComposerLoader:
+  TYPO3\CMS\ContentBlocks\Loader\PackageLoader:
     tags:
       - name: cb.loader
-        identifier: composer
-    arguments:
-      $cache: '@cache.core'
-
-  TYPO3\CMS\ContentBlocks\Loader\LegacyLoader:
-    tags:
-      - name: cb.loader
-        identifier: legacy
+        identifier: package
     arguments:
       $cache: '@cache.core'
 
