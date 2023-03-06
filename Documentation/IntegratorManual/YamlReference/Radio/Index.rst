@@ -50,6 +50,9 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
@@ -57,10 +60,26 @@ Example
       - identifier: radioboxes
         type: Radio
         properties:
-          default: 'two'
           items:
             [
               [ 'one', 'one' ],
               [ 'two', 'two' ],
-              [ 'three', 'three' ],
+            ]
+
+Advanced / use case
+-------------------
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: radioboxes
+        type: Radio
+        properties:
+          default: 'one'
+          items:
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
             ]

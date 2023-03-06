@@ -58,12 +58,18 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
       - identifier: image
         type: File
+
+Advanced / use case
+-------------------
 
 .. code-block:: yaml
 
@@ -72,5 +78,7 @@ Example
       - identifier: image
         type: File
         properties:
+            maxitems: 10
+            minitems: 1
             enableImageManipulation: true
             allowed: common-image-types

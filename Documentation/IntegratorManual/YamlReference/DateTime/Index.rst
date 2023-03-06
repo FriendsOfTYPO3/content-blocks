@@ -73,6 +73,9 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Examples
 ========
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
@@ -87,3 +90,21 @@ Examples
       - identifier: datetime
         type: DateTime
         dbType: datetime
+
+Advanced / use case
+-------------------
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: datetime
+        type: DateTime
+        properties:
+          default: '2023-02-11 12:00:00'
+          displayAge: true
+          size: 20
+          range:
+            lower: '2019-01-31 12:00:00'
+            upper: '2040-01-31 12:00:00'
+          required: true

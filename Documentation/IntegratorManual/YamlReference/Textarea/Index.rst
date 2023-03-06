@@ -86,12 +86,8 @@ required
 Examples
 ========
 
-.. code-block:: yaml
-
-    group: common
-    fields:
-      - identifier: textarea
-        type: Textarea
+Minimal
+-------
 
 .. code-block:: yaml
 
@@ -99,8 +95,9 @@ Examples
     fields:
       - identifier: textarea
         type: Textarea
-        properties:
-          enableRichtext: true
+
+Advanced / use case
+-------------------
 
 .. code-block:: yaml
 

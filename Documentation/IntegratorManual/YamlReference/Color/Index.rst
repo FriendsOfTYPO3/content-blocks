@@ -63,9 +63,32 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
       - identifier: color
         type: Color
+
+Advanced / use case
+-------------------
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: color
+        type: Color
+        properties:
+          autocomplete: true
+          default: '#0000FF'
+          valuePicker:
+            items:
+              [
+                ['Red', '#FF0000'],
+                ['Green', '#008000'],
+                ['Blue', '#0000FF'],
+              ]

@@ -48,8 +48,11 @@ items
 
 For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 
-Example
-=======
+Examples
+========
+
+Minimal
+-------
 
 .. code-block:: yaml
 
@@ -57,3 +60,36 @@ Example
     fields:
       - identifier: checkbox
         type: Checkbox
+
+Advanced / use case
+-------------------
+
+Multiple checkboxes:
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: checkbox
+        type: Checkbox
+        properties:
+          items:
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
+            ]
+          default: 2
+          cols: 3
+
+Toggle checkbox:
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: toggle
+      type: Checkbox
+      properties:
+        renderType: checkboxToggle
+        default: true

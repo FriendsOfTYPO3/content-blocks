@@ -47,9 +47,35 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
       - identifier: email
         type: Email
+
+Advanced / use case
+-------------------
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: email
+        type: Email
+        properties:
+          autocomplete: true
+          default: 'developer@localhost.de'
+          placeholder: 'Enter your email address'
+          required: true
+          valuePicker:
+            items:
+              [
+                [ 'Contact 1', 'contact_1@example.com' ],
+                [ 'Contact 2', 'contact_2@example.com' ],
+                [ 'Contact 3', 'contact_3@example.com' ],
+              ]
+

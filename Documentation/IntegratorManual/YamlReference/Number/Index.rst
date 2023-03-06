@@ -92,12 +92,18 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Examples
 ========
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
       - identifier: number
         type: Number
+
+Advanced / use case
+-------------------
 
 .. code-block:: yaml
 
@@ -106,4 +112,20 @@ Examples
       - identifier: number
         type: Number
         properties:
-           format: decimal
+          format: integer
+          default: 10
+          size: 20
+          range:
+            lower: 10
+            upper: 999
+          slider:
+            range:
+              step: 1
+              width: 100
+          valuePicker:
+            items:
+              [
+                [ '100', 100],
+                [ '250', 250],
+                [ '500', 500],
+              ]

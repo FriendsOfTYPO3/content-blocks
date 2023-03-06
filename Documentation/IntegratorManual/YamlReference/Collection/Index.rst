@@ -93,6 +93,22 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: collection
+        type: Collection
+        properties:
+          fields:
+            - identifier: text
+              type: Text
+
+Advanced / use case
+-------------------
+
 .. code-block:: yaml
 
     group: common
@@ -104,11 +120,11 @@ Example
           maxitems: 5
           minitems: 1
           fields:
-            - identifier: title
-              type: Text
             - identifier: image
               type: Image
               properties:
                 minitems: 1
                 maxitems: 1
                 required: true
+            - identifier: title
+              type: Text

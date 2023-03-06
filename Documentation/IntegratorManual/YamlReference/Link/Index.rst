@@ -48,6 +48,19 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: url
+        type: Link
+
+Advanced / use case
+-------------------
+
 .. code-block:: yaml
 
     group: common
@@ -55,4 +68,13 @@ Example
       - identifier: url
         type: Link
         properties:
-            allowedTypes: ['page']
+          autocomplete: true
+          default: 'https://typo3.org'
+          allowedTypes: ['page', 'url', 'file']
+          required: false
+          valuePicker:
+            items:
+              [
+                ['https://www.typo3.org', TYPO3 CMS],
+                ['https://www.typo3.com', TYPO3 GmbH],
+              ]

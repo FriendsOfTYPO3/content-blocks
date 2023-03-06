@@ -48,11 +48,33 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Examples
 ========
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
-      - identifier: page_select
+      - identifier: pageSelect
         type: Reference
         properties:
-            - allowed: 'pages'
+          allowed: 'pages'
+
+Advanced / use case
+-------------------
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: pageSelect
+        type: Reference
+        properties:
+          allowed: 'pages'
+          maxitems: 1,
+          minitems: 0,
+          suggestOptions:
+            'default' => [
+              'additionalSearchFields' => 'nav_title, url',
+              'addWhere' => 'AND pages.doktype = 1',
+            ],

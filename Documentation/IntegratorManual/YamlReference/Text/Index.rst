@@ -99,12 +99,18 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Examples
 ========
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
       - identifier: text
         type: Text
+
+Advanced / use case
+-------------------
 
 .. code-block:: yaml
 
@@ -113,6 +119,7 @@ Examples
       - identifier: text
         type: Text
         properties:
+          default: 'Default value'
           max: 15
           min: 4
           required: true

@@ -22,7 +22,7 @@ renderType
    :sep:`|`
 
    Choose from one of the four available select types: :yaml:`selectSingle`,
-   :yaml:`selectCheckBox`, :yaml:`selectSingleBox` or
+   :yaml:`selectCheckBox`, :yaml:`selectSingleBox`, :yaml:`selectTree` or
    :yaml:`selectMultipleSideBySide`.
 
 items
@@ -78,6 +78,9 @@ For more advanced configuration refer to the :ref:`TCA documentation <t3tca:colu
 Example
 =======
 
+Minimal
+-------
+
 Select single:
 
 .. code-block:: yaml
@@ -88,12 +91,10 @@ Select single:
         type: Select
         properties:
           renderType: selectSingle
-          default: 'one'
           items:
             [
               [ 'The first', 'one' ],
               [ 'The second', 'two' ],
-              [ 'The third', 'three' ],
             ]
 
 Select multiple:
@@ -106,12 +107,74 @@ Select multiple:
         type: Select
         properties:
           renderType: selectMultipleSideBySide
+          items:
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+            ]
+
+
+Advanced / use case
+-------------------
+
+.. code-block:: yaml
+
+Select single:
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: select
+        type: Select
+        properties:
+          renderType: selectSingle
           default: 'one'
+          minitems: 1
+          maxitems: 3
           items:
             [
               [ 'The first', 'one' ],
               [ 'The second', 'two' ],
               [ 'The third', 'three' ],
             ]
-          maxitems: 2
+          foreign_table: pages
+          foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
+
+Select multiple:
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: selectSideBySide
+        type: Select
+        properties:
+          renderType: selectMultipleSideBySide
+          default: 'one'
           minitems: 1
+          maxitems: 3
+          items:
+            [
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
+            ]
+          foreign_table: pages
+          foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
+
+Select tree:
+
+.. code-block:: yaml
+
+    group: common
+    fields:
+      - identifier: selectTree
+        type: Select
+        properties:
+          renderType: selectTree
+          size: 5
+          foreign_table: 'pages'
+          foreign_table_where: 'ORDER BY pages.uid'
+          treeConfig:
+            parentField: pid

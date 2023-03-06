@@ -57,12 +57,18 @@ treeConfig.startingPoints
 Examples
 ========
 
+Minimal
+-------
+
 .. code-block:: yaml
 
     group: common
     fields:
       - identifier: categories
         type: Category
+
+Advanced / use case
+-------------------
 
 .. code-block:: yaml
 
@@ -71,6 +77,7 @@ Examples
       - identifier: categories
         type: Category
         properties:
-            minitems: 1
-            treeConfig:
-                startingPoints: 7
+          minitems: 1
+          treeConfig:
+            startingPoints: 7
+          relationship: oneToOne
