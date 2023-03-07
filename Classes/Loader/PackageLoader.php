@@ -79,14 +79,6 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
         $cbFinder->directories()->depth(0)->in($path);
 
         foreach ($cbFinder as $splPath) {
-            if (!is_readable($splPath->getPathname() . '/composer.json')) {
-                throw new \RuntimeException('Cannot read or find composer.json file in "' . $splPath->getPathname() . '"' . '/composer.json', 1674224824);
-            }
-            $composerJson = json_decode(file_get_contents($splPath->getPathname() . '/composer.json'), true);
-            if (($composerJson['type'] ?? '') !== 'typo3-content-block') {
-                continue;
-            }
-
             if (!is_readable($splPath->getPathname() . '/Resources/Private/EditorInterface.yaml')) {
                 throw new \RuntimeException('Cannot read or find EditorInterface.yaml file in "' . $splPath->getPathname() . '"' . '/Resources/Private/EditorInterface.yaml', 1674224824);
             }
