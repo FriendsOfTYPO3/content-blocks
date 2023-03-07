@@ -23,7 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 final class ParsedContentBlock
 {
     public function __construct(
-        private readonly array $composerJson,
+        private readonly string $name,
         private readonly array $yaml,
         private readonly string $icon,
         private readonly string $iconProvider,
@@ -34,7 +34,7 @@ final class ParsedContentBlock
     public static function fromArray(array $array): ParsedContentBlock
     {
         return new self(
-            composerJson: (array)($array['composerJson'] ?? []),
+            name: (string)($array['name'] ?? ''),
             yaml: (array)($array['yaml'] ?? []),
             icon: (string)($array['icon'] ?? ''),
             iconProvider: (string)($array['iconProvider'] ?? ''),
@@ -45,7 +45,7 @@ final class ParsedContentBlock
     public function toArray(): array
     {
         return [
-            'composerJson' => $this->composerJson,
+            'name' => $this->name,
             'yaml' => $this->yaml,
             'icon' => $this->icon,
             'iconProvider' => $this->iconProvider,
@@ -53,9 +53,9 @@ final class ParsedContentBlock
         ];
     }
 
-    public function getComposerJson(): array
+    public function getName(): string
     {
-        return $this->composerJson;
+        return $this->name;
     }
 
     public function getYaml(): array

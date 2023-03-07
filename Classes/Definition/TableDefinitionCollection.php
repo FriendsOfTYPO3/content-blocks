@@ -69,8 +69,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
             $table = $contentBlock->getYaml()['table'] ?? 'tt_content';
-            $composerName = $contentBlock->getComposerJson()['name'];
-            [$vendor, $package] = explode('/', $composerName);
+            $cbName = $contentBlock->getName();
+            [$vendor, $package] = explode('/', $cbName);
 
             $uniqueIdentifiers = [];
             $columns = [];
@@ -78,7 +78,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
             foreach ($contentBlock->getYaml()['fields'] ?? [] as $field) {
                 if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
                     throw new \InvalidArgumentException(
-                        'The identifier "' . $field['identifier'] . '" in package ' . $composerName . ' does exist more than once. Please choose unique identifiers.',
+                        'The identifier "' . $field['identifier'] . '" in package ' . $cbName . ' does exist more than once. Please choose unique identifiers.',
                         1677407941
                     );
                 }
@@ -88,7 +88,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $uniqueColumnName = $field['identifier'];
                     $useExistingField = true;
                 } else {
-                    $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($composerName, $field['identifier']);
+                    $uniqueColumnName = UniqueNameUtility::createUniqueColumnName($cbName, $field['identifier']);
                     // Prevent reusing not allowed fields (e.g. system fields).
                     $field['useExistingField'] = false;
                 }
@@ -98,7 +98,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     field: $field,
                     table: $uniqueColumnName,
                     languagePath: [ 'LLL:' . $contentBlock->getPackagePath() . 'Resources/Private/Language/Labels.xlf:' . $field['identifier'] ],
-                    composerName: $composerName,
+                    cbName: $cbName,
                     parentTable: $table,
                     rootTable: $table,
                 );
@@ -113,7 +113,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
             }
 
             $tableDefinitionList[$table]['elements'][] = [
-                'identifier' => $composerName,
+                'identifier' => $cbName,
                 'columns' => $columns,
                 'overrideColumns' => $overrideColumns,
                 'vendor' => $vendor,
@@ -122,7 +122,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 'icon' => $contentBlock->getIcon(),
                 'iconProvider' => $contentBlock->getIconProvider(),
                 'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
-                'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($composerName),
+                'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($cbName),
                 'packagePath' => $contentBlock->getPackagePath(),
             ];
         }
@@ -133,7 +133,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $table, array $languagePath, string $composerName, string $parentTable, string $rootTable): array
+    private function processCollections(array $field, string $table, array $languagePath, string $cbName, string $parentTable, string $rootTable): array
     {
         $field['languagePath'] = implode('.', $languagePath);
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
@@ -150,7 +150,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $identifier = $collectionField['identifier'];
             if (in_array($identifier, $uniqueIdentifiers, true)) {
                 throw new \InvalidArgumentException(
-                    'The identifier "' . $identifier . '" in package ' . $composerName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
+                    'The identifier "' . $identifier . '" in package ' . $cbName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
                     1677407942
                 );
             }
@@ -158,9 +158,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $languagePath[] = $identifier;
             $childField = $this->processCollections(
                 field: $collectionField,
-                table: UniqueNameUtility::createUniqueColumnName($composerName, $identifier),
+                table: UniqueNameUtility::createUniqueColumnName($cbName, $identifier),
                 languagePath: $languagePath,
-                composerName: $composerName,
+                cbName: $cbName,
                 parentTable: $table,
                 rootTable: $rootTable
             );

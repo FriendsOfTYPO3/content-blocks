@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
@@ -56,9 +57,10 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
         /** @var Package $t3Package */
         foreach($packageManager->getAvailablePackages() as $t3Package) {
+            $extKey = $t3Package->getPackageKey();
             $cbPathInPackage = $t3Package->getPackagePath() . 'ContentBlocks/';
             if (is_dir($cbPathInPackage)) {
-                $result = array_merge($result, $this->loadDir($cbPathInPackage));
+                $result = array_merge($result, $this->loadDir($cbPathInPackage, $extKey));
             }
         }
         // @todo: insert asset publishing here when cache is empty
@@ -70,7 +72,7 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
         return $this->tableDefinitionCollection;
     }
 
-    protected function loadDir(string $path): array
+    protected function loadDir(string $path, string $extKey): array
     {
         $result = [];
         $cbFinder = new Finder();
@@ -84,8 +86,17 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
             if (($composerJson['type'] ?? '') !== 'typo3-content-block') {
                 continue;
             }
-            [$vendor, $package] = explode('/', $composerJson['name']);
-            $result[] = $this->loadPackageConfiguration($package, $vendor, $composerJson, $splPath->getPathname() . '/');
+
+            if (!is_readable($splPath->getPathname() . '/Resources/Private/EditorInterface.yaml')) {
+                throw new \RuntimeException('Cannot read or find EditorInterface.yaml file in "' . $splPath->getPathname() . '"' . '/Resources/Private/EditorInterface.yaml', 1674224824);
+            }
+            $yamlContent = Yaml::parseFile($splPath->getPathname() . '/Resources/Private/EditorInterface.yaml');
+            if (!is_array($yamlContent) || !isset($yamlContent['name']) || strlen($yamlContent['name']) < 3 || strpos($yamlContent['name'], '/') < 1) {
+                throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $splPath->getPathname() . '"' . '/Resources/Private/EditorInterface.yaml: Cannot find a valid name in format "vendor/package".', 1678224283);
+            }
+
+            $pathInExt = 'EXT:' . $extKey . '/ContentBlocks/' . $splPath->getRelativePathname() . '/';
+            $result[] = $this->loadPackageConfiguration($yamlContent['name'], $splPath->getPathname() . '/', $pathInExt, $yamlContent);
         }
         return $result;
     }

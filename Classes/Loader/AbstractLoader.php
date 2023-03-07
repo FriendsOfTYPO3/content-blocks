@@ -27,19 +27,25 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
  */
 class AbstractLoader
 {
-    protected function loadPackageConfiguration(string $package, string $vendor, ?array $parsedComposerJson = null, string $packagePath = ''): ParsedContentBlock
+    protected function loadPackageConfiguration(
+        string $name,
+        string $packagePath = '',
+        string $pathInExt = '',
+        array $yaml = []
+    ): ParsedContentBlock
     {
         if (!file_exists($packagePath)) {
-            throw new \RuntimeException('Content block "' . $package . '" could not be found in "' . $packagePath . '".', 1674225340);
+            throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1674225340);
         }
 
         $iconPath = null;
         $iconProviderClass = null;
+
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
             $iconName = 'ContentBlockIcon.' . $fileExtension;
-            $checkIconPath = $packagePath . 'Resources/Public/' . $iconName;
+            $checkIconPath = $pathInExt . 'Resources/Public/' . $iconName;
             if (is_readable($checkIconPath)) {
-                $iconPath = $packagePath . 'Resources/Public/' . $iconName;
+                $iconPath = $pathInExt . 'Resources/Public/' . $iconName;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
                 break;
             }
@@ -50,13 +56,11 @@ class AbstractLoader
         }
 
         return new ParsedContentBlock(
-            composerJson: $parsedComposerJson === null
-                ? json_decode(file_get_contents($packagePath . 'composer.json'), true)
-                : $parsedComposerJson,
-            yaml: Yaml::parseFile($packagePath . 'Resources/Private/' . 'EditorInterface.yaml'),
+            name: $name,
+            yaml: $yaml,
             icon: $iconPath,
             iconProvider: $iconProviderClass,
-            packagePath: $packagePath
+            packagePath: $pathInExt
         );
     }
 }
