@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
@@ -97,7 +98,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $processedField = $tableDefinitionCollection->processCollections(
                     field: $field,
                     table: $uniqueColumnName,
-                    languagePath: [ 'LLL:' . $contentBlock->getPackagePath() . 'Resources/Private/Language/Labels.xlf:' . $field['identifier'] ],
+                    languagePath: [ 'LLL:' . $contentBlock->getPackagePath() . ContentBlockPathUtility::getPathToLabels() . ':' . $field['identifier'] ],
                     cbName: $cbName,
                     parentTable: $table,
                     rootTable: $table,

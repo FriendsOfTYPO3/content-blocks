@@ -74,4 +74,43 @@ class ContentBlockPathUtility
     {
         return str_starts_with($path, 'CB:');
     }
+
+    /**
+     * Returns something like "EXT:my_ext/ContentBlocks/my_content_block/".
+     */
+    public static function getRelativeContentBlockPath(string $extKey, string $cbDir): string
+    {
+        return 'EXT:' . $extKey . '/' . self::getContentBlocksSubDirectory() . $cbDir . '/';
+    }
+
+    public static function getPathToEditorConfig(): string
+    {
+        return self::getPrivatePathSegment() . 'EditorInterface.yaml';
+    }
+
+    public static function getContentBlocksSubDirectory(): string
+    {
+        return 'ContentBlocks/';
+    }
+
+    /**
+     * There are thoughts to change this to "dist/"
+     */
+    public static function getPublicPathSegment(): string
+    {
+        return 'Resources/Public/';
+    }
+
+    /**
+     * There are thoughts to change this to "src/"
+     */
+    public static function getPrivatePathSegment(): string
+    {
+        return 'Resources/Private/';
+    }
+
+    public static function getPathToLabels(): string
+    {
+        return self::getPrivatePathSegment() . 'Language/Labels.xlf';
+    }
 }

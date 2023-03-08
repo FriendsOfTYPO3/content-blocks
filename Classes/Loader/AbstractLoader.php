@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
-use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
@@ -43,9 +42,9 @@ class AbstractLoader
 
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
             $iconName = 'ContentBlockIcon.' . $fileExtension;
-            $checkIconPath = $pathInExt . 'Resources/Public/' . $iconName;
+            $checkIconPath = $pathInExt . ContentBlockPathUtility::getPublicPathSegment() . $iconName;
             if (is_readable($checkIconPath)) {
-                $iconPath = $pathInExt . 'Resources/Public/' . $iconName;
+                $iconPath = $pathInExt . ContentBlockPathUtility::getPublicPathSegment() . $iconName;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
                 break;
             }

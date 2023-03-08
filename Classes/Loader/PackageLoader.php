@@ -58,7 +58,7 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
         /** @var Package $t3Package */
         foreach($packageManager->getAvailablePackages() as $t3Package) {
             $extKey = $t3Package->getPackageKey();
-            $cbPathInPackage = $t3Package->getPackagePath() . 'ContentBlocks/';
+            $cbPathInPackage = $t3Package->getPackagePath() . ContentBlockPathUtility::getContentBlocksSubDirectory();
             if (is_dir($cbPathInPackage)) {
                 $result = array_merge($result, $this->loadDir($cbPathInPackage, $extKey));
             }
@@ -79,15 +79,16 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
         $cbFinder->directories()->depth(0)->in($path);
 
         foreach ($cbFinder as $splPath) {
-            if (!is_readable($splPath->getPathname() . '/Resources/Private/EditorInterface.yaml')) {
-                throw new \RuntimeException('Cannot read or find EditorInterface.yaml file in "' . $splPath->getPathname() . '"' . '/Resources/Private/EditorInterface.yaml', 1674224824);
+            $yamlDestination = $splPath->getPathname() . '/' . ContentBlockPathUtility::getPathToEditorConfig();
+            if (!is_readable($yamlDestination)) {
+                throw new \RuntimeException('Cannot read or find EditorInterface.yaml file in "' . $splPath->getPathname() . '"', 1674224824);
             }
-            $yamlContent = Yaml::parseFile($splPath->getPathname() . '/Resources/Private/EditorInterface.yaml');
+            $yamlContent = Yaml::parseFile($yamlDestination);
             if (!is_array($yamlContent) || !isset($yamlContent['name']) || strlen($yamlContent['name']) < 3 || strpos($yamlContent['name'], '/') < 1) {
-                throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $splPath->getPathname() . '"' . '/Resources/Private/EditorInterface.yaml: Cannot find a valid name in format "vendor/package".', 1678224283);
+                throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlDestination . '"' . ': Cannot find a valid name in format "vendor/package".', 1678224283);
             }
 
-            $pathInExt = 'EXT:' . $extKey . '/ContentBlocks/' . $splPath->getRelativePathname() . '/';
+            $pathInExt = ContentBlockPathUtility::getRelativeContentBlockPath($extKey, $splPath->getRelativePathname());
             $result[] = $this->loadPackageConfiguration($yamlContent['name'], $splPath->getPathname() . '/', $pathInExt, $yamlContent);
         }
         return $result;
