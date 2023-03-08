@@ -97,6 +97,7 @@ Minimal
 -------
 .. code-block:: yaml
 
+    name: example/collection
     group: common
     fields:
       - identifier: collection
@@ -111,6 +112,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/collection
     group: common
     fields:
       - identifier: slides

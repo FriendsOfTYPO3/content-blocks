@@ -91,6 +91,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/textarea
     group: common
     fields:
       - identifier: textarea
@@ -101,6 +102,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/textarea
     group: common
     fields:
       - identifier: textarea

@@ -63,6 +63,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/file
     group: common
     fields:
       - identifier: image
@@ -73,6 +74,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/file
     group: common
     fields:
       - identifier: image

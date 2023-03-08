@@ -32,7 +32,7 @@ TYPO3 Content Blocks
 
 
 The TYPO3 Content Blocks extension provides a simplified way to register and
-use content types as composer packages.
+use content types as packages.
 
 **Table of Contents**
 

@@ -8,12 +8,10 @@ Defining a Content Block
 Directory structure of a Content Block
 ======================================
 
-A Content Block package has the following files and directory structure:
+A Content Block definition package has the following files and directory structure:
 
 +-------------------------------------------------+------------+--------------------------------+
 | Directory / File                                | Mandatory? | Created via make:content-block |
-+-------------------------------------------------+------------+--------------------------------+
-| composer.json                                   | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 | EditorInterface.yaml                            | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
@@ -32,27 +30,8 @@ A Content Block package has the following files and directory structure:
 | Resources/Public/ContentBlockIcon.(svg/png/gif) | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
-Content Block package files explained
+Content Block definiton package files explained
 =====================================
-
-composer.json
--------------
-
-refers to: `Composer schema <https://getcomposer.org/doc/04-schema.md>`__
-
-The Content Block ID (CType) derives from the package name. Therefore one
-composer package represents exactly one Content Block.
-
-**You must**
-
-*  provide this file
-*  set the type property to: `typo3-content-block`
-
-**You may**
-
-*  use the full composer.json config and define autoloading for ViewHelpers etc.
-   (only in composer mode).
-
 
 EditorInterface.yaml
 --------------------
@@ -63,7 +42,7 @@ refers to: `YAML RFC <https://github.com/yaml/summit.yaml.io/wiki/YAML-RFC-Index
 
 *  provide this file
 *  define the editor interface of exactly one Content Block
-*  define all the fields and their position in the editing interface
+*  define the unique name of the Content Block, all the fields and their position in the editing interface
 
 See :ref:`yaml_reference`.
 

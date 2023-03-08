@@ -53,27 +53,30 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/reference
     group: common
     fields:
-      - identifier: record_select
+      - identifier: pageSelect
         type: Reference
         properties:
-          allowed: 'some_table'
+          allowed: 'pages'
 
 Advanced / use case
 -------------------
 
 .. code-block:: yaml
 
+    name: example/reference
     group: common
     fields:
-      - identifier: page_select
+      - identifier: pageSelect
         type: Reference
         properties:
           allowed: 'pages'
           maxitems: 1,
           minitems: 0,
           suggestOptions:
-              default:
-                additionalSearchFields: 'nav_title, url'
-                addWhere: 'AND pages.doktype = 1'
+            'default' => [
+              'additionalSearchFields' => 'nav_title, url',
+              'addWhere' => 'AND pages.doktype = 1',
+            ],

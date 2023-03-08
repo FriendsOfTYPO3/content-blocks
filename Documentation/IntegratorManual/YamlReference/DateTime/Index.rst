@@ -78,6 +78,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/datetime
     group: common
     fields:
       - identifier: datetime
@@ -85,6 +86,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/datetime
     group: common
     fields:
       - identifier: datetime
@@ -102,7 +104,7 @@ Advanced / use case
         type: DateTime
         properties:
           default: '2023-02-11 12:00:00'
-          disableAgeDisplay: true
+          displayAge: true
           size: 20
           range:
             lower: '2019-01-31 12:00:00'

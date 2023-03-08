@@ -35,12 +35,12 @@ The content blocks concept is a new way to create content elements in TYPO3.
 
 The outcome of the research and the discussions in the community is:
 
-* A content block is composer package, so you can require it with composer, and it is unique within a system
+* A content block is a definition package in your {extDir}/ContentBlocks/ folder, which will be determined and loaded automatically
 * A content block is not a TYPO3 Extension, so there is no PHP, typoscript, SQL nor TsConfig inside
 * The configuration for a new content element is stored in a YAML file, the EditorInterface.yaml
 * The content blocks is made for frontend developers as main target group, so the folder structure is /src/ for private resources and /dist/ for public resources
 * As a common best practice in TYPO3, labels and every other language related stuff is stored in a XLF file. This will be registered an processed by convention
-* The composer name (vendor/package) defines the identifier of a content block
+* The entered name (vendor/package) in the EditorInterface.yaml file defines the identifier of a content block
 * GUI to create / kickstart a new content block
 * If there are breaking changes, support e.g via UpgradeWizards to migrate easily to the new version
 * Not limited to fluid, twig or other technologies are possible too use in the template
@@ -55,7 +55,7 @@ The outcome of the research and the discussions in the community is:
 What it does:
 =============
 
-Basically, the content blocks register the new content element by the composer vendor/package name
+Basically, the content blocks register the new content element by the entered vendor/package names in the corresponding EditorInterface,yaml
 in TYPO3 and the newContentElementWizard, and translate the YAML-file into TCA and SQL.
 It registers the Labels.xlf and sets the labels and descriptions by the field identifiers,
 register the icon and adds the necessary typoscript.

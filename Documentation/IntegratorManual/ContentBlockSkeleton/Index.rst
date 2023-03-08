@@ -10,19 +10,13 @@ Create a Content Block skeleton	on your terminal
 ================================================
 
 This command creates a Content Block skeleton for you.
-It creates the basic structure of a Content Block, by vendor, package, and
-on composer mode with the path to your packages folder.
-If no path is given, it will be created in {publicDir}/typo3conf/content-blocks directory.
+It creates the basic structure of a Content Block, by vendor and package in
+the `ContentBlocks` folder of the selected extension.
 
 Example creating a Content Block skeleton in one line:
 
 .. code-block:: bash
-    // composer installation
-    vendor/bin/typo3 make:content-block --vendor=foo --package=bar --path=packages/content-blocks
-
-    // classic installation
-    typo3/sysext/core/bin/typo3 make:content-block --vendor=foo --package=bar --path=packages/content-blocks
-
+    typo3/sysext/core/bin/typo3 make:content-block --vendor=foo --package=bar --extension=foo_bar
 
 If you do not want to use the options, you can also use the interactive mode:
 
@@ -32,8 +26,7 @@ If you do not want to use the options, you can also use the interactive mode:
 
 
 This will ask you for the following information:
-(the question to the path will only be asked on composer mode)
 
     Enter your vendor name:
     Enter your package name:
-    Enter your relative path (Default is {publicDir}/typo3conf/content-blocks):
+    Enter the extension name in which you want to save the content block:

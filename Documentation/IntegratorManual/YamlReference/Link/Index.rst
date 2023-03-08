@@ -53,6 +53,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/link
     group: common
     fields:
       - identifier: url
@@ -63,6 +64,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/link
     group: common
     fields:
       - identifier: url
@@ -71,7 +73,7 @@ Advanced / use case
           autocomplete: true
           default: 'https://typo3.org'
           allowedTypes: ['page', 'url', 'file']
-          required: true
+          required: false
           valuePicker:
             items:
               [

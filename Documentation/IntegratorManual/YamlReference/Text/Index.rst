@@ -104,6 +104,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/text
     group: common
     fields:
       - identifier: text
@@ -114,6 +115,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/text
     group: common
     fields:
       - identifier: text

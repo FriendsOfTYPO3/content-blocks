@@ -97,6 +97,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/number
     group: common
     fields:
       - identifier: number
@@ -107,6 +108,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/number
     group: common
     fields:
       - identifier: number
@@ -125,7 +127,7 @@ Advanced / use case
           valuePicker:
             items:
               [
-                [ '100', 100 ],
-                [ '250', 250 ],
-                [ '500', 500 ],
+                [ '100', 100],
+                [ '250', 250],
+                [ '500', 500],
               ]

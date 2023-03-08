@@ -56,6 +56,7 @@ Minimal
 
 .. code-block:: yaml
 
+    name: example/checkbox
     group: common
     fields:
       - identifier: checkbox
@@ -68,6 +69,7 @@ Multiple checkboxes:
 
 .. code-block:: yaml
 
+    name: example/checkbox
     group: common
     fields:
       - identifier: checkbox
@@ -75,9 +77,9 @@ Multiple checkboxes:
         properties:
           items:
             [
-              [ 'The first' ],
-              [ 'The second' ],
-              [ 'The third' ],
+              [ 'The first', 'one' ],
+              [ 'The second', 'two' ],
+              [ 'The third', 'three' ],
             ]
           default: 2
           cols: 3
@@ -89,7 +91,7 @@ Toggle checkbox:
     group: common
     fields:
       - identifier: toggle
-        type: Checkbox
-        properties:
-          renderType: checkboxToggle
-          default: 1
+      type: Checkbox
+      properties:
+        renderType: checkboxToggle
+        default: true

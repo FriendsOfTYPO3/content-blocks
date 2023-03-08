@@ -27,6 +27,14 @@ Common field properties
 -----------------------
 .. rst-class:: dl-parameters
 
+name
+   :sep:`|` :aspect:`Required:` true
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|`
+
+   Every editing interface configuration must contain exactly on name. The name is made up of vendor and package and must be unique.
+   Content Blocks which are placed in the `ContentBlocks` folder at any of your extensions will be determined and loaded automatically.
+
 identifier
    :sep:`|` :aspect:`Required:` true
    :sep:`|` :aspect:`Type:` string
