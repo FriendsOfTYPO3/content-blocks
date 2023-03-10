@@ -28,7 +28,6 @@ final class ContentElementDefinition extends TypeDefinition
     private bool $saveAndClose = false;
     private string $wizardGroup = '';
     private string $wizardIconPath = '';
-    private string $packagePath = '';
 
     public static function createFromArray(array $array, string $table = 'tt_content'): static
     {
@@ -39,8 +38,7 @@ final class ContentElementDefinition extends TypeDefinition
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
             ->withWizardGroup($array['wizardGroup'] ?? 'common')
-            ->withWizardIconPath($array['icon'] ?? '')
-            ->withPackagePath($array['packagePath'] ?? '');
+            ->withWizardIconPath($array['icon'] ?? '');
     }
 
     public function getDescription(): string
@@ -76,11 +74,6 @@ final class ContentElementDefinition extends TypeDefinition
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
-    }
-
-    public function getPackagePath(): string
-    {
-        return $this->packagePath;
     }
 
     public function withDescription(string $description): self
@@ -122,13 +115,6 @@ final class ContentElementDefinition extends TypeDefinition
     {
         $clone = clone $this;
         $clone->wizardIconPath = $icon;
-        return $clone;
-    }
-
-    public function withPackagePath(string $packagePath): self
-    {
-        $clone = clone $this;
-        $clone->packagePath = $packagePath;
         return $clone;
     }
 }

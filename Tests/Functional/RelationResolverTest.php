@@ -28,8 +28,8 @@ class RelationResolverTest extends FunctionalTestCase
         'content_blocks',
     ];
 
-    protected array $pathsToProvideInTestInstance = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/ContentBlocks/' => 'typo3conf/content-blocks/',
+    protected array $testExtensionsToLoad = [
+        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
     ];
 
     /**

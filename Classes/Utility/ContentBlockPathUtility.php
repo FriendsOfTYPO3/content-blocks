@@ -17,70 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Utility;
 
-use Composer\InstalledVersions;
-use TYPO3\CMS\Core\Core\Environment;
-
 /**
  * @internal Not part of TYPO3's public API.
  */
 class ContentBlockPathUtility
 {
-    public static function getAbsoluteContentBlockLegacyPath(): string
+    public static function getRelativeContentBlockPath(string $extensionKey, string $contentBlockPackageName): string
     {
-        return Environment::getLegacyConfigPath() . '/content-blocks';
-    }
-
-    public static function getAbsoluteContentBlockPath(string $package, string $vendor = ''): string
-    {
-        if (Environment::isComposerMode()) {
-            if ($vendor === '') {
-                throw new \InvalidArgumentException('`$vendor` must be set to retrieve absolute path of package in composer-mode.', 1674170723);
-            }
-            try {
-                return realpath(InstalledVersions::getInstallPath($vendor . '/' . $package));
-            } catch (\OutOfBoundsException) {
-                return '';
-            }
-        }
-        return self::getAbsoluteContentBlockLegacyPath() . '/' . $package;
-    }
-
-    public static function getAbsoluteContentBlockPrivatePath(string $package, string $vendor = ''): string
-    {
-        return self::getAbsoluteContentBlockPath($package, $vendor) . '/Resources/Private';
-    }
-
-    public static function getPrefixedContentBlockPrivatePath(string $package, string $vendor = ''): string
-    {
-        return self::getPrefixedContentBlockPath($package, $vendor) . '/Resources/Private';
-    }
-
-    public static function getAbsoluteContentBlockPublicPath(string $package, string $vendor = ''): string
-    {
-        return self::getAbsoluteContentBlockPath($package, $vendor) . '/Resources/Public';
-    }
-
-    public static function getPrefixedContentBlockPublicPath(string $package, string $vendor = ''): string
-    {
-        return self::getPrefixedContentBlockPath($package, $vendor) . '/Resources/Public';
-    }
-
-    protected static function getPrefixedContentBlockPath(string $package, string $vendor): string
-    {
-        return 'CB:' . $vendor . '/' . $package;
-    }
-
-    public static function isContentBlockPath(string $path): bool
-    {
-        return str_starts_with($path, 'CB:');
-    }
-
-    /**
-     * Returns something like "EXT:my_ext/ContentBlocks/my_content_block/".
-     */
-    public static function getRelativeContentBlockPath(string $extKey, string $cbDir): string
-    {
-        return 'EXT:' . $extKey . '/' . self::getContentBlocksSubDirectory() . $cbDir . '/';
+        return 'EXT:' . $extensionKey . '/' . self::getContentBlocksSubDirectory() . $contentBlockPackageName . '/';
     }
 
     public static function getPathToEditorConfig(): string
@@ -93,17 +37,11 @@ class ContentBlockPathUtility
         return 'ContentBlocks/';
     }
 
-    /**
-     * There are thoughts to change this to "dist/"
-     */
     public static function getPublicPathSegment(): string
     {
         return 'Resources/Public/';
     }
 
-    /**
-     * There are thoughts to change this to "src/"
-     */
     public static function getPrivatePathSegment(): string
     {
         return 'Resources/Private/';

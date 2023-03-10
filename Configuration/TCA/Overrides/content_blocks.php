@@ -2,7 +2,7 @@
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderFactory;
-use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -11,12 +11,6 @@ defined('TYPO3') or die();
 $tableDefinitionCollection = GeneralUtility::makeInstance(LoaderFactory::class)->load();
 foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
     foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-        $title = LanguagePathUtility::getFullLanguageIdentifierPath(
-            package: $typeDefinition->getPackage(),
-            vendor: $typeDefinition->getVendor(),
-            identifier: $typeDefinition->getVendor(),
-            suffix: $typeDefinition->getPackage() . '.title'
-        );
         if ($typeDefinition instanceof ContentElementDefinition) {
             ExtensionManagementUtility::addTcaSelectItemGroup(
                 table: $typeDefinition->getTable(),
@@ -30,7 +24,7 @@ foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
             table: $typeDefinition->getTable(),
             field: $typeDefinition->getTypeField(),
             item: [
-                $title,
+                'LLL:' . $typeDefinition->getPackagePath() . ContentBlockPathUtility::getPrivatePathSegment() . 'Language/Labels.xlf:' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage() . '.title',
                 $typeDefinition->getTypeName(),
                 $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
                 $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',

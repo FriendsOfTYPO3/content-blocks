@@ -29,9 +29,7 @@ class SqlGeneratorTest extends UnitTestCase
         yield 'simple fields in tt_content table' => [
             'array' => [
                 [
-                    'composerJson' => [
-                        'name' => 'foo/bar',
-                    ],
+                    'name' => 'foo/bar',
                     'yaml' => [
                         'fields' => [
                             [
@@ -55,9 +53,7 @@ class SqlGeneratorTest extends UnitTestCase
         yield 'nullable option removes NOT NULL statement' => [
             'array' => [
                 [
-                    'composerJson' => [
-                        'name' => 'foo/bar',
-                    ],
+                    'name' => 'foo/bar',
                     'yaml' => [
                         'fields' => [
                             [
@@ -84,9 +80,7 @@ class SqlGeneratorTest extends UnitTestCase
         yield 'It is possible to override SQL definitions' => [
             'array' => [
                 [
-                    'composerJson' => [
-                        'name' => 'foo/bar',
-                    ],
+                    'name' => 'foo/bar',
                     'yaml' => [
                         'fields' => [
                             [
@@ -165,9 +159,7 @@ class SqlGeneratorTest extends UnitTestCase
         yield 'inline field on root level' => [
             'array' => [
                 [
-                    'composerJson' => [
-                        'name' => 'foo/bar',
-                    ],
+                    'name' => 'foo/bar',
                     'yaml' => [
                         'fields' => [
                             [
@@ -201,9 +193,7 @@ class SqlGeneratorTest extends UnitTestCase
         yield 'inline field on second level' => [
             'array' => [
                 [
-                    'composerJson' => [
-                        'name' => 'foo/bar',
-                    ],
+                    'name' => 'foo/bar',
                     'yaml' => [
                         'fields' => [
                             [

@@ -34,6 +34,7 @@ class TypeDefinition
     protected array $overrideColumns = [];
     protected string $vendor = '';
     protected string $package = '';
+    private string $packagePath = '';
 
     final public function __construct()
     {
@@ -64,7 +65,8 @@ class TypeDefinition
             ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '');
+            ->withPackage($array['package'] ?? '')
+            ->withPackagePath($array['packagePath'] ?? '');
     }
 
     public function getIdentifier(): string
@@ -120,6 +122,11 @@ class TypeDefinition
     public function hasColumn(string $column): bool
     {
         return in_array($column, $this->columns, true);
+    }
+
+    public function getPackagePath(): string
+    {
+        return $this->packagePath;
     }
 
     public function getOverrideColumns(): array
@@ -200,6 +207,13 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->typeName = $type;
+        return $clone;
+    }
+
+    public function withPackagePath(string $packagePath): self
+    {
+        $clone = clone $this;
+        $clone->packagePath = $packagePath;
         return $clone;
     }
 }

@@ -31,9 +31,8 @@ class TcaGeneratorTest extends UnitTestCase
         yield 'Two simple content block create two types and two columns in tt_content table' => [
             'contentBlocks' => [
                 [
-                    'composerJson' => [
-                        'name' => 't3ce/example',
-                    ],
+                    'name' => 't3ce/example',
+                    'packagePath' => 'EXT:foo/ContentBlocks/example/',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
@@ -142,9 +141,8 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                 ],
                 [
-                    'composerJson' => [
-                        'name' => 't3ce/testblock',
-                    ],
+                    'name' => 't3ce/testblock',
+                    'packagePath' => 'EXT:foo/ContentBlocks/testblock/',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
@@ -181,8 +179,8 @@ class TcaGeneratorTest extends UnitTestCase
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'bodytext' => [
-                                    'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:bodytext.label',
-                                    'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:bodytext.description',
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:bodytext.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:bodytext.description',
                                     'config' => [
                                         'enableRichtext' => true,
                                     ],
@@ -194,8 +192,8 @@ class TcaGeneratorTest extends UnitTestCase
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'bodytext' => [
-                                    'label' => 'LLL:CB:t3ce/testblock/Resources/Private/Language/Labels.xlf:bodytext.label',
-                                    'description' => 'LLL:CB:t3ce/testblock/Resources/Private/Language/Labels.xlf:bodytext.description',
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/testblock/Resources/Private/Language/Labels.xlf:bodytext.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/testblock/Resources/Private/Language/Labels.xlf:bodytext.description',
                                     'config' => [],
                                 ],
                             ],
@@ -203,8 +201,8 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'columns' => [
                         't3ce_example_text' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:text.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:text.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:text.description',
                             'config' => [
                                 'type' => 'input',
                                 'default' => 'Default value',
@@ -213,48 +211,48 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_textarea' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:textarea.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:textarea.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:textarea.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:textarea.description',
                             'config' => [
                                 'type' => 'text',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_number' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:number.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:number.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:number.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:number.description',
                             'config' => [
                                 'type' => 'number',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_email' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:email.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:email.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:email.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:email.description',
                             'config' => [
                                 'type' => 'email',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_check' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:check.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:check.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:check.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:check.description',
                             'config' => [
                                 'type' => 'check',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_color' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:color.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:color.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:color.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:color.description',
                             'config' => [
                                 'type' => 'color',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_file' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:file.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:file.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:file.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:file.description',
                             'config' => [
                                 'type' => 'file',
                                 'foreign_table' => 'sys_file_reference',
@@ -270,8 +268,8 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_category' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:category.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:category.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:category.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:category.description',
                             'config' => [
                                 'type' => 'category',
                                 'foreign_table' => 'sys_category',
@@ -290,48 +288,48 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_datetime' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:datetime.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:datetime.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:datetime.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:datetime.description',
                             'config' => [
                                 'type' => 'datetime',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_select' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:select.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:select.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:select.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:select.description',
                             'config' => [
                                 'type' => 'select',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_link' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:link.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:link.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:link.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:link.description',
                             'config' => [
                                 'type' => 'link',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_radio' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:radio.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:radio.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:radio.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:radio.description',
                             'config' => [
                                 'type' => 'radio',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_reference' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:reference.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:reference.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:reference.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:reference.description',
                             'config' => [
                                 'type' => 'group',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_collection' => [
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.description',
                             'config' => [
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection',
@@ -340,8 +338,8 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_testblock_text' => [
-                            'label' => 'LLL:CB:t3ce/testblock/Resources/Private/Language/Labels.xlf:text.label',
-                            'description' => 'LLL:CB:t3ce/testblock/Resources/Private/Language/Labels.xlf:text.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/testblock/Resources/Private/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/testblock/Resources/Private/Language/Labels.xlf:text.description',
                             'config' => [
                                 'type' => 'input',
                             ],
@@ -518,24 +516,24 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'text' => [
                             'exclude' => true,
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.text.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.text.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.text.description',
                             'config' => [
                                 'type' => 'input',
                             ],
                         ],
                         'text2' => [
                             'exclude' => true,
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.text2.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.text2.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.text2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.text2.description',
                             'config' => [
                                 'type' => 'input',
                             ],
                         ],
                         'collection2' => [
                             'exclude' => true,
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.description',
                             'config' => [
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection2',
@@ -706,16 +704,16 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'text' => [
                             'exclude' => true,
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.text.description',
                             'config' => [
                                 'type' => 'input',
                             ],
                         ],
                         'text2' => [
                             'exclude' => true,
-                            'label' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text2.label',
-                            'description' => 'LLL:CB:t3ce/example/Resources/Private/Language/Labels.xlf:collection.collection2.text2.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.text2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Resources/Private/Language/Labels.xlf:collection.collection2.text2.description',
                             'config' => [
                                 'type' => 'input',
                             ],

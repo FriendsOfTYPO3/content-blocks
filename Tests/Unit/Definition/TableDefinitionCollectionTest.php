@@ -28,9 +28,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         yield 'two collections with the same identifier' => [
             'contentBlocks' => [
                 [
-                    'composerJson' => [
-                        'name' => 't3ce/example',
-                    ],
+                    'name' => 't3ce/example',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
@@ -83,9 +81,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
     {
         $contentBlocks = [
             [
-                'composerJson' => [
-                    'name' => 'foo/bar',
-                ],
+                'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
                 'yaml' => [
@@ -93,9 +89,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 ],
             ],
             [
-                'composerJson' => [
-                    'name' => 't3ce/example',
-                ],
+                'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
                 'yaml' => [
@@ -120,9 +114,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
     {
         $contentBlocks = [
             [
-                'composerJson' => [
-                    'name' => 't3ce/example',
-                ],
+                'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
                 'yaml' => [
@@ -143,9 +135,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         yield 'two collections with the same identifier' => [
             'contentBlocks' => [
                 [
-                    'composerJson' => [
-                        'name' => 't3ce/example',
-                    ],
+                    'name' => 't3ce/example',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
@@ -188,9 +178,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         yield 'two collections with the same identifier' => [
             'contentBlocks' => [
                 [
-                    'composerJson' => [
-                        'name' => 't3ce/example',
-                    ],
+                    'name' => 't3ce/example',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [

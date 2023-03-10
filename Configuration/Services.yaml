@@ -29,6 +29,7 @@ services:
     public: true
 
   TYPO3\CMS\ContentBlocks\Loader\PackageLoader:
+    autowire: false
     tags:
       - name: cb.loader
         identifier: package
@@ -55,9 +56,3 @@ services:
         command: 'make:content-block'
         description: 'Create a content block skeleton.'
         schedulable: false
-
-  TYPO3\CMS\ContentBlocks\EventListener\ContentBlockAbsolutePathEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-tca'
-        event: TYPO3\CMS\Core\Utility\Event\AbsoluteFileNameResolvingEvent

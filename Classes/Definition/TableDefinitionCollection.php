@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\ContentBlocks\Utility\LanguagePathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
 /**
