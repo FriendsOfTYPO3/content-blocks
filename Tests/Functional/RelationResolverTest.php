@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional;
 
+use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderFactory;
-use TYPO3\CMS\ContentBlocks\RelationResolver;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 

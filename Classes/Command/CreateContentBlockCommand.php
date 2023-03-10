@@ -27,7 +27,6 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
-use TYPO3\CMS\ContentBlocks\PackageResolver;
 
 class CreateContentBlockCommand extends Command
 {

@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\RelationResolver;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 

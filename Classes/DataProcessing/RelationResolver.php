@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks;
+namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
