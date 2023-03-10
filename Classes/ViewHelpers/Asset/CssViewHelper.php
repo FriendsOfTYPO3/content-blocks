@@ -29,15 +29,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  * Examples
  * ========
  *
- * ::
+ * <cb:asset.css identifier="identifier123" name="myVendor/myPackage" file="Frontend.css" />
+ * <cb:asset.css identifier="identifier123" name="myVendor/myPackage" file="SubDirectory/style.css" />
  *
- *    <cb:asset.css identifier="identifier123" name="my_ext" content-block="example" file="Frontend.css" />
- *    <cb:asset.css identifier="identifier123" href="EXT:my_ext/ContentBlocks/example/Resources/Public/Frontend.css" />
- *    <cb:asset.css identifier="identifier123">
- *       .foo { color: black; }
- *    </cb:asset.css>
- *
- * See also :ref:`changelog-Feature-90522-IntroduceAssetCollector`
  */
 final class CssViewHelper extends AbstractTagBasedViewHelper
 {
@@ -57,13 +51,16 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
     protected $escapeChildren = true;
 
     protected AssetCollector $assetCollector;
+    protected ContentBlockRegistry $contentBlockRegistry;
 
-    protected ContentBlockRegistry $cbRegistry;
-
-    public function injectAssetCollector(AssetCollector $assetCollector, ContentBlockRegistry $cbRegistry): void
+    public function injectAssetCollector(AssetCollector $assetCollector): void
     {
         $this->assetCollector = $assetCollector;
-        $this->cbRegistry = $cbRegistry;
+    }
+
+    public function injectContentBlockRegistry(ContentBlockRegistry $contentBlockRegistry): void
+    {
+        $this->contentBlockRegistry = $contentBlockRegistry;
     }
 
     public function initialize(): void
@@ -84,12 +81,11 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
+        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/package) of the content block.', true);
+        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered from within the Resources/Public directory.', true);
         $this->registerTagAttribute('as', 'string', 'Define the type of content being loaded (For rel="preload" or rel="prefetch" only).', false);
         $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.', false);
         $this->registerTagAttribute('disabled', 'bool', 'Define whether or not the described stylesheet should be loaded and applied to the document.', false);
-        $this->registerTagAttribute('href', 'string', 'Define the URL of the resource (absolute or relative).', false);
-        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/dir) of the content block.', false);
-        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered.', false);
         $this->registerTagAttribute('hreflang', 'string', 'Define the language of the resource (Only to be used if \'href\' is set).', false);
         $this->registerTagAttribute('importance', 'string', 'Define the relative fetch priority of the resource.', false);
         $this->registerTagAttribute('integrity', 'string', 'Define base64-encoded cryptographic hash of the resource that allows browsers to verify what they fetch.', false);
@@ -124,27 +120,17 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
             $attributes['disabled'] = 'disabled';
         }
 
-        $file = $attributes['href'] ?? null;
-        unset($attributes['href']);
-        if ($file === null) {
-            $name = $attributes['name'] ?? null;
-            $file = $attributes['file'] ?? null;
-            unset($attributes['name'], $attributes['content-block'], $attributes['file']);
-            if ($name !== null && $file !== null) {
-                $file = $this->cbRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
-            }
-        }
+        $name = $attributes['name'];
+        $file = $attributes['file'];
+        unset(
+            $attributes['name'],
+            $attributes['file'],
+        );
+        $file = $this->contentBlockRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
         $options = [
             'priority' => $this->arguments['priority'],
         ];
-        if ($file !== null) {
-            $this->assetCollector->addStyleSheet($identifier, $file, $attributes, $options);
-        } else {
-            $content = (string)$this->renderChildren();
-            if ($content !== '') {
-                $this->assetCollector->addInlineStyleSheet($identifier, $content, $attributes, $options);
-            }
-        }
+        $this->assetCollector->addStyleSheet($identifier, $file, $attributes, $options);
         return '';
     }
 }

@@ -29,13 +29,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  * Examples
  * ========
  *
- * ::
- *
- *    <cb:asset.script identifier="identifier123" extkey="example_content_blocks" content-block="example" file="Frontend.js"  />
- *    <cb:asset.script identifier="identifier123" src="EXT:my_ext/ContentBlocks/example/Resources/Public/Frontend.js" />
- *    <cb:asset.script identifier="identifier123">
- *       alert('hello world');
- *    </cb:asset.script>
+ *  <cb:asset.script identifier="identifier123" name="myVendor/myPackage" file="Frontend.js" />
+ *  <cb:asset.script identifier="identifier123" name="myVendor/myPackage" file="SubDirectory/script.js" />
  */
 final class ScriptViewHelper extends AbstractTagBasedViewHelper
 {
@@ -55,13 +50,16 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
     protected $escapeChildren = false;
 
     protected AssetCollector $assetCollector;
+    protected ContentBlockRegistry $contentBlockRegistry;
 
-    protected ContentBlockRegistry $cbRegistry;
-
-    public function injectAssetCollector(AssetCollector $assetCollector, ContentBlockRegistry $cbRegistry): void
+    public function injectAssetCollector(AssetCollector $assetCollector): void
     {
         $this->assetCollector = $assetCollector;
-        $this->cbRegistry = $cbRegistry;
+    }
+
+    public function injectContentBlockRegistry(ContentBlockRegistry $contentBlockRegistry): void
+    {
+        $this->contentBlockRegistry = $contentBlockRegistry;
     }
 
     public function initialize(): void
@@ -82,6 +80,8 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
+        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/dir) of the content block.', true);
+        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered.', true);
         $this->registerTagAttribute('async', 'bool', 'Define that the script will be fetched in parallel to parsing and evaluation.', false);
         $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.', false);
         $this->registerTagAttribute('defer', 'bool', 'Define that the script is meant to be executed after the document has been parsed.', false);
@@ -89,9 +89,6 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
         $this->registerTagAttribute('nomodule', 'bool', 'Define that the script should not be executed in browsers that support ES2015 modules.', false);
         $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.', false);
         $this->registerTagAttribute('referrerpolicy', 'string', 'Define which referrer is sent when fetching the resource.', false);
-        $this->registerTagAttribute('src', 'string', 'Define the URI of the external resource.', false);
-        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/dir) of the content block.', false);
-        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered.', false);
         $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/javascript\').', false);
         $this->registerArgument(
             'identifier',
@@ -120,28 +117,18 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
             }
         }
 
-        $src = $attributes['src'] ?? null;
-        unset($attributes['src']);
-        if ($src === null) {
-            $name = $attributes['name'] ?? null;
-            $file = $attributes['file'] ?? null;
-            unset($attributes['name'], $attributes['file']);
-            if ($name !== null && $file !== null) {
-                $src = $this->cbRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
-            }
-        }
+        $name = $attributes['name'];
+        $file = $attributes['file'];
+        unset(
+            $attributes['name'],
+            $attributes['file']
+        );
+        $src = $this->contentBlockRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
 
         $options = [
             'priority' => $this->arguments['priority'],
         ];
-        if ($src !== null) {
-            $this->assetCollector->addJavaScript($identifier, $src, $attributes, $options);
-        } else {
-            $content = (string)$this->renderChildren();
-            if ($content !== '') {
-                $this->assetCollector->addInlineJavaScript($identifier, $content, $attributes, $options);
-            }
-        }
+        $this->assetCollector->addJavaScript($identifier, $src, $attributes, $options);
         return '';
     }
 }

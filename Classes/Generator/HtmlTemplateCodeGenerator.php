@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
-use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -29,15 +28,15 @@ class HtmlTemplateCodeGenerator
     {
         $package = $contentBlockConfiguration->getPackage();
         $vendor = $contentBlockConfiguration->getVendor();
-        return '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="' . ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/EditorPreview.css"/>' . "\n";
+        return '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" name="' . $vendor . '/' . $package . '" file="EditorPreview.css"/>' . "\n";
     }
 
     public function generateFrontendTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getPackage();
         $vendor = $contentBlockConfiguration->getVendor();
-        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="' . ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/Frontend.css"/>';
-        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="' . ContentBlockPathUtility::getPrefixedContentBlockPublicPath($package, $vendor) . '/Frontend.js"/>';
+        $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" name="' . $vendor . '/' . $package . '" file="Frontend.css"/>';
+        $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" name="' . $vendor . '/' . $package . '" file="Frontend.js"/>';
         $frontendTemplate[] = '';
         return implode("\n", $frontendTemplate);
     }

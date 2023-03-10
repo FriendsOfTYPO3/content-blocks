@@ -34,3 +34,5 @@ foreach (GeneralUtility::makeInstance(LoaderFactory::class)->load() as $tableDef
         ExtensionManagementUtility::addTypoScriptSetup(TypoScriptGenerator::generate($typeDefinition));
     }
 }
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['cb'][] = 'TYPO3\\CMS\\ContentBlocks\\ViewHelpers';
