@@ -15,13 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Tests\Functional;
+namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Registry;
 
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class ContentBlockRegistryTest extends FunctionalTestCase
 {
+    protected bool $initializeDatabase = false;
+
     protected array $coreExtensionsToLoad = [
         'content_blocks',
     ];
