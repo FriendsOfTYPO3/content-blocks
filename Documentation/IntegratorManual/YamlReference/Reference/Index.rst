@@ -56,10 +56,10 @@ Minimal
     name: example/reference
     group: common
     fields:
-      - identifier: pageSelect
+      - identifier: record_select
         type: Reference
         properties:
-          allowed: 'pages'
+          allowed: 'some_table'
 
 Advanced / use case
 -------------------
@@ -69,14 +69,13 @@ Advanced / use case
     name: example/reference
     group: common
     fields:
-      - identifier: pageSelect
+      - identifier: page_select
         type: Reference
         properties:
           allowed: 'pages'
           maxitems: 1,
           minitems: 0,
           suggestOptions:
-            'default' => [
-              'additionalSearchFields' => 'nav_title, url',
-              'addWhere' => 'AND pages.doktype = 1',
-            ],
+              default:
+                additionalSearchFields: 'nav_title, url'
+                addWhere: 'AND pages.doktype = 1'

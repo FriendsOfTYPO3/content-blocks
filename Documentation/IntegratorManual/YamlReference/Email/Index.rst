@@ -73,11 +73,3 @@ Advanced / use case
           default: 'developer@localhost.de'
           placeholder: 'Enter your email address'
           required: true
-          valuePicker:
-            items:
-              [
-                [ 'Contact 1', 'contact_1@example.com' ],
-                [ 'Contact 2', 'contact_2@example.com' ],
-                [ 'Contact 3', 'contact_3@example.com' ],
-              ]
-

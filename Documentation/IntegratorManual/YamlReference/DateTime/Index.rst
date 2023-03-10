@@ -104,7 +104,7 @@ Advanced / use case
         type: DateTime
         properties:
           default: '2023-02-11 12:00:00'
-          displayAge: true
+          disableAgeDisplay: true
           size: 20
           range:
             lower: '2019-01-31 12:00:00'

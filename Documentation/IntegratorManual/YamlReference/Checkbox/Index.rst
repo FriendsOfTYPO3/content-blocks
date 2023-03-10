@@ -77,9 +77,9 @@ Multiple checkboxes:
         properties:
           items:
             [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
-              [ 'The third', 'three' ],
+              [ 'The first' ],
+              [ 'The second' ],
+              [ 'The third' ],
             ]
           default: 2
           cols: 3
@@ -91,7 +91,7 @@ Toggle checkbox:
     group: common
     fields:
       - identifier: toggle
-      type: Checkbox
-      properties:
-        renderType: checkboxToggle
-        default: true
+        type: Checkbox
+        properties:
+          renderType: checkboxToggle
+          default: 1
