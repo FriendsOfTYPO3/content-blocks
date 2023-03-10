@@ -21,7 +21,7 @@ renderType
    :sep:`|` :aspect:`Type:` string
    :sep:`|`
 
-   Choose from one of the four available select types: :yaml:`selectSingle`,
+   Choose from one of the available select types: :yaml:`selectSingle`,
    :yaml:`selectCheckBox`, :yaml:`selectSingleBox`, :yaml:`selectTree` or
    :yaml:`selectMultipleSideBySide`.
 
@@ -103,7 +103,7 @@ Select multiple:
 
     group: common
     fields:
-      - identifier: selectSideBySide
+      - identifier: select_side_by_side
         type: Select
         properties:
           renderType: selectMultipleSideBySide
@@ -147,7 +147,7 @@ Select multiple:
 
     group: common
     fields:
-      - identifier: selectSideBySide
+      - identifier: select_side_by_side
         type: Select
         properties:
           renderType: selectMultipleSideBySide
@@ -169,7 +169,7 @@ Select tree:
 
     group: common
     fields:
-      - identifier: selectTree
+      - identifier: select_tree
         type: Select
         properties:
           renderType: selectTree
