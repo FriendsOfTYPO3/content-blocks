@@ -63,10 +63,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_collection');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_collection');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_collection' => 2,
+            'foo_bar_collection' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -86,10 +86,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_collection_recursive');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_collection_recursive');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_collection_recursive' => 2,
+            'foo_bar_collection_recursive' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -112,10 +112,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_categories_mm');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_mm');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_categories_mm' => 2,
+            'foo_bar_categories_mm' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -135,10 +135,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_categories_11');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_11');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_categories_11' => 7,
+            'foo_bar_categories_11' => 7,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -157,10 +157,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_categories_1m');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_1m');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_categories_1m' => '7,8',
+            'foo_bar_categories_1m' => '7,8',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -180,10 +180,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_pages_reference');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_reference');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_pages_reference' => '1,2',
+            'foo_bar_pages_reference' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -203,10 +203,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_pages_content_reference');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_content_reference');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_pages_content_reference' => 'pages_1,pages_2,tt_content_1,tt_content_2',
+            'foo_bar_pages_content_reference' => 'pages_1,pages_2,tt_content_1,tt_content_2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -228,10 +228,10 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_pages_mm');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_mm');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_pages_mm' => 2,
+            'foo_bar_pages_mm' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -249,10 +249,10 @@ class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_select_checkbox');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_checkbox');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_select_checkbox' => '1,2,3',
+            'foo_bar_select_checkbox' => '1,2,3',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -268,10 +268,10 @@ class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_select_single_box');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_single_box');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_select_single_box' => '1,2,3',
+            'foo_bar_select_single_box' => '1,2,3',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -287,10 +287,10 @@ class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_select_multiple');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_multiple');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_select_multiple' => '1,2,3',
+            'foo_bar_select_multiple' => '1,2,3',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
@@ -307,10 +307,10 @@ class RelationResolverTest extends FunctionalTestCase
         $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/select_foreign.csv');
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('bar_foo_select_foreign');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_foreign');
         $dummyRecord = [
             'uid' => 1,
-            'bar_foo_select_foreign' => '1,2',
+            'foo_bar_select_foreign' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);

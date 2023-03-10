@@ -1,5 +1,5 @@
 group: common
-name: foo/bar
+name: bar/foo
 fields:
   - identifier: image
     type: File

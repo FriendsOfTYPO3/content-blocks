@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
@@ -32,9 +33,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PackageLoader implements LoaderInterface
 {
+    protected ?TableDefinitionCollection $tableDefinitionCollection = null;
+
     public function __construct(
         protected PhpFrontend $cache,
-        protected ?TableDefinitionCollection $tableDefinitionCollection = null,
+        protected ContentBlockRegistry $contentBlockRegistry
     ) {
     }
 
@@ -46,6 +49,9 @@ class PackageLoader implements LoaderInterface
 
         if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn (array $contentBlock): ParsedContentBlock => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+            foreach ($contentBlocks as $contentBlock) {
+                $this->contentBlockRegistry->addContentBlock($contentBlock);
+            }
             $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
             $this->tableDefinitionCollection = $tableDefinitionCollection;
             return $this->tableDefinitionCollection;
@@ -62,7 +68,9 @@ class PackageLoader implements LoaderInterface
         }
         $parsedContentBlocks = array_merge([], ...$parsedContentBlocks);
         $this->checkForUniqueness($parsedContentBlocks);
-
+        foreach ($parsedContentBlocks as $contentBlock) {
+            $this->contentBlockRegistry->addContentBlock($contentBlock);
+        }
         // @todo: insert asset publishing here when cache is empty
 
         $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);

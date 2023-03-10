@@ -29,7 +29,6 @@ services:
     public: true
 
   TYPO3\CMS\ContentBlocks\Loader\PackageLoader:
-    autowire: false
     tags:
       - name: cb.loader
         identifier: package
