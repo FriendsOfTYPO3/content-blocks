@@ -18,7 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -27,7 +29,8 @@ class PageTsConfigGenerator
 {
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $partialLanguagePath = 'LLL:' . $contentElementDefinition->getPackagePath() . ContentBlockPathUtility::getPrivatePathSegment() . 'Language/Labels.xlf:' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
+        $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
+        $partialLanguagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . ContentBlockPathUtility::getPrivatePathSegment() . 'Language/Labels.xlf:' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
 elements {

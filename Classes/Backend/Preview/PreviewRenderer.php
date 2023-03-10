@@ -22,6 +22,7 @@ use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -39,6 +40,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected ContentBlocksDataProcessor $cbProcessor,
         protected TableDefinitionCollection $tableDefinitionCollection,
         protected RelationResolver $relationResolver,
+        protected ContentBlockRegistry $contentBlockRegistry,
     ) {
     }
 
@@ -48,7 +50,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateRootPaths([$contentElementDefinition->getPackagePath() . 'Resources/Private']);
+        $view->setTemplateRootPaths([$this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . 'Resources/Private']);
 
         $view->setTemplate('EditorPreview');
         $view->assign('data', $record);
