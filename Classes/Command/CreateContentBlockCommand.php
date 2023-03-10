@@ -74,15 +74,8 @@ class CreateContentBlockCommand extends Command
             $questionPackage = new Question('Enter your package name: ');
             $package = $questionHelper->ask($input, $output, $questionPackage);
         }
-        $packages = $this->packageResolver->getAvailablePackages();
-        $availablePackages = [];
-
-        foreach ($packages as $p) {
-            if (!$p->getPackageMetaData()->isFrameworkType()) {
-                $availablePackages[$p->getPackageKey()] = $p->getPackageMetaData()->getTitle();
-            }
-        }
-        if (count($availablePackages) < 1) {
+        $availablePackages = $this->getAvailablePackages();
+        if ($availablePackages === []) {
             throw new \RuntimeException('No packages were found in which to store the content block.', 1674225339);
         }
         if ($input->getOption('extension')) {
@@ -113,5 +106,16 @@ class CreateContentBlockCommand extends Command
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
         return Command::SUCCESS;
+    }
+
+    protected function getAvailablePackages(): array
+    {
+        $availablePackages = [];
+        foreach ($this->packageResolver->getAvailablePackages() as $package) {
+            if (!$package->getPackageMetaData()->isFrameworkType()) {
+                $availablePackages[$package->getPackageKey()] = $package->getPackageMetaData()->getTitle();
+            }
+        }
+        return $availablePackages;
     }
 }
