@@ -19,8 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
-use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -42,9 +40,7 @@ class ContentBlockSkeletonBuilder
         $package = $contentBlockConfiguration->getPackage();
         $basePath = $contentBlockConfiguration->getBasePath();
         if ($basePath === '') {
-            $basePath = ContentBlockPathUtility::getAbsoluteContentBlockLegacyPath();
-        } else {
-            $basePath = Environment::getProjectPath() . '/' . $basePath;
+            throw new \RuntimeException('Path to package "' . $package . '" cannot be empty.', 1674225339);
         }
         $basePath .= '/' . $package;
         if (file_exists($basePath)) {
@@ -58,10 +54,6 @@ class ContentBlockSkeletonBuilder
         GeneralUtility::mkdir_deep($privatePath . '/Language');
 
         // create files
-        file_put_contents(
-            $basePath . '/composer.json',
-            json_encode($contentBlockConfiguration->getComposerJson(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-        );
         file_put_contents(
             $privatePath . '/EditorInterface.yaml',
             Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10)
