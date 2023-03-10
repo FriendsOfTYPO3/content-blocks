@@ -28,15 +28,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\PackageResolver;
-use TYPO3\CMS\Core\Package\PackageManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CreateContentBlockCommand extends Command
 {
     protected ContentBlockSkeletonBuilder $contentBlockBuilder;
-
-    protected SymfonyStyle $io;
-
     protected PackageResolver $packageResolver;
 
     public function injectContentBlockBuilder(ContentBlockSkeletonBuilder $contentBlockBuilder): void
@@ -44,11 +39,9 @@ class CreateContentBlockCommand extends Command
         $this->contentBlockBuilder = $contentBlockBuilder;
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void
+    public function injectPackageResolver(PackageResolver $packageResolver): void
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $packageManager = GeneralUtility::makeInstance(PackageManager::class);
-        $this->packageResolver = GeneralUtility::makeInstance(PackageResolver::class, $packageManager);
+        $this->packageResolver = $packageResolver;
     }
 
     public function configure()
@@ -82,10 +75,8 @@ class CreateContentBlockCommand extends Command
             $extension = $input->getOption('extension');
             $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath();
         } else {
-            $extension = $this->io->askQuestion((new ChoiceQuestion(
-                'Choose extension in which the content block should be stored: ',
-                $availablePackages
-            )));
+            $io = new SymfonyStyle($input, $output);
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose extension in which the content block should be stored', $availablePackages));
             $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . 'ContentBlocks';
         }
 
