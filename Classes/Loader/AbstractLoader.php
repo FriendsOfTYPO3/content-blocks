@@ -31,8 +31,7 @@ class AbstractLoader
         string $packagePath = '',
         string $pathInExt = '',
         array $yaml = []
-    ): ParsedContentBlock
-    {
+    ): ParsedContentBlock {
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1674225340);
         }

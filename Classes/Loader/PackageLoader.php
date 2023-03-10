@@ -56,7 +56,7 @@ class PackageLoader extends AbstractLoader implements LoaderInterface
         /** @var PackageManager */
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
         /** @var Package $t3Package */
-        foreach($packageManager->getAvailablePackages() as $t3Package) {
+        foreach ($packageManager->getAvailablePackages() as $t3Package) {
             $extKey = $t3Package->getPackageKey();
             $cbPathInPackage = $t3Package->getPackagePath() . ContentBlockPathUtility::getContentBlocksSubDirectory();
             if (is_dir($cbPathInPackage)) {

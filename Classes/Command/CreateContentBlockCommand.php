@@ -28,7 +28,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\PackageResolver;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -79,7 +78,12 @@ class CreateContentBlockCommand extends Command
         $availablePackages = [];
 
         foreach ($packages as $p) {
-            $availablePackages[$p->getPackageKey()] = $p->getPackageMetaData()->getTitle();
+            if (!$p->getPackageMetaData()->isFrameworkType()) {
+                $availablePackages[$p->getPackageKey()] = $p->getPackageMetaData()->getTitle();
+            }
+        }
+        if (count($availablePackages) < 1) {
+            throw new \RuntimeException('No packages were found in which to store the content block.', 1674225339);
         }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
