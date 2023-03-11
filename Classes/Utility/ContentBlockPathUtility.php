@@ -51,4 +51,9 @@ class ContentBlockPathUtility
     {
         return self::getPrivatePathSegment() . 'Language/Labels.xlf';
     }
+
+    public static function getSymlinkedAssetsPath(string $name): string
+    {
+        return '_assets/cb/' . $name . '/';
+    }
 }

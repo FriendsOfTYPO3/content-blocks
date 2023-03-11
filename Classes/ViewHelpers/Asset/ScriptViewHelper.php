@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\ViewHelpers\Asset;
 
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
@@ -123,7 +124,11 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
             $attributes['name'],
             $attributes['file']
         );
-        $src = $this->contentBlockRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
+        if (Environment::isComposerMode()) {
+            $src = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . $file;
+        } else {
+            $src = $this->contentBlockRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
+        }
 
         $options = [
             'priority' => $this->arguments['priority'],
