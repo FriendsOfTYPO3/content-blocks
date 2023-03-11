@@ -17,13 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Service\PublishAssetsService;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -73,8 +74,7 @@ class PackageLoader implements LoaderInterface
             $this->contentBlockRegistry->addContentBlock($contentBlock);
         }
 
-        // publis assets on empty cache
-        GeneralUtility::makeInstance(PublishAssetsService::class)->publishAssets($parsedContentBlocks);
+        $this->publishAssets($parsedContentBlocks);
 
         $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
@@ -151,6 +151,30 @@ class PackageLoader implements LoaderInterface
                 );
             }
             $uniqueNames[] = $parsedContentBlock->getName();
+        }
+    }
+
+    /**
+     * @param ParsedContentBlock[] $parsedContentBlocks
+     */
+    public function publishAssets(array $parsedContentBlocks): void
+    {
+        if (!Environment::isComposerMode()) {
+            return;
+        }
+
+        $fileSystem = new Filesystem();
+        $assetsPath = Environment::getPublicPath() . '/_assets/cb';
+        $fileSystem->remove($assetsPath);
+        $fileSystem->mkdir($assetsPath);
+        foreach ($parsedContentBlocks as $parsedContentBlock) {
+            $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
+                $parsedContentBlock->getPackagePath() . ContentBlockPathUtility::getPublicPathSegment()
+            );
+            $contentBlockAssetsPathDestination = $assetsPath . '/' . $parsedContentBlock->getName();
+            if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {
+                $fileSystem->symlink($absolutContentBlockPublicPath, $contentBlockAssetsPathDestination);
+            }
         }
     }
 }
