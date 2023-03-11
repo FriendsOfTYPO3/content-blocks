@@ -47,7 +47,7 @@ class CreateContentBlockCommand extends Command
     {
         $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor name of the content block.');
         $this->addOption('package', '', InputOption::VALUE_OPTIONAL, 'The package name of the content block.');
-        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Enter extension in which the content block should be stored.');
+        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Choose extension in which the content block should be stored.');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -75,7 +75,7 @@ class CreateContentBlockCommand extends Command
             $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath();
         } else {
             $io = new SymfonyStyle($input, $output);
-            $extension = $io->askQuestion(new ChoiceQuestion('Choose extension in which the content block should be stored', $availablePackages));
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose extension in which the content block should be stored: ', $availablePackages));
             $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . 'ContentBlocks';
         }
 

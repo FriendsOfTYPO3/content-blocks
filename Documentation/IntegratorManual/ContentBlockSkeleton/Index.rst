@@ -29,4 +29,4 @@ This will ask you for the following information:
 
     Enter your vendor name:
     Enter your package name:
-    Enter the extension name in which you want to save the content block:
+    Choose extension in which the content block should be stored:
