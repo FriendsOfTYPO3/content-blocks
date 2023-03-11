@@ -1,8 +1,5 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">
-    <f:asset.css identifier="content-block-foo-be" href="CB:foo/dist/EditorPreview.css"/>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+      data-namespace-typo3-fluid="true"/>
 
-    <be:link.editRecord uid="{data.uid}" table="tt_content" id="element-tt_content-{data.uid}">
-        <div class="foo">
-        </div>
-    </be:link.editRecord>
-</html>
+<cb:asset.css identifier="content-block-backend-css" name="foo/bar" file="EditorPreview.css"/>
