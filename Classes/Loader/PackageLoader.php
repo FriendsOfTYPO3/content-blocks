@@ -21,6 +21,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Service\PublishAssetsService;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
@@ -71,7 +72,9 @@ class PackageLoader implements LoaderInterface
         foreach ($parsedContentBlocks as $contentBlock) {
             $this->contentBlockRegistry->addContentBlock($contentBlock);
         }
-        // @todo: insert asset publishing here when cache is empty
+
+        // publis assets on empty cache
+        GeneralUtility::makeInstance(PublishAssetsService::class)->publishAssets($parsedContentBlocks);
 
         $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
