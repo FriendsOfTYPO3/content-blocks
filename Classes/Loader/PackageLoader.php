@@ -108,7 +108,7 @@ class PackageLoader implements LoaderInterface
         array $yaml = []
     ): ParsedContentBlock {
         if (!file_exists($packagePath)) {
-            throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1674225340);
+            throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1678699637);
         }
 
         $iconPath = null;

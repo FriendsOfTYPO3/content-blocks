@@ -68,7 +68,7 @@ class CreateContentBlockCommand extends Command
         }
         $availablePackages = $this->getAvailablePackages();
         if ($availablePackages === []) {
-            throw new \RuntimeException('No packages were found in which to store the content block.', 1674225339);
+            throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
         }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
