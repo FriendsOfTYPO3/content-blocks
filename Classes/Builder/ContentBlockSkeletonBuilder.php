@@ -44,7 +44,7 @@ class ContentBlockSkeletonBuilder
         }
         $basePath .= '/' . $package;
         if (file_exists($basePath)) {
-            throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.', 1674225339);
+            throw new \RuntimeException('A content block with the identifier "' . $package . '" already exists.', 1674225340);
         }
 
         // create directory structure
