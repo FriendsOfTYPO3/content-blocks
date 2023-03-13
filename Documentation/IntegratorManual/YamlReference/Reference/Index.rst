@@ -74,7 +74,6 @@ Advanced / use case
         properties:
           allowed: 'pages'
           maxitems: 1,
-          minitems: 0,
           suggestOptions:
               default:
                 additionalSearchFields: 'nav_title, url'

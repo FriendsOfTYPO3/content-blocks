@@ -95,6 +95,7 @@ Example
 
 Minimal
 -------
+
 .. code-block:: yaml
 
     name: example/collection
