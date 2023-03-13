@@ -61,7 +61,7 @@ class PackageLoader implements LoaderInterface
 
         $parsedContentBlocks = [];
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
-        foreach ($packageManager->getAvailablePackages() as $package) {
+        foreach ($packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
             $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getContentBlocksSubDirectory();
             if (is_dir($contentBlockFolder)) {
