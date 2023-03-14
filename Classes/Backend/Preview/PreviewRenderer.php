@@ -29,7 +29,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Sets up Fluid and applies the same DataProcessor as the frontend to the data record.
- * Wraps the backend preview in class="cb-editor".
  *
  * @internal Not part of TYPO3's public API.
  */
@@ -47,13 +46,17 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         $record = $item->getRecord();
-
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateRootPaths([$this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . 'Resources/Private']);
+        $privatePath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . 'Resources/Private';
 
+        // Fall back to standard preview rendering if EditorPreview.html does not exist.
+        if (!file_exists(GeneralUtility::getFileAbsFileName($privatePath . '/EditorPreview.html'))) {
+            return parent::renderPageModulePreviewContent($item);
+        }
+
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setTemplateRootPaths([$privatePath]);
         $view->setTemplate('EditorPreview');
-        $view->assign('data', $record);
 
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
         $contentBlockData = [];
@@ -64,6 +67,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             }
             $contentBlockData[$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $record, 'tt_content');
         }
+
+        $view->assign('data', $record);
         $view->assign('cb', $contentBlockData);
 
         return $view->render();
