@@ -98,6 +98,7 @@ Advanced / use case
 
 .. code-block:: yaml
 
+    name: example/datetime
     group: common
     fields:
       - identifier: datetime

@@ -30,8 +30,8 @@ A Content Block definition package has the following files and directory structu
 | Resources/Public/ContentBlockIcon.(svg/png/gif) | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
-Content Block definiton package files explained
-=====================================
+Content Block definition package files explained
+================================================
 
 EditorInterface.yaml
 --------------------

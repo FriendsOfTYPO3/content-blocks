@@ -11,7 +11,7 @@ Create a Content Block skeleton	on your terminal
 
 This command creates a Content Block skeleton for you.
 It creates the basic structure of a Content Block, by vendor and package in
-the `ContentBlocks` folder of the selected extension.
+the `ContentBlocks` folder of the selected or entered extension.
 
 Example creating a Content Block skeleton in one line:
 

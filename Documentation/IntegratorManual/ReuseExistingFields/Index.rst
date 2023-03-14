@@ -16,7 +16,7 @@ to use the header field this way, because it is used for the title on different
 places in the backend.
 
 It's recommended to use existing fields whenever possible instead of creating
-new ones. This also avoids the risk of the :ref:`"Row size to large" <row-size-too-large>`
+new ones. This also avoids the risk of the :ref:`"Row size too large" <row-size-too-large>`
 problem that can arise when a database table becomes too large and difficult to
 manage.
 
@@ -63,6 +63,7 @@ For example, if you want to use the existing column :sql:`bodytext`, or
 
 .. code-block:: yaml
 
+    name: vendor/package
     group: common
     fields:
         -

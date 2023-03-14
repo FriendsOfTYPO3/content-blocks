@@ -88,6 +88,7 @@ Toggle checkbox:
 
 .. code-block:: yaml
 
+    name: example/checkbox
     group: common
     fields:
       - identifier: toggle

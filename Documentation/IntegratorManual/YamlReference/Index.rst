@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
 .. _yaml_reference:
 
-==============================================
-Editing interface field types (YAML reference)
-==============================================
+==================================
+Editing interface (YAML reference)
+==================================
 
 The editing interface configuration only contains view related properties of
 the fields (unlike in TCA). Therefore, a descriptive language (as YAML) is
@@ -20,12 +20,8 @@ and documented it makes it easier to understand those types for TYPO3 newcomers/
 beginners/ frontend-only devs than TYPO3's exclusive TCA, thus providing a kind
 of ubiquitous language.
 
-Field definitions
-=================
-
-Common field properties
------------------------
-.. rst-class:: dl-parameters
+General definitions
+===================
 
 name
    :sep:`|` :aspect:`Required:` true
@@ -35,6 +31,13 @@ name
    Every editing interface configuration must contain exactly one name. The name is made up of vendor and package separated by a "/" like
    the `vendor/package` notation in a traditional composer.json file must be unique and must have at least 3 characters. Content Blocks which
    are placed in the `ContentBlocks` folder at any of your extensions will be determined and loaded automatically.
+
+Field definitions
+=================
+
+Common field properties
+-----------------------
+.. rst-class:: dl-parameters
 
 identifier
    :sep:`|` :aspect:`Required:` true

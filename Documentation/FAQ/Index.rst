@@ -8,7 +8,7 @@ FAQ
 Overriding of Content Blocks
 ============================
 
-Because Content Block definiton packages within the `ContentBlocks` folder of your extension
+Because Content Block definition packages within the `ContentBlocks` folder of your extension
 are merely an abstraction layer, you can override existing Content Block configurations just
 like you would override a third-party-extension (e.g. by adding corresponding TCA/ TypoScript/
 TSconfig via a sitepackage extension).
@@ -16,7 +16,7 @@ TSconfig via a sitepackage extension).
 Bundling
 ========
 
-One Content Block definiton package represents exactly one Content Block. Bundles can be
+One Content Block definition package represents exactly one Content Block. Bundles can be
 realized as distributions (e.g. like TYPO3 minimal distribution) or within
 a bundling extension.
 
