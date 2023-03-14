@@ -5,9 +5,10 @@
 Editing interface (YAML reference)
 ==================================
 
-The editing interface configuration only contains view related properties of
-the fields (unlike in TCA). Therefore, a descriptive language (as YAML) is
-sufficient and does not open up a possible security flaw.
+The editing interface configuration contains mostly of view-related properties of
+the fields (Exception is field `alternativeSql`, which is database-related). Therefore,
+a descriptive language (as YAML) is sufficient and does not open up a possible security
+flaw.
 
 A strict schema for field types is used to ease up the validation process for
 field definitions. To keep it slim and easy to read, the mapping to TCA uses
@@ -77,8 +78,8 @@ alternativeSql
 
    It is possible to override the default SQL definition of a field with this
    option. Example :sql:`tinyint(2) DEFAULT '0' NOT NULL`. Not every field type
-   can be overridden. Have a look at the default SQL in the appropriate field
-   section.
+   can be overridden. Have a look at the standard SQL definition of the
+   corresponding field.
 
 .. _field_types:
 
