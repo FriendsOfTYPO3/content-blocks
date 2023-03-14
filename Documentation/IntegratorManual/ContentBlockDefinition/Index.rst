@@ -27,7 +27,7 @@ A Content Block definition package has the following files and directory structu
 +-------------------------------------------------+------------+--------------------------------+
 | Resources/Public/Frontend.js                    |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Public/ContentBlockIcon.(svg/png/gif) | x          | x                              |
+| Resources/Public/ContentBlockIcon.(svg/png/gif) |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
 Content Block definition package files explained
