@@ -5,10 +5,10 @@
 Editing interface (YAML reference)
 ==================================
 
-The editing interface configuration contains mostly of view-related properties of
-the fields (Exception is field `alternativeSql`, which is database-related). Therefore,
-a descriptive language (as YAML) is sufficient and does not open up a possible security
-flaw.
+The editing interface configuration contains mostly view-related properties of
+the fields (Exception is field :yaml:`alternativeSql`, which is database-related).
+Therefore, a descriptive language (as YAML) is sufficient and does not open up a
+possible security flaw.
 
 A strict schema for field types is used to ease up the validation process for
 field definitions. To keep it slim and easy to read, the mapping to TCA uses
