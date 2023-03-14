@@ -52,6 +52,11 @@ class CreateContentBlockCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        $availablePackages = $this->getAvailablePackages();
+        if ($availablePackages === []) {
+            throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
+        }
+
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
         if ($input->getOption('vendor')) {
@@ -66,16 +71,16 @@ class CreateContentBlockCommand extends Command
             $questionPackage = new Question('Enter your package name: ');
             $package = $questionHelper->ask($input, $output, $questionPackage);
         }
-        $availablePackages = $this->getAvailablePackages();
-        if ($availablePackages === []) {
-            throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
-        }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
-            if(empty($this->packageResolver->resolvePackage($extension))) {
-                throw new \RuntimeException('An extension with the entered name could not be found. Please check your input for the option "extension"', 1678699706);
+            $resolvedPackage = $this->packageResolver->resolvePackage($extension);
+            if ($resolvedPackage === null) {
+                throw new \RuntimeException(
+                    'The extension "' . $extension . '" could not be found. Please choose one of these extensions: ' . implode(', ', array_keys($availablePackages)),
+                    1678781014
+                );
             }
-            $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath();
+            $basePath = $resolvedPackage->getPackagePath();
         } else {
             $io = new SymfonyStyle($input, $output);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $availablePackages));
