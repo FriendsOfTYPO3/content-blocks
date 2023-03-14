@@ -47,7 +47,7 @@ class CreateContentBlockCommand extends Command
     {
         $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor name of the content block.');
         $this->addOption('package', '', InputOption::VALUE_OPTIONAL, 'The package name of the content block.');
-        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Choose extension in which the content block should be stored.');
+        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Enter extension in which the content block should be stored.');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -72,6 +72,9 @@ class CreateContentBlockCommand extends Command
         }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
+            if(empty($this->packageResolver->resolvePackage($extension))) {
+                throw new \RuntimeException('An extension with the entered name could not be found. Please check your input for the option "extension"', 1678699706);
+            }
             $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath();
         } else {
             $io = new SymfonyStyle($input, $output);
