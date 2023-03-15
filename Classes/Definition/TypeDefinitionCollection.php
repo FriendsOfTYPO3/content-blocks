@@ -63,11 +63,18 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
 
     public function getIterator(): \Traversable
     {
-        return new \ArrayIterator($this->definitions);
+        return new \ArrayIterator($this->sort());
     }
 
     public function count(): int
     {
         return count($this->definitions);
+    }
+
+    private function sort(): array
+    {
+        $types = $this->definitions;
+        usort($types, fn (TypeDefinition $a, TypeDefinition $b): int => $b->getPriority() <=> $a->getPriority());
+        return $types;
     }
 }

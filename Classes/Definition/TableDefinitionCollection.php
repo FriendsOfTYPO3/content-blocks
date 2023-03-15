@@ -123,6 +123,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 'iconProvider' => $contentBlock->getIconProvider(),
                 'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
                 'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::composerNameToTypeIdentifier($cbName),
+                'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
             ];
         }
 

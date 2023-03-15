@@ -223,4 +223,49 @@ class TableDefinitionCollectionTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
+
+    /**
+     * @test
+     */
+    public function contentBlocksCanBeSortedByPriority(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [],
+                ],
+            ],
+            [
+                'name' => 't3ce/example',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'priority' => 20,
+                    'fields' => [],
+                ],
+            ],
+            [
+                'name' => 'fizz/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'priority' => 30,
+                    'fields' => [],
+                ],
+            ],
+        ];
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getTypeDefinitionCollection();
+        $result = [];
+        foreach ($typeDefinitionCollection as $typeDefinition) {
+            $result[] = $typeDefinition->getName();
+        }
+
+        self::assertSame(['fizz/bar', 't3ce/example', 'foo/bar'], $result);
+    }
 }

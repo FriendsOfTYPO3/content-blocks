@@ -33,6 +33,17 @@ name
    the `vendor/package` notation in a traditional composer.json file must be unique and must have at least 3 characters. Content Blocks which
    are placed in the `ContentBlocks` folder at any of your extensions will be determined and loaded automatically.
 
+priority
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` integer
+   :sep:`|` :aspect:`Default:` 0
+   :sep:`|`
+
+   The priority can be used to prioritize certain content blocks in the loading
+   order. The default loading order is alphabetically. Higher priorities will be
+   loaded before lower ones. This affects e.g. the order in the "New Content
+   Element Wizard".
+
 Field definitions
 =================
 

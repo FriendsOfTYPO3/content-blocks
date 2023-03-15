@@ -34,6 +34,7 @@ class TypeDefinition
     protected array $overrideColumns = [];
     protected string $vendor = '';
     protected string $package = '';
+    protected int $priority = 0;
 
     final public function __construct()
     {
@@ -64,7 +65,8 @@ class TypeDefinition
             ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '');
+            ->withPackage($array['package'] ?? '')
+            ->withPriority($array['priority'] ?? '');
     }
 
     public function getIdentifier(): string
@@ -130,6 +132,11 @@ class TypeDefinition
     public function getOverrideColumns(): array
     {
         return $this->overrideColumns;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     public function withIdentifier(string $identifier): static
@@ -205,6 +212,13 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->typeName = $type;
+        return $clone;
+    }
+
+    public function withPriority(int $priority): static
+    {
+        $clone = clone $this;
+        $clone->priority = $priority;
         return $clone;
     }
 }
