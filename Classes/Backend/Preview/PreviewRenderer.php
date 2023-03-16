@@ -57,7 +57,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
 
-
         $view->setLayoutRootPaths([$cbPrivatePath . '/Layouts']);
         $view->setPartialRootPaths([$cbPrivatePath . '/Partials']);
         $view->setTemplateRootPaths([$cbPrivatePath]);
