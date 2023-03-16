@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -47,15 +48,22 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     {
         $record = $item->getRecord();
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
-        $privatePath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . 'Resources/Private';
+        $cbPrivatePath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . ContentBlockPathUtility::getPrivatePathSegment();
+        $cbPrivatePath = rtrim($cbPrivatePath, '/');
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
-        if (!file_exists(GeneralUtility::getFileAbsFileName($privatePath . '/EditorPreview.html'))) {
+        if (!file_exists(GeneralUtility::getFileAbsFileName($cbPrivatePath . '/EditorPreview.html'))) {
             return parent::renderPageModulePreviewContent($item);
         }
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+
+
+        $view->setLayoutRootPaths([$cbPrivatePath . '/Layouts']);
+        $view->setPartialRootPaths([$cbPrivatePath . '/Partials']);
+        $view->setTemplateRootPaths([$cbPrivatePath]);
 
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateRootPaths([$privatePath]);
+        $view->setTemplateRootPaths([$cbPrivatePath]);
         $view->setTemplate('EditorPreview');
 
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
