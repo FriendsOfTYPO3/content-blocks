@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class SqlGeneratorTest extends UnitTestCase
@@ -252,7 +253,8 @@ class SqlGeneratorTest extends UnitTestCase
     {
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $array);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
-        $sqlGenerator = new SqlGenerator($tableDefinitionCollection);
+        $loader = new TestLoader($tableDefinitionCollection);
+        $sqlGenerator = new SqlGenerator($loader);
 
         $result = $sqlGenerator->generate();
 

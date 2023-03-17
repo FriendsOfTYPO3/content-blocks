@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -756,7 +757,8 @@ class TcaGeneratorTest extends UnitTestCase
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
-        $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher());
+        $loader = new TestLoader($tableDefinitionCollection);
+        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher());
 
         $tca = $tcaGenerator->generate();
 
