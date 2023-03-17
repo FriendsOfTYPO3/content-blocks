@@ -15,19 +15,19 @@ A Content Block definition package has the following files and directory structu
 +-------------------------------------------------+------------+--------------------------------+
 | EditorInterface.yaml                            | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Private/Language/Labels.xlf           | x          | x                              |
+| Source/Language/Labels.xlf           | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Private/EditorPreview.html            |            | x                              |
+| Source/EditorPreview.html            |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Private/Frontend.html                 |            | x                              |
+| Source/Frontend.html                 |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Public/EditorPreview.css              |            | x                              |
+| Assets/EditorPreview.css              |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Public/Frontend.css                   |            | x                              |
+| Assets/Frontend.css                   |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Public/Frontend.js                    |            | x                              |
+| Assets/Frontend.js                    |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Resources/Public/ContentBlockIcon.(svg/png/gif) |            | x                              |
+| Assets/ContentBlockIcon.(svg/png/gif) |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
 Content Block definition package files explained
@@ -64,7 +64,7 @@ representation.
 *  provide a file with 1:1 dimensions
 
 
-Resources/Private/Language/Labels.xlf
+Source/Language/Labels.xlf
 -------------------------------------
 
 **You may**
@@ -73,7 +73,7 @@ Resources/Private/Language/Labels.xlf
 *  define your labels with the XLF links in the configuration file
 
 Labels for the editing interface, as well as frontend labels, are stored in the
-`Resources/Private/Language/Labels.xlf`(translated files will be e.g. `de.Labels.xlf`).
+`Source/Language/Labels.xlf`(translated files will be e.g. `de.Labels.xlf`).
 
 It is recommended to apply the :ref:`coding guidelines for labels <t3coreapi:xliff>`
 to your Content Blocks as well. E.g. for backend labels that would be:
