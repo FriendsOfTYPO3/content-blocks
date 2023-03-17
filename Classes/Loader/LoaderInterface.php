@@ -24,5 +24,5 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
  */
 interface LoaderInterface
 {
-    public function load(): TableDefinitionCollection;
+    public function load(bool $allowCache = true): TableDefinitionCollection;
 }

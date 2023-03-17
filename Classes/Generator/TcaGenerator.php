@@ -21,9 +21,9 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaColumnsDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
+use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -34,7 +34,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TcaGenerator
 {
     public function __construct(
-        protected TableDefinitionCollection $tableDefinitionCollection,
+        protected LoaderInterface $loader,
         protected EventDispatcherInterface $eventDispatcher
     ) {
     }
@@ -51,9 +51,10 @@ class TcaGenerator
 
     public function generate(): array
     {
+        $tableDefinitionCollection = $this->loader->load(false);
         $tca = [];
-        foreach ($this->tableDefinitionCollection as $tableName => $tableDefinition) {
-            if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
+        foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
+            if ($tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelField = $this->resolveLabelField($tableDefinition);
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelField);
             }

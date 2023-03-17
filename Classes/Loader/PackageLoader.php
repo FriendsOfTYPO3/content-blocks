@@ -43,13 +43,13 @@ class PackageLoader implements LoaderInterface
     ) {
     }
 
-    public function load(): TableDefinitionCollection
+    public function load(bool $allowCache = true): TableDefinitionCollection
     {
-        if ($this->tableDefinitionCollection instanceof TableDefinitionCollection) {
+        if ($allowCache && $this->tableDefinitionCollection instanceof TableDefinitionCollection) {
             return $this->tableDefinitionCollection;
         }
 
-        if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
+        if ($allowCache && is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn (array $contentBlock): ParsedContentBlock => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
             foreach ($contentBlocks as $contentBlock) {
                 $this->contentBlockRegistry->addContentBlock($contentBlock);

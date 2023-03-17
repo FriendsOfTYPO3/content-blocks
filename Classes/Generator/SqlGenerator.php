@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
 /**
@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 class SqlGenerator
 {
     public function __construct(
-        protected readonly TableDefinitionCollection $tableDefinitionCollection
+        protected readonly LoaderInterface $loader
     ) {
     }
 
@@ -37,15 +37,16 @@ class SqlGenerator
 
     public function generate(): array
     {
+        $tableDefinitionCollection = $this->loader->load(false);
         $sql = [];
-        foreach ($this->tableDefinitionCollection as $tableDefinition) {
+        foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getSqlDefinition() as $column) {
                 if ($column->getSql() === '') {
                     continue;
                 }
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
             }
-            if ($this->tableDefinitionCollection->isCustomTable($tableDefinition)) {
+            if ($tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`foreign_table_parent_uid` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (foreign_table_parent_uid));';
             }
         }
