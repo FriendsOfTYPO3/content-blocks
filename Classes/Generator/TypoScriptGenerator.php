@@ -31,7 +31,7 @@ class TypoScriptGenerator
     {
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
         $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . ContentBlockPathUtility::getPrivatePathSegment();
-        $privatePath = rtrim($privatePath,'/');
+        $privatePath = rtrim($privatePath, '/');
 
         return <<<HEREDOC
 tt_content.{$contentElementDefinition->getTypeName()} =< lib.contentBlock
