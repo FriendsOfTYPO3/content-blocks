@@ -15,19 +15,19 @@ A Content Block definition package has the following files and directory structu
 +-------------------------------------------------+------------+--------------------------------+
 | EditorInterface.yaml                            | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Source/Language/Labels.xlf           | x          | x                              |
+| Source/Language/Labels.xlf                      | x          | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Source/EditorPreview.html            |            | x                              |
+| Source/EditorPreview.html                       |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Source/Frontend.html                 |            | x                              |
+| Source/Frontend.html                            |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Assets/EditorPreview.css              |            | x                              |
+| Assets/EditorPreview.css                        |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Assets/Frontend.css                   |            | x                              |
+| Assets/Frontend.css                             |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Assets/Frontend.js                    |            | x                              |
+| Assets/Frontend.js                              |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Assets/ContentBlockIcon.(svg/png/gif) |            | x                              |
+| Assets/ContentBlockIcon.(svg/png/gif)           |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
 Content Block definition package files explained
