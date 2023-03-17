@@ -115,8 +115,7 @@ class PackageLoader implements LoaderInterface
         $iconProviderClass = null;
 
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $iconName = 'ContentBlockIcon.' . $fileExtension;
-            $checkIconPath = $contentBlockFolder . ContentBlockPathUtility::getPublicPathSegment() . $iconName;
+            $checkIconPath = $contentBlockFolder . ContentBlockPathUtility::getPathToIcon();
             if (is_readable($checkIconPath)) {
                 $iconPath = $checkIconPath;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;

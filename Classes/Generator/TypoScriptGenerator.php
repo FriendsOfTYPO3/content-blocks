@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -29,7 +30,8 @@ class TypoScriptGenerator
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-        $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . 'Resources/Private';
+        $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . ContentBlockPathUtility::getPrivatePathSegment();
+        $privatePath = rtrim($privatePath,'/');
 
         return <<<HEREDOC
 tt_content.{$contentElementDefinition->getTypeName()} =< lib.contentBlock

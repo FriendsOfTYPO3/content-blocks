@@ -27,6 +27,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
 class CreateContentBlockCommand extends Command
 {
@@ -84,7 +85,7 @@ class CreateContentBlockCommand extends Command
         } else {
             $io = new SymfonyStyle($input, $output);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $availablePackages));
-            $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . 'ContentBlocks';
+            $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . rtrim(ContentBlockPathUtility::getContentBlocksSubDirectory(), '/');
         }
 
         $contentBlockConfiguration = new ContentBlockConfiguration(

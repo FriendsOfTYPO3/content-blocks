@@ -48,17 +48,18 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     {
         $record = $item->getRecord();
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
-        $cbPrivatePath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . ContentBlockPathUtility::getPrivatePathSegment();
-        $cbPrivatePath = rtrim($cbPrivatePath, '/');
+        $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
+        $contentBlockPath = rtrim($contentBlockPath, '/');
+        $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivatePathSegment();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
-        if (!file_exists(GeneralUtility::getFileAbsFileName($cbPrivatePath . '/EditorPreview.html'))) {
+        if (!file_exists(GeneralUtility::getFileAbsFileName($contentBlockPath . '/' . ContentBlockPathUtility::getPathToBackendPreviewTemplate()))) {
             return parent::renderPageModulePreviewContent($item);
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths([$cbPrivatePath . '/Layouts']);
-        $view->setPartialRootPaths([$cbPrivatePath . '/Partials']);
-        $view->setTemplateRootPaths([$cbPrivatePath]);
+        $view->setLayoutRootPaths([$contentBlockPrivatePath . 'Layouts']);
+        $view->setPartialRootPaths([$contentBlockPrivatePath . 'Partials']);
+        $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate('EditorPreview');
 
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');

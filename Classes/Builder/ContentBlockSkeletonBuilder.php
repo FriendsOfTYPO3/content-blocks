@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -48,22 +49,21 @@ class ContentBlockSkeletonBuilder
         }
 
         // create directory structure
-        $privatePath = $basePath . '/Resources/Private';
-        $publicPath = $basePath . '/Resources/Public';
+        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicPathSegment();
         GeneralUtility::mkdir_deep($publicPath);
-        GeneralUtility::mkdir_deep($privatePath . '/Language');
+        GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getPathToLanguageFolder());
 
         // create files
         file_put_contents(
-            $privatePath . '/EditorInterface.yaml',
+            $basePath . '/' . ContentBlockPathUtility::getPathToEditorConfig(),
             Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10)
         );
         file_put_contents(
-            $privatePath . '/EditorPreview.html',
+            $basePath . '/' . ContentBlockPathUtility::getPathToBackendPreviewTemplate(),
             $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlockConfiguration)
         );
         file_put_contents(
-            $privatePath . '/Frontend.html',
+            $basePath . '/' . ContentBlockPathUtility::getPathToFrontendTemplate(),
             $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlockConfiguration)
         );
 
@@ -88,7 +88,7 @@ class ContentBlockSkeletonBuilder
 HEREDOC;
 
         file_put_contents(
-            $privatePath . '/Language/Labels.xlf',
+            $basePath . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile(),
             $languageContent
         );
         file_put_contents(
@@ -105,7 +105,7 @@ HEREDOC;
         );
         copy(
             GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
-            $publicPath . '/ContentBlockIcon.svg'
+            $basePath . '/' . ContentBlockPathUtility::getPathToIcon()
         );
     }
 }

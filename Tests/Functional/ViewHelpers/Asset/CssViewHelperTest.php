@@ -53,7 +53,7 @@ class CssViewHelperTest extends FunctionalTestCase
         $viewHelper->initializeArgumentsAndRender();
         $collectedStyleSheets = $assetCollector->getStyleSheets();
 
-        self::assertSame('EXT:foo/ContentBlocks/foo/Resources/Public/Frontend.css', $collectedStyleSheets['test']['source']);
+        self::assertSame('EXT:foo/ContentBlocks/foo/Assets/Frontend.css', $collectedStyleSheets['test']['source']);
         self::assertSame([], $collectedStyleSheets['test']['attributes']);
     }
 
@@ -76,7 +76,7 @@ class CssViewHelperTest extends FunctionalTestCase
         $viewHelper->initializeArgumentsAndRender();
         $collectedStyleSheets = $assetCollector->getStyleSheets();
 
-        self::assertSame('EXT:bar/ContentBlocks/bar/Resources/Public/my.css', $collectedStyleSheets['test']['source']);
+        self::assertSame('EXT:bar/ContentBlocks/bar/Assets/my.css', $collectedStyleSheets['test']['source']);
         self::assertSame(['disabled' => 'disabled'], $collectedStyleSheets['test']['attributes']);
     }
 }

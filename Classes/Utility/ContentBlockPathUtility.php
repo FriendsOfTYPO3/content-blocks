@@ -29,7 +29,32 @@ class ContentBlockPathUtility
 
     public static function getPathToEditorConfig(): string
     {
-        return self::getPrivatePathSegment() . 'EditorInterface.yaml';
+        return 'EditorInterface.yaml';
+    }
+
+    public static function getPathToBackendPreviewTemplate(): string
+    {
+        return self::getPrivatePathSegment() . 'EditorPreview.html';
+    }
+
+    public static function getPathToFrontendTemplate(): string
+    {
+        return self::getPrivatePathSegment() . 'Frontend.html';
+    }
+
+    public static function getPathToLanguageFolder(): string
+    {
+        return self::getPrivatePathSegment() . 'Language/';
+    }
+
+    public static function getPathToDefaultLanguageFile(): string
+    {
+        return self::getPathToLanguageFolder() . 'Labels.xlf';
+    }
+
+    public static function getPathToIcon(): string
+    {
+        return self::getPublicPathSegment() . 'ContentBlockIcon.svg';
     }
 
     public static function getContentBlocksSubDirectory(): string
@@ -39,17 +64,12 @@ class ContentBlockPathUtility
 
     public static function getPublicPathSegment(): string
     {
-        return 'Resources/Public/';
+        return 'Assets/';
     }
 
     public static function getPrivatePathSegment(): string
     {
-        return 'Resources/Private/';
-    }
-
-    public static function getPathToLabels(): string
-    {
-        return self::getPrivatePathSegment() . 'Language/Labels.xlf';
+        return 'Source/';
     }
 
     public static function getSymlinkedAssetsPath(string $name): string
