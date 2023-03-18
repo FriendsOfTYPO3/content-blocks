@@ -1,7 +1,7 @@
 {
 	"name": "typo3/cms-content-blocks",
 	"type": "typo3-cms-framework",
-	"description": "TYPO3 CMS Content Blocks - TYPO3 Content Elements Manager.",
+	"description": "TYPO3 CMS Content Blocks - Content Types API.",
 	"homepage": "https://typo3.org",
 	"license": ["GPL-2.0-or-later"],
 	"authors": [{
