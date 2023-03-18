@@ -108,29 +108,11 @@ Field types
     DateTime/Index
     Email/Index
     File/Index
+    Link/Index
     Number/Index
+    Palette/Index
     Radio/Index
     Reference/Index
     Select/Index
     Text/Index
     Textarea/Index
-    Link/Index
-
-
-Field grouping
-==============
-
-Visually grouping of fields by palettes in the editing interface is defined by
-the key `palettes` Example:
-
-.. code-block:: yaml
-
-   palettes:
-      - identifier: palette_1
-        label: palette_1
-        fields:
-        # …
-
-.. attention::
-   **Not yet implemented!** See `feature request <https://github.com/
-   TYPO3-Initiatives/content-block-registration-api/issues/22>`__
