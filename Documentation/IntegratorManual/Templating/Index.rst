@@ -103,3 +103,11 @@ Layouts
 Analogue to the partials, you can also use layouts. You can create a subdirectory `Layouts` in the `Source` directory and dump your
 layouts there. This part is automatically added, but you can also extend or overwrite this TypoScript configuration in your sitepackage.
 Afterwards you can use your layouts as usual in Fluid.
+
+
+Shareable resources
+====================
+
+Despite there is the technical possibility to use resources from the whole TYPO3 setup (e.g. translations, scripts, or partials from other extensions),
+we do not recommend to do so. Since the Content Blocks are intended to be easily copy and paste between different projects, your Content Block might
+get broken and you loose this initial benefit.
