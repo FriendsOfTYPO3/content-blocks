@@ -40,6 +40,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ): array {
+        $this->relationResolver->setRequest($cObj->getRequest());
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($processedData['data']['CType']);
 

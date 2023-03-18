@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
@@ -31,6 +32,8 @@ use TYPO3\CMS\Frontend\Resource\FileCollector;
  */
 class RelationResolver
 {
+    protected ?ServerRequestInterface $serverRequest = null;
+
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection
     ) {
@@ -172,11 +175,16 @@ class RelationResolver
         return $records;
     }
 
+    public function setRequest(ServerRequestInterface $serverRequest): void
+    {
+        $this->serverRequest = $serverRequest;
+    }
+
     protected function getPageRepository(): PageRepository
     {
-        $tsfe = $GLOBALS['TSFE'] ?? null;
-        if ($tsfe instanceof TypoScriptFrontendController && $tsfe->sys_page !== '') {
-            return $tsfe->sys_page;
+        $frontendController = $this->serverRequest?->getAttribute('frontend.controller');
+        if ($frontendController instanceof TypoScriptFrontendController && $frontendController->sys_page instanceof PageRepository) {
+            return $frontendController->sys_page;
         }
         return GeneralUtility::makeInstance(PageRepository::class);
     }
