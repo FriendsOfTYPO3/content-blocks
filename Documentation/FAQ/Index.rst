@@ -70,4 +70,4 @@ To use a script e.g. from your sitepackage extension, you can use the AssetColle
 
 .. code-block:: html
 
-    <f:asset.script identifier="jQuery" path="EXT:my_sitepackage/Resources/Public/JavaScript/Libs/jQuery.min.js" />
+    <f:asset.script identifier="jQuery" src="EXT:my_sitepackage/Resources/Public/JavaScript/Libs/jQuery.min.js" />
