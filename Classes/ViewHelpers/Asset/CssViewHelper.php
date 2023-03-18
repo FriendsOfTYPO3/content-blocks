@@ -27,11 +27,13 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 /**
  * CssViewHelper
  *
+ * ONLY TO BE USED INSIDE CONTENT BLOCKS
+ *
  * Examples
  * ========
  *
- * <cb:asset.css identifier="identifier123" name="myVendor/myPackage" file="Frontend.css" />
- * <cb:asset.css identifier="identifier123" name="myVendor/myPackage" file="SubDirectory/style.css" />
+ * <cb:asset.css identifier="identifier123" file="Frontend.css" />
+ * <cb:asset.css identifier="identifier123" file="SubDirectory/style.css" />
  */
 final class CssViewHelper extends AbstractTagBasedViewHelper
 {
@@ -81,20 +83,20 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
-        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/package) of the content block.', true);
         $this->registerTagAttribute('file', 'string', 'Define which file should be delivered from within the Resources/Public directory.', true);
-        $this->registerTagAttribute('as', 'string', 'Define the type of content being loaded (For rel="preload" or rel="prefetch" only).', false);
-        $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.', false);
-        $this->registerTagAttribute('disabled', 'bool', 'Define whether or not the described stylesheet should be loaded and applied to the document.', false);
-        $this->registerTagAttribute('hreflang', 'string', 'Define the language of the resource (Only to be used if \'href\' is set).', false);
-        $this->registerTagAttribute('importance', 'string', 'Define the relative fetch priority of the resource.', false);
-        $this->registerTagAttribute('integrity', 'string', 'Define base64-encoded cryptographic hash of the resource that allows browsers to verify what they fetch.', false);
-        $this->registerTagAttribute('media', 'string', 'Define which media type the resources applies to.', false);
-        $this->registerTagAttribute('referrerpolicy', 'string', 'Define which referrer is sent when fetching the resource.', false);
-        $this->registerTagAttribute('rel', 'string', 'Define the relationship of the target object to the link object.', false);
-        $this->registerTagAttribute('sizes', 'string', 'Define the icon size of the resource.', false);
-        $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/css\').', false);
-        $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.', false);
+        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/package) of the content block.');
+        $this->registerTagAttribute('as', 'string', 'Define the type of content being loaded (For rel="preload" or rel="prefetch" only).');
+        $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.');
+        $this->registerTagAttribute('disabled', 'bool', 'Define whether or not the described stylesheet should be loaded and applied to the document.');
+        $this->registerTagAttribute('hreflang', 'string', 'Define the language of the resource (Only to be used if \'href\' is set).');
+        $this->registerTagAttribute('importance', 'string', 'Define the relative fetch priority of the resource.');
+        $this->registerTagAttribute('integrity', 'string', 'Define base64-encoded cryptographic hash of the resource that allows browsers to verify what they fetch.');
+        $this->registerTagAttribute('media', 'string', 'Define which media type the resources applies to.');
+        $this->registerTagAttribute('referrerpolicy', 'string', 'Define which referrer is sent when fetching the resource.');
+        $this->registerTagAttribute('rel', 'string', 'Define the relationship of the target object to the link object.');
+        $this->registerTagAttribute('sizes', 'string', 'Define the icon size of the resource.');
+        $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/css\').');
+        $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.');
         $this->registerArgument(
             'identifier',
             'string',
@@ -120,7 +122,7 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
             $attributes['disabled'] = 'disabled';
         }
 
-        $name = $attributes['name'];
+        $name = $attributes['name'] ?? $this->templateVariableContainer->get('settings.name');
         $file = $attributes['file'];
         unset(
             $attributes['name'],

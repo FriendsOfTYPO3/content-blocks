@@ -67,6 +67,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $contentBlockData[$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $record, 'tt_content');
         }
 
+        $view->assign('settings', ['name' => $contentElementDefinition->getName()]);
         $view->assign('data', $record);
         $view->assign('cb', $contentBlockData);
 

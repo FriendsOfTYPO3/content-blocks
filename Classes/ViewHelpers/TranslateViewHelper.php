@@ -26,6 +26,16 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
+/**
+ * TranslateViewHelper
+ *
+ * ONLY TO BE USED INSIDE CONTENT BLOCKS
+ *
+ * Examples
+ * ========
+ *
+ * <cb:translate key="my.contentblock.header" />
+ */
 class TranslateViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
@@ -33,15 +43,15 @@ class TranslateViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('name', 'string', 'The vendor/package of the Content Block.', true);
         $this->registerArgument('key', 'string', 'The key of the label to use.', true);
+        $this->registerArgument('name', 'string', 'The vendor/package of the Content Block.');
         $this->registerArgument('default', 'string', 'If the given locallang key could not be found, this value is used. If this argument is not set, child nodes will be used to render the default');
         $this->registerArgument('arguments', 'array', 'Arguments to be replaced in the resulting string');
     }
 
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
     {
-        $name = (string)$arguments['name'];
+        $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('settings.name'));
         $key = (string)$arguments['key'];
         $default = (string)($arguments['default'] ?? $renderChildrenClosure() ?? '');
         $translateArguments = $arguments['arguments'];

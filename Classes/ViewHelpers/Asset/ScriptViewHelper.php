@@ -27,11 +27,13 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 /**
  * ScriptViewHelper
  *
+ * ONLY TO BE USED INSIDE CONTENT BLOCKS
+ *
  * Examples
  * ========
  *
- *  <cb:asset.script identifier="identifier123" name="myVendor/myPackage" file="Frontend.js" />
- *  <cb:asset.script identifier="identifier123" name="myVendor/myPackage" file="SubDirectory/script.js" />
+ *  <cb:asset.script identifier="identifier123" file="Frontend.js" />
+ *  <cb:asset.script identifier="identifier123" file="SubDirectory/script.js" />
  */
 final class ScriptViewHelper extends AbstractTagBasedViewHelper
 {
@@ -81,16 +83,16 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
-        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/dir) of the content block.', true);
         $this->registerTagAttribute('file', 'string', 'Define which file should be delivered.', true);
-        $this->registerTagAttribute('async', 'bool', 'Define that the script will be fetched in parallel to parsing and evaluation.', false);
-        $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.', false);
-        $this->registerTagAttribute('defer', 'bool', 'Define that the script is meant to be executed after the document has been parsed.', false);
-        $this->registerTagAttribute('integrity', 'string', 'Define base64-encoded cryptographic hash of the resource that allows browsers to verify what they fetch.', false);
-        $this->registerTagAttribute('nomodule', 'bool', 'Define that the script should not be executed in browsers that support ES2015 modules.', false);
-        $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.', false);
-        $this->registerTagAttribute('referrerpolicy', 'string', 'Define which referrer is sent when fetching the resource.', false);
-        $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/javascript\').', false);
+        $this->registerTagAttribute('name', 'string', 'Define the name (vendor/dir) of the content block.');
+        $this->registerTagAttribute('async', 'bool', 'Define that the script will be fetched in parallel to parsing and evaluation.');
+        $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.');
+        $this->registerTagAttribute('defer', 'bool', 'Define that the script is meant to be executed after the document has been parsed.');
+        $this->registerTagAttribute('integrity', 'string', 'Define base64-encoded cryptographic hash of the resource that allows browsers to verify what they fetch.');
+        $this->registerTagAttribute('nomodule', 'bool', 'Define that the script should not be executed in browsers that support ES2015 modules.');
+        $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.');
+        $this->registerTagAttribute('referrerpolicy', 'string', 'Define which referrer is sent when fetching the resource.');
+        $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/javascript\').');
         $this->registerArgument(
             'identifier',
             'string',
@@ -118,7 +120,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
             }
         }
 
-        $name = $attributes['name'];
+        $name = $attributes['name'] ?? $this->templateVariableContainer->get('settings.name');
         $file = $attributes['file'];
         unset(
             $attributes['name'],

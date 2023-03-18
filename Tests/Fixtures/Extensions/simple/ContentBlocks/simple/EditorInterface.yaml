@@ -1,0 +1,9 @@
+group: common
+name: simple/simple
+fields:
+  - identifier: header
+    type: Text
+    useExistingField: true
+  - identifier: bodytext
+    type: Textarea
+    useExistingField: true

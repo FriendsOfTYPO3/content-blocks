@@ -1,0 +1,6 @@
+"pages"
+,"uid","pid","title"
+,1,0,"ContentBlockFrontendTest"
+"tt_content"
+,"uid","pid","header","bodytext","sys_language_uid","colPos","CType"
+,1,1,"HeaderSimple","BodytextSimple",0,0,"simple_simple"

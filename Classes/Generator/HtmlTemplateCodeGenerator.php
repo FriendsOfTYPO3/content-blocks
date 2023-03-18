@@ -28,15 +28,15 @@ class HtmlTemplateCodeGenerator
     {
         $package = $contentBlockConfiguration->getPackage();
         $vendor = $contentBlockConfiguration->getVendor();
-        return '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" name="' . $vendor . '/' . $package . '" file="EditorPreview.css"/>' . "\n";
+        return '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css"/>' . "\n";
     }
 
     public function generateFrontendTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getPackage();
         $vendor = $contentBlockConfiguration->getVendor();
-        $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" name="' . $vendor . '/' . $package . '" file="Frontend.css"/>';
-        $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" name="' . $vendor . '/' . $package . '" file="Frontend.js"/>';
+        $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" file="Frontend.css"/>';
+        $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" file="Frontend.js"/>';
         $frontendTemplate[] = '';
         return implode("\n", $frontendTemplate);
     }
