@@ -97,7 +97,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $processedField = $tableDefinitionCollection->processCollections(
                     field: $field,
                     table: $uniqueColumnName,
-                    languagePath: ['LLL:' . $contentBlock->getPackagePath() . '/' .  ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $field['identifier']],
+                    languagePath: ['LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $field['identifier']],
                     cbName: $contentBlockName,
                     parentTable: $table,
                     rootTable: $table,
