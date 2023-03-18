@@ -167,7 +167,7 @@ class PackageLoader implements LoaderInterface
         $fileSystem->mkdir($assetsPath);
         foreach ($parsedContentBlocks as $parsedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $parsedContentBlock->getPackagePath() . ContentBlockPathUtility::getPublicPathSegment()
+                $parsedContentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPublicPathSegment()
             );
             $contentBlockAssetsPathDestination = $assetsPath . '/' . $parsedContentBlock->getName();
             if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {
