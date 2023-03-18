@@ -49,8 +49,7 @@ class TranslateViewHelper extends AbstractViewHelper
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
         $languagePath = '';
         if ($contentBlockRegistry->hasContentBlock($name)) {
-            $contentBlockPath = $contentBlockRegistry->getContentBlockPath($name);
-            $languagePath = 'LLL:' . $contentBlockPath . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $key;
+            $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $key;
         }
 
         $value = self::getLanguageService()->sL($languagePath);

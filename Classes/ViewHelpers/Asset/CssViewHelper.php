@@ -127,9 +127,9 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
             $attributes['file'],
         );
         if (Environment::isComposerMode()) {
-            $file = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . $file;
+            $file = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . '/' . $file;
         } else {
-            $file = $this->contentBlockRegistry->getContentBlockPath($name) . ContentBlockPathUtility::getPublicPathSegment() . $file;
+            $file = $this->contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getPublicPathSegment() . '/' . $file;
         }
         $options = [
             'priority' => $this->arguments['priority'],

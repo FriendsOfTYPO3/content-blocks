@@ -24,7 +24,7 @@ class ContentBlockPathUtility
 {
     public static function getRelativeContentBlockPath(string $extensionKey, string $contentBlockPackageName): string
     {
-        return 'EXT:' . $extensionKey . '/' . self::getContentBlocksSubDirectory() . $contentBlockPackageName . '/';
+        return 'EXT:' . $extensionKey . '/' . self::getContentBlocksSubDirectory() . '/' . $contentBlockPackageName;
     }
 
     public static function getPathToEditorConfig(): string
@@ -34,46 +34,46 @@ class ContentBlockPathUtility
 
     public static function getPathToBackendPreviewTemplate(): string
     {
-        return self::getPrivatePathSegment() . 'EditorPreview.html';
+        return self::getPrivatePathSegment() . '/EditorPreview.html';
     }
 
     public static function getPathToFrontendTemplate(): string
     {
-        return self::getPrivatePathSegment() . 'Frontend.html';
+        return self::getPrivatePathSegment() . '/Frontend.html';
     }
 
     public static function getPathToLanguageFolder(): string
     {
-        return self::getPrivatePathSegment() . 'Language/';
+        return self::getPrivatePathSegment() . '/Language';
     }
 
     public static function getPathToDefaultLanguageFile(): string
     {
-        return self::getPathToLanguageFolder() . 'Labels.xlf';
+        return self::getPathToLanguageFolder() . '/Labels.xlf';
     }
 
     public static function getPathToIcon(): string
     {
-        return self::getPublicPathSegment() . 'ContentBlockIcon.svg';
+        return self::getPublicPathSegment() . '/ContentBlockIcon.svg';
     }
 
     public static function getContentBlocksSubDirectory(): string
     {
-        return 'ContentBlocks/';
+        return 'ContentBlocks';
     }
 
     public static function getPublicPathSegment(): string
     {
-        return 'Assets/';
+        return 'Assets';
     }
 
     public static function getPrivatePathSegment(): string
     {
-        return 'Source/';
+        return 'Source';
     }
 
     public static function getSymlinkedAssetsPath(string $name): string
     {
-        return '_assets/cb/' . $name . '/';
+        return '_assets/cb/' . $name;
     }
 }

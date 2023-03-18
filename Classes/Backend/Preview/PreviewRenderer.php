@@ -49,7 +49,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $record = $item->getRecord();
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
         $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
-        $contentBlockPath = rtrim($contentBlockPath, '/');
         $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivatePathSegment();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
@@ -57,8 +56,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             return parent::renderPageModulePreviewContent($item);
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths([$contentBlockPrivatePath . 'Layouts']);
-        $view->setPartialRootPaths([$contentBlockPrivatePath . 'Partials']);
+        $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
+        $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate('EditorPreview');
 

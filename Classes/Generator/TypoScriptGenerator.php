@@ -30,7 +30,7 @@ class TypoScriptGenerator
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-        $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . ContentBlockPathUtility::getPrivatePathSegment();
+        $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivatePathSegment();
         $privatePath = rtrim($privatePath, '/');
 
         return <<<HEREDOC

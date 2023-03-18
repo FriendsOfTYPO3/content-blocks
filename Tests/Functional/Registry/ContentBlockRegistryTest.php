@@ -37,12 +37,12 @@ class ContentBlockRegistryTest extends FunctionalTestCase
     {
         yield 'Extension path for foo' => [
             'name' => 'foo/bar',
-            'expected' => 'EXT:foo/ContentBlocks/foo/',
+            'expected' => 'EXT:foo/ContentBlocks/foo',
         ];
 
         yield 'Extension path for bar' => [
             'name' => 'foo/bar',
-            'expected' => 'EXT:foo/ContentBlocks/foo/',
+            'expected' => 'EXT:foo/ContentBlocks/foo',
         ];
     }
 
