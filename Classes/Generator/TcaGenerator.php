@@ -21,7 +21,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TcaColumnsDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
@@ -56,7 +55,10 @@ class TcaGenerator
         foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
             if ($tableDefinitionCollection->isCustomTable($tableDefinition)) {
                 $labelField = $this->resolveLabelField($tableDefinition);
-                $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getTcaColumnsDefinition(), $tableName, $labelField);
+                $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getShowItems(), $tableName, $labelField);
+            }
+            foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
+                $tca[$tableName]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
                 if (!$column->useExistingField()) {
@@ -73,7 +75,7 @@ class TcaGenerator
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
                         'previewRenderer' => PreviewRenderer::class,
-                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getColumns()),
+                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getShowItems()),
                     ];
                     if ($columnsOverrides !== []) {
                         $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -82,7 +84,7 @@ class TcaGenerator
                     $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodytextSearchAndWhere($typeDefinition);
                 } else {
                     $typeDefinitionArray = [
-                        'showitem' => $this->getGenericStandardShowItem($typeDefinition->getColumns()),
+                        'showitem' => $this->getGenericStandardShowItem($typeDefinition->getShowItems()),
                     ];
                 }
                 $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
@@ -133,12 +135,12 @@ class TcaGenerator
         return implode(',', $parts);
     }
 
-    protected function getGenericStandardShowItem(array $columns): string
+    protected function getGenericStandardShowItem(array $showItems): string
     {
         $parts = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
             '--palette--;;general',
-            implode(',', $columns),
+            implode(',', $showItems),
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
             '--palette--;;language',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
@@ -149,12 +151,12 @@ class TcaGenerator
         return implode(',', $parts);
     }
 
-    protected function getCollectionTableStandardShowItem(TcaColumnsDefinition $columns): string
+    protected function getCollectionTableStandardShowItem(array $showItems): string
     {
         $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,';
         $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
         $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
-        return $generalTab . implode(',', $columns->getKeys()) . $appendLanguageTab . $appendAccessTab;
+        return $generalTab . implode(',', $showItems) . $appendLanguageTab . $appendAccessTab;
     }
 
     /**
@@ -188,7 +190,7 @@ class TcaGenerator
         return $andWhere;
     }
 
-    protected function getCollectionTableStandardTca(TcaColumnsDefinition $columns, string $table, string $labelField): array
+    protected function getCollectionTableStandardTca(array $showItems, string $table, string $labelField): array
     {
         return [
             'ctrl' => [
@@ -220,7 +222,7 @@ class TcaGenerator
             ],
             'types' => [
                 '1' => [
-                    'showitem' => $this->getCollectionTableStandardShowItem($columns),
+                    'showitem' => $this->getCollectionTableStandardShowItem($showItems),
                 ],
             ],
             'palettes' => [

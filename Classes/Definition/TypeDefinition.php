@@ -30,6 +30,8 @@ class TypeDefinition
     protected string $iconProviderClassName = '';
     /** @var string[] */
     protected array $columns = [];
+    /** @var string[] */
+    protected array $showItems = [];
     /** @var array<TcaFieldDefinition> */
     protected array $overrideColumns = [];
     protected string $vendor = '';
@@ -62,6 +64,7 @@ class TypeDefinition
             ->withTypeName($array['typeName'])
             ->withLabel($array['label'] ?? '')
             ->withColumns($array['columns'] ?? [])
+            ->withShowItems($array['showItems'] ?? [])
             ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
@@ -114,9 +117,20 @@ class TypeDefinition
         return $this->iconProviderClassName;
     }
 
+    /**
+     * @return string[] $columns
+     */
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    /**
+     * @return string[] $columns
+     */
+    public function getShowItems(): array
+    {
+        return $this->showItems;
     }
 
     public function hasColumn(string $column): bool
@@ -181,6 +195,16 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->columns = $columns;
+        return $clone;
+    }
+
+    /**
+     * @param string[] $showItems
+     */
+    public function withShowItems(array $showItems): static
+    {
+        $clone = clone $this;
+        $clone->showItems = $showItems;
         return $clone;
     }
 

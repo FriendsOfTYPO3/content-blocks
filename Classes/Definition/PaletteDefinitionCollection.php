@@ -46,7 +46,7 @@ final class PaletteDefinitionCollection implements \IteratorAggregate, \Countabl
             return $this->definitions[$key];
         }
 
-        throw new \OutOfBoundsException(sprintf('A palette with the key "%s" does not exist in table "%s".', $key, $this->table), 1629293912);
+        throw new \OutOfBoundsException('A palette with the key "' . $key . '" does not exist in table "' . $this->table . '".', 1629293912);
     }
 
     public static function createFromArray(array $array, string $table): PaletteDefinitionCollection

@@ -55,12 +55,18 @@ class TcaGeneratorTest extends UnitTestCase
                                 ],
                             ],
                             [
-                                'identifier' => 'textarea',
-                                'type' => 'Textarea',
-                            ],
-                            [
-                                'identifier' => 'number',
-                                'type' => 'Number',
+                                'identifier' => 'palette_1',
+                                'type' => 'Palette',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'textarea',
+                                        'type' => 'Textarea',
+                                    ],
+                                    [
+                                        'identifier' => 'number',
+                                        'type' => 'Number',
+                                    ],
+                                ],
                             ],
                             [
                                 'identifier' => 'email',
@@ -120,6 +126,20 @@ class TcaGeneratorTest extends UnitTestCase
                                             'type' => 'Text',
                                         ],
                                         [
+                                            'identifier' => 'palette_inline',
+                                            'type' => 'Palette',
+                                            'fields' => [
+                                                [
+                                                    'identifier' => 'palette_field1',
+                                                    'type' => 'Text',
+                                                ],
+                                                [
+                                                    'identifier' => 'palette_field2',
+                                                    'type' => 'Text',
+                                                ],
+                                            ],
+                                        ],
+                                        [
                                             'identifier' => 'collection2',
                                             'type' => 'Collection',
                                             'properties' => [
@@ -176,7 +196,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,t3ce_example_textarea,t3ce_example_number,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_datetime,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_reference,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_datetime,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_reference,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'bodytext' => [
@@ -354,6 +374,13 @@ class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                     ],
+                    'palettes' => [
+                        't3ce_example_palette_1' => [
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:palettes.palette_1.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:palettes.palette_1.description',
+                            'showitem' => 't3ce_example_textarea,t3ce_example_number',
+                        ],
+                    ],
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
@@ -382,11 +409,11 @@ class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
-                        'searchFields' => 'text,text2',
+                        'searchFields' => 'text,text2,palette_field1,palette_field2',
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,collection2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,--palette--;;palette_inline,collection2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -408,6 +435,11 @@ class TcaGeneratorTest extends UnitTestCase
                         fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
                         --linebreak--,editlock
                     ',
+                        ],
+                        'palette_inline' => [
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palettes.palette_inline.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palettes.palette_inline.description',
+                            'showitem' => 'palette_field1,palette_field2',
                         ],
                     ],
                     'columns' => [
@@ -527,6 +559,22 @@ class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.text2.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.text2.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        'palette_field1' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palette_field1.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palette_field1.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        'palette_field2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palette_field2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palette_field2.description',
                             'config' => [
                                 'type' => 'input',
                             ],

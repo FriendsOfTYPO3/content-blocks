@@ -45,33 +45,36 @@ fields:
     properties:
       allowed: pages
       MM: block_pages_mm
-  - identifier: select_checkbox
-    type: Select
-    properties:
-      renderType: selectCheckBox
-      items:
-        - ['Foo 1', '1']
-        - ['Foo 2', '2']
-        - ['Foo 3', '3']
-  - identifier: select_single_box
-    type: Select
-    properties:
-      renderType: selectSingleBox
-      items:
-        - ['Foo 1', '1']
-        - ['Foo 2', '2']
-        - ['Foo 3', '3']
-  - identifier: select_multiple
-    type: Select
-    properties:
-      renderType: selectMultipleSideBySide
-      items:
-        - ['Foo 1', '1']
-        - ['Foo 2', '2']
-        - ['Foo 3', '3']
+  - identifier: palette
+    type: Palette
+    fields:
+      - identifier: select_checkbox
+        type: Select
+        properties:
+          renderType: selectCheckBox
+          items:
+            - ['Foo 1', '1']
+            - ['Foo 2', '2']
+            - ['Foo 3', '3']
+      - identifier: select_single_box
+        type: Select
+        properties:
+          renderType: selectSingleBox
+          items:
+            - ['Foo 1', '1']
+            - ['Foo 2', '2']
+            - ['Foo 3', '3']
+      - identifier: select_multiple
+        type: Select
+        properties:
+          renderType: selectMultipleSideBySide
+          items:
+            - ['Foo 1', '1']
+            - ['Foo 2', '2']
+            - ['Foo 3', '3']
 
-  - identifier: select_foreign
-    type: Select
-    properties:
-      renderType: selectSingle
-      foreign_table: pages
+      - identifier: select_foreign
+        type: Select
+        properties:
+          renderType: selectSingle
+          foreign_table: pages

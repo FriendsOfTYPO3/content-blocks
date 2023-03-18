@@ -25,7 +25,6 @@ final class PaletteDefinition
     private string $identifier = '';
     private string $label = '';
     private string $description = '';
-
     /** @var string[] */
     public array $showitem = [];
 
@@ -54,5 +53,14 @@ final class PaletteDefinition
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function getTca(): array
+    {
+        return [
+            'label' => $this->label,
+            'description' => $this->description,
+            'showitem' => implode(',', $this->showitem),
+        ];
     }
 }

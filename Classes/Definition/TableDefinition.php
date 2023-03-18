@@ -26,6 +26,8 @@ final class TableDefinition
     private string $parentTable = '';
     private string $parentField = '';
     private string $useAsLabel = '';
+    /** @var string[] */
+    private array $showItems = [];
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
     private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
@@ -43,6 +45,7 @@ final class TableDefinition
             ->withParentTable($definition['parentTable'] ?? '')
             ->withParentField($definition['parentField'] ?? '')
             ->withUseAsLabel($definition['useAsLabel'] ?? '')
+            ->withShowItems($definition['showItems'] ?? [])
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
@@ -77,6 +80,11 @@ final class TableDefinition
     public function hasUseAsLabel(): bool
     {
         return $this->useAsLabel !== '';
+    }
+
+    public function getShowItems(): array
+    {
+        return $this->showItems;
     }
 
     public function getTypeDefinitionCollection(): ?TypeDefinitionCollection
@@ -124,6 +132,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->useAsLabel = $useAsLabel;
+        return $clone;
+    }
+
+    public function withShowItems(array $showItems): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->showItems = $showItems;
         return $clone;
     }
 

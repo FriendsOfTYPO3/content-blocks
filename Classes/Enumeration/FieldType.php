@@ -27,6 +27,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\PaletteFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
@@ -52,6 +53,7 @@ enum FieldType: string
     case REFERENCE = 'Reference';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
+    case PALETTE = 'Palette';
 
     public function getTcaType(): string
     {
@@ -70,6 +72,7 @@ enum FieldType: string
             self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
+            self::PALETTE => '',
         };
     }
 
@@ -80,7 +83,7 @@ enum FieldType: string
 
     public function isRenderable(): bool
     {
-        return true;
+        return !in_array($this, [self::PALETTE], true);
     }
 
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
@@ -100,6 +103,7 @@ enum FieldType: string
             self::REFERENCE => ReferenceFieldConfiguration::createFromArray($config),
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
+            self::PALETTE => new PaletteFieldConfiguration(),
         };
     }
 }

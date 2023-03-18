@@ -268,4 +268,40 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         self::assertSame(['fizz/bar', 't3ce/example', 'foo/bar'], $result);
     }
+
+    /**
+     * @test
+     */
+    public function paletteInsidePaletteIsNotAllowed(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'palette_1',
+                            'type' => 'Palette',
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_inside_palette',
+                                    'type' => 'Palette',
+                                    'fields' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679167139);
+        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
 }

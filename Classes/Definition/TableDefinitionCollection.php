@@ -73,48 +73,87 @@ final class TableDefinitionCollection implements \IteratorAggregate
             [$vendor, $package] = explode('/', $contentBlockName);
 
             $uniqueIdentifiers = [];
+            $uniquePaletteIdentifiers = [];
             $columns = [];
+            $showItems = [];
             $overrideColumns = [];
-            foreach ($contentBlock->getYaml()['fields'] ?? [] as $field) {
-                if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The identifier "' . $field['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
-                        1677407941
-                    );
-                }
-                $uniqueIdentifiers[] = $field['identifier'];
-                $useExistingField = false;
-                if ($field['useExistingField'] ?? false) {
-                    $uniqueColumnName = $field['identifier'];
-                    $useExistingField = true;
+            foreach ($contentBlock->getYaml()['fields'] ?? [] as $rootField) {
+                $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $rootField['identifier']);
+                $fieldType = FieldType::from($rootField['type']);
+                if ($fieldType === FieldType::PALETTE) {
+                    if (in_array($rootField['identifier'], $uniquePaletteIdentifiers, true)) {
+                        throw new \InvalidArgumentException(
+                            'The palette identifier "' . $rootField['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                            1679161623
+                        );
+                    }
+                    $uniquePaletteIdentifiers[] = $rootField['identifier'];
+                    $showItems[] = '--palette--;;' . $uniqueRootColumnName;
+                    $fields = $rootField['fields'] ?? [];
+                    $baseLanguagePath = 'LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':palettes.' . $rootField['identifier'];
+                    $paletteShowItems = [];
+                    foreach ($fields as $paletteField) {
+                        $paletteFieldType = FieldType::from($paletteField['type']);
+                        if ($paletteFieldType === FieldType::PALETTE) {
+                            throw new \InvalidArgumentException(
+                                'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '".',
+                                1679167139
+                            );
+                        }
+                        $paletteShowItems[] = ($paletteField['useExistingField'] ?? false) ? $paletteField['identifier'] : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $paletteField['identifier']);
+                    }
+                    $tableDefinitionList[$table]['palettes'][$uniqueRootColumnName] = [
+                        'label' => $baseLanguagePath . '.label',
+                        'description' => $baseLanguagePath . '.description',
+                        'showitem' => $paletteShowItems,
+                    ];
                 } else {
-                    $uniqueColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $field['identifier']);
-                    // Prevent reusing not allowed fields (e.g. system fields).
-                    $field['useExistingField'] = false;
+                    $showItems[] = ($rootField['useExistingField'] ?? false) ? $rootField['identifier'] : $uniqueRootColumnName;
+                    $fields = [$rootField];
                 }
-                $columns[] = $uniqueColumnName;
+                foreach ($fields as $field) {
+                    if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
+                        throw new \InvalidArgumentException(
+                            'The identifier "' . $field['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                            1677407941
+                        );
+                    }
+                    $uniqueIdentifiers[] = $field['identifier'];
 
-                $processedField = $tableDefinitionCollection->processCollections(
-                    field: $field,
-                    table: $uniqueColumnName,
-                    languagePath: ['LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $field['identifier']],
-                    cbName: $contentBlockName,
-                    parentTable: $table,
-                    rootTable: $table,
-                );
-                $fieldArray = [
-                    'uniqueIdentifier' => $uniqueColumnName,
-                    'config' => $processedField,
-                ];
-                $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
-                if ($useExistingField) {
-                    $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                    $useExistingField = false;
+                    if ($field['useExistingField'] ?? false) {
+                        $uniqueColumnName = $field['identifier'];
+                        $useExistingField = true;
+                    } else {
+                        $uniqueColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $field['identifier']);
+                        // Prevent reusing not allowed fields (e.g. system fields).
+                        $field['useExistingField'] = false;
+                    }
+                    $columns[] = $uniqueColumnName;
+
+                    $processedField = $tableDefinitionCollection->processCollections(
+                        field: $field,
+                        table: $uniqueColumnName,
+                        languagePath: ['LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $field['identifier']],
+                        contentBlockName: $contentBlockName,
+                        parentTable: $table,
+                        rootTable: $table,
+                    );
+                    $fieldArray = [
+                        'uniqueIdentifier' => $uniqueColumnName,
+                        'config' => $processedField,
+                    ];
+                    $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
+                    if ($useExistingField) {
+                        $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                    }
                 }
             }
 
             $tableDefinitionList[$table]['elements'][] = [
                 'identifier' => $contentBlockName,
                 'columns' => $columns,
+                'showItems' => $showItems,
                 'overrideColumns' => $overrideColumns,
                 'vendor' => $vendor,
                 'package' => $package,
@@ -133,7 +172,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $table, array $languagePath, string $cbName, string $parentTable, string $rootTable): array
+    private function processCollections(array $field, string $table, array $languagePath, string $contentBlockName, string $parentTable, string $rootTable): array
     {
         $field['languagePath'] = implode('.', $languagePath);
         if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
@@ -144,35 +183,73 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
 
         $uniqueIdentifiers = [];
+        $uniquePaletteIdentifiers = [];
+        $showItems = [];
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
-        foreach ($field['properties']['fields'] as $collectionField) {
-            $identifier = $collectionField['identifier'];
-            if (in_array($identifier, $uniqueIdentifiers, true)) {
-                throw new \InvalidArgumentException(
-                    'The identifier "' . $identifier . '" in package ' . $cbName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
-                    1677407942
-                );
+        foreach ($field['properties']['fields'] as $collectionRootField) {
+            $collectionRootFieldType = FieldType::from($collectionRootField['type']);
+            if ($collectionRootFieldType === FieldType::PALETTE) {
+                if (in_array($collectionRootField['identifier'], $uniquePaletteIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The palette identifier "' . $collectionRootField['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                        1679168022
+                    );
+                }
+                $uniquePaletteIdentifiers[] = $collectionRootField['identifier'];
+                $paletteShowItems = [];
+                foreach ($collectionRootField['fields'] as $collectionRootPaletteField) {
+                    $paletteFieldType = FieldType::from($collectionRootPaletteField['type']);
+                    if ($paletteFieldType === FieldType::PALETTE) {
+                        throw new \InvalidArgumentException(
+                            'Palette "' . $collectionRootPaletteField['identifier'] . '" is not allowed inside palette "' . $collectionRootPaletteField['identifier'] . '" in content block "' . $contentBlockName . '".',
+                            1679168602
+                        );
+                    }
+                    $paletteShowItems[] = $collectionRootPaletteField['identifier'];
+                }
+                $tableDefinition['palettes'][$collectionRootField['identifier']] = [
+                    'label' => $field['languagePath'] . '.palettes.' . $collectionRootField['identifier'] . '.label',
+                    'description' => $field['languagePath'] . '.palettes.' . $collectionRootField['identifier'] . '.description',
+                    'showitem' => $paletteShowItems,
+                ];
+                $showItems[] = '--palette--;;' . $collectionRootField['identifier'];
+                $fields = $collectionRootField['fields'];
+            } else {
+                $showItems[] = $collectionRootField['identifier'];
+                $fields = [$collectionRootField];
             }
-            $uniqueIdentifiers[] = $identifier;
-            $languagePath[] = $identifier;
-            $childField = $this->processCollections(
-                field: $collectionField,
-                table: UniqueNameUtility::createUniqueColumnNameFromContentBlockName($cbName, $identifier),
-                languagePath: $languagePath,
-                cbName: $cbName,
-                parentTable: $table,
-                rootTable: $rootTable
-            );
-            // Since we can't check TCA and collection tables are individual tables
-            // the useExistingField is not allowed on collections
-            $childField['useExistingField'] = false;
 
-            $tableDefinition['fields'][$identifier] = [
-                'uniqueIdentifier' => $identifier,
-                'config' => $childField,
-            ];
-            array_pop($languagePath);
+            foreach ($fields as $collectionField) {
+                $identifier = $collectionField['identifier'];
+                if (in_array($identifier, $uniqueIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The identifier "' . $identifier . '" in package ' . $contentBlockName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
+                        1677407942
+                    );
+                }
+                $uniqueIdentifiers[] = $identifier;
+                $languagePath[] = $identifier;
+                $childField = $this->processCollections(
+                    field: $collectionField,
+                    table: UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $identifier),
+                    languagePath: $languagePath,
+                    contentBlockName: $contentBlockName,
+                    parentTable: $table,
+                    rootTable: $rootTable
+                );
+                // Since we can't check TCA and collection tables are individual tables
+                // the useExistingField is not allowed on collections
+                $childField['useExistingField'] = false;
+
+                $tableDefinition['fields'][$identifier] = [
+                    'uniqueIdentifier' => $identifier,
+                    'config' => $childField,
+                ];
+
+                $tableDefinition['showItems'] = $showItems;
+                array_pop($languagePath);
+            }
         }
 
         if ($this->hasTable($table)) {
