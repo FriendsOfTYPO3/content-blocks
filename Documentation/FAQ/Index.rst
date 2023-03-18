@@ -37,7 +37,7 @@ To use a translation e.g. from your sitepackage extension, you can do the follow
 
 .. code-block:: html
 
-    <f:translate key="myKey" extensionName="MySitepackage" />
+    <f:translate key="myKey" extensionName="my_sitepackage" />
 
 
 Can I use a partial from my e.g. sitepackage or other extensions?
@@ -51,7 +51,7 @@ via TypoScript:
 
 .. code-block:: typoscript
 
-    tt_content.my_content_block {
+    tt_content.vendor_package {
         view {
             partialRootPaths {
                 20 = EXT:my_sitepackage/Resources/Private/Partials/ContentElements
@@ -61,7 +61,7 @@ via TypoScript:
 
 
 Can I use a script from my e.g. sitepackage or other extensions?
-=================================================================
+================================================================
 
 Yes you can, but we do not recommend it. The reason is that when you reuse your Content Block
 in another project, you might not have the same scripts available.

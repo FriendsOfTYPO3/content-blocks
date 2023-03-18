@@ -109,5 +109,5 @@ Shareable resources
 ====================
 
 Despite there is the technical possibility to use resources from the whole TYPO3 setup (e.g. translations, scripts, or partials from other extensions),
-we do not recommend to do so. Since the Content Blocks are intended to be easily copy and paste between different projects, your Content Block might
+we do not recommend to do so. Since the Content Blocks are intended to be easily copied and pasted between different projects, your Content Block might
 get broken and you loose this initial benefit.
