@@ -25,7 +25,7 @@ class UniqueNameUtility
     public static function composerNameToTypeIdentifier(string $composerName): string
     {
         $parts = explode('/', $composerName);
-        $removeDashes = fn ($name) => str_replace('-', '', $name);
+        $removeDashes = fn ($name): string => str_replace('-', '', $name);
         return implode('_', array_map($removeDashes, $parts));
     }
 
