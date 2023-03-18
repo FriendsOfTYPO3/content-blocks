@@ -93,15 +93,15 @@ HEREDOC;
         );
         file_put_contents(
             $publicPath . '/EditorPreview.css',
-            '/* Created by Content BlockWizard */'
+            '/* Created by Content Block skeleton builder */'
         );
         file_put_contents(
             $publicPath . '/Frontend.css',
-            '/* Created by Content BlockWizard */'
+            '/* Created by Content Block skeleton builder */'
         );
         file_put_contents(
             $publicPath . '/Frontend.js',
-            '/* Created by Content BlockWizard */'
+            '/* Created by Content Block skeleton builder */'
         );
         copy(
             GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
