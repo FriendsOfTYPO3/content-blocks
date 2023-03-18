@@ -19,14 +19,12 @@ namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
-use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Sets up Fluid and applies the same DataProcessor as the frontend to the data record.
@@ -36,8 +34,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 class PreviewRenderer extends StandardContentPreviewRenderer
 {
     public function __construct(
-        protected ContentObjectRenderer $cObj,
-        protected ContentBlocksDataProcessor $cbProcessor,
         protected TableDefinitionCollection $tableDefinitionCollection,
         protected RelationResolver $relationResolver,
         protected ContentBlockRegistry $contentBlockRegistry,
