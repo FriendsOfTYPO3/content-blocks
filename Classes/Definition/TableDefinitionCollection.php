@@ -247,9 +247,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     'config' => $childField,
                 ];
 
-                $tableDefinition['showItems'] = $showItems;
                 array_pop($languagePath);
             }
+            $tableDefinition['showItems'] = $showItems;
         }
 
         if ($this->hasTable($table)) {
