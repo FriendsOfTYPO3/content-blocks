@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\ViewHelpers\Asset;
 
-use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\ViewHelpers\Asset\CssViewHelper;
 use TYPO3\CMS\Core\Page\AssetCollector;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 class CssViewHelperTest extends FunctionalTestCase
 {
@@ -40,19 +40,12 @@ class CssViewHelperTest extends FunctionalTestCase
      */
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
-        $assetCollector = new AssetCollector();
-        $viewHelper = new CssViewHelper();
-        $viewHelper->injectAssetCollector($assetCollector);
-        $viewHelper->injectContentBlockRegistry($this->get(ContentBlockRegistry::class));
-        $viewHelper->setArguments([
-            'identifier' => 'test',
-            'name' => 'foo/bar',
-            'file' => 'Frontend.css',
-            'priority' => false,
-        ]);
-        $viewHelper->initializeArgumentsAndRender();
-        $collectedStyleSheets = $assetCollector->getStyleSheets();
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="foo/bar" identifier="test" file="Frontend.css" priority="0"/>');
 
+        (new TemplateView($context))->render();
+
+        $collectedStyleSheets = $this->get(AssetCollector::class)->getStyleSheets();
         self::assertSame('EXT:foo/ContentBlocks/foo/Assets/Frontend.css', $collectedStyleSheets['test']['source']);
         self::assertSame([], $collectedStyleSheets['test']['attributes']);
     }
@@ -62,20 +55,12 @@ class CssViewHelperTest extends FunctionalTestCase
      */
     public function booleanAttributesAreProperlyConverted(): void
     {
-        $assetCollector = new AssetCollector();
-        $viewHelper = new CssViewHelper();
-        $viewHelper->injectAssetCollector($assetCollector);
-        $viewHelper->injectContentBlockRegistry($this->get(ContentBlockRegistry::class));
-        $viewHelper->setArguments([
-            'identifier' => 'test',
-            'name' => 'bar/foo',
-            'file' => 'my.css',
-            'disabled' => true,
-            'priority' => false,
-        ]);
-        $viewHelper->initializeArgumentsAndRender();
-        $collectedStyleSheets = $assetCollector->getStyleSheets();
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="bar/foo" identifier="test" file="my.css" disabled="1" priority="0"/>');
 
+        (new TemplateView($context))->render();
+
+        $collectedStyleSheets = $this->get(AssetCollector::class)->getStyleSheets();
         self::assertSame('EXT:bar/ContentBlocks/bar/Assets/my.css', $collectedStyleSheets['test']['source']);
         self::assertSame(['disabled' => 'disabled'], $collectedStyleSheets['test']['attributes']);
     }

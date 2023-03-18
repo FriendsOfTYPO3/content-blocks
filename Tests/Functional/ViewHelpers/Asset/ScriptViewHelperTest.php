@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\ViewHelpers\Asset;
 
-use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\ViewHelpers\Asset\ScriptViewHelper;
 use TYPO3\CMS\Core\Page\AssetCollector;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 class ScriptViewHelperTest extends FunctionalTestCase
 {
@@ -40,19 +40,12 @@ class ScriptViewHelperTest extends FunctionalTestCase
      */
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
-        $assetCollector = new AssetCollector();
-        $viewHelper = new ScriptViewHelper();
-        $viewHelper->injectAssetCollector($assetCollector);
-        $viewHelper->injectContentBlockRegistry($this->get(ContentBlockRegistry::class));
-        $viewHelper->setArguments([
-            'identifier' => 'test',
-            'name' => 'foo/bar',
-            'file' => 'Frontend.js',
-            'priority' => false,
-        ]);
-        $viewHelper->initializeArgumentsAndRender();
-        $collectedJavaScripts = $assetCollector->getJavaScripts();
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="foo/bar" identifier="test" file="Frontend.js" priority="0"/>');
 
+        (new TemplateView($context))->render();
+
+        $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
         self::assertSame('EXT:foo/ContentBlocks/foo/Assets/Frontend.js', $collectedJavaScripts['test']['source']);
         self::assertSame([], $collectedJavaScripts['test']['attributes']);
     }
@@ -62,22 +55,12 @@ class ScriptViewHelperTest extends FunctionalTestCase
      */
     public function booleanAttributesAreProperlyConverted(): void
     {
-        $viewHelper = new ScriptViewHelper();
-        $assetCollector = new AssetCollector();
-        $viewHelper->injectAssetCollector($assetCollector);
-        $viewHelper->injectContentBlockRegistry($this->get(ContentBlockRegistry::class));
-        $viewHelper->setArguments([
-            'identifier' => 'test',
-            'name' => 'bar/foo',
-            'file' => 'my.js',
-            'async' => true,
-            'defer' => true,
-            'nomodule' => true,
-            'priority' => false,
-        ]);
-        $viewHelper->initializeArgumentsAndRender();
-        $collectedJavaScripts = $assetCollector->getJavaScripts();
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="bar/foo" identifier="test" file="my.js" async="1" defer="1" nomodule="1" priority="0"/>');
 
+        (new TemplateView($context))->render();
+
+        $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
         self::assertSame('EXT:bar/ContentBlocks/bar/Assets/my.js', $collectedJavaScripts['test']['source']);
         self::assertSame(['async' => 'async', 'defer' => 'defer', 'nomodule' => 'nomodule'], $collectedJavaScripts['test']['attributes']);
     }
