@@ -83,7 +83,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
-        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered.', true);
+        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered from within the "Assets" directory.', true);
         $this->registerTagAttribute('name', 'string', 'Define the name (vendor/dir) of the content block.');
         $this->registerTagAttribute('async', 'bool', 'Define that the script will be fetched in parallel to parsing and evaluation.');
         $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.');

@@ -83,7 +83,7 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
-        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered from within the Resources/Public directory.', true);
+        $this->registerTagAttribute('file', 'string', 'Define which file should be delivered from within the "Assets" directory.', true);
         $this->registerTagAttribute('name', 'string', 'Define the name (vendor/package) of the content block.');
         $this->registerTagAttribute('as', 'string', 'Define the type of content being loaded (For rel="preload" or rel="prefetch" only).');
         $this->registerTagAttribute('crossorigin', 'string', 'Define how to handle crossorigin requests.');
