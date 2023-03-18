@@ -22,38 +22,38 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class UniqueNameUtilityTest extends UnitTestCase
 {
-    public function composerNameToTypeIdentifierTestDataProvider(): iterable
+    public function contentBlockNameToTypeIdentifierTestDataProvider(): iterable
     {
-        yield 'simple composer name' => [
-            'composerName' => 'bar/foo',
+        yield 'simple name' => [
+            'contentBlockName' => 'bar/foo',
             'expected' => 'bar_foo',
         ];
 
-        yield 'with dashes' => [
-            'composerName' => 'bar-foo/foo-bar',
+        yield 'name with dashes' => [
+            'contentBlockName' => 'bar-foo/foo-bar',
             'expected' => 'barfoo_foobar',
         ];
     }
 
     /**
-     * @dataProvider composerNameToTypeIdentifierTestDataProvider
+     * @dataProvider contentBlockNameToTypeIdentifierTestDataProvider
      * @test
      */
-    public function composerNameToTypeIdentifierTest(string $composerName, string $expected): void
+    public function contentBlockNameToTypeIdentifierTest(string $contentBlockName, string $expected): void
     {
-        self::assertSame($expected, UniqueNameUtility::composerNameToTypeIdentifier($composerName));
+        self::assertSame($expected, UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlockName));
     }
 
     public function createUniqueColumnNameTestDataProvider(): iterable
     {
-        yield 'simple composer name' => [
-            'composerName' => 'bar/foo',
+        yield 'simple name' => [
+            'contentBlockName' => 'bar/foo',
             'identifier' => 'aField',
             'expected' => 'bar_foo_aField',
         ];
 
-        yield 'with dashes' => [
-            'composerName' => 'bar-foo/foo-bar',
+        yield 'name with dashes' => [
+            'contentBlockName' => 'bar-foo/foo-bar',
             'identifier' => 'aField',
             'expected' => 'barfoo_foobar_aField',
         ];
@@ -63,8 +63,8 @@ class UniqueNameUtilityTest extends UnitTestCase
      * @dataProvider createUniqueColumnNameTestDataProvider
      * @test
      */
-    public function createUniqueColumnNameTest(string $composerName, string $identifier, string $expected): void
+    public function createUniqueColumnNameTest(string $contentBlockName, string $identifier, string $expected): void
     {
-        self::assertSame($expected, UniqueNameUtility::createUniqueColumnName($composerName, $identifier));
+        self::assertSame($expected, UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $identifier));
     }
 }

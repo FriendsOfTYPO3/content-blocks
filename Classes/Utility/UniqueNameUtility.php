@@ -22,15 +22,15 @@ namespace TYPO3\CMS\ContentBlocks\Utility;
  */
 class UniqueNameUtility
 {
-    public static function composerNameToTypeIdentifier(string $composerName): string
+    public static function contentBlockNameToTypeIdentifier(string $name): string
     {
-        $parts = explode('/', $composerName);
+        $parts = explode('/', $name);
         $removeDashes = fn ($name): string => str_replace('-', '', $name);
         return implode('_', array_map($removeDashes, $parts));
     }
 
-    public static function createUniqueColumnName(string $composerName, string $identifier): string
+    public static function createUniqueColumnNameFromContentBlockName(string $name, string $identifier): string
     {
-        return self::composerNameToTypeIdentifier($composerName) . '_' . $identifier;
+        return self::contentBlockNameToTypeIdentifier($name) . '_' . $identifier;
     }
 }
