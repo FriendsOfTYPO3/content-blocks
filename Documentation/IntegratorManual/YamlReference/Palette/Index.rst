@@ -8,6 +8,11 @@ Palette
 The `Palette` field is used to group other fields. Grouped fields will be
 displayed next to each other rather than below each other.
 
+Labels.xlf
+==========
+
+The naming convention is [<collection>.<collection2>...]palettes.<identifier>
+
 Examples
 ========
 

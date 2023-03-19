@@ -9,6 +9,11 @@ The `Tab` field can be used to create a new tab in the editor interface. It
 needs an unique `identifier` and can be placed between any two fields. Note: Not
 allowed inside a `Palette`.
 
+Labels.xlf
+==========
+
+The naming convention is [<collection>.<collection2>...]tabs.<identifier>
+
 Examples
 ========
 
