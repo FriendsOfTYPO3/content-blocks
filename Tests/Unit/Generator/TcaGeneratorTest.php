@@ -63,6 +63,9 @@ class TcaGeneratorTest extends UnitTestCase
                                         'type' => 'Textarea',
                                     ],
                                     [
+                                        'type' => 'Linebreak',
+                                    ],
+                                    [
                                         'identifier' => 'number',
                                         'type' => 'Number',
                                     ],
@@ -132,6 +135,9 @@ class TcaGeneratorTest extends UnitTestCase
                                                 [
                                                     'identifier' => 'palette_field1',
                                                     'type' => 'Text',
+                                                ],
+                                                [
+                                                    'type' => 'Linebreak',
                                                 ],
                                                 [
                                                     'identifier' => 'palette_field2',
@@ -378,7 +384,7 @@ class TcaGeneratorTest extends UnitTestCase
                         't3ce_example_palette_1' => [
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:palettes.palette_1.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:palettes.palette_1.description',
-                            'showitem' => 't3ce_example_textarea,t3ce_example_number',
+                            'showitem' => 't3ce_example_textarea,--linebreak--,t3ce_example_number',
                         ],
                     ],
                 ],
@@ -439,7 +445,7 @@ class TcaGeneratorTest extends UnitTestCase
                         'palette_inline' => [
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palettes.palette_inline.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palettes.palette_inline.description',
-                            'showitem' => 'palette_field1,palette_field2',
+                            'showitem' => 'palette_field1,--linebreak--,palette_field2',
                         ],
                     ],
                     'columns' => [

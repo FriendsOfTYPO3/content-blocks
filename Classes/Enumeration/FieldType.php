@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinebreakFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\PaletteFieldConfiguration;
@@ -54,6 +55,7 @@ enum FieldType: string
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
     case PALETTE = 'Palette';
+    case LINEBREAK = 'Linebreak';
 
     public function getTcaType(): string
     {
@@ -72,7 +74,7 @@ enum FieldType: string
             self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
-            self::PALETTE => '',
+            self::PALETTE, self::LINEBREAK => '',
         };
     }
 
@@ -83,7 +85,7 @@ enum FieldType: string
 
     public function isRenderable(): bool
     {
-        return !in_array($this, [self::PALETTE], true);
+        return !in_array($this, [self::PALETTE, self::LINEBREAK], true);
     }
 
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
@@ -104,6 +106,7 @@ enum FieldType: string
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             self::PALETTE => new PaletteFieldConfiguration(),
+            self::LINEBREAK => new LinebreakFieldConfiguration(),
         };
     }
 }

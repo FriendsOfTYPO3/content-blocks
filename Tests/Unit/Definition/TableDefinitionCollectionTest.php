@@ -462,4 +462,102 @@ class TableDefinitionCollectionTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
+
+    /**
+     * @test
+     */
+    public function linebreaksAreOnlyAllowedWithinPalettes(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'palette_1',
+                            'type' => 'Palette',
+                            'fields' => [
+                                [
+                                    'identifier' => 'field1',
+                                    'type' => 'Text',
+                                ],
+                                [
+                                    'type' => 'Linebreak',
+                                ],
+                                [
+                                    'identifier' => 'field2',
+                                    'type' => 'Text',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'Linebreak',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679224094);
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in package "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
+    public function linebreaksAreOnlyAllowedWithinPalettesInsideCollections(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'properties' => [
+                                'fields' => [
+                                    [
+                                        'identifier' => 'palette_1',
+                                        'type' => 'Palette',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'field1',
+                                                'type' => 'Text',
+                                            ],
+                                            [
+                                                'type' => 'Linebreak',
+                                            ],
+                                            [
+                                                'identifier' => 'field2',
+                                                'type' => 'Text',
+                                            ],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'Linebreak',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679224392);
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Collection "inline" in package "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
 }

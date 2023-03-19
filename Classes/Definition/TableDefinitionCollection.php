@@ -78,9 +78,19 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $showItems = [];
             $overrideColumns = [];
             foreach ($contentBlock->getYaml()['fields'] ?? [] as $rootField) {
-                $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $rootField['identifier']);
                 $fieldType = FieldType::from($rootField['type']);
+                if ($fieldType === FieldType::LINEBREAK) {
+                    throw new \InvalidArgumentException(
+                        'Linebreaks are only allowed within Palettes in package "' . $contentBlockName . '".',
+                        1679224094
+                    );
+                }
+                $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $rootField['identifier']);
                 if ($fieldType === FieldType::PALETTE) {
+                    // Ignore empty Palettes.
+                    if (($rootField['fields'] ?? []) === []) {
+                        continue;
+                    }
                     if (in_array($rootField['identifier'], $uniquePaletteIdentifiers, true)) {
                         throw new \InvalidArgumentException(
                             'The palette identifier "' . $rootField['identifier'] . '" in package "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
@@ -89,10 +99,10 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     }
                     $uniquePaletteIdentifiers[] = $rootField['identifier'];
                     $showItems[] = '--palette--;;' . $uniqueRootColumnName;
-                    $fields = $rootField['fields'] ?? [];
+                    $fields = [];
                     $baseLanguagePath = 'LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':palettes.' . $rootField['identifier'];
                     $paletteShowItems = [];
-                    foreach ($fields as $paletteField) {
+                    foreach ($rootField['fields'] as $paletteField) {
                         $paletteFieldType = FieldType::from($paletteField['type']);
                         if ($paletteFieldType === FieldType::PALETTE) {
                             throw new \InvalidArgumentException(
@@ -100,7 +110,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
                                 1679167139
                             );
                         }
-                        $paletteShowItems[] = ($paletteField['useExistingField'] ?? false) ? $paletteField['identifier'] : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $paletteField['identifier']);
+                        if ($paletteFieldType === FieldType::LINEBREAK) {
+                            $paletteShowItems[] = '--linebreak--';
+                        } else {
+                            $fields[] = $paletteField;
+                            $paletteShowItems[] = ($paletteField['useExistingField'] ?? false) ? $paletteField['identifier'] : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $paletteField['identifier']);
+                        }
                     }
                     $tableDefinitionList[$table]['palettes'][$uniqueRootColumnName] = [
                         'label' => $baseLanguagePath . '.label',
@@ -189,7 +204,17 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
         foreach ($field['properties']['fields'] as $collectionRootField) {
             $collectionRootFieldType = FieldType::from($collectionRootField['type']);
+            if ($collectionRootFieldType === FieldType::LINEBREAK) {
+                throw new \InvalidArgumentException(
+                    'Linebreaks are only allowed within Palettes in Collection "' . $field['identifier'] . '" in package "' . $contentBlockName . '".',
+                    1679224392
+                );
+            }
             if ($collectionRootFieldType === FieldType::PALETTE) {
+                // Ignore empty Palettes.
+                if (($collectionRootField['fields'] ?? []) === []) {
+                    continue;
+                }
                 if (in_array($collectionRootField['identifier'], $uniquePaletteIdentifiers, true)) {
                     throw new \InvalidArgumentException(
                         'The palette identifier "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
@@ -197,6 +222,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     );
                 }
                 $uniquePaletteIdentifiers[] = $collectionRootField['identifier'];
+                $fields = [];
                 $paletteShowItems = [];
                 foreach ($collectionRootField['fields'] as $collectionRootPaletteField) {
                     $paletteFieldType = FieldType::from($collectionRootPaletteField['type']);
@@ -206,7 +232,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
                             1679168602
                         );
                     }
-                    $paletteShowItems[] = $collectionRootPaletteField['identifier'];
+                    if ($paletteFieldType === FieldType::LINEBREAK) {
+                        $paletteShowItems[] = '--linebreak--';
+                    } else {
+                        $fields[] = $collectionRootPaletteField;
+                        $paletteShowItems[] = $collectionRootPaletteField['identifier'];
+                    }
                 }
                 $tableDefinition['palettes'][$collectionRootField['identifier']] = [
                     'label' => $field['languagePath'] . '.palettes.' . $collectionRootField['identifier'] . '.label',
@@ -214,7 +245,6 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     'showitem' => $paletteShowItems,
                 ];
                 $showItems[] = '--palette--;;' . $collectionRootField['identifier'];
-                $fields = $collectionRootField['fields'];
             } else {
                 $showItems[] = $collectionRootField['identifier'];
                 $fields = [$collectionRootField];
