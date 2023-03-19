@@ -167,7 +167,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1677407941);
-        $this->expectExceptionMessage('The identifier "foo" in package t3ce/example does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The identifier "foo" in content block t3ce/example does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -218,7 +218,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1677407942);
-        $this->expectExceptionMessage('The identifier "foo" in package t3ce/example in Collection "collection" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The identifier "foo" in content block t3ce/example in Collection "collection" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -396,7 +396,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679161623);
-        $this->expectExceptionMessage('The palette identifier "palette_1" in package "foo/bar" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -457,7 +457,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168022);
-        $this->expectExceptionMessage('The palette identifier "palette_1" in Collection "inline" in package foo/bar does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The palette identifier "palette_1" in Collection "inline" in content block foo/bar does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -502,7 +502,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679224094);
-        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in package "foo/bar".');
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -555,7 +555,79 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679224392);
-        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Collection "inline" in package "foo/bar".');
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Collection "inline" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
+    public function identifierIsRequired(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'type' => 'Text',
+                            'identifier' => 'text1',
+                        ],
+                        [
+                            'type' => 'Text',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679225969);
+        $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
+    public function identifierIsRequiredInsideCollections(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'properties' => [
+                                'fields' => [
+                                    [
+                                        'identifier' => 'text1',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'type' => 'Text',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679226075);
+        $this->expectExceptionMessage('A field is missing the required "identifier" in Collection "inline" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);

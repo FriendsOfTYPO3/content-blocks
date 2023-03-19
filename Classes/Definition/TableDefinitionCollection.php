@@ -81,8 +81,14 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $fieldType = FieldType::from($rootField['type']);
                 if ($fieldType === FieldType::LINEBREAK) {
                     throw new \InvalidArgumentException(
-                        'Linebreaks are only allowed within Palettes in package "' . $contentBlockName . '".',
+                        'Linebreaks are only allowed within Palettes in content block "' . $contentBlockName . '".',
                         1679224094
+                    );
+                }
+                if (!isset($rootField['identifier'])) {
+                    throw new \InvalidArgumentException(
+                        'A field is missing the required "identifier" in content block "' . $contentBlockName . '".',
+                        1679225969
                     );
                 }
                 $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $rootField['identifier']);
@@ -93,7 +99,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     }
                     if (in_array($rootField['identifier'], $uniquePaletteIdentifiers, true)) {
                         throw new \InvalidArgumentException(
-                            'The palette identifier "' . $rootField['identifier'] . '" in package "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
+                            'The palette identifier "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
                             1679161623
                         );
                     }
@@ -129,7 +135,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 foreach ($fields as $field) {
                     if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
                         throw new \InvalidArgumentException(
-                            'The identifier "' . $field['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                            'The identifier "' . $field['identifier'] . '" in content block ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
                             1677407941
                         );
                     }
@@ -206,8 +212,14 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $collectionRootFieldType = FieldType::from($collectionRootField['type']);
             if ($collectionRootFieldType === FieldType::LINEBREAK) {
                 throw new \InvalidArgumentException(
-                    'Linebreaks are only allowed within Palettes in Collection "' . $field['identifier'] . '" in package "' . $contentBlockName . '".',
+                    'Linebreaks are only allowed within Palettes in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
                     1679224392
+                );
+            }
+            if (!isset($collectionRootField['identifier'])) {
+                throw new \InvalidArgumentException(
+                    'A field is missing the required "identifier" in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
+                    1679226075
                 );
             }
             if ($collectionRootFieldType === FieldType::PALETTE) {
@@ -217,7 +229,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
                 if (in_array($collectionRootField['identifier'], $uniquePaletteIdentifiers, true)) {
                     throw new \InvalidArgumentException(
-                        'The palette identifier "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                        'The palette identifier "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
                         1679168022
                     );
                 }
@@ -254,7 +266,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $identifier = $collectionField['identifier'];
                 if (in_array($identifier, $uniqueIdentifiers, true)) {
                     throw new \InvalidArgumentException(
-                        'The identifier "' . $identifier . '" in package ' . $contentBlockName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
+                        'The identifier "' . $identifier . '" in content block ' . $contentBlockName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
                         1677407942
                     );
                 }
