@@ -304,4 +304,48 @@ class TableDefinitionCollectionTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
+
+    /**
+     * @test
+     */
+    public function paletteInsidePaletteInsideCollectionIsNotAllowed(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'properties' => [
+                                'fields' => [
+                                    [
+                                        'identifier' => 'palette_1',
+                                        'type' => 'Palette',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'palette_inside_palette',
+                                                'type' => 'Palette',
+                                                'fields' => [],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679168602);
+        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
 }

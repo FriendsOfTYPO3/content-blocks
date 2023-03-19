@@ -83,7 +83,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 if ($fieldType === FieldType::PALETTE) {
                     if (in_array($rootField['identifier'], $uniquePaletteIdentifiers, true)) {
                         throw new \InvalidArgumentException(
-                            'The palette identifier "' . $rootField['identifier'] . '" in package ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                            'The palette identifier "' . $rootField['identifier'] . '" in package "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
                             1679161623
                         );
                     }
@@ -202,7 +202,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $paletteFieldType = FieldType::from($collectionRootPaletteField['type']);
                     if ($paletteFieldType === FieldType::PALETTE) {
                         throw new \InvalidArgumentException(
-                            'Palette "' . $collectionRootPaletteField['identifier'] . '" is not allowed inside palette "' . $collectionRootPaletteField['identifier'] . '" in content block "' . $contentBlockName . '".',
+                            'Palette "' . $collectionRootPaletteField['identifier'] . '" is not allowed inside palette "' . $collectionRootField['identifier'] . '" in content block "' . $contentBlockName . '".',
                             1679168602
                         );
                     }
