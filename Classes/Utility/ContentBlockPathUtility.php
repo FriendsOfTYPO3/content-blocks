@@ -24,50 +24,50 @@ class ContentBlockPathUtility
 {
     public static function getRelativeContentBlockPath(string $extensionKey, string $contentBlockPackageName): string
     {
-        return 'EXT:' . $extensionKey . '/' . self::getContentBlocksSubDirectory() . '/' . $contentBlockPackageName;
+        return 'EXT:' . $extensionKey . '/' . self::getSubDirectoryPath() . '/' . $contentBlockPackageName;
     }
 
-    public static function getPathToEditorConfig(): string
+    public static function getEditorInterfacePath(): string
     {
         return 'EditorInterface.yaml';
     }
 
-    public static function getPathToBackendPreviewTemplate(): string
+    public static function getBackendPreviewPath(): string
     {
-        return self::getPrivatePathSegment() . '/EditorPreview.html';
+        return self::getPrivateFolderPath() . '/EditorPreview.html';
     }
 
-    public static function getPathToFrontendTemplate(): string
+    public static function getFrontendTemplatePath(): string
     {
-        return self::getPrivatePathSegment() . '/Frontend.html';
+        return self::getPrivateFolderPath() . '/Frontend.html';
     }
 
-    public static function getPathToLanguageFolder(): string
+    public static function getLanguageFolderPath(): string
     {
-        return self::getPrivatePathSegment() . '/Language';
+        return self::getPrivateFolderPath() . '/Language';
     }
 
-    public static function getPathToDefaultLanguageFile(): string
+    public static function getLanguageFilePath(): string
     {
-        return self::getPathToLanguageFolder() . '/Labels.xlf';
+        return self::getLanguageFolderPath() . '/Labels.xlf';
     }
 
-    public static function getPathToIcon(): string
+    public static function getIconPath(): string
     {
-        return self::getPublicPathSegment() . '/ContentBlockIcon.svg';
+        return self::getPublicFolderPath() . '/ContentBlockIcon.svg';
     }
 
-    public static function getContentBlocksSubDirectory(): string
+    public static function getSubDirectoryPath(): string
     {
         return 'ContentBlocks';
     }
 
-    public static function getPublicPathSegment(): string
+    public static function getPublicFolderPath(): string
     {
         return 'Assets';
     }
 
-    public static function getPrivatePathSegment(): string
+    public static function getPrivateFolderPath(): string
     {
         return 'Source';
     }

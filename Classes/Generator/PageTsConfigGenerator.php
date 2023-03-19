@@ -30,7 +30,7 @@ class PageTsConfigGenerator
     public static function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-        $partialLanguagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
+        $partialLanguagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
 elements {

@@ -63,7 +63,7 @@ class ContentBlockLoader implements LoaderInterface
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
         foreach ($packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
-            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getContentBlocksSubDirectory();
+            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getSubDirectoryPath();
             if (is_dir($contentBlockFolder)) {
                 $parsedContentBlocks[] = $this->loadContentBlocks($contentBlockFolder, $extensionKey);
             }
@@ -91,7 +91,7 @@ class ContentBlockLoader implements LoaderInterface
         $finder = new Finder();
         $finder->directories()->depth(0)->in($path);
         foreach ($finder as $splFileInfo) {
-            $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getPathToEditorConfig();
+            $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getEditorInterfacePath();
             $yamlContent = Yaml::parseFile($yamlPath);
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
                 throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/package".', 1678224283);
@@ -116,7 +116,7 @@ class ContentBlockLoader implements LoaderInterface
         $iconPath = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $checkIconPath = $contentBlockFolder . '/' . ContentBlockPathUtility::getPathToIcon();
+            $checkIconPath = $contentBlockFolder . '/' . ContentBlockPathUtility::getIconPath();
             if (is_readable($checkIconPath)) {
                 $iconPath = $checkIconPath;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
@@ -169,7 +169,7 @@ class ContentBlockLoader implements LoaderInterface
         $fileSystem->mkdir($assetsPath);
         foreach ($parsedContentBlocks as $parsedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $parsedContentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPublicPathSegment()
+                $parsedContentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPublicFolderPath()
             );
             $contentBlockAssetsPathDestination = $assetsPath . '/' . $parsedContentBlock->getName();
             if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {

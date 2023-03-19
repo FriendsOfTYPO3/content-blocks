@@ -26,7 +26,7 @@ foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
             table: $typeDefinition->getTable(),
             field: $typeDefinition->getTypeField(),
             item: [
-                'LLL:' . $contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile() . ':' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage() . '.title',
+                'LLL:' . $contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage() . '.title',
                 $typeDefinition->getTypeName(),
                 $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
                 $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',

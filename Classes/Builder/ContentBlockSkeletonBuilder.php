@@ -49,21 +49,21 @@ class ContentBlockSkeletonBuilder
         }
 
         // create directory structure
-        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicPathSegment();
+        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolderPath();
         GeneralUtility::mkdir_deep($publicPath);
-        GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getPathToLanguageFolder());
+        GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
 
         // create files
         file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getPathToEditorConfig(),
+            $basePath . '/' . ContentBlockPathUtility::getEditorInterfacePath(),
             Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10)
         );
         file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getPathToBackendPreviewTemplate(),
+            $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
             $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlockConfiguration)
         );
         file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getPathToFrontendTemplate(),
+            $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
             $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlockConfiguration)
         );
 
@@ -88,7 +88,7 @@ class ContentBlockSkeletonBuilder
 HEREDOC;
 
         file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getPathToDefaultLanguageFile(),
+            $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
             $languageContent
         );
         file_put_contents(
@@ -105,7 +105,7 @@ HEREDOC;
         );
         copy(
             GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
-            $basePath . '/' . ContentBlockPathUtility::getPathToIcon()
+            $basePath . '/' . ContentBlockPathUtility::getIconPath()
         );
     }
 }

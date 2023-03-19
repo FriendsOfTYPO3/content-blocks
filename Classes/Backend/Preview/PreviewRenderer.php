@@ -45,10 +45,10 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $record = $item->getRecord();
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
         $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
-        $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivatePathSegment();
+        $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolderPath();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
-        if (!file_exists(GeneralUtility::getFileAbsFileName($contentBlockPath . '/' . ContentBlockPathUtility::getPathToBackendPreviewTemplate()))) {
+        if (!file_exists(GeneralUtility::getFileAbsFileName($contentBlockPath . '/' . ContentBlockPathUtility::getBackendPreviewPath()))) {
             return parent::renderPageModulePreviewContent($item);
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
