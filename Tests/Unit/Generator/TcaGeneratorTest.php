@@ -86,9 +86,7 @@ class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'file',
                                 'type' => 'File',
-                                'properties' => [
-                                    'enableImageManipulation' => 0,
-                                ],
+                                'enableImageManipulation' => 0,
                             ],
                             [
                                 'identifier' => 'category',

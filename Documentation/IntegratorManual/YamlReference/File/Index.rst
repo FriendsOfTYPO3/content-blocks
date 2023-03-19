@@ -11,6 +11,18 @@ It corresponds with the TCA :php:`type => 'file'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
+Settings
+========
+
+enableImageManipulation
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` 'false'
+   :sep:`|`
+
+   If enabled, an additional image palette will be rendered, which consists of
+   the fields `crop`, `title`, `alternative`, `link` and `description`.
+
 Properties
 ==========
 
@@ -24,15 +36,6 @@ allowed
 
     Possible values: `common-image-types`, `common-media-types` or your custom
     list of file types.
-
-enableImageManipulation
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
-
-   If enabled, an additional image palette will be rendered, which consists of
-   the fields `crop`, `title`, `alternative`, `link` and `description`.
 
 maxitems
    :sep:`|` :aspect:`Required:` false
@@ -79,8 +82,8 @@ Advanced / use case
     fields:
       - identifier: image
         type: File
+        enableImageManipulation: true
         properties:
             maxitems: 10
             minitems: 1
-            enableImageManipulation: true
             allowed: common-image-types

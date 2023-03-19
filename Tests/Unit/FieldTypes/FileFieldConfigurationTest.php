@@ -27,6 +27,7 @@ class FileFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'enableImageManipulation' => 1,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'allowed' => 'common-image-types',
@@ -40,7 +41,6 @@ class FileFieldConfigurationTest extends UnitTestCase
                     'readOnly' => 1,
                     'minitems' => 1,
                     'maxitems' => 1,
-                    'enableImageManipulation' => 1,
                 ],
             ],
             'expectedTca' => [
@@ -88,6 +88,7 @@ class FileFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'enableImageManipulation' => 0,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'allowed' => '',
@@ -97,7 +98,6 @@ class FileFieldConfigurationTest extends UnitTestCase
                     'readOnly' => 0,
                     'minitems' => 0,
                     'maxitems' => 0,
-                    'enableImageManipulation' => 0,
                 ],
             ],
             'expectedTca' => [
@@ -112,11 +112,11 @@ class FileFieldConfigurationTest extends UnitTestCase
 
         yield 'allowed and disallowed accept arrays' => [
             'config' => [
+                'enableImageManipulation' => 0,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'allowed' => ['common-image-types'],
                     'disallowed' => ['png'],
-                    'enableImageManipulation' => 0,
                 ],
             ],
             'expectedTca' => [

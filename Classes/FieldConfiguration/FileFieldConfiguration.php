@@ -52,7 +52,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
         $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
         $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
-        $self->enableImageManipulation = (bool)($properties['enableImageManipulation'] ?? $self->enableImageManipulation);
+        $self->enableImageManipulation = (bool)($settings['enableImageManipulation'] ?? $self->enableImageManipulation);
         return $self;
     }
 
