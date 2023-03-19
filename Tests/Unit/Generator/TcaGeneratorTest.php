@@ -392,6 +392,7 @@ class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
+                        'title' => 't3ce_example_collection',
                         'label' => 'text2',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -601,6 +602,7 @@ class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection2' => [
                     'ctrl' => [
+                        'title' => 't3ce_example_collection2',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',

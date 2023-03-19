@@ -194,6 +194,7 @@ class TcaGenerator
     {
         return [
             'ctrl' => [
+                'title' => $table,
                 'label' => $labelField,
                 'sortby' => 'sorting',
                 'tstamp' => 'tstamp',
