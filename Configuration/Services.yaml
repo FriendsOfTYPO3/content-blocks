@@ -28,10 +28,10 @@ services:
     autoconfigure: false
     public: true
 
-  TYPO3\CMS\ContentBlocks\Loader\PackageLoader:
+  TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
     tags:
       - name: cb.loader
-        identifier: package
+        identifier: content-block
     arguments:
       $cache: '@cache.core'
 

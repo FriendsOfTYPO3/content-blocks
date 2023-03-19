@@ -36,7 +36,7 @@ class LoaderFactory
 
     public function create(): LoaderInterface
     {
-        return $this->loaders['package'];
+        return $this->loaders['content-block'];
     }
 
     public function load(): TableDefinitionCollection
