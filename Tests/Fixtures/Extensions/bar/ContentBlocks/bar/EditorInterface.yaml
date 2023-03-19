@@ -6,22 +6,19 @@ fields:
     useExistingField: true
   - identifier: collection
     type: Collection
-    properties:
-      fields:
-        - identifier: fieldA
-          type: Text
+    fields:
+      - identifier: fieldA
+        type: Text
   - identifier: collection_recursive
     type: Collection
-    properties:
-      fields:
-        - identifier: fieldA
-          type: Text
-        - identifier: collection_inner
-          type: Collection
-          properties:
-            fields:
-              - identifier: fieldB
-                type: Text
+    fields:
+      - identifier: fieldA
+        type: Text
+      - identifier: collection_inner
+        type: Collection
+        fields:
+          - identifier: fieldB
+            type: Text
   - identifier: categories_mm
     type: Category
   - identifier: categories_11

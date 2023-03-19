@@ -14,5 +14,6 @@ Administration
 ==============
 
 .. attention::
+
    You will need to allow the generated database fields, tables (if using inline
    relations) and CType in the backend user group permissions.

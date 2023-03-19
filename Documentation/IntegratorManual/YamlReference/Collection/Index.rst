@@ -36,12 +36,33 @@ useAsLabel
       identifier: collection
       type: Collection
       useAsLabel: text
-      properties:
-          fields:
-            - identifier: image
-              type: Image
-            - identifier: text
-              type: Text
+      fields:
+        - identifier: image
+          type: Image
+        - identifier: text
+          type: Text
+
+fields
+   :sep:`|` :aspect:`Required:` true
+   :sep:`|` :aspect:`Type:` array
+   :sep:`|` :aspect:`Default:` []
+   :sep:`|`
+
+   Configures a set of fields as repeatable child objects. All fields defined in
+   field types are possible as children. However, consider not to have
+   too many nested Collection fields to avoid performance issues. Content Blocks
+   are not intended to represent complex data structures. Consider to create
+   custom tables for these cases.
+
+   Example:
+
+   .. code-block:: yaml
+
+      fields:
+        - identifier: text
+          type: Text
+        - identifier: image
+          type: Image
 
 Properties
 ==========
@@ -66,28 +87,6 @@ minitems
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
 
-fields
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` []
-   :sep:`|`
-
-   Configures a set of fields as repeatable child objects. All fields defined in
-   field types are possible as children. However, consider not to have
-   too many nested Collection fields to avoid performance issues. Content Blocks
-   are not intended to represent complex data structures. Consider to create
-   custom tables for these cases.
-
-   Example:
-
-   .. code-block:: yaml
-
-      fields:
-        - identifier: text
-          type: Text
-        - identifier: image
-          type: Image
-
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline>`
 
 Example
@@ -103,10 +102,9 @@ Minimal
     fields:
       - identifier: collection
         type: Collection
-        properties:
-          fields:
-            - identifier: text
-              type: Text
+        fields:
+          - identifier: text
+            type: Text
 
 Advanced / use case
 -------------------
@@ -122,12 +120,12 @@ Advanced / use case
         properties:
           maxitems: 5
           minitems: 1
-          fields:
-            - identifier: image
-              type: Image
-              properties:
-                minitems: 1
-                maxitems: 1
-                required: true
-            - identifier: title
-              type: Text
+        fields:
+          - identifier: image
+            type: Image
+            properties:
+              minitems: 1
+              maxitems: 1
+              required: true
+          - identifier: title
+            type: Text

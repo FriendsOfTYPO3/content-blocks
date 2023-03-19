@@ -170,12 +170,10 @@ class SqlGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
-                                'properties' => [
-                                    'fields' => [
-                                        [
-                                            'identifier' => 'text',
-                                            'type' => 'Text',
-                                        ],
+                                'fields' => [
+                                    [
+                                        'identifier' => 'text',
+                                        'type' => 'Text',
                                     ],
                                 ],
                             ],
@@ -208,22 +206,18 @@ class SqlGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
-                                'properties' => [
-                                    'fields' => [
-                                        [
-                                            'identifier' => 'text',
-                                            'type' => 'Text',
-                                        ],
-                                        [
-                                            'identifier' => 'collection2',
-                                            'type' => 'Collection',
-                                            'properties' => [
-                                                'fields' => [
-                                                    [
-                                                        'identifier' => 'text',
-                                                        'type' => 'Text',
-                                                    ],
-                                                ],
+                                'fields' => [
+                                    [
+                                        'identifier' => 'text',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'identifier' => 'collection2',
+                                        'type' => 'Collection',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'text',
+                                                'type' => 'Text',
                                             ],
                                         ],
                                     ],

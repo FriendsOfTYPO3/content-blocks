@@ -213,7 +213,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
     private function processCollections(array $field, string $table, array $languagePath, string $contentBlockName, string $parentTable, string $rootTable): array
     {
         $field['languagePath'] = implode('.', $languagePath);
-        if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['properties']['fields'])) {
+        if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['fields'])) {
             return $field;
         }
 
@@ -226,7 +226,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $showItems = [];
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
-        foreach ($field['properties']['fields'] as $collectionRootField) {
+        foreach ($field['fields'] as $collectionRootField) {
             $collectionRootFieldType = FieldType::from($collectionRootField['type']);
             if ($collectionRootFieldType === FieldType::LINEBREAK) {
                 throw new \InvalidArgumentException(

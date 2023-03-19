@@ -122,51 +122,47 @@ class TcaGeneratorTest extends UnitTestCase
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'useAsLabel' => 'text2',
-                                'properties' => [
-                                    'fields' => [
-                                        [
-                                            'identifier' => 'text',
-                                            'type' => 'Text',
-                                        ],
-                                        [
-                                            'identifier' => 'tab_1',
-                                            'type' => 'Tab',
-                                        ],
-                                        [
-                                            'identifier' => 'text2',
-                                            'type' => 'Text',
-                                        ],
-                                        [
-                                            'identifier' => 'palette_inline',
-                                            'type' => 'Palette',
-                                            'fields' => [
-                                                [
-                                                    'identifier' => 'palette_field1',
-                                                    'type' => 'Text',
-                                                ],
-                                                [
-                                                    'type' => 'Linebreak',
-                                                ],
-                                                [
-                                                    'identifier' => 'palette_field2',
-                                                    'type' => 'Text',
-                                                ],
+                                'fields' => [
+                                    [
+                                        'identifier' => 'text',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'identifier' => 'tab_1',
+                                        'type' => 'Tab',
+                                    ],
+                                    [
+                                        'identifier' => 'text2',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'identifier' => 'palette_inline',
+                                        'type' => 'Palette',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'palette_field1',
+                                                'type' => 'Text',
+                                            ],
+                                            [
+                                                'type' => 'Linebreak',
+                                            ],
+                                            [
+                                                'identifier' => 'palette_field2',
+                                                'type' => 'Text',
                                             ],
                                         ],
-                                        [
-                                            'identifier' => 'collection2',
-                                            'type' => 'Collection',
-                                            'properties' => [
-                                                'fields' => [
-                                                    [
-                                                        'identifier' => 'text',
-                                                        'type' => 'Text',
-                                                    ],
-                                                    [
-                                                        'identifier' => 'text2',
-                                                        'type' => 'Text',
-                                                    ],
-                                                ],
+                                    ],
+                                    [
+                                        'identifier' => 'collection2',
+                                        'type' => 'Collection',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'text',
+                                                'type' => 'Text',
+                                            ],
+                                            [
+                                                'identifier' => 'text2',
+                                                'type' => 'Text',
                                             ],
                                         ],
                                     ],

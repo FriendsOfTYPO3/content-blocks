@@ -36,18 +36,14 @@ class TableDefinitionCollectionTest extends UnitTestCase
                             [
                                 'identifier' => 'foo',
                                 'type' => 'Collection',
-                                'properties' => [
-                                    'fields' => [
-                                        [
-                                            'identifier' => 'foo',
-                                            'type' => 'Collection',
-                                            'properties' => [
-                                                'fields' => [
-                                                    [
-                                                        'identifier' => 'text',
-                                                        'type' => 'Text',
-                                                    ],
-                                                ],
+                                'fields' => [
+                                    [
+                                        'identifier' => 'foo',
+                                        'type' => 'Collection',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'text',
+                                                'type' => 'Text',
                                             ],
                                         ],
                                     ],
@@ -186,20 +182,18 @@ class TableDefinitionCollectionTest extends UnitTestCase
                             [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
-                                'properties' => [
-                                    'fields' => [
-                                        [
-                                            'identifier' => 'foo',
-                                            'type' => 'Text',
-                                        ],
-                                        [
-                                            'identifier' => 'bar',
-                                            'type' => 'Text',
-                                        ],
-                                        [
-                                            'identifier' => 'foo',
-                                            'type' => 'Text',
-                                        ],
+                                'fields' => [
+                                    [
+                                        'identifier' => 'foo',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'identifier' => 'bar',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'identifier' => 'foo',
+                                        'type' => 'Text',
                                     ],
                                 ],
                             ],
@@ -320,17 +314,15 @@ class TableDefinitionCollectionTest extends UnitTestCase
                         [
                             'identifier' => 'inline',
                             'type' => 'Collection',
-                            'properties' => [
-                                'fields' => [
-                                    [
-                                        'identifier' => 'palette_1',
-                                        'type' => 'Palette',
-                                        'fields' => [
-                                            [
-                                                'identifier' => 'palette_inside_palette',
-                                                'type' => 'Palette',
-                                                'fields' => [],
-                                            ],
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'palette_inside_palette',
+                                            'type' => 'Palette',
+                                            'fields' => [],
                                         ],
                                     ],
                                 ],
@@ -417,34 +409,32 @@ class TableDefinitionCollectionTest extends UnitTestCase
                         [
                             'identifier' => 'inline',
                             'type' => 'Collection',
-                            'properties' => [
-                                'fields' => [
-                                    [
-                                        'identifier' => 'palette_1',
-                                        'type' => 'Palette',
-                                        'fields' => [
-                                            [
-                                                'identifier' => 'field1',
-                                                'type' => 'Text',
-                                            ],
-                                            [
-                                                'identifier' => 'field2',
-                                                'type' => 'Text',
-                                            ],
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'field1',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'field2',
+                                            'type' => 'Text',
                                         ],
                                     ],
-                                    [
-                                        'identifier' => 'palette_1',
-                                        'type' => 'Palette',
-                                        'fields' => [
-                                            [
-                                                'identifier' => 'field3',
-                                                'type' => 'Text',
-                                            ],
-                                            [
-                                                'identifier' => 'field4',
-                                                'type' => 'Text',
-                                            ],
+                                ],
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'field3',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'field4',
+                                            'type' => 'Text',
                                         ],
                                     ],
                                 ],
@@ -515,20 +505,18 @@ class TableDefinitionCollectionTest extends UnitTestCase
                         [
                             'identifier' => 'inline',
                             'type' => 'Collection',
-                            'properties' => [
-                                'fields' => [
-                                    [
-                                        'identifier' => 'tab_1',
-                                        'type' => 'Tab',
-                                    ],
-                                    [
-                                        'identifier' => 'tab_2',
-                                        'type' => 'Tab',
-                                    ],
-                                    [
-                                        'identifier' => 'tab_1',
-                                        'type' => 'Tab',
-                                    ],
+                            'fields' => [
+                                [
+                                    'identifier' => 'tab_1',
+                                    'type' => 'Tab',
+                                ],
+                                [
+                                    'identifier' => 'tab_2',
+                                    'type' => 'Tab',
+                                ],
+                                [
+                                    'identifier' => 'tab_1',
+                                    'type' => 'Tab',
                                 ],
                             ],
                         ],
@@ -595,16 +583,14 @@ class TableDefinitionCollectionTest extends UnitTestCase
                         [
                             'identifier' => 'inline',
                             'type' => 'Collection',
-                            'properties' => [
-                                'fields' => [
-                                    [
-                                        'identifier' => 'palette_1',
-                                        'type' => 'Palette',
-                                        'fields' => [
-                                            [
-                                                'identifier' => 'tab_1',
-                                                'type' => 'Tab',
-                                            ],
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'tab_1',
+                                            'type' => 'Tab',
                                         ],
                                     ],
                                 ],
@@ -683,28 +669,26 @@ class TableDefinitionCollectionTest extends UnitTestCase
                         [
                             'identifier' => 'inline',
                             'type' => 'Collection',
-                            'properties' => [
-                                'fields' => [
-                                    [
-                                        'identifier' => 'palette_1',
-                                        'type' => 'Palette',
-                                        'fields' => [
-                                            [
-                                                'identifier' => 'field1',
-                                                'type' => 'Text',
-                                            ],
-                                            [
-                                                'type' => 'Linebreak',
-                                            ],
-                                            [
-                                                'identifier' => 'field2',
-                                                'type' => 'Text',
-                                            ],
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'field1',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'type' => 'Linebreak',
+                                        ],
+                                        [
+                                            'identifier' => 'field2',
+                                            'type' => 'Text',
                                         ],
                                     ],
-                                    [
-                                        'type' => 'Linebreak',
-                                    ],
+                                ],
+                                [
+                                    'type' => 'Linebreak',
                                 ],
                             ],
                         ],
@@ -768,15 +752,13 @@ class TableDefinitionCollectionTest extends UnitTestCase
                         [
                             'identifier' => 'inline',
                             'type' => 'Collection',
-                            'properties' => [
-                                'fields' => [
-                                    [
-                                        'identifier' => 'text1',
-                                        'type' => 'Text',
-                                    ],
-                                    [
-                                        'type' => 'Text',
-                                    ],
+                            'fields' => [
+                                [
+                                    'identifier' => 'text1',
+                                    'type' => 'Text',
+                                ],
+                                [
+                                    'type' => 'Text',
                                 ],
                             ],
                         ],
