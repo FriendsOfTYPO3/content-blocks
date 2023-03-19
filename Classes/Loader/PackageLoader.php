@@ -76,10 +76,12 @@ class PackageLoader implements LoaderInterface
 
         $this->publishAssets($parsedContentBlocks);
 
-        $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);
-        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($parsedContentBlocks);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
+
+        $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);
+        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
+
         return $this->tableDefinitionCollection;
     }
 
