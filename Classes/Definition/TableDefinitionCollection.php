@@ -74,6 +74,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
             $uniqueIdentifiers = [];
             $uniquePaletteIdentifiers = [];
+            $uniqueTabIdentifiers = [];
             $columns = [];
             $showItems = [];
             $overrideColumns = [];
@@ -116,6 +117,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
                                 1679167139
                             );
                         }
+                        if ($paletteFieldType === FieldType::TAB) {
+                            throw new \InvalidArgumentException(
+                                'Tab "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '".',
+                                1679245227
+                            );
+                        }
                         if ($paletteFieldType === FieldType::LINEBREAK) {
                             $paletteShowItems[] = '--linebreak--';
                         } else {
@@ -128,6 +135,16 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'description' => $baseLanguagePath . '.description',
                         'showitem' => $paletteShowItems,
                     ];
+                } elseif ($fieldType === FieldType::TAB) {
+                    if (in_array($rootField['identifier'], $uniqueTabIdentifiers, true)) {
+                        throw new \InvalidArgumentException(
+                            'The tab identifier "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
+                            1679244116
+                        );
+                    }
+                    $showItems[] = '--div--;' . 'LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':tabs.' . $rootField['identifier'];
+                    $uniqueTabIdentifiers[] = $rootField['identifier'];
+                    continue;
                 } else {
                     $showItems[] = ($rootField['useExistingField'] ?? false) ? $rootField['identifier'] : $uniqueRootColumnName;
                     $fields = [$rootField];
@@ -205,6 +222,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
         $uniqueIdentifiers = [];
         $uniquePaletteIdentifiers = [];
+        $uniqueTabIdentifiers = [];
         $showItems = [];
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
@@ -244,6 +262,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
                             1679168602
                         );
                     }
+                    if ($paletteFieldType === FieldType::TAB) {
+                        throw new \InvalidArgumentException(
+                            'Tab "' . $collectionRootPaletteField['identifier'] . '" is not allowed inside palette "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
+                            1679245193
+                        );
+                    }
                     if ($paletteFieldType === FieldType::LINEBREAK) {
                         $paletteShowItems[] = '--linebreak--';
                     } else {
@@ -257,6 +281,16 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     'showitem' => $paletteShowItems,
                 ];
                 $showItems[] = '--palette--;;' . $collectionRootField['identifier'];
+            } elseif ($collectionRootFieldType === FieldType::TAB) {
+                if (in_array($collectionRootField['identifier'], $uniqueTabIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The tab identifier "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                        1679243686
+                    );
+                }
+                $uniqueTabIdentifiers[] = $collectionRootField['identifier'];
+                $showItems[] = '--div--;' . $field['languagePath'] . '.tabs.' . $collectionRootField['identifier'];
+                continue;
             } else {
                 $showItems[] = $collectionRootField['identifier'];
                 $fields = [$collectionRootField];

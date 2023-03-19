@@ -32,6 +32,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\PaletteFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\TabFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
 
@@ -56,6 +57,7 @@ enum FieldType: string
     case TEXTAREA = 'Textarea';
     case PALETTE = 'Palette';
     case LINEBREAK = 'Linebreak';
+    case TAB = 'Tab';
 
     public function getTcaType(): string
     {
@@ -74,7 +76,7 @@ enum FieldType: string
             self::REFERENCE => 'group',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
-            self::PALETTE, self::LINEBREAK => '',
+            self::PALETTE, self::LINEBREAK, self::TAB => '',
         };
     }
 
@@ -85,7 +87,7 @@ enum FieldType: string
 
     public function isRenderable(): bool
     {
-        return !in_array($this, [self::PALETTE, self::LINEBREAK], true);
+        return !in_array($this, [self::PALETTE, self::LINEBREAK, self::TAB], true);
     }
 
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
@@ -107,6 +109,7 @@ enum FieldType: string
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             self::PALETTE => new PaletteFieldConfiguration(),
             self::LINEBREAK => new LinebreakFieldConfiguration(),
+            self::TAB => new TabFieldConfiguration(),
         };
     }
 }

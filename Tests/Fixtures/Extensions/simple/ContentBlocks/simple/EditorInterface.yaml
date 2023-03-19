@@ -4,6 +4,8 @@ fields:
   - identifier: palette
     type: Palette
     fields:
+      - identifier: tab_1
+        type: Tab
       - identifier: header
         type: Text
         useExistingField: true

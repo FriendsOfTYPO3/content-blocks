@@ -466,6 +466,166 @@ class TableDefinitionCollectionTest extends UnitTestCase
     /**
      * @test
      */
+    public function tabWithSameIdentifierIsNotAllowed(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'tab_1',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'tab_2',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'tab_1',
+                            'type' => 'Tab',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679244116);
+        $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
+    public function tabWithSameIdentifierInsideCollectionIsNotAllowed(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'properties' => [
+                                'fields' => [
+                                    [
+                                        'identifier' => 'tab_1',
+                                        'type' => 'Tab',
+                                    ],
+                                    [
+                                        'identifier' => 'tab_2',
+                                        'type' => 'Tab',
+                                    ],
+                                    [
+                                        'identifier' => 'tab_1',
+                                        'type' => 'Tab',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679243686);
+        $this->expectExceptionMessage('The tab identifier "tab_1" in Collection "inline" in content block foo/bar does exist more than once. Please choose unique identifiers.');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
+    public function tabInsidePaletteIsNotAllowed(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'palette_1',
+                            'type' => 'Palette',
+                            'fields' => [
+                                [
+                                    'identifier' => 'tab_1',
+                                    'type' => 'Tab',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679245227);
+        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
+    public function tabInsidePaletteInsideCollectionIsNotAllowed(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'properties' => [
+                                'fields' => [
+                                    [
+                                        'identifier' => 'palette_1',
+                                        'type' => 'Palette',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'tab_1',
+                                                'type' => 'Tab',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679245193);
+        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Collection "inline" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        TableDefinitionCollection::createFromArray($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
     public function linebreaksAreOnlyAllowedWithinPalettes(): void
     {
         $contentBlocks = [

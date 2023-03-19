@@ -115,5 +115,6 @@ Field types
     Radio/Index
     Reference/Index
     Select/Index
+    Tab/Index
     Text/Index
     Textarea/Index

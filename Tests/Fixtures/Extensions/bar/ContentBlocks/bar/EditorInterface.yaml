@@ -45,6 +45,8 @@ fields:
     properties:
       allowed: pages
       MM: block_pages_mm
+  - identifier: tab_1
+    type: Tab
   - identifier: palette
     type: Palette
     fields:
