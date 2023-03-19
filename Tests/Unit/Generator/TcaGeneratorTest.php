@@ -33,7 +33,7 @@ class TcaGeneratorTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'packagePath' => 'EXT:foo/ContentBlocks/example',
+                    'path' => 'EXT:foo/ContentBlocks/example',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
@@ -169,7 +169,7 @@ class TcaGeneratorTest extends UnitTestCase
                 ],
                 [
                     'name' => 't3ce/testblock',
-                    'packagePath' => 'EXT:foo/ContentBlocks/testblock',
+                    'path' => 'EXT:foo/ContentBlocks/testblock',
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [

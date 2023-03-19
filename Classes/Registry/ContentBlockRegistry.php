@@ -42,6 +42,6 @@ class ContentBlockRegistry implements SingletonInterface
         if (!$this->hasContentBlock($name)) {
             throw new \OutOfBoundsException('Content block with the name "' . $name . '" is not registered.', 1678478902);
         }
-        return $this->contentBlocks[$name]->getPackagePath();
+        return $this->contentBlocks[$name]->getPath();
     }
 }

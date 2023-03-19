@@ -133,7 +133,7 @@ class ContentBlockLoader implements LoaderInterface
             yaml: $yaml,
             icon: $iconPath,
             iconProvider: $iconProviderClass,
-            packagePath: $contentBlockFolder
+            path: $contentBlockFolder
         );
     }
 
@@ -169,7 +169,7 @@ class ContentBlockLoader implements LoaderInterface
         $fileSystem->mkdir($assetsPath);
         foreach ($parsedContentBlocks as $parsedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $parsedContentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getPublicFolderPath()
+                $parsedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolderPath()
             );
             $contentBlockAssetsPathDestination = $assetsPath . '/' . $parsedContentBlock->getName();
             if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {

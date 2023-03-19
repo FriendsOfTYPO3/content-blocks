@@ -106,7 +106,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $uniquePaletteIdentifiers[] = $rootField['identifier'];
                     $showItems[] = '--palette--;;' . $uniqueRootColumnName;
                     $fields = [];
-                    $baseLanguagePath = 'LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':palettes.' . $rootField['identifier'];
+                    $baseLanguagePath = 'LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':palettes.' . $rootField['identifier'];
                     $paletteShowItems = [];
                     foreach ($rootField['fields'] as $paletteField) {
                         $paletteFieldType = FieldType::from($paletteField['type']);
@@ -155,7 +155,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $processedField = $tableDefinitionCollection->processCollections(
                         field: $field,
                         table: $uniqueColumnName,
-                        languagePath: ['LLL:' . $contentBlock->getPackagePath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $field['identifier']],
+                        languagePath: ['LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $field['identifier']],
                         contentBlockName: $contentBlockName,
                         parentTable: $table,
                         rootTable: $table,
