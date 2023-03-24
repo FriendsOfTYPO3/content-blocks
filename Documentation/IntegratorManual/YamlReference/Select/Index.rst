@@ -40,9 +40,9 @@ items
 
       items:
         [
-          [ 'The first', 'one' ],
-          [ 'The second', 'two' ],
-          [ 'The third', 'three' ],
+          [ label: 'The first', value: 'one' ],
+          [ label: 'The second', value: 'two' ],
+          [ label: 'The third', value: 'three' ],
         ]
 
 default
@@ -94,8 +94,8 @@ Select single:
           renderType: selectSingle
           items:
             [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
+              [ label: 'The first', value: 'one' ],
+              [ label: 'The second', value: 'two' ],
             ]
 
 Select multiple:
@@ -111,8 +111,8 @@ Select multiple:
           renderType: selectMultipleSideBySide
           items:
             [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
+              [ label: 'The first', value: 'one' ],
+              [ label: 'The second', value: 'two' ],
             ]
 
 
@@ -137,9 +137,9 @@ Select single:
           maxitems: 3
           items:
             [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
-              [ 'The third', 'three' ],
+              [ label: 'The first', value: 'one' ],
+              [ label: 'The second', value: 'two' ],
+              [ label: 'The third', value: 'three' ],
             ]
           foreign_table: pages
           foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
@@ -160,9 +160,9 @@ Select multiple:
           maxitems: 3
           items:
             [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
-              [ 'The third', 'three' ],
+              [ label: 'The first', value: 'one' ],
+              [ label: 'The second', value: 'two' ],
+              [ label: 'The third', value: 'three' ],
             ]
           foreign_table: pages
           foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'

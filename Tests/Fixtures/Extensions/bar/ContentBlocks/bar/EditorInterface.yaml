@@ -52,25 +52,25 @@ fields:
         properties:
           renderType: selectCheckBox
           items:
-            - ['Foo 1', '1']
-            - ['Foo 2', '2']
-            - ['Foo 3', '3']
+            - [label: 'Foo 1', value: '1']
+            - [label: 'Foo 2', value: '2']
+            - [label: 'Foo 3', value: '3']
       - identifier: select_single_box
         type: Select
         properties:
           renderType: selectSingleBox
           items:
-            - ['Foo 1', '1']
-            - ['Foo 2', '2']
-            - ['Foo 3', '3']
+            - [label: 'Foo 1', value: '1']
+            - [label: 'Foo 2', value: '2']
+            - [label: 'Foo 3', value: '3']
       - identifier: select_multiple
         type: Select
         properties:
           renderType: selectMultipleSideBySide
           items:
-            - ['Foo 1', '1']
-            - ['Foo 2', '2']
-            - ['Foo 3', '3']
+            - [label: 'Foo 1', value: '1']
+            - [label: 'Foo 2', value: '2']
+            - [label: 'Foo 3', value: '3']
 
       - identifier: select_foreign
         type: Select

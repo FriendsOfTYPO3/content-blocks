@@ -81,7 +81,7 @@ Advanced / use case
           default: 'one'
           items:
             [
-              [ 'The first', 'one' ],
-              [ 'The second', 'two' ],
-              [ 'The third', 'three' ],
+              [ label: 'The first', value: 'one' ],
+              [ label: 'The second', value: 'two' ],
+              [ label: 'The third', value: 'three' ],
             ]

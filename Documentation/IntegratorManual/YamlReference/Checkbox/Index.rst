@@ -41,9 +41,9 @@ items
 
       items:
         [
-          [ 'The first' ],
-          [ 'The second' ],
-          [ 'The third' ],
+          [ label: 'The first' ],
+          [ label: 'The second' ],
+          [ label: 'The third' ],
         ]
 
 For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
@@ -77,9 +77,9 @@ Multiple checkboxes:
         properties:
           items:
             [
-              [ 'The first' ],
-              [ 'The second' ],
-              [ 'The third' ],
+              [ label: 'The first' ],
+              [ label: 'The second' ],
+              [ label: 'The third' ],
             ]
           default: 2
           cols: 3
