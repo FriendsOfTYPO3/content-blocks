@@ -72,7 +72,10 @@ Advanced / use case
         properties:
           autocomplete: true
           default: 'https://typo3.org'
-          allowedTypes: ['page', 'url', 'file']
+          allowedTypes:
+            - page
+            - url
+            - file
           required: true
           valuePicker:
             items:

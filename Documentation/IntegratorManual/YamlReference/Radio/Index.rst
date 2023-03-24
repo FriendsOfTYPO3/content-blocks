@@ -78,10 +78,11 @@ Advanced / use case
       - identifier: radioboxes
         type: Radio
         properties:
-          default: 'one'
+          default: one
           items:
-            [
-              [ label: 'The first', value: 'one' ],
-              [ label: 'The second', value: 'two' ],
-              [ label: 'The third', value: 'three' ],
-            ]
+            - label: 'The first'
+              value: one
+            - label: 'The second'
+              value: two
+            - label: 'The third'
+              value: three

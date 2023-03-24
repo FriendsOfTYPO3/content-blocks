@@ -39,11 +39,12 @@ items
    .. code-block:: yaml
 
       items:
-        [
-          [ label: 'The first', value: 'one' ],
-          [ label: 'The second', value: 'two' ],
-          [ label: 'The third', value: 'three' ],
-        ]
+        - label: 'The first'
+          value: one
+        - label: 'The second'
+          value: two
+        - label: 'The third'
+          value: three
 
 default
    :sep:`|` :aspect:`Required:` false
@@ -93,10 +94,10 @@ Select single:
         properties:
           renderType: selectSingle
           items:
-            [
-              [ label: 'The first', value: 'one' ],
-              [ label: 'The second', value: 'two' ],
-            ]
+            - label: 'The first'
+              value: one
+            - label: 'The second'
+              value: two
 
 Select multiple:
 
@@ -110,11 +111,10 @@ Select multiple:
         properties:
           renderType: selectMultipleSideBySide
           items:
-            [
-              [ label: 'The first', value: 'one' ],
-              [ label: 'The second', value: 'two' ],
-            ]
-
+            - label: 'The first'
+              value: one
+            - label: 'The second'
+              value: two
 
 Advanced / use case
 -------------------
@@ -136,11 +136,12 @@ Select single:
           minitems: 1
           maxitems: 3
           items:
-            [
-              [ label: 'The first', value: 'one' ],
-              [ label: 'The second', value: 'two' ],
-              [ label: 'The third', value: 'three' ],
-            ]
+            - label: 'The first'
+              value: one
+            - label: 'The second'
+              value: two
+            - label: 'The third'
+              value: three
           foreign_table: pages
           foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
 
@@ -159,11 +160,12 @@ Select multiple:
           minitems: 1
           maxitems: 3
           items:
-            [
-              [ label: 'The first', value: 'one' ],
-              [ label: 'The second', value: 'two' ],
-              [ label: 'The third', value: 'three' ],
-            ]
+            - label: 'The first'
+              value: one
+            - label: 'The second'
+              value: two
+            - label: 'The third'
+              value: three
           foreign_table: pages
           foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
 
