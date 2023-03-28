@@ -31,6 +31,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                     'name' => 't3ce/example',
                     'icon' => '',
                     'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'fields' => [
                             [
@@ -80,6 +81,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [],
                 ],
@@ -88,6 +90,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'fields' => [],
                 ],
@@ -113,6 +116,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'fields' => [],
                 ],
@@ -134,6 +138,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                     'name' => 't3ce/example',
                     'icon' => '',
                     'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'fields' => [
                             [
@@ -162,8 +167,8 @@ class TableDefinitionCollectionTest extends UnitTestCase
     public function notUniqueIdentifiersThrowAnException(array $contentBlocks): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1677407941);
-        $this->expectExceptionMessage('The identifier "foo" in content block t3ce/example does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionCode(1677407942);
+        $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -177,6 +182,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                     'name' => 't3ce/example',
                     'icon' => '',
                     'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'fields' => [
                             [
@@ -212,7 +218,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1677407942);
-        $this->expectExceptionMessage('The identifier "foo" in content block t3ce/example in Collection "collection" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -228,6 +234,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [],
                 ],
@@ -236,6 +243,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'priority' => 20,
                     'fields' => [],
@@ -245,6 +253,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'fizz/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/fizz',
                 'yaml' => [
                     'priority' => 30,
                     'fields' => [],
@@ -273,6 +282,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -292,7 +302,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1679167139);
+        $this->expectExceptionCode(1679168602);
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -309,6 +319,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -335,7 +346,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168602);
-        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Collection "inline" in content block "foo/bar".');
+        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -351,6 +362,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -387,7 +399,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1679161623);
+        $this->expectExceptionCode(1679168022);
         $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -404,6 +416,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -447,7 +460,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168022);
-        $this->expectExceptionMessage('The palette identifier "palette_1" in Collection "inline" in content block foo/bar does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -463,6 +476,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -483,7 +497,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1679244116);
+        $this->expectExceptionCode(1679243686);
         $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -500,6 +514,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -527,7 +542,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679243686);
-        $this->expectExceptionMessage('The tab identifier "tab_1" in Collection "inline" in content block foo/bar does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -543,6 +558,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -561,7 +577,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1679245227);
+        $this->expectExceptionCode(1679245193);
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -578,6 +594,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -603,7 +620,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679245193);
-        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Collection "inline" in content block "foo/bar".');
+        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -619,6 +636,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -647,7 +665,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1679224094);
+        $this->expectExceptionCode(1679224392);
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -664,6 +682,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -699,7 +718,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679224392);
-        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Collection "inline" in content block "foo/bar".');
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);
@@ -715,6 +734,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -730,7 +750,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1679225969);
+        $this->expectExceptionCode(1679226075);
         $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -747,6 +767,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'fields' => [
                         [
@@ -769,7 +790,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679226075);
-        $this->expectExceptionMessage('A field is missing the required "identifier" in Collection "inline" in content block "foo/bar".');
+        $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         TableDefinitionCollection::createFromArray($contentBlocks);

@@ -61,7 +61,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
     }
 
     /**
-     * @param array<ParsedContentBlock> $contentBlocks
+     * @param ParsedContentBlock[] $contentBlocks
      */
     public static function createFromArray(array $contentBlocks): TableDefinitionCollection
     {
@@ -69,278 +69,215 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
             $table = $contentBlock->getYaml()['table'] ?? 'tt_content';
-            $contentBlockName = $contentBlock->getName();
-            [$vendor, $package] = explode('/', $contentBlockName);
-
-            $uniqueIdentifiers = [];
-            $uniquePaletteIdentifiers = [];
-            $uniqueTabIdentifiers = [];
-            $columns = [];
-            $showItems = [];
-            $overrideColumns = [];
-            foreach ($contentBlock->getYaml()['fields'] ?? [] as $rootField) {
-                $fieldType = FieldType::from($rootField['type']);
-                if ($fieldType === FieldType::LINEBREAK) {
-                    throw new \InvalidArgumentException(
-                        'Linebreaks are only allowed within Palettes in content block "' . $contentBlockName . '".',
-                        1679224094
-                    );
-                }
-                if (!isset($rootField['identifier'])) {
-                    throw new \InvalidArgumentException(
-                        'A field is missing the required "identifier" in content block "' . $contentBlockName . '".',
-                        1679225969
-                    );
-                }
-                $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $rootField['identifier']);
-                if ($fieldType === FieldType::PALETTE) {
-                    // Ignore empty Palettes.
-                    if (($rootField['fields'] ?? []) === []) {
-                        continue;
-                    }
-                    if (in_array($rootField['identifier'], $uniquePaletteIdentifiers, true)) {
-                        throw new \InvalidArgumentException(
-                            'The palette identifier "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
-                            1679161623
-                        );
-                    }
-                    $uniquePaletteIdentifiers[] = $rootField['identifier'];
-                    $showItems[] = '--palette--;;' . $uniqueRootColumnName;
-                    $fields = [];
-                    $baseLanguagePath = 'LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':palettes.' . $rootField['identifier'];
-                    $paletteShowItems = [];
-                    foreach ($rootField['fields'] as $paletteField) {
-                        $paletteFieldType = FieldType::from($paletteField['type']);
-                        if ($paletteFieldType === FieldType::PALETTE) {
-                            throw new \InvalidArgumentException(
-                                'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '".',
-                                1679167139
-                            );
-                        }
-                        if ($paletteFieldType === FieldType::TAB) {
-                            throw new \InvalidArgumentException(
-                                'Tab "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '".',
-                                1679245227
-                            );
-                        }
-                        if ($paletteFieldType === FieldType::LINEBREAK) {
-                            $paletteShowItems[] = '--linebreak--';
-                        } else {
-                            $fields[] = $paletteField;
-                            $paletteShowItems[] = ($paletteField['useExistingField'] ?? false) ? $paletteField['identifier'] : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $paletteField['identifier']);
-                        }
-                    }
-                    $tableDefinitionList[$table]['palettes'][$uniqueRootColumnName] = [
-                        'label' => $baseLanguagePath . '.label',
-                        'description' => $baseLanguagePath . '.description',
-                        'showitem' => $paletteShowItems,
-                    ];
-                } elseif ($fieldType === FieldType::TAB) {
-                    if (in_array($rootField['identifier'], $uniqueTabIdentifiers, true)) {
-                        throw new \InvalidArgumentException(
-                            'The tab identifier "' . $rootField['identifier'] . '" in content block "' . $contentBlockName . '" does exist more than once. Please choose unique identifiers.',
-                            1679244116
-                        );
-                    }
-                    $showItems[] = '--div--;' . 'LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':tabs.' . $rootField['identifier'];
-                    $uniqueTabIdentifiers[] = $rootField['identifier'];
-                    continue;
-                } else {
-                    $showItems[] = ($rootField['useExistingField'] ?? false) ? $rootField['identifier'] : $uniqueRootColumnName;
-                    $fields = [$rootField];
-                }
-                foreach ($fields as $field) {
-                    if (in_array($field['identifier'], $uniqueIdentifiers, true)) {
-                        throw new \InvalidArgumentException(
-                            'The identifier "' . $field['identifier'] . '" in content block ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
-                            1677407941
-                        );
-                    }
-                    $uniqueIdentifiers[] = $field['identifier'];
-
-                    $useExistingField = false;
-                    if ($field['useExistingField'] ?? false) {
-                        $uniqueColumnName = $field['identifier'];
-                        $useExistingField = true;
-                    } else {
-                        $uniqueColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $field['identifier']);
-                        // Prevent reusing not allowed fields (e.g. system fields).
-                        $field['useExistingField'] = false;
-                    }
-                    $columns[] = $uniqueColumnName;
-
-                    $processedField = $tableDefinitionCollection->processCollections(
-                        field: $field,
-                        table: $uniqueColumnName,
-                        languagePath: ['LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $field['identifier']],
-                        contentBlockName: $contentBlockName,
-                        parentTable: $table,
-                        rootTable: $table,
-                    );
-                    $fieldArray = [
-                        'uniqueIdentifier' => $uniqueColumnName,
-                        'config' => $processedField,
-                    ];
-                    $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
-                    if ($useExistingField) {
-                        $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
-                    }
-                }
-            }
-
-            $tableDefinitionList[$table]['elements'][] = [
-                'identifier' => $contentBlockName,
-                'columns' => $columns,
-                'showItems' => $showItems,
-                'overrideColumns' => $overrideColumns,
-                'vendor' => $vendor,
-                'package' => $package,
-                'wizardGroup' => $contentBlock->getYaml()['group'] ?? null,
-                'icon' => $contentBlock->getIcon(),
-                'iconProvider' => $contentBlock->getIconProvider(),
-                'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
-                'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlockName),
-                'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
-            ];
+            $tableDefinitionList = $tableDefinitionCollection->processContentBlock(
+                yaml: $contentBlock->getYaml(),
+                contentBlock: $contentBlock,
+                table: $table,
+                rootTable: $table,
+                tableDefinitionList: $tableDefinitionList,
+            );
         }
-
         foreach ($tableDefinitionList as $table => $tableDefinition) {
             $tableDefinitionCollection->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
         }
         return $tableDefinitionCollection;
     }
 
-    private function processCollections(array $field, string $table, array $languagePath, string $contentBlockName, string $parentTable, string $rootTable): array
+    private function processContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, ?LanguagePath $languagePath = null): array
     {
-        $field['languagePath'] = implode('.', $languagePath);
-        if (FieldType::from($field['type']) !== FieldType::COLLECTION || empty($field['fields'])) {
-            return $field;
-        }
-
-        $field['properties']['foreign_table'] = $table;
-        $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
-
+        $languagePath ??= new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
         $uniqueIdentifiers = [];
         $uniquePaletteIdentifiers = [];
         $uniqueTabIdentifiers = [];
+        $columns = [];
         $showItems = [];
+        $overrideColumns = [];
         $tableDefinition = [];
-        $tableDefinition['useAsLabel'] = $field['useAsLabel'] ?? '';
-        foreach ($field['fields'] as $collectionRootField) {
-            $collectionRootFieldType = FieldType::from($collectionRootField['type']);
-            if ($collectionRootFieldType === FieldType::LINEBREAK) {
+        $tableDefinition['useAsLabel'] = $yaml['useAsLabel'] ?? '';
+        $isRootTable = $table === $rootTable;
+        // @todo Enable to create a new root table if table does not exist already.
+        $shouldCreateNewTable = !$isRootTable;
+        foreach ($yaml['fields'] as $rootField) {
+            $rootFieldType = FieldType::from($rootField['type']);
+            if ($rootFieldType === FieldType::LINEBREAK) {
                 throw new \InvalidArgumentException(
-                    'Linebreaks are only allowed within Palettes in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
+                    'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
                     1679224392
                 );
             }
-            if (!isset($collectionRootField['identifier'])) {
+            if (!isset($rootField['identifier'])) {
                 throw new \InvalidArgumentException(
-                    'A field is missing the required "identifier" in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
+                    'A field is missing the required "identifier" in content block "' . $contentBlock->getName() . '".',
                     1679226075
                 );
             }
-            if ($collectionRootFieldType === FieldType::PALETTE) {
+            $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootField['identifier']);
+            if ($rootFieldType === FieldType::PALETTE) {
                 // Ignore empty Palettes.
-                if (($collectionRootField['fields'] ?? []) === []) {
+                if (($rootField['fields'] ?? []) === []) {
                     continue;
                 }
-                if (in_array($collectionRootField['identifier'], $uniquePaletteIdentifiers, true)) {
+                if (in_array($rootField['identifier'], $uniquePaletteIdentifiers, true)) {
                     throw new \InvalidArgumentException(
-                        'The palette identifier "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                        'The palette identifier "' . $rootField['identifier'] . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
                         1679168022
                     );
                 }
-                $uniquePaletteIdentifiers[] = $collectionRootField['identifier'];
+                $uniquePaletteIdentifiers[] = $rootField['identifier'];
                 $fields = [];
                 $paletteShowItems = [];
-                foreach ($collectionRootField['fields'] as $collectionRootPaletteField) {
-                    $paletteFieldType = FieldType::from($collectionRootPaletteField['type']);
+                foreach ($rootField['fields'] as $paletteField) {
+                    $paletteFieldType = FieldType::from($paletteField['type']);
                     if ($paletteFieldType === FieldType::PALETTE) {
                         throw new \InvalidArgumentException(
-                            'Palette "' . $collectionRootPaletteField['identifier'] . '" is not allowed inside palette "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
+                            'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlock->getName() . '".',
                             1679168602
                         );
                     }
                     if ($paletteFieldType === FieldType::TAB) {
                         throw new \InvalidArgumentException(
-                            'Tab "' . $collectionRootPaletteField['identifier'] . '" is not allowed inside palette "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block "' . $contentBlockName . '".',
+                            'Tab "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlock->getName() . '".',
                             1679245193
                         );
                     }
                     if ($paletteFieldType === FieldType::LINEBREAK) {
                         $paletteShowItems[] = '--linebreak--';
                     } else {
-                        $fields[] = $collectionRootPaletteField;
-                        $paletteShowItems[] = $collectionRootPaletteField['identifier'];
+                        $fields[] = $paletteField;
+                        if ($isRootTable) {
+                            $paletteShowItems[] = ($paletteField['useExistingField'] ?? false)
+                                ? $paletteField['identifier']
+                                : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $paletteField['identifier']);
+                        } else {
+                            $paletteShowItems[] = $paletteField['identifier'];
+                        }
                     }
                 }
-                $tableDefinition['palettes'][$collectionRootField['identifier']] = [
-                    'label' => $field['languagePath'] . '.palettes.' . $collectionRootField['identifier'] . '.label',
-                    'description' => $field['languagePath'] . '.palettes.' . $collectionRootField['identifier'] . '.description',
+                $languagePath->addPathSegment('palettes.' . $rootField['identifier']);
+                $palette = [
+                    'label' => $languagePath->getCurrentPath() . '.label',
+                    'description' => $languagePath->getCurrentPath() . '.description',
                     'showitem' => $paletteShowItems,
                 ];
-                $showItems[] = '--palette--;;' . $collectionRootField['identifier'];
-            } elseif ($collectionRootFieldType === FieldType::TAB) {
-                if (in_array($collectionRootField['identifier'], $uniqueTabIdentifiers, true)) {
+                if ($isRootTable) {
+                    $tableDefinitionList[$table]['palettes'][$uniqueRootColumnName] = $palette;
+                    $showItems[] = '--palette--;;' . $uniqueRootColumnName;
+                } else {
+                    $tableDefinition['palettes'][$rootField['identifier']] = $palette;
+                    $showItems[] = '--palette--;;' . $rootField['identifier'];
+                }
+                $languagePath->popSegment();
+            } elseif ($rootFieldType === FieldType::TAB) {
+                if (in_array($rootField['identifier'], $uniqueTabIdentifiers, true)) {
                     throw new \InvalidArgumentException(
-                        'The tab identifier "' . $collectionRootField['identifier'] . '" in Collection "' . $field['identifier'] . '" in content block ' . $contentBlockName . ' does exist more than once. Please choose unique identifiers.',
+                        'The tab identifier "' . $rootField['identifier'] . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
                         1679243686
                     );
                 }
-                $uniqueTabIdentifiers[] = $collectionRootField['identifier'];
-                $showItems[] = '--div--;' . $field['languagePath'] . '.tabs.' . $collectionRootField['identifier'];
+                $uniqueTabIdentifiers[] = $rootField['identifier'];
+                $languagePath->addPathSegment('tabs.' . $rootField['identifier']);
+                $showItems[] = '--div--;' . $languagePath->getCurrentPath();
+                $languagePath->popSegment();
                 continue;
             } else {
-                $showItems[] = $collectionRootField['identifier'];
-                $fields = [$collectionRootField];
+                if ($isRootTable) {
+                    $showItems[] = ($rootField['useExistingField'] ?? false)
+                        ? $rootField['identifier']
+                        : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootField['identifier']);
+                } else {
+                    $showItems[] = $rootField['identifier'];
+                }
+                $fields = [$rootField];
             }
 
-            foreach ($fields as $collectionField) {
-                $identifier = $collectionField['identifier'];
+            foreach ($fields as $field) {
+                $identifier = $field['identifier'];
+                $languagePath->addPathSegment($identifier);
                 if (in_array($identifier, $uniqueIdentifiers, true)) {
                     throw new \InvalidArgumentException(
-                        'The identifier "' . $identifier . '" in content block ' . $contentBlockName . ' in Collection "' . $field['identifier'] . '" does exist more than once. Please choose unique identifiers.',
+                        'The identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
                         1677407942
                     );
                 }
                 $uniqueIdentifiers[] = $identifier;
-                $languagePath[] = $identifier;
-                $childField = $this->processCollections(
-                    field: $collectionField,
-                    table: UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlockName, $identifier),
-                    languagePath: $languagePath,
-                    contentBlockName: $contentBlockName,
-                    parentTable: $table,
-                    rootTable: $rootTable
-                );
-                // Since we can't check TCA and collection tables are individual tables
-                // the useExistingField is not allowed on collections
-                $childField['useExistingField'] = false;
 
-                $tableDefinition['fields'][$identifier] = [
-                    'uniqueIdentifier' => $identifier,
-                    'config' => $childField,
-                ];
+                // Recursive call for Collection (inline) fields.
+                if (FieldType::from($field['type']) === FieldType::COLLECTION && !empty($field['fields'])) {
+                    $inlineTable = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier);
+                    $field['properties']['foreign_table'] = $inlineTable;
+                    $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
+                    $tableDefinitionList = $this->processContentBlock(
+                        yaml: $field,
+                        contentBlock: $contentBlock,
+                        table: $inlineTable,
+                        rootTable: $rootTable,
+                        tableDefinitionList: $tableDefinitionList,
+                        languagePath: $languagePath,
+                    );
+                }
 
-                array_pop($languagePath);
+                $field['languagePath'] = $languagePath->getCurrentPath();
+                if ($isRootTable) {
+                    $uniqueColumnName = ($field['useExistingField'] ?? false)
+                        ? $field['identifier']
+                        : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $field['identifier']);
+                    $columns[] = $uniqueColumnName;
+                    $fieldArray = [
+                        'uniqueIdentifier' => $uniqueColumnName,
+                        'config' => $field,
+                    ];
+                    $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
+                    // @todo only needed, if overriding existing tables like tt_content.
+                    if ($field['useExistingField'] ?? false) {
+                        $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                    }
+                }
+
+                if ($shouldCreateNewTable) {
+                    if ($this->hasTable($table)) {
+                        throw new \InvalidArgumentException('A Collection field with the identifier "' . $yaml['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
+                    }
+                    // useExistingField is not allowed on Collections.
+                    $field['useExistingField'] = false;
+                    $tableDefinition['fields'][$identifier] = [
+                        'uniqueIdentifier' => $identifier,
+                        'config' => $field,
+                    ];
+                }
+                $languagePath->popSegment();
             }
             $tableDefinition['showItems'] = $showItems;
         }
 
-        if ($this->hasTable($table)) {
-            throw new \InvalidArgumentException('A Collection field with the identifier "' . $field['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
+        // If this is the root table, we add a brand-new element (content type), with columns, type field ect.
+        if ($isRootTable) {
+            [$vendor, $package] = explode('/', $contentBlock->getName());
+            $tableDefinitionList[$table]['elements'][] = [
+                'identifier' => $contentBlock->getName(),
+                'columns' => $columns,
+                'showItems' => $showItems,
+                'overrideColumns' => $overrideColumns, // @todo only needed, if overriding existing tables like tt_content.
+                'vendor' => $vendor,
+                'package' => $package,
+                'wizardGroup' => $contentBlock->getYaml()['group'] ?? null,
+                'icon' => $contentBlock->getIcon(),
+                'iconProvider' => $contentBlock->getIconProvider(),
+                'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
+                'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName()),
+                'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
+            ];
         }
 
-        // Add parent table information.
-        $tableDefinition['parentTable'] = $parentTable;
-        // The reason we check for the root table is that only custom (child) tables have the prefixed identifier.
-        $tableDefinition['parentField'] = $rootTable === $parentTable ? $table : $field['identifier'];
-        $this->addTable(
-            tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
-            isCustomTable: true
-        );
-        return $field;
+        // Collection fields are unique and require always an own table definition, which can't be shared across
+        // other content blocks.
+        if ($shouldCreateNewTable) {
+            $this->addTable(
+                tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
+                isCustomTable: true
+            );
+        }
+
+        return $tableDefinitionList;
     }
 
     public function getContentElementDefinition(string $CType): ?ContentElementDefinition
