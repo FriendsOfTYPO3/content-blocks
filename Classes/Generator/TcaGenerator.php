@@ -54,8 +54,7 @@ class TcaGenerator
         $tca = [];
         foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
             if ($tableDefinitionCollection->isCustomTable($tableDefinition)) {
-                $labelField = $this->resolveLabelField($tableDefinition);
-                $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition->getShowItems(), $tableName, $labelField);
+                $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition);
             }
             foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
                 $tca[$tableName]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
@@ -190,12 +189,12 @@ class TcaGenerator
         return $andWhere;
     }
 
-    protected function getCollectionTableStandardTca(array $showItems, string $table, string $labelField): array
+    protected function getCollectionTableStandardTca(TableDefinition $tableDefinition): array
     {
         return [
             'ctrl' => [
-                'title' => $table,
-                'label' => $labelField,
+                'title' => $tableDefinition->getTable(),
+                'label' => $this->resolveLabelField($tableDefinition),
                 'sortby' => 'sorting',
                 'tstamp' => 'tstamp',
                 'crdate' => 'crdate',
@@ -203,7 +202,7 @@ class TcaGenerator
                 'editlock' => 'editlock',
                 'versioningWS' => true,
                 'origUid' => 't3_origuid',
-                'hideTable' => true,
+                'hideTable' => !$tableDefinition->isRootTable(),
                 'transOrigPointerField' => 'l10n_parent',
                 'translationSource' => 'l10n_source',
                 'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -223,7 +222,7 @@ class TcaGenerator
             ],
             'types' => [
                 '1' => [
-                    'showitem' => $this->getCollectionTableStandardShowItem($showItems),
+                    'showitem' => $this->getCollectionTableStandardShowItem($tableDefinition->getShowItems()),
                 ],
             ],
             'palettes' => [
@@ -332,8 +331,8 @@ class TcaGenerator
                                 0,
                             ],
                         ],
-                        'foreign_table' => $table,
-                        'foreign_table_where' => 'AND ' . $table . '.pid=###CURRENT_PID### AND ' . $table . '.sys_language_uid IN (-1,0)',
+                        'foreign_table' => $tableDefinition->getTable(),
+                        'foreign_table_where' => 'AND ' . $tableDefinition->getTable() . '.pid=###CURRENT_PID### AND ' . $tableDefinition->getTable() . '.sys_language_uid IN (-1,0)',
                         'default' => 0,
                     ],
                 ],

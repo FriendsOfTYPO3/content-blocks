@@ -23,6 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 final class TableDefinition
 {
     private string $table = '';
+    private bool $isRootTable = false;
     private string $useAsLabel = '';
     /** @var string[] */
     private array $showItems = [];
@@ -41,6 +42,7 @@ final class TableDefinition
         $tableDefinition = $tableDefinition
             ->withTable($table)
             ->withUseAsLabel($definition['useAsLabel'] ?? '')
+            ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withShowItems($definition['showItems'] ?? [])
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
@@ -56,6 +58,11 @@ final class TableDefinition
     public function getTable(): string
     {
         return $this->table;
+    }
+
+    public function isRootTable(): bool
+    {
+        return $this->isRootTable;
     }
 
     public function getUseAsLabel(): string
@@ -97,6 +104,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->table = $table;
+        return $clone;
+    }
+
+    public function withIsRootTable(bool $isRootTable): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->isRootTable = $isRootTable;
         return $clone;
     }
 

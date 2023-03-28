@@ -95,8 +95,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $yaml['useAsLabel'] ?? '';
         $isRootTable = $table === $rootTable;
-        // @todo Enable to create a new root table if table does not exist already.
-        $shouldCreateNewTable = !$isRootTable;
+        // @todo How to define existing tables without hard-coding system tables here?
+        $isExistingTable = $table === 'tt_content';
+        $shouldCreateNewTable = !$isRootTable || !$isExistingTable;
         foreach ($yaml['fields'] as $rootField) {
             $rootFieldType = FieldType::from($rootField['type']);
             if ($rootFieldType === FieldType::LINEBREAK) {
@@ -227,20 +228,27 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'config' => $field,
                     ];
                     $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
-                    // @todo only needed, if overriding existing tables like tt_content.
-                    if ($field['useExistingField'] ?? false) {
+                    // columnsOverrides for reusing existing fields.
+                    if ($isExistingTable && ($field['useExistingField'] ?? false)) {
                         $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
                     }
                 }
 
-                if ($shouldCreateNewTable) {
+                if (!$isRootTable && $this->hasTable($table)) {
                     if ($this->hasTable($table)) {
                         throw new \InvalidArgumentException('A Collection field with the identifier "' . $yaml['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
                     }
                     // useExistingField is not allowed on Collections.
                     $field['useExistingField'] = false;
-                    $tableDefinition['fields'][$identifier] = [
-                        'uniqueIdentifier' => $identifier,
+                }
+
+                if ($shouldCreateNewTable) {
+                    $uniqueColumnName = $isRootTable
+                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
+                        : $identifier;
+                    $tableDefinition['isRootTable'] = $isRootTable;
+                    $tableDefinition['fields'][$uniqueColumnName] = [
+                        'uniqueIdentifier' => $uniqueColumnName,
                         'config' => $field,
                     ];
                 }
@@ -256,7 +264,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 'identifier' => $contentBlock->getName(),
                 'columns' => $columns,
                 'showItems' => $showItems,
-                'overrideColumns' => $overrideColumns, // @todo only needed, if overriding existing tables like tt_content.
+                'overrideColumns' => $overrideColumns,
                 'vendor' => $vendor,
                 'package' => $package,
                 'wizardGroup' => $contentBlock->getYaml()['group'] ?? null,

@@ -794,6 +794,199 @@ class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
+
+        yield 'Content Block creating a new custom root table (not tt_content, generic content type)' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'path' => 'EXT:foo/ContentBlocks/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'foobar' => [
+                    'ctrl' => [
+                        'title' => 'foobar',
+                        'label' => 't3ce_example_text',
+                        'sortby' => 'sorting',
+                        'tstamp' => 'tstamp',
+                        'crdate' => 'crdate',
+                        'delete' => 'deleted',
+                        'editlock' => 'editlock',
+                        'versioningWS' => true,
+                        'origUid' => 't3_origuid',
+                        'hideTable' => false,
+                        'transOrigPointerField' => 'l10n_parent',
+                        'translationSource' => 'l10n_source',
+                        'transOrigDiffSourceField' => 'l10n_diffsource',
+                        'languageField' => 'sys_language_uid',
+                        'enablecolumns' => [
+                            'disabled' => 'hidden',
+                            'starttime' => 'starttime',
+                            'endtime' => 'endtime',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'typeicon_classes' => [
+                            'default' => 'content-blocks',
+                        ],
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
+                        'searchFields' => 't3ce_example_text',
+                    ],
+                    'types' => [
+                        '1' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                        ],
+                    ],
+                    'palettes' => [
+                        'language' => [
+                            'showitem' => '
+                        sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,l18n_parent
+                    ',
+                        ],
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => '
+                        starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
+                        endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
+                        --linebreak--,
+                        fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
+                        --linebreak--,editlock
+                    ',
+                        ],
+                    ],
+                    'columns' => [
+                        'editlock' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        'hidden' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        'fe_group' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectMultipleSideBySide',
+                                'size' => 5,
+                                'maxitems' => 20,
+                                'items' => [
+                                    [
+                                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                                        -1,
+                                    ],
+                                    [
+                                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                                        -2,
+                                    ],
+                                    [
+                                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                                        '--div--',
+                                    ],
+                                ],
+                                'exclusiveKeys' => '-1,-2',
+                                'foreign_table' => 'fe_groups',
+                            ],
+                        ],
+                        'starttime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'endtime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                                'range' => [
+                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
+                                ],
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'sys_language_uid' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
+                            'config' => [
+                                'type' => 'language',
+                            ],
+                        ],
+                        'l10n_parent' => [
+                            'displayCond' => 'FIELD:sys_language_uid:>:0',
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectSingle',
+                                'items' => [
+                                    [
+                                        '',
+                                        0,
+                                    ],
+                                ],
+                                'foreign_table' => 'foobar',
+                                'foreign_table_where' => 'AND foobar.pid=###CURRENT_PID### AND foobar.sys_language_uid IN (-1,0)',
+                                'default' => 0,
+                            ],
+                        ],
+                        'l10n_diffsource' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'sorting' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'foreign_table_parent_uid' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        't3ce_example_text' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
