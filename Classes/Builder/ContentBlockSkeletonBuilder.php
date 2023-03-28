@@ -56,7 +56,7 @@ class ContentBlockSkeletonBuilder
         // create files
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getEditorInterfacePath(),
-            Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10)
+            Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10, 2)
         );
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
