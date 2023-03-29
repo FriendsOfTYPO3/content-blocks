@@ -29,22 +29,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
 {
     /** @var TableDefinition[] */
     private array $definitions = [];
-    /** @var list<string> */
-    private array $customTables = [];
 
-    public function addTable(TableDefinition $tableDefinition, $isCustomTable = false): void
+    public function addTable(TableDefinition $tableDefinition): void
     {
         if (!$this->hasTable($tableDefinition->getTable())) {
             $this->definitions[$tableDefinition->getTable()] = $tableDefinition;
-            if ($isCustomTable) {
-                $this->customTables[] = $tableDefinition->getTable();
-            }
         }
-    }
-
-    public function isCustomTable(TableDefinition $tableDefinition): bool
-    {
-        return in_array($tableDefinition->getTable(), $this->customTables, true);
     }
 
     public function getTable(string $table): TableDefinition
@@ -95,8 +85,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $yaml['useAsLabel'] ?? '';
         $isRootTable = $table === $rootTable;
-        // @todo How to define existing tables without hard-coding system tables here?
-        $isExistingTable = $table === 'tt_content';
+        $isExistingTable = isset($GLOBALS['TCA'][$table]);
         $shouldCreateNewTable = !$isRootTable || !$isExistingTable;
         foreach ($yaml['fields'] as $rootField) {
             $rootFieldType = FieldType::from($rootField['type']);
@@ -160,13 +149,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     'description' => $languagePath->getCurrentPath() . '.description',
                     'showitem' => $paletteShowItems,
                 ];
-                if ($isRootTable) {
-                    $tableDefinitionList[$table]['palettes'][$uniqueRootColumnName] = $palette;
-                    $showItems[] = '--palette--;;' . $uniqueRootColumnName;
-                } else {
-                    $tableDefinition['palettes'][$rootField['identifier']] = $palette;
-                    $showItems[] = '--palette--;;' . $rootField['identifier'];
-                }
+                $paletteIdentifier = $isRootTable ? $uniqueRootColumnName : $rootField['identifier'];
+                $tableDefinition['palettes'][$paletteIdentifier] = $palette;
+                $showItems[] = '--palette--;;' . $paletteIdentifier;
                 $languagePath->popSegment();
             } elseif ($rootFieldType === FieldType::TAB) {
                 if (in_array($rootField['identifier'], $uniqueTabIdentifiers, true)) {
@@ -227,7 +212,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'uniqueIdentifier' => $uniqueColumnName,
                         'config' => $field,
                     ];
-                    $tableDefinitionList[$table]['fields'][$uniqueColumnName] = $fieldArray;
+                    $tableDefinition['fields'][$uniqueColumnName] = $fieldArray;
                     // columnsOverrides for reusing existing fields.
                     if ($isExistingTable && ($field['useExistingField'] ?? false)) {
                         $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
@@ -247,6 +232,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
                         : $identifier;
                     $tableDefinition['isRootTable'] = $isRootTable;
+                    $tableDefinition['isCustomTable'] = true;
                     $tableDefinition['fields'][$uniqueColumnName] = [
                         'uniqueIdentifier' => $uniqueColumnName,
                         'config' => $field,
@@ -257,10 +243,16 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $tableDefinition['showItems'] = $showItems;
         }
 
-        // If this is the root table, we add a brand-new element (content type), with columns, type field ect.
+        // If this is the root table, we add a new content type to the list of elements.
         if ($isRootTable) {
             [$vendor, $package] = explode('/', $contentBlock->getName());
-            $tableDefinitionList[$table]['elements'][] = [
+            $elements = $tableDefinitionList[$table]['elements'] ?? [];
+            $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
+            $typeName = '1';
+            if ($typeField !== null) {
+                $typeName = $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
+            }
+            $elements[] = [
                 'identifier' => $contentBlock->getName(),
                 'columns' => $columns,
                 'showItems' => $showItems,
@@ -270,19 +262,21 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 'wizardGroup' => $contentBlock->getYaml()['group'] ?? null,
                 'icon' => $contentBlock->getIcon(),
                 'iconProvider' => $contentBlock->getIconProvider(),
-                'typeField' => $contentBlock->getYaml()['typeField'] ?? 'CType',
-                'typeName' => $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName()),
+                'typeField' => $typeField,
+                'typeName' => $typeName,
                 'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
             ];
+            $tableDefinition['elements'] = $elements;
         }
 
-        // Collection fields are unique and require always an own table definition, which can't be shared across
-        // other content blocks.
-        if ($shouldCreateNewTable) {
-            $this->addTable(
-                tableDefinition: TableDefinition::createFromTableArray($table, $tableDefinition),
-                isCustomTable: true
-            );
+        // Collection fields are unique and require always an own table definition, which can't be shared across other
+        // content blocks, so they can be added here directly.
+        if ($shouldCreateNewTable && !$isRootTable) {
+            $this->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
+        } else {
+            // Add / merge table definition to the list, so the combined result can be added later to the definition collection.
+            $tableDefinitionList[$table] ??= $tableDefinition;
+            $tableDefinitionList[$table] = array_replace_recursive($tableDefinitionList[$table], $tableDefinition);
         }
 
         return $tableDefinitionList;

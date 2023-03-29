@@ -97,6 +97,8 @@ class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
+        $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
+
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');

@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -966,6 +967,7 @@ class TcaGeneratorTest extends UnitTestCase
      */
     public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
+        $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
         $GLOBALS['TCA']['tt_content']['columns']['bodytext'] = [
             'label' => 'Core bodytext field',
             'config' => [
@@ -980,9 +982,9 @@ class TcaGeneratorTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher());
+        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), new ContentBlockRegistry());
 
-        $tca = $tcaGenerator->generate();
+        $tca = $tcaGenerator->generate($tableDefinitionCollection);
 
         self::assertEquals($expected, $tca);
     }

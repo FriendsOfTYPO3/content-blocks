@@ -24,7 +24,7 @@ class TypeDefinition
 {
     protected string $identifier = '';
     protected string $table = '';
-    protected string $typeField = '';
+    protected ?string $typeField = null;
     protected string|int $typeName = '';
     protected string $label = '';
     protected string $iconProviderClassName = '';
@@ -46,10 +46,6 @@ class TypeDefinition
     {
         if (!isset($array['identifier']) || $array['identifier'] === '') {
             throw new \InvalidArgumentException('Type identifier must not be empty.', 1629292395);
-        }
-
-        if (!isset($array['typeField']) || $array['typeField'] === '') {
-            throw new \InvalidArgumentException('Type field must not be empty.', 1668856783);
         }
 
         if ($table === '') {
@@ -82,7 +78,7 @@ class TypeDefinition
         return $this->table;
     }
 
-    public function getTypeField(): string
+    public function getTypeField(): ?string
     {
         return $this->typeField;
     }
@@ -167,7 +163,7 @@ class TypeDefinition
         return $clone;
     }
 
-    public function withTypeField(string $typeField): static
+    public function withTypeField(?string $typeField): static
     {
         $clone = clone $this;
         $clone->typeField = $typeField;

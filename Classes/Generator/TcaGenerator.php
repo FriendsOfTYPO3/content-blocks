@@ -21,10 +21,14 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -33,27 +37,60 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TcaGenerator
 {
     public function __construct(
-        protected LoaderInterface $loader,
-        protected EventDispatcherInterface $eventDispatcher
+        protected readonly LoaderInterface $loader,
+        protected readonly EventDispatcherInterface $eventDispatcher,
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {
     }
 
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
-        $event->setTca(array_replace_recursive($event->getTca(), $this->generate()));
-        $event->setTca(
-            $this->eventDispatcher->dispatch(
-                new AfterContentBlocksTcaCompilationEvent($event->getTca())
-            )->getTca()
-        );
+        $tableDefinitionCollection = $this->loader->load(false);
+
+        // Use helper methods to add group "Content Blocks" and add the content block to the type item list.
+        // Store backup of current TCA, as the helper methods operate on the global array.
+        $tcaBackup = $GLOBALS['TCA'];
+        $GLOBALS['TCA'] = $event->getTca();
+        foreach ($tableDefinitionCollection as $tableDefinition) {
+            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                // This definition has only one type (the default type "1"). There is no type select to add it to.
+                if ($typeDefinition->getTypeField() === null) {
+                    continue;
+                }
+                if ($typeDefinition instanceof ContentElementDefinition) {
+                    ExtensionManagementUtility::addTcaSelectItemGroup(
+                        table: $typeDefinition->getTable(),
+                        field: $typeDefinition->getTypeField(),
+                        groupId: 'content_blocks',
+                        groupLabel: 'LLL:EXT:content_blocks/Resources/Private/Language/locallang.xlf:content-blocks',
+                        position: 'after:default',
+                    );
+                }
+                ExtensionManagementUtility::addTcaSelectItem(
+                    table: $typeDefinition->getTable(),
+                    field: $typeDefinition->getTypeField(),
+                    item: [
+                        'label' => 'LLL:' . $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage() . '.title',
+                        'value' => $typeDefinition->getTypeName(),
+                        'icon' => $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
+                        'group' => $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',
+                    ]
+                );
+            }
+        }
+        $event->setTca($GLOBALS['TCA']);
+        // Restore backup, see comment above.
+        $GLOBALS['TCA'] = $tcaBackup;
+
+        $event->setTca(array_replace_recursive($event->getTca(), $this->generate($tableDefinitionCollection)));
+        $event->setTca($this->eventDispatcher->dispatch(new AfterContentBlocksTcaCompilationEvent($event->getTca()))->getTca());
     }
 
-    public function generate(): array
+    public function generate(TableDefinitionCollection $tableDefinitionCollection): array
     {
-        $tableDefinitionCollection = $this->loader->load(false);
         $tca = [];
         foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
-            if ($tableDefinitionCollection->isCustomTable($tableDefinition)) {
+            if ($tableDefinition->isCustomTable()) {
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition);
             }
             foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
@@ -86,8 +123,10 @@ class TcaGenerator
                         'showitem' => $this->getGenericStandardShowItem($typeDefinition->getShowItems()),
                     ];
                 }
-                $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-                $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
+                if ($typeDefinition->getTypeField() !== null) {
+                    $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
+                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
+                }
             }
             $tca[$tableName]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
         }

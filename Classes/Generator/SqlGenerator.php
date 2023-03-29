@@ -46,7 +46,7 @@ class SqlGenerator
                 }
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
             }
-            if (!$tableDefinition->isRootTable() && $tableDefinitionCollection->isCustomTable($tableDefinition)) {
+            if (!$tableDefinition->isRootTable() && $tableDefinition->isCustomTable()) {
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`foreign_table_parent_uid` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (foreign_table_parent_uid));';
             }
         }

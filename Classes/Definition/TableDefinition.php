@@ -24,6 +24,7 @@ final class TableDefinition
 {
     private string $table = '';
     private bool $isRootTable = false;
+    private bool $isCustomTable = false;
     private string $useAsLabel = '';
     /** @var string[] */
     private array $showItems = [];
@@ -43,6 +44,7 @@ final class TableDefinition
             ->withTable($table)
             ->withUseAsLabel($definition['useAsLabel'] ?? '')
             ->withIsRootTable($definition['isRootTable'] ?? false)
+            ->withIsCustomTable($definition['isCustomTable'] ?? false)
             ->withShowItems($definition['showItems'] ?? [])
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
@@ -63,6 +65,11 @@ final class TableDefinition
     public function isRootTable(): bool
     {
         return $this->isRootTable;
+    }
+
+    public function isCustomTable(): bool
+    {
+        return $this->isCustomTable;
     }
 
     public function getUseAsLabel(): string
@@ -111,6 +118,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->isRootTable = $isRootTable;
+        return $clone;
+    }
+
+    public function withIsCustomTable(bool $isCustomTable): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->isCustomTable = $isCustomTable;
         return $clone;
     }
 

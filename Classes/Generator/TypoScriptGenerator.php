@@ -18,8 +18,12 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -27,7 +31,30 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class TypoScriptGenerator
 {
-    public static function generate(ContentElementDefinition $contentElementDefinition): string
+    public function __construct(
+        protected readonly TableDefinitionCollection $tableDefinitionCollection,
+        protected readonly IconRegistry $iconRegistry,
+    ) {
+    }
+
+    public function __invoke(BootCompletedEvent $event): void
+    {
+        foreach ($this->tableDefinitionCollection as $tableDefinition) {
+            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                if (!$typeDefinition instanceof ContentElementDefinition) {
+                    continue;
+                }
+                $this->iconRegistry->registerIcon(
+                    identifier: $typeDefinition->getWizardIconIdentifier(),
+                    iconProviderClassName: $typeDefinition->getIconProviderClassName(),
+                    options: ['source' => $typeDefinition->getWizardIconPath()],
+                );
+                ExtensionManagementUtility::addTypoScriptSetup($this->generate($typeDefinition));
+            }
+        }
+    }
+
+    protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
         $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolderPath();
