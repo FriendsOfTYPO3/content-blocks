@@ -970,11 +970,6 @@ class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'passthrough',
                             ],
                         ],
-                        'foreign_table_parent_uid' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         't3ce_example_text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
