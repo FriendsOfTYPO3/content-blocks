@@ -28,6 +28,7 @@ final class ContentElementDefinition extends TypeDefinition
     private bool $saveAndClose = false;
     private string $wizardGroup = '';
     private string $wizardIconPath = '';
+    private string $iconProviderClassName = '';
 
     public static function createFromArray(array $array, string $table = 'tt_content'): static
     {
@@ -37,8 +38,9 @@ final class ContentElementDefinition extends TypeDefinition
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
-            ->withWizardGroup($array['wizardGroup'] ?? 'common')
-            ->withWizardIconPath($array['icon'] ?? '');
+            ->withWizardGroup($array['wizardGroup'])
+            ->withWizardIconPath($array['icon'] ?? '')
+            ->withIconProviderClassName($array['iconProvider'] ?? '');
     }
 
     public function getDescription(): string
@@ -64,6 +66,11 @@ final class ContentElementDefinition extends TypeDefinition
     public function getWizardIconPath(): string
     {
         return $this->wizardIconPath;
+    }
+
+    public function getIconProviderClassName(): string
+    {
+        return $this->iconProviderClassName;
     }
 
     public function getWizardIconIdentifier(): string
@@ -115,6 +122,13 @@ final class ContentElementDefinition extends TypeDefinition
     {
         $clone = clone $this;
         $clone->wizardIconPath = $icon;
+        return $clone;
+    }
+
+    public function withIconProviderClassName(string $iconProvider): self
+    {
+        $clone = clone $this;
+        $clone->iconProviderClassName = $iconProvider;
         return $clone;
     }
 }

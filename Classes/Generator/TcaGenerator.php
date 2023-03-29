@@ -122,9 +122,10 @@ class TcaGenerator
                     $typeDefinitionArray = [
                         'showitem' => $this->getGenericStandardShowItem($typeDefinition->getShowItems()),
                     ];
+                    $tca[$tableName]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
                 }
+                $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
                 if ($typeDefinition->getTypeField() !== null) {
-                    $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
                     $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
                 }
             }
@@ -176,8 +177,6 @@ class TcaGenerator
     protected function getGenericStandardShowItem(array $showItems): string
     {
         $parts = [
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
-            '--palette--;;general',
             implode(',', $showItems),
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
             '--palette--;;language',
@@ -187,14 +186,6 @@ class TcaGenerator
         ];
 
         return implode(',', $parts);
-    }
-
-    protected function getCollectionTableStandardShowItem(array $showItems): string
-    {
-        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,';
-        $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
-        $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
-        return $generalTab . implode(',', $showItems) . $appendLanguageTab . $appendAccessTab;
     }
 
     /**
@@ -251,17 +242,8 @@ class TcaGenerator
                 'endtime' => 'endtime',
                 'fe_group' => 'fe_group',
             ],
-            'typeicon_classes' => [
-                'default' => 'content-blocks',
-            ],
             'security' => [
                 'ignorePageTypeRestriction' => true,
-            ],
-        ];
-
-        $types = [
-            '1' => [
-                'showitem' => $this->getCollectionTableStandardShowItem($tableDefinition->getShowItems()),
             ],
         ];
 
@@ -396,7 +378,6 @@ class TcaGenerator
 
         return [
             'ctrl' => $ctrl,
-            'types' => $types,
             'palettes' => $palettes,
             'columns' => $columns,
         ];

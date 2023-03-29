@@ -27,7 +27,6 @@ class TypeDefinition
     protected ?string $typeField = null;
     protected string|int $typeName = '';
     protected string $label = '';
-    protected string $iconProviderClassName = '';
     /** @var string[] */
     protected array $columns = [];
     /** @var string[] */
@@ -62,7 +61,6 @@ class TypeDefinition
             ->withColumns($array['columns'] ?? [])
             ->withShowItems($array['showItems'] ?? [])
             ->withOverrideColumns($array['overrideColumns'] ?? [])
-            ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
             ->withPriority($array['priority'] ?? '');
@@ -106,11 +104,6 @@ class TypeDefinition
     public function getLabel(): string
     {
         return $this->label;
-    }
-
-    public function getIconProviderClassName(): string
-    {
-        return $this->iconProviderClassName;
     }
 
     /**
@@ -174,13 +167,6 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->label = $label;
-        return $clone;
-    }
-
-    public function withIconProviderClassName(string $iconProvider): static
-    {
-        $clone = clone $this;
-        $clone->iconProviderClassName = $iconProvider;
         return $clone;
     }
 

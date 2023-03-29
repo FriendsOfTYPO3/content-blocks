@@ -244,30 +244,30 @@ final class TableDefinitionCollection implements \IteratorAggregate
         }
 
         // If this is the root table, we add a new content type to the list of elements.
-        if ($isRootTable) {
-            [$vendor, $package] = explode('/', $contentBlock->getName());
-            $elements = $tableDefinitionList[$table]['elements'] ?? [];
-            $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
-            $typeName = '1';
-            if ($typeField !== null) {
-                $typeName = $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
-            }
-            $elements[] = [
-                'identifier' => $contentBlock->getName(),
-                'columns' => $columns,
-                'showItems' => $showItems,
-                'overrideColumns' => $overrideColumns,
-                'vendor' => $vendor,
-                'package' => $package,
-                'wizardGroup' => $contentBlock->getYaml()['group'] ?? null,
-                'icon' => $contentBlock->getIcon(),
-                'iconProvider' => $contentBlock->getIconProvider(),
-                'typeField' => $typeField,
-                'typeName' => $typeName,
-                'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
-            ];
-            $tableDefinition['elements'] = $elements;
+        [$vendor, $package] = explode('/', $contentBlock->getName());
+        $elements = $tableDefinitionList[$table]['elements'] ?? [];
+        $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
+        $typeName = $typeField === null
+            ? '1'
+            : $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
+        $element = [
+            'identifier' => $contentBlock->getName(),
+            'columns' => $columns,
+            'showItems' => $showItems,
+            'overrideColumns' => $overrideColumns,
+            'vendor' => $vendor,
+            'package' => $package,
+            'iconProvider' => $contentBlock->getIconProvider(),
+            'typeField' => $typeField,
+            'typeName' => $typeName,
+            'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
+        ];
+        if ($table === 'tt_content') {
+            $element['wizardGroup'] = $contentBlock->getYaml()['group'] ?? 'common';
+            $element['icon'] = $contentBlock->getIcon();
         }
+        $elements[] = $element;
+        $tableDefinition['elements'] = $elements;
 
         // Collection fields are unique and require always an own table definition, which can't be shared across other
         // content blocks, so they can be added here directly.
