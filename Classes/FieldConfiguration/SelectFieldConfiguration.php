@@ -33,7 +33,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     private string $MM = '';
     private bool $MM_hasUidField = false;
     private string $MM_opposite_field = '';
-    private array $MM_insert_fields = [];
     private array $MM_match_fields = [];
     private string $MM_oppositeUsage = '';
     private string $MM_table_where = '';
@@ -75,7 +74,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         $self->MM = (string)($properties['MM'] ?? $self->MM);
         $self->MM_hasUidField = (bool)($properties['MM_hasUidField'] ?? $self->MM_hasUidField);
         $self->MM_opposite_field = (string)($properties['MM_opposite_field'] ?? $self->MM_opposite_field);
-        $self->MM_insert_fields = (array)($properties['MM_insert_fields'] ?? $self->MM_insert_fields);
         $self->MM_match_fields = (array)($properties['MM_match_fields'] ?? $self->MM_match_fields);
         $self->MM_oppositeUsage = (string)($properties['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
         $self->MM_table_where = (string)($properties['MM_table_where'] ?? $self->MM_table_where);
@@ -130,9 +128,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->MM_opposite_field !== '') {
             $config['MM_opposite_field'] = $this->MM_opposite_field;
-        }
-        if ($this->MM_insert_fields !== []) {
-            $config['MM_insert_fields'] = $this->MM_insert_fields;
         }
         if ($this->MM_match_fields !== []) {
             $config['MM_match_fields'] = $this->MM_match_fields;
