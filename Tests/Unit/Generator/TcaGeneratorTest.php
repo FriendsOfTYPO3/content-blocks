@@ -427,9 +427,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'palettes' => [
                         'language' => [
-                            'showitem' => '
-                        sys_language_uid,l18n_parent
-                    ',
+                            'showitem' => 'sys_language_uid,l18n_parent',
                         ],
                         'hidden' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
@@ -437,13 +435,7 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'access' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                            'showitem' => '
-                        starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
-                        endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
-                        --linebreak--,
-                        fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
-                        --linebreak--,editlock
-                    ',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
                         ],
                         'palette_inline' => [
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.palettes.palette_inline.label',
@@ -637,9 +629,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'palettes' => [
                         'language' => [
-                            'showitem' => '
-                        sys_language_uid,l18n_parent
-                    ',
+                            'showitem' => 'sys_language_uid,l18n_parent',
                         ],
                         'hidden' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
@@ -647,13 +637,7 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'access' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                            'showitem' => '
-                        starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
-                        endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
-                        --linebreak--,
-                        fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
-                        --linebreak--,editlock
-                    ',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
                         ],
                     ],
                     'columns' => [
@@ -851,9 +835,7 @@ class TcaGeneratorTest extends UnitTestCase
                     ],
                     'palettes' => [
                         'language' => [
-                            'showitem' => '
-                        sys_language_uid,l18n_parent
-                    ',
+                            'showitem' => 'sys_language_uid,l18n_parent',
                         ],
                         'hidden' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
@@ -861,13 +843,7 @@ class TcaGeneratorTest extends UnitTestCase
                         ],
                         'access' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                            'showitem' => '
-                        starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
-                        endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
-                        --linebreak--,
-                        fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
-                        --linebreak--,editlock
-                    ',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
                         ],
                     ],
                     'columns' => [

@@ -228,9 +228,7 @@ class TcaGenerator
 
         $palettes = [];
         $palettes['language'] = [
-            'showitem' => '
-                        sys_language_uid,l18n_parent
-                    ',
+            'showitem' => 'sys_language_uid,l18n_parent',
         ];
         $palettes['hidden'] = [
             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
@@ -238,13 +236,14 @@ class TcaGenerator
         ];
         $palettes['access'] = [
             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-            'showitem' => '
-                        starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
-                        endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
-                        --linebreak--,
-                        fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
-                        --linebreak--,editlock
-                    ',
+            'showitem' => implode(',', [
+                'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel',
+                'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
+                '--linebreak--',
+                'fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel',
+                '--linebreak--',
+                'editlock',
+            ]),
         ];
 
         $columns = [];
