@@ -2,7 +2,6 @@ group: common
 name: bar/foo
 fields:
   - identifier: image
-    type: File
     useExistingField: true
   - identifier: collection
     type: Collection

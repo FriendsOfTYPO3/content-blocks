@@ -79,8 +79,7 @@ useExistingField
    :sep:`|`
 
    If set to true, the identifier is treated as an existing field from the Core
-   or your own defined field. **Important**: Make sure `type` matches the actual
-   type in TCA.
+   or your own defined field.
 
 alternativeSql
    :sep:`|` :aspect:`Required:` false

@@ -88,7 +88,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $isExistingTable = isset($GLOBALS['TCA'][$table]);
         $shouldCreateNewTable = !$isRootTable || !$isExistingTable;
         foreach ($yaml['fields'] as $rootField) {
-            $rootFieldType = FieldType::from($rootField['type']);
+            $rootFieldType = ($rootField['useExistingField'] ?? false)
+                ? TypeResolver::resolve($rootField['identifier'], $table)
+                : FieldType::from($rootField['type']);
             if ($rootFieldType === FieldType::LINEBREAK) {
                 throw new \InvalidArgumentException(
                     'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
@@ -117,7 +119,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $fields = [];
                 $paletteShowItems = [];
                 foreach ($rootField['fields'] as $paletteField) {
-                    $paletteFieldType = FieldType::from($paletteField['type']);
+                    $paletteFieldType = ($paletteField['useExistingField'] ?? false)
+                        ? TypeResolver::resolve($paletteField['identifier'], $table)
+                        : FieldType::from($paletteField['type']);
                     if ($paletteFieldType === FieldType::PALETTE) {
                         throw new \InvalidArgumentException(
                             'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootField['identifier'] . '" in content block "' . $contentBlock->getName() . '".',
@@ -178,6 +182,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
             foreach ($fields as $field) {
                 $identifier = $field['identifier'];
+                $fieldType = ($field['useExistingField'] ?? false)
+                    ? TypeResolver::resolve($identifier, $table)
+                    : FieldType::from($field['type']);
                 $languagePath->addPathSegment($identifier);
                 if (in_array($identifier, $uniqueIdentifiers, true)) {
                     throw new \InvalidArgumentException(
@@ -188,7 +195,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $uniqueIdentifiers[] = $identifier;
 
                 // Recursive call for Collection (inline) fields.
-                if (FieldType::from($field['type']) === FieldType::COLLECTION && !empty($field['fields'])) {
+                if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
                     $inlineTable = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier);
                     $field['properties']['foreign_table'] = $inlineTable;
                     $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
@@ -211,6 +218,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $fieldArray = [
                         'uniqueIdentifier' => $uniqueColumnName,
                         'config' => $field,
+                        'type' => $fieldType,
                     ];
                     $tableDefinition['fields'][$uniqueColumnName] = $fieldArray;
                     // columnsOverrides for reusing existing fields.
@@ -236,6 +244,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $tableDefinition['fields'][$uniqueColumnName] = [
                         'uniqueIdentifier' => $uniqueColumnName,
                         'config' => $field,
+                        'type' => $fieldType,
                     ];
                 }
                 $languagePath->popSegment();

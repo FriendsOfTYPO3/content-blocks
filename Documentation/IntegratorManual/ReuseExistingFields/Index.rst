@@ -68,15 +68,12 @@ For example, if you want to use the existing column :sql:`bodytext`, or
     fields:
         -
             identifier: header
-            type: Text
             useExistingField: true
         -
             identifier: bodytext
-            type: Textarea
             useExistingField: true
             properties:
                 enableRichtext: true
         -
             identifier: image
-            type: File
             useExistingField: true

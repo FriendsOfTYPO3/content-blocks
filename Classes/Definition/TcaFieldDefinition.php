@@ -39,7 +39,7 @@ final class TcaFieldDefinition
         if ($uniqueIdentifier === '') {
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty.', 1629277138);
         }
-        if (!isset($array['config']['type'])) {
+        if (!($array['type'] ?? null) instanceof FieldType) {
             throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty.', 1629277139);
         }
 
@@ -51,7 +51,7 @@ final class TcaFieldDefinition
             ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'] ?? '')
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
-            ->withFieldConfiguration(FieldType::from($array['config']['type'])->getFieldConfiguration($array['config']));
+            ->withFieldConfiguration($array['type']->getFieldConfiguration($array['config']));
     }
 
     public function getFieldType(): FieldType

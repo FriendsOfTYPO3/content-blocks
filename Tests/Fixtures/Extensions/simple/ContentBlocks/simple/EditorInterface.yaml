@@ -5,9 +5,7 @@ fields:
     type: Palette
     fields:
       - identifier: header
-        type: Text
         useExistingField: true
       - type: Linebreak
       - identifier: bodytext
-        type: Textarea
         useExistingField: true
