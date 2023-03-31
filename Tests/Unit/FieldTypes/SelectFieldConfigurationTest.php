@@ -35,9 +35,6 @@ class SelectFieldConfigurationTest extends UnitTestCase
                     'MM' => 'foo',
                     'MM_hasUidField' => 1,
                     'MM_opposite_field' => 'foo',
-                    'MM_insert_fields' => [
-                        'foo' => 'bar',
-                    ],
                     'MM_match_fields' => [
                         'foo' => 'bar',
                     ],
@@ -88,9 +85,6 @@ class SelectFieldConfigurationTest extends UnitTestCase
                     'MM' => 'foo',
                     'MM_hasUidField' => true,
                     'MM_opposite_field' => 'foo',
-                    'MM_insert_fields' => [
-                        'foo' => 'bar',
-                    ],
                     'MM_match_fields' => [
                         'foo' => 'bar',
                     ],
@@ -141,7 +135,6 @@ class SelectFieldConfigurationTest extends UnitTestCase
                     'MM' => '',
                     'MM_hasUidField' => 0,
                     'MM_opposite_field' => '',
-                    'MM_insert_fields' => [],
                     'MM_match_fields' => [],
                     'MM_oppositeUsage' => '',
                     'MM_table_where' => '',
