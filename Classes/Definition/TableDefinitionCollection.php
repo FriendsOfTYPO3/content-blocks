@@ -228,11 +228,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
 
                 if (!$isRootTable && $this->hasTable($table)) {
-                    if ($this->hasTable($table)) {
-                        throw new \InvalidArgumentException('A Collection field with the identifier "' . $yaml['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
-                    }
-                    // useExistingField is not allowed on Collections.
-                    $field['useExistingField'] = false;
+                    throw new \InvalidArgumentException('A Collection field with the identifier "' . $yaml['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
                 }
 
                 if ($shouldCreateNewTable) {
