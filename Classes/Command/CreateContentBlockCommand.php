@@ -81,7 +81,7 @@ class CreateContentBlockCommand extends Command
                     1678781014
                 );
             }
-            $basePath = $resolvedPackage->getPackagePath();
+            $basePath = $resolvedPackage->getPackagePath() . ContentBlockPathUtility::getSubDirectoryPath();
         } else {
             $io = new SymfonyStyle($input, $output);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $availablePackages));
