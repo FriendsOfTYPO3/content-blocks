@@ -23,7 +23,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class FileFieldConfigurationTest extends UnitTestCase
 {
-    public function getTcaReturnsExpectedTcaDataProvider(): iterable
+    public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
         yield 'truthy values' => [
             'config' => [
@@ -143,7 +143,7 @@ class FileFieldConfigurationTest extends UnitTestCase
         self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
-    public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
+    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
         yield 'default integer column' => [
             'uniqueColumnName' => 'cb_example_myText',

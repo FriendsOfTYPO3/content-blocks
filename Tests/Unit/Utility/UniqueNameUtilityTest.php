@@ -22,7 +22,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class UniqueNameUtilityTest extends UnitTestCase
 {
-    public function contentBlockNameToTypeIdentifierTestDataProvider(): iterable
+    public static function contentBlockNameToTypeIdentifierTestDataProvider(): iterable
     {
         yield 'simple name' => [
             'contentBlockName' => 'bar/foo',
@@ -44,7 +44,7 @@ class UniqueNameUtilityTest extends UnitTestCase
         self::assertSame($expected, UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlockName));
     }
 
-    public function createUniqueColumnNameTestDataProvider(): iterable
+    public static function createUniqueColumnNameTestDataProvider(): iterable
     {
         yield 'simple name' => [
             'contentBlockName' => 'bar/foo',

@@ -23,7 +23,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TableDefinitionCollectionTest extends UnitTestCase
 {
-    public function twoCollectionsWithTheSameIdentifierRaiseAnExceptionDataProvider(): iterable
+    public static function twoCollectionsWithTheSameIdentifierRaiseAnExceptionDataProvider(): iterable
     {
         yield 'two collections with the same identifier' => [
             'contentBlocks' => [
@@ -132,7 +132,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         self::assertNull($contentElementDefinition);
     }
 
-    public function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
+    public static function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
     {
         yield 'two collections with the same identifier' => [
             'contentBlocks' => [
@@ -176,7 +176,7 @@ class TableDefinitionCollectionTest extends UnitTestCase
         TableDefinitionCollection::createFromArray($contentBlocks);
     }
 
-    public function notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider(): iterable
+    public static function notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider(): iterable
     {
         yield 'two collections with the same identifier' => [
             'contentBlocks' => [

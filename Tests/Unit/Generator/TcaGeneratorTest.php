@@ -28,7 +28,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TcaGeneratorTest extends UnitTestCase
 {
-    public function checkTcaFieldTypesDataProvider(): iterable
+    public static function checkTcaFieldTypesDataProvider(): iterable
     {
         yield 'Two simple content block create two types and two columns in tt_content table' => [
             'contentBlocks' => [

@@ -22,7 +22,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class ReferenceFieldConfigurationTest extends UnitTestCase
 {
-    public function getTcaReturnsExpectedTcaDataProvider(): iterable
+    public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
         yield 'truthy values' => [
             'config' => [
@@ -161,7 +161,7 @@ class ReferenceFieldConfigurationTest extends UnitTestCase
         self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
     }
 
-    public function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
+    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',

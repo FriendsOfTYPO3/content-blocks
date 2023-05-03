@@ -35,7 +35,7 @@ class TranslateViewHelperTest extends FunctionalTestCase
         'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
     ];
 
-    public function renderReturnsStringDataProvider(): array
+    public static function renderReturnsStringDataProvider(): array
     {
         return [
             'fallback to default attribute for not existing label' => [

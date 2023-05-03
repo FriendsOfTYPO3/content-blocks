@@ -25,7 +25,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class SqlGeneratorTest extends UnitTestCase
 {
-    public function generateReturnsExpectedSqlStatementsDataProvider(): iterable
+    public static function generateReturnsExpectedSqlStatementsDataProvider(): iterable
     {
         yield 'simple fields in tt_content table' => [
             'array' => [
