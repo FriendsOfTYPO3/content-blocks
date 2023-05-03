@@ -41,6 +41,11 @@ fields:
     properties:
       allowed: pages
       MM: block_pages_mm
+  - identifier: folder
+    type: Folder
+  - identifier: folder_recursive
+    type: Folder
+    recursive: true
   - identifier: palette
     type: Palette
     fields:

@@ -54,7 +54,7 @@ class RelationResolver
         $data = $record[$recordIdentifier];
 
         if ($fieldType === FieldType::FILE) {
-            $fileCollector = new FileCollector();
+            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
             return $fileCollector->getFiles();
         }
@@ -69,6 +69,13 @@ class RelationResolver
 
         if ($fieldType === FieldType::REFERENCE) {
             return $this->processReference($tcaFieldDefinition, $table, $record);
+        }
+
+        if ($fieldType === FieldType::FOLDER) {
+            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
+            $folders = GeneralUtility::trimExplode(',', (string)$data, true);
+            $fileCollector->addFilesFromFolders($folders, $tcaFieldDefinition->getFieldConfiguration()->isRecursive());
+            return $fileCollector->getFiles();
         }
 
         if ($fieldType === FieldType::SELECT) {

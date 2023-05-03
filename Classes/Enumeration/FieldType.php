@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinebreakFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
@@ -53,6 +54,7 @@ enum FieldType: string
     case RADIO = 'Radio';
     case SELECT = 'Select';
     case REFERENCE = 'Reference';
+    case FOLDER = 'Folder';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
     case PALETTE = 'Palette';
@@ -74,6 +76,7 @@ enum FieldType: string
             self::RADIO => 'radio',
             self::SELECT => 'select',
             self::REFERENCE => 'group',
+            self::FOLDER => 'folder',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
             self::PALETTE, self::LINEBREAK, self::TAB => '',
@@ -105,6 +108,7 @@ enum FieldType: string
             self::RADIO => RadioFieldConfiguration::createFromArray($config),
             self::SELECT => SelectFieldConfiguration::createFromArray($config),
             self::REFERENCE => ReferenceFieldConfiguration::createFromArray($config),
+            self::FOLDER => FolderFieldConfiguration::createFromArray($config),
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             self::PALETTE => new PaletteFieldConfiguration(),

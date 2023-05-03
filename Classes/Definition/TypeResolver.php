@@ -40,6 +40,7 @@ class TypeResolver
             'radio' => FieldType::RADIO,
             'check' => FieldType::CHECKBOX,
             'group' => FieldType::REFERENCE,
+            'folder' => FieldType::FOLDER,
             'file' => FieldType::FILE,
             default => throw new \InvalidArgumentException('Field type "' . $tca['config']['type'] . '" is either not implemented or cannot be shared in Content Blocks.', 1680110918)
         };

@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Functional\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderFactory;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -30,6 +31,10 @@ class RelationResolverTest extends FunctionalTestCase
 
     protected array $testExtensionsToLoad = [
         'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
+    ];
+
+    protected array $pathsToProvideInTestInstance = [
+        'typo3/sysext/content_blocks/Tests/Fixtures/TestFolder/' => 'fileadmin/',
     ];
 
     /**
@@ -52,6 +57,51 @@ class RelationResolverTest extends FunctionalTestCase
 
         self::assertCount(1, $result);
         self::assertInstanceOf(FileReference::class, $result[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveFilesFromFolder(): void
+    {
+        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/folder_files.csv');
+
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_folder');
+        $dummyRecord = [
+            'uid' => 1,
+            'foo_bar_folder' => '1:/',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(1, $result);
+        self::assertInstanceOf(File::class, $result[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveFilesFromFolderRecursive(): void
+    {
+        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/folder_files.csv');
+
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_folder_recursive');
+        $dummyRecord = [
+            'uid' => 1,
+            'foo_bar_folder_recursive' => '1:/',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(2, $result);
+        self::assertInstanceOf(File::class, $result[0]);
+        self::assertInstanceOf(File::class, $result[1]);
     }
 
     /**

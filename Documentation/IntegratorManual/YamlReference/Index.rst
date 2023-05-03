@@ -107,6 +107,7 @@ Field types
     DateTime/Index
     Email/Index
     File/Index
+    Folder/Index
     Linebreak/Index
     Link/Index
     Number/Index
