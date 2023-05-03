@@ -17,7 +17,7 @@ Properties
 
 .. rst-class:: dl-parameters
 
-relationship
+allowed
    :sep:`|` :aspect:`Required:` true
    :sep:`|` :aspect:`Type:` string (table name, comma-separated)
    :sep:`|`
