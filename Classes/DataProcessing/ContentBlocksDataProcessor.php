@@ -50,7 +50,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
-            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $processedData['data'], 'tt_content');
+            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $processedData['data'], 'tt_content');
         }
 
         return array_merge($processedData, $contentBlockData);

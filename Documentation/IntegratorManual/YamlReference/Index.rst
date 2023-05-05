@@ -44,6 +44,46 @@ priority
    loaded before lower ones. This affects e.g. the order in the "New Content
    Element Wizard".
 
+table
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` tt_content
+   :sep:`|`
+
+   It is possible to create a new content types with another table. This is
+   especially useful if you want e.g. to store contacts or similar in a storage
+   folder and use them in different places. These won't create a new content
+   element as with tt_content types.
+
+typeField
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` CType
+   :sep:`|`
+
+   The field to use as the type switch. Should be a type Select field. Useful in
+   combination with another :yaml:`table`.
+
+typeName
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` 1 or automatically generated
+   :sep:`|`
+
+   The identifier of the new content type. It is automatically generated from
+   the name, if not defined manually.
+
+prefixFields
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   By default, all fields are prefixed with the name of the content block to
+   prevent collisions. In order to better reuse fields between content blocks,
+   it can be useful to deactivate this option. Read more about
+   :ref:`reusing fields here <cb_reuse_existing_fields>`.
+
 Field definitions
 =================
 

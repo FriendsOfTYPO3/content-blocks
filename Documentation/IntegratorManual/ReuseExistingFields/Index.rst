@@ -6,14 +6,17 @@
 Reuse existing fields
 =====================
 
-It is possible to reuse already existing fields by using the `useExistingField`
-flag. Currently you can reuse only the standard core fields. Even when reusing
-an existing field at least the type of that field is still required. However, it
-is possible to extend existing fields with your own properties. While it's
-possible to reuse standard core fields with the `useExistingField` flag, it's
-not allowed on :ref:`collections <field_type_collection>`. We highly recommend
-to use the header field this way, because it is used for the title on different
-places in the backend.
+It's possible to reuse already existing fields by using the :yaml:`useExistingField`
+flag. By doing so, you can extend existing fields with your own properties on a
+per element level. It is highly recommend to use the `header` field this way,
+because it is used for the title on different places in the backend.
+
+Reusing fields between different Content Blocks is only possible, if the option
+:yaml:`prefixFields: false` is turned off. As soon as the :yaml:`identifier`
+is the same, the field will only be generated once. Be careful to define the
+same :yaml:`type` for the field. :yaml:`properties` can be overridden on a per
+element level the same way as with core fields. Here it is not needed to define
+:yaml:`useExistingField`.
 
 It's recommended to use existing fields whenever possible instead of creating
 new ones. This also avoids the risk of the :ref:`"Row size too large" <row-size-too-large>`

@@ -56,11 +56,8 @@ final class ColorFieldConfiguration implements FieldConfigurationInterface
         return $self;
     }
 
-    public function getTca(string $languagePath, bool $useExistingField): array
+    public function getTca(string $languagePath): array
     {
-        if (!$useExistingField) {
-            $tca['exclude'] = true;
-        }
         $tca['label'] = $languagePath . '.label';
         $tca['description'] = $languagePath . '.description';
         $config['type'] = $this->fieldType->getTcaType();

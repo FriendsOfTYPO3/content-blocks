@@ -36,6 +36,27 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class TcaGenerator
 {
+    /**
+     * These fields are required for automatic default SQL schema generation
+     * or have to be otherwise the same for each field. Thus, these fields
+     * can't be overridden through type overrides.
+     */
+    protected array $nonOverridableOptions = [
+        'type',
+        'relationship',
+        'dbType',
+        'nullable',
+        'MM',
+        'MM_opposite_field',
+        'MM_hasUidField',
+        'MM_oppositeUsage',
+        'allowed',
+        'foreign_table',
+        'foreign_field',
+        'foreign_table_field',
+        'foreign_match_fields',
+    ];
+
     public function __construct(
         protected readonly LoaderInterface $loader,
         protected readonly EventDispatcherInterface $eventDispatcher,
@@ -54,13 +75,13 @@ class TcaGenerator
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 // This definition has only one type (the default type "1"). There is no type select to add it to.
-                if ($typeDefinition->getTypeField() === null) {
+                if ($tableDefinition->getTypeField() === null) {
                     continue;
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     ExtensionManagementUtility::addTcaSelectItemGroup(
                         table: $typeDefinition->getTable(),
-                        field: $typeDefinition->getTypeField(),
+                        field: $tableDefinition->getTypeField(),
                         groupId: 'content_blocks',
                         groupLabel: 'LLL:EXT:content_blocks/Resources/Private/Language/locallang.xlf:content-blocks',
                         position: 'after:default',
@@ -68,7 +89,7 @@ class TcaGenerator
                 }
                 ExtensionManagementUtility::addTcaSelectItem(
                     table: $typeDefinition->getTable(),
-                    field: $typeDefinition->getTypeField(),
+                    field: $tableDefinition->getTypeField(),
                     item: [
                         'label' => 'LLL:' . $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage() . '.title',
                         'value' => $typeDefinition->getTypeName(),
@@ -97,16 +118,33 @@ class TcaGenerator
                 $tca[$tableName]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
             }
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                if (!$column->useExistingField()) {
+                // Fields on root tables are defined with minimal setup. Actual configuration goes into type overrides.
+                // But only, if a custom typeField is defined.
+                if ($tableDefinition->isRootTable() && !$column->useExistingField() && $tableDefinition->getTypeField() !== null) {
+                    foreach ($this->nonOverridableOptions as $option) {
+                        if (array_key_exists($option, $column->getTca()['config'])) {
+                            $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $column->getTca()['config'][$option];
+                        }
+                    }
+                }
+                // Non-root tables should not be able to reuse fields. They can only be reused as a whole.
+                // Also, root tables which didn't define a custom typeField get the full TCA.
+                if (!$tableDefinition->isRootTable() || $tableDefinition->getTypeField() === null) {
                     $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
+                }
+                // Newly created fields are enabled to be configured in user permissions by default.
+                if (!$column->useExistingField()) {
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['exclude'] = true;
                 }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $columnsOverrides = [];
                 foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
                     $overrideTca = $overrideColumn->getTca();
-                    unset($overrideTca['config']['type']);
-                    $columnsOverrides[$overrideColumn->getIdentifier()] = $overrideTca;
+                    foreach ($this->nonOverridableOptions as $option) {
+                        unset($overrideTca['config'][$option]);
+                    }
+                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideTca;
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
@@ -125,7 +163,7 @@ class TcaGenerator
                     $tca[$tableName]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
                 }
                 $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-                if ($typeDefinition->getTypeField() !== null) {
+                if ($tableDefinition->getTypeField() !== null) {
                     $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
                 }
             }

@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -39,7 +40,7 @@ class RelationResolver
     ) {
     }
 
-    public function processField(TcaFieldDefinition $tcaFieldDefinition, array $record, string $table): mixed
+    public function processField(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, array $record, string $table): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
         $recordIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
@@ -60,15 +61,15 @@ class RelationResolver
         }
 
         if ($fieldType === FieldType::COLLECTION) {
-            return $this->processCollection($table, $record, $tcaFieldDefinition);
+            return $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition);
         }
 
         if ($fieldType === FieldType::CATEGORY) {
-            return $this->processCategory($tcaFieldDefinition, $table, $record);
+            return $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
 
         if ($fieldType === FieldType::REFERENCE) {
-            return $this->processReference($tcaFieldDefinition, $table, $record);
+            return $this->processReference($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
 
         if ($fieldType === FieldType::FOLDER) {
@@ -79,16 +80,16 @@ class RelationResolver
         }
 
         if ($fieldType === FieldType::SELECT) {
-            return $this->processSelect($tcaFieldDefinition, $table, $record);
+            return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
 
         return $data;
     }
 
-    protected function processSelect(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): mixed
+    protected function processSelect(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, string $parentTable, array $record): mixed
     {
+        $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
-        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
             return $this->getRelations(
                 uidList: (string)($record[$uniqueIdentifier] ?? ''),
@@ -105,12 +106,11 @@ class RelationResolver
         return $record[$uniqueIdentifier] ?? '';
     }
 
-    protected function processReference(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): array
+    protected function processReference(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, string $parentTable, array $record): array
     {
-        $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
-        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
+        $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         return $this->getRelations(
-            uidList: (string)($record[$uniqueIdentifier] ?? ''),
+            uidList: (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? ''),
             tableList: $tcaFieldConfig['config']['allowed'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: (int)$record['uid'],
@@ -119,11 +119,10 @@ class RelationResolver
         );
     }
 
-    protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, string $parentTable, array $record): array
+    protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, string $parentTable, array $record): array
     {
-        $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
-        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
-        $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$uniqueIdentifier] ?? '');
+        $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
+        $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         return $this->getRelations(
             uidList: $uidList,
             tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
@@ -134,9 +133,9 @@ class RelationResolver
         );
     }
 
-    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition): array
+    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition): array
     {
-        $tcaFieldConfig = $GLOBALS['TCA'][$parentTable]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [];
+        $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $collectionTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
         $uid = (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         $data = $this->getRelations(
@@ -153,6 +152,7 @@ class RelationResolver
             foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
                 $data[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
                     tcaFieldDefinition: $childTcaFieldDefinition,
+                    typeDefinition: $typeDefinition,
                     record: $row,
                     table: $collectionTable,
                 );
@@ -185,6 +185,14 @@ class RelationResolver
     public function setRequest(ServerRequestInterface $serverRequest): void
     {
         $this->serverRequest = $serverRequest;
+    }
+
+    protected function getMergedTcaFieldConfig(string $table, TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition): array
+    {
+        return array_replace_recursive(
+            $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [],
+            $GLOBALS['TCA'][$table]['types'][$typeDefinition->getTypeName()]['columnsOverrides'][$tcaFieldDefinition->getUniqueIdentifier()] ?? []
+        );
     }
 
     protected function getPageRepository(): PageRepository

@@ -46,6 +46,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('image');
         $dummyRecord = [
             'uid' => 1,
@@ -53,7 +54,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
         self::assertInstanceOf(FileReference::class, $result[0]);
@@ -68,6 +69,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_folder');
         $dummyRecord = [
             'uid' => 1,
@@ -75,7 +77,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
         self::assertInstanceOf(File::class, $result[0]);
@@ -90,6 +92,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_folder_recursive');
         $dummyRecord = [
             'uid' => 1,
@@ -97,7 +100,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertInstanceOf(File::class, $result[0]);
@@ -113,6 +116,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_collection');
         $dummyRecord = [
             'uid' => 1,
@@ -120,7 +124,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('lorem foo bar', $result[0]['fieldA']);
@@ -136,6 +140,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_collection_recursive');
         $dummyRecord = [
             'uid' => 1,
@@ -143,7 +148,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('lorem foo bar A', $result[0]['fieldA']);
@@ -162,6 +167,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_mm');
         $dummyRecord = [
             'uid' => 1,
@@ -169,7 +175,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('Category 1', $result[0]['title']);
@@ -185,6 +191,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_11');
         $dummyRecord = [
             'uid' => 1,
@@ -192,7 +199,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
         self::assertSame('Category 1', $result[0]['title']);
@@ -207,6 +214,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_1m');
         $dummyRecord = [
             'uid' => 1,
@@ -214,7 +222,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('Category 1', $result[0]['title']);
@@ -230,6 +238,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_reference');
         $dummyRecord = [
             'uid' => 1,
@@ -237,7 +246,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('Page 1', $result[0]['title']);
@@ -253,6 +262,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_content_reference');
         $dummyRecord = [
             'uid' => 1,
@@ -260,7 +270,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(4, $result);
         self::assertSame('Page 1', $result[0]['title']);
@@ -278,6 +288,7 @@ class RelationResolverTest extends FunctionalTestCase
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_mm');
         $dummyRecord = [
             'uid' => 1,
@@ -285,7 +296,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('Page 1', $result[0]['title']);
@@ -299,6 +310,7 @@ class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_checkbox');
         $dummyRecord = [
             'uid' => 1,
@@ -306,7 +318,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
     }
@@ -318,6 +330,7 @@ class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_single_box');
         $dummyRecord = [
             'uid' => 1,
@@ -325,7 +338,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
     }
@@ -337,6 +350,7 @@ class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_multiple');
         $dummyRecord = [
             'uid' => 1,
@@ -344,7 +358,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
     }
@@ -357,6 +371,7 @@ class RelationResolverTest extends FunctionalTestCase
         $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/select_foreign.csv');
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_foreign');
         $dummyRecord = [
             'uid' => 1,
@@ -364,7 +379,7 @@ class RelationResolverTest extends FunctionalTestCase
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection);
-        $result = $relationResolver->processField($fieldDefinition, $dummyRecord, 'tt_content');
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('Page 1', $result[0]['title']);

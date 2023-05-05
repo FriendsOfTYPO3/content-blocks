@@ -77,4 +77,9 @@ final class ParsedContentBlock
     {
         return $this->path;
     }
+
+    public function prefixFields(): bool
+    {
+        return (bool)($this->yaml['prefixFields'] ?? true);
+    }
 }

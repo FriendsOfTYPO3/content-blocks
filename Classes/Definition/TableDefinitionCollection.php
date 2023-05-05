@@ -103,7 +103,6 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     1679226075
                 );
             }
-            $uniqueRootColumnName = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootField['identifier']);
             if ($rootFieldType === FieldType::PALETTE) {
                 // Ignore empty Palettes.
                 if (($rootField['fields'] ?? []) === []) {
@@ -139,7 +138,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     } else {
                         $fields[] = $paletteField;
                         if ($isRootTable) {
-                            $paletteShowItems[] = ($paletteField['useExistingField'] ?? false)
+                            $paletteShowItems[] = ($paletteField['useExistingField'] ?? false) || !$contentBlock->prefixFields()
                                 ? $paletteField['identifier']
                                 : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $paletteField['identifier']);
                         } else {
@@ -153,7 +152,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     'description' => $languagePath->getCurrentPath() . '.description',
                     'showitem' => $paletteShowItems,
                 ];
-                $paletteIdentifier = $isRootTable ? $uniqueRootColumnName : $rootField['identifier'];
+                $paletteIdentifier = $isRootTable && $contentBlock->prefixFields()
+                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootField['identifier'])
+                    : $rootField['identifier'];
                 $tableDefinition['palettes'][$paletteIdentifier] = $palette;
                 $showItems[] = '--palette--;;' . $paletteIdentifier;
                 $languagePath->popSegment();
@@ -171,7 +172,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 continue;
             } else {
                 if ($isRootTable) {
-                    $showItems[] = ($rootField['useExistingField'] ?? false)
+                    $showItems[] = ($rootField['useExistingField'] ?? false) || !$contentBlock->prefixFields()
                         ? $rootField['identifier']
                         : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootField['identifier']);
                 } else {
@@ -196,9 +197,15 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
                 // Recursive call for Collection (inline) fields.
                 if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
-                    $inlineTable = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier);
+                    $inlineTable = $contentBlock->prefixFields()
+                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
+                        : $identifier;
                     $field['properties']['foreign_table'] = $inlineTable;
                     $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
+                    $field['properties']['foreign_table_field'] = 'tablenames';
+                    $field['properties']['foreign_match_fields'] = [
+                        'fieldname' => $inlineTable,
+                    ];
                     $tableDefinitionList = $this->processContentBlock(
                         yaml: $field,
                         contentBlock: $contentBlock,
@@ -211,7 +218,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
                 $field['languagePath'] = $languagePath->getCurrentPath();
                 if ($isRootTable) {
-                    $uniqueColumnName = ($field['useExistingField'] ?? false)
+                    $uniqueColumnName = ($field['useExistingField'] ?? false) || !$contentBlock->prefixFields()
                         ? $field['identifier']
                         : UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $field['identifier']);
                     $columns[] = $uniqueColumnName;
@@ -221,21 +228,14 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'type' => $fieldType,
                     ];
                     $tableDefinition['fields'][$uniqueColumnName] = $fieldArray;
-                    // columnsOverrides for reusing existing fields.
-                    if ($isExistingTable && ($field['useExistingField'] ?? false)) {
-                        $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
-                    }
+                    $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
                 }
 
-                if (!$isRootTable && $this->hasTable($table)) {
-                    throw new \InvalidArgumentException('A Collection field with the identifier "' . $yaml['identifier'] . '" exists more than once. Please choose another name.', 1672449082);
-                }
-
+                $tableDefinition['isRootTable'] = $isRootTable;
                 if ($shouldCreateNewTable) {
-                    $uniqueColumnName = $isRootTable
+                    $uniqueColumnName = $isRootTable && $contentBlock->prefixFields()
                         ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
                         : $identifier;
-                    $tableDefinition['isRootTable'] = $isRootTable;
                     $tableDefinition['isCustomTable'] = true;
                     $tableDefinition['fields'][$uniqueColumnName] = [
                         'uniqueIdentifier' => $uniqueColumnName,
@@ -252,6 +252,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         [$vendor, $package] = explode('/', $contentBlock->getName());
         $elements = $tableDefinitionList[$table]['elements'] ?? [];
         $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
+        $tableDefinition['typeField'] = $typeField;
         $typeName = $typeField === null
             ? '1'
             : $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
@@ -263,7 +264,6 @@ final class TableDefinitionCollection implements \IteratorAggregate
             'vendor' => $vendor,
             'package' => $package,
             'iconProvider' => $contentBlock->getIconProvider(),
-            'typeField' => $typeField,
             'typeName' => $typeName,
             'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
         ];

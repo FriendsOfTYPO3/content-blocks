@@ -31,7 +31,7 @@ final class PaletteFieldConfiguration implements FieldConfigurationInterface
         return new self();
     }
 
-    public function getTca(string $languagePath, bool $useExistingField): array
+    public function getTca(string $languagePath): array
     {
         return [];
     }

@@ -24,7 +24,6 @@ class TypeDefinition
 {
     protected string $identifier = '';
     protected string $table = '';
-    protected ?string $typeField = null;
     protected string|int $typeName = '';
     protected string $label = '';
     /** @var string[] */
@@ -55,7 +54,6 @@ class TypeDefinition
         return $self
             ->withTable($table)
             ->withIdentifier($array['identifier'])
-            ->withTypeField($array['typeField'])
             ->withTypeName($array['typeName'])
             ->withLabel($array['label'] ?? '')
             ->withColumns($array['columns'] ?? [])
@@ -74,11 +72,6 @@ class TypeDefinition
     public function getTable(): string
     {
         return $this->table;
-    }
-
-    public function getTypeField(): ?string
-    {
-        return $this->typeField;
     }
 
     public function getTypeName(): string|int
@@ -153,13 +146,6 @@ class TypeDefinition
     {
         $clone = clone $this;
         $clone->table = $table;
-        return $clone;
-    }
-
-    public function withTypeField(?string $typeField): static
-    {
-        $clone = clone $this;
-        $clone->typeField = $typeField;
         return $clone;
     }
 

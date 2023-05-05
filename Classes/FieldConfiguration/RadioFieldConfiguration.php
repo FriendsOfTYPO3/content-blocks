@@ -47,11 +47,8 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
         return $self;
     }
 
-    public function getTca(string $languagePath, bool $useExistingField): array
+    public function getTca(string $languagePath): array
     {
-        if (!$useExistingField) {
-            $tca['exclude'] = true;
-        }
         $tca['label'] = $languagePath . '.label';
         $tca['description'] = $languagePath . '.description';
 

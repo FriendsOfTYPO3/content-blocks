@@ -49,7 +49,6 @@ class TextFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'exclude' => true,
                 'label' => 'LLL:test-path.xlf:foo.label',
                 'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
@@ -98,7 +97,6 @@ class TextFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'exclude' => true,
                 'label' => 'LLL:test-path.xlf:foo.label',
                 'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
@@ -117,7 +115,7 @@ class TextFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = TextFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo', false));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

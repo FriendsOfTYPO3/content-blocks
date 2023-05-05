@@ -48,6 +48,8 @@ class SqlGenerator
             }
             if (!$tableDefinition->isRootTable() && $tableDefinition->isCustomTable()) {
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`foreign_table_parent_uid` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (foreign_table_parent_uid));';
+                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`tablenames` varchar(255) DEFAULT \'\' NOT NULL);';
+                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`fieldname` varchar(255) DEFAULT \'\' NOT NULL);';
             }
         }
         return $sql;

@@ -37,11 +37,16 @@ class ContentBlockRegistry implements SingletonInterface
         return array_key_exists($name, $this->contentBlocks);
     }
 
-    public function getContentBlockPath(string $name): string
+    public function getContentBlock(string $name): ParsedContentBlock
     {
         if (!$this->hasContentBlock($name)) {
             throw new \OutOfBoundsException('Content block with the name "' . $name . '" is not registered.', 1678478902);
         }
-        return $this->contentBlocks[$name]->getPath();
+        return $this->contentBlocks[$name];
+    }
+
+    public function getContentBlockPath(string $name): string
+    {
+        return $this->getContentBlock($name)->getPath();
     }
 }

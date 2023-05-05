@@ -82,7 +82,7 @@ final class TcaFieldDefinition
     public function getTca(): array
     {
         if ($this->fieldConfiguration instanceof FieldConfigurationInterface) {
-            return $this->fieldConfiguration->getTca($this->languagePath, $this->useExistingField);
+            return $this->fieldConfiguration->getTca($this->languagePath);
         }
         return [];
     }

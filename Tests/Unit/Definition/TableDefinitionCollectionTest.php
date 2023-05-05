@@ -23,54 +23,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TableDefinitionCollectionTest extends UnitTestCase
 {
-    public static function twoCollectionsWithTheSameIdentifierRaiseAnExceptionDataProvider(): iterable
-    {
-        yield 'two collections with the same identifier' => [
-            'contentBlocks' => [
-                [
-                    'name' => 't3ce/example',
-                    'icon' => '',
-                    'iconProvider' => '',
-                    'path' => 'EXT:example/ContentBlocks/example',
-                    'yaml' => [
-                        'fields' => [
-                            [
-                                'identifier' => 'foo',
-                                'type' => 'Collection',
-                                'fields' => [
-                                    [
-                                        'identifier' => 'foo',
-                                        'type' => 'Collection',
-                                        'fields' => [
-                                            [
-                                                'identifier' => 'text',
-                                                'type' => 'Text',
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider twoCollectionsWithTheSameIdentifierRaiseAnExceptionDataProvider
-     * @test
-     */
-    public function twoCollectionsWithTheSameIdentifierRaiseAnException(array $contentBlocks): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1672449082);
-        $this->expectExceptionMessage('A Collection field with the identifier "foo" exists more than once. Please choose another name.');
-
-        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
-        TableDefinitionCollection::createFromArray($contentBlocks);
-    }
-
     /**
      * @test
      */
