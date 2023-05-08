@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Utility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class UniqueNameUtilityTest extends UnitTestCase
+final class UniqueNameUtilityTest extends UnitTestCase
 {
     public static function contentBlockNameToTypeIdentifierTestDataProvider(): iterable
     {

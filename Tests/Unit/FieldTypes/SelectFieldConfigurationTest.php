@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class SelectFieldConfigurationTest extends UnitTestCase
+final class SelectFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {

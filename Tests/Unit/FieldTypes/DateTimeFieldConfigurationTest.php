@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class DateTimeFieldConfigurationTest extends UnitTestCase
+final class DateTimeFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {

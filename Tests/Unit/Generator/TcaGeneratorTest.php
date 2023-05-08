@@ -26,7 +26,7 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class TcaGeneratorTest extends UnitTestCase
+final class TcaGeneratorTest extends UnitTestCase
 {
     public static function checkTcaFieldTypesDataProvider(): iterable
     {

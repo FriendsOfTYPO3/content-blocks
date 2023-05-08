@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class LinkFieldConfigurationTest extends UnitTestCase
+final class LinkFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {

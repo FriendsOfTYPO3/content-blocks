@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class RadioFieldConfigurationTest extends UnitTestCase
+final class RadioFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {

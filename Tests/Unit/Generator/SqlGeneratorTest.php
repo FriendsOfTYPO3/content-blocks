@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class SqlGeneratorTest extends UnitTestCase
+final class SqlGeneratorTest extends UnitTestCase
 {
     public static function generateReturnsExpectedSqlStatementsDataProvider(): iterable
     {

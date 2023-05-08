@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Registry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class ContentBlockRegistryTest extends FunctionalTestCase
+final class ContentBlockRegistryTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 

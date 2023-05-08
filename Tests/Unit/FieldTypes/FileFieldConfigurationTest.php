@@ -21,7 +21,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class FileFieldConfigurationTest extends UnitTestCase
+final class FileFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {

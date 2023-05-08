@@ -21,7 +21,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class TableDefinitionCollectionTest extends UnitTestCase
+final class TableDefinitionCollectionTest extends UnitTestCase
 {
     /**
      * @test
