@@ -415,7 +415,7 @@ class TcaGeneratorTest extends UnitTestCase
                                 'foreign_field' => 'foreign_table_parent_uid',
                                 'foreign_table_field' => 'tablenames',
                                 'foreign_match_fields' => [
-                                    'fieldname' => 't3ce_example_collection'
+                                    'fieldname' => 't3ce_example_collection',
                                 ],
                             ],
                             'exclude' => true,
@@ -641,7 +641,7 @@ class TcaGeneratorTest extends UnitTestCase
                                 'foreign_table' => 't3ce_example_collection2',
                                 'foreign_field' => 'foreign_table_parent_uid',
                                 'foreign_match_fields' => [
-                                    'fieldname' => 't3ce_example_collection2'
+                                    'fieldname' => 't3ce_example_collection2',
                                 ],
                                 'foreign_table_field' => 'tablenames',
                             ],
