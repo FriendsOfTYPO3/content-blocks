@@ -33,7 +33,10 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/simple',
     ];
 
-    protected const LANGUAGE_PRESETS = [];
+    protected const LANGUAGE_PRESETS = [
+        'EN' => ['id' => 0, 'title' => 'English', 'locale' => 'en_US.UTF8'],
+    ];
+
     protected const ROOT_PAGE_ID = 1;
 
     public function setUp(): void
