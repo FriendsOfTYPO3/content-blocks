@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -75,7 +76,9 @@ class RelationResolver
         if ($fieldType === FieldType::FOLDER) {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $folders = GeneralUtility::trimExplode(',', (string)$data, true);
-            $fileCollector->addFilesFromFolders($folders, $tcaFieldDefinition->getFieldConfiguration()->isRecursive());
+            /** @var FolderFieldConfiguration $folderFieldConfiguration */
+            $folderFieldConfiguration = $tcaFieldDefinition->getFieldConfiguration();
+            $fileCollector->addFilesFromFolders($folders, $folderFieldConfiguration->isRecursive());
             return $fileCollector->getFiles();
         }
 
