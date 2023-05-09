@@ -92,7 +92,7 @@ class CreateContentBlockCommand extends Command
             yamlConfig: [
                 'name' => $vendor . '/' . $package,
                 'group' => 'common',
-                'prefixFields' => 'false',
+                'prefixFields' => false,
                 'fields' => [
                     [
                         'identifier' => 'header',
