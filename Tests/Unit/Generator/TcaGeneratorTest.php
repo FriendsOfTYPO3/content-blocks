@@ -118,6 +118,20 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'Reference',
                             ],
                             [
+                                'identifier' => 'flex',
+                                'type' => 'FlexForm',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'header',
+                                        'type' => 'Text',
+                                    ],
+                                    [
+                                        'identifier' => 'textarea',
+                                        'type' => 'Textarea',
+                                    ],
+                                ],
+                            ],
+                            [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'useAsLabel' => 'text2',
@@ -205,7 +219,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_reference,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_reference,t3ce_example_flex,t3ce_example_collection,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'bodytext' => [
@@ -281,6 +295,11 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_reference' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:reference.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:reference.description',
+                                    'config' => [],
+                                ],
+                                't3ce_example_flex' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.description',
                                     'config' => [],
                                 ],
                                 't3ce_example_collection' => [
@@ -405,6 +424,41 @@ final class TcaGeneratorTest extends UnitTestCase
                         't3ce_example_reference' => [
                             'config' => [
                                 'type' => 'group',
+                            ],
+                            'exclude' => true,
+                        ],
+                        't3ce_example_flex' => [
+                            'config' => [
+                                'type' => 'flex',
+                                'ds_pointerField' => 'CType',
+                                'ds' => [
+                                    't3ce_example' => '<T3FlexForms>
+    <sheets type="array">
+        <sDEF type="array">
+            <ROOT type="array">
+                <sheetTitle>Content Blocks Standard Sheet</sheetTitle>
+                <type>array</type>
+                <el type="array">
+                    <header type="array">
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.header.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.header.description</description>
+                        <config type="array">
+                            <type>input</type>
+                        </config>
+                    </header>
+                    <textarea type="array">
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.textarea.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.textarea.description</description>
+                        <config type="array">
+                            <type>text</type>
+                        </config>
+                    </textarea>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3FlexForms>',
+                                ],
                             ],
                             'exclude' => true,
                         ],

@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -82,8 +83,13 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $columns = [];
         $showItems = [];
         $overrideColumns = [];
+        $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
+        $typeName = $typeField === null
+            ? '1'
+            : $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $yaml['useAsLabel'] ?? '';
+        $tableDefinition['typeField'] = $typeField;
         $isRootTable = $table === $rootTable;
         $isExistingTable = isset($GLOBALS['TCA'][$table]);
         $shouldCreateNewTable = !$isRootTable || !$isExistingTable;
@@ -195,6 +201,35 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
                 $uniqueIdentifiers[] = $identifier;
 
+                // Process FlexForm
+                if ($fieldType === FieldType::FLEXFORM) {
+                    $field['properties']['ds_pointerField'] = $typeField;
+                    $flexFormElements = [];
+                    foreach ($field['fields'] ?? [] as $flexFormField) {
+                        $languagePath->addPathSegment($flexFormField['identifier']);
+                        $flexFormField['languagePath'] = $languagePath->getCurrentPath();
+                        $languagePath->popSegment();
+                        $flexFormFieldArray = [
+                            'uniqueIdentifier' => $flexFormField['identifier'],
+                            'config' => $flexFormField,
+                            'type' => FieldType::from($flexFormField['type']),
+                        ];
+                        $flexFormElements[$flexFormField['identifier']] = TcaFieldDefinition::createFromArray($flexFormFieldArray)->getTca();
+                    }
+                    $dataStructure = [
+                        'sheets' => [
+                            'sDEF' => [
+                                'ROOT' => [
+                                    'sheetTitle' => 'Content Blocks Standard Sheet',
+                                    'type' => 'array',
+                                    'el' => $flexFormElements,
+                                ],
+                            ],
+                        ],
+                    ];
+                    $field['properties']['ds'][$typeName] = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
+                }
+
                 // Recursive call for Collection (inline) fields.
                 if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
                     $inlineTable = $contentBlock->prefixFields()
@@ -251,11 +286,6 @@ final class TableDefinitionCollection implements \IteratorAggregate
         // If this is the root table, we add a new content type to the list of elements.
         [$vendor, $package] = explode('/', $contentBlock->getName());
         $elements = $tableDefinitionList[$table]['elements'] ?? [];
-        $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
-        $tableDefinition['typeField'] = $typeField;
-        $typeName = $typeField === null
-            ? '1'
-            : $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
         $element = [
             'identifier' => $contentBlock->getName(),
             'columns' => $columns,

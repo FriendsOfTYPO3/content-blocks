@@ -88,3 +88,12 @@ fields:
         properties:
           renderType: selectSingle
           foreign_table: pages
+  - identifier: flexfield
+    type: FlexForm
+    fields:
+      -
+        identifier: header
+        type: Text
+      -
+        identifier: textarea
+        type: Textarea

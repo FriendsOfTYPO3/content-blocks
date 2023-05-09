@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderFactory;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class RelationResolverTest extends FunctionalTestCase
@@ -53,7 +54,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'image' => 1,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -76,7 +77,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_folder' => '1:/',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -99,7 +100,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_folder_recursive' => '1:/',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -123,7 +124,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_collection' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -147,7 +148,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_collection_recursive' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -174,7 +175,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_categories_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -198,7 +199,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_categories_11' => 7,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -221,7 +222,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_categories_1m' => '7,8',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -245,7 +246,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_pages_reference' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -269,7 +270,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_pages_content_reference' => 'pages_1,pages_2,tt_content_1,tt_content_2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(4, $result);
@@ -295,7 +296,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_pages_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -317,7 +318,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_select_checkbox' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
@@ -337,7 +338,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_select_single_box' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
@@ -357,7 +358,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_select_multiple' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
@@ -378,11 +379,46 @@ final class RelationResolverTest extends FunctionalTestCase
             'foo_bar_select_foreign' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection);
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
         self::assertSame('Page 1', $result[0]['title']);
         self::assertSame('Page 2', $result[1]['title']);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveFlexForm(): void
+    {
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_flexfield');
+        $dummyRecord = [
+            'uid' => 1,
+            'foo_bar_flexfield' => '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3FlexForms>
+    <data>
+        <sheet index="sDEF">
+            <language index="lDEF">
+                <field index="header">
+                    <value index="vDEF">Header in Flex</value>
+                </field>
+                <field index="textarea">
+                    <value index="vDEF">Text in Flex</value>
+                </field>
+            </language>
+        </sheet>
+    </data>
+</T3FlexForms>',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame('Header in Flex', $result['header']);
+        self::assertSame('Text in Flex', $result['textarea']);
     }
 }

@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Resource\FileCollector;
@@ -37,7 +38,8 @@ class RelationResolver
     protected ?ServerRequestInterface $serverRequest = null;
 
     public function __construct(
-        protected readonly TableDefinitionCollection $tableDefinitionCollection
+        protected readonly TableDefinitionCollection $tableDefinitionCollection,
+        protected readonly FlexFormService $flexFormService,
     ) {
     }
 
@@ -84,6 +86,10 @@ class RelationResolver
 
         if ($fieldType === FieldType::SELECT) {
             return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
+        }
+
+        if ($fieldType === FieldType::FLEXFORM) {
+            return $this->flexFormService->convertFlexFormContentToArray($data);
         }
 
         return $data;
