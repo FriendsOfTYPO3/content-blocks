@@ -125,7 +125,6 @@ class TcaGenerator
                 if ($tableDefinition->isRootTable() && !$column->useExistingField() && $tableDefinition->getTypeField() !== null) {
                     foreach ($this->nonOverridableOptions as $option) {
                         if (array_key_exists($option, $column->getTca()['config'])) {
-                            // @todo ds needs array_replace_recursive
                             $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $column->getTca()['config'][$option];
                         }
                     }

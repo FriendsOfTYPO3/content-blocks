@@ -22,13 +22,13 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class FlexFormConfiguration implements FieldConfigurationInterface
+final class FlexFormFieldConfiguration implements FieldConfigurationInterface
 {
     private FieldType $fieldType = FieldType::FLEXFORM;
     private string $ds_pointerField = '';
     private array $ds = [];
 
-    public static function createFromArray(array $settings): FlexFormConfiguration
+    public static function createFromArray(array $settings): FlexFormFieldConfiguration
     {
         $self = new self();
         $self->ds_pointerField = (string)($settings['properties']['ds_pointerField'] ?? $self->ds_pointerField);

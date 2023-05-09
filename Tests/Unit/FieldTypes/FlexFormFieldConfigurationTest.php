@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class FlexFormFieldConfigurationTest extends UnitTestCase
@@ -50,7 +50,7 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
      */
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FlexFormConfiguration::createFromArray($config);
+        $fieldConfiguration = FlexFormFieldConfiguration::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
     }
@@ -69,7 +69,7 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
      */
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = FlexFormConfiguration::createFromArray([]);
+        $inputFieldConfiguration = FlexFormFieldConfiguration::createFromArray([]);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }
