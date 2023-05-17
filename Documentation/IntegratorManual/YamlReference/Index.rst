@@ -131,6 +131,15 @@ alternativeSql
    can be overridden. Have a look at the standard SQL definition of the
    corresponding field.
 
+prefixField
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   If set to false, the prefixing is disabled for this field. This overrules the
+   global option :yaml:`prefixFields`.
+
 .. _field_types:
 
 Field types
