@@ -200,7 +200,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     $flexFormElements = [];
                     foreach ($field['fields'] ?? [] as $flexFormField) {
                         $languagePath->addPathSegment($flexFormField['identifier']);
-                        $flexFormField['languagePath'] = $languagePath->getCurrentPath();
+                        $flexFormField['languagePath'] = clone $languagePath;
                         $languagePath->popSegment();
                         $flexFormFieldArray = [
                             'uniqueIdentifier' => $flexFormField['identifier'],
@@ -209,8 +209,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         ];
                         $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
                         $flexFormTca = $flexFormTcaDefinition->getTca();
-                        $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath() . '.label';
-                        $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath() . '.description';
+                        $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.label';
+                        $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.description';
                         $flexFormElements[$flexFormField['identifier']] = $flexFormTca;
                     }
                     $dataStructure = [
@@ -248,7 +248,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     );
                 }
 
-                $field['languagePath'] = $languagePath->getCurrentPath();
+                $field['languagePath'] = clone $languagePath;
                 if ($isRootTable) {
                     $uniqueColumnName = $this->isPrefixEnabledForField($contentBlock, $field)
                         ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)

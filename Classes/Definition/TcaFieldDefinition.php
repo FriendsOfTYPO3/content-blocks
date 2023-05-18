@@ -29,7 +29,7 @@ final class TcaFieldDefinition
     private string $uniqueIdentifier = '';
     private string $label = '';
     private string $description = '';
-    private string $languagePath = '';
+    private LanguagePath $languagePath;
     private bool $useExistingField = false;
     private ?FieldConfigurationInterface $fieldConfiguration = null;
 
@@ -49,7 +49,7 @@ final class TcaFieldDefinition
             ->withIdentifier($array['config']['identifier'])
             ->withLabel($array['label'] ?? '')
             ->withDescription($array['description'] ?? '')
-            ->withLanguagePath($array['config']['languagePath'] ?? '')
+            ->withLanguagePath($array['config']['languagePath'])
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
             ->withFieldConfiguration($array['type']->getFieldConfiguration($array['config']));
     }
@@ -79,7 +79,7 @@ final class TcaFieldDefinition
         return $this->description;
     }
 
-    public function getLanguagePath(): string
+    public function getLanguagePath(): LanguagePath
     {
         return $this->languagePath;
     }
@@ -130,7 +130,7 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withLanguagePath(string $languagePath): TcaFieldDefinition
+    public function withLanguagePath(LanguagePath $languagePath): TcaFieldDefinition
     {
         $clone = clone $this;
         $clone->languagePath = $languagePath;

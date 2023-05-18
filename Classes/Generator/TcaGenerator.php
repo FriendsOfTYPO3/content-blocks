@@ -28,6 +28,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
+use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -155,8 +156,8 @@ class TcaGenerator
                 // Also, root tables which didn't define a custom typeField get the full TCA.
                 if (!$tableDefinition->isRootTable() || $tableDefinition->getTypeField() === null) {
                     $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['label'] = $column->getLanguagePath() . '.label';
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['description'] = $column->getLanguagePath() . '.description';
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['label'] = $column->getLanguagePath()->getCurrentPath() . '.label';
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['description'] = $column->getLanguagePath()->getCurrentPath() . '.description';
                 }
                 // Newly created fields are enabled to be configured in user permissions by default.
                 if (!$column->useExistingField()) {
@@ -171,8 +172,8 @@ class TcaGenerator
                         unset($overrideTca['config'][$option]);
                     }
                     $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideTca;
-                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getLanguagePath() . '.label';
-                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $overrideColumn->getLanguagePath() . '.description';
+                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getLanguagePath()->getCurrentPath() . '.label';
+                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $overrideColumn->getLanguagePath()->getCurrentPath() . '.description';
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
