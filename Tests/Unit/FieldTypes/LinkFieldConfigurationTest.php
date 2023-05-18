@@ -51,8 +51,6 @@ final class LinkFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'link',
                     'size' => 20,
@@ -97,8 +95,6 @@ final class LinkFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'link',
                     'autocomplete' => false,

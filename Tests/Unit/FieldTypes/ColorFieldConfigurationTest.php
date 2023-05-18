@@ -45,8 +45,6 @@ final class ColorFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'color',
                     'size' => 20,
@@ -85,8 +83,6 @@ final class ColorFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'color',
                     'autocomplete' => false,

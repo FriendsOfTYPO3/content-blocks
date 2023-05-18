@@ -39,8 +39,6 @@ final class EmailFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'email',
                     'default' => 'Default value',
@@ -71,8 +69,6 @@ final class EmailFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'email',
                     'autocomplete' => false,

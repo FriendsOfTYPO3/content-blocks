@@ -31,7 +31,7 @@ final class TabFieldConfiguration implements FieldConfigurationInterface
         return new self();
     }
 
-    public function getTca(string $languagePath): array
+    public function getTca(): array
     {
         return [];
     }

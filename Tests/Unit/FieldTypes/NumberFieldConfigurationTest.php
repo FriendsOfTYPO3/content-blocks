@@ -52,8 +52,6 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'number',
                     'size' => 20,
@@ -102,8 +100,6 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'number',
                     'autocomplete' => false,
@@ -120,8 +116,6 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'number',
                     'default' => 10.0,
@@ -139,8 +133,6 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'number',
                     'format' => 'decimal',

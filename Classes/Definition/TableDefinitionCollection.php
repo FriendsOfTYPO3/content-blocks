@@ -207,7 +207,11 @@ final class TableDefinitionCollection implements \IteratorAggregate
                             'config' => $flexFormField,
                             'type' => FieldType::from($flexFormField['type']),
                         ];
-                        $flexFormElements[$flexFormField['identifier']] = TcaFieldDefinition::createFromArray($flexFormFieldArray)->getTca();
+                        $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
+                        $flexFormTca = $flexFormTcaDefinition->getTca();
+                        $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath() . '.label';
+                        $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath() . '.description';
+                        $flexFormElements[$flexFormField['identifier']] = $flexFormTca;
                     }
                     $dataStructure = [
                         'sheets' => [

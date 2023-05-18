@@ -44,8 +44,6 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'datetime',
                     'default' => 1,
@@ -83,8 +81,6 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'datetime',
                 ],
@@ -102,8 +98,6 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'datetime',
                     'default' => (new \DateTime('2023-02-24'))->getTimestamp(),
@@ -127,8 +121,6 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'datetime',
                     'default' => '2023-02-24',
@@ -153,8 +145,6 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'datetime',
                     'default' => (new \DateTime('1970-01-01 00:10'))->getTimestamp(),
@@ -179,8 +169,6 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'datetime',
                     'default' => 1800,

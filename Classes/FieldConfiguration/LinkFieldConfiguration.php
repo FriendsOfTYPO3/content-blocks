@@ -60,10 +60,8 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
         return $self;
     }
 
-    public function getTca(string $languagePath): array
+    public function getTca(): array
     {
-        $tca['label'] = $languagePath . '.label';
-        $tca['description'] = $languagePath . '.description';
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

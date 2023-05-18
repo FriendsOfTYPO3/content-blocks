@@ -36,10 +36,8 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
         return $self;
     }
 
-    public function getTca(string $languagePath): array
+    public function getTca(): array
     {
-        $tca['label'] = $languagePath . '.label';
-        $tca['description'] = $languagePath . '.description';
         $config['type'] = $this->fieldType->getTcaType();
         $config['ds_pointerField'] = $this->ds_pointerField;
         $config['ds'] = $this->ds;

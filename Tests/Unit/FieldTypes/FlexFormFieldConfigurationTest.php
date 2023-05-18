@@ -33,8 +33,6 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
-                'label' => 'LLL:test-path.xlf:foo.label',
-                'description' => 'LLL:test-path.xlf:foo.description',
                 'config' => [
                     'type' => 'flex',
                     'ds_pointerField' => 'foobar',

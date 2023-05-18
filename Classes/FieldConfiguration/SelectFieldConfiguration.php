@@ -99,11 +99,8 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         return $self;
     }
 
-    public function getTca(string $languagePath): array
+    public function getTca(): array
     {
-        $tca['label'] = $languagePath . '.label';
-        $tca['description'] = $languagePath . '.description';
-
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->renderType !== '') {
             $config['renderType'] = $this->renderType;

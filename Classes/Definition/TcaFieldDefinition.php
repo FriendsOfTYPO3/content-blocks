@@ -79,10 +79,20 @@ final class TcaFieldDefinition
         return $this->description;
     }
 
+    public function getLanguagePath(): string
+    {
+        return $this->languagePath;
+    }
+
+    public function useExistingField(): bool
+    {
+        return $this->useExistingField;
+    }
+
     public function getTca(): array
     {
         if ($this->fieldConfiguration instanceof FieldConfigurationInterface) {
-            return $this->fieldConfiguration->getTca($this->languagePath);
+            return $this->fieldConfiguration->getTca();
         }
         return [];
     }
@@ -139,10 +149,5 @@ final class TcaFieldDefinition
         $clone = clone $this;
         $clone->fieldConfiguration = $fieldConfiguration;
         return $clone;
-    }
-
-    public function useExistingField(): bool
-    {
-        return $this->useExistingField;
     }
 }
