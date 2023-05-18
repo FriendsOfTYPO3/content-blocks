@@ -30,7 +30,12 @@ final class LanguagePath
 
     public function getCurrentPath(): string
     {
-        return $this->basePath . ':' . implode('.', $this->path);
+        return $this->basePath . ':' . $this->getPathWithoutBase();
+    }
+
+    public function getPathWithoutBase(): string
+    {
+        return implode('.', $this->path);
     }
 
     public function addPathSegment(string $segment): void

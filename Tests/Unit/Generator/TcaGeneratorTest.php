@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -1306,7 +1307,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), new ContentBlockRegistry());
+        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), new ContentBlockRegistry(), new NoopLanguageFileRegistry());
 
         $tca = $tcaGenerator->generate($tableDefinitionCollection);
 
@@ -1639,7 +1640,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), new ContentBlockRegistry());
+        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), new ContentBlockRegistry(), new NoopLanguageFileRegistry());
 
         $tca = $tcaGenerator->generate($tableDefinitionCollection);
 

@@ -26,9 +26,9 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
-use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -77,6 +77,7 @@ class TcaGenerator
         protected readonly LoaderInterface $loader,
         protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly LanguageFileRegistryInterface $languageFileRegistry,
     ) {
     }
 
@@ -165,6 +166,7 @@ class TcaGenerator
                 }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                $this->languageFileRegistry->register($typeDefinition);
                 $columnsOverrides = [];
                 foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
                     $overrideTca = $overrideColumn->getTca();
@@ -172,8 +174,19 @@ class TcaGenerator
                         unset($overrideTca['config'][$option]);
                     }
                     $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideTca;
-                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getLanguagePath()->getCurrentPath() . '.label';
-                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $overrideColumn->getLanguagePath()->getCurrentPath() . '.description';
+                    // Label and description overrides. For core fields, fall back to standard translation.
+                    // For content block fields, fall back to identifier.
+                    $languagePath = $overrideColumn->getLanguagePath();
+                    $labelPath = '.label';
+                    $descriptionPath = '.description';
+                    if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $labelPath)) {
+                        $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $languagePath->getCurrentPath() . $labelPath;
+                    } elseif (!$overrideColumn->useExistingField()) {
+                        $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getIdentifier();
+                    }
+                    if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $descriptionPath)) {
+                        $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $languagePath->getCurrentPath() . $descriptionPath;
+                    }
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
