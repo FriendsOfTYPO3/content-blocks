@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -40,6 +41,8 @@ class TcaGenerator
      * These fields are required for automatic default SQL schema generation
      * or have to be otherwise the same for each field. Thus, these fields
      * can't be overridden through type overrides.
+     *
+     * @var string[]
      */
     protected array $nonOverridableOptions = [
         'type',
@@ -57,6 +60,16 @@ class TcaGenerator
         'foreign_match_fields',
         'ds',
         'ds_pointerField',
+    ];
+
+    /**
+     * Associative arrays, which can be extended without the need to
+     * use columnsOverrides.
+     *
+     * @var string[]
+     */
+    protected array $extensibleOptions = [
+        'ds',
     ];
 
     public function __construct(
@@ -122,10 +135,19 @@ class TcaGenerator
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
                 // Fields on root tables are defined with minimal setup. Actual configuration goes into type overrides.
                 // But only, if a custom typeField is defined.
-                if ($tableDefinition->isRootTable() && !$column->useExistingField() && $tableDefinition->getTypeField() !== null) {
-                    foreach ($this->nonOverridableOptions as $option) {
+                if ($tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null) {
+                    $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
+                    foreach ($iterateOptions as $option) {
                         if (array_key_exists($option, $column->getTca()['config'])) {
-                            $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $column->getTca()['config'][$option];
+                            $configuration = $column->getTca()['config'][$option];
+                            // Support for existing flexForm fields.
+                            if ($column->useExistingField() && $option === 'ds') {
+                                $configuration = $this->processExistingFlexForm($column, $tableDefinition);
+                                if ($configuration === null) {
+                                    continue;
+                                }
+                            }
+                            $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $configuration;
                         }
                     }
                 }
@@ -156,8 +178,10 @@ class TcaGenerator
                     if ($columnsOverrides !== []) {
                         $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
                     }
-                    $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config']['search']['andWhere'];
-                    $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodytextSearchAndWhere($typeDefinition);
+                    if ($typeDefinition->hasColumn('bodytext')) {
+                        $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ?? '';
+                        $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodytextSearchAndWhere($typeDefinition);
+                    }
                 } else {
                     $typeDefinitionArray = [
                         'showitem' => $this->getGenericStandardShowItem($typeDefinition->getShowItems()),
@@ -173,6 +197,60 @@ class TcaGenerator
         }
 
         return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
+    }
+
+    /**
+     * To be compatible with existing flexForm fields, the type field has to be present inside `ds_pointerField`.
+     * If this is not the case, the flexForm field cannot be reused.
+     *
+     * Furthermore, this method handles the adjustment for multiple pointer fields. The most prominent example would be
+     * `pi_flexform`, which points to `list_type` and `CType`. Content Blocks only uses CType by default for Content
+     * Elements. Hence, the identifier needs to be prepended by '*,' to match any `list_type`.
+     *
+     * Example:
+     *
+     *     // Default only one pointer field
+     *     'ds' => [
+     *         'example_flexfield' => '...'
+     *     ]
+     *
+     *     // Core config for pi_flexform with CType at the second position
+     *     'ds_pointerField' => 'list_type,CType'
+     *
+     *     // "*," prepended to match anything at position 1
+     *     'ds' => [
+     *         '*,example_flexfield' => '...'
+     *     ]
+     */
+    protected function processExistingFlexForm(TcaFieldDefinition $column, TableDefinition $tableDefinition): ?array
+    {
+        $existingDsPointerField = $GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config']['ds_pointerField'];
+        $existingDsPointerFieldArray = GeneralUtility::trimExplode(',', $existingDsPointerField);
+        $dsConfiguration = $column->getTca()['config']['ds'];
+        $typeSwitchField = $tableDefinition->getTypeField();
+        $fieldPositionInDsPointerFields = array_search($typeSwitchField, $existingDsPointerFieldArray);
+        // type field is not compatible.
+        if ($fieldPositionInDsPointerFields === false) {
+            return null;
+        }
+        $pointerFieldsCount = count($existingDsPointerFieldArray);
+        // If only one valid field exists, no need to add wildcards.
+        if ($pointerFieldsCount === 1) {
+            return $dsConfiguration;
+        }
+        $newDsConfiguration = [];
+        foreach (array_keys($dsConfiguration) as $dsKey) {
+            $dsKeys = [];
+            foreach (range(0, $pointerFieldsCount - 1) as $index) {
+                if ($index === $fieldPositionInDsPointerFields) {
+                    $dsKeys[] = $dsKey;
+                    continue;
+                }
+                $dsKeys[] = '*';
+            }
+            $newDsConfiguration[implode(',', $dsKeys)] = $dsConfiguration[$dsKey];
+        }
+        return $newDsConfiguration;
     }
 
     protected function resolveLabelField(TableDefinition $tableDefinition): string
@@ -249,7 +327,7 @@ class TcaGenerator
         return implode(',', $searchFields);
     }
 
-    public function extendBodytextSearchAndWhere(ContentElementDefinition $contentElementDefinition): string
+    protected function extendBodytextSearchAndWhere(ContentElementDefinition $contentElementDefinition): string
     {
         $andWhere = '';
         if ($contentElementDefinition->hasColumn('bodytext')) {
