@@ -1414,7 +1414,6 @@ final class TcaGeneratorTest extends UnitTestCase
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
-                <sheetTitle>Content Blocks Standard Sheet</sheetTitle>
                 <type>array</type>
                 <el type="array">
                     <header type="array">
@@ -1440,7 +1439,6 @@ final class TcaGeneratorTest extends UnitTestCase
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
-                <sheetTitle>Content Blocks Standard Sheet</sheetTitle>
                 <type>array</type>
                 <el type="array">
                     <color type="array">
@@ -1563,7 +1561,6 @@ final class TcaGeneratorTest extends UnitTestCase
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
-                <sheetTitle>Content Blocks Standard Sheet</sheetTitle>
                 <type>array</type>
                 <el type="array">
                     <header type="array">
@@ -1589,7 +1586,6 @@ final class TcaGeneratorTest extends UnitTestCase
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
-                <sheetTitle>Content Blocks Standard Sheet</sheetTitle>
                 <type>array</type>
                 <el type="array">
                     <header type="array">

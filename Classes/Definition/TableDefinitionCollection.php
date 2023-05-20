@@ -217,7 +217,6 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'sheets' => [
                             'sDEF' => [
                                 'ROOT' => [
-                                    'sheetTitle' => 'Content Blocks Standard Sheet',
                                     'type' => 'array',
                                     'el' => $flexFormElements,
                                 ],
