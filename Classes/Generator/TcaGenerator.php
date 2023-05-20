@@ -25,9 +25,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
-use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
-use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -76,7 +75,7 @@ class TcaGenerator
     public function __construct(
         protected readonly LoaderInterface $loader,
         protected readonly EventDispatcherInterface $eventDispatcher,
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
     ) {
     }
@@ -108,7 +107,7 @@ class TcaGenerator
                     table: $typeDefinition->getTable(),
                     field: $tableDefinition->getTypeField(),
                     item: [
-                        'label' => 'LLL:' . $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage() . '.title',
+                        'label' => $this->typeDefinitionLabelService->getLLLPathForTitle($typeDefinition),
                         'value' => $typeDefinition->getTypeName(),
                         'icon' => $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
                         'group' => $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',

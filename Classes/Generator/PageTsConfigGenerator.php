@@ -19,8 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
 
@@ -31,8 +30,8 @@ class PageTsConfigGenerator
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly IconRegistry $iconRegistry,
+        protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
     ) {
     }
 
@@ -50,23 +49,21 @@ class PageTsConfigGenerator
 
     protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $partialLanguagePath = 'LLL:'
-            . $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/'
-            . ContentBlockPathUtility::getLanguageFilePath()
-            . ':' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
+        $title = $this->typeDefinitionLabelService->getLLLPathForTitle($contentElementDefinition);
+        $description = $this->typeDefinitionLabelService->getLLLPathForDescription($contentElementDefinition);
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
-elements {
-{$contentElementDefinition->getTypeName()} {
-    iconIdentifier = {$contentElementDefinition->getWizardIconIdentifier()}
-    title = $partialLanguagePath.title
-    description = $partialLanguagePath.description
-    tt_content_defValues {
-        CType = {$contentElementDefinition->getTypeName()}
+    elements {
+        {$contentElementDefinition->getTypeName()} {
+            iconIdentifier = {$contentElementDefinition->getWizardIconIdentifier()}
+            title = $title
+            description = $description
+            tt_content_defValues {
+                CType = {$contentElementDefinition->getTypeName()}
+            }
+        }
     }
-}
-}
-show := addToList({$contentElementDefinition->getTypeName()})
+    show := addToList({$contentElementDefinition->getTypeName()})
 }
 HEREDOC;
     }
