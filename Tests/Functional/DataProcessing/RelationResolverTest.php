@@ -421,4 +421,51 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Header in Flex', $result['header']);
         self::assertSame('Text in Flex', $result['textarea']);
     }
+
+    /**
+     * @test
+     */
+    public function canResolveFlexFormWithSheetsOtherThanDefault(): void
+    {
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_flexfield');
+        $dummyRecord = [
+            'uid' => 1,
+            'foo_bar_flexfield' => '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3FlexForms>
+    <data>
+        <sheet index="sheet1">
+            <language index="lDEF">
+                <field index="header">
+                    <value index="vDEF">Header in Flex</value>
+                </field>
+                <field index="textarea">
+                    <value index="vDEF">Text in Flex</value>
+                </field>
+            </language>
+        </sheet>
+        <sheet index="sheet2">
+            <language index="lDEF">
+                <field index="link">
+                    <value index="vDEF">Link</value>
+                </field>
+                <field index="number">
+                    <value index="vDEF">12</value>
+                </field>
+            </language>
+        </sheet>
+    </data>
+</T3FlexForms>',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame('Header in Flex', $result['header']);
+        self::assertSame('Text in Flex', $result['textarea']);
+        self::assertSame('Link', $result['link']);
+        self::assertSame('12', $result['number']);
+    }
 }
