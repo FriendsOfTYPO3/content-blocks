@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\Enumeration\FlexFormSubType;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
@@ -194,36 +195,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
                 $uniqueIdentifiers[] = $identifier;
 
-                // Process FlexForm
                 if ($fieldType === FieldType::FLEXFORM) {
-                    $field['properties']['ds_pointerField'] = $typeField;
-                    $flexFormElements = [];
-                    foreach ($field['fields'] ?? [] as $flexFormField) {
-                        $languagePath->addPathSegment($flexFormField['identifier']);
-                        $flexFormField['languagePath'] = clone $languagePath;
-                        $languagePath->popSegment();
-                        $flexFormFieldArray = [
-                            'uniqueIdentifier' => $flexFormField['identifier'],
-                            'config' => $flexFormField,
-                            'type' => FieldType::from($flexFormField['type']),
-                        ];
-                        $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
-                        $flexFormTca = $flexFormTcaDefinition->getTca();
-                        $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.label';
-                        $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.description';
-                        $flexFormElements[$flexFormField['identifier']] = $flexFormTca;
-                    }
-                    $dataStructure = [
-                        'sheets' => [
-                            'sDEF' => [
-                                'ROOT' => [
-                                    'type' => 'array',
-                                    'el' => $flexFormElements,
-                                ],
-                            ],
-                        ],
-                    ];
-                    $field['properties']['ds'][$typeName] = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
+                    $field = $this->processFlexForm($field, $typeField, $typeName, $languagePath);
                 }
 
                 // Recursive call for Collection (inline) fields.
@@ -311,6 +284,64 @@ final class TableDefinitionCollection implements \IteratorAggregate
         }
 
         return $tableDefinitionList;
+    }
+
+    protected function processFlexForm(array $field, string $typeField, string $typeName, LanguagePath $languagePath): array
+    {
+        $flexFormSheets = [];
+        $sheetKey = 'sDEF';
+        foreach ($field['fields'] ?? [] as $flexFormField) {
+            if (FlexFormSubType::tryFrom($flexFormField['type']) === FlexFormSubType::SHEET) {
+                $sheetKey = $flexFormField['identifier'];
+                $languagePath->addPathSegment($sheetKey);
+                foreach ($flexFormField['fields'] ?? [] as $sheetField) {
+                    $flexFormSheets[$sheetKey][$sheetField['identifier']] = $this->resolveFlexFormField($languagePath, $sheetField);
+                }
+                $languagePath->popSegment();
+                continue;
+            }
+            $languagePath->addPathSegment($sheetKey);
+            $flexFormSheets[$sheetKey][$flexFormField['identifier']] = $this->resolveFlexFormField($languagePath, $flexFormField);
+            $languagePath->popSegment();
+        }
+        $sheets = [];
+        foreach ($flexFormSheets as $sheetIdentifier => $sheet) {
+            $root = [
+                'type' => 'array',
+                'el' => $sheet,
+            ];
+            if (count($flexFormSheets) > 1) {
+                $languagePath->addPathSegment('sheets.' . $sheetIdentifier);
+                $root['sheetTitle'] = $languagePath->getCurrentPath() . '.label';
+                $root['sheetDescription'] = $languagePath->getCurrentPath() . '.description';
+                $root['sheetShortDescr'] = $languagePath->getCurrentPath() . '.linkTitle';
+                $languagePath->popSegment();
+            }
+            $sheets[$sheetIdentifier] = [
+                'ROOT' => $root,
+            ];
+        }
+        $dataStructure['sheets'] = $sheets;
+        $field['properties']['ds_pointerField'] = $typeField;
+        $field['properties']['ds'][$typeName] = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
+        return $field;
+    }
+
+    protected function resolveFlexFormField(LanguagePath $languagePath, array $flexFormField): array
+    {
+        $languagePath->addPathSegment($flexFormField['identifier']);
+        $flexFormField['languagePath'] = clone $languagePath;
+        $languagePath->popSegment();
+        $flexFormFieldArray = [
+            'uniqueIdentifier' => $flexFormField['identifier'],
+            'config' => $flexFormField,
+            'type' => FieldType::from($flexFormField['type']),
+        ];
+        $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
+        $flexFormTca = $flexFormTcaDefinition->getTca();
+        $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.label';
+        $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.description';
+        return $flexFormTca;
     }
 
     protected function isPrefixEnabledForField(ParsedContentBlock $contentBlock, array $fieldConfiguration): bool
