@@ -50,7 +50,10 @@ class PageTsConfigGenerator
 
     protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $partialLanguagePath = 'LLL:' . $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
+        $partialLanguagePath = 'LLL:'
+            . $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/'
+            . ContentBlockPathUtility::getLanguageFilePath()
+            . ':' . $contentElementDefinition->getVendor() . '.' . $contentElementDefinition->getPackage();
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
 elements {
