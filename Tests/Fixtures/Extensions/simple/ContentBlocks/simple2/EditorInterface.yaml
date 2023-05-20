@@ -1,0 +1,5 @@
+group: common
+name: simple/simple2
+fields:
+  - identifier: header
+    useExistingField: true
