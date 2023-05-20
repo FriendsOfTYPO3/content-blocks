@@ -111,7 +111,7 @@ final class LinkFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = LinkFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

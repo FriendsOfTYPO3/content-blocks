@@ -149,7 +149,7 @@ final class NumberFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = NumberFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

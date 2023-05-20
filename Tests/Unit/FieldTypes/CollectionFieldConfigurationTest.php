@@ -160,7 +160,7 @@ final class CollectionFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = CollectionFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

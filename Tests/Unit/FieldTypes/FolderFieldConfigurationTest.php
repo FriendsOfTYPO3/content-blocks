@@ -91,7 +91,7 @@ final class FolderFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = FolderFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable

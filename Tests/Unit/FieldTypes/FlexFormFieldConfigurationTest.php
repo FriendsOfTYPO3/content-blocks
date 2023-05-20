@@ -50,7 +50,7 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     {
         $fieldConfiguration = FlexFormFieldConfiguration::createFromArray($config);
 
-        self::assertSame($expectedTca, $fieldConfiguration->getTca('LLL:test-path.xlf:foo'));
+        self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
