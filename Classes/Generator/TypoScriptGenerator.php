@@ -24,7 +24,6 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -34,6 +33,7 @@ class TypoScriptGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly IconRegistry $iconRegistry,
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {
     }
 
@@ -56,8 +56,7 @@ class TypoScriptGenerator
 
     protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-        $privatePath = $contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolderPath();
+        $privatePath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolderPath();
 
         return <<<HEREDOC
 tt_content.{$contentElementDefinition->getTypeName()} =< lib.contentBlock
