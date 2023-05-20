@@ -293,16 +293,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
         foreach ($field['fields'] ?? [] as $flexFormField) {
             if (FlexFormSubType::tryFrom($flexFormField['type']) === FlexFormSubType::SHEET) {
                 $sheetKey = $flexFormField['identifier'];
-                $languagePath->addPathSegment($sheetKey);
                 foreach ($flexFormField['fields'] ?? [] as $sheetField) {
                     $flexFormSheets[$sheetKey][$sheetField['identifier']] = $this->resolveFlexFormField($languagePath, $sheetField);
                 }
-                $languagePath->popSegment();
                 continue;
             }
-            $languagePath->addPathSegment($sheetKey);
             $flexFormSheets[$sheetKey][$flexFormField['identifier']] = $this->resolveFlexFormField($languagePath, $flexFormField);
-            $languagePath->popSegment();
         }
         $sheets = [];
         foreach ($flexFormSheets as $sheetIdentifier => $sheet) {

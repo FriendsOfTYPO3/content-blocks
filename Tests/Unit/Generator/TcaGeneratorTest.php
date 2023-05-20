@@ -1420,15 +1420,15 @@ final class TcaGeneratorTest extends UnitTestCase
                         <config type="array">
                             <type>input</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sDEF.header.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sDEF.header.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.header.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.header.description</description>
                     </header>
                     <textarea type="array">
                         <config type="array">
                             <type>text</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sDEF.textarea.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sDEF.textarea.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.textarea.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.textarea.description</description>
                     </textarea>
                 </el>
             </ROOT>
@@ -1445,15 +1445,15 @@ final class TcaGeneratorTest extends UnitTestCase
                         <config type="array">
                             <type>color</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.sDEF.color.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.sDEF.color.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.color.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.color.description</description>
                     </color>
                     <link type="array">
                         <config type="array">
                             <type>link</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.sDEF.link.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.sDEF.link.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.link.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.link.description</description>
                     </link>
                 </el>
             </ROOT>
@@ -1623,15 +1623,15 @@ final class TcaGeneratorTest extends UnitTestCase
                         <config type="array">
                             <type>input</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.sDEF.header.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.sDEF.header.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.header.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.header.description</description>
                     </header>
                     <textarea type="array">
                         <config type="array">
                             <type>text</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.sDEF.textarea.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.sDEF.textarea.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.textarea.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.textarea.description</description>
                     </textarea>
                 </el>
             </ROOT>
@@ -1648,15 +1648,15 @@ final class TcaGeneratorTest extends UnitTestCase
                         <config type="array">
                             <type>input</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.sDEF.header.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.sDEF.header.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.header.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.header.description</description>
                     </header>
                     <textarea type="array">
                         <config type="array">
                             <type>text</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.sDEF.textarea.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.sDEF.textarea.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.textarea.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.textarea.description</description>
                     </textarea>
                 </el>
             </ROOT>
@@ -1673,15 +1673,15 @@ final class TcaGeneratorTest extends UnitTestCase
                         <config type="array">
                             <type>input</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet1.header.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet1.header.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.header.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.header.description</description>
                     </header>
                     <textarea type="array">
                         <config type="array">
                             <type>text</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet1.textarea.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet1.textarea.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.textarea.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.textarea.description</description>
                     </textarea>
                 </el>
                 <sheetTitle>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheets.sheet1.label</sheetTitle>
@@ -1697,15 +1697,15 @@ final class TcaGeneratorTest extends UnitTestCase
                         <config type="array">
                             <type>link</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet2.link.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet2.link.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.link.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.link.description</description>
                     </link>
                     <number type="array">
                         <config type="array">
                             <type>number</type>
                         </config>
-                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet2.number.label</label>
-                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheet2.number.description</description>
+                        <label>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.number.label</label>
+                        <description>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.number.description</description>
                     </number>
                 </el>
                 <sheetTitle>LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.sheets.sheet2.label</sheetTitle>
