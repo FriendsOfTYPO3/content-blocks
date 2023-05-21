@@ -156,6 +156,7 @@ Field types
     DateTime/Index
     Email/Index
     File/Index
+    FlexForm/Index
     Folder/Index
     Linebreak/Index
     Link/Index
