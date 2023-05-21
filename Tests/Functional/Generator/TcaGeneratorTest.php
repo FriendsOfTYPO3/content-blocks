@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Generator;
 
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class TcaGeneratorTest extends FunctionalTestCase
+final class TcaGeneratorTest extends FunctionalTestCase
 {
     protected array $coreExtensionsToLoad = [
         'content_blocks',
