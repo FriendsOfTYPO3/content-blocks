@@ -26,6 +26,8 @@ final class ColorFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => '#000000',
@@ -45,6 +47,8 @@ final class ColorFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'color',
                     'size' => 20,
@@ -67,6 +71,8 @@ final class ColorFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'label' => '',
+                'description' => null,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => '',

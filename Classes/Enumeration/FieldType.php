@@ -115,9 +115,9 @@ enum FieldType: string
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             self::FLEXFORM => FlexFormFieldConfiguration::createFromArray($config),
-            self::PALETTE => new PaletteFieldConfiguration(),
-            self::LINEBREAK => new LinebreakFieldConfiguration(),
-            self::TAB => new TabFieldConfiguration(),
+            self::PALETTE => PaletteFieldConfiguration::createFromArray($config),
+            self::LINEBREAK => LinebreakFieldConfiguration::createFromArray($config),
+            self::TAB => TabFieldConfiguration::createFromArray($config),
         };
     }
 }

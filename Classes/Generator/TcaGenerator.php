@@ -77,6 +77,7 @@ class TcaGenerator
         protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
+        protected readonly TcaPreparation $tcaPreparation,
     ) {
     }
 
@@ -156,8 +157,8 @@ class TcaGenerator
                 // Also, root tables which didn't define a custom typeField get the full TCA.
                 if (!$tableDefinition->isRootTable() || $tableDefinition->getTypeField() === null) {
                     $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['label'] = $column->getLanguagePath()->getCurrentPath() . '.label';
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['description'] = $column->getLanguagePath()->getCurrentPath() . '.description';
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getLanguagePath()->getCurrentPath() . '.label';
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['description'] ??= $column->getLanguagePath()->getCurrentPath() . '.description';
                 }
                 // Newly created fields are enabled to be configured in user permissions by default.
                 if (!$column->useExistingField()) {
@@ -176,15 +177,19 @@ class TcaGenerator
                     // Label and description overrides. For core fields, fall back to standard translation.
                     // For content block fields, fall back to identifier.
                     $languagePath = $overrideColumn->getLanguagePath();
-                    $labelPath = '.label';
-                    $descriptionPath = '.description';
-                    if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $labelPath)) {
-                        $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $languagePath->getCurrentPath() . $labelPath;
-                    } elseif (!$overrideColumn->useExistingField()) {
-                        $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getIdentifier();
+                    if (!isset($columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'])) {
+                        $labelPath = '.label';
+                        if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $labelPath)) {
+                            $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $languagePath->getCurrentPath() . $labelPath;
+                        } elseif (!$overrideColumn->useExistingField()) {
+                            $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getIdentifier();
+                        }
                     }
-                    if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $descriptionPath)) {
-                        $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $languagePath->getCurrentPath() . $descriptionPath;
+                    if (!isset($columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'])) {
+                        $descriptionPath = '.description';
+                        if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $descriptionPath)) {
+                            $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $languagePath->getCurrentPath() . $descriptionPath;
+                        }
                     }
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
@@ -213,7 +218,7 @@ class TcaGenerator
             $tca[$tableName]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
         }
 
-        return GeneralUtility::makeInstance(TcaPreparation::class)->prepare($tca);
+        return $this->tcaPreparation->prepare($tca);
     }
 
     /**

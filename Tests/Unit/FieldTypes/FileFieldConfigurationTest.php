@@ -27,6 +27,8 @@ final class FileFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'enableImageManipulation' => 1,
                 'properties' => [
                     'non_available_field' => 'foo',
@@ -44,6 +46,8 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'file',
                     'allowed' => 'common-image-types',
@@ -85,6 +89,8 @@ final class FileFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'label' => '',
+                'description' => null,
                 'enableImageManipulation' => 0,
                 'properties' => [
                     'non_available_field' => 'foo',

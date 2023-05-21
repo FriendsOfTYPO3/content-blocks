@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
+use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TcaGeneratorTest extends UnitTestCase
@@ -1309,7 +1310,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry());
+        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
 
         $tca = $tcaGenerator->generate($tableDefinitionCollection);
 
@@ -1747,7 +1748,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry());
+        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
 
         $tca = $tcaGenerator->generate($tableDefinitionCollection);
 

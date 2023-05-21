@@ -26,6 +26,8 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => 1,
@@ -40,6 +42,8 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'category',
                     'default' => 1,
@@ -57,6 +61,8 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'label' => '',
+                'description' => null,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => '',

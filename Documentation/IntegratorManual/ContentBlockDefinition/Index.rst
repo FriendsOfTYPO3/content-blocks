@@ -65,7 +65,7 @@ representation.
 
 
 Source/Language/Labels.xlf
--------------------------------------
+--------------------------
 
 **You may**
 

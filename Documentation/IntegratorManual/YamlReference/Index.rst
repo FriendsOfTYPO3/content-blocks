@@ -106,6 +106,22 @@ type
 
    The field's type. See :ref:`field_types`.
 
+label
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|`
+
+By default labels should be defined inside the :file:`Labels.xml` file. But in
+case there is only one language for the backend you may define labels directly
+in the YAML configuration. This has precedence over translation files.
+
+description
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|`
+
+See `label` above.
+
 properties
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` array

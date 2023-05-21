@@ -26,6 +26,8 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'properties' => [
                     'non_available_field' => 'foo',
                     'ds_pointerField' => 'foobar',
@@ -33,6 +35,8 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'flex',
                     'ds_pointerField' => 'foobar',

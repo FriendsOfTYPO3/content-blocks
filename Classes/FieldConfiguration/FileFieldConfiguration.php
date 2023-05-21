@@ -25,6 +25,8 @@ use TYPO3\CMS\Core\Resource\AbstractFile;
  */
 final class FileFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithLabelAndDescription;
+
     private FieldType $fieldType = FieldType::FILE;
     private array|string $allowed = [];
     private array|string $disallowed = [];
@@ -38,6 +40,8 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): FileFieldConfiguration
     {
         $self = new self();
+        $self->label = $settings['label'] ?? $self->label;
+        $self->description = $settings['description'] ?? $self->description;
         $properties = $settings['properties'] ?? [];
         $allowed = $properties['allowed'] ?? $self->allowed;
         if (is_array($allowed) || is_string($allowed)) {
@@ -58,6 +62,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
+        $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->allowed !== [] && $this->allowed !== '') {
             $config['allowed'] = $this->allowed;

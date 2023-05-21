@@ -26,6 +26,8 @@ final class LinkFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => 'Default value',
@@ -51,6 +53,8 @@ final class LinkFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'link',
                     'size' => 20,
@@ -79,6 +83,8 @@ final class LinkFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'label' => '',
+                'description' => null,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => '',

@@ -24,6 +24,8 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class ColorFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithLabelAndDescription;
+
     private FieldType $fieldType = FieldType::COLOR;
     private ?string $alternativeSql = null;
     private string $default = '';
@@ -39,6 +41,8 @@ final class ColorFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): ColorFieldConfiguration
     {
         $self = new self();
+        $self->label = $settings['label'] ?? $self->label;
+        $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $self->default = (string)($properties['default'] ?? $self->default);
@@ -58,6 +62,7 @@ final class ColorFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
+        $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

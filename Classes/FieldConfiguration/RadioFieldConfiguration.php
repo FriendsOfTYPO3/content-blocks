@@ -24,6 +24,8 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class RadioFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithLabelAndDescription;
+
     private FieldType $fieldType = FieldType::RADIO;
     private ?string $alternativeSql = null;
     private string|int $default = '';
@@ -34,6 +36,8 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): RadioFieldConfiguration
     {
         $self = new self();
+        $self->label = $settings['label'] ?? $self->label;
+        $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $default = $properties['default'] ?? $self->default;
@@ -49,6 +53,7 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
+        $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;

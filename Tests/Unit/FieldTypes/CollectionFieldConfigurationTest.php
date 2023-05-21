@@ -26,6 +26,8 @@ final class CollectionFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'properties' => [
                     'non_available_field' => 'foo',
                     'readOnly' => 1,
@@ -69,6 +71,8 @@ final class CollectionFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'inline',
                     'readOnly' => true,
@@ -115,6 +119,8 @@ final class CollectionFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'label' => '',
+                'description' => null,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'readOnly' => 0,

@@ -152,9 +152,11 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     }
                 }
                 $languagePath->addPathSegment('palettes.' . $rootFieldIdentifier);
+                $label = $rootField['label'] ?? '';
+                $description = $rootField['description'] ?? '';
                 $palette = [
-                    'label' => $languagePath->getCurrentPath() . '.label',
-                    'description' => $languagePath->getCurrentPath() . '.description',
+                    'label' => $label !== '' ? $label : $languagePath->getCurrentPath() . '.label',
+                    'description' => $description !== '' ? $description : $languagePath->getCurrentPath() . '.description',
                     'showitem' => $paletteShowItems,
                 ];
                 $paletteIdentifier = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $rootField)
@@ -172,7 +174,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
                 $uniqueTabIdentifiers[] = $rootFieldIdentifier;
                 $languagePath->addPathSegment('tabs.' . $rootFieldIdentifier);
-                $showItems[] = '--div--;' . $languagePath->getCurrentPath();
+                $label = ($rootField['label'] ?? '') !== '' ? $rootField['label'] : $languagePath->getCurrentPath();
+                $showItems[] = '--div--;' . $label;
                 $languagePath->popSegment();
                 continue;
             } else {

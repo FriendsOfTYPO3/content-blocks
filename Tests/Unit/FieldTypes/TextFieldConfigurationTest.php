@@ -26,6 +26,8 @@ final class TextFieldConfigurationTest extends UnitTestCase
     {
         yield 'truthy values' => [
             'config' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => 'Default value',
@@ -49,6 +51,8 @@ final class TextFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'label' => 'foo',
+                'description' => 'foo',
                 'config' => [
                     'type' => 'input',
                     'size' => 20,
@@ -75,6 +79,8 @@ final class TextFieldConfigurationTest extends UnitTestCase
 
         yield 'falsy values' => [
             'config' => [
+                'label' => '',
+                'description' => null,
                 'properties' => [
                     'non_available_field' => 'foo',
                     'default' => '',

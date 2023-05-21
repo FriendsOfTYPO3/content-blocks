@@ -24,6 +24,8 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class CollectionFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithLabelAndDescription;
+
     private FieldType $fieldType = FieldType::COLLECTION;
     private bool $readOnly = false;
     private int $size = 0;
@@ -55,6 +57,8 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): CollectionFieldConfiguration
     {
         $self = new self();
+        $self->label = $settings['label'] ?? $self->label;
+        $self->description = $settings['description'] ?? $self->description;
         $properties = $settings['properties'] ?? [];
         $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
         $self->size = (int)($properties['size'] ?? $self->size);
@@ -87,6 +91,7 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
+        $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->readOnly) {
             $config['readOnly'] = true;

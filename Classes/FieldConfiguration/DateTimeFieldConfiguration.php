@@ -25,6 +25,8 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithLabelAndDescription;
+
     private FieldType $fieldType = FieldType::DATETIME;
     private string|int $default = '';
     private bool $readOnly = false;
@@ -41,6 +43,8 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): DateTimeFieldConfiguration
     {
         $self = new self();
+        $self->label = $settings['label'] ?? $self->label;
+        $self->description = $settings['description'] ?? $self->description;
         $properties = $settings['properties'] ?? [];
         $default = $properties['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -62,6 +66,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
+        $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->dbType !== '' ? $this->default : $this->convertDateToTimestamp($this->default);

@@ -24,6 +24,8 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class ReferenceFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithLabelAndDescription;
+
     private FieldType $fieldType = FieldType::REFERENCE;
     private ?string $alternativeSql = null;
     private string|int $default = '';
@@ -54,6 +56,8 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): ReferenceFieldConfiguration
     {
         $self = new self();
+        $self->label = $settings['label'] ?? $self->label;
+        $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $properties = $settings['properties'] ?? [];
         $default = $properties['default'] ?? $self->default;
@@ -89,6 +93,7 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
+        $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
