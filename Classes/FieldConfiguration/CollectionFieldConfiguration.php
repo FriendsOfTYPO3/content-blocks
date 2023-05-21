@@ -42,12 +42,12 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
     private array $behaviour = [];
     private array $customControls = [];
     private string $foreign_default_sortby = '';
-    private string $foreign_field = '';
+    private string $foreign_field = 'foreign_table_parent_uid';
     private string $foreign_label = '';
     private array $foreign_match_fields = [];
     private string $foreign_selector = '';
     private string $foreign_sortby = '';
-    private string $foreign_table_field = '';
+    private string $foreign_table_field = 'tablenames';
     private string $foreign_unique = '';
     private array $overrideChildTca = [];
     private string $symmetric_field = '';

@@ -104,16 +104,22 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $columns = [];
         $showItems = [];
         $overrideColumns = [];
-        $typeField = $contentBlock->getYaml()['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
+        $typeField = $yaml['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
         $typeName = $typeField === null
             ? '1'
-            : $contentBlock->getYaml()['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
+            : $yaml['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
         $tableDefinition = [];
         $tableDefinition['useAsLabel'] = $yaml['useAsLabel'] ?? '';
         $tableDefinition['typeField'] = $typeField;
         $isRootTable = $table === $rootTable;
-        $isExistingTable = isset($GLOBALS['TCA'][$table]);
-        $shouldCreateNewTable = !$isRootTable || !$isExistingTable;
+        $tableDefinition['isRootTable'] = $isRootTable;
+        if ($isRootTable) {
+            if (isset($yaml['aggregateRoot'])) {
+                $tableDefinition['aggregateRoot'] = $yaml['aggregateRoot'];
+            }
+        } else {
+            $tableDefinition['aggregateRoot'] = false;
+        }
         foreach ($yaml['fields'] as $rootField) {
             $rootFieldType = ($rootField['useExistingField'] ?? false)
                 ? TypeResolver::resolve($rootField['identifier'] ?? '', $table)
@@ -178,52 +184,41 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
 
                 // Recursive call for Collection (inline) fields.
-                if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
+                if ($fieldType === FieldType::COLLECTION) {
                     $inlineTable = $this->isPrefixEnabledForField($contentBlock, $field)
                         ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
                         : $identifier;
-                    $field['properties']['foreign_table'] = $inlineTable;
-                    $field['properties']['foreign_field'] = 'foreign_table_parent_uid';
-                    $field['properties']['foreign_table_field'] = 'tablenames';
+                    $field['properties']['foreign_table'] ??= $inlineTable;
                     $field['properties']['foreign_match_fields'] = [
                         'fieldname' => $inlineTable,
                     ];
-                    $tableDefinitionList = $this->processContentBlock(
-                        yaml: $field,
-                        contentBlock: $contentBlock,
-                        table: $inlineTable,
-                        rootTable: $rootTable,
-                        tableDefinitionList: $tableDefinitionList,
-                        languagePath: $languagePath,
-                    );
+                    if (!empty($field['fields'])) {
+                        $tableDefinitionList = $this->processContentBlock(
+                            yaml: $field,
+                            contentBlock: $contentBlock,
+                            table: $inlineTable,
+                            rootTable: $rootTable,
+                            tableDefinitionList: $tableDefinitionList,
+                            languagePath: $languagePath,
+                        );
+                    }
                 }
 
                 $field['languagePath'] = clone $languagePath;
-                if ($isRootTable) {
-                    $uniqueColumnName = $this->isPrefixEnabledForField($contentBlock, $field)
-                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
-                        : $identifier;
-                    $columns[] = $uniqueColumnName;
-                    $fieldArray = [
-                        'uniqueIdentifier' => $uniqueColumnName,
-                        'config' => $field,
-                        'type' => $fieldType,
-                    ];
-                    $tableDefinition['fields'][$uniqueColumnName] = $fieldArray;
-                    $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
-                }
 
-                $tableDefinition['isRootTable'] = $isRootTable;
-                if ($shouldCreateNewTable) {
-                    $uniqueColumnName = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $field)
-                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
-                        : $identifier;
-                    $tableDefinition['isCustomTable'] = true;
-                    $tableDefinition['fields'][$uniqueColumnName] = [
-                        'uniqueIdentifier' => $uniqueColumnName,
-                        'config' => $field,
-                        'type' => $fieldType,
-                    ];
+                $uniqueColumnName = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $field)
+                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
+                    : $identifier;
+                $fieldArray = [
+                    'uniqueIdentifier' => $uniqueColumnName,
+                    'config' => $field,
+                    'type' => $fieldType,
+                ];
+                $tableDefinition['fields'][$uniqueColumnName] = $fieldArray;
+
+                if ($isRootTable) {
+                    $columns[] = $uniqueColumnName;
+                    $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
                 }
                 $languagePath->popSegment();
             }
@@ -250,16 +245,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
         }
         $elements[] = $element;
         $tableDefinition['elements'] = $elements;
-
-        // Collection fields are unique and require always an own table definition, which can't be shared across other
-        // content blocks, so they can be added here directly.
-        if ($shouldCreateNewTable && !$isRootTable) {
-            $this->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
-        } else {
-            // Add / merge table definition to the list, so the combined result can be added later to the definition collection.
-            $tableDefinitionList[$table] ??= $tableDefinition;
-            $tableDefinitionList[$table] = array_replace_recursive($tableDefinitionList[$table], $tableDefinition);
-        }
+        // Add / merge table definition to the list, so the combined result can be added later to the definition collection.
+        $tableDefinitionList[$table] ??= $tableDefinition;
+        $tableDefinitionList[$table] = array_replace_recursive($tableDefinitionList[$table], $tableDefinition);
 
         return $tableDefinitionList;
     }

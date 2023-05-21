@@ -87,6 +87,19 @@ minitems
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
 
+foreign_table
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string (table)
+   :sep:`|`
+
+   It is possible to reference another table instead of creating a new one. This
+   table can be defined by another Content Block, but can also be an existing
+   table defined by the Core or another extension. In case of another Content
+   Block, the option :yaml:`aggregateRoot` has to be set to `false`, so that
+   required fields are created. Existing tables need to manually define
+   the :sql:`foreign_table_parent_uid`, :sql:`tablenames` and :sql:`fieldname`
+   fields.
+
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline>`
 
 Example
@@ -126,6 +139,22 @@ Advanced / use case
             properties:
               minitems: 1
               maxitems: 1
-              required: true
           - identifier: title
             type: Text
+
+.. code-block:: yaml
+
+    # This custom table needs to be defined in a separate Content Block
+    name: example/slide
+    table: my_slide
+    aggregateRoot: false
+    fields:
+      - identifier: image
+        type: Image
+
+    name: example/collection
+    group: common
+    fields:
+      - identifier: slides
+        type: Collection
+        foreign_table: my_slide

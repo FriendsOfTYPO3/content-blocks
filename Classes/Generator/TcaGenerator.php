@@ -128,7 +128,7 @@ class TcaGenerator
     {
         $tca = [];
         foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
-            if ($tableDefinition->isCustomTable()) {
+            if (!isset($GLOBALS['TCA'][$tableName])) {
                 $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition);
             }
             foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
@@ -371,7 +371,7 @@ class TcaGenerator
             'editlock' => 'editlock',
             'versioningWS' => true,
             'origUid' => 't3_origuid',
-            'hideTable' => !$tableDefinition->isRootTable(),
+            'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'transOrigPointerField' => 'l10n_parent',
             'translationSource' => 'l10n_source',
             'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -508,8 +508,18 @@ class TcaGenerator
             ],
         ];
 
-        if (!$tableDefinition->isRootTable()) {
+        if (!$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot()) {
             $columns['foreign_table_parent_uid'] = [
+                'config' => [
+                    'type' => 'passthrough',
+                ],
+            ];
+            $columns['tablenames'] = [
+                'config' => [
+                    'type' => 'passthrough',
+                ],
+            ];
+            $columns['fieldname'] = [
                 'config' => [
                     'type' => 'passthrough',
                 ],

@@ -156,6 +156,11 @@ class RelationResolver
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
 
+        // If this table is defined through TCA, return data as is.
+        if (!$this->tableDefinitionCollection->hasTable($collectionTable)) {
+            return $data;
+        }
+
         $tableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
         foreach ($data as $index => $row) {
             foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {

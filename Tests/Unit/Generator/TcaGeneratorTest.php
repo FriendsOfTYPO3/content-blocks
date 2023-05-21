@@ -603,6 +603,16 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'passthrough',
                             ],
                         ],
+                        'tablenames' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'fieldname' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
                         'text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.text.label',
@@ -800,6 +810,16 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         'foreign_table_parent_uid' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'tablenames' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'fieldname' => [
                             'config' => [
                                 'type' => 'passthrough',
                             ],
@@ -1278,6 +1298,16 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         'foreign_table_parent_uid' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'tablenames' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'fieldname' => [
                             'config' => [
                                 'type' => 'passthrough',
                             ],

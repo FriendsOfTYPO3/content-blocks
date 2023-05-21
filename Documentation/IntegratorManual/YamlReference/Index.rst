@@ -84,6 +84,20 @@ prefixFields
    it can be useful to deactivate this option. Read more about
    :ref:`reusing fields here <cb_reuse_existing_fields>`.
 
+aggregateRoot
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   By default, all tables are treated as `aggregateRoot`. This means, this table
+   is not a child-table of another root. By assigning this option the `false`
+   value, additional fields are created to enable a reference to a parent table:
+   :sql:`foreign_table_parent_uid`, :sql:`tablenames` and :sql:`fieldname`. Now,
+   a type Collection field can define :yaml:`foreign_table` with this table.
+   When referencing an existing table, you need to take care yourself that these
+   fields exist. Also, non-aggregate tables are hidden in the List module.
+
 Field definitions
 =================
 

@@ -24,7 +24,7 @@ final class TableDefinition
 {
     private string $table = '';
     private bool $isRootTable = false;
-    private bool $isCustomTable = false;
+    private bool $isAggregateRoot = true;
     protected ?string $typeField = null;
     private string $useAsLabel = '';
     /** @var string[] */
@@ -45,7 +45,7 @@ final class TableDefinition
             ->withTable($table)
             ->withUseAsLabel($definition['useAsLabel'] ?? '')
             ->withIsRootTable($definition['isRootTable'] ?? false)
-            ->withIsCustomTable($definition['isCustomTable'] ?? false)
+            ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
             ->withShowItems($definition['showItems'] ?? [])
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
@@ -69,9 +69,9 @@ final class TableDefinition
         return $this->isRootTable;
     }
 
-    public function isCustomTable(): bool
+    public function isAggregateRoot(): bool
     {
-        return $this->isCustomTable;
+        return $this->isAggregateRoot;
     }
 
     public function getTypeField(): ?string
@@ -128,10 +128,10 @@ final class TableDefinition
         return $clone;
     }
 
-    public function withIsCustomTable(bool $isCustomTable): TableDefinition
+    public function withIsAggregateRoot(bool $isAggregateRoot): TableDefinition
     {
         $clone = clone $this;
-        $clone->isCustomTable = $isCustomTable;
+        $clone->isAggregateRoot = $isAggregateRoot;
         return $clone;
     }
 
