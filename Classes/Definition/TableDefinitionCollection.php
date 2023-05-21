@@ -61,12 +61,14 @@ final class TableDefinitionCollection implements \IteratorAggregate
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
             $table = $contentBlock->getYaml()['table'] ?? 'tt_content';
+            $languagePath = new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
             $tableDefinitionList = $tableDefinitionCollection->processContentBlock(
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
                 table: $table,
                 rootTable: $table,
                 tableDefinitionList: $tableDefinitionList,
+                languagePath: $languagePath
             );
         }
         foreach ($tableDefinitionList as $table => $tableDefinition) {
@@ -75,9 +77,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $tableDefinitionCollection;
     }
 
-    private function processContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, ?LanguagePath $languagePath = null): array
+    private function processContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, LanguagePath $languagePath): array
     {
-        $languagePath ??= new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
         $uniqueIdentifiers = [];
         $uniquePaletteIdentifiers = [];
         $uniqueTabIdentifiers = [];
