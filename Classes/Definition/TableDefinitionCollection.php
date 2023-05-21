@@ -32,6 +32,11 @@ final class TableDefinitionCollection implements \IteratorAggregate
     /** @var TableDefinition[] */
     private array $definitions = [];
 
+    public function getIterator(): \Traversable
+    {
+        return new \ArrayIterator($this->definitions);
+    }
+
     public function addTable(TableDefinition $tableDefinition): void
     {
         if (!$this->hasTable($tableDefinition->getTable())) {
@@ -50,6 +55,22 @@ final class TableDefinitionCollection implements \IteratorAggregate
     public function hasTable(string $table): bool
     {
         return isset($this->definitions[$table]);
+    }
+
+    public function getContentElementDefinition(string $CType): ?ContentElementDefinition
+    {
+        if (!$this->hasTable('tt_content')) {
+            return null;
+        }
+        foreach ($this->getTable('tt_content')->getTypeDefinitionCollection() as $typeDefinition) {
+            if (!$typeDefinition instanceof ContentElementDefinition) {
+                continue;
+            }
+            if ($typeDefinition->getTypeName() === $CType) {
+                return $typeDefinition;
+            }
+        }
+        return null;
     }
 
     /**
@@ -336,7 +357,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         }
     }
 
-    protected function processFlexForm(array $field, string $typeField, string $typeName, LanguagePath $languagePath): array
+    private function processFlexForm(array $field, string $typeField, string $typeName, LanguagePath $languagePath): array
     {
         $flexFormSheets = [];
         $sheetKey = 'sDEF';
@@ -373,7 +394,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $field;
     }
 
-    protected function resolveFlexFormField(LanguagePath $languagePath, array $flexFormField): array
+    private function resolveFlexFormField(LanguagePath $languagePath, array $flexFormField): array
     {
         $languagePath->addPathSegment($flexFormField['identifier']);
         $flexFormField['languagePath'] = clone $languagePath;
@@ -390,7 +411,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $flexFormTca;
     }
 
-    protected function isPrefixEnabledForField(ParsedContentBlock $contentBlock, array $fieldConfiguration): bool
+    private function isPrefixEnabledForField(ParsedContentBlock $contentBlock, array $fieldConfiguration): bool
     {
         if (array_key_exists('useExistingField', $fieldConfiguration)) {
             return !$fieldConfiguration['useExistingField'];
@@ -399,26 +420,5 @@ final class TableDefinitionCollection implements \IteratorAggregate
             return (bool)$fieldConfiguration['prefixField'];
         }
         return $contentBlock->prefixFields();
-    }
-
-    public function getContentElementDefinition(string $CType): ?ContentElementDefinition
-    {
-        if (!$this->hasTable('tt_content')) {
-            return null;
-        }
-        foreach ($this->getTable('tt_content')->getTypeDefinitionCollection() as $typeDefinition) {
-            if (!$typeDefinition instanceof ContentElementDefinition) {
-                continue;
-            }
-            if ($typeDefinition->getTypeName() === $CType) {
-                return $typeDefinition;
-            }
-        }
-        return null;
-    }
-
-    public function getIterator(): \Traversable
-    {
-        return new \ArrayIterator($this->definitions);
     }
 }
