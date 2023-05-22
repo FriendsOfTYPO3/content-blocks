@@ -17,6 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessedContentType;
+use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessedFieldsResult;
+use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessedTableDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Enumeration\FlexFormSubType;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
@@ -101,25 +104,34 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
     private function processContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, LanguagePath $languagePath): array
     {
-        $columns = [];
-        $showItems = [];
-        $overrideColumns = [];
+        $processedFieldsResult = $this->processRootFields($yaml, $contentBlock, $table, $rootTable, $tableDefinitionList, $languagePath);
+
+        // Merge table definition to the list, so the combined result can be added later to the definition collection.
+        $tableDefinition = $this->createNewTableDefinition($processedFieldsResult->tableDefinition);
+        $processedFieldsResult->tableDefinitionList[$table] ??= [];
+        $processedFieldsResult->tableDefinitionList[$table]['elements'][] = $this->createNewContentType($processedFieldsResult->contentType);
+        $processedFieldsResult->tableDefinitionList[$table] = array_replace_recursive($processedFieldsResult->tableDefinitionList[$table], $tableDefinition);
+        return $processedFieldsResult->tableDefinitionList;
+    }
+
+    private function processRootFields(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, LanguagePath $languagePath): ProcessedFieldsResult
+    {
+        $isRootTable = $table === $rootTable;
         $typeField = $yaml['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
         $typeName = $typeField === null
             ? '1'
             : $yaml['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
-        $tableDefinition = [];
-        $tableDefinition['useAsLabel'] = $yaml['useAsLabel'] ?? '';
-        $tableDefinition['typeField'] = $typeField;
-        $isRootTable = $table === $rootTable;
-        $tableDefinition['isRootTable'] = $isRootTable;
-        if ($isRootTable) {
-            if (isset($yaml['aggregateRoot'])) {
-                $tableDefinition['aggregateRoot'] = $yaml['aggregateRoot'];
-            }
-        } else {
-            $tableDefinition['aggregateRoot'] = false;
-        }
+        $result = new ProcessedFieldsResult();
+        $result->tableDefinitionList = $tableDefinitionList;
+        $result->contentType = new ProcessedContentType();
+        $result->contentType->contentBlock = $contentBlock;
+        $result->contentType->typeName = $typeName;
+        $result->contentType->table = $table;
+        $result->tableDefinition = new ProcessedTableDefinition();
+        $result->tableDefinition->useAsLabel = $yaml['useAsLabel'] ?? '';
+        $result->tableDefinition->typeField = $typeField;
+        $result->tableDefinition->isRootTable = $isRootTable;
+        $result->tableDefinition->isAggregateRoot = $yaml['aggregateRoot'] ?? null;
         foreach ($yaml['fields'] as $rootField) {
             $rootFieldType = ($rootField['useExistingField'] ?? false)
                 ? TypeResolver::resolve($rootField['identifier'] ?? '', $table)
@@ -156,17 +168,17 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $paletteIdentifier = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $rootField)
                     ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootFieldIdentifier)
                     : $rootFieldIdentifier;
-                $tableDefinition['palettes'][$paletteIdentifier] = $palette;
-                $showItems[] = '--palette--;;' . $paletteIdentifier;
+                $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
+                $result->contentType->showItems[] = '--palette--;;' . $paletteIdentifier;
                 $languagePath->popSegment();
             } elseif ($rootFieldType === FieldType::TAB) {
                 $languagePath->addPathSegment('tabs.' . $rootFieldIdentifier);
                 $label = ($rootField['label'] ?? '') !== '' ? $rootField['label'] : $languagePath->getCurrentPath();
-                $showItems[] = '--div--;' . $label;
+                $result->contentType->showItems[] = '--div--;' . $label;
                 $languagePath->popSegment();
                 continue;
             } else {
-                $showItems[] = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $rootField)
+                $result->contentType->showItems[] = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $rootField)
                     ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootFieldIdentifier)
                     : $rootFieldIdentifier;
                 $fields = [$rootField];
@@ -193,12 +205,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'fieldname' => $inlineTable,
                     ];
                     if (!empty($field['fields'])) {
-                        $tableDefinitionList = $this->processContentBlock(
+                        $result->tableDefinitionList = $this->processContentBlock(
                             yaml: $field,
                             contentBlock: $contentBlock,
                             table: $inlineTable,
                             rootTable: $rootTable,
-                            tableDefinitionList: $tableDefinitionList,
+                            tableDefinitionList: $result->tableDefinitionList,
                             languagePath: $languagePath,
                         );
                     }
@@ -214,42 +226,55 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     'config' => $field,
                     'type' => $fieldType,
                 ];
-                $tableDefinition['fields'][$uniqueColumnName] = $fieldArray;
+                $result->tableDefinition->fields[$uniqueColumnName] = $fieldArray;
 
                 if ($isRootTable) {
-                    $columns[] = $uniqueColumnName;
-                    $overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                    $result->contentType->columns[] = $uniqueColumnName;
+                    $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
                 }
                 $languagePath->popSegment();
             }
-            $tableDefinition['showItems'] = $showItems;
         }
+        return $result;
+    }
 
-        // If this is the root table, we add a new content type to the list of elements.
-        [$vendor, $package] = explode('/', $contentBlock->getName());
-        $elements = $tableDefinitionList[$table]['elements'] ?? [];
+    private function createNewTableDefinition(ProcessedTableDefinition $processedTableDefinition): array
+    {
+        $tableDefinition['palettes'] = $processedTableDefinition->palettes;
+        $tableDefinition['fields'] = $processedTableDefinition->fields;
+        $tableDefinition['useAsLabel'] = $processedTableDefinition->useAsLabel;
+        $tableDefinition['typeField'] = $processedTableDefinition->typeField;
+        $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
+        if ($processedTableDefinition->isRootTable) {
+            if ($processedTableDefinition->isAggregateRoot !== null) {
+                $tableDefinition['aggregateRoot'] = $processedTableDefinition->isAggregateRoot;
+            }
+        } else {
+            $tableDefinition['aggregateRoot'] = false;
+        }
+        return $tableDefinition;
+    }
+
+    private function createNewContentType(ProcessedContentType $contentType): array
+    {
+        [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
         $element = [
-            'identifier' => $contentBlock->getName(),
-            'columns' => $columns,
-            'showItems' => $showItems,
-            'overrideColumns' => $overrideColumns,
+            'identifier' => $contentType->contentBlock->getName(),
+            'columns' => $contentType->columns,
+            'showItems' => $contentType->showItems,
+            'overrideColumns' => $contentType->overrideColumns,
             'vendor' => $vendor,
             'package' => $package,
-            'iconProvider' => $contentBlock->getIconProvider(),
-            'typeName' => $typeName,
-            'priority' => (int)($contentBlock->getYaml()['priority'] ?? 0),
+            'iconProvider' => $contentType->contentBlock->getIconProvider(),
+            'typeName' => $contentType->typeName,
+            'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
         ];
-        if ($table === 'tt_content') {
-            $element['wizardGroup'] = $contentBlock->getYaml()['group'] ?? 'common';
-            $element['icon'] = $contentBlock->getIcon();
+        // Only Content Elements (=tt_content) have a "New Content Element Wizard".
+        if ($contentType->table === 'tt_content') {
+            $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
+            $element['icon'] = $contentType->contentBlock->getIcon();
         }
-        $elements[] = $element;
-        $tableDefinition['elements'] = $elements;
-        // Add / merge table definition to the list, so the combined result can be added later to the definition collection.
-        $tableDefinitionList[$table] ??= $tableDefinition;
-        $tableDefinitionList[$table] = array_replace_recursive($tableDefinitionList[$table], $tableDefinition);
-
-        return $tableDefinitionList;
+        return $element;
     }
 
     private function validateContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table): void

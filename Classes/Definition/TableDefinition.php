@@ -27,8 +27,6 @@ final class TableDefinition
     private bool $isAggregateRoot = true;
     protected ?string $typeField = null;
     private string $useAsLabel = '';
-    /** @var string[] */
-    private array $showItems = [];
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
     private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
@@ -47,7 +45,6 @@ final class TableDefinition
             ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
-            ->withShowItems($definition['showItems'] ?? [])
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
@@ -87,11 +84,6 @@ final class TableDefinition
     public function hasUseAsLabel(): bool
     {
         return $this->useAsLabel !== '';
-    }
-
-    public function getShowItems(): array
-    {
-        return $this->showItems;
     }
 
     public function getTypeDefinitionCollection(): ?TypeDefinitionCollection
