@@ -25,5 +25,4 @@ final class ProcessedFieldsResult
     public array $tableDefinitionList = [];
     public ProcessedTableDefinition $tableDefinition;
     public ProcessedContentType $contentType;
-    public array $fields = [];
 }
