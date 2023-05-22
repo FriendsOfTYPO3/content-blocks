@@ -29,5 +29,5 @@ final class ProcessedContentType
     public array $columns = [];
     public array $showItems = [];
     public array $overrideColumns = [];
-    public string $typeName = '';
+    public string|int $typeName = '';
 }

@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessedTableDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\Struct\ProcessingInput;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Enumeration\FlexFormSubType;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
@@ -87,14 +88,15 @@ final class TableDefinitionCollection implements \IteratorAggregate
             $table = $contentBlock->getYaml()['table'] ?? 'tt_content';
             $tableDefinitionCollection->validateContentBlock($contentBlock->getYaml(), $contentBlock, $table);
             $languagePath = new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
-            $tableDefinitionList = $tableDefinitionCollection->processContentBlock(
+            $processingInput = new ProcessingInput(
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
                 table: $table,
                 rootTable: $table,
+                languagePath: $languagePath,
                 tableDefinitionList: $tableDefinitionList,
-                languagePath: $languagePath
             );
+            $tableDefinitionList = $tableDefinitionCollection->processContentBlock($processingInput);
         }
         foreach ($tableDefinitionList as $table => $tableDefinition) {
             $tableDefinitionCollection->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
@@ -102,39 +104,42 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $tableDefinitionCollection;
     }
 
-    private function processContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, LanguagePath $languagePath): array
+    private function processContentBlock(ProcessingInput $input): array
     {
-        $processedFieldsResult = $this->processRootFields($yaml, $contentBlock, $table, $rootTable, $tableDefinitionList, $languagePath);
+        $processedFieldsResult = $this->processFields($input);
 
         // Merge table definition to the list, so the combined result can be added later to the definition collection.
-        $tableDefinition = $this->createNewTableDefinition($processedFieldsResult->tableDefinition);
-        $processedFieldsResult->tableDefinitionList[$table] ??= [];
-        $processedFieldsResult->tableDefinitionList[$table]['elements'][] = $this->createNewContentType($processedFieldsResult->contentType);
-        $processedFieldsResult->tableDefinitionList[$table] = array_replace_recursive($processedFieldsResult->tableDefinitionList[$table], $tableDefinition);
+        $tableDefinition = $this->createInputArrayForTableDefinition($processedFieldsResult->tableDefinition);
+        $processedFieldsResult->tableDefinitionList[$input->table] ??= [];
+        $processedFieldsResult->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($processedFieldsResult->contentType);
+        $processedFieldsResult->tableDefinitionList[$input->table] = array_replace_recursive($processedFieldsResult->tableDefinitionList[$input->table], $tableDefinition);
         return $processedFieldsResult->tableDefinitionList;
     }
 
-    private function processRootFields(array $yaml, ParsedContentBlock $contentBlock, string $table, string $rootTable, array $tableDefinitionList, LanguagePath $languagePath): ProcessedFieldsResult
+    private function initializeProcessedFieldResult(ProcessingInput $input): ProcessedFieldsResult
     {
-        $isRootTable = $table === $rootTable;
-        $typeField = $yaml['typeField'] ?? $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
-        $typeName = $typeField === null
-            ? '1'
-            : $yaml['typeName'] ?? UniqueNameUtility::contentBlockNameToTypeIdentifier($contentBlock->getName());
         $result = new ProcessedFieldsResult();
-        $result->tableDefinitionList = $tableDefinitionList;
+        $result->tableDefinitionList = $input->tableDefinitionList;
+
         $result->contentType = new ProcessedContentType();
-        $result->contentType->contentBlock = $contentBlock;
-        $result->contentType->typeName = $typeName;
-        $result->contentType->table = $table;
+        $result->contentType->contentBlock = $input->contentBlock;
+        $result->contentType->typeName = $input->getTypeName();
+        $result->contentType->table = $input->table;
+
         $result->tableDefinition = new ProcessedTableDefinition();
-        $result->tableDefinition->useAsLabel = $yaml['useAsLabel'] ?? '';
-        $result->tableDefinition->typeField = $typeField;
-        $result->tableDefinition->isRootTable = $isRootTable;
-        $result->tableDefinition->isAggregateRoot = $yaml['aggregateRoot'] ?? null;
-        foreach ($yaml['fields'] as $rootField) {
+        $result->tableDefinition->useAsLabel = $input->yaml['useAsLabel'] ?? '';
+        $result->tableDefinition->typeField = $input->getTypeField();
+        $result->tableDefinition->isRootTable = $input->isRootTable();
+        $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
+        return $result;
+    }
+
+    private function processFields(ProcessingInput $input): ProcessedFieldsResult
+    {
+        $result = $this->initializeProcessedFieldResult($input);
+        foreach ($input->yaml['fields'] as $rootField) {
             $rootFieldType = ($rootField['useExistingField'] ?? false)
-                ? TypeResolver::resolve($rootField['identifier'] ?? '', $table)
+                ? TypeResolver::resolve($rootField['identifier'] ?? '', $input->table)
                 : FieldType::from($rootField['type']);
             $rootFieldIdentifier = $rootField['identifier'];
             if ($rootFieldType === FieldType::PALETTE) {
@@ -146,40 +151,40 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $paletteShowItems = [];
                 foreach ($rootField['fields'] as $paletteField) {
                     $paletteFieldType = ($paletteField['useExistingField'] ?? false)
-                        ? TypeResolver::resolve($paletteField['identifier'] ?? '', $table)
+                        ? TypeResolver::resolve($paletteField['identifier'] ?? '', $input->table)
                         : FieldType::from($paletteField['type']);
                     if ($paletteFieldType === FieldType::LINEBREAK) {
                         $paletteShowItems[] = '--linebreak--';
                     } else {
                         $fields[] = $paletteField;
-                        $paletteShowItems[] = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $paletteField)
-                            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $paletteField['identifier'])
+                        $paletteShowItems[] = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $paletteField)
+                            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $paletteField['identifier'])
                             : $paletteField['identifier'];
                     }
                 }
-                $languagePath->addPathSegment('palettes.' . $rootFieldIdentifier);
+                $input->languagePath->addPathSegment('palettes.' . $rootFieldIdentifier);
                 $label = $rootField['label'] ?? '';
                 $description = $rootField['description'] ?? '';
                 $palette = [
-                    'label' => $label !== '' ? $label : $languagePath->getCurrentPath() . '.label',
-                    'description' => $description !== '' ? $description : $languagePath->getCurrentPath() . '.description',
+                    'label' => $label !== '' ? $label : $input->languagePath->getCurrentPath() . '.label',
+                    'description' => $description !== '' ? $description : $input->languagePath->getCurrentPath() . '.description',
                     'showitem' => $paletteShowItems,
                 ];
-                $paletteIdentifier = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $rootField)
-                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootFieldIdentifier)
+                $paletteIdentifier = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $rootField)
+                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $rootFieldIdentifier)
                     : $rootFieldIdentifier;
                 $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
                 $result->contentType->showItems[] = '--palette--;;' . $paletteIdentifier;
-                $languagePath->popSegment();
+                $input->languagePath->popSegment();
             } elseif ($rootFieldType === FieldType::TAB) {
-                $languagePath->addPathSegment('tabs.' . $rootFieldIdentifier);
-                $label = ($rootField['label'] ?? '') !== '' ? $rootField['label'] : $languagePath->getCurrentPath();
+                $input->languagePath->addPathSegment('tabs.' . $rootFieldIdentifier);
+                $label = ($rootField['label'] ?? '') !== '' ? $rootField['label'] : $input->languagePath->getCurrentPath();
                 $result->contentType->showItems[] = '--div--;' . $label;
-                $languagePath->popSegment();
+                $input->languagePath->popSegment();
                 continue;
             } else {
-                $result->contentType->showItems[] = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $rootField)
-                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $rootFieldIdentifier)
+                $result->contentType->showItems[] = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $rootField)
+                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $rootFieldIdentifier)
                     : $rootFieldIdentifier;
                 $fields = [$rootField];
             }
@@ -187,18 +192,18 @@ final class TableDefinitionCollection implements \IteratorAggregate
             foreach ($fields as $field) {
                 $identifier = $field['identifier'];
                 $fieldType = ($field['useExistingField'] ?? false)
-                    ? TypeResolver::resolve($identifier, $table)
+                    ? TypeResolver::resolve($identifier, $input->table)
                     : FieldType::from($field['type']);
-                $languagePath->addPathSegment($identifier);
+                $input->languagePath->addPathSegment($identifier);
 
                 if ($fieldType === FieldType::FLEXFORM) {
-                    $field = $this->processFlexForm($field, $typeField, $typeName, $languagePath);
+                    $field = $this->processFlexForm($field, $input->getTypeField(), $input->getTypeName(), $input->languagePath);
                 }
 
                 // Recursive call for Collection (inline) fields.
                 if ($fieldType === FieldType::COLLECTION) {
-                    $inlineTable = $this->isPrefixEnabledForField($contentBlock, $field)
-                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
+                    $inlineTable = $this->isPrefixEnabledForField($input->contentBlock, $field)
+                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $identifier)
                         : $identifier;
                     $field['properties']['foreign_table'] ??= $inlineTable;
                     $field['properties']['foreign_match_fields'] = [
@@ -206,20 +211,22 @@ final class TableDefinitionCollection implements \IteratorAggregate
                     ];
                     if (!empty($field['fields'])) {
                         $result->tableDefinitionList = $this->processContentBlock(
-                            yaml: $field,
-                            contentBlock: $contentBlock,
-                            table: $inlineTable,
-                            rootTable: $rootTable,
-                            tableDefinitionList: $result->tableDefinitionList,
-                            languagePath: $languagePath,
+                            new ProcessingInput(
+                                yaml: $field,
+                                contentBlock: $input->contentBlock,
+                                table: $inlineTable,
+                                rootTable: $input->rootTable,
+                                languagePath: $input->languagePath,
+                                tableDefinitionList: $result->tableDefinitionList
+                            )
                         );
                     }
                 }
 
-                $field['languagePath'] = clone $languagePath;
+                $field['languagePath'] = clone $input->languagePath;
 
-                $uniqueColumnName = $isRootTable && $this->isPrefixEnabledForField($contentBlock, $field)
-                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
+                $uniqueColumnName = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $field)
+                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $identifier)
                     : $identifier;
                 $fieldArray = [
                     'uniqueIdentifier' => $uniqueColumnName,
@@ -228,17 +235,20 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 ];
                 $result->tableDefinition->fields[$uniqueColumnName] = $fieldArray;
 
-                if ($isRootTable) {
+                if ($input->isRootTable()) {
                     $result->contentType->columns[] = $uniqueColumnName;
                     $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
                 }
-                $languagePath->popSegment();
+                $input->languagePath->popSegment();
             }
         }
         return $result;
     }
 
-    private function createNewTableDefinition(ProcessedTableDefinition $processedTableDefinition): array
+    /**
+     * @see TableDefinition
+     */
+    private function createInputArrayForTableDefinition(ProcessedTableDefinition $processedTableDefinition): array
     {
         $tableDefinition['palettes'] = $processedTableDefinition->palettes;
         $tableDefinition['fields'] = $processedTableDefinition->fields;
@@ -255,7 +265,10 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $tableDefinition;
     }
 
-    private function createNewContentType(ProcessedContentType $contentType): array
+    /**
+     * @see TypeDefinition
+     */
+    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType): array
     {
         [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
         $element = [
@@ -269,7 +282,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
             'typeName' => $contentType->typeName,
             'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
         ];
-        // Only Content Elements (=tt_content) have a "New Content Element Wizard".
+        /** @see ContentElementDefinition */
         if ($contentType->table === 'tt_content') {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
             $element['icon'] = $contentType->contentBlock->getIcon();
