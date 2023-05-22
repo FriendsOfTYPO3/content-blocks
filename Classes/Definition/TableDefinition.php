@@ -141,13 +141,6 @@ final class TableDefinition
         return $clone;
     }
 
-    public function withShowItems(array $showItems): TableDefinition
-    {
-        $clone = clone $this;
-        $clone->showItems = $showItems;
-        return $clone;
-    }
-
     public function withTypeDefinitionCollection(TypeDefinitionCollection $typeDefinitionCollection): TableDefinition
     {
         $clone = clone $this;
