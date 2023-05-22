@@ -25,4 +25,10 @@ final class ProcessedFieldsResult
     public array $tableDefinitionList = [];
     public ProcessedTableDefinition $tableDefinition;
     public ProcessedContentType $contentType;
+
+    public function __construct()
+    {
+        $this->tableDefinition = new ProcessedTableDefinition();
+        $this->contentType = new ProcessedContentType();
+    }
 }

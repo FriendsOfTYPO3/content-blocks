@@ -96,37 +96,34 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 languagePath: $languagePath,
                 tableDefinitionList: $tableDefinitionList,
             );
-            $tableDefinitionList = $tableDefinitionCollection->processContentBlock($processingInput);
+            $tableDefinitionList = $tableDefinitionCollection->processFields($processingInput);
         }
-        foreach ($tableDefinitionList as $table => $tableDefinition) {
+        $mergedTableDefinitionList = $tableDefinitionCollection->mergeProcessingResult($tableDefinitionList);
+        foreach ($mergedTableDefinitionList as $table => $tableDefinition) {
             $tableDefinitionCollection->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
         }
         return $tableDefinitionCollection;
     }
 
-    private function processContentBlock(ProcessingInput $input): array
+    private function mergeProcessingResult(array $tableDefinitionList): array
     {
-        $processedFieldsResult = $this->processFields($input);
-
-        // Merge table definition to the list, so the combined result can be added later to the definition collection.
-        $tableDefinition = $this->createInputArrayForTableDefinition($processedFieldsResult->tableDefinition);
-        $processedFieldsResult->tableDefinitionList[$input->table] ??= [];
-        $processedFieldsResult->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($processedFieldsResult->contentType);
-        $processedFieldsResult->tableDefinitionList[$input->table] = array_replace_recursive($processedFieldsResult->tableDefinitionList[$input->table], $tableDefinition);
-        return $processedFieldsResult->tableDefinitionList;
+        $mergedResult = [];
+        foreach ($tableDefinitionList as $table => $definition) {
+            $mergedResult[$table] = array_replace_recursive(...$definition['tableDefinitions']);
+            $mergedResult[$table]['elements'] = $definition['elements'];
+        }
+        return $mergedResult;
     }
 
-    private function initializeProcessedFieldResult(ProcessingInput $input): ProcessedFieldsResult
+    private function initializeResult(ProcessingInput $input): ProcessedFieldsResult
     {
         $result = new ProcessedFieldsResult();
         $result->tableDefinitionList = $input->tableDefinitionList;
 
-        $result->contentType = new ProcessedContentType();
         $result->contentType->contentBlock = $input->contentBlock;
         $result->contentType->typeName = $input->getTypeName();
         $result->contentType->table = $input->table;
 
-        $result->tableDefinition = new ProcessedTableDefinition();
         $result->tableDefinition->useAsLabel = $input->yaml['useAsLabel'] ?? '';
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
@@ -134,9 +131,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $result;
     }
 
-    private function processFields(ProcessingInput $input): ProcessedFieldsResult
+    private function processFields(ProcessingInput $input): array
     {
-        $result = $this->initializeProcessedFieldResult($input);
+        $result = $this->initializeResult($input);
         foreach ($input->yaml['fields'] as $rootField) {
             $rootFieldType = ($rootField['useExistingField'] ?? false)
                 ? TypeResolver::resolve($rootField['identifier'] ?? '', $input->table)
@@ -210,7 +207,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                         'fieldname' => $inlineTable,
                     ];
                     if (!empty($field['fields'])) {
-                        $result->tableDefinitionList = $this->processContentBlock(
+                        $result->tableDefinitionList = $this->processFields(
                             new ProcessingInput(
                                 yaml: $field,
                                 contentBlock: $input->contentBlock,
@@ -242,7 +239,12 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 $input->languagePath->popSegment();
             }
         }
-        return $result;
+
+        // Collect table definitions and content types and carry it over to the next stack.
+        // This will be merged at the very end.
+        $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $this->createInputArrayForTableDefinition($result->tableDefinition);
+        $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType);
+        return $result->tableDefinitionList;
     }
 
     /**
