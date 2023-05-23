@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -39,7 +40,8 @@ class ContentBlockLoader implements LoaderInterface
 
     public function __construct(
         protected PhpFrontend $cache,
-        protected ContentBlockRegistry $contentBlockRegistry
+        protected ContentBlockRegistry $contentBlockRegistry,
+        protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
     ) {
     }
 
@@ -54,7 +56,7 @@ class ContentBlockLoader implements LoaderInterface
             foreach ($contentBlocks as $contentBlock) {
                 $this->contentBlockRegistry->addContentBlock($contentBlock);
             }
-            $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+            $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromParsedContentBlocks($contentBlocks);
             $this->tableDefinitionCollection = $tableDefinitionCollection;
             return $this->tableDefinitionCollection;
         }
@@ -76,7 +78,7 @@ class ContentBlockLoader implements LoaderInterface
 
         $this->publishAssets($parsedContentBlocks);
 
-        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($parsedContentBlocks);
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromParsedContentBlocks($parsedContentBlocks);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
 
         $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);

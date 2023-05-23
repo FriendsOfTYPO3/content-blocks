@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -1337,7 +1337,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
         $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
@@ -1775,7 +1775,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $tableDefinitionCollection = TableDefinitionCollection::createFromArray($contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
         $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());

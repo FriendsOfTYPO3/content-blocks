@@ -15,20 +15,17 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition\Struct;
+namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ProcessedFieldsResult
+final class ProcessedTableDefinition
 {
-    public array $tableDefinitionList = [];
-    public ProcessedTableDefinition $tableDefinition;
-    public ProcessedContentType $contentType;
-
-    public function __construct()
-    {
-        $this->tableDefinition = new ProcessedTableDefinition();
-        $this->contentType = new ProcessedContentType();
-    }
+    public array $palettes = [];
+    public array $fields = [];
+    public string $useAsLabel = '';
+    public ?string $typeField = null;
+    public bool $isRootTable = true;
+    public ?bool $isAggregateRoot = null;
 }
