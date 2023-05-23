@@ -115,83 +115,19 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $mergedResult;
     }
 
-    private function initializeResult(ProcessingInput $input): ProcessedFieldsResult
-    {
-        $result = new ProcessedFieldsResult();
-        $result->tableDefinitionList = $input->tableDefinitionList;
-
-        $result->contentType->contentBlock = $input->contentBlock;
-        $result->contentType->typeName = $input->getTypeName();
-        $result->contentType->table = $input->table;
-
-        $result->tableDefinition->useAsLabel = $input->yaml['useAsLabel'] ?? '';
-        $result->tableDefinition->typeField = $input->getTypeField();
-        $result->tableDefinition->isRootTable = $input->isRootTable();
-        $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
-        return $result;
-    }
-
     private function processFields(ProcessingInput $input): array
     {
         $result = $this->initializeResult($input);
         foreach ($input->yaml['fields'] as $rootField) {
-            $rootFieldType = ($rootField['useExistingField'] ?? false)
-                ? TypeResolver::resolve($rootField['identifier'] ?? '', $input->table)
-                : FieldType::from($rootField['type']);
-            $rootFieldIdentifier = $rootField['identifier'];
-            if ($rootFieldType === FieldType::PALETTE) {
-                // Ignore empty Palettes.
-                if (($rootField['fields'] ?? []) === []) {
-                    continue;
-                }
-                $fields = [];
-                $paletteShowItems = [];
-                foreach ($rootField['fields'] as $paletteField) {
-                    $paletteFieldType = ($paletteField['useExistingField'] ?? false)
-                        ? TypeResolver::resolve($paletteField['identifier'] ?? '', $input->table)
-                        : FieldType::from($paletteField['type']);
-                    if ($paletteFieldType === FieldType::LINEBREAK) {
-                        $paletteShowItems[] = '--linebreak--';
-                    } else {
-                        $fields[] = $paletteField;
-                        $paletteShowItems[] = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $paletteField)
-                            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $paletteField['identifier'])
-                            : $paletteField['identifier'];
-                    }
-                }
-                $input->languagePath->addPathSegment('palettes.' . $rootFieldIdentifier);
-                $label = $rootField['label'] ?? '';
-                $description = $rootField['description'] ?? '';
-                $palette = [
-                    'label' => $label !== '' ? $label : $input->languagePath->getCurrentPath() . '.label',
-                    'description' => $description !== '' ? $description : $input->languagePath->getCurrentPath() . '.description',
-                    'showitem' => $paletteShowItems,
-                ];
-                $paletteIdentifier = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $rootField)
-                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $rootFieldIdentifier)
-                    : $rootFieldIdentifier;
-                $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
-                $result->contentType->showItems[] = '--palette--;;' . $paletteIdentifier;
-                $input->languagePath->popSegment();
-            } elseif ($rootFieldType === FieldType::TAB) {
-                $input->languagePath->addPathSegment('tabs.' . $rootFieldIdentifier);
-                $label = ($rootField['label'] ?? '') !== '' ? $rootField['label'] : $input->languagePath->getCurrentPath();
-                $result->contentType->showItems[] = '--div--;' . $label;
-                $input->languagePath->popSegment();
-                continue;
-            } else {
-                $result->contentType->showItems[] = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $rootField)
-                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $rootFieldIdentifier)
-                    : $rootFieldIdentifier;
-                $fields = [$rootField];
-            }
-
+            $rootFieldType = $this->resolveType($rootField, $input->table);
+            $fields = match ($rootFieldType) {
+                Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
+                FieldType::TAB => $this->handleTab($input, $result, $rootField),
+                default => $this->handleDefault($input, $result, $rootField)
+            };
             foreach ($fields as $field) {
-                $identifier = $field['identifier'];
-                $fieldType = ($field['useExistingField'] ?? false)
-                    ? TypeResolver::resolve($identifier, $input->table)
-                    : FieldType::from($field['type']);
-                $input->languagePath->addPathSegment($identifier);
+                $fieldType = $this->resolveType($field, $input->table);
+                $input->languagePath->addPathSegment($field['identifier']);
 
                 if ($fieldType === FieldType::FLEXFORM) {
                     $field = $this->processFlexForm($field, $input->getTypeField(), $input->getTypeName(), $input->languagePath);
@@ -199,9 +135,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
                 // Recursive call for Collection (inline) fields.
                 if ($fieldType === FieldType::COLLECTION) {
-                    $inlineTable = $this->isPrefixEnabledForField($input->contentBlock, $field)
-                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $identifier)
-                        : $identifier;
+                    $inlineTable = $this->chooseInlineTableName($input->contentBlock, $field);
                     $field['properties']['foreign_table'] ??= $inlineTable;
                     $field['properties']['foreign_match_fields'] = [
                         'fieldname' => $inlineTable,
@@ -221,21 +155,16 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 }
 
                 $field['languagePath'] = clone $input->languagePath;
-
-                $uniqueColumnName = $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $field)
-                    ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $identifier)
-                    : $identifier;
+                $uniqueIdentifier = $this->chooseIdentifier($input, $field);
                 $fieldArray = [
-                    'uniqueIdentifier' => $uniqueColumnName,
+                    'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
                     'type' => $fieldType,
                 ];
-                $result->tableDefinition->fields[$uniqueColumnName] = $fieldArray;
+                $result->tableDefinition->fields[$uniqueIdentifier] = $fieldArray;
+                $result->contentType->columns[] = $uniqueIdentifier;
+                $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
 
-                if ($input->isRootTable()) {
-                    $result->contentType->columns[] = $uniqueColumnName;
-                    $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
-                }
                 $input->languagePath->popSegment();
             }
         }
@@ -247,142 +176,67 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return $result->tableDefinitionList;
     }
 
-    /**
-     * @see TableDefinition
-     */
-    private function createInputArrayForTableDefinition(ProcessedTableDefinition $processedTableDefinition): array
+    private function initializeResult(ProcessingInput $input): ProcessedFieldsResult
     {
-        $tableDefinition['palettes'] = $processedTableDefinition->palettes;
-        $tableDefinition['fields'] = $processedTableDefinition->fields;
-        $tableDefinition['useAsLabel'] = $processedTableDefinition->useAsLabel;
-        $tableDefinition['typeField'] = $processedTableDefinition->typeField;
-        $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
-        if ($processedTableDefinition->isRootTable) {
-            if ($processedTableDefinition->isAggregateRoot !== null) {
-                $tableDefinition['aggregateRoot'] = $processedTableDefinition->isAggregateRoot;
-            }
-        } else {
-            $tableDefinition['aggregateRoot'] = false;
-        }
-        return $tableDefinition;
+        $result = new ProcessedFieldsResult();
+        $result->tableDefinitionList = $input->tableDefinitionList;
+
+        $result->contentType->contentBlock = $input->contentBlock;
+        $result->contentType->typeName = $input->getTypeName();
+        $result->contentType->table = $input->table;
+
+        $result->tableDefinition->useAsLabel = $input->yaml['useAsLabel'] ?? '';
+        $result->tableDefinition->typeField = $input->getTypeField();
+        $result->tableDefinition->isRootTable = $input->isRootTable();
+        $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
+        return $result;
     }
 
-    /**
-     * @see TypeDefinition
-     */
-    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType): array
+    private function handleDefault(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
     {
-        [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
-        $element = [
-            'identifier' => $contentType->contentBlock->getName(),
-            'columns' => $contentType->columns,
-            'showItems' => $contentType->showItems,
-            'overrideColumns' => $contentType->overrideColumns,
-            'vendor' => $vendor,
-            'package' => $package,
-            'iconProvider' => $contentType->contentBlock->getIconProvider(),
-            'typeName' => $contentType->typeName,
-            'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
-        ];
-        /** @see ContentElementDefinition */
-        if ($contentType->table === 'tt_content') {
-            $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
-            $element['icon'] = $contentType->contentBlock->getIcon();
-        }
-        return $element;
+        $result->contentType->showItems[] = $this->chooseIdentifier($input, $field);
+        return [$field];
     }
 
-    private function validateContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table): void
+    private function handlePalette(ProcessingInput $input, ProcessedFieldsResult $result, array $rootPalette): array
     {
-        $uniqueIdentifiers = [];
-        $uniquePaletteIdentifiers = [];
-        $uniqueTabIdentifiers = [];
-        foreach ($yaml['fields'] as $rootField) {
-            $rootFieldType = ($rootField['useExistingField'] ?? false)
-                ? TypeResolver::resolve($rootField['identifier'] ?? '', $table)
-                : FieldType::from($rootField['type']);
-            if ($rootFieldType === FieldType::LINEBREAK) {
-                throw new \InvalidArgumentException(
-                    'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
-                    1679224392
-                );
-            }
-            if (!isset($rootField['identifier'])) {
-                throw new \InvalidArgumentException(
-                    'A field is missing the required "identifier" in content block "' . $contentBlock->getName() . '".',
-                    1679226075
-                );
-            }
-            $rootFieldIdentifier = $rootField['identifier'];
-            if ($rootFieldType === FieldType::PALETTE) {
-                // Ignore empty Palettes.
-                if (($rootField['fields'] ?? []) === []) {
-                    continue;
-                }
-                if (in_array($rootFieldIdentifier, $uniquePaletteIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The palette identifier "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
-                        1679168022
-                    );
-                }
-                $uniquePaletteIdentifiers[] = $rootFieldIdentifier;
-                $fields = [];
-                foreach ($rootField['fields'] as $paletteField) {
-                    $paletteFieldType = ($paletteField['useExistingField'] ?? false)
-                        ? TypeResolver::resolve($paletteField['identifier'] ?? '', $table)
-                        : FieldType::from($paletteField['type']);
-                    if ($paletteFieldType === FieldType::PALETTE) {
-                        throw new \InvalidArgumentException(
-                            'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
-                            1679168602
-                        );
-                    }
-                    if ($paletteFieldType === FieldType::TAB) {
-                        throw new \InvalidArgumentException(
-                            'Tab "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
-                            1679245193
-                        );
-                    }
-                }
-            } elseif ($rootFieldType === FieldType::TAB) {
-                if (in_array($rootFieldIdentifier, $uniqueTabIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The tab identifier "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
-                        1679243686
-                    );
-                }
-                $uniqueTabIdentifiers[] = $rootFieldIdentifier;
-                continue;
+        // Ignore empty Palettes.
+        if (($rootPalette['fields'] ?? []) === []) {
+            return [];
+        }
+        $fields = [];
+        $paletteShowItems = [];
+        foreach ($rootPalette['fields'] as $paletteField) {
+            $paletteFieldType = $this->resolveType($paletteField, $input->table);
+            if ($paletteFieldType === FieldType::LINEBREAK) {
+                $paletteShowItems[] = '--linebreak--';
             } else {
-                $fields = [$rootField];
-            }
-
-            foreach ($fields as $field) {
-                $identifier = $field['identifier'];
-                $fieldType = ($field['useExistingField'] ?? false)
-                    ? TypeResolver::resolve($identifier, $table)
-                    : FieldType::from($field['type']);
-                if (in_array($identifier, $uniqueIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
-                        1677407942
-                    );
-                }
-                $uniqueIdentifiers[] = $identifier;
-
-                if ($fieldType === FieldType::FLEXFORM) {
-                    // @todo validate FlexForm
-                }
-
-                // Recursive call for Collection (inline) fields.
-                if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
-                    $inlineTable = $this->isPrefixEnabledForField($contentBlock, $field)
-                        ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $identifier)
-                        : $identifier;
-                    $this->validateContentBlock($field, $contentBlock, $inlineTable);
-                }
+                $fields[] = $paletteField;
+                $paletteShowItems[] = $this->chooseIdentifier($input, $paletteField);
             }
         }
+        $input->languagePath->addPathSegment('palettes.' . $rootPalette['identifier']);
+        $label = $rootPalette['label'] ?? '';
+        $description = $rootPalette['description'] ?? '';
+        $palette = [
+            'label' => $label !== '' ? $label : $input->languagePath->getCurrentPath() . '.label',
+            'description' => $description !== '' ? $description : $input->languagePath->getCurrentPath() . '.description',
+            'showitem' => $paletteShowItems,
+        ];
+        $paletteIdentifier = $this->chooseIdentifier($input, $rootPalette);
+        $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
+        $result->contentType->showItems[] = '--palette--;;' . $paletteIdentifier;
+        $input->languagePath->popSegment();
+        return $fields;
+    }
+
+    private function handleTab(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    {
+        $input->languagePath->addPathSegment('tabs.' . $field['identifier']);
+        $label = ($field['label'] ?? '') !== '' ? $field['label'] : $input->languagePath->getCurrentPath();
+        $result->contentType->showItems[] = '--div--;' . $label;
+        $input->languagePath->popSegment();
+        return [];
     }
 
     private function processFlexForm(array $field, string $typeField, string $typeName, LanguagePath $languagePath): array
@@ -448,5 +302,156 @@ final class TableDefinitionCollection implements \IteratorAggregate
             return (bool)$fieldConfiguration['prefixField'];
         }
         return $contentBlock->prefixFields();
+    }
+
+    private function resolveType(array $field, string $table): FieldType
+    {
+        return ($field['useExistingField'] ?? false)
+            ? TypeResolver::resolve($field['identifier'] ?? '', $table)
+            : FieldType::from($field['type']);
+    }
+
+    private function chooseIdentifier(ProcessingInput $input, array $field): string
+    {
+        return $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $field)
+            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $field['identifier'])
+            : $field['identifier'];
+    }
+
+    private function chooseInlineTableName(ParsedContentBlock $contentBlock, array $field): string
+    {
+        return $this->isPrefixEnabledForField($contentBlock, $field)
+            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $field['identifier'])
+            : $field['identifier'];
+    }
+
+    /**
+     * @see TableDefinition
+     */
+    private function createInputArrayForTableDefinition(ProcessedTableDefinition $processedTableDefinition): array
+    {
+        $tableDefinition['palettes'] = $processedTableDefinition->palettes;
+        $tableDefinition['fields'] = $processedTableDefinition->fields;
+        $tableDefinition['useAsLabel'] = $processedTableDefinition->useAsLabel;
+        $tableDefinition['typeField'] = $processedTableDefinition->typeField;
+        $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
+        if ($processedTableDefinition->isRootTable) {
+            if ($processedTableDefinition->isAggregateRoot !== null) {
+                $tableDefinition['aggregateRoot'] = $processedTableDefinition->isAggregateRoot;
+            }
+        } else {
+            $tableDefinition['aggregateRoot'] = false;
+        }
+        return $tableDefinition;
+    }
+
+    /**
+     * @see TypeDefinition
+     */
+    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType): array
+    {
+        [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
+        $element = [
+            'identifier' => $contentType->contentBlock->getName(),
+            'columns' => $contentType->columns,
+            'showItems' => $contentType->showItems,
+            'overrideColumns' => $contentType->overrideColumns,
+            'vendor' => $vendor,
+            'package' => $package,
+            'iconProvider' => $contentType->contentBlock->getIconProvider(),
+            'typeName' => $contentType->typeName,
+            'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
+        ];
+        /** @see ContentElementDefinition */
+        if ($contentType->table === 'tt_content') {
+            $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
+            $element['icon'] = $contentType->contentBlock->getIcon();
+        }
+        return $element;
+    }
+
+    private function validateContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table): void
+    {
+        $uniqueIdentifiers = [];
+        $uniquePaletteIdentifiers = [];
+        $uniqueTabIdentifiers = [];
+        foreach ($yaml['fields'] as $rootField) {
+            $rootFieldType = $this->resolveType($rootField, $table);
+            if ($rootFieldType === FieldType::LINEBREAK) {
+                throw new \InvalidArgumentException(
+                    'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
+                    1679224392
+                );
+            }
+            if (!isset($rootField['identifier'])) {
+                throw new \InvalidArgumentException(
+                    'A field is missing the required "identifier" in content block "' . $contentBlock->getName() . '".',
+                    1679226075
+                );
+            }
+            $rootFieldIdentifier = $rootField['identifier'];
+            if ($rootFieldType === FieldType::PALETTE) {
+                // Ignore empty Palettes.
+                if (($rootField['fields'] ?? []) === []) {
+                    continue;
+                }
+                if (in_array($rootFieldIdentifier, $uniquePaletteIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The palette identifier "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                        1679168022
+                    );
+                }
+                $uniquePaletteIdentifiers[] = $rootFieldIdentifier;
+                $fields = [];
+                foreach ($rootField['fields'] as $paletteField) {
+                    $paletteFieldType = $this->resolveType($paletteField, $table);
+                    if ($paletteFieldType === FieldType::PALETTE) {
+                        throw new \InvalidArgumentException(
+                            'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
+                            1679168602
+                        );
+                    }
+                    if ($paletteFieldType === FieldType::TAB) {
+                        throw new \InvalidArgumentException(
+                            'Tab "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
+                            1679245193
+                        );
+                    }
+                }
+            } elseif ($rootFieldType === FieldType::TAB) {
+                if (in_array($rootFieldIdentifier, $uniqueTabIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The tab identifier "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                        1679243686
+                    );
+                }
+                $uniqueTabIdentifiers[] = $rootFieldIdentifier;
+                continue;
+            } else {
+                $fields = [$rootField];
+            }
+
+            foreach ($fields as $field) {
+                $identifier = $field['identifier'];
+                $fieldType = $this->resolveType($field, $table);
+                if (in_array($identifier, $uniqueIdentifiers, true)) {
+                    throw new \InvalidArgumentException(
+                        'The identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                        1677407942
+                    );
+                }
+                $uniqueIdentifiers[] = $identifier;
+
+                if ($fieldType === FieldType::FLEXFORM) {
+                    // @todo validate FlexForm
+                }
+
+                // Recursive call for Collection (inline) fields.
+                if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
+                    $inlineTable = $this->chooseInlineTableName($contentBlock, $field);
+                    $this->validateContentBlock($field, $contentBlock, $inlineTable);
+                }
+            }
+        }
     }
 }
