@@ -21,7 +21,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class TableDefinitionFactoryTest extends UnitTestCase
+final class TableDefinitionFactoryTest extends UnitTestCase
 {
     public static function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
     {
