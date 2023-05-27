@@ -21,6 +21,9 @@ use TYPO3\CMS\ContentBlocks\Definition\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class ProcessingInput
 {
     private bool $isRootTable;

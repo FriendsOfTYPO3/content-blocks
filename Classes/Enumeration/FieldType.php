@@ -96,6 +96,14 @@ enum FieldType: string
         return !in_array($this, [self::PALETTE, self::LINEBREAK, self::TAB], true);
     }
 
+    public static function isValidFlexFormField(FieldType $type): bool
+    {
+        if (!$type->isRenderable()) {
+            return false;
+        }
+        return $type !== FieldType::FLEXFORM;
+    }
+
     public function getFieldConfiguration(array $config): FieldConfigurationInterface
     {
         return match ($this) {

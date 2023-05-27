@@ -640,4 +640,162 @@ final class TableDefinitionFactoryTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
     }
+
+    /**
+     * @test
+     */
+    public function flexFieldIsNotAllowedToMixNonSheetAndSheet(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'flexField',
+                                    'type' => 'FlexForm',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'foo',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'aSheet',
+                                            'type' => 'Sheet',
+                                            'fields' => [
+                                                [
+                                                    'identifier' => 'bar',
+                                                    'type' => 'Text',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in content block "foo/bar".');
+        $this->expectExceptionCode(1685217163);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+    }
+
+    public static function structuralFieldTypesAreNotAllowedInFlexFormDataProvider(): iterable
+    {
+        yield 'Invalid field inside default Sheet' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'foo/bar',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/foo',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'inline',
+                                'type' => 'Collection',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'flexField',
+                                        'type' => 'FlexForm',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'foo',
+                                                'type' => 'FlexForm',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'message' => 'Field type "FlexForm" with identifier "foo" is not allowed inside FlexForm in Content Block "foo/bar".',
+        ];
+
+        yield 'Invalid field inside Sheet' => [
+            'contentBlocks' => [
+                [
+
+                    'name' => 'foo/bar',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/foo',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'inline',
+                                'type' => 'Collection',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'flexField',
+                                        'type' => 'FlexForm',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'aSheet',
+                                                'type' => 'Sheet',
+                                                'fields' => [
+                                                    [
+                                                        'identifier' => 'foo',
+                                                        'type' => 'Text',
+                                                    ],
+                                                ],
+                                            ],
+                                            [
+                                                'identifier' => 'aSheet2',
+                                                'type' => 'Sheet',
+                                                'fields' => [
+                                                    [
+                                                        'identifier' => 'paletteInFlex',
+                                                        'type' => 'Palette',
+                                                        'fields' => [
+                                                            [
+                                                                [
+                                                                    'identifier' => 'bar',
+                                                                    'type' => 'Text',
+                                                                ],
+                                                            ],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'message' => 'Field type "Palette" with identifier "paletteInFlex" is not allowed inside FlexForm in Content Block "foo/bar".',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider structuralFieldTypesAreNotAllowedInFlexFormDataProvider
+     */
+    public function structuralFieldTypesAreNotAllowedInFlexForm(array $contentBlocks, string $message): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1685220309);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+    }
 }

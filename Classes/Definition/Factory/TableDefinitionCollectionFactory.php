@@ -400,7 +400,8 @@ class TableDefinitionCollectionFactory
                 $uniqueIdentifiers[] = $identifier;
 
                 if ($fieldType === FieldType::FLEXFORM) {
-                    // @todo validate FlexForm
+                    $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $contentBlock);
+                    $this->validateFlexFormContainsValidFieldTypes($field, $contentBlock);
                 }
 
                 // Recursive call for Collection (inline) fields.
@@ -408,6 +409,39 @@ class TableDefinitionCollectionFactory
                     $inlineTable = $this->chooseInlineTableName($contentBlock, $field);
                     $this->validateContentBlock($field, $contentBlock, $inlineTable);
                 }
+            }
+        }
+    }
+
+    private function validateFlexFormHasOnlySheetsOrNoSheet(array $field, ParsedContentBlock $contentBlock): void
+    {
+        foreach ($field['fields'] ?? [] as $flexField) {
+            $flexFormType = FlexFormSubType::tryFrom($flexField['type']) ?? 'nonSheet';
+            $currentType ??= $flexFormType;
+            $isValid = $currentType === $flexFormType;
+            if (!$isValid) {
+                throw new \InvalidArgumentException(
+                    'You must not mix Sheets with normal fields inside the FlexForm definition "' . $field['identifier'] . '" in content block "' . $contentBlock->getName() . '".',
+                    1685217163
+                );
+            }
+            $currentType = $flexFormType;
+        }
+    }
+
+    private function validateFlexFormContainsValidFieldTypes(array $field, ParsedContentBlock $contentBlock): void
+    {
+        foreach ($field['fields'] ?? [] as $flexField) {
+            if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SHEET) {
+                $this->validateFlexFormContainsValidFieldTypes($flexField, $contentBlock);
+                continue;
+            }
+            $type = FieldType::from($flexField['type']);
+            if (!FieldType::isValidFlexFormField($type)) {
+                throw new \InvalidArgumentException(
+                    'Field type "' . $type->value . '" with identifier "' . $flexField['identifier'] . '" is not allowed inside FlexForm in Content Block "' . $contentBlock->getName() . '".',
+                    1685220309
+                );
             }
         }
     }
