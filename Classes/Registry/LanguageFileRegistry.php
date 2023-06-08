@@ -32,6 +32,7 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
     ) {
     }
 
+    // @todo Call the register function inside the loader and change parameter to ParsedContentBlock.
     public function register(TypeDefinition $typeDefinition): void
     {
         if (!array_key_exists($typeDefinition->getName(), $this->parsedLanguageFiles)) {
@@ -43,6 +44,7 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
         }
     }
 
+    // Change parameter to $name and pass contentBlock->getName() or TypeDefinition->getName()
     public function isset(TypeDefinition $typeDefinition, string $key): bool
     {
         return isset($this->parsedLanguageFiles[$typeDefinition->getName()]['default'][$key]);

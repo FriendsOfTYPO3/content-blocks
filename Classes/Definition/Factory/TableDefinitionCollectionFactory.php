@@ -238,6 +238,11 @@ class TableDefinitionCollectionFactory
         $languagePath->addPathSegment($flexFormField['identifier']);
         $flexFormField['languagePath'] = clone $languagePath;
         $languagePath->popSegment();
+
+        if (FlexFormSubType::tryFrom($flexFormField['type']) === FlexFormSubType::SECTION) {
+            return $this->processFlexFormSection($flexFormField, $languagePath);
+        }
+
         $flexFormFieldArray = [
             'uniqueIdentifier' => $flexFormField['identifier'],
             'config' => $flexFormField,
@@ -248,6 +253,35 @@ class TableDefinitionCollectionFactory
         $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.label';
         $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.description';
         return $flexFormTca;
+    }
+
+    // @todo seems to work fine. Add tests, validation, documentation.
+    private function processFlexFormSection(array $section, LanguagePath $languagePath): array
+    {
+        $languagePath->addPathSegment('sections.' . $section['identifier']);
+        $result = [
+            'title' => $languagePath->getCurrentPath() . '.title',
+            'type' => 'array',
+            'section' => 1,
+        ];
+        $processedContainers = [];
+        foreach ($section['container'] as $container) {
+            $languagePath->addPathSegment('container.' . $container['identifier']);
+            $containerResult = [
+                'title' => $languagePath->getCurrentPath() . '.title',
+                'type' => 'array',
+            ];
+            $processedContainerFields = [];
+            foreach ($container['fields'] as $containerField) {
+                $processedContainerFields[$containerField['identifier']] = $this->resolveFlexFormField($languagePath, $containerField);
+            }
+            $containerResult['el'] = $processedContainerFields;
+            $processedContainers[$container['identifier']] = $containerResult;
+            $languagePath->popSegment();
+        }
+        $result['el'] = $processedContainers;
+        $languagePath->popSegment();
+        return $result;
     }
 
     private function isPrefixEnabledForField(ParsedContentBlock $contentBlock, array $fieldConfiguration): bool
@@ -416,7 +450,10 @@ class TableDefinitionCollectionFactory
     private function validateFlexFormHasOnlySheetsOrNoSheet(array $field, ParsedContentBlock $contentBlock): void
     {
         foreach ($field['fields'] ?? [] as $flexField) {
-            $flexFormType = FlexFormSubType::tryFrom($flexField['type']) ?? 'nonSheet';
+            $flexFormType = FlexFormSubType::tryFrom($flexField['type']);
+            if ($flexFormType !== FlexFormSubType::SHEET) {
+                $flexFormType = 'nonSheet';
+            }
             $currentType ??= $flexFormType;
             $isValid = $currentType === $flexFormType;
             if (!$isValid) {
@@ -434,6 +471,10 @@ class TableDefinitionCollectionFactory
         foreach ($field['fields'] ?? [] as $flexField) {
             if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SHEET) {
                 $this->validateFlexFormContainsValidFieldTypes($flexField, $contentBlock);
+                continue;
+            }
+            // @todo implement validation
+            if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SECTION) {
                 continue;
             }
             $type = FieldType::from($flexField['type']);

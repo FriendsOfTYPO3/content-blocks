@@ -20,4 +20,5 @@ namespace TYPO3\CMS\ContentBlocks\Enumeration;
 enum FlexFormSubType: string
 {
     case SHEET = 'Sheet';
+    case SECTION = 'Section';
 }
