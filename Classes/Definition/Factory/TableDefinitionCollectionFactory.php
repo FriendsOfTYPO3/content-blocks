@@ -255,7 +255,6 @@ class TableDefinitionCollectionFactory
         return $flexFormTca;
     }
 
-    // @todo seems to work fine. Add tests, validation, documentation.
     private function processFlexFormSection(array $section, LanguagePath $languagePath): array
     {
         $languagePath->addPathSegment('sections.' . $section['identifier']);
