@@ -23,6 +23,7 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Core\Environment;
@@ -41,6 +42,7 @@ class ContentBlockLoader implements LoaderInterface
     public function __construct(
         protected PhpFrontend $cache,
         protected ContentBlockRegistry $contentBlockRegistry,
+        protected LanguageFileRegistry $languageFileRegistry,
         protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
     ) {
     }
@@ -54,7 +56,8 @@ class ContentBlockLoader implements LoaderInterface
         if ($allowCache && is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn (array $contentBlock): ParsedContentBlock => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
             foreach ($contentBlocks as $contentBlock) {
-                $this->contentBlockRegistry->addContentBlock($contentBlock);
+                $this->contentBlockRegistry->register($contentBlock);
+                $this->languageFileRegistry->register($contentBlock);
             }
             $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromParsedContentBlocks($contentBlocks);
             $this->tableDefinitionCollection = $tableDefinitionCollection;
@@ -73,7 +76,8 @@ class ContentBlockLoader implements LoaderInterface
         $parsedContentBlocks = array_merge([], ...$parsedContentBlocks);
         $this->checkForUniqueness($parsedContentBlocks);
         foreach ($parsedContentBlocks as $contentBlock) {
-            $this->contentBlockRegistry->addContentBlock($contentBlock);
+            $this->contentBlockRegistry->register($contentBlock);
+            $this->languageFileRegistry->register($contentBlock);
         }
 
         $this->publishAssets($parsedContentBlocks);

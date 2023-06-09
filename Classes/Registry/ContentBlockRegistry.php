@@ -27,7 +27,7 @@ class ContentBlockRegistry implements SingletonInterface
      */
     protected array $contentBlocks = [];
 
-    public function addContentBlock(ParsedContentBlock $contentBlock): void
+    public function register(ParsedContentBlock $contentBlock): void
     {
         $this->contentBlocks[$contentBlock->getName()] = $contentBlock;
     }

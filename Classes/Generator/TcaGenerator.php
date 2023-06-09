@@ -166,7 +166,6 @@ class TcaGenerator
                 }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                $this->languageFileRegistry->register($typeDefinition);
                 $columnsOverrides = [];
                 foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
                     $overrideTca = $overrideColumn->getTca();
@@ -179,7 +178,7 @@ class TcaGenerator
                     $languagePath = $overrideColumn->getLanguagePath();
                     if (!isset($columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'])) {
                         $labelPath = '.label';
-                        if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $labelPath)) {
+                        if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
                             $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $languagePath->getCurrentPath() . $labelPath;
                         } elseif (!$overrideColumn->useExistingField()) {
                             $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getIdentifier();
@@ -187,7 +186,7 @@ class TcaGenerator
                     }
                     if (!isset($columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'])) {
                         $descriptionPath = '.description';
-                        if ($this->languageFileRegistry->isset($typeDefinition, $languagePath->getPathWithoutBase() . $descriptionPath)) {
+                        if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)) {
                             $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $languagePath->getCurrentPath() . $descriptionPath;
                         }
                     }

@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
-use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
+use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -28,25 +28,22 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
 
     public function __construct(
         protected readonly XliffParser $xliffParser,
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {
     }
 
-    // @todo Call the register function inside the loader and change parameter to ParsedContentBlock.
-    public function register(TypeDefinition $typeDefinition): void
+    public function register(ParsedContentBlock $contentBlock): void
     {
-        if (!array_key_exists($typeDefinition->getName(), $this->parsedLanguageFiles)) {
-            $languagePath = $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getLanguageFilePath();
+        if (!array_key_exists($contentBlock->getName(), $this->parsedLanguageFiles)) {
+            $languagePath = $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
             $absoluteLanguagePath = GeneralUtility::getFileAbsFileName($languagePath);
             if (file_exists($absoluteLanguagePath)) {
-                $this->parsedLanguageFiles[$typeDefinition->getName()] = $this->xliffParser->getParsedData($absoluteLanguagePath, 'default');
+                $this->parsedLanguageFiles[$contentBlock->getName()] = $this->xliffParser->getParsedData($absoluteLanguagePath, 'default');
             }
         }
     }
 
-    // Change parameter to $name and pass contentBlock->getName() or TypeDefinition->getName()
-    public function isset(TypeDefinition $typeDefinition, string $key): bool
+    public function isset(string $name, string $key): bool
     {
-        return isset($this->parsedLanguageFiles[$typeDefinition->getName()]['default'][$key]);
+        return isset($this->parsedLanguageFiles[$name]['default'][$key]);
     }
 }
