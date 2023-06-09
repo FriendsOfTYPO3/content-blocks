@@ -797,4 +797,168 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
     }
+
+    public static function sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider(): iterable
+    {
+        yield 'Missing Container in Section' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'foo/bar',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/foo',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'inline',
+                                'type' => 'Collection',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'flexField',
+                                        'type' => 'FlexForm',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'section1',
+                                                'type' => 'Section',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'message' => 'FlexForm field "flexField" has a Section "section1" without "container" defined. This is invalid, please add at least one item to "container" in Content Block "foo/bar".',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider
+     */
+    public function sectionsHaveAtLeastOneContainerExceptionIsThrown(array $contentBlocks, string $message): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1686330220);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+    }
+
+    public static function containerHaveAtLeastOneFieldExceptionIsThrownDataProvider(): iterable
+    {
+        yield 'Missing Container in Section' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'foo/bar',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/foo',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'inline',
+                                'type' => 'Collection',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'flexField',
+                                        'type' => 'FlexForm',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'section1',
+                                                'type' => 'Section',
+                                                'container' => [
+                                                    [
+                                                        'identifier' => 'container1',
+                                                        'fields' => [],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'message' => 'FlexForm field "flexField" has a Container in Section "section1" without "fields" defined. This is invalid, please add at least one field to "fields" in Content Block "foo/bar".',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider containerHaveAtLeastOneFieldExceptionIsThrownDataProvider
+     */
+    public function containerHaveAtLeastOneFieldExceptionIsThrown(array $contentBlocks, string $message): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1686331469);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+    }
+
+    public static function containerContainsValidFieldTypeExceptionIsThrownDataProvider(): iterable
+    {
+        yield 'Missing Container in Section' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'foo/bar',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'path' => 'EXT:example/ContentBlocks/foo',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'inline',
+                                'type' => 'Collection',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'flexField',
+                                        'type' => 'FlexForm',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'section1',
+                                                'type' => 'Section',
+                                                'container' => [
+                                                    [
+                                                        'identifier' => 'container1',
+                                                        'fields' => [
+                                                            [
+                                                                'type' => 'FlexForm',
+                                                                'identifier' => 'nestedFlex',
+                                                            ],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'message' => 'FlexForm field "flexField" has an invalid field of type "FlexForm" inside of a "container" item. Please use valid field types in Content Block "foo/bar".',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider containerContainsValidFieldTypeExceptionIsThrownDataProvider
+     */
+    public function containerContainsValidFieldTypeExceptionIsThrown(array $contentBlocks, string $message): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1686330594);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+    }
 }

@@ -1774,7 +1774,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'container' => [
                                             [
                                                 'identifier' => 'container1',
-                                                'type' => 'Container',
                                                 'fields' => [
                                                     [
                                                         'identifier' => 'header',
@@ -1788,7 +1787,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                             ],
                                             [
                                                 'identifier' => 'container2',
-                                                'type' => 'Container',
                                                 'fields' => [
                                                     [
                                                         'identifier' => 'header2',

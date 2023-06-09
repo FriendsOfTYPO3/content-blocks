@@ -473,8 +473,30 @@ class TableDefinitionCollectionFactory
                 $this->validateFlexFormContainsValidFieldTypes($flexField, $contentBlock);
                 continue;
             }
-            // @todo implement validation
             if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SECTION) {
+                if (empty($flexField['container'])) {
+                    throw new \InvalidArgumentException(
+                        'FlexForm field "' . $field['identifier'] . '" has a Section "' . $flexField['identifier'] . '" without "container" defined. This is invalid, please add at least one item to "container" in Content Block "' . $contentBlock->getName() . '".',
+                        1686330220
+                    );
+                }
+                foreach ($flexField['container'] as $container) {
+                    if (empty($container['fields'])) {
+                        throw new \InvalidArgumentException(
+                            'FlexForm field "' . $field['identifier'] . '" has a Container in Section "' . $flexField['identifier'] . '" without "fields" defined. This is invalid, please add at least one field to "fields" in Content Block "' . $contentBlock->getName() . '".',
+                            1686331469
+                        );
+                    }
+                    foreach ($container['fields'] as $containerField) {
+                        $containerType = FieldType::from($containerField['type']);
+                        if (!FieldType::isValidFlexFormField($containerType)) {
+                            throw new \InvalidArgumentException(
+                                'FlexForm field "' . $field['identifier'] . '" has an invalid field of type "' . $containerType->value . '" inside of a "container" item. Please use valid field types in Content Block "' . $contentBlock->getName() . '".',
+                                1686330594
+                            );
+                        }
+                    }
+                }
                 continue;
             }
             $type = FieldType::from($flexField['type']);
