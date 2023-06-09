@@ -22,6 +22,9 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class LanguageFileRegistry implements LanguageFileRegistryInterface
 {
     protected array $parsedLanguageFiles = [];

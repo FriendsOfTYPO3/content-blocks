@@ -19,6 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class TypeResolver
 {
     public static function resolve(string $field, string $table): FieldType

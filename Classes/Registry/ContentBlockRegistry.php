@@ -20,6 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\CMS\Core\SingletonInterface;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class ContentBlockRegistry implements SingletonInterface
 {
     /**

@@ -33,6 +33,9 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class TableDefinitionCollectionFactory
 {
     /**

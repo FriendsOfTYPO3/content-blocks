@@ -19,6 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 interface LanguageFileRegistryInterface
 {
     public function register(ParsedContentBlock $contentBlock): void;

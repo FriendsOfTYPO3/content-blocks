@@ -21,6 +21,9 @@ use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class TypeDefinitionLabelService
 {
     public function __construct(protected readonly ContentBlockRegistry $contentBlockRegistry)
