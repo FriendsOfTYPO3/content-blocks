@@ -21,7 +21,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class TableDefinitionFactoryTest extends UnitTestCase
+final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 {
     public static function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
     {
@@ -730,7 +730,6 @@ final class TableDefinitionFactoryTest extends UnitTestCase
         yield 'Invalid field inside Sheet' => [
             'contentBlocks' => [
                 [
-
                     'name' => 'foo/bar',
                     'icon' => '',
                     'iconProvider' => '',
