@@ -134,47 +134,12 @@ class TcaGenerator
             foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
                 $tca[$tableName]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
             }
+            $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                // Fields on root tables are defined with minimal setup. Actual configuration goes into type overrides.
-                // But only, if a custom typeField is defined.
-                if ($tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null) {
-                    $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
-                    foreach ($iterateOptions as $option) {
-                        if (array_key_exists($option, $column->getTca()['config'])) {
-                            $configuration = $column->getTca()['config'][$option];
-                            // Support for existing flexForm fields.
-                            if ($column->useExistingField() && $option === 'ds') {
-                                $configuration = $this->processExistingFlexForm($column, $tableDefinition);
-                                if ($configuration === null) {
-                                    continue;
-                                }
-                            }
-                            $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $configuration;
-                        }
-                    }
-                }
-                // Non-root tables should not be able to reuse fields. They can only be reused as a whole.
-                // Also, root tables which didn't define a custom typeField get the full TCA.
-                if (!$tableDefinition->isRootTable() || $tableDefinition->getTypeField() === null) {
-                    $standardTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getFirst();
-                    $languagePath = $column->getLanguagePath();
-                    $columnTca = $column->getTca();
-                    $labelPath = '.label';
-                    if (!isset($columnTca['label'])) {
-                        if ($this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
-                            $columnTca['label'] = $column->getLanguagePath()->getCurrentPath() . $labelPath;
-                        } else {
-                            $columnTca['label'] = $column->getIdentifier();
-                        }
-                    }
-                    $descriptionPath = '.description';
-                    if (
-                        !isset($columnTca['description'])
-                        && $this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)
-                    ) {
-                        $columnTca['description'] = $column->getLanguagePath()->getCurrentPath() . $descriptionPath;
-                    }
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $columnTca;
+                if ($isRootTableWithTypeField) {
+                    $tca = $this->getTcaForRootTableWithTypeField($tableDefinition, $column, $tca);
+                } else {
+                    $tca = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column, $tca);
                 }
                 // Newly created fields are enabled to be configured in user permissions by default.
                 if (!$column->useExistingField()) {
@@ -234,6 +199,57 @@ class TcaGenerator
         }
 
         return $this->tcaPreparation->prepare($tca);
+    }
+
+    /**
+     * Fields on root tables are defined with minimal setup. Actual configuration goes into type overrides.
+     * But only, if a custom typeField is defined.
+     */
+    protected function getTcaForRootTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $tca): array
+    {
+        $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
+        foreach ($iterateOptions as $option) {
+            if (array_key_exists($option, $column->getTca()['config'])) {
+                $configuration = $column->getTca()['config'][$option];
+                // Support for existing flexForm fields.
+                if ($column->useExistingField() && $option === 'ds') {
+                    $configuration = $this->processExistingFlexForm($column, $tableDefinition);
+                    if ($configuration === null) {
+                        continue;
+                    }
+                }
+                $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $configuration;
+            }
+        }
+        return $tca;
+    }
+
+    /**
+     * Non-root tables should not be able to reuse fields. They can only be reused as a whole.
+     * Also, root tables which didn't define a custom typeField get the full TCA.
+     */
+    protected function getTcaForNonRootTableOrWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $tca): array
+    {
+        $standardTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getFirst();
+        $languagePath = $column->getLanguagePath();
+        $columnTca = $column->getTca();
+        $labelPath = '.label';
+        if (!isset($columnTca['label'])) {
+            if ($this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
+                $columnTca['label'] = $column->getLanguagePath()->getCurrentPath() . $labelPath;
+            } else {
+                $columnTca['label'] = $column->getIdentifier();
+            }
+        }
+        $descriptionPath = '.description';
+        if (
+            !isset($columnTca['description'])
+            && $this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)
+        ) {
+            $columnTca['description'] = $column->getLanguagePath()->getCurrentPath() . $descriptionPath;
+        }
+        $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()] = $columnTca;
+        return $tca;
     }
 
     /**
