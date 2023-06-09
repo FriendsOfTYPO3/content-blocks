@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
@@ -153,24 +154,7 @@ class TcaGenerator
                     foreach ($this->nonOverridableOptions as $option) {
                         unset($overrideTca['config'][$option]);
                     }
-                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideTca;
-                    // Label and description overrides. For core fields, fall back to standard translation.
-                    // For content block fields, fall back to identifier.
-                    $languagePath = $overrideColumn->getLanguagePath();
-                    if (!isset($columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'])) {
-                        $labelPath = '.label';
-                        if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
-                            $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $languagePath->getCurrentPath() . $labelPath;
-                        } elseif (!$overrideColumn->useExistingField()) {
-                            $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['label'] = $overrideColumn->getIdentifier();
-                        }
-                    }
-                    if (!isset($columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'])) {
-                        $descriptionPath = '.description';
-                        if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)) {
-                            $columnsOverrides[$overrideColumn->getUniqueIdentifier()]['description'] = $languagePath->getCurrentPath() . $descriptionPath;
-                        }
-                    }
+                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
                 }
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
@@ -231,25 +215,33 @@ class TcaGenerator
     protected function getTcaForNonRootTableOrWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $tca): array
     {
         $standardTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getFirst();
-        $languagePath = $column->getLanguagePath();
-        $columnTca = $column->getTca();
-        $labelPath = '.label';
-        if (!isset($columnTca['label'])) {
-            if ($this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
-                $columnTca['label'] = $column->getLanguagePath()->getCurrentPath() . $labelPath;
-            } else {
-                $columnTca['label'] = $column->getIdentifier();
-            }
-        }
-        $descriptionPath = '.description';
-        if (
-            !isset($columnTca['description'])
-            && $this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)
-        ) {
-            $columnTca['description'] = $column->getLanguagePath()->getCurrentPath() . $descriptionPath;
-        }
+        $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
         $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()] = $columnTca;
         return $tca;
+    }
+
+    /**
+     * Label and description overrides. For core fields, fall back to standard translation.
+     * For content block fields, fall back to identifier.
+     */
+    protected function determineLabelAndDescription(TypeDefinition $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
+    {
+        $languagePath = $overrideColumn->getLanguagePath();
+        if (!isset($column['label'])) {
+            $labelPath = '.label';
+            if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
+                $column['label'] = $languagePath->getCurrentPath() . $labelPath;
+            } elseif (!$overrideColumn->useExistingField()) {
+                $column['label'] = $overrideColumn->getIdentifier();
+            }
+        }
+        if (!isset($column['description'])) {
+            $descriptionPath = '.description';
+            if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)) {
+                $column['description'] = $languagePath->getCurrentPath() . $descriptionPath;
+            }
+        }
+        return $column;
     }
 
     /**
