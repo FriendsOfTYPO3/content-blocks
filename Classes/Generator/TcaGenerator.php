@@ -156,9 +156,25 @@ class TcaGenerator
                 // Non-root tables should not be able to reuse fields. They can only be reused as a whole.
                 // Also, root tables which didn't define a custom typeField get the full TCA.
                 if (!$tableDefinition->isRootTable() || $tableDefinition->getTypeField() === null) {
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getLanguagePath()->getCurrentPath() . '.label';
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['description'] ??= $column->getLanguagePath()->getCurrentPath() . '.description';
+                    $standardTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getFirst();
+                    $languagePath = $column->getLanguagePath();
+                    $columnTca = $column->getTca();
+                    $labelPath = '.label';
+                    if (!isset($columnTca['label'])) {
+                        if ($this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $labelPath)) {
+                            $columnTca['label'] = $column->getLanguagePath()->getCurrentPath() . $labelPath;
+                        } else {
+                            $columnTca['label'] = $column->getIdentifier();
+                        }
+                    }
+                    $descriptionPath = '.description';
+                    if (
+                        !isset($columnTca['description'])
+                        && $this->languageFileRegistry->isset($standardTypeDefinition->getName(), $languagePath->getPathWithoutBase() . $descriptionPath)
+                    ) {
+                        $columnTca['description'] = $column->getLanguagePath()->getCurrentPath() . $descriptionPath;
+                    }
+                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()] = $columnTca;
                 }
                 // Newly created fields are enabled to be configured in user permissions by default.
                 if (!$column->useExistingField()) {

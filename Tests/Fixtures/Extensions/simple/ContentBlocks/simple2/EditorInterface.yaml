@@ -22,3 +22,5 @@ fields:
         type: Text
         label: Label in Inline
         description: Description in Inline
+      - identifier: header2
+        type: Text

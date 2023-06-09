@@ -95,6 +95,17 @@ final class TcaGeneratorTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function labelOfCollectionFieldFallsBackToIdentifierIfNotDefinedInLanguageFile(): void
+    {
+        self::assertSame(
+            'header2',
+            $GLOBALS['TCA']['simple_simple2_collection']['columns']['header2']['label']
+        );
+    }
+
+    /**
+     * @test
+     */
     public function paletteLabelCanBeSetStaticallyInYaml(): void
     {
         self::assertSame(

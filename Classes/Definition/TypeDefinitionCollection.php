@@ -47,6 +47,14 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
         throw new \OutOfBoundsException('A type with the identifier "' . $identifier . '" does not exist in table "' . $this->table . '".', 1629292879);
     }
 
+    public function getFirst(): TypeDefinition
+    {
+        if ($this->count() === 0) {
+            throw new \OutOfBoundsException('The table "' . $this->table . '" has not type definitions.', 1686340482);
+        }
+        return current($this->definitions);
+    }
+
     public static function createFromArray(array $array, string $table): TypeDefinitionCollection
     {
         $typeDefinitionCollection = new self();
