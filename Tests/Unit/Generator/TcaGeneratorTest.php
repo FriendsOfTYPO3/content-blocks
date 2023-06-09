@@ -1753,6 +1753,154 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
+
+        yield 'FlexForm sections and container are created' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'path' => 'EXT:foo/ContentBlocks/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'fields' => [
+                            [
+                                'identifier' => 'flex',
+                                'type' => 'FlexForm',
+                                'prefixField' => false,
+                                'fields' => [
+                                    [
+                                        'identifier' => 'section1',
+                                        'type' => 'Section',
+                                        'container' => [
+                                            [
+                                                'identifier' => 'container1',
+                                                'type' => 'Container',
+                                                'fields' => [
+                                                    [
+                                                        'identifier' => 'header',
+                                                        'type' => 'Text',
+                                                    ],
+                                                    [
+                                                        'identifier' => 'textarea',
+                                                        'type' => 'Textarea',
+                                                    ],
+                                                ],
+                                            ],
+                                            [
+                                                'identifier' => 'container2',
+                                                'type' => 'Container',
+                                                'fields' => [
+                                                    [
+                                                        'identifier' => 'header2',
+                                                        'type' => 'Text',
+                                                    ],
+                                                    [
+                                                        'identifier' => 'textarea2',
+                                                        'type' => 'Textarea',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'tt_content' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            't3ce_example' => 't3ce_example-icon',
+                        ],
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
+                    ],
+                    'types' => [
+                        't3ce_example' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,flex,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'flex' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'config' => [
+                                'type' => 'flex',
+                                'ds_pointerField' => 'CType',
+                                'ds' => [
+                                    't3ce_example' => '<T3FlexForms>
+    <sheets type="array">
+        <sDEF type="array">
+            <ROOT type="array">
+                <type>array</type>
+                <el type="array">
+                    <section1 type="array">
+                        <title>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.title</title>
+                        <type>array</type>
+                        <section type="integer">1</section>
+                        <el type="array">
+                            <container1 type="array">
+                                <title>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container1.title</title>
+                                <type>array</type>
+                                <el type="array">
+                                    <header type="array">
+                                        <config type="array">
+                                            <type>input</type>
+                                        </config>
+                                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container1.header.label</label>
+                                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container1.header.description</description>
+                                    </header>
+                                    <textarea type="array">
+                                        <config type="array">
+                                            <type>text</type>
+                                        </config>
+                                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container1.textarea.label</label>
+                                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container1.textarea.description</description>
+                                    </textarea>
+                                </el>
+                            </container1>
+                            <container2 type="array">
+                                <title>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container2.title</title>
+                                <type>array</type>
+                                <el type="array">
+                                    <header2 type="array">
+                                        <config type="array">
+                                            <type>input</type>
+                                        </config>
+                                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container2.header2.label</label>
+                                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container2.header2.description</description>
+                                    </header2>
+                                    <textarea2 type="array">
+                                        <config type="array">
+                                            <type>text</type>
+                                        </config>
+                                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container2.textarea2.label</label>
+                                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container2.textarea2.description</description>
+                                    </textarea2>
+                                </el>
+                            </container2>
+                        </el>
+                    </section1>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3FlexForms>',
+                                ],
+                            ],
+                            'exclude' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
