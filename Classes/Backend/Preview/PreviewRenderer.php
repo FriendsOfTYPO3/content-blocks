@@ -56,6 +56,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate('EditorPreview');
+        $view->setRequest($GLOBALS['TYPO3_REQUEST']);
 
         $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
         $contentBlockData = [];
