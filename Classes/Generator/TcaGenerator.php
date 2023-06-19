@@ -57,7 +57,7 @@ class TcaGenerator
         'MM_oppositeUsage',
         [
             'type' => 'Reference',
-            'option' => 'allowed'
+            'option' => 'allowed',
         ],
         'foreign_table',
         'foreign_field',
