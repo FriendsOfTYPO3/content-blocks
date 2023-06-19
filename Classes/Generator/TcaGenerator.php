@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
+use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
@@ -43,7 +44,7 @@ class TcaGenerator
      * or have to be otherwise the same for each field. Thus, these fields
      * can't be overridden through type overrides.
      *
-     * @var string[]
+     * @var string[]|array{type: string, option: string}
      */
     protected array $nonOverridableOptions = [
         'type',
@@ -54,7 +55,10 @@ class TcaGenerator
         'MM_opposite_field',
         'MM_hasUidField',
         'MM_oppositeUsage',
-        'allowed',
+        [
+            'type' => 'Reference',
+            'option' => 'allowed'
+        ],
         'foreign_table',
         'foreign_field',
         'foreign_table_field',
@@ -152,7 +156,11 @@ class TcaGenerator
                 foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
                     $overrideTca = $overrideColumn->getTca();
                     foreach ($this->nonOverridableOptions as $option) {
-                        unset($overrideTca['config'][$option]);
+                        $optionKey = $this->getOptionKey($option, $overrideColumn);
+                        if ($optionKey === null) {
+                            continue;
+                        }
+                        unset($overrideTca['config'][$optionKey]);
                     }
                     $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
                 }
@@ -193,19 +201,44 @@ class TcaGenerator
     {
         $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
         foreach ($iterateOptions as $option) {
-            if (array_key_exists($option, $column->getTca()['config'])) {
-                $configuration = $column->getTca()['config'][$option];
+            $optionKey = $this->getOptionKey($option, $column);
+            if ($optionKey === null) {
+                continue;
+            }
+            if (array_key_exists($optionKey, $column->getTca()['config'])) {
+                $configuration = $column->getTca()['config'][$optionKey];
                 // Support for existing flexForm fields.
-                if ($column->useExistingField() && $option === 'ds') {
+                if ($column->useExistingField() && $optionKey === 'ds') {
                     $configuration = $this->processExistingFlexForm($column, $tableDefinition);
                     if ($configuration === null) {
                         continue;
                     }
                 }
-                $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config'][$option] = $configuration;
+                $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config'][$optionKey] = $configuration;
             }
         }
         return $tca;
+    }
+
+    /**
+     * Some TCA option have the same key, but have completely different meanings.
+     * One example is "allowed" for type group and for type file.
+     * In this case, only the one for type group should be ignored for overrides.
+     * This is done here by comparing the current field type.
+     * Returns null, if this is the option of another type.
+     *
+     * @param string[]|array{type: string, option: string} $option
+     */
+    protected function getOptionKey(string|array $option, TcaFieldDefinition $tcaFieldDefinition): ?string
+    {
+        if (is_string($option)) {
+            return $option;
+        }
+        $fieldType = FieldType::from($option['type']);
+        if ($fieldType === $tcaFieldDefinition->getFieldType()) {
+            return $option['option'];
+        }
+        return null;
     }
 
     /**
