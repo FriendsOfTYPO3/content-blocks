@@ -28,7 +28,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TypeResolver;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Enumeration\FlexFormSubType;
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -39,9 +39,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TableDefinitionCollectionFactory
 {
     /**
-     * @param ParsedContentBlock[] $contentBlocks
+     * @param LoadedContentBlock[] $contentBlocks
      */
-    public function createFromParsedContentBlocks(array $contentBlocks): TableDefinitionCollection
+    public function createFromLoadedContentBlocks(array $contentBlocks): TableDefinitionCollection
     {
         $tableDefinitionCollection = new TableDefinitionCollection();
         $tableDefinitionList = [];
@@ -286,7 +286,7 @@ class TableDefinitionCollectionFactory
         return $result;
     }
 
-    private function isPrefixEnabledForField(ParsedContentBlock $contentBlock, array $fieldConfiguration): bool
+    private function isPrefixEnabledForField(LoadedContentBlock $contentBlock, array $fieldConfiguration): bool
     {
         if (array_key_exists('useExistingField', $fieldConfiguration)) {
             return !$fieldConfiguration['useExistingField'];
@@ -311,7 +311,7 @@ class TableDefinitionCollectionFactory
             : $field['identifier'];
     }
 
-    private function chooseInlineTableName(ParsedContentBlock $contentBlock, array $field): string
+    private function chooseInlineTableName(LoadedContentBlock $contentBlock, array $field): string
     {
         return $this->isPrefixEnabledForField($contentBlock, $field)
             ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $field['identifier'])
@@ -363,7 +363,7 @@ class TableDefinitionCollectionFactory
         return $element;
     }
 
-    private function validateContentBlock(array $yaml, ParsedContentBlock $contentBlock, string $table): void
+    private function validateContentBlock(array $yaml, LoadedContentBlock $contentBlock, string $table): void
     {
         $uniqueIdentifiers = [];
         $uniquePaletteIdentifiers = [];
@@ -449,7 +449,7 @@ class TableDefinitionCollectionFactory
         }
     }
 
-    private function validateFlexFormHasOnlySheetsOrNoSheet(array $field, ParsedContentBlock $contentBlock): void
+    private function validateFlexFormHasOnlySheetsOrNoSheet(array $field, LoadedContentBlock $contentBlock): void
     {
         foreach ($field['fields'] ?? [] as $flexField) {
             $flexFormType = FlexFormSubType::tryFrom($flexField['type']);
@@ -468,7 +468,7 @@ class TableDefinitionCollectionFactory
         }
     }
 
-    private function validateFlexFormContainsValidFieldTypes(array $field, ParsedContentBlock $contentBlock): void
+    private function validateFlexFormContainsValidFieldTypes(array $field, LoadedContentBlock $contentBlock): void
     {
         foreach ($field['fields'] ?? [] as $flexField) {
             if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SHEET) {

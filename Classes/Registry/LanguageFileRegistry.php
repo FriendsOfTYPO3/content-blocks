@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -34,7 +34,7 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
     ) {
     }
 
-    public function register(ParsedContentBlock $contentBlock): void
+    public function register(LoadedContentBlock $contentBlock): void
     {
         if (!array_key_exists($contentBlock->getName(), $this->parsedLanguageFiles)) {
             $languagePath = $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();

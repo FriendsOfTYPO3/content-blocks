@@ -17,13 +17,13 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
 interface LanguageFileRegistryInterface
 {
-    public function register(ParsedContentBlock $contentBlock): void;
+    public function register(LoadedContentBlock $contentBlock): void;
     public function isset(string $name, string $key): bool;
 }

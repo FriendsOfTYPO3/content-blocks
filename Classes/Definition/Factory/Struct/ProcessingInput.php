@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
 
 use TYPO3\CMS\ContentBlocks\Definition\LanguagePath;
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 
 /**
@@ -32,7 +32,7 @@ final class ProcessingInput
 
     public function __construct(
         public array $yaml,
-        public ParsedContentBlock $contentBlock,
+        public LoadedContentBlock $contentBlock,
         public string $table,
         public string $rootTable,
         public LanguagePath $languagePath,

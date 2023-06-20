@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TableDefinitionCollectionTest extends UnitTestCase
@@ -51,8 +51,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
 
         $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
 
-        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
         self::assertNotNull($contentElementDefinition);
@@ -77,8 +77,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
 
         self::assertNull($contentElementDefinition);
@@ -121,8 +121,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $contentBlocks = array_map(fn (array $contentBlock) => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromParsedContentBlocks($contentBlocks);
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getTypeDefinitionCollection();
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {

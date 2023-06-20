@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
 
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -25,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
 final class ProcessedContentType
 {
     public string $table = '';
-    public ParsedContentBlock $contentBlock;
+    public LoadedContentBlock $contentBlock;
     public array $columns = [];
     public array $showItems = [];
     public array $overrideColumns = [];

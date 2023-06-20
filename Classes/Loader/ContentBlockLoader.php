@@ -54,38 +54,38 @@ class ContentBlockLoader implements LoaderInterface
         }
 
         if ($allowCache && is_array($contentBlocks = $this->cache->require('content-blocks'))) {
-            $contentBlocks = array_map(fn (array $contentBlock): ParsedContentBlock => ParsedContentBlock::fromArray($contentBlock), $contentBlocks);
+            $contentBlocks = array_map(fn (array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
             foreach ($contentBlocks as $contentBlock) {
                 $this->contentBlockRegistry->register($contentBlock);
                 $this->languageFileRegistry->register($contentBlock);
             }
-            $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromParsedContentBlocks($contentBlocks);
+            $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($contentBlocks);
             $this->tableDefinitionCollection = $tableDefinitionCollection;
             return $this->tableDefinitionCollection;
         }
 
-        $parsedContentBlocks = [];
+        $loadedContentBlocks = [];
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
         foreach ($packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
             $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getSubDirectoryPath();
             if (is_dir($contentBlockFolder)) {
-                $parsedContentBlocks[] = $this->loadContentBlocks($contentBlockFolder, $extensionKey);
+                $loadedContentBlocks[] = $this->loadContentBlocks($contentBlockFolder, $extensionKey);
             }
         }
-        $parsedContentBlocks = array_merge([], ...$parsedContentBlocks);
-        $this->checkForUniqueness($parsedContentBlocks);
-        foreach ($parsedContentBlocks as $contentBlock) {
+        $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
+        $this->checkForUniqueness($loadedContentBlocks);
+        foreach ($loadedContentBlocks as $contentBlock) {
             $this->contentBlockRegistry->register($contentBlock);
             $this->languageFileRegistry->register($contentBlock);
         }
 
-        $this->publishAssets($parsedContentBlocks);
+        $this->publishAssets($loadedContentBlocks);
 
-        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromParsedContentBlocks($parsedContentBlocks);
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($loadedContentBlocks);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
 
-        $cache = array_map(fn (ParsedContentBlock $contentBlock): array => $contentBlock->toArray(), $parsedContentBlocks);
+        $cache = array_map(fn (LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
 
         return $this->tableDefinitionCollection;
@@ -114,7 +114,7 @@ class ContentBlockLoader implements LoaderInterface
         string $packagePath = '',
         string $contentBlockFolder = '',
         array $yaml = []
-    ): ParsedContentBlock {
+    ): LoadedContentBlock {
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1678699637);
         }
@@ -134,7 +134,7 @@ class ContentBlockLoader implements LoaderInterface
             $iconProviderClass = SvgIconProvider::class;
         }
 
-        return new ParsedContentBlock(
+        return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
             icon: $iconPath,
@@ -144,26 +144,26 @@ class ContentBlockLoader implements LoaderInterface
     }
 
     /**
-     * @param ParsedContentBlock[] $parsedContentBlocks
+     * @param LoadedContentBlock[] $loadedContentBlocks
      */
-    protected function checkForUniqueness(array $parsedContentBlocks): void
+    protected function checkForUniqueness(array $loadedContentBlocks): void
     {
         $uniqueNames = [];
-        foreach ($parsedContentBlocks as $parsedContentBlock) {
-            if (in_array($parsedContentBlock->getName(), $uniqueNames, true)) {
+        foreach ($loadedContentBlocks as $loadedContentBlock) {
+            if (in_array($loadedContentBlock->getName(), $uniqueNames, true)) {
                 throw new \InvalidArgumentException(
-                    'The content block with the name "' . $parsedContentBlock->getName() . '" exists more than once. Please choose another name.',
+                    'The content block with the name "' . $loadedContentBlock->getName() . '" exists more than once. Please choose another name.',
                     1678474766
                 );
             }
-            $uniqueNames[] = $parsedContentBlock->getName();
+            $uniqueNames[] = $loadedContentBlock->getName();
         }
     }
 
     /**
-     * @param ParsedContentBlock[] $parsedContentBlocks
+     * @param LoadedContentBlock[] $loadedContentBlocks
      */
-    public function publishAssets(array $parsedContentBlocks): void
+    public function publishAssets(array $loadedContentBlocks): void
     {
         if (!Environment::isComposerMode()) {
             return;
@@ -173,11 +173,11 @@ class ContentBlockLoader implements LoaderInterface
         $assetsPath = Environment::getPublicPath() . '/_assets/cb';
         $fileSystem->remove($assetsPath);
         $fileSystem->mkdir($assetsPath);
-        foreach ($parsedContentBlocks as $parsedContentBlock) {
+        foreach ($loadedContentBlocks as $loadedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $parsedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolderPath()
+                $loadedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolderPath()
             );
-            $contentBlockAssetsPathDestination = $assetsPath . '/' . $parsedContentBlock->getName();
+            $contentBlockAssetsPathDestination = $assetsPath . '/' . $loadedContentBlock->getName();
             if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {
                 $fileSystem->symlink($absolutContentBlockPublicPath, $contentBlockAssetsPathDestination);
             }

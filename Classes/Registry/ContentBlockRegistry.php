@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -26,11 +26,11 @@ use TYPO3\CMS\Core\SingletonInterface;
 class ContentBlockRegistry implements SingletonInterface
 {
     /**
-     * @var ParsedContentBlock[]
+     * @var LoadedContentBlock[]
      */
     protected array $contentBlocks = [];
 
-    public function register(ParsedContentBlock $contentBlock): void
+    public function register(LoadedContentBlock $contentBlock): void
     {
         $this->contentBlocks[$contentBlock->getName()] = $contentBlock;
     }
@@ -40,7 +40,7 @@ class ContentBlockRegistry implements SingletonInterface
         return array_key_exists($name, $this->contentBlocks);
     }
 
-    public function getContentBlock(string $name): ParsedContentBlock
+    public function getContentBlock(string $name): LoadedContentBlock
     {
         if (!$this->hasContentBlock($name)) {
             throw new \OutOfBoundsException('Content block with the name "' . $name . '" is not registered.', 1678478902);

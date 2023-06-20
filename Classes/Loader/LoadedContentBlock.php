@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ParsedContentBlock
+final class LoadedContentBlock
 {
     public function __construct(
         private readonly string $name,
@@ -31,7 +31,7 @@ final class ParsedContentBlock
     ) {
     }
 
-    public static function fromArray(array $array): ParsedContentBlock
+    public static function fromArray(array $array): LoadedContentBlock
     {
         return new self(
             name: (string)($array['name'] ?? ''),

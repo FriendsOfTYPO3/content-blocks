@@ -17,12 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures;
 
-use TYPO3\CMS\ContentBlocks\Loader\ParsedContentBlock;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 
 class NoopLanguageFileRegistry implements LanguageFileRegistryInterface
 {
-    public function register(ParsedContentBlock $contentBlock): void
+    public function register(LoadedContentBlock $contentBlock): void
     {
         // Do nothing.
     }
