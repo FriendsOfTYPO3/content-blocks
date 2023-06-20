@@ -445,7 +445,7 @@ class TcaGenerator
 
         $palettes = [];
         $palettes['language'] = [
-            'showitem' => 'sys_language_uid,l18n_parent',
+            'showitem' => 'sys_language_uid,l10n_parent',
         ];
         $palettes['hidden'] = [
             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
