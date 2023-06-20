@@ -1481,6 +1481,20 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'flex',
                                 'ds_pointerField' => 'CType',
                                 'ds' => [
+                                    'default' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                                     't3ce_example' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
@@ -1873,6 +1887,20 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'flex',
                                 'ds_pointerField' => 'CType',
                                 'ds' => [
+                                    'default' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                                     't3ce_example' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">

@@ -208,16 +208,41 @@ class TcaGenerator
             if (array_key_exists($optionKey, $column->getTca()['config'])) {
                 $configuration = $column->getTca()['config'][$optionKey];
                 // Support for existing flexForm fields.
-                if ($column->useExistingField() && $optionKey === 'ds') {
-                    $configuration = $this->processExistingFlexForm($column, $tableDefinition);
-                    if ($configuration === null) {
-                        continue;
+                if ($optionKey === 'ds') {
+                    if ($column->useExistingField()) {
+                        $configuration = $this->processExistingFlexForm($column, $tableDefinition);
+                        if ($configuration === null) {
+                            continue;
+                        }
+                    } else {
+                        // Add default FlexForm definition. This is needed for translation purposes, as special FlexForm
+                        // handling is performed even on elements, which didn't define this field in their show items.
+                        $configuration['default'] = $this->getDefaultFlexFormDefinition();
                     }
                 }
+
                 $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config'][$optionKey] = $configuration;
             }
         }
         return $tca;
+    }
+
+    protected function getDefaultFlexFormDefinition(): string
+    {
+        return '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>';
     }
 
     /**
