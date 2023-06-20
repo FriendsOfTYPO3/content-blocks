@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 
 /**
@@ -65,7 +66,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         $tca = $this->setLabelAndDescription();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->allowed !== [] && $this->allowed !== '') {
-            $config['allowed'] = $this->allowed;
+            $config['allowed'] = TcaPreparation::prepareFileExtensions($this->allowed);
         }
         if ($this->disallowed !== [] && $this->disallowed !== '') {
             $config['disallowed'] = $this->disallowed;

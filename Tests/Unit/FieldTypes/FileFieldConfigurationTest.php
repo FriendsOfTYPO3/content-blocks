@@ -50,7 +50,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'description' => 'foo',
                 'config' => [
                     'type' => 'file',
-                    'allowed' => 'common-image-types',
+                    'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
                     'disallowed' => 'png',
                     'appearance' => [
                         'foo' => 'bar',
@@ -122,7 +122,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'file',
-                    'allowed' => ['common-image-types'],
+                    'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
                     'disallowed' => ['png'],
                 ],
             ],
