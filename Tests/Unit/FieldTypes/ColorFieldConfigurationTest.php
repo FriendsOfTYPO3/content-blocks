@@ -28,21 +28,19 @@ final class ColorFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => '#000000',
-                    'placeholder' => 'Placeholder text',
-                    'size' => 20,
-                    'autocomplete' => 1,
-                    'required' => 1,
-                    'readOnly' => 1,
-                    'nullable' => 1,
-                    'mode' => 'useOrOverridePlaceholder',
-                    'valuePicker' => [
-                        'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
-                        ],
+                'non_available_field' => 'foo',
+                'default' => '#000000',
+                'placeholder' => 'Placeholder text',
+                'size' => 20,
+                'autocomplete' => 1,
+                'required' => 1,
+                'readOnly' => 1,
+                'nullable' => 1,
+                'mode' => 'useOrOverridePlaceholder',
+                'valuePicker' => [
+                    'items' => [
+                        ['One', '1'],
+                        ['Two', '2'],
                     ],
                 ],
             ],
@@ -73,19 +71,17 @@ final class ColorFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => '',
-                    'placeholder' => '',
-                    'size' => 0,
-                    'autocomplete' => 0,
-                    'required' => 0,
-                    'readOnly' => 0,
-                    'nullable' => 0,
-                    'mode' => '',
-                    'valuePicker' => [
-                        'items' => [],
-                    ],
+                'non_available_field' => 'foo',
+                'default' => '',
+                'placeholder' => '',
+                'size' => 0,
+                'autocomplete' => 0,
+                'required' => 0,
+                'readOnly' => 0,
+                'nullable' => 0,
+                'mode' => '',
+                'valuePicker' => [
+                    'items' => [],
                 ],
             ],
             'expectedTca' => [

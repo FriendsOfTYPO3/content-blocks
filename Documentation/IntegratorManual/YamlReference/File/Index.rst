@@ -11,8 +11,8 @@ It corresponds with the TCA :php:`type => 'file'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
-Settings
-========
+Properties
+==========
 
 enableImageManipulation
    :sep:`|` :aspect:`Required:` false
@@ -22,9 +22,6 @@ enableImageManipulation
 
    If enabled, an additional image palette will be rendered, which consists of
    the fields `crop`, `title`, `alternative`, `link` and `description`.
-
-Properties
-==========
 
 .. rst-class:: dl-parameters
 
@@ -83,7 +80,6 @@ Advanced / use case
       - identifier: image
         type: File
         enableImageManipulation: true
-        properties:
-            maxitems: 10
-            minitems: 1
-            allowed: common-image-types
+        maxitems: 10
+        minitems: 1
+        allowed: common-image-types

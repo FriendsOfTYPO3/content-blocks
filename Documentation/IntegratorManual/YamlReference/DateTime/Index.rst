@@ -103,11 +103,10 @@ Advanced / use case
     fields:
       - identifier: datetime
         type: DateTime
-        properties:
-          default: '2023-02-11 12:00:00'
-          disableAgeDisplay: true
-          size: 20
-          range:
-            lower: '2019-01-31 12:00:00'
-            upper: '2040-01-31 12:00:00'
-          required: true
+        default: '2023-02-11 12:00:00'
+        disableAgeDisplay: true
+        size: 20
+        range:
+          lower: '2019-01-31 12:00:00'
+          upper: '2040-01-31 12:00:00'
+        required: true

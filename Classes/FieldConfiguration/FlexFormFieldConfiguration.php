@@ -35,8 +35,8 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
         $self = new self();
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
-        $self->ds_pointerField = (string)($settings['properties']['ds_pointerField'] ?? $self->ds_pointerField);
-        $self->ds = (array)($settings['properties']['ds'] ?? $self->ds);
+        $self->ds_pointerField = (string)($settings['ds_pointerField'] ?? $self->ds_pointerField);
+        $self->ds = (array)($settings['ds'] ?? $self->ds);
         return $self;
     }
 

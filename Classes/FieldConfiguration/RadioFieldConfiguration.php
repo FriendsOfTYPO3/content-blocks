@@ -39,14 +39,13 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
-        $default = $properties['default'] ?? $self->default;
+        $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
         }
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->itemsProcFunc = (string)($properties['itemsProcFunc'] ?? $self->itemsProcFunc);
-        $self->items = (array)($properties['items'] ?? $self->items);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
+        $self->items = (array)($settings['items'] ?? $self->items);
 
         return $self;
     }

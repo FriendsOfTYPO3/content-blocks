@@ -47,22 +47,21 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
-        $self->format = (string)($properties['format'] ?? $self->format);
-        $default = $properties['default'] ?? $self->default;
+        $self->format = (string)($settings['format'] ?? $self->format);
+        $default = $settings['default'] ?? $self->default;
         $self->default = $self->format === 'decimal' ? (float)$default : (int)$default;
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($settings['properties']['size'] ?? $self->size);
-        $self->required = (bool)($properties['required'] ?? $self->required);
-        $self->nullable = (bool)($properties['nullable'] ?? $self->nullable);
-        $self->mode = (string)($properties['mode'] ?? $self->mode);
-        $self->placeholder = (string)($properties['placeholder'] ?? $self->placeholder);
-        $self->valuePicker = (array)($properties['valuePicker'] ?? $self->valuePicker);
-        if (isset($properties['autocomplete'])) {
-            $self->autocomplete = (bool)($properties['autocomplete'] ?? $self->autocomplete);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
+        $self->required = (bool)($settings['required'] ?? $self->required);
+        $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
+        $self->mode = (string)($settings['mode'] ?? $self->mode);
+        $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
+        $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
+        if (isset($settings['autocomplete'])) {
+            $self->autocomplete = (bool)($settings['autocomplete'] ?? $self->autocomplete);
         }
-        $self->range = (array)($properties['range'] ?? $self->range);
-        $self->slider = (array)($properties['slider'] ?? $self->slider);
+        $self->range = (array)($settings['range'] ?? $self->range);
+        $self->slider = (array)($settings['slider'] ?? $self->slider);
 
         return $self;
     }

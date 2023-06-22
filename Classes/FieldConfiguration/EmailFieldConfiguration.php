@@ -45,18 +45,17 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
-        $self->default = (string)($settings['properties']['default'] ?? $self->default);
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->required = (bool)(($properties['required'] ?? $self->required));
-        $self->nullable = (bool)($properties['nullable'] ?? $self->nullable);
-        $self->mode = (string)($properties['mode'] ?? $self->mode);
-        $self->placeholder = (string)($properties['placeholder'] ?? $self->placeholder);
-        $self->eval = (array)($properties['eval'] ?? $self->eval);
-        if (isset($properties['autocomplete'])) {
-            $self->autocomplete = (bool)($properties['autocomplete'] ?? $self->autocomplete);
+        $self->default = (string)($settings['default'] ?? $self->default);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->required = (bool)(($settings['required'] ?? $self->required));
+        $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
+        $self->mode = (string)($settings['mode'] ?? $self->mode);
+        $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
+        $self->eval = (array)($settings['eval'] ?? $self->eval);
+        if (isset($settings['autocomplete'])) {
+            $self->autocomplete = (bool)($settings['autocomplete'] ?? $self->autocomplete);
         }
-        $self->valuePicker = (array)($properties['valuePicker'] ?? $self->valuePicker);
+        $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
 
         return $self;
     }

@@ -46,17 +46,13 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'identifier' => 'bodytext',
                                 'type' => 'Textarea',
                                 'useExistingField' => true,
-                                'properties' => [
-                                    'enableRichtext' => true,
-                                ],
+                                'enableRichtext' => true,
                             ],
                             [
                                 'identifier' => 'text',
                                 'type' => 'Text',
-                                'properties' => [
-                                    'default' => 'Default value',
-                                    'placeholder' => 'Placeholder text',
-                                ],
+                                'default' => 'Default value',
+                                'placeholder' => 'Placeholder text',
                             ],
                             [
                                 'identifier' => 'palette_1',
@@ -96,16 +92,12 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'identifier' => 'assets',
                                 'useExistingField' => true,
                                 'enableImageManipulation' => 0,
-                                'properties' => [
-                                    'allowed' => 'png',
-                                ],
+                                'allowed' => 'png',
                             ],
                             [
                                 'identifier' => 'pages',
                                 'useExistingField' => true,
-                                'properties' => [
-                                    'allowed' => 'tt_content',
-                                ],
+                                'allowed' => 'tt_content',
                             ],
                             [
                                 'identifier' => 'category',
@@ -203,10 +195,8 @@ final class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'text',
                                 'type' => 'Text',
-                                'properties' => [
-                                    'default' => '',
-                                    'placeholder' => '',
-                                ],
+                                'default' => '',
+                                'placeholder' => '',
                             ],
                         ],
                     ],

@@ -30,20 +30,18 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'label' => 'foo',
                 'description' => 'foo',
                 'enableImageManipulation' => 1,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'allowed' => 'common-image-types',
-                    'disallowed' => 'png',
-                    'appearance' => [
-                        'foo' => 'bar',
-                    ],
-                    'behaviour' => [
-                        'foo' => 'bar',
-                    ],
-                    'readOnly' => 1,
-                    'minitems' => 1,
-                    'maxitems' => 1,
+                'non_available_field' => 'foo',
+                'allowed' => 'common-image-types',
+                'disallowed' => 'png',
+                'appearance' => [
+                    'foo' => 'bar',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
+                'readOnly' => 1,
+                'minitems' => 1,
+                'maxitems' => 1,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -92,16 +90,14 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'label' => '',
                 'description' => null,
                 'enableImageManipulation' => 0,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'allowed' => '',
-                    'disallowed' => '',
-                    'appearance' => [],
-                    'behaviour' => [],
-                    'readOnly' => 0,
-                    'minitems' => 0,
-                    'maxitems' => 0,
-                ],
+                'non_available_field' => 'foo',
+                'allowed' => '',
+                'disallowed' => '',
+                'appearance' => [],
+                'behaviour' => [],
+                'readOnly' => 0,
+                'minitems' => 0,
+                'maxitems' => 0,
             ],
             'expectedTca' => [
                 'config' => [
@@ -113,11 +109,9 @@ final class FileFieldConfigurationTest extends UnitTestCase
         yield 'allowed and disallowed accept arrays' => [
             'config' => [
                 'enableImageManipulation' => 0,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'allowed' => ['common-image-types'],
-                    'disallowed' => ['png'],
-                ],
+                'non_available_field' => 'foo',
+                'allowed' => ['common-image-types'],
+                'disallowed' => ['png'],
             ],
             'expectedTca' => [
                 'config' => [

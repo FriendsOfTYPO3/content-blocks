@@ -28,29 +28,27 @@ final class NumberFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => 10,
-                    'placeholder' => 'Placeholder text',
-                    'size' => 20,
-                    'autocomplete' => 1,
-                    'required' => 1,
-                    'readOnly' => 1,
-                    'nullable' => 1,
-                    'mode' => 'useOrOverridePlaceholder',
-                    'is_in' => 'abc',
-                    'valuePicker' => [
-                        'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
-                        ],
+                'non_available_field' => 'foo',
+                'default' => 10,
+                'placeholder' => 'Placeholder text',
+                'size' => 20,
+                'autocomplete' => 1,
+                'required' => 1,
+                'readOnly' => 1,
+                'nullable' => 1,
+                'mode' => 'useOrOverridePlaceholder',
+                'is_in' => 'abc',
+                'valuePicker' => [
+                    'items' => [
+                        ['One', '1'],
+                        ['Two', '2'],
                     ],
-                    'range' => [
-                        'lower' => 10,
-                    ],
-                    'slider' => [
-                        'step' => 1,
-                    ],
+                ],
+                'range' => [
+                    'lower' => 10,
+                ],
+                'slider' => [
+                    'step' => 1,
                 ],
             ],
             'expectedTca' => [
@@ -86,24 +84,22 @@ final class NumberFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => '',
-                    'format' => '',
-                    'placeholder' => '',
-                    'size' => 0,
-                    'autocomplete' => 0,
-                    'required' => 0,
-                    'readOnly' => 0,
-                    'nullable' => 0,
-                    'mode' => '',
-                    'is_in' => '',
-                    'valuePicker' => [
-                        'items' => [],
-                    ],
-                    'range' => [],
-                    'slider' => [],
+                'non_available_field' => 'foo',
+                'default' => '',
+                'format' => '',
+                'placeholder' => '',
+                'size' => 0,
+                'autocomplete' => 0,
+                'required' => 0,
+                'readOnly' => 0,
+                'nullable' => 0,
+                'mode' => '',
+                'is_in' => '',
+                'valuePicker' => [
+                    'items' => [],
                 ],
+                'range' => [],
+                'slider' => [],
             ],
             'expectedTca' => [
                 'config' => [
@@ -115,11 +111,9 @@ final class NumberFieldConfigurationTest extends UnitTestCase
 
         yield 'format decimal default value float' => [
             'config' => [
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => 10,
-                    'format' => 'decimal',
-                ],
+                'non_available_field' => 'foo',
+                'default' => 10,
+                'format' => 'decimal',
             ],
             'expectedTca' => [
                 'config' => [
@@ -132,11 +126,9 @@ final class NumberFieldConfigurationTest extends UnitTestCase
 
         yield 'format decimal default value zero not set as default' => [
             'config' => [
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => 0,
-                    'format' => 'decimal',
-                ],
+                'non_available_field' => 'foo',
+                'default' => 0,
+                'format' => 'decimal',
             ],
             'expectedTca' => [
                 'config' => [
@@ -167,9 +159,7 @@ final class NumberFieldConfigurationTest extends UnitTestCase
         ];
         yield 'float column' => [
             'config' => [
-                'properties' => [
-                    'format' => 'decimal',
-                ],
+                'format' => 'decimal',
             ],
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '`cb_example_myText` float DEFAULT \'0\' NOT NULL',

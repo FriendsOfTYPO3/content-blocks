@@ -72,13 +72,12 @@ Multiple checkboxes:
     fields:
       - identifier: checkbox
         type: Checkbox
-        properties:
-          items:
-            - label: 'The first'
-            - label: 'The second'
-            - label: 'The third'
-          default: 2
-          cols: 3
+        items:
+          - label: 'The first'
+          - label: 'The second'
+          - label: 'The third'
+        default: 2
+        cols: 3
 
 Toggle checkbox:
 
@@ -89,6 +88,5 @@ Toggle checkbox:
     fields:
       - identifier: toggle
         type: Checkbox
-        properties:
-          renderType: checkboxToggle
-          default: 1
+        renderType: checkboxToggle
+        default: 1

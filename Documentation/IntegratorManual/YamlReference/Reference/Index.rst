@@ -58,8 +58,7 @@ Minimal
     fields:
       - identifier: record_select
         type: Reference
-        properties:
-          allowed: 'some_table'
+        allowed: 'some_table'
 
 Advanced / use case
 -------------------
@@ -71,10 +70,9 @@ Advanced / use case
     fields:
       - identifier: page_select
         type: Reference
-        properties:
-          allowed: 'pages'
-          maxitems: 1,
-          suggestOptions:
-              default:
-                additionalSearchFields: 'nav_title, url'
-                addWhere: 'AND pages.doktype = 1'
+        allowed: 'pages'
+        maxitems: 1,
+        suggestOptions:
+          default:
+            additionalSearchFields: 'nav_title, url'
+            addWhere: 'AND pages.doktype = 1'

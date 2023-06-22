@@ -91,13 +91,12 @@ Select single:
     fields:
       - identifier: select
         type: Select
-        properties:
-          renderType: selectSingle
-          items:
-            - label: 'The first'
-              value: one
-            - label: 'The second'
-              value: two
+        renderType: selectSingle
+        items:
+          - label: 'The first'
+            value: one
+          - label: 'The second'
+            value: two
 
 Select multiple:
 
@@ -108,13 +107,12 @@ Select multiple:
     fields:
       - identifier: select_side_by_side
         type: Select
-        properties:
-          renderType: selectMultipleSideBySide
-          items:
-            - label: 'The first'
-              value: one
-            - label: 'The second'
-              value: two
+        renderType: selectMultipleSideBySide
+        items:
+          - label: 'The first'
+            value: one
+          - label: 'The second'
+            value: two
 
 Advanced / use case
 -------------------
@@ -130,20 +128,19 @@ Select single:
     fields:
       - identifier: select
         type: Select
-        properties:
-          renderType: selectSingle
-          default: 'one'
-          minitems: 1
-          maxitems: 3
-          items:
-            - label: 'The first'
-              value: one
-            - label: 'The second'
-              value: two
-            - label: 'The third'
-              value: three
-          foreign_table: pages
-          foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
+        renderType: selectSingle
+        default: 'one'
+        minitems: 1
+        maxitems: 3
+        items:
+        - label: 'The first'
+          value: one
+        - label: 'The second'
+          value: two
+        - label: 'The third'
+          value: three
+        foreign_table: pages
+        foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
 
 Select multiple:
 
@@ -154,20 +151,19 @@ Select multiple:
     fields:
       - identifier: select_side_by_side
         type: Select
-        properties:
-          renderType: selectMultipleSideBySide
-          default: 'one'
-          minitems: 1
-          maxitems: 3
-          items:
-            - label: 'The first'
-              value: one
-            - label: 'The second'
-              value: two
-            - label: 'The third'
-              value: three
-          foreign_table: pages
-          foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
+        renderType: selectMultipleSideBySide
+        default: 'one'
+        minitems: 1
+        maxitems: 3
+        items:
+        - label: 'The first'
+          value: one
+        - label: 'The second'
+          value: two
+        - label: 'The third'
+          value: three
+        foreign_table: pages
+        foreign_table_where: 'AND {#pages}.{#pid} = 123 ORDER BY uid'
 
 Select tree:
 
@@ -178,10 +174,9 @@ Select tree:
     fields:
       - identifier: select_tree
         type: Select
-        properties:
-          renderType: selectTree
-          size: 5
-          foreign_table: 'pages'
-          foreign_table_where: 'ORDER BY pages.uid'
-          treeConfig:
-            parentField: pid
+        renderType: selectTree
+        size: 5
+        foreign_table: 'pages'
+        foreign_table_where: 'ORDER BY pages.uid'
+        treeConfig:
+        parentField: pid

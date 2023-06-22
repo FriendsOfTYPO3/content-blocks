@@ -48,22 +48,21 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
-        $self->default = (string)($properties['default'] ?? $self->default);
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($properties['size'] ?? $self->size);
-        $self->required = (bool)($properties['required'] ?? $self->required);
-        $self->max = (int)($properties['max'] ?? $self->max);
-        $self->min = (int)($properties['min'] ?? $self->min);
-        $self->nullable = (bool)($properties['nullable'] ?? $self->nullable);
-        $self->mode = (string)($properties['mode'] ?? $self->mode);
-        $self->placeholder = (string)($properties['placeholder'] ?? $self->placeholder);
-        $self->is_in = (string)($properties['is_in'] ?? $self->is_in);
-        $self->eval = (array)($properties['eval'] ?? $self->eval);
-        if (isset($properties['autocomplete'])) {
-            $self->autocomplete = (bool)($properties['autocomplete'] ?? $self->autocomplete);
+        $self->default = (string)($settings['default'] ?? $self->default);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
+        $self->required = (bool)($settings['required'] ?? $self->required);
+        $self->max = (int)($settings['max'] ?? $self->max);
+        $self->min = (int)($settings['min'] ?? $self->min);
+        $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
+        $self->mode = (string)($settings['mode'] ?? $self->mode);
+        $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
+        $self->is_in = (string)($settings['is_in'] ?? $self->is_in);
+        $self->eval = (array)($settings['eval'] ?? $self->eval);
+        if (isset($settings['autocomplete'])) {
+            $self->autocomplete = (bool)$settings['autocomplete'];
         }
-        $self->valuePicker = (array)($properties['valuePicker'] ?? $self->valuePicker);
+        $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
 
         return $self;
     }

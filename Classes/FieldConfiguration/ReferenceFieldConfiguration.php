@@ -59,34 +59,33 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
-        $default = $properties['default'] ?? $self->default;
+        $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
         }
-        $self->allowed = (string)($properties['allowed'] ?? $self->allowed);
-        $self->foreign_table = (string)($properties['foreign_table'] ?? $self->foreign_table);
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($properties['size'] ?? $self->size);
-        $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
-        $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
-        $self->autoSizeMax = (int)($properties['autoSizeMax'] ?? $self->autoSizeMax);
-        $self->multiple = (bool)($properties['multiple'] ?? $self->multiple);
-        $self->MM = (string)($properties['MM'] ?? $self->MM);
-        $self->MM_hasUidField = (bool)($properties['MM_hasUidField'] ?? $self->MM_hasUidField);
-        $self->MM_opposite_field = (string)($properties['MM_opposite_field'] ?? $self->MM_opposite_field);
-        $self->MM_match_fields = (array)($properties['MM_match_fields'] ?? $self->MM_match_fields);
-        $self->MM_oppositeUsage = (string)($properties['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
-        $self->MM_table_where = (string)($properties['MM_table_where'] ?? $self->MM_table_where);
-        $self->dontRemapTablesOnCopy = (string)($properties['dontRemapTablesOnCopy'] ?? $self->dontRemapTablesOnCopy);
-        $self->localizeReferencesAtParentLocalization = (bool)($properties['localizeReferencesAtParentLocalization'] ?? $self->localizeReferencesAtParentLocalization);
-        $self->hideMoveIcons = (bool)($properties['hideMoveIcons'] ?? $self->hideMoveIcons);
-        $self->hideSuggest = (bool)($properties['hideSuggest'] ?? $self->hideSuggest);
-        $self->prepend_tname = (bool)($properties['prepend_tname'] ?? $self->prepend_tname);
-        $self->elementBrowserEntryPoints = (array)($properties['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
-        $self->filter = (array)($properties['filter'] ?? $self->filter);
-        $self->suggestOptions = (array)($properties['suggestOptions'] ?? $self->suggestOptions);
-        $self->appearance = (array)($properties['appearance'] ?? $self->appearance);
+        $self->allowed = (string)($settings['allowed'] ?? $self->allowed);
+        $self->foreign_table = (string)($settings['foreign_table'] ?? $self->foreign_table);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
+        $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
+        $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
+        $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
+        $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
+        $self->MM = (string)($settings['MM'] ?? $self->MM);
+        $self->MM_hasUidField = (bool)($settings['MM_hasUidField'] ?? $self->MM_hasUidField);
+        $self->MM_opposite_field = (string)($settings['MM_opposite_field'] ?? $self->MM_opposite_field);
+        $self->MM_match_fields = (array)($settings['MM_match_fields'] ?? $self->MM_match_fields);
+        $self->MM_oppositeUsage = (string)($settings['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
+        $self->MM_table_where = (string)($settings['MM_table_where'] ?? $self->MM_table_where);
+        $self->dontRemapTablesOnCopy = (string)($settings['dontRemapTablesOnCopy'] ?? $self->dontRemapTablesOnCopy);
+        $self->localizeReferencesAtParentLocalization = (bool)($settings['localizeReferencesAtParentLocalization'] ?? $self->localizeReferencesAtParentLocalization);
+        $self->hideMoveIcons = (bool)($settings['hideMoveIcons'] ?? $self->hideMoveIcons);
+        $self->hideSuggest = (bool)($settings['hideSuggest'] ?? $self->hideSuggest);
+        $self->prepend_tname = (bool)($settings['prepend_tname'] ?? $self->prepend_tname);
+        $self->elementBrowserEntryPoints = (array)($settings['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
+        $self->filter = (array)($settings['filter'] ?? $self->filter);
+        $self->suggestOptions = (array)($settings['suggestOptions'] ?? $self->suggestOptions);
+        $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
 
         return $self;
     }

@@ -28,14 +28,12 @@ final class RadioFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => 1,
-                    'readOnly' => 1,
-                    'itemsProcFunc' => 'foo',
-                    'items' => [
-                        'foo',
-                    ],
+                'non_available_field' => 'foo',
+                'default' => 1,
+                'readOnly' => 1,
+                'itemsProcFunc' => 'foo',
+                'items' => [
+                    'foo',
                 ],
             ],
             'expectedTca' => [
@@ -57,13 +55,11 @@ final class RadioFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => '',
-                    'readOnly' => 0,
-                    'itemsProcFunc' => '',
-                    'items' => [],
-                ],
+                'non_available_field' => 'foo',
+                'default' => '',
+                'readOnly' => 0,
+                'itemsProcFunc' => '',
+                'items' => [],
             ],
             'expectedTca' => [
                 'config' => [

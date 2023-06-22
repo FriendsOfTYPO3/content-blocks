@@ -96,8 +96,8 @@ class TableDefinitionCollectionFactory
 
                 if ($fieldType === FieldType::COLLECTION) {
                     $inlineTable = $this->chooseInlineTableName($input->contentBlock, $field);
-                    $field['properties']['foreign_table'] ??= $inlineTable;
-                    $field['properties']['foreign_match_fields'] = [
+                    $field['foreign_table'] ??= $inlineTable;
+                    $field['foreign_match_fields'] = [
                         'fieldname' => $inlineTable,
                     ];
                     if (!empty($field['fields'])) {
@@ -231,8 +231,8 @@ class TableDefinitionCollectionFactory
             ];
         }
         $dataStructure['sheets'] = $sheets;
-        $field['properties']['ds_pointerField'] = $typeField;
-        $field['properties']['ds'][$typeName] = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
+        $field['ds_pointerField'] = $typeField;
+        $field['ds'][$typeName] = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
         return $field;
     }
 

@@ -78,8 +78,7 @@ Advanced / use case
     fields:
       - identifier: categories
         type: Category
-        properties:
-          minitems: 1
-          treeConfig:
-            startingPoints: 7
-          relationship: oneToOne
+        minitems: 1
+        treeConfig:
+          startingPoints: 7
+        relationship: oneToOne

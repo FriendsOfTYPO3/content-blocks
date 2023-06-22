@@ -45,21 +45,20 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         $self = new self();
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
-        $properties = $settings['properties'] ?? [];
-        $default = $properties['default'] ?? $self->default;
+        $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
         }
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($properties['size'] ?? $self->size);
-        $self->required = (bool)($properties['required'] ?? $self->required);
-        $self->nullable = (bool)($properties['nullable'] ?? $self->nullable);
-        $self->mode = (string)($properties['mode'] ?? $self->mode);
-        $self->placeholder = (string)($properties['placeholder'] ?? $self->placeholder);
-        $self->range = (array)($properties['range'] ?? $self->range);
-        $self->dbType = (string)($properties['dbType'] ?? $self->dbType);
-        $self->disableAgeDisplay = (bool)($properties['disableAgeDisplay'] ?? $self->disableAgeDisplay);
-        $self->format = (string)($properties['format'] ?? $self->format);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
+        $self->required = (bool)($settings['required'] ?? $self->required);
+        $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
+        $self->mode = (string)($settings['mode'] ?? $self->mode);
+        $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
+        $self->range = (array)($settings['range'] ?? $self->range);
+        $self->dbType = (string)($settings['dbType'] ?? $self->dbType);
+        $self->disableAgeDisplay = (bool)($settings['disableAgeDisplay'] ?? $self->disableAgeDisplay);
+        $self->format = (string)($settings['format'] ?? $self->format);
 
         return $self;
     }

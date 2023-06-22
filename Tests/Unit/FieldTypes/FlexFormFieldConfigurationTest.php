@@ -28,11 +28,9 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'ds_pointerField' => 'foobar',
-                    'ds' => ['foo' => 'bar'],
-                ],
+                'non_available_field' => 'foo',
+                'ds_pointerField' => 'foobar',
+                'ds' => ['foo' => 'bar'],
             ],
             'expectedTca' => [
                 'label' => 'foo',

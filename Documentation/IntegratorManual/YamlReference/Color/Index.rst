@@ -84,13 +84,12 @@ Advanced / use case
     fields:
       - identifier: color
         type: Color
-        properties:
-          autocomplete: true
-          default: '#0000FF'
-          valuePicker:
-            items:
-              [
-                ['Red', '#FF0000'],
-                ['Green', '#008000'],
-                ['Blue', '#0000FF'],
-              ]
+        autocomplete: true
+        default: '#0000FF'
+        valuePicker:
+          items:
+            [
+              ['Red', '#FF0000'],
+              ['Green', '#008000'],
+              ['Blue', '#0000FF'],
+            ]

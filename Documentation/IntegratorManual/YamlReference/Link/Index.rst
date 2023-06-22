@@ -69,17 +69,16 @@ Advanced / use case
     fields:
       - identifier: url
         type: Link
-        properties:
-          autocomplete: true
-          default: 'https://typo3.org'
-          allowedTypes:
-            - page
-            - url
-            - file
-          required: true
-          valuePicker:
-            items:
-              [
-                ['https://www.typo3.org', TYPO3 CMS],
-                ['https://www.typo3.com', TYPO3 GmbH],
-              ]
+        autocomplete: true
+        default: 'https://typo3.org'
+        allowedTypes:
+          - page
+          - url
+          - file
+        required: true
+        valuePicker:
+        items:
+          [
+            ['https://www.typo3.org', TYPO3 CMS],
+            ['https://www.typo3.com', TYPO3 GmbH],
+          ]

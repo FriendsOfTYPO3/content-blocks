@@ -14,8 +14,8 @@ because it is used for the title on different places in the backend.
 Reusing fields between different Content Blocks is only possible, if the option
 :yaml:`prefixFields: false` is turned off. As soon as the :yaml:`identifier`
 is the same, the field will only be generated once. Be careful to define the
-same :yaml:`type` for the field. :yaml:`properties` can be overridden on a per
-element level the same way as with core fields. Here it is not needed to define
+same :yaml:`type` for the field. Settings can be overridden on a per
+element basis the same way as with core fields. Here it is not needed to define
 :yaml:`useExistingField`.
 
 It's recommended to use existing fields whenever possible instead of creating
@@ -75,8 +75,7 @@ For example, if you want to use the existing column :sql:`bodytext`, or
         -
             identifier: bodytext
             useExistingField: true
-            properties:
-                enableRichtext: true
+            enableRichtext: true
         -
             identifier: image
             useExistingField: true

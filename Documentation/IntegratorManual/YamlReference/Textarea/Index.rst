@@ -107,9 +107,8 @@ Advanced / use case
     fields:
       - identifier: textarea
         type: Textarea
-        properties:
-          enableRichtext: true
-          richtextConfiguration: full
-          default: 'Default value'
-          placeholder: 'Placeholder text'
-          rows: 15
+        enableRichtext: true
+        richtextConfiguration: full
+        default: 'Default value'
+        placeholder: 'Placeholder text'
+        rows: 15

@@ -43,20 +43,19 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         $self = new self();
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
-        $properties = $settings['properties'] ?? [];
-        $allowed = $properties['allowed'] ?? $self->allowed;
+        $allowed = $settings['allowed'] ?? $self->allowed;
         if (is_array($allowed) || is_string($allowed)) {
             $self->allowed = $allowed;
         }
-        $disallowed = $properties['disallowed'] ?? $self->disallowed;
+        $disallowed = $settings['disallowed'] ?? $self->disallowed;
         if (is_array($disallowed) || is_string($disallowed)) {
             $self->disallowed = $disallowed;
         }
-        $self->appearance = (array)($properties['appearance'] ?? $self->appearance);
-        $self->behaviour = (array)($properties['behaviour'] ?? $self->behaviour);
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
-        $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
+        $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
+        $self->behaviour = (array)($settings['behaviour'] ?? $self->behaviour);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
+        $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
         $self->enableImageManipulation = (bool)($settings['enableImageManipulation'] ?? $self->enableImageManipulation);
         return $self;
     }

@@ -44,16 +44,15 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
-        $self->renderType = (string)($properties['renderType'] ?? $self->renderType);
-        $self->default = (int)($properties['default'] ?? $self->default);
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->itemsProcFunc = (string)($properties['itemsProcFunc'] ?? $self->itemsProcFunc);
-        $self->cols = $properties['cols'] ?? $self->cols;
-        $self->eval = (string)($properties['eval'] ?? $self->eval);
-        $self->validation = (array)($properties['validation'] ?? $self->validation);
-        $self->items = (array)($properties['items'] ?? $self->items);
-        $self->invertStateDisplay = (bool)($properties['invertStateDisplay'] ?? $self->invertStateDisplay);
+        $self->renderType = (string)($settings['renderType'] ?? $self->renderType);
+        $self->default = (int)($settings['default'] ?? $self->default);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
+        $self->cols = $settings['cols'] ?? $self->cols;
+        $self->eval = (string)($settings['eval'] ?? $self->eval);
+        $self->validation = (array)($settings['validation'] ?? $self->validation);
+        $self->items = (array)($settings['items'] ?? $self->items);
+        $self->invertStateDisplay = (bool)($settings['invertStateDisplay'] ?? $self->invertStateDisplay);
 
         return $self;
     }

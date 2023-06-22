@@ -28,18 +28,16 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => 1,
-                    'readOnly' => 1,
-                    'maxitems' => 1,
-                    'minitems' => 1,
-                    'exclusiveKeys' => 'key',
-                    'treeConfig' => [
-                        'foo' => 'bar',
-                    ],
-                    'relationship' => 'foo',
+                'non_available_field' => 'foo',
+                'default' => 1,
+                'readOnly' => 1,
+                'maxitems' => 1,
+                'minitems' => 1,
+                'exclusiveKeys' => 'key',
+                'treeConfig' => [
+                    'foo' => 'bar',
                 ],
+                'relationship' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -63,16 +61,14 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => '',
-                    'readOnly' => 0,
-                    'maxitems' => 0,
-                    'minitems' => 0,
-                    'exclusiveKeys' => '',
-                    'treeConfig' => [],
-                    'relationship' => '',
-                ],
+                'non_available_field' => 'foo',
+                'default' => '',
+                'readOnly' => 0,
+                'maxitems' => 0,
+                'minitems' => 0,
+                'exclusiveKeys' => '',
+                'treeConfig' => [],
+                'relationship' => '',
             ],
             'expectedTca' => [
                 'config' => [

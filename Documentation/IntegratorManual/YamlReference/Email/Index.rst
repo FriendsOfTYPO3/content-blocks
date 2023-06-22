@@ -68,8 +68,7 @@ Advanced / use case
     fields:
       - identifier: email
         type: Email
-        properties:
-          autocomplete: true
-          default: 'developer@localhost.de'
-          placeholder: 'Enter your email address'
-          required: true
+        autocomplete: true
+        default: 'developer@localhost.de'
+        placeholder: 'Enter your email address'
+        required: true

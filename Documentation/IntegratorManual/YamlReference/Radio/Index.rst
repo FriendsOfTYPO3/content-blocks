@@ -60,12 +60,11 @@ Minimal
     fields:
       - identifier: radioboxes
         type: Radio
-        properties:
-          items:
-            [
-              [ 'one', 'one' ],
-              [ 'two', 'two' ],
-            ]
+        items:
+          [
+            [ 'one', 'one' ],
+            [ 'two', 'two' ],
+          ]
 
 Advanced / use case
 -------------------
@@ -77,12 +76,11 @@ Advanced / use case
     fields:
       - identifier: radioboxes
         type: Radio
-        properties:
-          default: one
-          items:
-            - label: 'The first'
-              value: one
-            - label: 'The second'
-              value: two
-            - label: 'The third'
-              value: three
+        default: one
+        items:
+          - label: 'The first'
+            value: one
+          - label: 'The second'
+            value: two
+          - label: 'The third'
+            value: three

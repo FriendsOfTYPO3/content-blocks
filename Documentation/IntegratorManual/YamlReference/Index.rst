@@ -136,13 +136,6 @@ description
 
 See `label` above.
 
-properties
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|`
-
-   Array of properties that are dependent on the :ref:`field_types`.
-
 useExistingField
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` bool

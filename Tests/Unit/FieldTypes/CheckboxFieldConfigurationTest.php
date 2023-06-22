@@ -28,21 +28,19 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'renderType' => 'checkboxToggle',
-                    'default' => 1,
-                    'readOnly' => 1,
-                    'eval' => 'foo',
-                    'itemsProcFunc' => 'foo->bar',
-                    'cols' => 5,
-                    'validation' => [
-                        'foo' => 'bar',
-                    ],
-                    'items' => [
-                        ['Item1'],
-                        ['Item2'],
-                    ],
+                'non_available_field' => 'foo',
+                'renderType' => 'checkboxToggle',
+                'default' => 1,
+                'readOnly' => 1,
+                'eval' => 'foo',
+                'itemsProcFunc' => 'foo->bar',
+                'cols' => 5,
+                'validation' => [
+                    'foo' => 'bar',
+                ],
+                'items' => [
+                    ['Item1'],
+                    ['Item2'],
                 ],
             ],
             'expectedTca' => [
@@ -71,17 +69,15 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'renderType' => '',
-                    'default' => 0,
-                    'readOnly' => 0,
-                    'eval' => '',
-                    'itemsProcFunc' => '',
-                    'cols' => '',
-                    'validation' => [],
-                    'items' => [],
-                ],
+                'non_available_field' => 'foo',
+                'renderType' => '',
+                'default' => 0,
+                'readOnly' => 0,
+                'eval' => '',
+                'itemsProcFunc' => '',
+                'cols' => '',
+                'validation' => [],
+                'items' => [],
             ],
             'expectedTca' => [
                 'config' => [
@@ -92,9 +88,7 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
 
         yield 'invertStateDisplay on, no items defined' => [
             'config' => [
-                'properties' => [
-                    'invertStateDisplay' => 1,
-                ],
+                'invertStateDisplay' => 1,
             ],
             'expectedTca' => [
                 'config' => [
@@ -108,11 +102,9 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
 
         yield 'invertStateDisplay on, items defined' => [
             'config' => [
-                'properties' => [
-                    'invertStateDisplay' => 1,
-                    'items' => [
-                        ['Item1'],
-                    ],
+                'invertStateDisplay' => 1,
+                'items' => [
+                    ['Item1'],
                 ],
             ],
             'expectedTca' => [

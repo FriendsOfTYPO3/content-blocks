@@ -41,18 +41,17 @@ final class CategoryFieldConfiguration implements FieldConfigurationInterface
         $self = new self();
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
-        $properties = $settings['properties'] ?? [];
-        $default = $properties['default'] ?? $self->default;
+        $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
         }
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($properties['size'] ?? $self->size);
-        $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
-        $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
-        $self->exclusiveKeys = (string)($properties['exclusiveKeys'] ?? $self->exclusiveKeys);
-        $self->treeConfig = (array)($properties['treeConfig'] ?? $self->treeConfig);
-        $self->relationship = (string)($properties['relationship'] ?? $self->relationship);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
+        $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
+        $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
+        $self->exclusiveKeys = (string)($settings['exclusiveKeys'] ?? $self->exclusiveKeys);
+        $self->treeConfig = (array)($settings['treeConfig'] ?? $self->treeConfig);
+        $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
 
         return $self;
     }

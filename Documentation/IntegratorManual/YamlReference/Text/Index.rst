@@ -120,8 +120,7 @@ Advanced / use case
     fields:
       - identifier: text
         type: Text
-        properties:
-          default: 'Default value'
-          max: 15
-          min: 4
-          required: true
+        default: 'Default value'
+        max: 15
+        min: 4
+        required: true

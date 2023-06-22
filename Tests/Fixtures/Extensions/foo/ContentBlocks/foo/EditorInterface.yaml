@@ -22,25 +22,20 @@ fields:
     type: Category
   - identifier: categories_11
     type: Category
-    properties:
-      relationship: oneToOne
+    relationship: oneToOne
   - identifier: categories_1m
     type: Category
-    properties:
-      relationship: oneToMany
+    relationship: oneToMany
   - identifier: pages_reference
     type: Reference
-    properties:
-      allowed: pages
+    allowed: pages
   - identifier: pages_content_reference
     type: Reference
-    properties:
-      allowed: pages,tt_content
+    allowed: pages,tt_content
   - identifier: pages_mm
     type: Reference
-    properties:
-      allowed: pages
-      MM: block_pages_mm
+    allowed: pages
+    MM: block_pages_mm
   - identifier: folder
     type: Folder
   - identifier: folder_recursive
@@ -51,43 +46,39 @@ fields:
     fields:
       - identifier: select_checkbox
         type: Select
-        properties:
-          renderType: selectCheckBox
-          items:
-            - label: 'Foo 1'
-              value: '1'
-            - label: 'Foo 2'
-              value: '2'
-            - label: 'Foo 3'
-              value: '3'
+        renderType: selectCheckBox
+        items:
+          - label: 'Foo 1'
+            value: '1'
+          - label: 'Foo 2'
+            value: '2'
+          - label: 'Foo 3'
+            value: '3'
       - identifier: select_single_box
         type: Select
-        properties:
-          renderType: selectSingleBox
-          items:
-            - label: 'Foo 1'
-              value: '1'
-            - label: 'Foo 2'
-              value: '2'
-            - label: 'Foo 3'
-              value: '3'
+        renderType: selectSingleBox
+        items:
+          - label: 'Foo 1'
+            value: '1'
+          - label: 'Foo 2'
+            value: '2'
+          - label: 'Foo 3'
+            value: '3'
       - identifier: select_multiple
         type: Select
-        properties:
-          renderType: selectMultipleSideBySide
-          items:
-            - label: 'Foo 1'
-              value: '1'
-            - label: 'Foo 2'
-              value: '2'
-            - label: 'Foo 3'
-              value: '3'
+        renderType: selectMultipleSideBySide
+        items:
+          - label: 'Foo 1'
+            value: '1'
+          - label: 'Foo 2'
+            value: '2'
+          - label: 'Foo 3'
+            value: '3'
 
       - identifier: select_foreign
         type: Select
-        properties:
-          renderType: selectSingle
-          foreign_table: pages
+        renderType: selectSingle
+        foreign_table: pages
   - identifier: flexfield
     type: FlexForm
     fields:

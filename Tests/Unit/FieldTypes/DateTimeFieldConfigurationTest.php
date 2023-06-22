@@ -28,22 +28,20 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => 1,
-                    'readOnly' => 1,
-                    'size' => 1,
-                    'required' => 1,
-                    'nullable' => 1,
-                    'mode' => 'foo',
-                    'placeholder' => 'foo',
-                    'range' => [
-                        'foo' => 'bar',
-                    ],
-                    'dbType' => 'foo',
-                    'disableAgeDisplay' => 1,
-                    'format' => 'foo',
+                'non_available_field' => 'foo',
+                'default' => 1,
+                'readOnly' => 1,
+                'size' => 1,
+                'required' => 1,
+                'nullable' => 1,
+                'mode' => 'foo',
+                'placeholder' => 'foo',
+                'range' => [
+                    'foo' => 'bar',
                 ],
+                'dbType' => 'foo',
+                'disableAgeDisplay' => 1,
+                'format' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,20 +69,18 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'properties' => [
-                    'non_available_field' => 'foo',
-                    'default' => '',
-                    'readOnly' => 0,
-                    'size' => 0,
-                    'required' => 0,
-                    'nullable' => 0,
-                    'mode' => '',
-                    'placeholder' => '',
-                    'range' => [],
-                    'dbType' => '',
-                    'disableAgeDisplay' => 0,
-                    'format' => '',
-                ],
+                'non_available_field' => 'foo',
+                'default' => '',
+                'readOnly' => 0,
+                'size' => 0,
+                'required' => 0,
+                'nullable' => 0,
+                'mode' => '',
+                'placeholder' => '',
+                'range' => [],
+                'dbType' => '',
+                'disableAgeDisplay' => 0,
+                'format' => '',
             ],
             'expectedTca' => [
                 'config' => [
@@ -95,12 +91,10 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
 
         yield 'default value and ranges converted to timestamps for non native date types' => [
             'config' => [
-                'properties' => [
-                    'default' => '2023-02-24',
-                    'range' => [
-                        'lower' => '2023-02-24',
-                        'upper' => '2023-12-24',
-                    ],
+                'default' => '2023-02-24',
+                'range' => [
+                    'lower' => '2023-02-24',
+                    'upper' => '2023-12-24',
                 ],
             ],
             'expectedTca' => [
@@ -117,13 +111,11 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
 
         yield 'default value stays for native date types' => [
             'config' => [
-                'properties' => [
-                    'dbType' => 'date',
-                    'default' => '2023-02-24',
-                    'range' => [
-                        'lower' => '2023-02-24',
-                        'upper' => '2023-12-24',
-                    ],
+                'dbType' => 'date',
+                'default' => '2023-02-24',
+                'range' => [
+                    'lower' => '2023-02-24',
+                    'upper' => '2023-12-24',
                 ],
             ],
             'expectedTca' => [
@@ -141,13 +133,11 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
 
         yield 'Format time is converted to timestamp in the year 1970' => [
             'config' => [
-                'properties' => [
-                    'format' => 'time',
-                    'default' => '00:10',
-                    'range' => [
-                        'lower' => '00:10',
-                        'upper' => '01:00',
-                    ],
+                'format' => 'time',
+                'default' => '00:10',
+                'range' => [
+                    'lower' => '00:10',
+                    'upper' => '01:00',
                 ],
             ],
             'expectedTca' => [
@@ -165,13 +155,11 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
 
         yield 'Hard coded timestamp passed as is' => [
             'config' => [
-                'properties' => [
-                    'format' => 'time',
-                    'default' => 1800,
-                    'range' => [
-                        'lower' => 1800,
-                        'upper' => '3600',
-                    ],
+                'format' => 'time',
+                'default' => 1800,
+                'range' => [
+                    'lower' => 1800,
+                    'upper' => '3600',
                 ],
             ],
             'expectedTca' => [

@@ -118,9 +118,7 @@ final class SqlGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'number',
                                 'type' => 'Number',
-                                'properties' => [
-                                    'nullable' => true,
-                                ],
+                                'nullable' => true,
                             ],
                         ],
                     ],

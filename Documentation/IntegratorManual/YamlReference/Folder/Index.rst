@@ -80,7 +80,6 @@ Advanced / use case
       - identifier: folder
         type: Folder
         recursive: true
-        properties:
-            elementBrowserEntryPoints:
-                _default: '1:/styleguide/'
-            minitems: 1
+        elementBrowserEntryPoints:
+          _default: '1:/styleguide/'
+        minitems: 1

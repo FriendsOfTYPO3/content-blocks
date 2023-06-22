@@ -45,17 +45,16 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
         $self->label = $settings['label'] ?? $self->label;
         $self->description = $settings['description'] ?? $self->description;
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $properties = $settings['properties'] ?? [];
         $self->recursive = (bool)($settings['recursive'] ?? $self->recursive);
-        $self->default = (string)($properties['default'] ?? $self->default);
-        $self->readOnly = (bool)($properties['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($properties['size'] ?? $self->size);
-        $self->maxitems = (int)($properties['maxitems'] ?? $self->maxitems);
-        $self->minitems = (int)($properties['minitems'] ?? $self->minitems);
-        $self->autoSizeMax = (int)($properties['autoSizeMax'] ?? $self->autoSizeMax);
-        $self->multiple = (bool)($properties['multiple'] ?? $self->multiple);
-        $self->hideMoveIcons = (bool)($properties['hideMoveIcons'] ?? $self->hideMoveIcons);
-        $self->elementBrowserEntryPoints = (array)($properties['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
+        $self->default = (string)($settings['default'] ?? $self->default);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
+        $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
+        $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
+        $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
+        $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
+        $self->hideMoveIcons = (bool)($settings['hideMoveIcons'] ?? $self->hideMoveIcons);
+        $self->elementBrowserEntryPoints = (array)($settings['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
 
         return $self;
     }

@@ -130,15 +130,13 @@ Advanced / use case
       - identifier: slides
         type: Collection
         useAsLabel: title
-        properties:
-          maxitems: 5
-          minitems: 1
+        maxitems: 5
+        minitems: 1
         fields:
           - identifier: image
             type: Image
-            properties:
-              minitems: 1
-              maxitems: 1
+            minitems: 1
+            maxitems: 1
           - identifier: title
             type: Text
 
