@@ -29,6 +29,13 @@ final class FileFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'enableImageManipulation' => 1,
                 'non_available_field' => 'foo',
                 'allowed' => 'common-image-types',
@@ -46,6 +53,13 @@ final class FileFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'config' => [
                     'type' => 'file',
                     'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
@@ -89,6 +103,11 @@ final class FileFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'displayCond' => [],
+                'l10n_display' => '',
+                'l10n_mode' => '',
+                'onChange' => '',
+                'exclude' => false,
                 'enableImageManipulation' => 0,
                 'non_available_field' => 'foo',
                 'allowed' => '',
@@ -114,6 +133,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'disallowed' => ['png'],
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'file',
                     'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',

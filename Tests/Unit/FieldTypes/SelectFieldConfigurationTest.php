@@ -28,6 +28,13 @@ final class SelectFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'non_available_field' => 'foo',
                 'default' => 1,
                 'renderType' => 'selectSingle',
@@ -75,6 +82,13 @@ final class SelectFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'config' => [
                     'type' => 'select',
                     'renderType' => 'selectSingle',
@@ -127,6 +141,11 @@ final class SelectFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'displayCond' => [],
+                'l10n_display' => '',
+                'l10n_mode' => '',
+                'onChange' => '',
+                'exclude' => false,
                 'non_available_field' => 'foo',
                 'default' => '',
                 'renderType' => '',

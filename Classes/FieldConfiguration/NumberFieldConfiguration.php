@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class NumberFieldConfiguration implements FieldConfigurationInterface
 {
-    use WithLabelAndDescription;
+    use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::NUMBER;
     private ?string $alternativeSql = null;
@@ -44,8 +44,7 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): NumberFieldConfiguration
     {
         $self = new self();
-        $self->label = $settings['label'] ?? $self->label;
-        $self->description = $settings['description'] ?? $self->description;
+        $self->setCommonProperties($settings);
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->format = (string)($settings['format'] ?? $self->format);
         $default = $settings['default'] ?? $self->default;
@@ -68,7 +67,7 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
-        $tca = $this->setLabelAndDescription();
+        $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

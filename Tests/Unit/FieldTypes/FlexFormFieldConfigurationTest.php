@@ -28,6 +28,13 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'non_available_field' => 'foo',
                 'ds_pointerField' => 'foobar',
                 'ds' => ['foo' => 'bar'],
@@ -35,6 +42,13 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'config' => [
                     'type' => 'flex',
                     'ds_pointerField' => 'foobar',

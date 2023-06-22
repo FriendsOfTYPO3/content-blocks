@@ -65,6 +65,7 @@ class TcaGenerator
         'foreign_match_fields',
         'ds',
         'ds_pointerField',
+        'exclude',
     ];
 
     /**
@@ -146,10 +147,6 @@ class TcaGenerator
                 } else {
                     $tca = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column, $tca);
                 }
-                // Newly created fields are enabled to be configured in user permissions by default.
-                if (!$column->useExistingField()) {
-                    $tca[$tableName]['columns'][$column->getUniqueIdentifier()]['exclude'] = true;
-                }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $columnsOverrides = [];
@@ -161,6 +158,7 @@ class TcaGenerator
                             continue;
                         }
                         unset($overrideTca['config'][$optionKey]);
+                        unset($overrideTca[$optionKey]);
                     }
                     $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
                 }
@@ -222,6 +220,9 @@ class TcaGenerator
                 }
 
                 $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config'][$optionKey] = $configuration;
+            }
+            if (array_key_exists($optionKey, $column->getTca())) {
+                $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()][$optionKey] = $column->getTca()[$optionKey];
             }
         }
         return $tca;

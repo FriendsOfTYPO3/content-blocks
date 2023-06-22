@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class FolderFieldConfiguration implements FieldConfigurationInterface
 {
-    use WithLabelAndDescription;
+    use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::FOLDER;
     private ?string $alternativeSql = null;
@@ -42,8 +42,7 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): FolderFieldConfiguration
     {
         $self = new self();
-        $self->label = $settings['label'] ?? $self->label;
-        $self->description = $settings['description'] ?? $self->description;
+        $self->setCommonProperties($settings);
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->recursive = (bool)($settings['recursive'] ?? $self->recursive);
         $self->default = (string)($settings['default'] ?? $self->default);
@@ -61,7 +60,7 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
-        $tca = $this->setLabelAndDescription();
+        $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;

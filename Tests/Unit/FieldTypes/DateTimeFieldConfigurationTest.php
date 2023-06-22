@@ -28,6 +28,13 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'non_available_field' => 'foo',
                 'default' => 1,
                 'readOnly' => 1,
@@ -46,6 +53,13 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'config' => [
                     'type' => 'datetime',
                     'default' => 1,
@@ -69,6 +83,11 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'displayCond' => [],
+                'l10n_display' => '',
+                'l10n_mode' => '',
+                'onChange' => '',
+                'exclude' => false,
                 'non_available_field' => 'foo',
                 'default' => '',
                 'readOnly' => 0,
@@ -98,6 +117,7 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'datetime',
                     'default' => (new \DateTime('2023-02-24'))->getTimestamp(),
@@ -119,6 +139,7 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'datetime',
                     'default' => '2023-02-24',
@@ -141,6 +162,7 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'datetime',
                     'default' => (new \DateTime('1970-01-01 00:10'))->getTimestamp(),
@@ -163,6 +185,7 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'datetime',
                     'default' => 1800,

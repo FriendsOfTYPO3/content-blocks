@@ -253,6 +253,8 @@ class TableDefinitionCollectionFactory
         ];
         $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
         $flexFormTca = $flexFormTcaDefinition->getTca();
+        // FlexForm child fields can't be excluded.
+        unset($flexFormTca['exclude']);
         $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.label';
         $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.description';
         return $flexFormTca;

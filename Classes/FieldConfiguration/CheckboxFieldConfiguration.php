@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 {
-    use WithLabelAndDescription;
+    use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::CHECKBOX;
     private ?string $alternativeSql = null;
@@ -41,8 +41,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): CheckboxFieldConfiguration
     {
         $self = new self();
-        $self->label = $settings['label'] ?? $self->label;
-        $self->description = $settings['description'] ?? $self->description;
+        $self->setCommonProperties($settings);
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->renderType = (string)($settings['renderType'] ?? $self->renderType);
         $self->default = (int)($settings['default'] ?? $self->default);
@@ -59,7 +58,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
-        $tca = $this->setLabelAndDescription();
+        $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
         if ($this->renderType !== '') {
             $config['renderType'] = $this->renderType;

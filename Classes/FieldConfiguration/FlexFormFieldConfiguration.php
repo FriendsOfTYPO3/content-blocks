@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
  */
 final class FlexFormFieldConfiguration implements FieldConfigurationInterface
 {
-    use WithLabelAndDescription;
+    use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::FLEXFORM;
     private string $ds_pointerField = '';
@@ -33,8 +33,7 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
     public static function createFromArray(array $settings): FlexFormFieldConfiguration
     {
         $self = new self();
-        $self->label = $settings['label'] ?? $self->label;
-        $self->description = $settings['description'] ?? $self->description;
+        $self->setCommonProperties($settings);
         $self->ds_pointerField = (string)($settings['ds_pointerField'] ?? $self->ds_pointerField);
         $self->ds = (array)($settings['ds'] ?? $self->ds);
         return $self;
@@ -42,7 +41,7 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
 
     public function getTca(): array
     {
-        $tca = $this->setLabelAndDescription();
+        $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
         $config['ds_pointerField'] = $this->ds_pointerField;
         $config['ds'] = $this->ds;

@@ -28,6 +28,7 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'exclude' => true,
                 'non_available_field' => 'foo',
                 'renderType' => 'checkboxToggle',
                 'default' => 1,
@@ -42,10 +43,23 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                     ['Item1'],
                     ['Item2'],
                 ],
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'config' => [
                     'type' => 'check',
                     'renderType' => 'checkboxToggle',
@@ -69,6 +83,7 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'exclude' => false,
                 'non_available_field' => 'foo',
                 'renderType' => '',
                 'default' => 0,
@@ -78,6 +93,10 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                 'cols' => '',
                 'validation' => [],
                 'items' => [],
+                'displayCond' => [],
+                'l10n_display' => '',
+                'l10n_mode' => '',
+                'onChange' => '',
             ],
             'expectedTca' => [
                 'config' => [
@@ -91,6 +110,7 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                 'invertStateDisplay' => 1,
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'check',
                     'items' => [
@@ -108,6 +128,7 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                 ],
             ],
             'expectedTca' => [
+                'exclude' => true,
                 'config' => [
                     'type' => 'check',
                     'items' => [

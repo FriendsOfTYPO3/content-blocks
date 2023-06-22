@@ -38,10 +38,23 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
                     'foo' => 'bar',
                 ],
                 'relationship' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
+                'l10n_display' => 'foo',
+                'l10n_mode' => 'foo',
+                'onChange' => 'foo',
+                'exclude' => true,
                 'config' => [
                     'type' => 'category',
                     'default' => 1,
@@ -61,6 +74,7 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'exclude' => false,
                 'non_available_field' => 'foo',
                 'default' => '',
                 'readOnly' => 0,
@@ -69,6 +83,10 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
                 'exclusiveKeys' => '',
                 'treeConfig' => [],
                 'relationship' => '',
+                'displayCond' => [],
+                'l10n_display' => '',
+                'l10n_mode' => '',
+                'onChange' => '',
             ],
             'expectedTca' => [
                 'config' => [
