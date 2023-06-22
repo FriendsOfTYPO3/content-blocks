@@ -51,7 +51,7 @@ final class ColorFieldConfiguration implements FieldConfigurationInterface
         $self->mode = (string)($settings['mode'] ?? $self->mode);
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
         if (isset($settings['autocomplete'])) {
-            $self->autocomplete = (bool)($settings['autocomplete'] ?? $self->autocomplete);
+            $self->autocomplete = (bool)$settings['autocomplete'];
         }
         $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
 

@@ -52,7 +52,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
         $self->eval = (array)($settings['eval'] ?? $self->eval);
         if (isset($settings['autocomplete'])) {
-            $self->autocomplete = (bool)($settings['autocomplete'] ?? $self->autocomplete);
+            $self->autocomplete = (bool)$settings['autocomplete'];
         }
         $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
 

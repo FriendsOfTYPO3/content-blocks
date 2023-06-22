@@ -57,7 +57,7 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
         $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
         if (isset($settings['autocomplete'])) {
-            $self->autocomplete = (bool)($settings['autocomplete'] ?? $self->autocomplete);
+            $self->autocomplete = (bool)$settings['autocomplete'];
         }
         $self->range = (array)($settings['range'] ?? $self->range);
         $self->slider = (array)($settings['slider'] ?? $self->slider);
