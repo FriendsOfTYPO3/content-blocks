@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
+		<header/>
+		<body>
+			<trans-unit id="foo.bar.title" xml:space="preserve">
+				<source>Content Block title</source>
+			</trans-unit>
+			<trans-unit id="foo.bar.description" xml:space="preserve">
+				<source>This is your content block description</source>
+			</trans-unit>
+        </body>
+	</file>
+</xliff>

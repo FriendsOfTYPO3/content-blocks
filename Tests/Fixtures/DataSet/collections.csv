@@ -1,0 +1,4 @@
+"foo_bar_collection"
+,"uid","pid","fieldA","foreign_table_parent_uid","tablenames","fieldname"
+,1,1,"lorem foo bar",1,"tt_content","foo_bar_collection"
+,2,1,"lorem foo bar 2",1,"tt_content","foo_bar_collection"

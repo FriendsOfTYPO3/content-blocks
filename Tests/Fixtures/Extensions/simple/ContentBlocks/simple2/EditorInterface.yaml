@@ -1,0 +1,26 @@
+group: common
+name: simple/simple2
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: palette_1
+    type: Palette
+    label: My Palette label
+    description: My Palette description
+    fields:
+      - identifier: aField
+        type: Text
+        label: My static label
+        description: My static description
+  - identifier: tab_1
+    type: Tab
+    label: My Tab label
+  - identifier: collection
+    type: Collection
+    fields:
+      - identifier: header
+        type: Text
+        label: Label in Inline
+        description: Description in Inline
+      - identifier: header2
+        type: Text

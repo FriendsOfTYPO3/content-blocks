@@ -1,0 +1,57 @@
+{
+	"name": "typo3/cms-content-blocks",
+	"type": "typo3-cms-framework",
+	"description": "TYPO3 CMS Content Blocks - Content Types API.",
+	"homepage": "https://typo3.org",
+	"license": ["GPL-2.0-or-later"],
+	"authors": [{
+		"name": "TYPO3 Core Team",
+		"email": "typo3cms@typo3.org",
+		"role": "Developer"
+	}],
+	"support": {
+		"chat": "https://typo3.org/help",
+		"docs": "https://docs.typo3.org/c/typo3/cms-content-blocks/main/en-us/",
+		"issues": "https://forge.typo3.org",
+		"source": "https://github.com/typo3/typo3"
+	},
+	"config": {
+		"sort-packages": true,
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
+	},
+	"require": {
+		"typo3/cms-backend": "13.0.*@dev",
+		"typo3/cms-core": "13.0.*@dev",
+		"typo3/cms-fluid": "13.0.*@dev",
+		"typo3/cms-frontend": "13.0.*@dev"
+	},
+	"conflict": {
+		"typo3/cms": "*"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-main": "13.0.x-dev"
+		},
+		"typo3/cms": {
+			"extension-key": "content_blocks",
+			"Package": {
+				"partOfFactoryDefault": false
+			}
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"TYPO3\\CMS\\ContentBlocks\\": "Classes/"
+		}
+	},
+	"require-dev": {
+		"typo3/cms-extbase": "13.0.*@dev",
+		"typo3/cms-extensionmanager": "13.0.*@dev",
+		"typo3/cms-filelist": "13.0.*@dev",
+		"typo3/cms-install": "13.0.*@dev",
+		"typo3/testing-framework": "^8.0"
+	}
+}

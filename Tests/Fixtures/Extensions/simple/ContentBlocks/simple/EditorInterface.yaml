@@ -1,0 +1,11 @@
+group: common
+name: simple/simple
+fields:
+  - identifier: palette
+    type: Palette
+    fields:
+      - identifier: header
+        useExistingField: true
+      - type: Linebreak
+      - identifier: bodytext
+        useExistingField: true

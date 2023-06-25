@@ -1,0 +1,6 @@
+page = PAGE
+page.10 = CONTENT
+page.10 {
+  table = tt_content
+  select.where = {#colPos}=0
+}

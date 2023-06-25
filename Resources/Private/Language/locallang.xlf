@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext" original="EXT:content_blocks/Resources/Private/Language/locallang.xlf" date="2023-03-29T10:11:32Z" product-name="content_blocks">
+		<header/>
+		<body>
+			<trans-unit id="content-blocks" resname="content-blocks">
+				<source>Content Blocks</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

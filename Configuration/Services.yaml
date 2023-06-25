@@ -1,0 +1,71 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  TYPO3\CMS\ContentBlocks\:
+    resource: '../Classes/*'
+
+  TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
+    public: true
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-tca'
+        event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
+
+  TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator:
+    public: true
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-typoscript'
+        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
+
+  TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator:
+    public: true
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-tsconfig'
+        event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
+
+  TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
+    public: true
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-sql'
+        event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
+
+  TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
+    public: true
+
+  TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
+    autoconfigure: false
+    public: true
+
+  TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
+    tags:
+      - name: cb.loader
+        identifier: content-block
+    arguments:
+      $cache: '@cache.core'
+
+  TYPO3\CMS\ContentBlocks\Loader\LoaderFactory:
+    public: true
+
+  TYPO3\CMS\ContentBlocks\Loader\LoaderInterface:
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderFactory'
+      - 'create'
+
+  TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
+    shared: false
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderFactory'
+      - 'load'
+
+  TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:content-block'
+        description: 'Create a content block skeleton.'
+        schedulable: false

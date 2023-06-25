@@ -1,0 +1,10 @@
+{
+	"name": "bar/foo",
+	"description": "This is a dummy extension to host content blocks.",
+	"license": "GPL-2.0-or-later",
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "bar"
+		}
+	}
+}
