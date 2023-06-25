@@ -16,13 +16,17 @@
 		"source": "https://github.com/typo3/typo3"
 	},
 	"config": {
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
 	},
 	"require": {
-		"typo3/cms-core": "13.0.*@dev",
-		"typo3/cms-frontend": "13.0.*@dev",
 		"typo3/cms-backend": "13.0.*@dev",
-		"typo3/cms-fluid": "13.0.*@dev"
+		"typo3/cms-core": "13.0.*@dev",
+		"typo3/cms-fluid": "13.0.*@dev",
+		"typo3/cms-frontend": "13.0.*@dev"
 	},
 	"conflict": {
 		"typo3/cms": "*"
@@ -42,5 +46,12 @@
 		"psr-4": {
 			"TYPO3\\CMS\\ContentBlocks\\": "Classes/"
 		}
+	},
+	"require-dev": {
+		"typo3/cms-extbase": "13.0.*@dev",
+		"typo3/cms-extensionmanager": "13.0.*@dev",
+		"typo3/cms-filelist": "13.0.*@dev",
+		"typo3/cms-install": "13.0.*@dev",
+		"typo3/testing-framework": "^8.0"
 	}
 }
