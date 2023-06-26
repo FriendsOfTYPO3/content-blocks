@@ -53,6 +53,11 @@
 			"TYPO3\\CMS\\ContentBlocks\\": "Classes/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"TYPO3\\CMS\\ContentBlocks\\Tests\\": "Tests/"
+		}
+	},
 	"require-dev": {
 		"contentblocks/examples": "^13.0@dev",
 		"typo3/cms-extbase": "^13.0@dev",
