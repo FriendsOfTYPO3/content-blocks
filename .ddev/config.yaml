@@ -1,6 +1,6 @@
 name: content-blocks
 type: typo3
-docroot: "public"
+docroot: ".Build/public"
 php_version: "8.1"
 webserver_type: nginx-fpm
 router_http_port: "80"

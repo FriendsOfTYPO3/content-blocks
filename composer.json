@@ -16,6 +16,8 @@
 		"source": "https://github.com/typo3/typo3"
 	},
 	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin",
 		"sort-packages": true,
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
@@ -39,6 +41,8 @@
 			"dev-main": "13.0.x-dev"
 		},
 		"typo3/cms": {
+			"app-dir": ".Build",
+			"web-dir": ".Build/public",
 			"extension-key": "content_blocks",
 			"Package": {
 				"partOfFactoryDefault": false
