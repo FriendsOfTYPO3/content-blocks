@@ -1,6 +1,5 @@
 .idea
-/public
-/var
-/vendor
 config/system/settings.php
 composer.lock
+.Build
+var
