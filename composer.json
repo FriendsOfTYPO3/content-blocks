@@ -1,5 +1,5 @@
 {
-	"name": "typo3/cms-content-blocks",
+	"name": "contentblocks/content-blocks",
 	"type": "typo3-cms-framework",
 	"description": "TYPO3 CMS Content Blocks - Content Types API.",
 	"homepage": "https://typo3.org",
@@ -23,10 +23,13 @@
 		}
 	},
 	"require": {
-		"typo3/cms-backend": "13.0.*@dev",
-		"typo3/cms-core": "13.0.*@dev",
-		"typo3/cms-fluid": "13.0.*@dev",
-		"typo3/cms-frontend": "13.0.*@dev"
+		"typo3/cms-backend": "^13.0@dev",
+		"typo3/cms-core": "^13.0@dev",
+		"typo3/cms-fluid": "^13.0@dev",
+		"typo3/cms-frontend": "^13.0@dev"
+	},
+	"replace": {
+		"typo3/cms-content-blocks": "*"
 	},
 	"conflict": {
 		"typo3/cms": "*"
@@ -48,10 +51,12 @@
 		}
 	},
 	"require-dev": {
-		"typo3/cms-extbase": "13.0.*@dev",
-		"typo3/cms-extensionmanager": "13.0.*@dev",
-		"typo3/cms-filelist": "13.0.*@dev",
-		"typo3/cms-install": "13.0.*@dev",
+		"contentblocks/examples": "^13.0@dev",
+		"typo3/cms-extbase": "^13.0@dev",
+		"typo3/cms-extensionmanager": "^13.0@dev",
+		"typo3/cms-filelist": "^13.0@dev",
+		"typo3/cms-install": "^13.0@dev",
+		"typo3/cms-tstemplate": "^13.0@dev",
 		"typo3/testing-framework": "^8.0"
 	}
 }
