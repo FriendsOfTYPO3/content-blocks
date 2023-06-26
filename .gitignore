@@ -3,3 +3,4 @@ config/system/settings.php
 composer.lock
 .Build
 var
+Build/testing-docker/.env
