@@ -32,30 +32,30 @@ final class TranslateViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
+        __DIR__ . '/../../Fixtures/Extensions/foo',
     ];
 
     public static function renderReturnsStringDataProvider(): array
     {
         return [
             'fallback to default attribute for not existing label' => [
-                '<cb:translate name="foo/bar" key="iDoNotExist" default="myDefault" />',
+                '<cb:translate name="typo3tests/foo" key="iDoNotExist" default="myDefault" />',
                 'myDefault',
             ],
             'fallback to default attribute for static label' => [
-                '<cb:translate name="foo/bar" key="static label" default="myDefault" />',
+                '<cb:translate name="typo3tests/foo" key="static label" default="myDefault" />',
                 'myDefault',
             ],
             'fallback to child for not existing label' => [
-                '<cb:translate name="foo/bar" key="iDoNotExist">myDefault</cb:translate>',
+                '<cb:translate name="typo3tests/foo" key="iDoNotExist">myDefault</cb:translate>',
                 'myDefault',
             ],
             'fallback to child for static label' => [
-                '<cb:translate name="foo/bar" key="static label">myDefault</cb:translate>',
+                '<cb:translate name="typo3tests/foo" key="static label">myDefault</cb:translate>',
                 'myDefault',
             ],
             'key and name given' => [
-                '<cb:translate key="foo.bar.title" name="foo/bar" />',
+                '<cb:translate key="foo.bar.title" name="typo3tests/foo" />',
                 'Content Block title',
             ],
             'empty string on invalid content block' => [

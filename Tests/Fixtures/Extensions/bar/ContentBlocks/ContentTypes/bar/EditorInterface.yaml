@@ -1,5 +1,5 @@
 group: common
-name: bar/foo
+name: typo3tests/bar
 fields:
   - identifier: image
     useExistingField: true

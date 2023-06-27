@@ -31,8 +31,8 @@ final class CssViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/bar',
+        __DIR__ . '/../../../Fixtures/Extensions/foo',
+        __DIR__ . '/../../../Fixtures/Extensions/bar',
     ];
 
     /**
@@ -41,7 +41,7 @@ final class CssViewHelperTest extends FunctionalTestCase
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="foo/bar" identifier="test" file="Frontend.css" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/foo" identifier="test" file="Frontend.css" priority="0"/>');
 
         (new TemplateView($context))->render();
 
@@ -56,7 +56,7 @@ final class CssViewHelperTest extends FunctionalTestCase
     public function booleanAttributesAreProperlyConverted(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="bar/foo" identifier="test" file="my.css" disabled="1" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/bar" identifier="test" file="my.css" disabled="1" priority="0"/>');
 
         (new TemplateView($context))->render();
 
