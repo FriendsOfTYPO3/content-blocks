@@ -77,8 +77,8 @@ Advanced / use case
           - file
         required: true
         valuePicker:
-        items:
-          [
-            ['https://www.typo3.org', TYPO3 CMS],
-            ['https://www.typo3.com', TYPO3 GmbH],
-          ]
+          items:
+            [
+              ['https://www.typo3.org', TYPO3 CMS],
+              ['https://www.typo3.com', TYPO3 GmbH],
+            ]
