@@ -38,7 +38,7 @@ useAsLabel
       useAsLabel: text
       fields:
         - identifier: image
-          type: Image
+          type: File
         - identifier: text
           type: Text
 
@@ -62,7 +62,7 @@ fields
         - identifier: text
           type: Text
         - identifier: image
-          type: Image
+          type: File
 
 Properties
 ==========
@@ -134,7 +134,7 @@ Advanced / use case
         minitems: 1
         fields:
           - identifier: image
-            type: Image
+            type: File
             minitems: 1
             maxitems: 1
           - identifier: title
@@ -148,7 +148,7 @@ Advanced / use case
     aggregateRoot: false
     fields:
       - identifier: image
-        type: Image
+        type: File
 
     name: example/collection
     group: common
