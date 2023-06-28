@@ -117,16 +117,16 @@ Advanced / use case
         default: 10
         size: 20
         range:
-        lower: 10
-        upper: 999
+          lower: 10
+          upper: 999
         slider:
-        range:
-          step: 1
-          width: 100
+          range:
+            step: 1
+            width: 100
         valuePicker:
-        items:
-          [
-            [ '100', 100 ],
-            [ '250', 250 ],
-            [ '500', 500 ],
-          ]
+          items:
+            [
+              [ '100', 100 ],
+              [ '250', 250 ],
+              [ '500', 500 ],
+            ]
