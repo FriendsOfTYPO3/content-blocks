@@ -22,10 +22,12 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockBasicsRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
@@ -44,6 +46,7 @@ class ContentBlockLoader implements LoaderInterface
         protected ContentBlockRegistry $contentBlockRegistry,
         protected LanguageFileRegistry $languageFileRegistry,
         protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected ContentBlockBasicsRegistry $contentBlockBasicsRegistry,
     ) {
     }
 
@@ -66,6 +69,21 @@ class ContentBlockLoader implements LoaderInterface
 
         $loadedContentBlocks = [];
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
+        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
+        // load content blocks basics:
+        // summary of basics and includes needed before loading content blocks
+        foreach ($packageManager->getActivePackages() as $package) {
+            $pathToBasics = $package->getPackagePath() . ContentBlockPathUtility::getRelativeBasicsPath();
+            if (is_file($pathToBasics)) {
+                $temp = $yamlFileLoader->load($pathToBasics);
+                foreach ( $temp['Basics'] as $basic) {
+                    $this->contentBlockBasicsRegistry->register(
+                        LoadedContentBlockBasic::fromArray($basic)
+                    );
+                }
+            }
+        }
+        // load content blocks
         foreach ($packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
             $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getSubDirectoryPath();
@@ -134,6 +152,21 @@ class ContentBlockLoader implements LoaderInterface
             $iconProviderClass = SvgIconProvider::class;
         }
 
+        // add basics: general tab BEFORE loading the content block fields
+        $yaml['fields'] = array_merge(
+            $this->contentBlockBasicsRegistry->getBasic('Typo3StandardGeneral')->getFields(),
+            $yaml['fields']
+        );
+        // look for basics on level 0
+        if (array_key_exists('basics', $yaml) && is_array($yaml['basics'])) {
+            foreach ($yaml['basics'] as $basics) {
+                $yaml['fields'] = $this->contentBlockBasicsRegistry->addBasicsToFields(
+                    $yaml['fields'],
+                    $basics
+                );
+            }
+        }
+        $yaml['fields'] = $this->applyBasicsToSubFields($yaml['fields']);
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
@@ -182,5 +215,26 @@ class ContentBlockLoader implements LoaderInterface
                 $fileSystem->symlink($absolutContentBlockPublicPath, $contentBlockAssetsPathDestination);
             }
         }
+    }
+
+    protected function applyBasicsToSubFields(array $fields): array
+    {
+        $newFields = [];
+        foreach ($fields as $key => $field) {
+            if (array_key_exists('fields', $field) && is_array($field['fields'])) {
+                $field['fields'] = $this->applyBasicsToSubFields($field['fields']);
+            }
+            if (array_key_exists('type', $field) && $field['type'] === 'Basic') {
+                foreach ($this->contentBlockBasicsRegistry->getBasic($field['identifier'])->getFields() as $basicKey => $basicsField) {
+                    if (array_key_exists('fields', $basicsField) && is_array($basicsField['fields'])) {
+                        $basicsField['fields'] = $this->applyBasicsToSubFields($basicsField['fields']);
+                    }
+                    $newFields[] = $basicsField;
+                }
+            } else {
+                $newFields[] = $field;
+            }
+        }
+        return $newFields;
     }
 }

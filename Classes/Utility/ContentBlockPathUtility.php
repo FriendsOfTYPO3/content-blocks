@@ -76,4 +76,9 @@ class ContentBlockPathUtility
     {
         return '_assets/cb/' . $name;
     }
+
+    public static function getRelativeBasicsPath(): string
+    {
+        return 'Configuration/Yaml/ContentBlockBasics.yaml';
+    }
 }

@@ -1,0 +1,5 @@
+imports:
+  - { resource: "./Basics/Typo3StandardGeneral.yaml" }
+  - { resource: "./Basics/Typo3StandardAppearance.yaml" }
+  - { resource: "./Basics/Typo3StandardLanguage.yaml" }
+  - { resource: "./Basics/Typo3StandardAccess.yaml" }

@@ -35,6 +35,7 @@ class TypeResolver
             'input' => FieldType::TEXT,
             'text' => FieldType::TEXTAREA,
             'color' => FieldType::COLOR,
+            'language' => FieldType::LANGUAGE,
             'link' => FieldType::LINK,
             'datetime' => FieldType::DATETIME,
             'email' => FieldType::EMAIL,

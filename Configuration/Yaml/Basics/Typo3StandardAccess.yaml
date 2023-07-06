@@ -1,0 +1,27 @@
+Basics:
+  - identifier: Typo3StandardAccess
+    fields:
+      - identifier: access_tab
+        type: Tab
+        label: LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access
+      - identifier: access
+        type: Palette
+        label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access
+        fields:
+          - identifier: starttime
+            useExistingField: true
+            label: LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime
+          - identifier: endtime
+            useExistingField: true
+            label: LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime
+          - type: Linebreak
+          - identifier: fe_group
+            useExistingField: true
+            label: LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group
+          - type: Linebreak
+          - identifier: editlock
+            useExistingField: true
+            label: LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock
+
+
+

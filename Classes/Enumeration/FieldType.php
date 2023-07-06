@@ -27,6 +27,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\LanguageFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinebreakFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
@@ -50,6 +51,7 @@ enum FieldType: string
     case DATETIME = 'DateTime';
     case EMAIL = 'Email';
     case FILE = 'File';
+    case LANGUAGE = 'Language';
     case LINK = 'Link';
     case NUMBER = 'Number';
     case RADIO = 'Radio';
@@ -73,6 +75,7 @@ enum FieldType: string
             self::DATETIME => 'datetime',
             self::EMAIL => 'email',
             self::FILE => 'file',
+            self::LANGUAGE => 'language',
             self::LINK => 'link',
             self::NUMBER => 'number',
             self::RADIO => 'radio',
@@ -114,6 +117,7 @@ enum FieldType: string
             self::DATETIME => DateTimeFieldConfiguration::createFromArray($config),
             self::EMAIL => EmailFieldConfiguration::createFromArray($config),
             self::FILE => FileFieldConfiguration::createFromArray($config),
+            self::LANGUAGE => LanguageFieldConfiguration::createFromArray($config),
             self::LINK => LinkFieldConfiguration::createFromArray($config),
             self::NUMBER => NumberFieldConfiguration::createFromArray($config),
             self::RADIO => RadioFieldConfiguration::createFromArray($config),

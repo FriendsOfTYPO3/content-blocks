@@ -1,0 +1,15 @@
+Basics:
+  - identifier: Typo3StandardLanguage
+    fields:
+      - identifier: language_tab
+        type: Tab
+        label: LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language
+      - identifier: sys_language_uid
+        useExistingField: true
+        label: LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language
+      - identifier: l18n_parent
+        useExistingField: true
+        label: LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent
+
+
+
