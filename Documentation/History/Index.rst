@@ -35,12 +35,12 @@ The content blocks concept is a new way to create content elements in TYPO3.
 
 The outcome of the research and the discussions in the community is:
 
-*  A content block is a definition package in your {extDir}/ContentBlocks/ folder, which will be determined and loaded automatically
+*  A content block is a definition in your {extDir}/ContentBlocks/ folder, which will be determined and loaded automatically
 *  A content block is not a TYPO3 Extension but a sub-resource, so there is no PHP, TypoScript, SQL nor TSconfig inside
 *  The configuration for a new content element is stored in a YAML file, the EditorInterface.yaml
 *  Content blocks are made for frontend developers / TYPO3 beginners as main target group
 *  As a common best practice in TYPO3, labels and every other language related stuff is stored in a XLF file. This will be registered an processed by convention
-*  The entered name (vendor/package) in the EditorInterface.yaml file defines the identifier of a content block
+*  The entered name (vendor/name) in the EditorInterface.yaml file defines the identifier of a content block
 *  GUI to create / kickstart a new content block
 *  If there are breaking changes, support e.g via UpgradeWizards to migrate easily to the new version
 *  Better UX for editors by shipping a template (EditorPreview.html) for the backend preview
@@ -53,10 +53,10 @@ The outcome of the research and the discussions in the community is:
 What it does
 ============
 
-Basically, the content blocks register the new content element by the entered vendor/package names in the corresponding EditorInterface.yaml
-in TYPO3 and the newContentElementWizard, and translate the YAML-file into TCA and SQL.
+Basically, this extension registers the new content type with the entered vendor/name in the corresponding EditorInterface.yaml
+file in TYPO3 and the newContentElementWizard, and translates the YAML-file into TCA and SQL.
 It registers the Labels.xlf and sets the labels and descriptions by the field identifiers,
-register the icon and adds the necessary TypoScript.
+registers the icon and adds the necessary TypoScript.
 
 So it is a abstraction layer to ease up and speed up the work of integrators and frontend developers.
 But in the end, it outputs the same definitions as a normal TYPO3 content element, which can be

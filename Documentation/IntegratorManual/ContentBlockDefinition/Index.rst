@@ -8,7 +8,7 @@ Defining a Content Block
 Directory structure of a Content Block
 ======================================
 
-A Content Block definition package has the following files and directory structure:
+A Content Block definition has the following files and directory structure:
 
 +-------------------------------------------------+------------+--------------------------------+
 | Directory / File                                | Mandatory? | Created via make:content-block |
@@ -30,8 +30,8 @@ A Content Block definition package has the following files and directory structu
 | Assets/ContentBlockIcon.(svg/png/gif)           |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
-Content Block definition package files explained
-================================================
+Content Block definition files explained
+========================================
 
 EditorInterface.yaml
 --------------------

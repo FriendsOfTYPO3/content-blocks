@@ -66,7 +66,7 @@ For example, if you want to use the existing column :sql:`bodytext`, or
 
 .. code-block:: yaml
 
-    name: vendor/package
+    name: vendor/content-block-name
     group: common
     fields:
         -
