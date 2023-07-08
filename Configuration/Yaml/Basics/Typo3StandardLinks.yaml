@@ -1,0 +1,14 @@
+Basics:
+  -
+    identifier: Typo3StandardLinks
+    fields:
+      -
+        identifier: links_palette
+        type: Palette
+        fields:
+          -
+            identifier: sectionIndex
+            useExistingField: true
+          -
+            identifier: linkToTop
+            useExistingField: true

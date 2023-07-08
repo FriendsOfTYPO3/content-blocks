@@ -13,7 +13,6 @@ Basics:
           -
             identifier: hidden
             useExistingField: true
-            label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:field.default.hidden
       -
         identifier: access_palette
         type: Palette
