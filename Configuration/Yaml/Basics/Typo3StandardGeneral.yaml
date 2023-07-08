@@ -7,7 +7,7 @@ Basics:
         type: Tab
         label: LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general
       -
-        identifier: general
+        identifier: general_palette
         label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.general
         type: Palette
         fields:
