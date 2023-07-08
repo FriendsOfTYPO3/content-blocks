@@ -44,10 +44,10 @@ class CreateContentBlockCommand extends Command
         $this->packageResolver = $packageResolver;
     }
 
-    public function configure()
+    public function configure(): void
     {
-        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor name of the content block.');
-        $this->addOption('package', '', InputOption::VALUE_OPTIONAL, 'The package name of the content block.');
+        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor of the content block.');
+        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'The name of the content block.');
         $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Enter extension in which the content block should be stored.');
     }
 
@@ -66,11 +66,11 @@ class CreateContentBlockCommand extends Command
             $questionVendor = new Question('Enter your vendor name: ');
             $vendor = $questionHelper->ask($input, $output, $questionVendor);
         }
-        if ($input->getOption('package')) {
-            $package = $input->getOption('package');
+        if ($input->getOption('name')) {
+            $name = $input->getOption('name');
         } else {
-            $questionPackage = new Question('Enter your package name: ');
-            $package = $questionHelper->ask($input, $output, $questionPackage);
+            $questionPackage = new Question('Enter your content block name: ');
+            $name = $questionHelper->ask($input, $output, $questionPackage);
         }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
@@ -90,7 +90,7 @@ class CreateContentBlockCommand extends Command
 
         $contentBlockConfiguration = new ContentBlockConfiguration(
             yamlConfig: [
-                'name' => $vendor . '/' . $package,
+                'name' => $vendor . '/' . $name,
                 'group' => 'common',
                 'prefixFields' => false,
                 'fields' => [

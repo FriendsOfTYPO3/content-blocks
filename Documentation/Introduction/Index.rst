@@ -16,7 +16,7 @@ to a view and then rendered in the TYPO3 frontend.
 
 The configuration of a Content Block is reduced and simplified via abstraction
 and convention. A Content Block is configured as a reusable standalone
-package, that needs all its dependencies to be defined.
+resource, that needs all its dependencies to be defined.
 
 What does it do?
 ================
