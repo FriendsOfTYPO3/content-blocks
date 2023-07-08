@@ -1,19 +1,19 @@
 Basics:
-  - identifier: Typo3StandardGeneral
-#    ctrl:
-#      -
-#        searchFields: header,header_link,subheader,bodytext,pi_flexform,example_cta_linkTitle
-#        hideAtCopy: 1
-#        label: header
-#        label_alt: subheader,bodytext
-#        languageField: sys_language_uid
+  -
+    identifier: Typo3StandardGeneral
     fields:
-      - identifier: general_tab
+      -
+        identifier: general_tab
         type: Tab
         label: LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general
-      - identifier: CType
-        useExistingField: true
-      - identifier: colPos
-        useExistingField: true
-
-
+      -
+        identifier: general
+        label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.general
+        type: Palette
+        fields:
+          -
+            identifier: CType
+            useExistingField: true
+          -
+            identifier: colPos
+            useExistingField: true

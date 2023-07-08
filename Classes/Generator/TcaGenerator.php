@@ -165,7 +165,7 @@ class TcaGenerator
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
                         'previewRenderer' => PreviewRenderer::class,
-                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getShowItems()),
+                        'showitem' => implode(',', $typeDefinition->getShowItems()),
                     ];
                     if ($columnsOverrides !== []) {
                         $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -370,30 +370,6 @@ class TcaGenerator
             }
         }
         return $labelFallback;
-    }
-
-    protected function getTtContentStandardShowItem(array $columns): string
-    {
-        $parts = [
-            // '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
-            // '--palette--;;general',
-            implode(',', $columns),
-            // '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance',
-            // '--palette--;;frames',
-            // '--palette--;;appearanceLinks',
-            // '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
-            // '--palette--;;language',
-            // '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
-            // '--palette--;;hidden',
-            // '--palette--;;access',
-            // '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories',
-            // 'categories',
-            // '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
-            // 'rowDescription',
-            // '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-        ];
-
-        return implode(',', $parts);
     }
 
     protected function getGenericStandardShowItem(array $showItems): string
