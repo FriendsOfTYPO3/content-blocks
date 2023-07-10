@@ -47,6 +47,7 @@ class TypeResolver
             'folder' => FieldType::FOLDER,
             'file' => FieldType::FILE,
             'flex' => FieldType::FLEXFORM,
+            'category' => FieldType::CATEGORY,
             default => throw new \InvalidArgumentException('Field type "' . $tca['config']['type'] . '" is either not implemented or cannot be shared in Content Blocks.', 1680110918)
         };
     }

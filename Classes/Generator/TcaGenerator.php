@@ -165,7 +165,7 @@ class TcaGenerator
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $typeDefinitionArray = [
                         'previewRenderer' => PreviewRenderer::class,
-                        'showitem' => implode(',', $typeDefinition->getShowItems()),
+                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getShowItems()),
                     ];
                     if ($columnsOverrides !== []) {
                         $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -370,6 +370,25 @@ class TcaGenerator
             }
         }
         return $labelFallback;
+    }
+
+    protected function getTtContentStandardShowItem(array $columns): string
+    {
+        $parts = [
+             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+             '--palette--;;general',
+            implode(',', $columns),
+             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+             '--palette--;;language',
+             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
+             '--palette--;;hidden',
+             '--palette--;;access',
+             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+             'rowDescription',
+             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+        ];
+
+        return implode(',', $parts);
     }
 
     protected function getGenericStandardShowItem(array $showItems): string
