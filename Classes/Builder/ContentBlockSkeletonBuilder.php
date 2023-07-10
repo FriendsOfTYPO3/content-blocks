@@ -74,7 +74,7 @@ class ContentBlockSkeletonBuilder
 		<header/>
 		<body>
 			<trans-unit id="$vendor.$package.title" xml:space="preserve">
-				<source>Content Block title</source>
+				<source>Content Block: $package</source>
 			</trans-unit>
 			<trans-unit id="$vendor.$package.description" xml:space="preserve">
 				<source>This is your content block description</source>

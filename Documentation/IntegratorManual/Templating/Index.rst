@@ -66,12 +66,12 @@ Example for a JavaScript file:
 
 
 The mapping between the assets and the Content Block in the ViewHelper is done by the TypoScript configuration of a Content Block
-in `tt_content.content_block_identifier.settings.name = vendor/package` which is set automatically. But if you try to use a
+in `tt_content.content_block_identifier.settings.name = vendor/content-block-name` which is set automatically. But if you try to use a
 asset ViewHelper in e.g. a partial, you have to ship the `settings` to the partial, or you can set the `name` attribute by hand:
 
 .. code-block:: html
 
-    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/package" file="Frontend.js"/>
+    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/content-block-name" file="Frontend.js"/>
 
 
 ViewHelper & translation
@@ -85,13 +85,13 @@ file for the given key.
     <cb:translate key="my.contentblock.header" />
 
 As described above in the asset ViewHelper, the mapping between the Content Block and the translation file is done by the TypoScript
-configuration of a Content Block in `tt_content.content_block_identifier.settings.name = vendor/package` which is set automatically.
+configuration of a Content Block in `tt_content.content_block_identifier.settings.name = vendor/content-block-name` which is set automatically.
 But if you try to use a translation ViewHelper in e.g. a partial, you have to ship the `settings` to the partial, or you can set the
 `name` attribute by hand:
 
 .. code-block:: html
 
-    <cb:translate key="my.contentblock.header" name="vendor/package" />
+    <cb:translate key="my.contentblock.header" name="vendor/content-block-name" />
 
 
 Partials

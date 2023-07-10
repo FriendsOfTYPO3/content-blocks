@@ -13,6 +13,8 @@ are merely an abstraction layer, you can override existing Content Block configu
 like you would override a third-party-extension (e.g. by adding corresponding TCA/ TypoScript/
 TSconfig via a sitepackage extension).
 
+@todo TCA overrides won't work. New feature needed for that.
+
 Bundling
 ========
 
@@ -20,12 +22,16 @@ One Content Block definition package represents exactly one Content Block. Bundl
 realized as distributions (e.g. like TYPO3 minimal distribution) or within
 a bundling extension.
 
+@todo rewrite this to account for the new sub-resource in extensions.
+
 Availability on platforms
 =========================
 
 The Content Blocks won't be available in the TYPO3 extension repository (TER) and on packagist.org.
 Of course it is technically possible to define a Content Block within a separate composer package
 and publish them (e.g. on packagist.org).
+
+@todo rewrite this to account for the new sub-resource in extensions.
 
 Can I use common translations from my e.g. sitepackage or other extensions?
 ===========================================================================
@@ -51,7 +57,7 @@ via TypoScript:
 
 .. code-block:: typoscript
 
-    tt_content.vendor_package {
+    tt_content.vendor_name {
         view {
             partialRootPaths {
                 20 = EXT:my_sitepackage/Resources/Private/Partials/ContentElements
