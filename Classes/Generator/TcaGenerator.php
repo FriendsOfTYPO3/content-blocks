@@ -375,17 +375,17 @@ class TcaGenerator
     protected function getTtContentStandardShowItem(array $columns): string
     {
         $parts = [
-             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
-             '--palette--;;general',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+            '--palette--;;general',
             implode(',', $columns),
-             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
-             '--palette--;;language',
-             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
-             '--palette--;;hidden',
-             '--palette--;;access',
-             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
-             'rowDescription',
-             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--palette--;;language',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
+            '--palette--;;hidden',
+            '--palette--;;access',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            'rowDescription',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
         ];
 
         return implode(',', $parts);
