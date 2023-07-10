@@ -1,88 +1,79 @@
 .. include:: /Includes.rst.txt
 .. _field_type_basic:
 
-========
-Basic
-========
+======
+Basics
+======
 
-Basics are a concept like partials or templates in fluid. They are used to
-have a predefined set of fields that can be used and has to defined only once.
+Basics are a concept like partials or mixins. They are used to have a
+pre-defined set of fields that can be reused and have to defined only once.
 
-There are basically two ways of using it.
+There are two different ways of using it.
 
-The first way is to use Basics on level 0 in EditorInterface.yaml. This way the Basics
-are added after the fields of the content block. This is useful if you want to have
+The first way is to use Basics like layouts for your UI. The Basics are added
+after the fields of your content block. This is useful if you want to have
 a set of fields that are always available for a content block.
 
-This is eg. how to add the classic Fluid Styled Content Tabs like Appearance, Access or Language.
-These Basics are shiplped with the content blocks out of the box.
+List of the standard Basics shipped with Content Blocks:
 
-List of the standard Basics shipped with the content blocks:
+*  Typo3StandardAppearance
+*  Typo3StandardLinks
+*  Typo3StandardCategories
 
-* Typo3StandardAppearance
-* Typo3StandardAccess
-* Typo3StandardLanguage
-* Typo3StandardGeneral
-
-`Typo3StandardGeneral` is always added to tt_content before the content block fields.
-
-How to use it on level 0:
+This is an example on how to add the classic Fluid Styled Content Tab
+"Appearance":
 
 .. code-block:: yaml
 
     name: example/basics
     group: common
     basics:
-        - Typo3StandardAccess
-        - Typo3StandardLanguage
+        - Typo3StandardAppearance
     fields:
         # - ...
 
-The second way is to use Basics in fields. This can be easily done by using the identifier
-and the type `Basic`.
-
+The second way is to use Basics directly between your custom fields. This can
+be done by using the identifier and the type :yaml:`Basic`.
 
 .. code-block:: yaml
 
     name: example/basics
     group: common
     basics:
-        - Typo3StandardAccess
-        - Typo3StandardLanguage
+        - Typo3StandardAppearance
     fields:
         - identifier: header
           useExistingField: true
-        - identifier: Typo3StandardAppearance
+        - identifier: Typo3StandardLinks
           type: Basic
 
+You can define your own Basics by placing a
+`Configuration/Yaml/ContentBlocksBasic.yaml` file into your sitepackage. If you
+want to create more then one Basic, it is recommended to split them up in
+separate files and include them in ContentBlocksBasic.yaml.
 
-You can define your own Basics by dump a ContentBlocksBasic.yaml to your e.g. sitepackage in
-Configuration/Yaml/ContentBlocksBasic.yaml. If you want to create more then one Basic, we recommend
-to split them up in seperate files and include them in ContentBlocksBasic.yaml.
-
-Example how to create a singel Basic:
+Example on how to create a single Basic:
 
 .. code-block:: yaml
 
     Basics:
-        - identifier: Typo3StandardAccess
+        - identifier: YourCustomBasic
             fields:
-            - identifier: access_tab
+            - identifier: your_tab
                 type: Tab
             # - ...
 
-You can go on with normal content block field definitions.
+You can continue with normal content block field definitions.
 
-Example how to include multiple separated Basics in diffrent sub files:
+Example on how to include multiple separated Basics in different sub files:
 
 .. code-block:: yaml
 
     imports:
-        - { resource: "./Basics/Typo3StandardGeneral.yaml" }
         - { resource: "./Basics/Typo3StandardAppearance.yaml" }
-        - { resource: "./Basics/Typo3StandardLanguage.yaml" }
-        - { resource: "./Basics/Typo3StandardAccess.yaml" }
+        - { resource: "./Basics/Typo3StandardLinks.yaml" }
+        - { resource: "./Basics/Typo3StandardCategories.yaml" }
 
 
-This examples can also be found in the content blocks extension in the Configuration/Yaml/ directory.
-    
+This examples can also be found in the content blocks extension in th
+`Configuration/Yaml` directory.
