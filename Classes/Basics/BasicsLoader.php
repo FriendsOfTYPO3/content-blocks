@@ -41,14 +41,11 @@ class BasicsLoader
             $finder->files()->name('*.yaml')->depth(0)->in($pathToBasics);
             foreach ($finder as $splFileInfo) {
                 $yamlContent = Yaml::parseFile($splFileInfo->getPathname());
-                // @todo Think about vendor for Basics and allow only one Basic per file
-                if (!is_array($yamlContent) /* || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/') */) {
-                    throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname() /* . '"' . ': Cannot find a valid name in format "vendor/package".' */, 1689095524);
+                if (!is_array($yamlContent) || ($yamlContent['identifier'] ?? '') === '') {
+                    throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname()  . '"' . ': Cannot find an identifier.', 1689095524);
                 }
-                foreach ($yamlContent['Basics'] ?? [] as $basic) {
-                    $loadedBasic = LoadedBasic::fromArray($basic);
-                    $this->basicsRegistry->register($loadedBasic);
-                }
+                $loadedBasic = LoadedBasic::fromArray($yamlContent);
+                $this->basicsRegistry->register($loadedBasic);
             }
         }
     }
