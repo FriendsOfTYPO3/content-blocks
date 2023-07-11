@@ -43,7 +43,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
     public function coreLabelsAreOverriddenIfTranslationExistsInLanguageFile(): void
     {
         self::assertSame(
-            'LLL:EXT:simple/ContentBlocks/simple2/Source/Language/Labels.xlf:header.label',
+            'LLL:EXT:simple/ContentBlocks/ContentTypes/simple2/Source/Language/Labels.xlf:header.label',
             $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['columnsOverrides']['header']['label']
         );
     }

@@ -76,7 +76,7 @@ class ContentBlockLoader implements LoaderInterface
         $loadedContentBlocks = [];
         foreach ($this->packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
-            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getSubDirectoryPath();
+            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeContentTypesPath();
             if (is_dir($contentBlockFolder)) {
                 $loadedContentBlocks[] = $this->loadContentBlocksInExtension($contentBlockFolder, $extensionKey);
             }
