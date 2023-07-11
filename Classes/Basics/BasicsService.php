@@ -46,7 +46,7 @@ class BasicsService
      * @param string $identifier identifier of the basic
      * @return array fields with the basic's fields added or just the fields from the content block
      */
-    public function addBasicsToFields(array $fields, string $identifier): array
+    protected function addBasicsToFields(array $fields, string $identifier): array
     {
         if ($this->basicsRegistry->hasBasic($identifier)) {
             $fields = array_merge(
@@ -57,7 +57,7 @@ class BasicsService
         return $fields;
     }
 
-    public function applyBasicsToSubFields(array $fields): array
+    protected function applyBasicsToSubFields(array $fields): array
     {
         $newFields = [];
         foreach ($fields as $field) {

@@ -135,4 +135,26 @@ final class TcaGeneratorTest extends FunctionalTestCase
             $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['showitem']
         );
     }
+
+    /**
+     * @test
+     */
+    public function basicsAreAppendedToTheEndFromTopLevelBasicsArray(): void
+    {
+        self::assertStringContainsString(
+            '--palette--;;simple_basics_palette,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;simple_basics_frames_palette,--palette--;;simple_basics_links_palette,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories',
+            $GLOBALS['TCA']['tt_content']['types']['simple_basics']['showitem']
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function basicIncludedAsTypeAddedToPalette(): void
+    {
+        self::assertStringContainsString(
+            'simple_basics_basic_field',
+            $GLOBALS['TCA']['tt_content']['palettes']['simple_basics_palette']['showitem']
+        );
+    }
 }

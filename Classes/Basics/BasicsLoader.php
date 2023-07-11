@@ -42,7 +42,7 @@ class BasicsLoader
             foreach ($finder as $splFileInfo) {
                 $yamlContent = Yaml::parseFile($splFileInfo->getPathname());
                 if (!is_array($yamlContent) || ($yamlContent['identifier'] ?? '') === '') {
-                    throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname()  . '"' . ': Cannot find an identifier.', 1689095524);
+                    throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname() . '"' . ': Cannot find an identifier.', 1689095524);
                 }
                 $loadedBasic = LoadedBasic::fromArray($yamlContent);
                 $this->basicsRegistry->register($loadedBasic);

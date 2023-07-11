@@ -1,0 +1,5 @@
+identifier: Simple/Basic
+fields:
+  -
+    identifier: basic_field
+    type: Text

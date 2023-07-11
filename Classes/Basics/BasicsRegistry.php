@@ -46,7 +46,7 @@ class BasicsRegistry implements SingletonInterface
         }
         return $this->basics[$identifier];
     }
-    
+
     public function getAllBasics(): array
     {
         return $this->basics;
