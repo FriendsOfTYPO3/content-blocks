@@ -31,7 +31,7 @@ name
 
    Every editing interface configuration must contain exactly one name. The name is made up of vendor and content block
    name separated by a "/" just like the `vendor/package` notation in a traditional composer.json file. It must be
-   unique and must have at least 3 characters. Content Blocks which are placed in the `ContentBlocks` folder at any of
+   unique and must have at least 3 characters. Content Blocks which are placed in the `ContentBlocks/ContentTypes` folder at any of
    your extensions will be determined and loaded automatically.
 
 priority
@@ -173,6 +173,7 @@ Field types
     :maxdepth: 1
     :titlesonly:
 
+    Basic/Index
     Category/Index
     Checkbox/Index
     Collection/Index

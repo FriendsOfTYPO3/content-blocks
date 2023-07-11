@@ -17,6 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Basics;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class BasicsService
 {
     public function __construct(protected readonly BasicsRegistry $basicsRegistry)

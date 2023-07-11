@@ -1,5 +1,5 @@
 .. include:: /Includes.rst.txt
-.. _field_type_palette:
+.. _field_type_tab:
 
 ===
 Tab

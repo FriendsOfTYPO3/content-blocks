@@ -22,6 +22,9 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Package\PackageManager;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class BasicsLoader
 {
     public function __construct(
