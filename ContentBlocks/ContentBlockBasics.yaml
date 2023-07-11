@@ -1,4 +1,0 @@
-imports:
-  - { resource: "./Basics/Typo3StandardAppearance.yaml" }
-  - { resource: "./Basics/Typo3StandardLinks.yaml" }
-  - { resource: "./Basics/Typo3StandardCategories.yaml" }

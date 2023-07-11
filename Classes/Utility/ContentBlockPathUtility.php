@@ -87,8 +87,13 @@ class ContentBlockPathUtility
         return '_assets/cb/' . $name;
     }
 
+    public static function getBasicsPath(): string
+    {
+        return 'Basics';
+    }
+
     public static function getRelativeBasicsPath(): string
     {
-        return  self::getSubDirectoryPath() . '/ContentBlockBasics.yaml';
+        return self::getSubDirectoryPath() . '/' . self::getBasicsPath();
     }
 }
