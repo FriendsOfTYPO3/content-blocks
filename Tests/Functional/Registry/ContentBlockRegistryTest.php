@@ -42,12 +42,12 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
     {
         yield 'Extension path for foo' => [
             'name' => 'typo3tests/foo',
-            'expected' => 'EXT:foo/ContentBlocks/ContentTypes/foo',
+            'expected' => 'EXT:foo/ContentBlocks/ContentElements/foo',
         ];
 
         yield 'Extension path for bar' => [
             'name' => 'typo3tests/bar',
-            'expected' => 'EXT:bar/ContentBlocks/ContentTypes/bar',
+            'expected' => 'EXT:bar/ContentBlocks/ContentElements/bar',
         ];
     }
 

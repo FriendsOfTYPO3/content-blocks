@@ -24,7 +24,7 @@ class ContentBlockPathUtility
 {
     public static function getRelativeContentBlockPath(string $extensionKey, string $contentBlockPackageName): string
     {
-        return 'EXT:' . $extensionKey . '/' . self::getRelativeContentTypesPath() . '/' . $contentBlockPackageName;
+        return 'EXT:' . $extensionKey . '/' . self::getRelativeContentElementsPath() . '/' . $contentBlockPackageName;
     }
 
     public static function getEditorInterfacePath(): string
@@ -57,9 +57,19 @@ class ContentBlockPathUtility
         return self::getPublicFolderPath() . '/ContentBlockIcon.svg';
     }
 
-    public static function getRelativeContentTypesPath(): string
+    public static function getRelativeContentElementsPath(): string
     {
-        return self::getSubDirectoryPath() . '/' . self::getContentTypesPath();
+        return self::getSubDirectoryPath() . '/' . self::getContentElementsFolder();
+    }
+
+    public static function getRelativePageTypesPath(): string
+    {
+        return self::getSubDirectoryPath() . '/' . self::getPageTypesFolder();
+    }
+
+    public static function getRelativeRecordTypesPath(): string
+    {
+        return self::getSubDirectoryPath() . '/' . self::getRecordTypesFolder();
     }
 
     public static function getSubDirectoryPath(): string
@@ -67,9 +77,19 @@ class ContentBlockPathUtility
         return 'ContentBlocks';
     }
 
-    public static function getContentTypesPath(): string
+    public static function getContentElementsFolder(): string
     {
-        return 'ContentTypes';
+        return 'ContentElements';
+    }
+
+    public static function getPageTypesFolder(): string
+    {
+        return 'PageTypes';
+    }
+
+    public static function getRecordTypesFolder(): string
+    {
+        return 'RecordTypes';
     }
 
     public static function getPublicFolderPath(): string

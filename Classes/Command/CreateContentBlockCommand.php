@@ -81,11 +81,11 @@ class CreateContentBlockCommand extends Command
                     1678781014
                 );
             }
-            $basePath = $resolvedPackage->getPackagePath() . ContentBlockPathUtility::getRelativeContentTypesPath();
+            $basePath = $resolvedPackage->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
         } else {
             $io = new SymfonyStyle($input, $output);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $availablePackages));
-            $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . ContentBlockPathUtility::getRelativeContentTypesPath();
+            $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
         }
 
         $contentBlockConfiguration = new ContentBlockConfiguration(

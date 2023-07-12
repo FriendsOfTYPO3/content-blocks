@@ -22,6 +22,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -76,9 +77,17 @@ class ContentBlockLoader implements LoaderInterface
         $loadedContentBlocks = [];
         foreach ($this->packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
-            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeContentTypesPath();
-            if (is_dir($contentBlockFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($contentBlockFolder, $extensionKey);
+            $contentElementsFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
+            if (is_dir($contentElementsFolder)) {
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($contentElementsFolder, $extensionKey, ContentType::CONTENT_ELEMENT);
+            }
+            $pageTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath();
+            if (is_dir($pageTypesFolder)) {
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($pageTypesFolder, $extensionKey, ContentType::PAGE_TYPE);
+            }
+            $recordTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath();
+            if (is_dir($recordTypesFolder)) {
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($recordTypesFolder, $extensionKey, ContentType::RECORD_TYPE);
             }
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
@@ -99,7 +108,7 @@ class ContentBlockLoader implements LoaderInterface
         return $this->tableDefinitionCollection;
     }
 
-    protected function loadContentBlocksInExtension(string $path, string $extensionKey): array
+    protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType): array
     {
         $result = [];
         $finder = new Finder();
@@ -108,20 +117,27 @@ class ContentBlockLoader implements LoaderInterface
             $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getEditorInterfacePath();
             $yamlContent = Yaml::parseFile($yamlPath);
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
-                throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/package".', 1678224283);
+                throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".', 1678224283);
             }
 
             $relativeExtensionPath = ContentBlockPathUtility::getRelativeContentBlockPath($extensionKey, $splFileInfo->getRelativePathname());
-            $result[] = $this->loadSingleContentBlock($yamlContent['name'], $splFileInfo->getPathname() . '/', $relativeExtensionPath, $yamlContent);
+            $result[] = $this->loadSingleContentBlock(
+                $yamlContent['name'],
+                $contentType,
+                $splFileInfo->getPathname() . '/',
+                $relativeExtensionPath,
+                $yamlContent,
+            );
         }
         return $result;
     }
 
     protected function loadSingleContentBlock(
         string $name,
+        ContentType $contentType,
         string $packagePath = '',
         string $contentBlockFolder = '',
-        array $yaml = []
+        array $yaml = [],
     ): LoadedContentBlock {
         if (!file_exists($packagePath)) {
             throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1678699637);
@@ -142,6 +158,12 @@ class ContentBlockLoader implements LoaderInterface
             $iconProviderClass = SvgIconProvider::class;
         }
 
+        // Override table and typeField for Content Elements and Page Types.
+        if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
+            $yaml['table'] = $contentType->getTable();
+            $yaml['typeField'] = $contentType->getTypeField();
+        }
+
         $yaml = $this->basicsService->applyBasics($yaml);
 
         return new LoadedContentBlock(
@@ -149,7 +171,8 @@ class ContentBlockLoader implements LoaderInterface
             yaml: $yaml,
             icon: $iconPath,
             iconProvider: $iconProviderClass,
-            path: $contentBlockFolder
+            path: $contentBlockFolder,
+            contentType: $contentType,
         );
     }
 

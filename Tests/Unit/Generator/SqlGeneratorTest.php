@@ -32,6 +32,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -110,6 +112,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -135,6 +139,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -214,6 +220,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -248,6 +256,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'text',

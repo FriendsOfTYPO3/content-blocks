@@ -18,9 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
 use TYPO3\CMS\Core\Database\RelationHandler;
@@ -43,7 +43,7 @@ class RelationResolver
     ) {
     }
 
-    public function processField(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, array $record, string $table): mixed
+    public function processField(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, array $record, string $table): mixed
     {
         $fieldType = $tcaFieldDefinition->getFieldType();
         $recordIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
@@ -95,7 +95,7 @@ class RelationResolver
         return $data;
     }
 
-    protected function processSelect(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, string $parentTable, array $record): mixed
+    protected function processSelect(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): mixed
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
@@ -115,7 +115,7 @@ class RelationResolver
         return $record[$uniqueIdentifier] ?? '';
     }
 
-    protected function processReference(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, string $parentTable, array $record): array
+    protected function processReference(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): array
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         return $this->getRelations(
@@ -128,7 +128,7 @@ class RelationResolver
         );
     }
 
-    protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition, string $parentTable, array $record): array
+    protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): array
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
@@ -142,7 +142,7 @@ class RelationResolver
         );
     }
 
-    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition): array
+    protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition): array
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $collectionTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
@@ -201,7 +201,7 @@ class RelationResolver
         $this->serverRequest = $serverRequest;
     }
 
-    protected function getMergedTcaFieldConfig(string $table, TcaFieldDefinition $tcaFieldDefinition, TypeDefinition $typeDefinition): array
+    protected function getMergedTcaFieldConfig(string $table, TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition): array
     {
         return array_replace_recursive(
             $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()] ?? [],

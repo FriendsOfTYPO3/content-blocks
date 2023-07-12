@@ -20,10 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
 use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
@@ -283,7 +283,7 @@ class TcaGenerator
      * Label and description overrides. For core fields, fall back to standard translation.
      * For content block fields, fall back to identifier.
      */
-    protected function determineLabelAndDescription(TypeDefinition $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
+    protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
         $languagePath = $overrideColumn->getLanguagePath();
         if (!isset($column['label'])) {

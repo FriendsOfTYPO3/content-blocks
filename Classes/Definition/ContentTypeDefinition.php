@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class TypeDefinition
+abstract class ContentTypeDefinition
 {
     protected string $identifier = '';
     protected string $table = '';
@@ -35,34 +35,6 @@ class TypeDefinition
     protected string $vendor = '';
     protected string $package = '';
     protected int $priority = 0;
-
-    final public function __construct()
-    {
-    }
-
-    public static function createFromArray(array $array, string $table): static
-    {
-        if (!isset($array['identifier']) || $array['identifier'] === '') {
-            throw new \InvalidArgumentException('Type identifier must not be empty.', 1629292395);
-        }
-
-        if ($table === '') {
-            throw new \InvalidArgumentException('Type table must not be empty.', 1668858103);
-        }
-
-        $self = new static();
-        return $self
-            ->withTable($table)
-            ->withIdentifier($array['identifier'])
-            ->withTypeName($array['typeName'])
-            ->withLabel($array['label'] ?? '')
-            ->withColumns($array['columns'] ?? [])
-            ->withShowItems($array['showItems'] ?? [])
-            ->withOverrideColumns($array['overrideColumns'] ?? [])
-            ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '')
-            ->withPriority($array['priority'] ?? '');
-    }
 
     public function getIdentifier(): string
     {

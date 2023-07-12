@@ -33,6 +33,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'foo',
@@ -77,6 +79,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'collection',
@@ -129,6 +133,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -166,6 +172,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -209,6 +217,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -263,6 +273,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -323,6 +335,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'tab_1',
@@ -361,6 +375,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -405,6 +421,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -441,6 +459,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -483,6 +503,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -529,6 +551,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -581,6 +605,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'type' => 'Text',
@@ -614,6 +640,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -653,6 +681,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -703,6 +733,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -735,6 +767,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -808,6 +842,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -857,6 +893,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -912,6 +950,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
                     'iconProvider' => '',
                     'path' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
