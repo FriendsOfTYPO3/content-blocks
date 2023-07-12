@@ -7,7 +7,7 @@ lib.parseFunc_RTE
 =================
 
 In order to process links inside RTE fields, one needs to define a so called
-:ref:`parseFunc <tsref:parsefunc>` TypoScript snippet. This snippet is shipped
+:ref:`parseFunc <t3tsref:parsefunc>` TypoScript snippet. This snippet is shipped
 in the Core, when you use the `fluid_styled_content` system extension. If you
 only rely on Content Blocks, you need to define it on your own.
 

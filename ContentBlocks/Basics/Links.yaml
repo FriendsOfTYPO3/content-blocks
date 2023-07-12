@@ -1,0 +1,13 @@
+# To be used within ContentElements
+identifier: TYPO3/Links
+fields:
+  -
+    identifier: links_palette
+    type: Palette
+    fields:
+      -
+        identifier: sectionIndex
+        useExistingField: true
+      -
+        identifier: linkToTop
+        useExistingField: true

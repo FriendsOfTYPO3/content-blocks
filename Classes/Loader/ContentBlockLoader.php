@@ -20,6 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -40,10 +42,13 @@ class ContentBlockLoader implements LoaderInterface
     protected ?TableDefinitionCollection $tableDefinitionCollection = null;
 
     public function __construct(
-        protected PhpFrontend $cache,
-        protected ContentBlockRegistry $contentBlockRegistry,
-        protected LanguageFileRegistry $languageFileRegistry,
-        protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected readonly PhpFrontend $cache,
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly LanguageFileRegistry $languageFileRegistry,
+        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected readonly BasicsLoader $basicsLoader,
+        protected readonly BasicsService $basicsService,
+        protected readonly PackageManager $packageManager,
     ) {
     }
 
@@ -64,13 +69,16 @@ class ContentBlockLoader implements LoaderInterface
             return $this->tableDefinitionCollection;
         }
 
+        // Load Basics before content block types.
+        $this->basicsLoader->load();
+
+        // Load content blocks
         $loadedContentBlocks = [];
-        $packageManager = GeneralUtility::makeInstance(PackageManager::class);
-        foreach ($packageManager->getActivePackages() as $package) {
+        foreach ($this->packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
-            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getSubDirectoryPath();
+            $contentBlockFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeContentTypesPath();
             if (is_dir($contentBlockFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocks($contentBlockFolder, $extensionKey);
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($contentBlockFolder, $extensionKey);
             }
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
@@ -91,7 +99,7 @@ class ContentBlockLoader implements LoaderInterface
         return $this->tableDefinitionCollection;
     }
 
-    protected function loadContentBlocks(string $path, string $extensionKey): array
+    protected function loadContentBlocksInExtension(string $path, string $extensionKey): array
     {
         $result = [];
         $finder = new Finder();
@@ -104,12 +112,12 @@ class ContentBlockLoader implements LoaderInterface
             }
 
             $relativeExtensionPath = ContentBlockPathUtility::getRelativeContentBlockPath($extensionKey, $splFileInfo->getRelativePathname());
-            $result[] = $this->loadPackageConfiguration($yamlContent['name'], $splFileInfo->getPathname() . '/', $relativeExtensionPath, $yamlContent);
+            $result[] = $this->loadSingleContentBlock($yamlContent['name'], $splFileInfo->getPathname() . '/', $relativeExtensionPath, $yamlContent);
         }
         return $result;
     }
 
-    protected function loadPackageConfiguration(
+    protected function loadSingleContentBlock(
         string $name,
         string $packagePath = '',
         string $contentBlockFolder = '',
@@ -133,6 +141,8 @@ class ContentBlockLoader implements LoaderInterface
             $iconPath = 'EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg';
             $iconProviderClass = SvgIconProvider::class;
         }
+
+        $yaml = $this->basicsService->applyBasics($yaml);
 
         return new LoadedContentBlock(
             name: $name,

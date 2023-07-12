@@ -1,0 +1,10 @@
+# To be used within ContentElements or PageTypes
+identifier: TYPO3/Categories
+fields:
+  -
+    identifier: categories_tab
+    type: Tab
+    label: LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories
+  -
+    identifier: categories
+    useExistingField: true

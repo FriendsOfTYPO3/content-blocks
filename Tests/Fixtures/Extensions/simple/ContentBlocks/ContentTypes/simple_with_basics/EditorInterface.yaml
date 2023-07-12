@@ -1,0 +1,22 @@
+group: common
+name: simple/basics
+basics:
+  - TYPO3/Appearance
+  - TYPO3/Links
+  - TYPO3/Categories
+fields:
+  -
+    identifier: palette
+    type: Palette
+    fields:
+      -
+        identifier: header
+        useExistingField: true
+      -
+        type: Linebreak
+      -
+        identifier: bodytext
+        useExistingField: true
+      -
+        identifier: Simple/Basic
+        type: Basic

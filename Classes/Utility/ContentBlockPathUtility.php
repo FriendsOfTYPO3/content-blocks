@@ -24,7 +24,7 @@ class ContentBlockPathUtility
 {
     public static function getRelativeContentBlockPath(string $extensionKey, string $contentBlockPackageName): string
     {
-        return 'EXT:' . $extensionKey . '/' . self::getSubDirectoryPath() . '/' . $contentBlockPackageName;
+        return 'EXT:' . $extensionKey . '/' . self::getRelativeContentTypesPath() . '/' . $contentBlockPackageName;
     }
 
     public static function getEditorInterfacePath(): string
@@ -57,9 +57,19 @@ class ContentBlockPathUtility
         return self::getPublicFolderPath() . '/ContentBlockIcon.svg';
     }
 
+    public static function getRelativeContentTypesPath(): string
+    {
+        return self::getSubDirectoryPath() . '/' . self::getContentTypesPath();
+    }
+
     public static function getSubDirectoryPath(): string
     {
         return 'ContentBlocks';
+    }
+
+    public static function getContentTypesPath(): string
+    {
+        return 'ContentTypes';
     }
 
     public static function getPublicFolderPath(): string
@@ -75,5 +85,15 @@ class ContentBlockPathUtility
     public static function getSymlinkedAssetsPath(string $name): string
     {
         return '_assets/cb/' . $name;
+    }
+
+    public static function getBasicsPath(): string
+    {
+        return 'Basics';
+    }
+
+    public static function getRelativeBasicsPath(): string
+    {
+        return self::getSubDirectoryPath() . '/' . self::getBasicsPath();
     }
 }
