@@ -1,0 +1,24 @@
+# To be used within ContentElements
+identifier: TYPO3/Appearance
+fields:
+  -
+    identifier: appearance_tab
+    type: Tab
+    label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance
+  -
+    identifier: frames_palette
+    type: Palette
+    label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.frames
+    fields:
+      -
+        identifier: layout
+        useExistingField: true
+      -
+        identifier: frame_class
+        useExistingField: true
+      -
+        identifier: space_before_class
+        useExistingField: true
+      -
+        identifier: space_after_class
+        useExistingField: true

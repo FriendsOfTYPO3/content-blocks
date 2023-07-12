@@ -65,7 +65,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('HeaderSimple', $html);
         self::assertStringContainsString('BodytextSimple', $html);
         self::assertStringContainsString('Simple Content Block', $html);
-        self::assertStringContainsString('<link href="/typo3conf/ext/simple/ContentBlocks/simple/Assets/Frontend.css', $html);
-        self::assertStringContainsString('<script src="/typo3conf/ext/simple/ContentBlocks/simple/Assets/Frontend.js', $html);
+        self::assertStringContainsString('<link href="/typo3conf/ext/simple/ContentBlocks/ContentTypes/simple/Assets/Frontend.css', $html);
+        self::assertStringContainsString('<script src="/typo3conf/ext/simple/ContentBlocks/ContentTypes/simple/Assets/Frontend.js', $html);
     }
 }

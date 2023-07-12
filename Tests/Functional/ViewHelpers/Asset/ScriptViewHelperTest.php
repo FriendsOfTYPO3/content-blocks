@@ -46,7 +46,7 @@ final class ScriptViewHelperTest extends FunctionalTestCase
         (new TemplateView($context))->render();
 
         $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
-        self::assertSame('EXT:foo/ContentBlocks/foo/Assets/Frontend.js', $collectedJavaScripts['test']['source']);
+        self::assertSame('EXT:foo/ContentBlocks/ContentTypes/foo/Assets/Frontend.js', $collectedJavaScripts['test']['source']);
         self::assertSame([], $collectedJavaScripts['test']['attributes']);
     }
 
@@ -61,7 +61,7 @@ final class ScriptViewHelperTest extends FunctionalTestCase
         (new TemplateView($context))->render();
 
         $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
-        self::assertSame('EXT:bar/ContentBlocks/bar/Assets/my.js', $collectedJavaScripts['test']['source']);
+        self::assertSame('EXT:bar/ContentBlocks/ContentTypes/bar/Assets/my.js', $collectedJavaScripts['test']['source']);
         self::assertSame(['async' => 'async', 'defer' => 'defer', 'nomodule' => 'nomodule'], $collectedJavaScripts['test']['attributes']);
     }
 }

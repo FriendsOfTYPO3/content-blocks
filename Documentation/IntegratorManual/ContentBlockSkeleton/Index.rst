@@ -5,9 +5,10 @@
 Create a Content Block skeleton
 ===============================
 
-
-Create a Content Block skeleton	on your terminal
+Create a Content Block skeleton in your terminal
 ================================================
+
+@todo Adjust documentation for new ContentBlocks/ContentTypes folder.
 
 This command creates a Content Block skeleton for you.
 It creates the basic structure of a Content Block, by vendor and name in
