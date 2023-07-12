@@ -1,7 +1,7 @@
 # TYPO3 Content Blocks
 
 This is the standalone repository for the Content Blocks project. Content Blocks
-provide a new API to provide custom Content Types like Content Elements, Page
+provide a new API to create custom Content Types like Content Elements, Page
 Types or generic Record Types.
 
 The repository is kept in sync with the pending Core patch on
@@ -23,7 +23,7 @@ Refer to the Documentation on how to use the Content Blocks API
 ## Developing
 
 There is a ddev setup ready to use. Ensure [ddev](https://github.com/ddev/ddev)
-is installed on your machine. The run:
+is installed on your machine. Then run:
 
 ```
 ddev start
