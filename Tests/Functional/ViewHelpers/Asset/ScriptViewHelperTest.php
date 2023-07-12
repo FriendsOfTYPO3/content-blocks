@@ -31,8 +31,8 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/bar',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/bar',
     ];
 
     /**
@@ -41,7 +41,7 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="foo/bar" identifier="test" file="Frontend.js" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="typo3tests/foo" identifier="test" file="Frontend.js" priority="0"/>');
 
         (new TemplateView($context))->render();
 
@@ -56,7 +56,7 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     public function booleanAttributesAreProperlyConverted(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="bar/foo" identifier="test" file="my.js" async="1" defer="1" nomodule="1" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="typo3tests/bar" identifier="test" file="my.js" async="1" defer="1" nomodule="1" priority="0"/>');
 
         (new TemplateView($context))->render();
 

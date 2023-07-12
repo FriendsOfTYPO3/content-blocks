@@ -4,5 +4,5 @@
 ,2,1,"Category 2"
 "sys_category_record_mm"
 ,"uid_local","uid_foreign","tablenames","fieldname"
-,1,1,"tt_content","foo_bar_categories_mm"
-,2,1,"tt_content","foo_bar_categories_mm"
+,1,1,"tt_content","typo3tests_foo_categories_mm"
+,2,1,"tt_content","typo3tests_foo_categories_mm"

@@ -26,7 +26,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/simple',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/simple',
     ];
 
     /**
