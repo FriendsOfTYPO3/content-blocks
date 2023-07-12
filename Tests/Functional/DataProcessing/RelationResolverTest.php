@@ -31,7 +31,7 @@ final class RelationResolverTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
     ];
 
     protected array $pathsToProvideInTestInstance = [
@@ -43,11 +43,11 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveFileReferences(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/file_reference.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/file_reference.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('image');
         $dummyRecord = [
             'uid' => 1,
@@ -66,15 +66,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveFilesFromFolder(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/folder_files.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/folder_files.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_folder');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_folder');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_folder' => '1:/',
+            'typo3tests_foo_folder' => '1:/',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -89,15 +89,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveFilesFromFolderRecursive(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/folder_files.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/folder_files.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_folder_recursive');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_folder_recursive');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_folder_recursive' => '1:/',
+            'typo3tests_foo_folder_recursive' => '1:/',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -113,15 +113,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCollections(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/collections.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_collection');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_collection');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_collection' => 2,
+            'typo3tests_foo_collection' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -137,15 +137,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCollectionsRecursively(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/collections_recursive.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections_recursive.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_collection_recursive');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_collection_recursive');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_collection_recursive' => 2,
+            'typo3tests_foo_collection_recursive' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -164,15 +164,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesManyToMany(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/category_many_to_many.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_mm');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_categories_mm');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_categories_mm' => 2,
+            'typo3tests_foo_categories_mm' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -188,15 +188,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesOneToOne(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/category_one_to_one.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_one_to_one.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_11');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_categories_11');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_categories_11' => 7,
+            'typo3tests_foo_categories_11' => 7,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -211,15 +211,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesOneToMany(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/category_one_to_many.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_one_to_many.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_categories_1m');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_categories_1m');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_categories_1m' => '7,8',
+            'typo3tests_foo_categories_1m' => '7,8',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -235,15 +235,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveDbReferences(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/db_reference.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_reference');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_reference');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_pages_reference' => '1,2',
+            'typo3tests_foo_pages_reference' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -259,15 +259,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveMultipleDbReferences(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/db_reference_multiple.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference_multiple.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_content_reference');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_content_reference');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_pages_content_reference' => 'pages_1,pages_2,tt_content_1,tt_content_2',
+            'typo3tests_foo_pages_content_reference' => 'pages_1,pages_2,tt_content_1,tt_content_2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -285,15 +285,15 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveDbReferencesMM(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/db_reference_mm.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference_mm.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_pages_mm');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_mm');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_pages_mm' => 2,
+            'typo3tests_foo_pages_mm' => 2,
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -311,11 +311,11 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_checkbox');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_select_checkbox');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_select_checkbox' => '1,2,3',
+            'typo3tests_foo_select_checkbox' => '1,2,3',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -331,11 +331,11 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_single_box');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_select_single_box');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_select_single_box' => '1,2,3',
+            'typo3tests_foo_select_single_box' => '1,2,3',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -351,11 +351,11 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_multiple');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_select_multiple');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_select_multiple' => '1,2,3',
+            'typo3tests_foo_select_multiple' => '1,2,3',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -369,14 +369,14 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveSelectForeignTable(): void
     {
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Fixtures/DataSet/select_foreign.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/select_foreign.csv');
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_select_foreign');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_select_foreign');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_select_foreign' => '1,2',
+            'typo3tests_foo_select_foreign' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -394,11 +394,11 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_flexfield');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_flexfield');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_flexfield' => '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+            'typo3tests_foo_flexfield' => '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3FlexForms>
     <data>
         <sheet index="sDEF">
@@ -429,11 +429,11 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
-        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('foo/bar');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('foo_bar_flexfield');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_flexfield');
         $dummyRecord = [
             'uid' => 1,
-            'foo_bar_flexfield' => '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+            'typo3tests_foo_flexfield' => '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3FlexForms>
     <data>
         <sheet index="sheet1">

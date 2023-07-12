@@ -104,7 +104,7 @@ services:
         else
           COMMAND=\"bin/codecept run Application -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} ${TEST_FILE} --xml reports.xml --html reports.html\"
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           $${COMMAND};
@@ -158,7 +158,7 @@ services:
         else
           COMMAND=\"bin/codecept run Application -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} ${TEST_FILE} --xml reports.xml --html reports.html\"
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           $${COMMAND};
@@ -215,7 +215,7 @@ services:
         else
           COMMAND=\"bin/codecept run Application -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} ${TEST_FILE} --xml reports.xml --html reports.html\"
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           $${COMMAND};
@@ -261,7 +261,7 @@ services:
         else
           COMMAND=\"bin/codecept run Application -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} ${TEST_FILE} --xml reports.xml --html reports.html\"
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           $${COMMAND};
@@ -308,7 +308,7 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml --env=mysql --xml reports.xml --html reports.html
@@ -355,7 +355,7 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=mysql --xml reports.xml --html reports.html
@@ -402,7 +402,7 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=postgresql --xml reports.xml --html reports.html
@@ -436,7 +436,7 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        mkdir -p typo3temp/var/tests/
+        mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=sqlite --xml reports.xml --html reports.html
@@ -1124,7 +1124,7 @@ services:
     image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     tmpfs:
-      - ${ROOT_DIR}/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid,uid=${HOST_UID}
+      - ${ROOT_DIR}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid,uid=${HOST_UID}
     volumes:
       - ${ROOT_DIR}:${ROOT_DIR}
     environment:
@@ -1159,7 +1159,7 @@ services:
     image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     tmpfs:
-      - ${ROOT_DIR}/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid,uid=${HOST_UID}
+      - ${ROOT_DIR}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid,uid=${HOST_UID}
     volumes:
       - ${ROOT_DIR}:${ROOT_DIR}
     environment:

@@ -319,7 +319,12 @@ cd "$THIS_SCRIPT_DIR" || exit 1
 cd ../testing-docker/ || exit 1
 
 # Option defaults
-ROOT_DIR=`readlink -f ${PWD}/../../`
+if ! command -v realpath &> /dev/null; then
+  echo "This script works best with realpath installed" >&2
+  ROOT_DIR="${PWD}/../../"
+else
+  ROOT_DIR=`realpath ${PWD}/../../`
+fi
 TEST_SUITE="unit"
 DBMS="sqlite"
 PHP_VERSION="8.1"
@@ -742,7 +747,7 @@ case ${TEST_SUITE} in
                 # Since docker is executed as root (yay!), the path to this dir is owned by
                 # root if docker creates it. Thank you, docker. We create the path beforehand
                 # to avoid permission issues on host filesystem after execution.
-                mkdir -p "${ROOT_DIR}/typo3temp/var/tests/functional-sqlite-dbs/"
+                mkdir -p ${ROOT_DIR}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs/
                 docker-compose run prepare_functional_sqlite
                 docker-compose run functional_sqlite
                 SUITE_EXIT_CODE=$?
