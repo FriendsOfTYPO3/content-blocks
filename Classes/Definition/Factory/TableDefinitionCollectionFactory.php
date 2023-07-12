@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedTableDefinition;
@@ -46,7 +47,7 @@ class TableDefinitionCollectionFactory
         $tableDefinitionCollection = new TableDefinitionCollection();
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
-            $table = $contentBlock->getYaml()['table'] ?? 'tt_content';
+            $table = $contentBlock->getYaml()['table'];
             $this->validateContentBlock($contentBlock->getYaml(), $contentBlock, $table);
             $languagePath = new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
             $processingInput = new ProcessingInput(
@@ -341,7 +342,7 @@ class TableDefinitionCollectionFactory
     }
 
     /**
-     * @see TypeDefinition
+     * @see ContentTypeDefinition
      */
     private function createInputArrayForTypeDefinition(ProcessedContentType $contentType): array
     {
@@ -358,7 +359,7 @@ class TableDefinitionCollectionFactory
             'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
         ];
         /** @see ContentElementDefinition */
-        if ($contentType->table === 'tt_content') {
+        if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
             $element['icon'] = $contentType->contentBlock->getIcon();
         }

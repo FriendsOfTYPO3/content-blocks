@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Service;
 
-use TYPO3\CMS\ContentBlocks\Definition\TypeDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
@@ -30,19 +30,19 @@ class TypeDefinitionLabelService
     {
     }
 
-    public function getLLLPathForTitle(TypeDefinition $typeDefinition): string
+    public function getLLLPathForTitle(ContentTypeInterface $typeDefinition): string
     {
         $label = $this->getBasePath($typeDefinition) . '.title';
         return $label;
     }
 
-    public function getLLLPathForDescription(TypeDefinition $typeDefinition): string
+    public function getLLLPathForDescription(ContentTypeInterface $typeDefinition): string
     {
         $label = $this->getBasePath($typeDefinition) . '.description';
         return $label;
     }
 
-    protected function getBasePath(TypeDefinition $typeDefinition): string
+    protected function getBasePath(ContentTypeInterface $typeDefinition): string
     {
         $basePath = 'LLL:' . $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/'
             . ContentBlockPathUtility::getLanguageFilePath()

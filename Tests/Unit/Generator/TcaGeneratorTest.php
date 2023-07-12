@@ -41,6 +41,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'bodytext',
@@ -186,6 +188,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'bodytext',
@@ -1063,6 +1067,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'prefixFields' => false,
                         'fields' => [
                             [
@@ -1387,6 +1393,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'flex',
@@ -1412,6 +1420,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'flex',
@@ -1552,6 +1562,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'pi_flexform',
@@ -1576,6 +1588,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'pi_flexform',
@@ -1600,6 +1614,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'pi_flexform',
@@ -1806,6 +1822,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'icon' => '',
                     'iconProvider' => '',
                     'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
                         'fields' => [
                             [
                                 'identifier' => 'flex',

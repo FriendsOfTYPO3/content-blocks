@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -28,17 +30,23 @@ final class LoadedContentBlock
         private readonly string $icon,
         private readonly string $iconProvider,
         private readonly string $path,
+        private readonly ContentType $contentType,
     ) {
     }
 
     public static function fromArray(array $array): LoadedContentBlock
     {
+        $table = (string)($array['yaml']['table'] ?? '');
+        if ($table === '') {
+            throw new \InvalidArgumentException('Failed to load Content Block: Missing "table".', 1689198195);
+        }
         return new self(
             name: (string)($array['name'] ?? ''),
             yaml: (array)($array['yaml'] ?? []),
             icon: (string)($array['icon'] ?? ''),
             iconProvider: (string)($array['iconProvider'] ?? ''),
-            path: (string)($array['path'] ?? '')
+            path: (string)($array['path'] ?? ''),
+            contentType: ContentType::getByTable($table)
         );
     }
 
@@ -81,5 +89,10 @@ final class LoadedContentBlock
     public function prefixFields(): bool
     {
         return (bool)($this->yaml['prefixFields'] ?? true);
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
     }
 }

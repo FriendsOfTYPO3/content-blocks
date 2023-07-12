@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ContentElementDefinition extends TypeDefinition
+final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
     private string $description = '';
     private string $contentElementIcon = '';
@@ -30,10 +30,20 @@ final class ContentElementDefinition extends TypeDefinition
     private string $wizardIconPath = '';
     private string $iconProviderClassName = '';
 
-    public static function createFromArray(array $array, string $table = 'tt_content'): static
+    public static function createFromArray(array $array, string $table): ContentElementDefinition
     {
-        $self = parent::createFromArray($array, $table);
+        $self = new self();
         return $self
+            ->withTable($table)
+            ->withIdentifier($array['identifier'])
+            ->withTypeName($array['typeName'])
+            ->withLabel($array['label'] ?? '')
+            ->withColumns($array['columns'] ?? [])
+            ->withShowItems($array['showItems'] ?? [])
+            ->withOverrideColumns($array['overrideColumns'] ?? [])
+            ->withVendor($array['vendor'] ?? '')
+            ->withPackage($array['package'] ?? '')
+            ->withPriority($array['priority'] ?? '')
             ->withDescription($array['description'] ?? '')
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')

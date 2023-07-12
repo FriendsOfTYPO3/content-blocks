@@ -17,16 +17,18 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentTypeFactory;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
 final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
 {
-    /** @var TypeDefinition[] */
+    /** @var ContentTypeInterface [] */
     private array $definitions = [];
     private string $table = '';
 
-    public function addType(TypeDefinition $definition): void
+    public function addType(ContentTypeInterface $definition): void
     {
         if (!$this->hasType($definition->getIdentifier())) {
             $this->definitions[$definition->getIdentifier()] = $definition;
@@ -38,7 +40,7 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
         return isset($this->definitions[$identifier]);
     }
 
-    public function getType(string $identifier): TypeDefinition
+    public function getType(string $identifier): ContentTypeInterface
     {
         if ($this->hasType($identifier)) {
             return $this->definitions[$identifier];
@@ -47,24 +49,22 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
         throw new \OutOfBoundsException('A type with the identifier "' . $identifier . '" does not exist in table "' . $this->table . '".', 1629292879);
     }
 
-    public function getFirst(): TypeDefinition
+    public function getFirst(): ContentTypeInterface
     {
         if ($this->count() === 0) {
-            throw new \OutOfBoundsException('The table "' . $this->table . '" has not type definitions.', 1686340482);
+            throw new \OutOfBoundsException('The table "' . $this->table . '" has no type definitions.', 1686340482);
         }
         return current($this->definitions);
     }
 
     public static function createFromArray(array $array, string $table): TypeDefinitionCollection
     {
+        $contentTypeFactory = new ContentTypeFactory();
         $typeDefinitionCollection = new self();
         $typeDefinitionCollection->table = $table;
         foreach ($array as $type) {
-            if ($table === 'tt_content') {
-                $typeDefinitionCollection->addType(ContentElementDefinition::createFromArray($type));
-            } else {
-                $typeDefinitionCollection->addType(TypeDefinition::createFromArray($type, $table));
-            }
+            $contentTypeDefinition = $contentTypeFactory->create($type, $table);
+            $typeDefinitionCollection->addType($contentTypeDefinition);
         }
         return $typeDefinitionCollection;
     }
@@ -82,7 +82,7 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
     private function sort(): array
     {
         $types = $this->definitions;
-        usort($types, fn (TypeDefinition $a, TypeDefinition $b): int => $b->getPriority() <=> $a->getPriority());
+        usort($types, fn (ContentTypeInterface $a, ContentTypeInterface $b): int => $b->getPriority() <=> $a->getPriority());
         return $types;
     }
 }

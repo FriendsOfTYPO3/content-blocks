@@ -35,6 +35,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [],
                 ],
             ],
@@ -44,6 +46,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [],
                 ],
             ],
@@ -72,6 +76,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [],
                 ],
             ],
@@ -96,6 +102,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'fields' => [],
                 ],
             ],
@@ -105,6 +113,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'priority' => 20,
                     'fields' => [],
                 ],
@@ -115,6 +125,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'iconProvider' => '',
                 'path' => 'EXT:example/ContentBlocks/fizz',
                 'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
                     'priority' => 30,
                     'fields' => [],
                 ],
