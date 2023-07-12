@@ -5,3 +5,4 @@ composer.lock
 var
 Build/testing-docker/.env
 .cache
+Documentation-GENERATED-temp
