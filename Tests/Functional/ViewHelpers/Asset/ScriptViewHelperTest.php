@@ -31,8 +31,8 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        __DIR__ . '/../../../Fixtures/Extensions/foo',
-        __DIR__ . '/../../../Fixtures/Extensions/bar',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/bar',
     ];
 
     /**

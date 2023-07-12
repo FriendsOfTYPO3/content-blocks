@@ -32,7 +32,7 @@ final class TranslateViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        __DIR__ . '/../../Fixtures/Extensions/foo',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
     ];
 
     public static function renderReturnsStringDataProvider(): array

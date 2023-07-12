@@ -31,7 +31,7 @@ final class RelationResolverTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        __DIR__ . '/../../Fixtures/Extensions/foo',
+       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
     ];
 
     protected array $pathsToProvideInTestInstance = [

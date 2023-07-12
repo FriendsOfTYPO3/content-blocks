@@ -17,7 +17,7 @@
 	},
 	"config": {
 		"preferred-install": {
-			"typo3/cms-*": "source",
+			"typo3/cms-core": "source",
 			"*": "dist"
 		},
 		"vendor-dir": ".Build/vendor",
