@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
-use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -101,7 +101,10 @@ class TcaGenerator
                 if ($tableDefinition->getTypeField() === null) {
                     continue;
                 }
-                if ($typeDefinition instanceof ContentElementDefinition) {
+                // @todo Right now we hard-code a new group for the type select of content elements.
+                // @todo The default destination should be made configurable, so e.g. the standard
+                // @todo group could be chosen.
+                if ($typeDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
                     ExtensionManagementUtility::addTcaSelectItemGroup(
                         table: $typeDefinition->getTable(),
                         field: $tableDefinition->getTypeField(),
@@ -110,14 +113,20 @@ class TcaGenerator
                         position: 'after:default',
                     );
                 }
+                // @todo hard-coded "default" group for pages. Make target group configurable.
+                $group = match ($typeDefinition->getContentType()) {
+                    ContentType::CONTENT_ELEMENT => 'content_blocks',
+                    ContentType::PAGE_TYPE => 'default',
+                    default => '',
+                };
                 ExtensionManagementUtility::addTcaSelectItem(
                     table: $typeDefinition->getTable(),
                     field: $tableDefinition->getTypeField(),
                     item: [
                         'label' => $this->typeDefinitionLabelService->getLLLPathForTitle($typeDefinition),
                         'value' => $typeDefinition->getTypeName(),
-                        'icon' => $typeDefinition instanceof ContentElementDefinition ? $typeDefinition->getWizardIconIdentifier() : '',
-                        'group' => $typeDefinition instanceof ContentElementDefinition ? 'content_blocks' : '',
+                        'icon' => $typeDefinition->getTypeIconIdentifier(),
+                        'group' => $group,
                     ]
                 );
             }
@@ -133,12 +142,12 @@ class TcaGenerator
     public function generate(TableDefinitionCollection $tableDefinitionCollection): array
     {
         $tca = [];
-        foreach ($tableDefinitionCollection as $tableName => $tableDefinition) {
-            if (!isset($GLOBALS['TCA'][$tableName])) {
-                $tca[$tableName] = $this->getCollectionTableStandardTca($tableDefinition);
+        foreach ($tableDefinitionCollection as $tableDefinition) {
+            if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
+                $tca[$tableDefinition->getTable()] = $this->getCollectionTableStandardTca($tableDefinition);
             }
             foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
-                $tca[$tableName]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
+                $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
             }
             $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
@@ -149,46 +158,59 @@ class TcaGenerator
                 }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                $columnsOverrides = [];
-                foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
-                    $overrideTca = $overrideColumn->getTca();
-                    foreach ($this->nonOverridableOptions as $option) {
-                        $optionKey = $this->getOptionKey($option, $overrideColumn);
-                        if ($optionKey === null) {
-                            continue;
-                        }
-                        unset($overrideTca['config'][$optionKey]);
-                        unset($overrideTca[$optionKey]);
-                    }
-                    $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
-                }
-                if ($typeDefinition instanceof ContentElementDefinition) {
-                    $typeDefinitionArray = [
-                        'previewRenderer' => PreviewRenderer::class,
-                        'showitem' => $this->getTtContentStandardShowItem($typeDefinition->getShowItems()),
-                    ];
-                    if ($columnsOverrides !== []) {
-                        $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
-                    }
-                    if ($typeDefinition->hasColumn('bodytext')) {
-                        $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ?? '';
-                        $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodytextSearchAndWhere($typeDefinition);
-                    }
-                } else {
-                    $typeDefinitionArray = [
-                        'showitem' => $this->getGenericStandardShowItem($typeDefinition->getShowItems()),
-                    ];
-                    $tca[$tableName]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
-                }
-                $tca[$tableName]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-                if ($tableDefinition->getTypeField() !== null) {
-                    $tca[$tableName]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
-                }
+                $tca = $this->processTypeDefinition($typeDefinition, $tableDefinition, $tca);
             }
-            $tca[$tableName]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
+            $tca[$tableDefinition->getTable()]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
         }
 
         return $this->tcaPreparation->prepare($tca);
+    }
+
+    protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition, array $tca): array
+    {
+        $columnsOverrides = [];
+        foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
+            $overrideTca = $overrideColumn->getTca();
+            foreach ($this->nonOverridableOptions as $option) {
+                $optionKey = $this->getOptionKey($option, $overrideColumn);
+                if ($optionKey === null) {
+                    continue;
+                }
+                unset($overrideTca['config'][$optionKey]);
+                unset($overrideTca[$optionKey]);
+            }
+            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
+        }
+        if ($typeDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+            $typeDefinitionArray = [
+                'previewRenderer' => PreviewRenderer::class,
+                'showitem' => $this->getContentElementStandardShowItem($typeDefinition->getShowItems()),
+            ];
+            if ($columnsOverrides !== []) {
+                $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+            }
+            if ($typeDefinition->hasColumn('bodytext')) {
+                $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ?? '';
+                $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
+            }
+        } elseif ($typeDefinition->getContentType() === ContentType::PAGE_TYPE) {
+            $typeDefinitionArray = [
+                'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
+            ];
+            if ($columnsOverrides !== []) {
+                $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+            }
+        } else {
+            $typeDefinitionArray = [
+                'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems()),
+            ];
+            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
+        }
+        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
+        if ($tableDefinition->getTypeField() !== null) {
+            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
+        }
+        return $tca;
     }
 
     /**
@@ -372,12 +394,12 @@ class TcaGenerator
         return $labelFallback;
     }
 
-    protected function getTtContentStandardShowItem(array $columns): string
+    protected function getContentElementStandardShowItem(array $showItems): string
     {
         $parts = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
             '--palette--;;general',
-            implode(',', $columns),
+            implode(',', $showItems),
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
             '--palette--;;language',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
@@ -385,13 +407,12 @@ class TcaGenerator
             '--palette--;;access',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
         ];
 
         return implode(',', $parts);
     }
 
-    protected function getGenericStandardShowItem(array $showItems): string
+    protected function getRecordTypeStandardShowItem(array $showItems): string
     {
         $parts = [
             implode(',', $showItems),
@@ -400,6 +421,33 @@ class TcaGenerator
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
             '--palette--;;hidden',
             '--palette--;;access',
+        ];
+
+        return implode(',', $parts);
+    }
+
+    protected function getPageTypeStandardShowItem(array $showItems): string
+    {
+        $parts = [
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+            '--palette--;;standard',
+            '--palette--;;titleonly',
+            'nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel',
+            implode(',', $showItems),
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--palette--;;links',
+            '--palette--;;caching',
+            '--palette--;;miscellaneous',
+            '--palette--;;module',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--palette--;;config',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--palette--;;language',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--palette--;;visibility',
+            '--palette--;;access',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            'rowDescription',
         ];
 
         return implode(',', $parts);
@@ -426,11 +474,11 @@ class TcaGenerator
         return implode(',', $searchFields);
     }
 
-    protected function extendBodytextSearchAndWhere(ContentElementDefinition $contentElementDefinition): string
+    protected function extendBodyTextSearchAndWhere(ContentTypeInterface $contentTypeDefinition): string
     {
         $andWhere = '';
-        if ($contentElementDefinition->hasColumn('bodytext')) {
-            $andWhere .= ' OR {#CType}=\'' . $contentElementDefinition->getTypeName() . '\'';
+        if ($contentTypeDefinition->hasColumn('bodytext')) {
+            $andWhere .= ' OR {#CType}=\'' . $contentTypeDefinition->getTypeName() . '\'';
         }
 
         return $andWhere;

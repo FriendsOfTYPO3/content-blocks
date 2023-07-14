@@ -29,4 +29,6 @@ interface ContentTypeInterface
     public function getTypeName(): string|int;
     public function getIdentifier(): string;
     public function getPriority(): int;
+    public function getTable(): string;
+    public function getContentType(): ContentType;
 }

@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\RecordTypeDefinition;
 
 /**
@@ -39,6 +40,7 @@ final class ContentTypeFactory
         $contentType = ContentType::getByTable($table);
         return match ($contentType) {
             ContentType::CONTENT_ELEMENT => ContentElementDefinition::createFromArray($typeDefinition, $table),
+            ContentType::PAGE_TYPE => PageTypeDefinition::createFromArray($typeDefinition, $table),
             default => RecordTypeDefinition::createFromArray($typeDefinition, $table)
         };
     }

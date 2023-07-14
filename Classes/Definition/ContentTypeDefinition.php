@@ -35,6 +35,8 @@ abstract class ContentTypeDefinition
     protected string $vendor = '';
     protected string $package = '';
     protected int $priority = 0;
+    protected ?string $typeIconPath = '';
+    private string $iconProviderClassName = '';
 
     public function getIdentifier(): string
     {
@@ -105,6 +107,16 @@ abstract class ContentTypeDefinition
     public function getPriority(): int
     {
         return $this->priority;
+    }
+
+    public function getTypeIconPath(): ?string
+    {
+        return $this->typeIconPath;
+    }
+
+    public function getIconProviderClassName(): string
+    {
+        return $this->iconProviderClassName;
     }
 
     public function withIdentifier(string $identifier): static
@@ -183,6 +195,20 @@ abstract class ContentTypeDefinition
     {
         $clone = clone $this;
         $clone->priority = $priority;
+        return $clone;
+    }
+
+    public function withTypeIconPath(?string $typeIconPath): static
+    {
+        $clone = clone $this;
+        $clone->typeIconPath = $typeIconPath;
+        return $clone;
+    }
+
+    public function withIconProviderClassName(string $iconProvider): self
+    {
+        $clone = clone $this;
+        $clone->iconProviderClassName = $iconProvider;
         return $clone;
     }
 }

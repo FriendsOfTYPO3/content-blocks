@@ -22,13 +22,13 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
  */
 final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
+    private ContentType $contentType = ContentType::CONTENT_ELEMENT;
     private string $description = '';
     private string $contentElementIcon = '';
     private string $contentElementIconOverlay = '';
     private bool $saveAndClose = false;
     private string $wizardGroup = '';
     private string $wizardIconPath = '';
-    private string $iconProviderClassName = '';
 
     public static function createFromArray(array $array, string $table): ContentElementDefinition
     {
@@ -50,6 +50,7 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withSaveAndClose(!empty($array['saveAndClose']))
             ->withWizardGroup($array['wizardGroup'])
             ->withWizardIconPath($array['icon'] ?? '')
+            ->withTypeIconPath($array['icon'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? '');
     }
 
@@ -78,11 +79,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
         return $this->wizardIconPath;
     }
 
-    public function getIconProviderClassName(): string
-    {
-        return $this->iconProviderClassName;
-    }
-
     public function getWizardIconIdentifier(): string
     {
         return $this->typeName . '-icon';
@@ -91,6 +87,11 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
     }
 
     public function withDescription(string $description): self
@@ -132,13 +133,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     {
         $clone = clone $this;
         $clone->wizardIconPath = $icon;
-        return $clone;
-    }
-
-    public function withIconProviderClassName(string $iconProvider): self
-    {
-        $clone = clone $this;
-        $clone->iconProviderClassName = $iconProvider;
         return $clone;
     }
 }

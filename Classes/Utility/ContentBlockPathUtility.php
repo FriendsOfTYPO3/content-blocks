@@ -17,14 +17,21 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Utility;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
 class ContentBlockPathUtility
 {
-    public static function getRelativeContentBlockPath(string $extensionKey, string $contentBlockPackageName): string
+    public static function getExtContentBlockPath(string $extensionKey, string $contentBlockPackageName, ContentType $contentType): string
     {
-        return 'EXT:' . $extensionKey . '/' . self::getRelativeContentElementsPath() . '/' . $contentBlockPackageName;
+        $contentTypeFolder = match ($contentType) {
+            ContentType::CONTENT_ELEMENT => self::getRelativeContentElementsPath(),
+            ContentType::PAGE_TYPE => self::getRelativePageTypesPath(),
+            default => self::getRelativeRecordTypesPath(),
+        };
+        return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $contentBlockPackageName;
     }
 
     public static function getEditorInterfacePath(): string
