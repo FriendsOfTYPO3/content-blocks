@@ -20,11 +20,11 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class RecordTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
+final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private ContentType $contentType = ContentType::RECORD_TYPE;
+    private ContentType $contentType = ContentType::PAGE_TYPE;
 
-    public static function createFromArray(array $array, string $table): RecordTypeDefinition
+    public static function createFromArray(array $array, string $table): PageTypeDefinition
     {
         $self = new self();
         return $self

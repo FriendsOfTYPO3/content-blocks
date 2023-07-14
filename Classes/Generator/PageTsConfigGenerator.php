@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
 
 /**
@@ -30,7 +29,6 @@ class PageTsConfigGenerator
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly IconRegistry $iconRegistry,
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
     ) {
     }

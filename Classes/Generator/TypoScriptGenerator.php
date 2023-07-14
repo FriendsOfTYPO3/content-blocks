@@ -17,12 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
@@ -32,7 +32,6 @@ class TypoScriptGenerator
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly IconRegistry $iconRegistry,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {
     }
@@ -41,26 +40,20 @@ class TypoScriptGenerator
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if (!$typeDefinition instanceof ContentElementDefinition) {
-                    continue;
+                if ($typeDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+                    ExtensionManagementUtility::addTypoScriptSetup($this->generate($typeDefinition));
                 }
-                $this->iconRegistry->registerIcon(
-                    identifier: $typeDefinition->getWizardIconIdentifier(),
-                    iconProviderClassName: $typeDefinition->getIconProviderClassName(),
-                    options: ['source' => $typeDefinition->getWizardIconPath()],
-                );
-                ExtensionManagementUtility::addTypoScriptSetup($this->generate($typeDefinition));
             }
         }
     }
 
-    protected function generate(ContentElementDefinition $contentElementDefinition): string
+    protected function generate(ContentTypeInterface $typeDefinition): string
     {
-        $privatePath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolderPath();
+        $privatePath = $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolderPath();
 
         return <<<HEREDOC
-tt_content.{$contentElementDefinition->getTypeName()} =< lib.contentBlock
-tt_content.{$contentElementDefinition->getTypeName()} {
+tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
+tt_content.{$typeDefinition->getTypeName()} {
     templateName = Frontend
     templateRootPaths {
         20 = $privatePath
@@ -71,7 +64,7 @@ tt_content.{$contentElementDefinition->getTypeName()} {
     layoutRootPaths {
         20 = $privatePath/Layouts
     }
-    settings.name = {$contentElementDefinition->getName()}
+    settings.name = {$typeDefinition->getName()}
 }
 HEREDOC;
     }

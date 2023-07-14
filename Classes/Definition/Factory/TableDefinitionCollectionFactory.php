@@ -354,14 +354,16 @@ class TableDefinitionCollectionFactory
             'overrideColumns' => $contentType->overrideColumns,
             'vendor' => $vendor,
             'package' => $package,
+            'icon' => $contentType->contentBlock->getIcon(),
             'iconProvider' => $contentType->contentBlock->getIconProvider(),
             'typeName' => $contentType->typeName,
             'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
         ];
-        /** @see ContentElementDefinition */
         if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
-            $element['icon'] = $contentType->contentBlock->getIcon();
+        }
+        if ($contentType->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
+            // @todo what does a page type need?
         }
         return $element;
     }

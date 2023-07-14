@@ -30,10 +30,12 @@ use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -119,13 +121,34 @@ class ContentBlockLoader implements LoaderInterface
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
                 throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".', 1678224283);
             }
+            $reservedPageTypes = [
+                PageRepository::DOKTYPE_DEFAULT,
+                PageRepository::DOKTYPE_LINK,
+                PageRepository::DOKTYPE_SHORTCUT,
+                PageRepository::DOKTYPE_BE_USER_SECTION,
+                PageRepository::DOKTYPE_SPACER,
+                PageRepository::DOKTYPE_SYSFOLDER
+            ];
+            if ($contentType === ContentType::PAGE_TYPE) {
+                if (!array_key_exists('typeName', $yamlContent)) {
+                    throw new \InvalidArgumentException('Missing mandatory integer value for "typeName" in ContentBlock "' . $yamlContent['name'] . '".', 1689286814);
+                }
+                $typeName = (int)$yamlContent['typeName'];
+                if (!MathUtility::canBeInterpretedAsInteger($yamlContent['typeName']) || $typeName < 0 || in_array($typeName, $reservedPageTypes, true)) {
+                    throw new \InvalidArgumentException(
+                        'Invalid value "' . $yamlContent['typeName'] . '" for "typeName" in ContentBlock "' . $yamlContent['name'] . '". Value must be a positive integer and not one of the reserved page types: '
+                        . implode(', ', $reservedPageTypes),
+                        1689287031
+                    );
+                }
+            }
 
-            $relativeExtensionPath = ContentBlockPathUtility::getRelativeContentBlockPath($extensionKey, $splFileInfo->getRelativePathname());
+            $extContentBlockPath = ContentBlockPathUtility::getExtContentBlockPath($extensionKey, $splFileInfo->getRelativePathname(), $contentType);
             $result[] = $this->loadSingleContentBlock(
                 $yamlContent['name'],
                 $contentType,
                 $splFileInfo->getPathname() . '/',
-                $relativeExtensionPath,
+                $extContentBlockPath,
                 $yamlContent,
             );
         }
@@ -136,7 +159,7 @@ class ContentBlockLoader implements LoaderInterface
         string $name,
         ContentType $contentType,
         string $packagePath = '',
-        string $contentBlockFolder = '',
+        string $extContentBlockPath = '',
         array $yaml = [],
     ): LoadedContentBlock {
         if (!file_exists($packagePath)) {
@@ -146,7 +169,7 @@ class ContentBlockLoader implements LoaderInterface
         $iconPath = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $checkIconPath = $contentBlockFolder . '/' . ContentBlockPathUtility::getIconPath();
+            $checkIconPath = $extContentBlockPath . '/' . ContentBlockPathUtility::getIconPath();
             if (is_readable($checkIconPath)) {
                 $iconPath = $checkIconPath;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
@@ -171,7 +194,7 @@ class ContentBlockLoader implements LoaderInterface
             yaml: $yaml,
             icon: $iconPath,
             iconProvider: $iconProviderClass,
-            path: $contentBlockFolder,
+            path: $extContentBlockPath,
             contentType: $contentType,
         );
     }
