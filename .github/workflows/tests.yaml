@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: "0 2 * * 1-5"
 jobs:
-  unit_tests:
+  unit_tests_12:
     name: Unit Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     strategy:
@@ -17,11 +17,39 @@ jobs:
       matrix:
         php: [ '8.1', '8.2' ]
         TYPO3: [ '12.4' ]
-        include:
-          - TYPO3: '13.0@dev'
-            php: '8.1'
-          - TYPO3: '13.0@dev'
-            php: '8.2'
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - uses: actions/checkout@v3
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer require typo3/cms-core:^${{ matrix.TYPO3 }} --prefer-dist --prefer-stable --no-progress
+
+      - name: Unit
+        run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
+
+  unit_tests_dev:
+    name: Unit Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.1', '8.2' ]
+        TYPO3: [ '13.0@dev' ]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -47,7 +75,7 @@ jobs:
       - name: Unit
         run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
 
-  functional_tests:
+  functional_tests_12:
     name: Functional Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     strategy:
@@ -55,11 +83,39 @@ jobs:
       matrix:
         php: [ '8.1', '8.2' ]
         TYPO3: [ '12.4' ]
-        include:
-          - TYPO3: '13.0@dev'
-            php: '8.1'
-          - TYPO3: '13.0@dev'
-            php: '8.2'
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - uses: actions/checkout@v3
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer require typo3/cms-core:^${{ matrix.TYPO3 }} --prefer-stable --no-progress
+
+      - name: Functional
+        run: Build/Scripts/runTests.sh -s functional -d sqlite -p ${{ matrix.php }}
+
+  functional_tests_dev:
+    name: Functional Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.1', '8.2' ]
+        TYPO3: [ '13.0@dev' ]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
