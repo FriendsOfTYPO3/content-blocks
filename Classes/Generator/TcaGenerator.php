@@ -190,8 +190,8 @@ class TcaGenerator
                 $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
             }
             if ($typeDefinition->hasColumn('bodytext')) {
-                $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config']['search']['andWhere'] ?? '';
-                $tca['tt_content']['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
+                $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
+                $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
             }
         } elseif ($typeDefinition->getContentType() === ContentType::PAGE_TYPE) {
             $typeDefinitionArray = [

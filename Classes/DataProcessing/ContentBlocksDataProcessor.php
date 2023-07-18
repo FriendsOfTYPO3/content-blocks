@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -41,8 +42,9 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         array $processedData
     ): array {
         $this->relationResolver->setRequest($cObj->getRequest());
-        $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
-        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($processedData['data']['CType']);
+        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
+        $ttContentDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
+        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($processedData['data'][ContentType::CONTENT_ELEMENT->getTypeField()]);
 
         $contentBlockData = [];
         foreach ($contentElementDefinition->getColumns() as $column) {
@@ -50,7 +52,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
-            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $processedData['data'], 'tt_content');
+            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $processedData['data'], $contentElementTable);
         }
 
         return array_merge($processedData, $contentBlockData);

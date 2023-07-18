@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -43,7 +44,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         $record = $item->getRecord();
-        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record['CType']);
+        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record[ContentType::CONTENT_ELEMENT->getTypeField()]);
         $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
         $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolderPath();
 
@@ -55,17 +56,18 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
         $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
-        $view->setTemplate('EditorPreview');
+        $view->setTemplate(ContentBlockPathUtility::getEditorInterfacePath());
         $view->setRequest($GLOBALS['TYPO3_REQUEST']);
 
-        $ttContentDefinition = $this->tableDefinitionCollection->getTable('tt_content');
+        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
+        $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
         $contentBlockData = [];
         foreach ($contentElementDefinition->getColumns() as $column) {
-            $tcaFieldDefinition = $ttContentDefinition->getTcaColumnsDefinition()->getField($column);
+            $tcaFieldDefinition = $contentElementTableDefinition->getTcaColumnsDefinition()->getField($column);
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
-            $contentBlockData[$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $record, 'tt_content');
+            $contentBlockData[$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $record, $contentElementTable);
         }
 
         $view->assign('settings', ['name' => $contentElementDefinition->getName()]);
