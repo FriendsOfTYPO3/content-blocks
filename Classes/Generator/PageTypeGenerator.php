@@ -36,6 +36,9 @@ class PageTypeGenerator
 
     public function __invoke(BootCompletedEvent $event): void
     {
+        if (!$this->tableDefinitionCollection->hasTable(ContentType::PAGE_TYPE->getTable())) {
+            return;
+        }
         $tableDefinition = $this->tableDefinitionCollection->getTable(ContentType::PAGE_TYPE->getTable());
         /** @var ContentTypeInterface $typeDefinition */
         foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
