@@ -105,7 +105,7 @@ HEREDOC;
         );
         copy(
             GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
-            $basePath . '/' . ContentBlockPathUtility::getIconPath()
+            $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg'
         );
     }
 }
