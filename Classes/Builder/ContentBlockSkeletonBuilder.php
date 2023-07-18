@@ -49,13 +49,13 @@ class ContentBlockSkeletonBuilder
         }
 
         // create directory structure
-        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolderPath();
+        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
         GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
 
         // create files
         file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getEditorInterfacePath(),
+            $basePath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName(),
             Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10, 2)
         );
         file_put_contents(

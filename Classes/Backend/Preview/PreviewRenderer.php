@@ -46,7 +46,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $record = $item->getRecord();
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record[ContentType::CONTENT_ELEMENT->getTypeField()]);
         $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
-        $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolderPath();
+        $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolder();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
         if (!file_exists(GeneralUtility::getFileAbsFileName($contentBlockPath . '/' . ContentBlockPathUtility::getBackendPreviewPath()))) {
@@ -56,7 +56,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
         $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
-        $view->setTemplate(ContentBlockPathUtility::getEditorInterfacePath());
+        $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
         $view->setRequest($GLOBALS['TYPO3_REQUEST']);
 
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();

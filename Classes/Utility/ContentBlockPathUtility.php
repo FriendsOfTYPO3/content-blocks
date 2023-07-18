@@ -34,24 +34,44 @@ class ContentBlockPathUtility
         return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $contentBlockPackageName;
     }
 
-    public static function getEditorInterfacePath(): string
+    public static function getContentBlockDefinitionFileName(): string
     {
         return 'EditorInterface.yaml';
     }
 
+    public static function getBackendPreviewFileName(): string
+    {
+        return 'EditorPreview.html';
+    }
+
+    public static function getBackendPreviewFileNameWithoutExtension(): string
+    {
+        return substr(self::getBackendPreviewFileName(), 0, -5);
+    }
+
     public static function getBackendPreviewPath(): string
     {
-        return self::getPrivateFolderPath() . '/EditorPreview.html';
+        return self::getPrivateFolder() . '/' . self::getBackendPreviewFileName();
+    }
+
+    public static function getFrontendTemplateFileName(): string
+    {
+        return 'Frontend.html';
+    }
+
+    public static function getFrontendTemplateFileNameWithoutExtension(): string
+    {
+        return substr(self::getFrontendTemplateFileName(), 0, -5);
     }
 
     public static function getFrontendTemplatePath(): string
     {
-        return self::getPrivateFolderPath() . '/Frontend.html';
+        return self::getPrivateFolder() . '/' . self::getFrontendTemplateFileName();
     }
 
     public static function getLanguageFolderPath(): string
     {
-        return self::getPrivateFolderPath() . '/Language';
+        return self::getPrivateFolder() . '/Language';
     }
 
     public static function getLanguageFilePath(): string
@@ -61,25 +81,25 @@ class ContentBlockPathUtility
 
     public static function getIconPath(): string
     {
-        return self::getPublicFolderPath() . '/ContentBlockIcon.svg';
+        return self::getPublicFolder() . '/ContentBlockIcon.svg';
     }
 
     public static function getRelativeContentElementsPath(): string
     {
-        return self::getSubDirectoryPath() . '/' . self::getContentElementsFolder();
+        return self::getSubDirectoryName() . '/' . self::getContentElementsFolder();
     }
 
     public static function getRelativePageTypesPath(): string
     {
-        return self::getSubDirectoryPath() . '/' . self::getPageTypesFolder();
+        return self::getSubDirectoryName() . '/' . self::getPageTypesFolder();
     }
 
     public static function getRelativeRecordTypesPath(): string
     {
-        return self::getSubDirectoryPath() . '/' . self::getRecordTypesFolder();
+        return self::getSubDirectoryName() . '/' . self::getRecordTypesFolder();
     }
 
-    public static function getSubDirectoryPath(): string
+    public static function getSubDirectoryName(): string
     {
         return 'ContentBlocks';
     }
@@ -99,12 +119,12 @@ class ContentBlockPathUtility
         return 'RecordTypes';
     }
 
-    public static function getPublicFolderPath(): string
+    public static function getPublicFolder(): string
     {
         return 'Assets';
     }
 
-    public static function getPrivateFolderPath(): string
+    public static function getPrivateFolder(): string
     {
         return 'Source';
     }
@@ -114,13 +134,13 @@ class ContentBlockPathUtility
         return '_assets/cb/' . $name;
     }
 
-    public static function getBasicsPath(): string
+    public static function getBasicsFolder(): string
     {
         return 'Basics';
     }
 
     public static function getRelativeBasicsPath(): string
     {
-        return self::getSubDirectoryPath() . '/' . self::getBasicsPath();
+        return self::getSubDirectoryName() . '/' . self::getBasicsFolder();
     }
 }

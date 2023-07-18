@@ -116,7 +116,7 @@ class ContentBlockLoader implements LoaderInterface
         $finder = new Finder();
         $finder->directories()->depth(0)->in($path);
         foreach ($finder as $splFileInfo) {
-            $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getEditorInterfacePath();
+            $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName();
             $yamlContent = Yaml::parseFile($yamlPath);
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
                 throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".', 1678224283);
@@ -231,7 +231,7 @@ class ContentBlockLoader implements LoaderInterface
         $fileSystem->mkdir($assetsPath);
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $loadedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolderPath()
+                $loadedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
             $contentBlockAssetsPathDestination = $assetsPath . '/' . $loadedContentBlock->getName();
             if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {

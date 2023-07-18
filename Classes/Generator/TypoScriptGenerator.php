@@ -49,12 +49,13 @@ class TypoScriptGenerator
 
     protected function generate(ContentTypeInterface $typeDefinition): string
     {
-        $privatePath = $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolderPath();
+        $privatePath = $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $template = ContentBlockPathUtility::getFrontendTemplateFileNameWithoutExtension();
 
         return <<<HEREDOC
 tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
 tt_content.{$typeDefinition->getTypeName()} {
-    templateName = Frontend
+    templateName = {$template}
     templateRootPaths {
         20 = $privatePath
     }
