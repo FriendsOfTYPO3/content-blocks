@@ -24,14 +24,14 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 class ContentBlockPathUtility
 {
-    public static function getExtContentBlockPath(string $extensionKey, string $contentBlockPackageName, ContentType $contentType): string
+    public static function getContentBlockExtPath(string $extensionKey, string $name, ContentType $contentType): string
     {
         $contentTypeFolder = match ($contentType) {
             ContentType::CONTENT_ELEMENT => self::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => self::getRelativePageTypesPath(),
             default => self::getRelativeRecordTypesPath(),
         };
-        return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $contentBlockPackageName;
+        return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $name;
     }
 
     public static function getContentBlockDefinitionFileName(): string
@@ -79,9 +79,14 @@ class ContentBlockPathUtility
         return self::getLanguageFolderPath() . '/Labels.xlf';
     }
 
-    public static function getIconPath(): string
+    public static function getIconNameWithoutFileExtension(): string
     {
-        return self::getPublicFolder() . '/ContentBlockIcon.svg';
+        return 'ContentBlockIcon';
+    }
+
+    public static function getIconPathWithoutFileExtension(): string
+    {
+        return self::getPublicFolder() . '/' . self::getIconNameWithoutFileExtension();
     }
 
     public static function getRelativeContentElementsPath(): string
@@ -129,9 +134,14 @@ class ContentBlockPathUtility
         return 'Source';
     }
 
+    public static function getPublicAssetsFolder(): string
+    {
+        return '_assets/cb';
+    }
+
     public static function getSymlinkedAssetsPath(string $name): string
     {
-        return '_assets/cb/' . $name;
+        return self::getPublicAssetsFolder() . '/' . $name;
     }
 
     public static function getBasicsFolder(): string

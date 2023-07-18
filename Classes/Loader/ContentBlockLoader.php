@@ -145,12 +145,12 @@ class ContentBlockLoader implements LoaderInterface
                 }
             }
 
-            $extContentBlockPath = ContentBlockPathUtility::getExtContentBlockPath($extensionKey, $splFileInfo->getRelativePathname(), $contentType);
+            $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $splFileInfo->getRelativePathname(), $contentType);
             $result[] = $this->loadSingleContentBlock(
                 $yamlContent['name'],
                 $contentType,
-                $splFileInfo->getPathname() . '/',
-                $extContentBlockPath,
+                $splFileInfo->getPathname(),
+                $contentBlockExtPath,
                 $yamlContent,
             );
         }
@@ -160,27 +160,27 @@ class ContentBlockLoader implements LoaderInterface
     protected function loadSingleContentBlock(
         string $name,
         ContentType $contentType,
-        string $packagePath = '',
-        string $extContentBlockPath = '',
+        string $absolutePath = '',
+        string $extPath = '',
         array $yaml = [],
     ): LoadedContentBlock {
-        if (!file_exists($packagePath)) {
-            throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $packagePath . '".', 1678699637);
+        if (!file_exists($absolutePath)) {
+            throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
         }
 
-        $iconPath = null;
+        $icon = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $checkIconPath = $extContentBlockPath . '/' . ContentBlockPathUtility::getIconPath();
+            $relativeIconPath = ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.' . $fileExtension;
+            $checkIconPath = $absolutePath . '/' . $relativeIconPath;
             if (is_readable($checkIconPath)) {
-                $iconPath = $checkIconPath;
+                $prefixPath = Environment::isComposerMode()
+                    ? Environment::getPublicPath() . '/' . ContentBlockPathUtility::getSymlinkedAssetsPath($name)
+                    : $extPath;
+                $icon = $prefixPath . '/' . ContentBlockPathUtility::getIconNameWithoutFileExtension() . '.' . $fileExtension;
                 $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
                 break;
             }
-        }
-        if ($iconPath === null) {
-            $iconPath = 'EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg';
-            $iconProviderClass = SvgIconProvider::class;
         }
 
         // Override table and typeField for Content Elements and Page Types.
@@ -194,9 +194,9 @@ class ContentBlockLoader implements LoaderInterface
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
-            icon: $iconPath,
-            iconProvider: $iconProviderClass,
-            path: $extContentBlockPath,
+            icon: $icon ?? 'EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg',
+            iconProvider: $iconProviderClass ?? SvgIconProvider::class,
+            path: $extPath,
             contentType: $contentType,
         );
     }
@@ -228,7 +228,7 @@ class ContentBlockLoader implements LoaderInterface
         }
 
         $fileSystem = new Filesystem();
-        $assetsPath = Environment::getPublicPath() . '/_assets/cb';
+        $assetsPath = Environment::getPublicPath() . '/' . ContentBlockPathUtility::getPublicAssetsFolder();
         $fileSystem->remove($assetsPath);
         $fileSystem->mkdir($assetsPath);
         foreach ($loadedContentBlocks as $loadedContentBlock) {
