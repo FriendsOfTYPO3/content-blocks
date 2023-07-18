@@ -37,10 +37,9 @@ class PageTsConfigGenerator
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if (!$typeDefinition instanceof ContentElementDefinition) {
-                    continue;
+                if ($typeDefinition instanceof ContentElementDefinition) {
+                    $event->addTsConfig($this->generate($typeDefinition));
                 }
-                $event->addTsConfig($this->generate($typeDefinition));
             }
         }
     }

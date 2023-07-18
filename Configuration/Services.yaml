@@ -39,8 +39,15 @@ services:
     public: true
     tags:
       - name: event.listener
-        identifier: 'content-blocks-tsconfig'
+        identifier: 'content-blocks-page-tsconfig'
         event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
+
+  TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator:
+    public: true
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-user-tsconfig'
+        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
 
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
     public: true
