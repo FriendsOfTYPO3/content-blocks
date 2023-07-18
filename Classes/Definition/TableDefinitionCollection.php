@@ -52,10 +52,10 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
     public function getContentElementDefinition(string $CType): ?ContentElementDefinition
     {
-        if (!$this->hasTable('tt_content')) {
+        if (!$this->hasTable(ContentType::CONTENT_ELEMENT->getTable())) {
             return null;
         }
-        foreach ($this->getTable('tt_content')->getTypeDefinitionCollection() as $typeDefinition) {
+        foreach ($this->getTable(ContentType::CONTENT_ELEMENT->getTable())->getTypeDefinitionCollection() as $typeDefinition) {
             if (!$typeDefinition instanceof ContentElementDefinition) {
                 continue;
             }
