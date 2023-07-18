@@ -44,6 +44,16 @@ class ContentBlockLoader implements LoaderInterface
 {
     protected ?TableDefinitionCollection $tableDefinitionCollection = null;
 
+    /** @var list<int> $reservedPageTypes */
+    protected static array $reservedPageTypes = [
+        PageRepository::DOKTYPE_DEFAULT,
+        PageRepository::DOKTYPE_LINK,
+        PageRepository::DOKTYPE_SHORTCUT,
+        PageRepository::DOKTYPE_BE_USER_SECTION,
+        PageRepository::DOKTYPE_SPACER,
+        PageRepository::DOKTYPE_SYSFOLDER
+    ];
+
     public function __construct(
         protected readonly PhpFrontend $cache,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
@@ -121,23 +131,15 @@ class ContentBlockLoader implements LoaderInterface
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
                 throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".', 1678224283);
             }
-            $reservedPageTypes = [
-                PageRepository::DOKTYPE_DEFAULT,
-                PageRepository::DOKTYPE_LINK,
-                PageRepository::DOKTYPE_SHORTCUT,
-                PageRepository::DOKTYPE_BE_USER_SECTION,
-                PageRepository::DOKTYPE_SPACER,
-                PageRepository::DOKTYPE_SYSFOLDER
-            ];
             if ($contentType === ContentType::PAGE_TYPE) {
                 if (!array_key_exists('typeName', $yamlContent)) {
                     throw new \InvalidArgumentException('Missing mandatory integer value for "typeName" in ContentBlock "' . $yamlContent['name'] . '".', 1689286814);
                 }
                 $typeName = (int)$yamlContent['typeName'];
-                if (!MathUtility::canBeInterpretedAsInteger($yamlContent['typeName']) || $typeName < 0 || in_array($typeName, $reservedPageTypes, true)) {
+                if (!MathUtility::canBeInterpretedAsInteger($yamlContent['typeName']) || $typeName < 0 || in_array($typeName, self::$reservedPageTypes, true)) {
                     throw new \InvalidArgumentException(
                         'Invalid value "' . $yamlContent['typeName'] . '" for "typeName" in ContentBlock "' . $yamlContent['name'] . '". Value must be a positive integer and not one of the reserved page types: '
-                        . implode(', ', $reservedPageTypes),
+                        . implode(', ', self::$reservedPageTypes),
                         1689287031
                     );
                 }
