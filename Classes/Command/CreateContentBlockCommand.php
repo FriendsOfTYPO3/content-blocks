@@ -28,20 +28,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Package\PackageInterface;
 
 class CreateContentBlockCommand extends Command
 {
-    protected ContentBlockSkeletonBuilder $contentBlockBuilder;
-    protected PackageResolver $packageResolver;
-
-    public function injectContentBlockBuilder(ContentBlockSkeletonBuilder $contentBlockBuilder): void
-    {
-        $this->contentBlockBuilder = $contentBlockBuilder;
-    }
-
-    public function injectPackageResolver(PackageResolver $packageResolver): void
-    {
-        $this->packageResolver = $packageResolver;
+    public function __construct(
+        protected readonly ContentBlockSkeletonBuilder $contentBlockBuilder,
+        protected readonly PackageResolver $packageResolver
+    ) {
+        parent::__construct();
     }
 
     public function configure(): void
@@ -53,7 +48,7 @@ class CreateContentBlockCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $availablePackages = $this->getAvailablePackages();
+        $availablePackages = $this->packageResolver->getAvailablePackages();
         if ($availablePackages === []) {
             throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
         }
@@ -74,19 +69,17 @@ class CreateContentBlockCommand extends Command
         }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
-            $resolvedPackage = $this->packageResolver->resolvePackage($extension);
-            if ($resolvedPackage === null) {
+            if (!array_key_exists($extension, $availablePackages)) {
                 throw new \RuntimeException(
-                    'The extension "' . $extension . '" could not be found. Please choose one of these extensions: ' . implode(', ', array_keys($availablePackages)),
+                    'The extension "' . $extension . '" could not be found. Please choose one of these extensions: ' . implode(', ', $this->getPackageKeys($availablePackages)),
                     1678781014
                 );
             }
-            $basePath = $resolvedPackage->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
         } else {
             $io = new SymfonyStyle($input, $output);
-            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $availablePackages));
-            $basePath = $this->packageResolver->resolvePackage($extension)->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
         }
+        $basePath = $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
 
         $contentBlockConfiguration = new ContentBlockConfiguration(
             yamlConfig: [
@@ -108,14 +101,21 @@ class CreateContentBlockCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function getAvailablePackages(): array
+    /**
+     * @param array<string, PackageInterface> $availablePackages
+     * @return array<string, string>
+     */
+    protected function getPackageTitles(array $availablePackages): array
     {
-        $availablePackages = [];
-        foreach ($this->packageResolver->getAvailablePackages() as $package) {
-            if (!$package->getPackageMetaData()->isFrameworkType()) {
-                $availablePackages[$package->getPackageKey()] = $package->getPackageMetaData()->getTitle();
-            }
-        }
-        return $availablePackages;
+        return array_map(fn(PackageInterface $package): string => $package->getPackageMetaData()->getTitle(), $availablePackages);
+    }
+
+    /**
+     * @param array<string, PackageInterface> $availablePackages
+     * @return array<string, string>
+     */
+    protected function getPackageKeys(array $availablePackages): array
+    {
+        return array_map(fn(PackageInterface $package): string => $package->getPackageKey(), $availablePackages);
     }
 }
