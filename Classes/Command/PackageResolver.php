@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Command;
 
-use TYPO3\CMS\Core\Package\Exception\UnknownPackageException;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
 
@@ -32,20 +32,44 @@ class PackageResolver
     {
     }
 
-    public function resolvePackage(string $extensionKey): ?PackageInterface
-    {
-        try {
-            return $this->packageManager->getPackage($extensionKey);
-        } catch (UnknownPackageException) {
-            return null;
-        }
-    }
-
     /**
-     * @return PackageInterface[]
+     * @return array<string, PackageInterface>
      */
     public function getAvailablePackages(): array
     {
-        return $this->packageManager->getAvailablePackages();
+        $packages = $this->packageManager->getAvailablePackages();
+        $packages = $this->removeFrameworkExtensions($packages);
+        if (!Environment::isComposerMode()) {
+            return $packages;
+        }
+        return $this->filterNonLocalComposerPackages($packages);
+    }
+
+    /**
+     * @param array<string, PackageInterface> $packages
+     * @return array<string, PackageInterface>
+     */
+    protected function removeFrameworkExtensions(array $packages): array
+    {
+        return array_filter($packages, fn(PackageInterface $package): bool => !$package->getPackageMetaData()->isFrameworkType());
+    }
+
+    /**
+     * @param array<string, PackageInterface> $packages
+     * @return array<string, PackageInterface>
+     */
+    protected function filterNonLocalComposerPackages(array $packages): array
+    {
+        $composerLockPath = Environment::getProjectPath() . '/composer.lock';
+        $composerLock = json_decode(file_get_contents($composerLockPath), true);
+        $composerLockPackages = array_merge($composerLock['packages'] ?? [], $composerLock['packages-dev'] ?? []);
+        $composerLockMap = [];
+        foreach ($composerLockPackages as $package) {
+            $composerLockMap[$package['name']] = $package['dist']['type'] ?? null;
+        }
+        return array_filter(
+            $packages,
+            fn(PackageInterface $package): bool => $composerLockMap[$package->getValueFromComposerManifest('name')] === 'path'
+        );
     }
 }
