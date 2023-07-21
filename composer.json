@@ -69,9 +69,10 @@
 		"typo3/cms-extensionmanager": "^12.4 || ^13.0@dev",
 		"typo3/cms-filelist": "^12.4 || ^13.0@dev",
 		"typo3/cms-install": "^12.4 || ^13.0@dev",
+		"typo3/cms-lowlevel": "^12.4 || ^13.0@dev",
 		"typo3/cms-rte-ckeditor": "^12.4 || ^13.0@dev",
 		"typo3/cms-tstemplate": "^12.4 || ^13.0@dev",
-		"typo3/cms-lowlevel": "^12.4 || ^13.0@dev",
+		"typo3/cms-workspaces": "^12.4 || ^13.0@dev",
 		"typo3/testing-framework": "^8.0"
 	}
 }
