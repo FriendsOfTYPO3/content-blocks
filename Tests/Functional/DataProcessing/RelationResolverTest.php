@@ -168,7 +168,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCollectionsInWorkspaces(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections_ws.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
@@ -222,7 +222,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesManyToManyInWorkspaces(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many_ws.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
