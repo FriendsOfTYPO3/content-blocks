@@ -104,7 +104,7 @@ class RelationResolver
                 uidList: (string)($record[$uniqueIdentifier] ?? ''),
                 tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
                 mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-                uid: (int)$record['uid'],
+                uid: $this->getUidOfCurrentRecord($record),
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
@@ -122,7 +122,7 @@ class RelationResolver
             uidList: (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? ''),
             tableList: $tcaFieldConfig['config']['allowed'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-            uid: (int)$record['uid'],
+            uid: $this->getUidOfCurrentRecord($record),
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
@@ -136,7 +136,7 @@ class RelationResolver
             uidList: $uidList,
             tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-            uid: (int)$record['uid'],
+            uid: $this->getUidOfCurrentRecord($record),
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
@@ -151,7 +151,7 @@ class RelationResolver
             uidList: $uid,
             tableList: $collectionTable,
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-            uid: (int)$record['uid'],
+            uid: $this->getUidOfCurrentRecord($record),
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
@@ -188,7 +188,12 @@ class RelationResolver
         $records = [];
         foreach ($relations as $relation) {
             $tableName = $relation['table'];
-            $translatedRecord = $pageRepository->getLanguageOverlay($tableName, $relation['record']);
+            $record = $relation['record'];
+            $pageRepository->versionOL($tableName, $record);
+            if (!is_array($record)) {
+                continue;
+            }
+            $translatedRecord = $pageRepository->getLanguageOverlay($tableName, $record);
             if ($translatedRecord !== null) {
                 $records[] = $translatedRecord;
             }
@@ -216,5 +221,13 @@ class RelationResolver
             return $frontendController->sys_page;
         }
         return GeneralUtility::makeInstance(PageRepository::class);
+    }
+
+    protected function getUidOfCurrentRecord(array $record): int
+    {
+        if (!empty($record['t3ver_oid'])) {
+            return (int)$record['_ORIG_uid'];
+        }
+        return (int)$record['uid'];
     }
 }

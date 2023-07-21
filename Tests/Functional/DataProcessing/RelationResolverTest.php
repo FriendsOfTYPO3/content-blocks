@@ -19,15 +19,19 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Functional\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderFactory;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\WorkspaceAspect;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class RelationResolverTest extends FunctionalTestCase
 {
     protected array $coreExtensionsToLoad = [
         'content_blocks',
+        'workspaces',
     ];
 
     protected array $testExtensionsToLoad = [
@@ -162,6 +166,36 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function canResolveCollectionsInWorkspaces(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections_ws.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
+
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_collection');
+        $this->setUpBackendUser(1);
+        $this->setWorkspaceId(1);
+        $dummyRecord = [
+            'typo3tests_foo_collection' => 2,
+            't3ver_oid' => 1,
+            't3_origuid' => 1,
+            't3ver_wsid' => 1,
+            '_ORIG_uid' => 2,
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(2, $result);
+        self::assertSame('lorem foo bar WS', $result[0]['fieldA']);
+        self::assertSame('lorem foo bar 2 WS', $result[1]['fieldA']);
+    }
+
+    /**
+     * @test
+     */
     public function canResolveCategoriesManyToMany(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many.csv');
@@ -181,6 +215,36 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertCount(2, $result);
         self::assertSame('Category 1', $result[0]['title']);
         self::assertSame('Category 2', $result[1]['title']);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveCategoriesManyToManyInWorkspaces(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many_ws.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
+
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_categories_mm');
+        $this->setUpBackendUser(1);
+        $this->setWorkspaceId(1);
+        $dummyRecord = [
+            't3ver_oid' => 1,
+            't3_origuid' => 1,
+            't3ver_wsid' => 1,
+            '_ORIG_uid' => 2,
+            'typo3tests_foo_categories_mm' => 2,
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(2, $result);
+        self::assertSame('Category 1 ws', $result[0]['title']);
+        self::assertSame('Category 2 ws', $result[1]['title']);
     }
 
     /**
@@ -252,6 +316,36 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertCount(2, $result);
         self::assertSame('Page 1', $result[0]['title']);
         self::assertSame('Page 2', $result[1]['title']);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveDbReferencesInWorkspaces(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
+
+        $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_reference');
+        $this->setUpBackendUser(1);
+        $this->setWorkspaceId(1);
+        $dummyRecord = [
+            't3ver_oid' => 1,
+            't3_origuid' => 1,
+            't3ver_wsid' => 1,
+            '_ORIG_uid' => 2,
+            'typo3tests_foo_pages_reference' => '1,2',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(2, $result);
+        self::assertSame('Page 1 ws', $result[0]['title']);
+        self::assertSame('Page 2 ws', $result[1]['title']);
     }
 
     /**
@@ -467,5 +561,11 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Text in Flex', $result['textarea']);
         self::assertSame('Link', $result['link']);
         self::assertSame('12', $result['number']);
+    }
+
+    protected function setWorkspaceId(int $workspaceId): void
+    {
+        $GLOBALS['BE_USER']->workspace = $workspaceId;
+        GeneralUtility::makeInstance(Context::class)->setAspect('workspace', new WorkspaceAspect($workspaceId));
     }
 }
