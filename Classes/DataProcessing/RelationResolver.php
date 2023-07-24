@@ -27,6 +27,7 @@ use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Versioning\VersionState;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Resource\FileCollector;
 
@@ -232,7 +233,7 @@ class RelationResolver
 
     protected function getUidOfCurrentRecord(array $record): int
     {
-        if (!empty($record['t3ver_oid'])) {
+        if (isset($record['_ORIG_uid'])) {
             return (int)$record['_ORIG_uid'];
         }
         return (int)$record['uid'];
