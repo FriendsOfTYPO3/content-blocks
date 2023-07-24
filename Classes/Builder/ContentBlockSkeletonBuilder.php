@@ -49,8 +49,10 @@ class ContentBlockSkeletonBuilder
         }
 
         // create directory structure
-        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
-        GeneralUtility::mkdir_deep($publicPath);
+        if(str_contains($basePath, 'ContentElements')) {
+            $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
+            GeneralUtility::mkdir_deep($publicPath);
+        }
         GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
 
         // create files
@@ -58,16 +60,8 @@ class ContentBlockSkeletonBuilder
             $basePath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName(),
             Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10, 2)
         );
-        file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
-            $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlockConfiguration)
-        );
-        file_put_contents(
-            $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
-            $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlockConfiguration)
-        );
-
-        $languageContent = <<<HEREDOC
+        if(str_contains($basePath, 'ContentElements')) {
+            $languageContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.0">
 	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
@@ -86,23 +80,54 @@ class ContentBlockSkeletonBuilder
 	</file>
 </xliff>
 HEREDOC;
+        } else {
+            $languageContent = <<<HEREDOC
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
+		<header/>
+		<body>
+			<trans-unit id="$vendor.$package.title" xml:space="preserve">
+				<source>Content Block: $package</source>
+			</trans-unit>
+			<trans-unit id="$vendor.$package.description" xml:space="preserve">
+				<source>This is your content block description</source>
+			</trans-unit>
+            <trans-unit id="title.label" xml:space="preserve">
+				<source>Custom title</source>
+			</trans-unit>
+        </body>
+	</file>
+</xliff>
+HEREDOC;
+        }
 
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
             $languageContent
         );
-        file_put_contents(
-            $publicPath . '/EditorPreview.css',
-            '/* Created by Content Block skeleton builder */'
-        );
-        file_put_contents(
-            $publicPath . '/Frontend.css',
-            '/* Created by Content Block skeleton builder */'
-        );
-        file_put_contents(
-            $publicPath . '/Frontend.js',
-            '/* Created by Content Block skeleton builder */'
-        );
+        if(str_contains($basePath, 'ContentElements')) {
+            file_put_contents(
+                $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
+                $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlockConfiguration)
+            );
+            file_put_contents(
+                $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
+                $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlockConfiguration)
+            );
+            file_put_contents(
+                $publicPath . '/EditorPreview.css',
+                '/* Created by Content Block skeleton builder */'
+            );
+            file_put_contents(
+                $publicPath . '/Frontend.css',
+                '/* Created by Content Block skeleton builder */'
+            );
+            file_put_contents(
+                $publicPath . '/Frontend.js',
+                '/* Created by Content Block skeleton builder */'
+            );
+        }
         copy(
             GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
             $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg'

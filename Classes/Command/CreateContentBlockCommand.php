@@ -28,10 +28,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Package\PackageInterface;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 class CreateContentBlockCommand extends Command
 {
+    /** @var list<int> $reservedPageTypes */
+    protected array $reservedPageTypes = [
+        PageRepository::DOKTYPE_DEFAULT,
+        PageRepository::DOKTYPE_LINK,
+        PageRepository::DOKTYPE_SHORTCUT,
+        PageRepository::DOKTYPE_BE_USER_SECTION,
+        PageRepository::DOKTYPE_SPACER,
+        PageRepository::DOKTYPE_SYSFOLDER
+    ];
+
     public function __construct(
         protected readonly ContentBlockSkeletonBuilder $contentBlockBuilder,
         protected readonly PackageResolver $packageResolver
@@ -41,6 +53,8 @@ class CreateContentBlockCommand extends Command
 
     public function configure(): void
     {
+        $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'The type of the content block.');
+        $this->addOption('type-name', '', InputOption::VALUE_OPTIONAL, 'The typeName of the content block (only necessary for PageTypes).');
         $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor of the content block.');
         $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'The name of the content block.');
         $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Enter extension in which the content block should be stored.');
@@ -54,6 +68,18 @@ class CreateContentBlockCommand extends Command
         }
 
         /** @var QuestionHelper $questionHelper */
+        if ($input->getOption('type')) {
+            $type = $input->getOption('type');
+            if (!array_key_exists($type, $this->getSupportedTypes())) {
+                throw new \RuntimeException(
+                    'Type "' . $type . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
+                    1678781014
+                );
+            }
+        } else {
+            $io = new SymfonyStyle($input, $output);
+            $type = $io->askQuestion(new ChoiceQuestion('Choose the type of your content block', $this->getSupportedTypes(), 'content-element'));
+        }
         $questionHelper = $this->getHelper('question');
         if ($input->getOption('vendor')) {
             $vendor = $input->getOption('vendor');
@@ -72,30 +98,31 @@ class CreateContentBlockCommand extends Command
             if (!array_key_exists($extension, $availablePackages)) {
                 throw new \RuntimeException(
                     'The extension "' . $extension . '" could not be found. Please choose one of these extensions: ' . implode(', ', $this->getPackageKeys($availablePackages)),
-                    1678781014
+                    1678781015
                 );
             }
         } else {
             $io = new SymfonyStyle($input, $output);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
         }
-        $basePath = $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
-
-        $contentBlockConfiguration = new ContentBlockConfiguration(
-            yamlConfig: [
-                'name' => $vendor . '/' . $name,
-                'group' => 'common',
-                'prefixFields' => false,
-                'fields' => [
-                    [
-                        'identifier' => 'header',
-                        'type' => 'Text',
-                        'useExistingField' => true,
-                    ],
-                ],
-            ],
-            basePath: $basePath
-        );
+        if($type === 'page-type') {
+            if ($input->getOption('type-name')) {
+                $typeName = (int) $input->getOption('type-name');
+                if (!MathUtility::canBeInterpretedAsInteger($typeName) || $typeName < 0 || in_array($typeName, $this->reservedPageTypes)) {
+                    throw new \InvalidArgumentException(
+                        'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' . $name . '". Value must be a positive integer and not one of the reserved page types: '
+                        . implode(', ', $this->reservedPageTypes),
+                        1689287031
+                    );
+                }
+            } else {
+                $io = new SymfonyStyle($input, $output);
+                $typeName = (int) $io->askQuestion(new Question('Enter the type-name of your "PageType" content block: '));
+            }
+        } else {
+            $typeName = 0;
+        }
+        $contentBlockConfiguration = $this->createContentBlockConfiguration($availablePackages, $extension, $vendor, $name, $type, $typeName);
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
         return Command::SUCCESS;
@@ -117,5 +144,97 @@ class CreateContentBlockCommand extends Command
     protected function getPackageKeys(array $availablePackages): array
     {
         return array_map(fn(PackageInterface $package): string => $package->getPackageKey(), $availablePackages);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function getSupportedTypes(): array
+    {
+        return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
+    }
+
+    /**
+     * @param array $availablePackages
+     * @param string $extension
+     * @param string $type
+     * @return string
+     */
+    protected function getBasePath(array $availablePackages, string $extension, string $type): string
+    {
+        return match ($type) {
+            'content-element' => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
+            'page-type' => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
+            'record-type' => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
+        };
+    }
+
+    protected function createContentBlockConfiguration(array $availablePackages, string $extension, string $vendor, string $name, string $type, int $typeName = 0): ContentBlockConfiguration
+    {
+        if($type === 'record-type') {
+            return $this->createContentBlockRecordTypeConfiguration($availablePackages, $extension, $vendor, $name, $type);
+        } else if($type === 'page-type') {
+            return $this->createContentBlockPageTypeConfiguration($availablePackages, $extension, $vendor, $name, $type, $typeName);
+        } else {
+            return $this->createContentBlockContentElementConfiguration($availablePackages, $extension, $vendor, $name, $type);
+        }
+    }
+
+    private function createContentBlockContentElementConfiguration(array $availablePackages, string $extension, string $vendor, string $name, string $type): ContentBlockConfiguration
+    {
+        return new ContentBlockConfiguration(
+            yamlConfig: [
+                'name' => $vendor . '/' . $name,
+                'group' => 'common',
+                'prefixFields' => false,
+                'fields' => [
+                    [
+                        'identifier' => 'header',
+                        'type' => 'Text',
+                        'useExistingField' => true,
+                    ],
+                ],
+            ],
+            basePath: $this->getBasePath($availablePackages, $extension, $type)
+        );
+    }
+
+    private function createContentBlockPageTypeConfiguration(array $availablePackages, string $extension, string $vendor, string $name, string $type, $typeName)
+    {
+        return new ContentBlockConfiguration(
+            yamlConfig: [
+                'name' => $vendor . '/' . $name,
+                'typeName' => $typeName,
+                'group' => 'common',
+                'prefixFields' => false,
+                'fields' => [
+                    [
+                        'identifier' => 'title',
+                        'type' => 'Text',
+                        'useExistingField' => true,
+                    ],
+                ],
+            ],
+            basePath: $this->getBasePath($availablePackages, $extension, $type)
+        );
+    }
+
+    private function createContentBlockRecordTypeConfiguration(array $availablePackages, string $extension, string $vendor, string $name, string $type): ContentBlockConfiguration
+    {
+        return new ContentBlockConfiguration(
+            yamlConfig: [
+                'name' => $vendor . '/' . $name,
+                'table' => 'tx_'.$vendor.'_domain_model_'.$name,
+                'group' => 'common',
+                'prefixFields' => false,
+                'fields' => [
+                    [
+                        'identifier' => 'title',
+                        'type' => 'Text'
+                    ],
+                ],
+            ],
+            basePath: $this->getBasePath($availablePackages, $extension, $type)
+        );
     }
 }
