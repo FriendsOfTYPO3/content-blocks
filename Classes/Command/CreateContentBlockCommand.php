@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,7 +57,6 @@ class CreateContentBlockCommand extends Command
             throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
         }
 
-        /** @var QuestionHelper $questionHelper */
         if ($input->getOption('content-type')) {
             $contentType = $input->getOption('content-type');
             if (!array_key_exists($contentType, $this->getSupportedTypes())) {
@@ -70,18 +68,15 @@ class CreateContentBlockCommand extends Command
         } else {
             $contentType = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
         }
-        $questionHelper = $this->getHelper('question');
         if ($input->getOption('vendor')) {
             $vendor = $input->getOption('vendor');
         } else {
-            $questionVendor = new Question('Enter your vendor name: ');
-            $vendor = $questionHelper->ask($input, $output, $questionVendor);
+            $vendor = $io->askQuestion(new Question('Enter your vendor name'));
         }
         if ($input->getOption('name')) {
             $name = $input->getOption('name');
         } else {
-            $questionPackage = new Question('Enter your content block name: ');
-            $name = $questionHelper->ask($input, $output, $questionPackage);
+            $name = $io->askQuestion(new Question('Enter your content block name'));
         }
         if ($contentType === 'page-type') {
             if ($input->getOption('type')) {
