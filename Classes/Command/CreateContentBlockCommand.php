@@ -96,12 +96,12 @@ class CreateContentBlockCommand extends Command
         }
         if ($contentType === 'page-type') {
             if ($input->getOption('type')) {
-                $typeName = (int)$input->getOption('type');
+                $typeName = $input->getOption('type');
             } else {
-                $typeName = (int)$io->askQuestion(new Question('Enter a unique integer type name'));
+                $typeName = $io->askQuestion(new Question('Enter a unique integer type name'));
             }
             $this->pageTypeNameValidator->validate($typeName, $vendor . '/' . $name);
-            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName);
+            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$typeName);
         } elseif ($contentType === 'content-element') {
             $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name);
         } else {
