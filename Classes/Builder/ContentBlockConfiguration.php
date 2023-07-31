@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Builder;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -25,6 +27,7 @@ final class ContentBlockConfiguration
     public function __construct(
         private readonly array $yamlConfig,
         private readonly string $basePath,
+        private readonly ContentType $contentType,
     ) {
     }
 
@@ -38,7 +41,7 @@ final class ContentBlockConfiguration
         return explode('/', $this->yamlConfig['name'])[0];
     }
 
-    public function getPackage(): string
+    public function getName(): string
     {
         return explode('/', $this->yamlConfig['name'])[1];
     }
@@ -46,5 +49,10 @@ final class ContentBlockConfiguration
     public function getBasePath(): string
     {
         return $this->basePath;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
     }
 }

@@ -26,6 +26,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Package\PackageInterface;
@@ -59,16 +60,21 @@ class CreateContentBlockCommand extends Command
         }
 
         if ($input->getOption('content-type')) {
-            $contentType = $input->getOption('content-type');
-            if (!array_key_exists($contentType, $this->getSupportedTypes())) {
+            $contentTypeFromInput = $input->getOption('content-type');
+            if (!array_key_exists($contentTypeFromInput, $this->getSupportedTypes())) {
                 throw new \RuntimeException(
-                    'Content type "' . $contentType . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
+                    'Content type "' . $contentTypeFromInput . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
                     1678781014
                 );
             }
         } else {
-            $contentType = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
+            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
         }
+        $contentType = match ($contentTypeFromInput) {
+            'content-element' => ContentType::CONTENT_ELEMENT,
+            'page-type' => ContentType::PAGE_TYPE,
+            default => ContentType::RECORD_TYPE
+        };
         if ($input->getOption('vendor')) {
             $vendor = $input->getOption('vendor');
         } else {
@@ -81,7 +87,7 @@ class CreateContentBlockCommand extends Command
             $name = $io->askQuestion(new Question('Enter your content block name'));
         }
         $name = strtolower($name);
-        if ($contentType === 'page-type') {
+        if ($contentType === ContentType::PAGE_TYPE) {
             if ($input->getOption('type')) {
                 $type = $input->getOption('type');
             } else {
@@ -89,7 +95,7 @@ class CreateContentBlockCommand extends Command
             }
             $this->pageTypeNameValidator->validate($type, $vendor . '/' . $name);
             $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$type);
-        } elseif ($contentType === 'content-element') {
+        } elseif ($contentType === ContentType::CONTENT_ELEMENT) {
             $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name, $type);
         } else {
             $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name, $type);
@@ -108,7 +114,8 @@ class CreateContentBlockCommand extends Command
 
         $contentBlockConfiguration = new ContentBlockConfiguration(
             yamlConfig: $yamlConfiguration,
-            basePath: $this->getBasePath($availablePackages, $extension, $contentType)
+            basePath: $this->getBasePath($availablePackages, $extension, $contentType),
+            contentType: $contentType
         );
 
         $this->contentBlockBuilder->create($contentBlockConfiguration);
@@ -142,12 +149,12 @@ class CreateContentBlockCommand extends Command
         return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
     }
 
-    protected function getBasePath(array $availablePackages, string $extension, string $type): string
+    protected function getBasePath(array $availablePackages, string $extension, ContentType $contentType): string
     {
-        return match ($type) {
-            'content-element' => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
-            'page-type' => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
-            'record-type' => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
+        return match ($contentType) {
+            ContentType::CONTENT_ELEMENT => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
+            ContentType::PAGE_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
+            default => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
         };
     }
 
