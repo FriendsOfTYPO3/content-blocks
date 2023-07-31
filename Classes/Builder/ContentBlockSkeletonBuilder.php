@@ -49,10 +49,8 @@ class ContentBlockSkeletonBuilder
         }
 
         // create directory structure
-        if(str_contains($basePath, 'ContentElements')) {
-            $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
-            GeneralUtility::mkdir_deep($publicPath);
-        }
+        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
+        GeneralUtility::mkdir_deep($publicPath);
         GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
 
         // create files
@@ -60,7 +58,7 @@ class ContentBlockSkeletonBuilder
             $basePath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName(),
             Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10, 2)
         );
-        if(str_contains($basePath, 'ContentElements')) {
+        if (str_contains($basePath, 'ContentElements')) {
             $languageContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.0">
