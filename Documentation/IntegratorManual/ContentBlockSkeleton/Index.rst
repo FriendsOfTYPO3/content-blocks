@@ -8,19 +8,28 @@ Create a Content Block skeleton
 Create a Content Block skeleton in your terminal
 ================================================
 
-@todo Adjust documentation for new ContentBlocks/ContentTypes folder.
+This command creates a bare-minimum content block for your specified
+:bash:`content-type` (one of :bash:`content-element`,
+:bash:`page-type` or :bash:`record-type`). Required options are
+:bash:`vendor`, :bash:`name` and :bash:`extension`. Optionally, you can
+define a custom type identifier by providing the :bash:`type` option. This
+option is required and has to be an integer value, if you chose the
+:bash:`page-type` content type.
 
-This command creates a Content Block skeleton for you.
-It creates the basic structure of a Content Block, by vendor and name in
-the `ContentBlocks` folder of the selected or entered extension.
+This will give you an overview of all available options:
+
+.. code-block:: bash
+
+   vendor/bin/typo3 make:content-block --help
 
 Example creating a Content Block skeleton in one line:
 
 .. code-block:: bash
 
-   vendor/bin/typo3 make:content-block --vendor=foo --name=bar --extension=foo_bar
+   vendor/bin/typo3 make:content-block --content-type="content-element" --vendor="my-vendor" --name="my-name" --extension="my_sitepackage"
 
-If you do not want to use the options, you can also use the interactive mode:
+Alternatively, the command can guide you through the creation by omitting the
+required options:
 
 .. code-block:: bash
 
@@ -32,9 +41,22 @@ On non-composer installations use:
 
    typo3/sysext/core/bin/typo3 make:content-block
 
+Example interaction:
 
-This will ask you for the following information:
+.. code-block:: bash
 
-    Enter your vendor name:
-    Enter your content-block name:
-    Choose extension in which the content block should be stored:
+   Choose the content type of your content block [Content Element]:
+   [content-element] Content Element
+   [page-type      ] Page Type
+   [record-type    ] Record Type
+   > content-element
+
+   Enter your vendor name:
+   > my-vendor
+
+   Enter your content block name:
+   > my-content-block-name
+
+   Choose an extension in which the content block should be stored:
+   [sitepackage] Test Package for content blocks
+   > sitepackage
