@@ -45,7 +45,7 @@ class PageTypeNameValidator
         $integerTypeName = (int)$typeName;
         if (!MathUtility::canBeInterpretedAsInteger($typeName) || $integerTypeName < 0 || in_array($integerTypeName, self::$reservedPageTypes, true)) {
             throw new \InvalidArgumentException(
-                'Invalid value "' . $integerTypeName . '" for "typeName" in ContentBlock "' . $contentBlockName . '". Value must be a positive integer and not one of the reserved page types: '
+                'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' . $contentBlockName . '". Value must be a positive integer and not one of the reserved page types: '
                 . implode(', ', self::$reservedPageTypes),
                 1689287031
             );
