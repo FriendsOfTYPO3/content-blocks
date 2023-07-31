@@ -28,25 +28,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Package\PackageInterface;
-use TYPO3\CMS\Core\Utility\MathUtility;
 
 class CreateContentBlockCommand extends Command
 {
-    /** @var list<int> $reservedPageTypes */
-    protected array $reservedPageTypes = [
-        PageRepository::DOKTYPE_DEFAULT,
-        PageRepository::DOKTYPE_LINK,
-        PageRepository::DOKTYPE_SHORTCUT,
-        PageRepository::DOKTYPE_BE_USER_SECTION,
-        PageRepository::DOKTYPE_SPACER,
-        PageRepository::DOKTYPE_SYSFOLDER
-    ];
-
     public function __construct(
         protected readonly ContentBlockSkeletonBuilder $contentBlockBuilder,
-        protected readonly PackageResolver $packageResolver
+        protected readonly PackageResolver $packageResolver,
+        protected readonly PageTypeNameValidator $pageTypeNameValidator,
     ) {
         parent::__construct();
     }
@@ -62,6 +52,7 @@ class CreateContentBlockCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
         $availablePackages = $this->packageResolver->getAvailablePackages();
         if ($availablePackages === []) {
             throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
@@ -77,7 +68,6 @@ class CreateContentBlockCommand extends Command
                 );
             }
         } else {
-            $io = new SymfonyStyle($input, $output);
             $type = $io->askQuestion(new ChoiceQuestion('Choose the type of your content block', $this->getSupportedTypes(), 'content-element'));
         }
         $questionHelper = $this->getHelper('question');
@@ -102,23 +92,15 @@ class CreateContentBlockCommand extends Command
                 );
             }
         } else {
-            $io = new SymfonyStyle($input, $output);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
         }
         if ($type === 'page-type') {
             if ($input->getOption('type-name')) {
-                $typeName = (int) $input->getOption('type-name');
-                if (!MathUtility::canBeInterpretedAsInteger($typeName) || $typeName < 0 || in_array($typeName, $this->reservedPageTypes)) {
-                    throw new \InvalidArgumentException(
-                        'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' . $name . '". Value must be a positive integer and not one of the reserved page types: '
-                        . implode(', ', $this->reservedPageTypes),
-                        1689287031
-                    );
-                }
+                $typeName = (int)$input->getOption('type-name');
             } else {
-                $io = new SymfonyStyle($input, $output);
-                $typeName = (int)$io->askQuestion(new Question('Enter a unique integer type name '));
+                $typeName = (int)$io->askQuestion(new Question('Enter a unique integer type name'));
             }
+            $this->pageTypeNameValidator->validate($typeName, $vendor . '/' . $name);
             $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName);
         } elseif ($type === 'content-element') {
             $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name);
