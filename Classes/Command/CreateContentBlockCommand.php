@@ -117,7 +117,7 @@ class CreateContentBlockCommand extends Command
                 }
             } else {
                 $io = new SymfonyStyle($input, $output);
-                $typeName = (int) $io->askQuestion(new Question('Enter the type-name of your "PageType" content block: '));
+                $typeName = (int)$io->askQuestion(new Question('Enter a unique integer type name '));
             }
         } else {
             $typeName = 0;
