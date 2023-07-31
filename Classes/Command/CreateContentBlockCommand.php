@@ -83,6 +83,19 @@ class CreateContentBlockCommand extends Command
             $questionPackage = new Question('Enter your content block name: ');
             $name = $questionHelper->ask($input, $output, $questionPackage);
         }
+        if ($contentType === 'page-type') {
+            if ($input->getOption('type')) {
+                $typeName = $input->getOption('type');
+            } else {
+                $typeName = $io->askQuestion(new Question('Enter a unique integer type'));
+            }
+            $this->pageTypeNameValidator->validate($typeName, $vendor . '/' . $name);
+            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$typeName);
+        } elseif ($contentType === 'content-element') {
+            $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name);
+        } else {
+            $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name);
+        }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
             if (!array_key_exists($extension, $availablePackages)) {
@@ -94,19 +107,7 @@ class CreateContentBlockCommand extends Command
         } else {
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
         }
-        if ($contentType === 'page-type') {
-            if ($input->getOption('type')) {
-                $typeName = $input->getOption('type');
-            } else {
-                $typeName = $io->askQuestion(new Question('Enter a unique integer type name'));
-            }
-            $this->pageTypeNameValidator->validate($typeName, $vendor . '/' . $name);
-            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$typeName);
-        } elseif ($contentType === 'content-element') {
-            $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name);
-        } else {
-            $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name);
-        }
+
         $contentBlockConfiguration = new ContentBlockConfiguration(
             yamlConfig: $yamlConfiguration,
             basePath: $this->getBasePath($availablePackages, $extension, $contentType)
