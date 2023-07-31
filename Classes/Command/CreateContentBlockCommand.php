@@ -43,8 +43,8 @@ class CreateContentBlockCommand extends Command
     public function configure(): void
     {
         $this->addOption('content-type', '', InputOption::VALUE_OPTIONAL, 'Content type of content block. One of: ' . implode(', ', array_keys($this->getSupportedTypes())) . '.');
-        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block.');
-        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block.');
+        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block (lowercase).');
+        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block (lowercase).');
         $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'Type identifier of content block. Falls back to combination of "vendor" and "name". Must be integer value for content type "page-type".');
         $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Host extension in which the content block should be stored.');
     }
@@ -73,11 +73,13 @@ class CreateContentBlockCommand extends Command
         } else {
             $vendor = $io->askQuestion(new Question('Enter your vendor name'));
         }
+        $vendor = strtolower($vendor);
         if ($input->getOption('name')) {
             $name = $input->getOption('name');
         } else {
             $name = $io->askQuestion(new Question('Enter your content block name'));
         }
+        $name = strtolower($name);
         if ($contentType === 'page-type') {
             if ($input->getOption('type')) {
                 $typeName = $input->getOption('type');
