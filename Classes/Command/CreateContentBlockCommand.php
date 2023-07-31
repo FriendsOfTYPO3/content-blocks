@@ -43,11 +43,11 @@ class CreateContentBlockCommand extends Command
 
     public function configure(): void
     {
-        $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'The type of the content block.');
-        $this->addOption('type-name', '', InputOption::VALUE_OPTIONAL, 'The typeName of the content block (only necessary for PageTypes).');
-        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'The vendor of the content block.');
-        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'The name of the content block.');
-        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Enter extension in which the content block should be stored.');
+        $this->addOption('content-type', '', InputOption::VALUE_OPTIONAL, 'Content type of content block. One of: ' . implode(', ', array_keys($this->getSupportedTypes())) . '.');
+        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block.');
+        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block.');
+        $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'Type identifier of content block. Falls back to combination of "vendor" and "name". Must be integer value for content type "page-type".');
+        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Host extension in which the content block should be stored.');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -59,16 +59,16 @@ class CreateContentBlockCommand extends Command
         }
 
         /** @var QuestionHelper $questionHelper */
-        if ($input->getOption('type')) {
-            $type = $input->getOption('type');
-            if (!array_key_exists($type, $this->getSupportedTypes())) {
+        if ($input->getOption('content-type')) {
+            $contentType = $input->getOption('content-type');
+            if (!array_key_exists($contentType, $this->getSupportedTypes())) {
                 throw new \RuntimeException(
-                    'Type "' . $type . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
+                    'Content type "' . $contentType . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
                     1678781014
                 );
             }
         } else {
-            $type = $io->askQuestion(new ChoiceQuestion('Choose the type of your content block', $this->getSupportedTypes(), 'content-element'));
+            $contentType = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
         }
         $questionHelper = $this->getHelper('question');
         if ($input->getOption('vendor')) {
@@ -94,22 +94,22 @@ class CreateContentBlockCommand extends Command
         } else {
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
         }
-        if ($type === 'page-type') {
-            if ($input->getOption('type-name')) {
-                $typeName = (int)$input->getOption('type-name');
+        if ($contentType === 'page-type') {
+            if ($input->getOption('type')) {
+                $typeName = (int)$input->getOption('type');
             } else {
                 $typeName = (int)$io->askQuestion(new Question('Enter a unique integer type name'));
             }
             $this->pageTypeNameValidator->validate($typeName, $vendor . '/' . $name);
             $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName);
-        } elseif ($type === 'content-element') {
+        } elseif ($contentType === 'content-element') {
             $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name);
         } else {
             $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name);
         }
         $contentBlockConfiguration = new ContentBlockConfiguration(
             yamlConfig: $yamlConfiguration,
-            basePath: $this->getBasePath($availablePackages, $extension, $type)
+            basePath: $this->getBasePath($availablePackages, $extension, $contentType)
         );
 
         $this->contentBlockBuilder->create($contentBlockConfiguration);
@@ -173,11 +173,11 @@ class CreateContentBlockCommand extends Command
         ];
     }
 
-    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $typeName): array
+    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $type): array
     {
         return [
             'name' => $vendor . '/' . $name,
-            'typeName' => $typeName,
+            'typeName' => $type,
             'prefixFields' => true,
             'fields' => [],
         ];
