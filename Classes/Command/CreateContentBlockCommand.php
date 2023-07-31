@@ -52,6 +52,7 @@ class CreateContentBlockCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $type = $input->getOption('type');
         $availablePackages = $this->packageResolver->getAvailablePackages();
         if ($availablePackages === []) {
             throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
@@ -82,16 +83,16 @@ class CreateContentBlockCommand extends Command
         $name = strtolower($name);
         if ($contentType === 'page-type') {
             if ($input->getOption('type')) {
-                $typeName = $input->getOption('type');
+                $type = $input->getOption('type');
             } else {
-                $typeName = $io->askQuestion(new Question('Enter a unique integer type'));
+                $type = $io->askQuestion(new Question('Enter a unique integer type'));
             }
-            $this->pageTypeNameValidator->validate($typeName, $vendor . '/' . $name);
-            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$typeName);
+            $this->pageTypeNameValidator->validate($type, $vendor . '/' . $name);
+            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$type);
         } elseif ($contentType === 'content-element') {
-            $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name);
+            $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name, $type);
         } else {
-            $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name);
+            $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name, $type);
         }
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
@@ -141,12 +142,6 @@ class CreateContentBlockCommand extends Command
         return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
     }
 
-    /**
-     * @param array $availablePackages
-     * @param string $extension
-     * @param string $type
-     * @return string
-     */
     protected function getBasePath(array $availablePackages, string $extension, string $type): string
     {
         return match ($type) {
@@ -156,19 +151,21 @@ class CreateContentBlockCommand extends Command
         };
     }
 
-    private function createContentBlockContentElementConfiguration(string $vendor, string $name): array
+    private function createContentBlockContentElementConfiguration(string $vendor, string $name, ?string $type = ''): array
     {
-        return [
+        $configuration = [
             'name' => $vendor . '/' . $name,
             'group' => 'common',
             'prefixFields' => true,
-            'fields' => [
-                [
-                    'identifier' => 'header',
-                    'useExistingField' => true,
-                ],
-            ],
         ];
+        if ($type !== '' && $type !== null) {
+            $configuration['typeName'] = $type;
+        }
+        $configuration['fields'] = [
+            'identifier' => 'header',
+            'useExistingField' => true,
+        ];
+        return $configuration;
     }
 
     private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $type): array
@@ -181,19 +178,23 @@ class CreateContentBlockCommand extends Command
         ];
     }
 
-    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name): array
+    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, ?string $type = ''): array
     {
-        return [
+        $configuration = [
             'name' => $vendor . '/' . $name,
             'table' => 'tx_' . $vendor . '_domain_model_' . $name,
             'prefixFields' => false,
             'useAsLabel' => 'title',
-            'fields' => [
-                [
-                    'identifier' => 'title',
-                    'type' => 'Text'
-                ],
+        ];
+        if ($type !== '' && $type !== null) {
+            $configuration['typeName'] = $type;
+        }
+        $configuration['fields'] = [
+            [
+                'identifier' => 'title',
+                'type' => 'Text'
             ],
         ];
+        return $configuration;
     }
 }
