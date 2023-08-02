@@ -169,8 +169,10 @@ class CreateContentBlockCommand extends Command
             $configuration['typeName'] = $type;
         }
         $configuration['fields'] = [
-            'identifier' => 'header',
-            'useExistingField' => true,
+            [
+                'identifier' => 'header',
+                'useExistingField' => true,
+            ],
         ];
         return $configuration;
     }
