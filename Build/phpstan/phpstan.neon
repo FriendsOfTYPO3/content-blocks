@@ -1,0 +1,19 @@
+includes:
+  - ../../.Build/vendor/bnf/phpstan-psr-container/extension.neon
+  - ../../.Build/vendor/friendsoftypo3/phpstan-typo3/extension.neon
+  - ../../.Build/vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+  # Use local .cache dir instead of /tmp
+  tmpDir: ../../.cache/phpstan
+
+  level: 5
+
+  bootstrapFiles:
+    - phpstan-constants.php
+
+  paths:
+    - ../../Classes
+    - ../../Tests
+    - ../../Configuration
+    - ../../ext_localconf.php

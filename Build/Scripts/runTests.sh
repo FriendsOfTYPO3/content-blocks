@@ -342,7 +342,7 @@ CHUNKS=0
 THISCHUNK=0
 DOCKER_SELENIUM_IMAGE="selenium/standalone-chrome:4.0.0-20211102"
 IS_CORE_CI=0
-PHPSTAN_CONFIG_FILE="phpstan.local.neon"
+PHPSTAN_CONFIG_FILE="phpstan.neon"
 IMAGE_PREFIX="ghcr.io/typo3/"
 
 # ENV var "CI" is set by gitlab-ci. We use it here to distinct 'local' and 'CI' environment.
