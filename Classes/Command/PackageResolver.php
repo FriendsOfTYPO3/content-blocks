@@ -51,7 +51,7 @@ class PackageResolver
      */
     protected function removeFrameworkExtensions(array $packages): array
     {
-        return array_filter($packages, fn(PackageInterface $package): bool => !$package->getPackageMetaData()->isFrameworkType());
+        return array_filter($packages, fn (PackageInterface $package): bool => !$package->getPackageMetaData()->isFrameworkType());
     }
 
     /**
@@ -69,7 +69,7 @@ class PackageResolver
         }
         return array_filter(
             $packages,
-            fn(PackageInterface $package): bool => $composerLockMap[$package->getValueFromComposerManifest('name')] === 'path'
+            fn (PackageInterface $package): bool => $composerLockMap[$package->getValueFromComposerManifest('name')] === 'path'
         );
     }
 }
