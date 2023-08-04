@@ -28,14 +28,13 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -43,16 +42,6 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 class ContentBlockLoader implements LoaderInterface
 {
     protected ?TableDefinitionCollection $tableDefinitionCollection = null;
-
-    /** @var list<int> $reservedPageTypes */
-    protected static array $reservedPageTypes = [
-        PageRepository::DOKTYPE_DEFAULT,
-        PageRepository::DOKTYPE_LINK,
-        PageRepository::DOKTYPE_SHORTCUT,
-        PageRepository::DOKTYPE_BE_USER_SECTION,
-        PageRepository::DOKTYPE_SPACER,
-        PageRepository::DOKTYPE_SYSFOLDER
-    ];
 
     public function __construct(
         protected readonly PhpFrontend $cache,
@@ -62,6 +51,7 @@ class ContentBlockLoader implements LoaderInterface
         protected readonly BasicsLoader $basicsLoader,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
+        protected readonly PageTypeNameValidator $pageTypeNameValidator,
     ) {
     }
 
@@ -95,7 +85,7 @@ class ContentBlockLoader implements LoaderInterface
             }
             $pageTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath();
             if (is_dir($pageTypesFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($pageTypesFolder, $extensionKey, ContentType::PAGE_TYPE);
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($pageTypesFolder, $extensionKey, ContentType::PAGE_TYPE, $allowCache);
             }
             $recordTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath();
             if (is_dir($recordTypesFolder)) {
@@ -120,7 +110,7 @@ class ContentBlockLoader implements LoaderInterface
         return $this->tableDefinitionCollection;
     }
 
-    protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType): array
+    protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType, bool $allowCache = true): array
     {
         $result = [];
         $finder = new Finder();
@@ -135,13 +125,10 @@ class ContentBlockLoader implements LoaderInterface
                 if (!array_key_exists('typeName', $yamlContent)) {
                     throw new \InvalidArgumentException('Missing mandatory integer value for "typeName" in ContentBlock "' . $yamlContent['name'] . '".', 1689286814);
                 }
-                $typeName = (int)$yamlContent['typeName'];
-                if (!MathUtility::canBeInterpretedAsInteger($yamlContent['typeName']) || $typeName < 0 || in_array($typeName, self::$reservedPageTypes, true)) {
-                    throw new \InvalidArgumentException(
-                        'Invalid value "' . $yamlContent['typeName'] . '" for "typeName" in ContentBlock "' . $yamlContent['name'] . '". Value must be a positive integer and not one of the reserved page types: '
-                        . implode(', ', self::$reservedPageTypes),
-                        1689287031
-                    );
+                // Skip validation, if cache is disabled or else this will always fail
+                // as the PageDoktypeRegistry is already loaded with types from Content Blocks.
+                if ($allowCache) {
+                    $this->pageTypeNameValidator->validate($yamlContent['typeName'], $yamlContent['name']);
                 }
             }
 
