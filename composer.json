@@ -65,6 +65,7 @@
 	},
 	"require-dev": {
 		"contentblocks/examples": "^13.0@dev",
+		"friendsofphp/php-cs-fixer": "^3.22",
 		"typo3/cms-extbase": "^12.4 || ^13.0@dev",
 		"typo3/cms-extensionmanager": "^12.4 || ^13.0@dev",
 		"typo3/cms-filelist": "^12.4 || ^13.0@dev",
@@ -73,6 +74,7 @@
 		"typo3/cms-rte-ckeditor": "^12.4 || ^13.0@dev",
 		"typo3/cms-tstemplate": "^12.4 || ^13.0@dev",
 		"typo3/cms-workspaces": "^12.4 || ^13.0@dev",
+		"typo3/coding-standards": "^0.7",
 		"typo3/testing-framework": "^8.0"
 	}
 }
