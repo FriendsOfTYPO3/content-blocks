@@ -31,4 +31,8 @@ interface ContentTypeInterface
     public function getPriority(): int;
     public function getTable(): string;
     public function getContentType(): ContentType;
+    public function getOverrideColumns(): array;
+    public function getShowItems(): array;
+    public function hasColumn(string $column): bool;
+    public function getTypeIconIdentifier(): string;
 }

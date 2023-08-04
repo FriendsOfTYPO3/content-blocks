@@ -205,7 +205,7 @@ abstract class ContentTypeDefinition
         return $clone;
     }
 
-    public function withIconProviderClassName(string $iconProvider): self
+    public function withIconProviderClassName(string $iconProvider): static
     {
         $clone = clone $this;
         $clone->iconProviderClassName = $iconProvider;
