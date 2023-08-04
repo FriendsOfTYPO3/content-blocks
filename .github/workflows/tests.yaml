@@ -179,7 +179,7 @@ jobs:
         run: Build/Scripts/runTests.sh -s functional -d sqlite -p ${{ matrix.php }}
 
   PHPStan:
-    name: PHPStan TYPO3 12.4 PHP 8.2
+    name: PHPStan TYPO3 13.0@dev PHP 8.2
     runs-on: ubuntu-latest
 
     steps:
@@ -202,7 +202,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer require typo3/cms-core:^12.4 --prefer-dist --no-progress
+        run: composer require typo3/cms-core:^13.0@dev --no-progress
 
       - name: PHPStan
         run: XDEBUG_MODE="off" .Build/bin/phpstan analyse -c Build/phpstan/phpstan.neon --no-progress --no-interaction --memory-limit 4G
