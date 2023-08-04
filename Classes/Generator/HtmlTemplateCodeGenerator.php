@@ -26,14 +26,14 @@ class HtmlTemplateCodeGenerator
 {
     public function generateEditorPreviewTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
-        $package = $contentBlockConfiguration->getPackage();
+        $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
         return '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css"/>' . "\n";
     }
 
     public function generateFrontendTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
     {
-        $package = $contentBlockConfiguration->getPackage();
+        $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
         $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" file="Frontend.css"/>';
         $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" file="Frontend.js"/>';
