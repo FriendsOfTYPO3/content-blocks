@@ -129,7 +129,7 @@ class CreateContentBlockCommand extends Command
      */
     protected function getPackageTitles(array $availablePackages): array
     {
-        return array_map(fn(PackageInterface $package): string => $package->getPackageMetaData()->getTitle(), $availablePackages);
+        return array_map(fn (PackageInterface $package): string => $package->getPackageMetaData()->getTitle(), $availablePackages);
     }
 
     /**
@@ -138,7 +138,7 @@ class CreateContentBlockCommand extends Command
      */
     protected function getPackageKeys(array $availablePackages): array
     {
-        return array_map(fn(PackageInterface $package): string => $package->getPackageKey(), $availablePackages);
+        return array_map(fn (PackageInterface $package): string => $package->getPackageKey(), $availablePackages);
     }
 
     /**
@@ -201,7 +201,7 @@ class CreateContentBlockCommand extends Command
         $configuration['fields'] = [
             [
                 'identifier' => 'title',
-                'type' => 'Text'
+                'type' => 'Text',
             ],
         ];
         return $configuration;

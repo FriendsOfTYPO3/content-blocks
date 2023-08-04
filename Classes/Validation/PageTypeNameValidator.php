@@ -33,7 +33,7 @@ class PageTypeNameValidator
         PageRepository::DOKTYPE_SHORTCUT,
         PageRepository::DOKTYPE_BE_USER_SECTION,
         PageRepository::DOKTYPE_SPACER,
-        PageRepository::DOKTYPE_SYSFOLDER
+        PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
     public function __construct(protected readonly PageDoktypeRegistry $pageDoktypeRegistry)
