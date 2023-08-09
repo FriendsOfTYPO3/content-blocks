@@ -38,7 +38,6 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
     private int $autoSizeMax = 0;
     private bool $multiple = false;
     private string $MM = '';
-    private bool $MM_hasUidField = false;
     private string $MM_opposite_field = '';
     private array $MM_match_fields = [];
     private string $MM_oppositeUsage = '';
@@ -71,7 +70,6 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
         $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
         $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
         $self->MM = (string)($settings['MM'] ?? $self->MM);
-        $self->MM_hasUidField = (bool)($settings['MM_hasUidField'] ?? $self->MM_hasUidField);
         $self->MM_opposite_field = (string)($settings['MM_opposite_field'] ?? $self->MM_opposite_field);
         $self->MM_match_fields = (array)($settings['MM_match_fields'] ?? $self->MM_match_fields);
         $self->MM_oppositeUsage = (string)($settings['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
@@ -122,9 +120,6 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->MM !== '') {
             $config['MM'] = $this->MM;
-        }
-        if ($this->MM_hasUidField) {
-            $config['MM_hasUidField'] = true;
         }
         if ($this->MM_opposite_field !== '') {
             $config['MM_opposite_field'] = $this->MM_opposite_field;

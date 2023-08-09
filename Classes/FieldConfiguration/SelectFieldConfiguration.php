@@ -33,7 +33,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     private bool $readOnly = false;
     private int $size = 0;
     private string $MM = '';
-    private bool $MM_hasUidField = false;
     private string $MM_opposite_field = '';
     private array $MM_match_fields = [];
     private string $MM_oppositeUsage = '';
@@ -74,7 +73,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->MM = (string)($settings['MM'] ?? $self->MM);
-        $self->MM_hasUidField = (bool)($settings['MM_hasUidField'] ?? $self->MM_hasUidField);
         $self->MM_opposite_field = (string)($settings['MM_opposite_field'] ?? $self->MM_opposite_field);
         $self->MM_match_fields = (array)($settings['MM_match_fields'] ?? $self->MM_match_fields);
         $self->MM_oppositeUsage = (string)($settings['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
@@ -119,9 +117,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->MM !== '') {
             $config['MM'] = $this->MM;
-        }
-        if ($this->MM_hasUidField) {
-            $config['MM_hasUidField'] = true;
         }
         if ($this->MM_opposite_field !== '') {
             $config['MM_opposite_field'] = $this->MM_opposite_field;

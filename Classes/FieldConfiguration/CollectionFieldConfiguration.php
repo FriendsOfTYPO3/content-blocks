@@ -33,7 +33,6 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
     private int $maxitems = 0;
     private int $minitems = 0;
     private string $MM = '';
-    private bool $MM_hasUidField = false;
     private string $MM_opposite_field = '';
     private string $foreign_table = '';
     private int $autoSizeMax = 0;
@@ -64,7 +63,6 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
         $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
         $self->MM = (string)($settings['MM'] ?? $self->MM);
-        $self->MM_hasUidField = (bool)($settings['MM_hasUidField'] ?? $self->MM_hasUidField);
         $self->MM_opposite_field = (string)($settings['MM_opposite_field'] ?? $self->MM_opposite_field);
         $self->foreign_table = (string)($settings['foreign_table'] ?? $self->foreign_table);
         $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
@@ -108,9 +106,6 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->MM !== '') {
             $config['MM'] = $this->MM;
-        }
-        if ($this->MM_hasUidField) {
-            $config['MM_hasUidField'] = true;
         }
         if ($this->MM_opposite_field !== '') {
             $config['MM_opposite_field'] = $this->MM_opposite_field;
