@@ -46,7 +46,6 @@ final class ReferenceFieldConfigurationTest extends UnitTestCase
                 'autoSizeMax' => 1,
                 'multiple' => 1,
                 'MM' => 'foo',
-                'MM_hasUidField' => 1,
                 'MM_opposite_field' => 'foo',
                 'MM_match_fields' => [
                     'foo' => 'bar',
@@ -93,7 +92,6 @@ final class ReferenceFieldConfigurationTest extends UnitTestCase
                     'autoSizeMax' => 1,
                     'multiple' => true,
                     'MM' => 'foo',
-                    'MM_hasUidField' => true,
                     'MM_opposite_field' => 'foo',
                     'MM_match_fields' => [
                         'foo' => 'bar',
@@ -141,7 +139,6 @@ final class ReferenceFieldConfigurationTest extends UnitTestCase
                 'autoSizeMax' => 0,
                 'multiple' => 0,
                 'MM' => '',
-                'MM_hasUidField' => 0,
                 'MM_opposite_field' => '',
                 'MM_match_fields' => [],
                 'MM_oppositeUsage' => '',

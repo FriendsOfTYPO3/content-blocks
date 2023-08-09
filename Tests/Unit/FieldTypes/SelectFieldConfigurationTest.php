@@ -41,7 +41,6 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'readOnly' => 1,
                 'size' => 1,
                 'MM' => 'foo',
-                'MM_hasUidField' => 1,
                 'MM_opposite_field' => 'foo',
                 'MM_match_fields' => [
                     'foo' => 'bar',
@@ -96,7 +95,6 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                     'readOnly' => true,
                     'size' => 1,
                     'MM' => 'foo',
-                    'MM_hasUidField' => true,
                     'MM_opposite_field' => 'foo',
                     'MM_match_fields' => [
                         'foo' => 'bar',
@@ -152,7 +150,6 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'readOnly' => 0,
                 'size' => 0,
                 'MM' => '',
-                'MM_hasUidField' => 0,
                 'MM_opposite_field' => '',
                 'MM_match_fields' => [],
                 'MM_oppositeUsage' => '',
