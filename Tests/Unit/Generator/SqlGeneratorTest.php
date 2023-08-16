@@ -107,6 +107,34 @@ final class SqlGeneratorTest extends UnitTestCase
             ],
         ];
 
+        yield 'simple fields in custom foobar table with typeField defined' => [
+            'array' => [
+                [
+                    'name' => 'foo/bar',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'typeField' => 'my_type',
+                        'typeName' => 'foo',
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                "CREATE TABLE `foobar`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
+                "CREATE TABLE `foobar`(`foo_bar_number` int(11) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `foobar`(`my_type` VARCHAR(255) DEFAULT '' NOT NULL);",
+            ],
+        ];
+
         yield 'nullable option removes NOT NULL statement' => [
             'array' => [
                 [

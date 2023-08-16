@@ -1204,6 +1204,240 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
 
+        yield 'Content Block creating a new custom root table with typeField defined' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'path' => 'EXT:foo/ContentBlocks/RecordTypes/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'typeField' => 'type',
+                        'typeName' => 'example',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 't3ce/example2',
+                    'path' => 'EXT:foo/ContentBlocks/RecordTypes/example2',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'typeField' => 'type',
+                        'typeName' => 'example2',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'text2',
+                                'type' => 'Textarea',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'foobar' => [
+                    'ctrl' => [
+                        'title' => 'foobar',
+                        'label' => 'text',
+                        'sortby' => 'sorting',
+                        'tstamp' => 'tstamp',
+                        'crdate' => 'crdate',
+                        'delete' => 'deleted',
+                        'editlock' => 'editlock',
+                        'versioningWS' => true,
+                        'origUid' => 't3_origuid',
+                        'hideTable' => false,
+                        'transOrigPointerField' => 'l10n_parent',
+                        'translationSource' => 'l10n_source',
+                        'transOrigDiffSourceField' => 'l10n_diffsource',
+                        'languageField' => 'sys_language_uid',
+                        'enablecolumns' => [
+                            'disabled' => 'hidden',
+                            'starttime' => 'starttime',
+                            'endtime' => 'endtime',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'type' => 'type',
+                        'typeicon_classes' => [
+                            'example' => 'example-icon',
+                            'example2' => 'example2-icon',
+                            'default' => 'content-blocks',
+                        ],
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
+                        'searchFields' => 'text,text2',
+                    ],
+                    'types' => [
+                        'example' => [
+                            'showitem' => 'type,text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'columnsOverrides' => [
+                                'text' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                        'example2' => [
+                            'showitem' => 'type,text,text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'columnsOverrides' => [
+                                'text' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text.description',
+                                    'config' => [],
+                                ],
+                                'text2' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text2.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text2.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'palettes' => [
+                        'language' => [
+                            'showitem' => 'sys_language_uid,l10n_parent',
+                        ],
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
+                        ],
+                    ],
+                    'columns' => [
+                        'editlock' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        'hidden' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        'fe_group' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectMultipleSideBySide',
+                                'size' => 5,
+                                'maxitems' => 20,
+                                'items' => [
+                                    [
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                                        'value' => -1,
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                                        'value' => -2,
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                                        'value' => '--div--',
+                                    ],
+                                ],
+                                'exclusiveKeys' => '-1,-2',
+                                'foreign_table' => 'fe_groups',
+                            ],
+                        ],
+                        'starttime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'endtime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                                'range' => [
+                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
+                                ],
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'sys_language_uid' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
+                            'config' => [
+                                'type' => 'language',
+                            ],
+                        ],
+                        'l10n_parent' => [
+                            'displayCond' => 'FIELD:sys_language_uid:>:0',
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectSingle',
+                                'items' => [
+                                    [
+                                        'label' => '',
+                                        'value' => 0,
+                                    ],
+                                ],
+                                'foreign_table' => 'foobar',
+                                'foreign_table_where' => 'AND foobar.pid=###CURRENT_PID### AND foobar.sys_language_uid IN (-1,0)',
+                                'default' => 0,
+                            ],
+                        ],
+                        'l10n_diffsource' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'sorting' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'text' => [
+                            'exclude' => true,
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        'text2' => [
+                            'exclude' => true,
+                            'config' => [
+                                'type' => 'text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         yield 'prefixing can be disabled globally' => [
             'contentBlocks' => [
                 [

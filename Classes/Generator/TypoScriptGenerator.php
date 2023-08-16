@@ -40,7 +40,7 @@ class TypoScriptGenerator
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if ($typeDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+                if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
                     ExtensionManagementUtility::addTypoScriptSetup($this->generate($typeDefinition));
                 }
             }

@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -29,4 +31,5 @@ final class ProcessedTableDefinition
     public bool $isRootTable = true;
     public ?bool $isAggregateRoot = null;
     public ?bool $languageAware = null;
+    public ?ContentType $contentType = null;
 }

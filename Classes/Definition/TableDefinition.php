@@ -25,9 +25,10 @@ final class TableDefinition
     private string $table = '';
     private bool $isRootTable = false;
     private bool $isAggregateRoot = true;
-    protected ?string $typeField = null;
+    private ?string $typeField = null;
     private string $useAsLabel = '';
     private bool $languageAware = true;
+    private ?ContentType $contentType = null;
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
     private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
@@ -47,6 +48,7 @@ final class TableDefinition
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
             ->withLanguageAware($definition['languageAware'] ?? $tableDefinition->languageAware)
+            ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
@@ -91,6 +93,11 @@ final class TableDefinition
     public function isLanguageAware(): bool
     {
         return $this->languageAware;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
     }
 
     public function getTypeDefinitionCollection(): ?TypeDefinitionCollection
@@ -152,6 +159,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->languageAware = $languageAware;
+        return $clone;
+    }
+
+    public function withContentType(ContentType $contentType): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->contentType = $contentType;
         return $clone;
     }
 
