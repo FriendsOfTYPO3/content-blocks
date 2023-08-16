@@ -96,15 +96,30 @@ class TcaGenerator
         $tcaBackup = $GLOBALS['TCA'];
         $GLOBALS['TCA'] = $event->getTca();
         foreach ($tableDefinitionCollection as $tableDefinition) {
+            // This definition has only one type (the default type "1"). There is no type select to add it to.
+            if ($tableDefinition->getTypeField() === null) {
+                continue;
+            }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                // This definition has only one type (the default type "1"). There is no type select to add it to.
-                if ($tableDefinition->getTypeField() === null) {
-                    continue;
+                // New record type with defined typeField. Add the first type as default value.
+                if (
+                    !isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$tableDefinition->getTypeField()])
+                    && $tableDefinition->getContentType() === ContentType::RECORD_TYPE
+                ) {
+                    $GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$tableDefinition->getTypeField()] = [
+                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectSingle',
+                            'items' => [],
+                            'default' => $typeDefinition->getTypeName(),
+                        ],
+                    ];
                 }
                 // @todo Right now we hard-code a new group for the type select of content elements.
                 // @todo The default destination should be made configurable, so e.g. the standard
                 // @todo group could be chosen.
-                if ($typeDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+                if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
                     ExtensionManagementUtility::addTcaSelectItemGroup(
                         table: $typeDefinition->getTable(),
                         field: $tableDefinition->getTypeField(),
@@ -114,7 +129,7 @@ class TcaGenerator
                     );
                 }
                 // @todo hard-coded "default" group for pages. Make target group configurable.
-                $group = match ($typeDefinition->getContentType()) {
+                $group = match ($tableDefinition->getContentType()) {
                     ContentType::CONTENT_ELEMENT => 'content_blocks',
                     ContentType::PAGE_TYPE => 'default',
                     default => '',
@@ -181,7 +196,7 @@ class TcaGenerator
             }
             $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
         }
-        if ($typeDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+        if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
             $typeDefinitionArray = [
                 'previewRenderer' => PreviewRenderer::class,
                 'showitem' => $this->getContentElementStandardShowItem($typeDefinition->getShowItems()),
@@ -193,7 +208,7 @@ class TcaGenerator
                 $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
                 $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
             }
-        } elseif ($typeDefinition->getContentType() === ContentType::PAGE_TYPE) {
+        } elseif ($tableDefinition->getContentType() === ContentType::PAGE_TYPE) {
             $typeDefinitionArray = [
                 'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
             ];
@@ -205,6 +220,9 @@ class TcaGenerator
                 'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition),
             ];
             $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
+            if ($tableDefinition->getTypeField() !== null && $columnsOverrides !== []) {
+                $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+            }
         }
         $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
         if ($tableDefinition->getTypeField() !== null) {
@@ -414,9 +432,11 @@ class TcaGenerator
 
     protected function getRecordTypeStandardShowItem(array $showItems, TableDefinition $tableDefinition): string
     {
-        $parts = [
-            implode(',', $showItems),
-        ];
+        $parts = [];
+        if ($tableDefinition->getTypeField() !== null) {
+            $parts[] = $tableDefinition->getTypeField();
+        }
+        $parts[] = implode(',', $showItems);
         if ($tableDefinition->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
             $parts[] = '--palette--;;language';
@@ -509,6 +529,10 @@ class TcaGenerator
                 'ignorePageTypeRestriction' => true,
             ],
         ];
+
+        if ($tableDefinition->getTypeField() !== null) {
+            $ctrl['type'] = $tableDefinition->getTypeField();
+        }
 
         if ($tableDefinition->isLanguageAware()) {
             $ctrl += [

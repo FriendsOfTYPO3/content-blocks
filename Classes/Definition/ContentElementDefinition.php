@@ -22,7 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
  */
 final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private ContentType $contentType = ContentType::CONTENT_ELEMENT;
     private string $description = '';
     private string $contentElementIcon = '';
     private string $contentElementIconOverlay = '';
@@ -87,11 +86,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
-    }
-
-    public function getContentType(): ContentType
-    {
-        return $this->contentType;
     }
 
     public function withDescription(string $description): self

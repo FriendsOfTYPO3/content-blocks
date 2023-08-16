@@ -22,8 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
  */
 final class RecordTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private ContentType $contentType = ContentType::RECORD_TYPE;
-
     public static function createFromArray(array $array, string $table): RecordTypeDefinition
     {
         $self = new self();
@@ -40,10 +38,5 @@ final class RecordTypeDefinition extends ContentTypeDefinition implements Conten
             ->withTypeIconPath($array['icon'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withPriority($array['priority'] ?? '');
-    }
-
-    public function getContentType(): ContentType
-    {
-        return $this->contentType;
     }
 }

@@ -56,6 +56,7 @@ class TableDefinitionCollectionFactory
                 table: $table,
                 rootTable: $table,
                 languagePath: $languagePath,
+                contentType: $contentBlock->getContentType(),
                 tableDefinitionList: $tableDefinitionList,
             );
             $tableDefinitionList = $this->processFields($processingInput);
@@ -109,6 +110,7 @@ class TableDefinitionCollectionFactory
                                 table: $inlineTable,
                                 rootTable: $input->rootTable,
                                 languagePath: $input->languagePath,
+                                contentType: ContentType::RECORD_TYPE,
                                 tableDefinitionList: $result->tableDefinitionList
                             )
                         );
@@ -151,6 +153,7 @@ class TableDefinitionCollectionFactory
         $result->tableDefinition->isRootTable = $input->isRootTable();
         $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
         $result->tableDefinition->languageAware = $input->yaml['languageAware'] ?? null;
+        $result->tableDefinition->contentType = $input->contentType;
         return $result;
     }
 
@@ -333,6 +336,7 @@ class TableDefinitionCollectionFactory
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
         $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
         $tableDefinition['languageAware'] = $processedTableDefinition->languageAware;
+        $tableDefinition['contentType'] = $processedTableDefinition->contentType;
         if ($processedTableDefinition->isRootTable) {
             if ($processedTableDefinition->isAggregateRoot !== null) {
                 $tableDefinition['aggregateRoot'] = $processedTableDefinition->isAggregateRoot;

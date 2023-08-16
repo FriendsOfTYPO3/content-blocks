@@ -22,8 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
  */
 final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private ContentType $contentType = ContentType::PAGE_TYPE;
-
     public static function createFromArray(array $array, string $table): PageTypeDefinition
     {
         $self = new self();
@@ -40,10 +38,5 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withTypeIconPath($array['icon'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? '')
             ->withPriority($array['priority'] ?? '');
-    }
-
-    public function getContentType(): ContentType
-    {
-        return $this->contentType;
     }
 }
