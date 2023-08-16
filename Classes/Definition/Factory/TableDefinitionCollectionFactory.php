@@ -150,6 +150,7 @@ class TableDefinitionCollectionFactory
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
         $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
+        $result->tableDefinition->languageAware = $input->yaml['languageAware'] ?? null;
         return $result;
     }
 
@@ -331,6 +332,7 @@ class TableDefinitionCollectionFactory
         $tableDefinition['useAsLabel'] = $processedTableDefinition->useAsLabel;
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
         $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
+        $tableDefinition['languageAware'] = $processedTableDefinition->languageAware;
         if ($processedTableDefinition->isRootTable) {
             if ($processedTableDefinition->isAggregateRoot !== null) {
                 $tableDefinition['aggregateRoot'] = $processedTableDefinition->isAggregateRoot;

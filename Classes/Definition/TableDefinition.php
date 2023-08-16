@@ -27,6 +27,7 @@ final class TableDefinition
     private bool $isAggregateRoot = true;
     protected ?string $typeField = null;
     private string $useAsLabel = '';
+    private bool $languageAware = true;
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
     private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
@@ -45,6 +46,7 @@ final class TableDefinition
             ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
+            ->withLanguageAware($definition['languageAware'] ?? $tableDefinition->languageAware)
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
@@ -84,6 +86,11 @@ final class TableDefinition
     public function hasUseAsLabel(): bool
     {
         return $this->useAsLabel !== '';
+    }
+
+    public function isLanguageAware(): bool
+    {
+        return $this->languageAware;
     }
 
     public function getTypeDefinitionCollection(): ?TypeDefinitionCollection
@@ -138,6 +145,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->useAsLabel = $useAsLabel;
+        return $clone;
+    }
+
+    public function withLanguageAware(bool $languageAware): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->languageAware = $languageAware;
         return $clone;
     }
 

@@ -99,6 +99,15 @@ aggregateRoot
    When referencing an existing table, you need to take care yourself that these
    fields exist. Also, non-aggregate tables are hidden in the List module.
 
+languageAware
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   If set to :yaml:`false`, language related fields are not created. Namely
+   :sql:`sys_language_uid`, :sql:`l10n_parent`, :sql:`l10n_source` and :sql:`l10n_diffsource`.
+
 Field definitions
 =================
 
