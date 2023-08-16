@@ -28,4 +28,5 @@ final class ProcessedTableDefinition
     public ?string $typeField = null;
     public bool $isRootTable = true;
     public ?bool $isAggregateRoot = null;
+    public ?bool $languageAware = null;
 }

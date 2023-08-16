@@ -202,7 +202,7 @@ class TcaGenerator
             }
         } else {
             $typeDefinitionArray = [
-                'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems()),
+                'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition),
             ];
             $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
         }
@@ -412,16 +412,18 @@ class TcaGenerator
         return implode(',', $parts);
     }
 
-    protected function getRecordTypeStandardShowItem(array $showItems): string
+    protected function getRecordTypeStandardShowItem(array $showItems, TableDefinition $tableDefinition): string
     {
         $parts = [
             implode(',', $showItems),
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
-            '--palette--;;language',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
-            '--palette--;;hidden',
-            '--palette--;;access',
         ];
+        if ($tableDefinition->isLanguageAware()) {
+            $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
+            $parts[] = '--palette--;;language';
+        }
+        $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access';
+        $parts[] = '--palette--;;hidden';
+        $parts[] = '--palette--;;access';
 
         return implode(',', $parts);
     }
@@ -497,10 +499,6 @@ class TcaGenerator
             'versioningWS' => true,
             'origUid' => 't3_origuid',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
-            'transOrigPointerField' => 'l10n_parent',
-            'translationSource' => 'l10n_source',
-            'transOrigDiffSourceField' => 'l10n_diffsource',
-            'languageField' => 'sys_language_uid',
             'enablecolumns' => [
                 'disabled' => 'hidden',
                 'starttime' => 'starttime',
@@ -512,10 +510,21 @@ class TcaGenerator
             ],
         ];
 
+        if ($tableDefinition->isLanguageAware()) {
+            $ctrl += [
+                'transOrigPointerField' => 'l10n_parent',
+                'translationSource' => 'l10n_source',
+                'transOrigDiffSourceField' => 'l10n_diffsource',
+                'languageField' => 'sys_language_uid',
+            ];
+        }
+
         $palettes = [];
-        $palettes['language'] = [
-            'showitem' => 'sys_language_uid,l10n_parent',
-        ];
+        if ($tableDefinition->isLanguageAware()) {
+            $palettes['language'] = [
+                'showitem' => 'sys_language_uid,l10n_parent',
+            ];
+        }
         $palettes['hidden'] = [
             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
             'showitem' => 'hidden',
@@ -598,35 +607,37 @@ class TcaGenerator
             'l10n_mode' => 'exclude',
             'l10n_display' => 'defaultAsReadonly',
         ];
-        $columns['sys_language_uid'] = [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => [
-                'type' => 'language',
-            ],
-        ];
-        $columns['l10n_parent'] = [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => 0,
-                    ],
+        if ($tableDefinition->isLanguageAware()) {
+            $columns['sys_language_uid'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
+                'config' => [
+                    'type' => 'language',
                 ],
-                'foreign_table' => $tableDefinition->getTable(),
-                'foreign_table_where' => 'AND ' . $tableDefinition->getTable() . '.pid=###CURRENT_PID### AND ' . $tableDefinition->getTable() . '.sys_language_uid IN (-1,0)',
-                'default' => 0,
-            ],
-        ];
-        $columns['l10n_diffsource'] = [
-            'config' => [
-                'type' => 'passthrough',
-            ],
-        ];
+            ];
+            $columns['l10n_parent'] = [
+                'displayCond' => 'FIELD:sys_language_uid:>:0',
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+                'config' => [
+                    'type' => 'select',
+                    'renderType' => 'selectSingle',
+                    'items' => [
+                        [
+                            'label' => '',
+                            'value' => 0,
+                        ],
+                    ],
+                    'foreign_table' => $tableDefinition->getTable(),
+                    'foreign_table_where' => 'AND ' . $tableDefinition->getTable() . '.pid=###CURRENT_PID### AND ' . $tableDefinition->getTable() . '.sys_language_uid IN (-1,0)',
+                    'default' => 0,
+                ],
+            ];
+            $columns['l10n_diffsource'] = [
+                'config' => [
+                    'type' => 'passthrough',
+                ],
+            ];
+        }
         $columns['sorting'] = [
             'config' => [
                 'type' => 'passthrough',
