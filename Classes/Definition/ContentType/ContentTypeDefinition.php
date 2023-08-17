@@ -15,7 +15,9 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition;
+namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
+
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 
 /**
  * @internal Not part of TYPO3's public API.

@@ -17,11 +17,11 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentElementDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
-use TYPO3\CMS\ContentBlocks\Definition\PageTypeDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\RecordTypeDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\RecordTypeDefinition;
 
 /**
  * @internal Not part of TYPO3's public API.
