@@ -15,29 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Enumeration;
-
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\CategoryFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\CheckboxFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\ColorFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\DateTimeFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\LanguageFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinebreakFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\PaletteFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\TabFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextFieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 /**
  * @internal Not part of TYPO3's public API.

@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
-use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 
