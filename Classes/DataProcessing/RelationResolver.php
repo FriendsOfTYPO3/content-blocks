@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\Enumeration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
