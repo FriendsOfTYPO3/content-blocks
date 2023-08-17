@@ -17,7 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedTableDefinition;

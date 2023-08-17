@@ -15,14 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition;
+namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class RecordTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
+final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    public static function createFromArray(array $array, string $table): RecordTypeDefinition
+    public static function createFromArray(array $array, string $table): PageTypeDefinition
     {
         $self = new self();
         return $self

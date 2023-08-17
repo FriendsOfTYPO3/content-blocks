@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 
 /**
  * @internal Not part of TYPO3's public API.

@@ -19,8 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
