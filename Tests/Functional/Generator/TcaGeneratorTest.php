@@ -157,4 +157,39 @@ final class TcaGeneratorTest extends FunctionalTestCase
             $GLOBALS['TCA']['tt_content']['palettes']['simple_basics_palette']['showitem']
         );
     }
+
+    /**
+     * @test
+     */
+    public function typeFieldSelectAddedForRecordType(): void
+    {
+        self::assertSame(
+            [
+                [
+                    'label' => 'LLL:EXT:simple/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:content-blocks.record1.title',
+                    'value' => 'record1',
+                    'icon' => 'record1-icon',
+                    'group' => '',
+                ],
+                [
+                    'label' => 'LLL:EXT:simple/ContentBlocks/RecordTypes/record2/Source/Language/Labels.xlf:content-blocks.record2.title',
+                    'value' => 'record2',
+                    'icon' => 'record2-icon',
+                    'group' => '',
+                ],
+            ],
+            $GLOBALS['TCA']['custom_record']['columns']['type']['config']['items'],
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function typeFieldDefaultValueAddedForTheFirstRecord(): void
+    {
+        self::assertSame(
+            'record1',
+            $GLOBALS['TCA']['custom_record']['columns']['type']['config']['default'],
+        );
+    }
 }

@@ -213,7 +213,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             't3ce_example' => 't3ce_example-icon',
                             't3ce_testblock' => 't3ce_testblock-icon',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_example_text,t3ce_example_textarea,t3ce_example_email,t3ce_testblock_text',
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_testblock_text,t3ce_example_text,t3ce_example_textarea,t3ce_example_email',
                     ],
                     'types' => [
                         't3ce_example' => [
@@ -278,7 +278,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_select' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.description',
-                                    'config' => [],
+                                    'config' => [
+                                        'items' => [],
+                                    ],
                                 ],
                                 't3ce_example_link' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:link.label',
@@ -1432,6 +1434,16 @@ final class TcaGeneratorTest extends UnitTestCase
                             'config' => [
                                 'type' => 'text',
                             ],
+                        ],
+                        'type' => [
+                            'exclude' => true,
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectSingle',
+                                'default' => 'example',
+                                'items' => [],
+                            ],
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
                         ],
                     ],
                 ],

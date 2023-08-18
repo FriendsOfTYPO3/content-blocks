@@ -1,0 +1,12 @@
+name: content-blocks/record2
+table: custom_record
+prefixFields: false
+useAsLabel: title
+languageAware: false
+typeField: type
+typeName: record2
+priority: 10
+fields:
+  -
+    identifier: title
+    type: Text

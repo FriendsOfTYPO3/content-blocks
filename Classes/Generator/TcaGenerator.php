@@ -90,32 +90,53 @@ class TcaGenerator
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
         $tableDefinitionCollection = $this->loader->load(false);
+        $event->setTca(array_replace_recursive($event->getTca(), $this->generate($tableDefinitionCollection)));
 
-        // Use helper methods to add group "Content Blocks" and add the content block to the type item list.
-        // Store backup of current TCA, as the helper methods operate on the global array.
+        // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
         $tcaBackup = $GLOBALS['TCA'];
         $GLOBALS['TCA'] = $event->getTca();
+        $this->fillTypeFieldSelectItems($tableDefinitionCollection);
+        $event->setTca($GLOBALS['TCA']);
+        $GLOBALS['TCA'] = $tcaBackup;
+
+        $event->setTca($this->eventDispatcher->dispatch(new AfterContentBlocksTcaCompilationEvent($event->getTca()))->getTca());
+    }
+
+    public function generate(TableDefinitionCollection $tableDefinitionCollection): array
+    {
+        $tca = [];
+        foreach ($tableDefinitionCollection as $tableDefinition) {
+            if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
+                $tca[$tableDefinition->getTable()] = $this->getCollectionTableStandardTca($tableDefinition);
+            }
+            foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
+                $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
+            }
+            $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
+            foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
+                if ($isRootTableWithTypeField) {
+                    $tca = $this->getTcaForRootTableWithTypeField($tableDefinition, $column, $tca);
+                } else {
+                    $tca = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column, $tca);
+                }
+            }
+            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                $tca = $this->processTypeDefinition($typeDefinition, $tableDefinition, $tca);
+            }
+            $tca[$tableDefinition->getTable()]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
+        }
+
+        return $this->tcaPreparation->prepare($tca);
+    }
+
+    protected function fillTypeFieldSelectItems(TableDefinitionCollection $tableDefinitionCollection): void
+    {
         foreach ($tableDefinitionCollection as $tableDefinition) {
             // This definition has only one type (the default type "1"). There is no type select to add it to.
             if ($tableDefinition->getTypeField() === null) {
                 continue;
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                // New record type with defined typeField. Add the first type as default value.
-                if (
-                    !isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$tableDefinition->getTypeField()])
-                    && $tableDefinition->getContentType() === ContentType::RECORD_TYPE
-                ) {
-                    $GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$tableDefinition->getTypeField()] = [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
-                        'config' => [
-                            'type' => 'select',
-                            'renderType' => 'selectSingle',
-                            'items' => [],
-                            'default' => $typeDefinition->getTypeName(),
-                        ],
-                    ];
-                }
                 // @todo Right now we hard-code a new group for the type select of content elements.
                 // @todo The default destination should be made configurable, so e.g. the standard
                 // @todo group could be chosen.
@@ -146,39 +167,6 @@ class TcaGenerator
                 );
             }
         }
-        $event->setTca($GLOBALS['TCA']);
-        // Restore backup, see comment above.
-        $GLOBALS['TCA'] = $tcaBackup;
-
-        $event->setTca(array_replace_recursive($event->getTca(), $this->generate($tableDefinitionCollection)));
-        $event->setTca($this->eventDispatcher->dispatch(new AfterContentBlocksTcaCompilationEvent($event->getTca()))->getTca());
-    }
-
-    public function generate(TableDefinitionCollection $tableDefinitionCollection): array
-    {
-        $tca = [];
-        foreach ($tableDefinitionCollection as $tableDefinition) {
-            if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
-                $tca[$tableDefinition->getTable()] = $this->getCollectionTableStandardTca($tableDefinition);
-            }
-            foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
-                $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
-            }
-            $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
-            foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                if ($isRootTableWithTypeField) {
-                    $tca = $this->getTcaForRootTableWithTypeField($tableDefinition, $column, $tca);
-                } else {
-                    $tca = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column, $tca);
-                }
-            }
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                $tca = $this->processTypeDefinition($typeDefinition, $tableDefinition, $tca);
-            }
-            $tca[$tableDefinition->getTable()]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
-        }
-
-        return $this->tcaPreparation->prepare($tca);
     }
 
     protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition, array $tca): array
@@ -264,6 +252,10 @@ class TcaGenerator
             if (array_key_exists($optionKey, $column->getTca())) {
                 $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()][$optionKey] = $column->getTca()[$optionKey];
             }
+        }
+        // Add TCA for automatically added typeField.
+        if ($tableDefinition->getTypeField() === $column->getIdentifier()) {
+            $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
         }
         return $tca;
     }
@@ -405,6 +397,10 @@ class TcaGenerator
         } else {
             // If there is no user-defined label field, use first field as label.
             foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
+                // Ignore fields for label, which can't be searched properly.
+                if (!$columnFieldDefinition->getFieldType()->isSearchable()) {
+                    continue;
+                }
                 $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
                 break;
             }
@@ -432,10 +428,6 @@ class TcaGenerator
 
     protected function getRecordTypeStandardShowItem(array $showItems, TableDefinition $tableDefinition): string
     {
-        $parts = [];
-        if ($tableDefinition->getTypeField() !== null) {
-            $parts[] = $tableDefinition->getTypeField();
-        }
         $parts[] = implode(',', $showItems);
         if ($tableDefinition->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';

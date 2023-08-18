@@ -94,6 +94,8 @@ class ContentBlockLoader implements LoaderInterface
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
         $this->checkForUniqueness($loadedContentBlocks);
+        // Sort content blocks by priority.
+        usort($loadedContentBlocks, fn (LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0));
         foreach ($loadedContentBlocks as $contentBlock) {
             $this->contentBlockRegistry->register($contentBlock);
             $this->languageFileRegistry->register($contentBlock);
@@ -110,6 +112,9 @@ class ContentBlockLoader implements LoaderInterface
         return $this->tableDefinitionCollection;
     }
 
+    /**
+     * @return LoadedContentBlock[]
+     */
     protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType, bool $allowCache = true): array
     {
         $result = [];

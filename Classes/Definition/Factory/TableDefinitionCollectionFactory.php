@@ -72,7 +72,7 @@ class TableDefinitionCollectionFactory
     {
         $mergedResult = [];
         foreach ($tableDefinitionList as $table => $definition) {
-            $mergedResult[$table] = array_replace_recursive(...$definition['tableDefinitions']);
+            $mergedResult[$table] = array_replace_recursive(...array_reverse($definition['tableDefinitions']));
             $mergedResult[$table]['elements'] = $definition['elements'];
         }
         return $mergedResult;
@@ -81,7 +81,16 @@ class TableDefinitionCollectionFactory
     private function processFields(ProcessingInput $input): array
     {
         $result = $this->initializeResult($input);
-        foreach ($input->yaml['fields'] as $rootField) {
+        $yamlFields = $input->yaml['fields'];
+
+        // Automatically add a `type` field for record types.
+        if (
+            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
+            && $result->tableDefinition->typeField !== null
+        ) {
+            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
+        }
+        foreach ($yamlFields as $rootField) {
             $rootFieldType = $this->resolveType($rootField, $input->table);
             $fields = match ($rootFieldType) {
                 Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
@@ -126,7 +135,9 @@ class TableDefinitionCollectionFactory
                 ];
                 $result->tableDefinition->fields[$uniqueIdentifier] = $fieldArray;
                 $result->contentType->columns[] = $uniqueIdentifier;
-                $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                if ($uniqueIdentifier !== $result->tableDefinition->typeField) {
+                    $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                }
 
                 $input->languagePath->popSegment();
             }
@@ -155,6 +166,20 @@ class TableDefinitionCollectionFactory
         $result->tableDefinition->languageAware = $input->yaml['languageAware'] ?? null;
         $result->tableDefinition->contentType = $input->contentType;
         return $result;
+    }
+
+    private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
+    {
+        array_unshift($yamlFields, [
+            'identifier' => $result->tableDefinition->typeField,
+            'type' => FieldType::SELECT->value,
+            'renderType' => 'selectSingle',
+            'prefixField' => false,
+            'default' => $result->contentType->typeName,
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
+            'items' => [],
+        ]);
+        return $yamlFields;
     }
 
     private function handleDefault(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
