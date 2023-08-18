@@ -170,9 +170,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         if ($this->itemGroups !== []) {
             $config['itemGroups'] = $this->itemGroups;
         }
-        if ($this->items !== []) {
-            $config['items'] = $this->items;
-        }
+        $config['items'] = $this->items;
         if ($this->sortItems !== []) {
             $config['sortItems'] = $this->sortItems;
         }

@@ -129,9 +129,9 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
+                "CREATE TABLE `foobar`(`my_type` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foobar`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foobar`(`foo_bar_number` int(11) DEFAULT '0' NOT NULL);",
-                "CREATE TABLE `foobar`(`my_type` VARCHAR(255) DEFAULT '' NOT NULL);",
             ],
         ];
 

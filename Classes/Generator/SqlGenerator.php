@@ -17,8 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
@@ -52,10 +50,6 @@ class SqlGenerator
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`foreign_table_parent_uid` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (foreign_table_parent_uid));';
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`tablenames` varchar(255) DEFAULT \'\' NOT NULL);';
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`fieldname` varchar(255) DEFAULT \'\' NOT NULL);';
-            }
-            if ($tableDefinition->getTypeField() !== null && $tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
-                $selectFieldConfiguration = new SelectFieldConfiguration();
-                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $selectFieldConfiguration->getSql($tableDefinition->getTypeField()) . ');';
             }
         }
         return $sql;

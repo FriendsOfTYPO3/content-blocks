@@ -176,6 +176,7 @@ final class SelectFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'select',
+                    'items' => [],
                 ],
             ],
         ];
