@@ -165,6 +165,7 @@ class TableDefinitionCollectionFactory
         $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
         $result->tableDefinition->languageAware = $input->yaml['languageAware'] ?? null;
         $result->tableDefinition->workspaceAware = $input->yaml['workspaceAware'] ?? null;
+        $result->tableDefinition->ancestorReferenceField = $input->yaml['ancestorReferenceField'] ?? null;
         $result->tableDefinition->contentType = $input->contentType;
         return $result;
     }
@@ -363,6 +364,7 @@ class TableDefinitionCollectionFactory
         $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
         $tableDefinition['languageAware'] = $processedTableDefinition->languageAware;
         $tableDefinition['workspaceAware'] = $processedTableDefinition->workspaceAware;
+        $tableDefinition['ancestorReferenceField'] = $processedTableDefinition->ancestorReferenceField;
         $tableDefinition['contentType'] = $processedTableDefinition->contentType;
         if ($processedTableDefinition->isRootTable) {
             if ($processedTableDefinition->isAggregateRoot !== null) {
