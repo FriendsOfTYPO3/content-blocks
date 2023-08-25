@@ -158,7 +158,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
     {
         yield 'default integer column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` int(11) UNSIGNED DEFAULT \'0\' NOT NULL',
         ];
     }
 
