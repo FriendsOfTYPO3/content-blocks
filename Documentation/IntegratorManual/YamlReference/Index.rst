@@ -108,6 +108,15 @@ languageAware
    If set to :yaml:`false`, language related fields are not created. Namely
    :sql:`sys_language_uid`, :sql:`l10n_parent`, :sql:`l10n_source` and :sql:`l10n_diffsource`.
 
+workspaceAware
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   If set to :yaml:`false`, workspace related fields are not created. Namely
+   :sql:`t3ver_oid`, :sql:`t3ver_wsid`, :sql:`t3ver_state` and :sql:`t3ver_stage`.
+
 Field definitions
 =================
 

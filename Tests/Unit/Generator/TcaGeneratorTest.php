@@ -1061,7 +1061,7 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
 
-        yield 'Content Block creating a new custom root table with languageAware = false' => [
+        yield 'Content Block creating a new custom root table with languageAware = false and workspaceAware = false' => [
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
@@ -1071,6 +1071,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'yaml' => [
                         'table' => 'foobar',
                         'languageAware' => false,
+                        'workspaceAware' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1090,7 +1091,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'crdate' => 'crdate',
                         'delete' => 'deleted',
                         'editlock' => 'editlock',
-                        'versioningWS' => true,
                         'origUid' => 't3_origuid',
                         'hideTable' => false,
                         'enablecolumns' => [
