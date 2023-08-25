@@ -508,7 +508,6 @@ class TcaGenerator
             'crdate' => 'crdate',
             'delete' => 'deleted',
             'editlock' => 'editlock',
-            'origUid' => 't3_origuid',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => [
                 'disabled' => 'hidden',
@@ -523,6 +522,10 @@ class TcaGenerator
 
         if ($tableDefinition->getTypeField() !== null) {
             $ctrl['type'] = $tableDefinition->getTypeField();
+        }
+
+        if ($tableDefinition->hasAncestorReferenceField()) {
+            $ctrl['origUid'] = 't3_origuid';
         }
 
         if ($tableDefinition->isWorkspaceAware()) {

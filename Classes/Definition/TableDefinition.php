@@ -31,6 +31,7 @@ final class TableDefinition
     private string $useAsLabel = '';
     private bool $languageAware = true;
     private bool $workspaceAware = true;
+    private bool $ancestorReferenceField = true;
     private ?ContentType $contentType = null;
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
@@ -52,6 +53,7 @@ final class TableDefinition
             ->withTypeField($definition['typeField'] ?? null)
             ->withLanguageAware($definition['languageAware'] ?? $tableDefinition->languageAware)
             ->withWorkspaceAware($definition['workspaceAware'] ?? $tableDefinition->workspaceAware)
+            ->withAncestorReferenceField($definition['ancestorReferenceField'] ?? $tableDefinition->ancestorReferenceField)
             ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
@@ -102,6 +104,11 @@ final class TableDefinition
     public function isWorkspaceAware(): bool
     {
         return $this->workspaceAware;
+    }
+
+    public function hasAncestorReferenceField(): bool
+    {
+        return $this->ancestorReferenceField;
     }
 
     public function getContentType(): ContentType
@@ -175,6 +182,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->workspaceAware = $workspaceAware;
+        return $clone;
+    }
+
+    public function withAncestorReferenceField(bool $ancestorReferenceField): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->ancestorReferenceField = $ancestorReferenceField;
         return $clone;
     }
 
