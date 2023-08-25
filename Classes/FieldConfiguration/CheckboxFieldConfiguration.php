@@ -94,7 +94,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         if ($this->alternativeSql !== null) {
             return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
         }
-        return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
+        return "`$uniqueColumnName` int(11) UNSIGNED DEFAULT '0' NOT NULL";
     }
 
     public function getFieldType(): FieldType
