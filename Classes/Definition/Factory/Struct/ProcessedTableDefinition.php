@@ -31,5 +31,6 @@ final class ProcessedTableDefinition
     public bool $isRootTable = true;
     public ?bool $isAggregateRoot = null;
     public ?bool $languageAware = null;
+    public ?bool $workspaceAware = null;
     public ?ContentType $contentType = null;
 }

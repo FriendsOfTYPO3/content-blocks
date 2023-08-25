@@ -30,6 +30,7 @@ final class TableDefinition
     private ?string $typeField = null;
     private string $useAsLabel = '';
     private bool $languageAware = true;
+    private bool $workspaceAware = true;
     private ?ContentType $contentType = null;
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
@@ -50,6 +51,7 @@ final class TableDefinition
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
             ->withLanguageAware($definition['languageAware'] ?? $tableDefinition->languageAware)
+            ->withWorkspaceAware($definition['workspaceAware'] ?? $tableDefinition->workspaceAware)
             ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
@@ -95,6 +97,11 @@ final class TableDefinition
     public function isLanguageAware(): bool
     {
         return $this->languageAware;
+    }
+
+    public function isWorkspaceAware(): bool
+    {
+        return $this->workspaceAware;
     }
 
     public function getContentType(): ContentType
@@ -161,6 +168,13 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->languageAware = $languageAware;
+        return $clone;
+    }
+
+    public function withWorkspaceAware(bool $workspaceAware): TableDefinition
+    {
+        $clone = clone $this;
+        $clone->workspaceAware = $workspaceAware;
         return $clone;
     }
 
