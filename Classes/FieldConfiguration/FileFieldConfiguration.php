@@ -113,6 +113,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        // @todo change to return '' for v13 release (generated automatically now).
         return "`$uniqueColumnName` int(11) UNSIGNED DEFAULT '0' NOT NULL";
     }
 
