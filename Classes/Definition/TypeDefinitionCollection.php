@@ -25,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentTypeFactory;
  */
 final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
 {
-    /** @var ContentTypeInterface [] */
+    /** @var ContentTypeInterface[] */
     private array $definitions = [];
     private string $table = '';
 
