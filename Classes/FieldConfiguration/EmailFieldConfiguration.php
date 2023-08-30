@@ -97,6 +97,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
+        // @todo change to return '' for v13 release (generated automatically now).
         if ($this->alternativeSql !== null) {
             return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
         }
