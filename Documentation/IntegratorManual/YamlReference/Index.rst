@@ -169,6 +169,13 @@ updatedAtField
    Tracks the timestamp of the last update. Disabling this option removes this
    information.
 
+trackSorting
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+
+   Tracks the order of records. Disabling this option removes this information.
+
 Field definitions
 =================
 
