@@ -29,6 +29,7 @@ final class TableDefinitionCapability
     private bool $startTimeRestriction = true;
     private bool $endTimeRestriction = true;
     private bool $userGroupRestriction = true;
+    private bool $editLocking = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -40,6 +41,7 @@ final class TableDefinitionCapability
         $capability->startTimeRestriction = $definition['restriction']['starttime'] ?? $capability->startTimeRestriction;
         $capability->endTimeRestriction = $definition['restriction']['endtime'] ?? $capability->endTimeRestriction;
         $capability->userGroupRestriction = $definition['restriction']['usergroup'] ?? $capability->userGroupRestriction;
+        $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
         return $capability;
     }
 
@@ -78,6 +80,11 @@ final class TableDefinitionCapability
         return $this->userGroupRestriction;
     }
 
+    public function isEditLockingEnabled(): bool
+    {
+        return $this->editLocking;
+    }
+
     public function getRestrictionsTca(): array
     {
         $restrictions = [];
@@ -98,6 +105,9 @@ final class TableDefinitionCapability
 
     public function getAccessShowItemTca(): string
     {
+        if (!$this->hasAccessPalette()) {
+            return '';
+        }
         $access = [];
         if ($this->hasStartTimeRestriction()) {
             $access[] = 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel';
@@ -112,14 +122,15 @@ final class TableDefinitionCapability
             $access[] = 'fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel';
             $access[] = '--linebreak--';
         }
-        $access[] = 'editlock';
+        if ($this->isEditLockingEnabled()) {
+            $access[] = 'editlock';
+        }
         $accessTcaString = implode(',', $access);
         return $accessTcaString;
     }
 
     public function hasAccessPalette(): bool
     {
-        // @todo extend with editlock
-        return $this->hasStartTimeRestriction() || $this->hasEndTimeRestriction() || $this->hasUserGroupRestriction() || true;
+        return $this->hasStartTimeRestriction() || $this->hasEndTimeRestriction() || $this->hasUserGroupRestriction() || $this->isEditLockingEnabled();
     }
 }

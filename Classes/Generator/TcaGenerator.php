@@ -515,7 +515,6 @@ class TcaGenerator
             'tstamp' => 'tstamp',
             'crdate' => 'crdate',
             'delete' => 'deleted',
-            'editlock' => 'editlock',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->getRestrictionsTca(),
             'security' => [
@@ -529,6 +528,10 @@ class TcaGenerator
 
         if ($capability->hasAncestorReferenceField()) {
             $ctrl['origUid'] = 't3_origuid';
+        }
+
+        if ($capability->isEditLockingEnabled()) {
+            $ctrl['editlock'] = 'editlock';
         }
 
         if ($capability->isWorkspaceAware()) {
@@ -565,14 +568,16 @@ class TcaGenerator
         }
 
         $columns = [];
-        $columns['editlock'] = [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-            'config' => [
-                'type' => 'check',
-                'renderType' => 'checkboxToggle',
-            ],
-        ];
+        if ($capability->isEditLockingEnabled()) {
+            $columns['editlock'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
+                'config' => [
+                    'type' => 'check',
+                    'renderType' => 'checkboxToggle',
+                ],
+            ];
+        }
         if ($capability->hasDisabledRestriction()) {
             $columns['hidden'] = [
                 'exclude' => true,

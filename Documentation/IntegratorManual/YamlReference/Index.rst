@@ -126,6 +126,15 @@ ancestorReferenceField
    If set to :yaml:`false`, the tracking field for the original record will not
    be created. Namely :sql:`t3_origuid`.
 
+editLocking
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   If set to :yaml:`false`, the functionality to lock the editing for editors is
+   removed. This refers to the :sql:`editlock` field.
+
 restriction
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` array
