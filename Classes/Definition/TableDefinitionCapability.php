@@ -33,6 +33,7 @@ final class TableDefinitionCapability
     private bool $softDelete = true;
     private bool $createdAtField = true;
     private bool $updatedAtField = true;
+    private bool $trackSorting = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -48,6 +49,7 @@ final class TableDefinitionCapability
         $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
         $capability->createdAtField = $definition['createdAtField'] ?? $capability->createdAtField;
         $capability->updatedAtField = $definition['updatedAtField'] ?? $capability->updatedAtField;
+        $capability->trackSorting = $definition['trackSorting'] ?? $capability->trackSorting;
         return $capability;
     }
 
@@ -104,6 +106,11 @@ final class TableDefinitionCapability
     public function hasUpdatedAtField(): bool
     {
         return $this->updatedAtField;
+    }
+
+    public function shallTrackSorting(): bool
+    {
+        return $this->trackSorting;
     }
 
     public function getRestrictionsTca(): array

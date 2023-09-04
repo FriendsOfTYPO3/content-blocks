@@ -1081,6 +1081,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'softDelete' => false,
                         'createdAtField' => false,
                         'updatedAtField' => false,
+                        'trackSorting' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1095,7 +1096,6 @@ final class TcaGeneratorTest extends UnitTestCase
                     'ctrl' => [
                         'title' => 'foobar',
                         'label' => 't3ce_example_text',
-                        'sortby' => 'sorting',
                         'hideTable' => false,
                         'enablecolumns' => [
                             'endtime' => 'endtime',
