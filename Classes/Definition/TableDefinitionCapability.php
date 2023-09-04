@@ -32,7 +32,7 @@ final class TableDefinitionCapability
     private bool $softDelete = true;
     private bool $trackCreationDate = true;
     private bool $trackUpdateDate = true;
-    private bool $trackSorting = true;
+    private bool $sortable = true;
     private bool $trackAncestorReference = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
@@ -49,7 +49,7 @@ final class TableDefinitionCapability
         $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
         $capability->trackCreationDate = $definition['trackCreationDate'] ?? $capability->trackCreationDate;
         $capability->trackUpdateDate = $definition['trackUpdateDate'] ?? $capability->trackUpdateDate;
-        $capability->trackSorting = $definition['trackSorting'] ?? $capability->trackSorting;
+        $capability->sortable = $definition['sortable'] ?? $capability->sortable;
         return $capability;
     }
 
@@ -108,9 +108,9 @@ final class TableDefinitionCapability
         return $this->trackUpdateDate;
     }
 
-    public function shallTrackSorting(): bool
+    public function isSortable(): bool
     {
-        return $this->trackSorting;
+        return $this->sortable;
     }
 
     public function getRestrictionsTca(): array

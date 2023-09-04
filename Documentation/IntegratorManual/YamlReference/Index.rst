@@ -160,13 +160,6 @@ trackUpdateDate
    Tracks the timestamp of the last update. Disabling this option removes this
    information.
 
-trackSorting
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` true
-
-   Tracks the order of records. Disabling this option removes this information.
-
 trackAncestorReference
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` boolean
@@ -175,6 +168,13 @@ trackAncestorReference
 
    If set to :yaml:`false`, the tracking field for the original record will not
    be created. Namely :sql:`t3_origuid`.
+
+sortable
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+
+   Tracks the order of records. Disabling this option removes this information.
 
 Field definitions
 =================
