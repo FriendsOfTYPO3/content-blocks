@@ -153,6 +153,14 @@ softDelete
    the database. They are merely flagged as deleted. Disabling this option,
    removes this safety net.
 
+createdAtField
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+
+   Tracks the timestamp of the creation date. Disabling this option removes this
+   information.
+
 Field definitions
 =================
 

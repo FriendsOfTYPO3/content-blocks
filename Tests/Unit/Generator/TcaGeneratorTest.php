@@ -1079,6 +1079,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'editLocking' => false,
                         'softDelete' => false,
+                        'createdAtField' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1095,7 +1096,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'label' => 't3ce_example_text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
-                        'crdate' => 'crdate',
                         'hideTable' => false,
                         'enablecolumns' => [
                             'endtime' => 'endtime',

@@ -513,7 +513,6 @@ class TcaGenerator
             'label' => $this->resolveLabelField($tableDefinition),
             'sortby' => 'sorting',
             'tstamp' => 'tstamp',
-            'crdate' => 'crdate',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->getRestrictionsTca(),
             'security' => [
@@ -524,19 +523,18 @@ class TcaGenerator
         if ($tableDefinition->getTypeField() !== null) {
             $ctrl['type'] = $tableDefinition->getTypeField();
         }
-
         if ($capability->hasAncestorReferenceField()) {
             $ctrl['origUid'] = 't3_origuid';
         }
-
         if ($capability->isEditLockingEnabled()) {
             $ctrl['editlock'] = 'editlock';
         }
-
         if ($capability->hasSoftDelete()) {
             $ctrl['delete'] = 'deleted';
         }
-
+        if ($capability->hasCreatedAtField()) {
+            $ctrl['crdate'] = 'crdate';
+        }
         if ($capability->isWorkspaceAware()) {
             $ctrl['versioningWS'] = true;
         }

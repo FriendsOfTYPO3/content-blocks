@@ -31,6 +31,7 @@ final class TableDefinitionCapability
     private bool $userGroupRestriction = true;
     private bool $editLocking = true;
     private bool $softDelete = true;
+    private bool $createdAtField = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -44,6 +45,7 @@ final class TableDefinitionCapability
         $capability->userGroupRestriction = $definition['restriction']['userGroup'] ?? $capability->userGroupRestriction;
         $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
         $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
+        $capability->createdAtField = $definition['createdAtField'] ?? $capability->createdAtField;
         return $capability;
     }
 
@@ -90,6 +92,11 @@ final class TableDefinitionCapability
     public function hasSoftDelete(): bool
     {
         return $this->softDelete;
+    }
+
+    public function hasCreatedAtField(): bool
+    {
+        return $this->createdAtField;
     }
 
     public function getRestrictionsTca(): array
