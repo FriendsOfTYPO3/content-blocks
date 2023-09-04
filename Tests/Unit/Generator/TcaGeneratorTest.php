@@ -1077,6 +1077,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'disabled' => false,
                             'starttime' => false,
                         ],
+                        'editLocking' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1095,7 +1096,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
                         'delete' => 'deleted',
-                        'editlock' => 'editlock',
                         'hideTable' => false,
                         'enablecolumns' => [
                             'endtime' => 'endtime',
@@ -1117,18 +1117,10 @@ final class TcaGeneratorTest extends UnitTestCase
                     'palettes' => [
                         'access' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                            'showitem' => 'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
+                            'showitem' => 'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--',
                         ],
                     ],
                     'columns' => [
-                        'editlock' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
                         'fe_group' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
