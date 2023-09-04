@@ -163,9 +163,7 @@ class TableDefinitionCollectionFactory
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
         $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
-        $result->tableDefinition->languageAware = $input->yaml['languageAware'] ?? null;
-        $result->tableDefinition->workspaceAware = $input->yaml['workspaceAware'] ?? null;
-        $result->tableDefinition->ancestorReferenceField = $input->yaml['ancestorReferenceField'] ?? null;
+        $result->tableDefinition->raw = $input->yaml;
         $result->tableDefinition->contentType = $input->contentType;
         return $result;
     }
@@ -362,9 +360,7 @@ class TableDefinitionCollectionFactory
         $tableDefinition['useAsLabel'] = $processedTableDefinition->useAsLabel;
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
         $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
-        $tableDefinition['languageAware'] = $processedTableDefinition->languageAware;
-        $tableDefinition['workspaceAware'] = $processedTableDefinition->workspaceAware;
-        $tableDefinition['ancestorReferenceField'] = $processedTableDefinition->ancestorReferenceField;
+        $tableDefinition['raw'] = $processedTableDefinition->raw;
         $tableDefinition['contentType'] = $processedTableDefinition->contentType;
         if ($processedTableDefinition->isRootTable) {
             if ($processedTableDefinition->isAggregateRoot !== null) {

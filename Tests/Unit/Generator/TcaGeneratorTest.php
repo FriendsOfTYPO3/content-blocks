@@ -1073,6 +1073,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'languageAware' => false,
                         'workspaceAware' => false,
                         'ancestorReferenceField' => false,
+                        'restriction' => [
+                            'disabled' => false,
+                            'starttime' => false,
+                        ],
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1094,8 +1098,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'editlock' => 'editlock',
                         'hideTable' => false,
                         'enablecolumns' => [
-                            'disabled' => 'hidden',
-                            'starttime' => 'starttime',
                             'endtime' => 'endtime',
                             'fe_group' => 'fe_group',
                         ],
@@ -1109,31 +1111,19 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => 't3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => 't3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
-                        'hidden' => [
-                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
-                            'showitem' => 'hidden',
-                        ],
                         'access' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
+                            'showitem' => 'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
                         ],
                     ],
                     'columns' => [
                         'editlock' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
                             'config' => [
                                 'type' => 'check',
                                 'renderType' => 'checkboxToggle',
@@ -1164,16 +1154,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'exclusiveKeys' => '-1,-2',
                                 'foreign_table' => 'fe_groups',
                             ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
                         ],
                         'endtime' => [
                             'exclude' => true,

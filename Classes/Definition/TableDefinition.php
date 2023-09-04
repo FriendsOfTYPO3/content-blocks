@@ -49,7 +49,7 @@ final class TableDefinition
             ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
-            ->withCapability(TableDefinitionCapability::createFromArray($definition))
+            ->withCapability(TableDefinitionCapability::createFromArray($definition['raw']))
             ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))

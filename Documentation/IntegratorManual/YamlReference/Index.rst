@@ -126,6 +126,15 @@ ancestorReferenceField
    If set to :yaml:`false`, the tracking field for the original record will not
    be created. Namely :sql:`t3_origuid`.
 
+restriction
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` array
+   :sep:`|`
+
+   There are several restrictions in TYPO3, which filter records by certain
+   constraints. These are :yaml:`disabled`, :yaml:`starttime`, :yaml:`endtime`,
+   and :yaml:`usergroup`. Setting these keys to :yaml:`false` will remove them.
+
 Field definitions
 =================
 
