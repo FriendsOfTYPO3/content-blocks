@@ -536,11 +536,13 @@ class TcaGenerator
         if ($capability->shallTrackUpdateDate()) {
             $ctrl['tstamp'] = 'tstamp';
         }
-        if ($capability->isSortable()) {
-            $ctrl['sortby'] = 'sorting';
-        }
         if ($capability->isWorkspaceAware()) {
             $ctrl['versioningWS'] = true;
+        }
+        if ($capability->hasSortField()) {
+            $ctrl['default_sortby'] = $capability->getSortField();
+        } elseif ($capability->isSortable()) {
+            $ctrl['sortby'] = 'sorting';
         }
 
         if ($capability->isLanguageAware()) {

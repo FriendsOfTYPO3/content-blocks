@@ -1081,7 +1081,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'trackCreationDate' => false,
                         'trackUpdateDate' => false,
                         'trackAncestorReference' => false,
-                        'sortable' => false,
+                        'sortField' => 'text',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1107,6 +1107,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
+                        'default_sortby' => 't3ce_example_text',
                         'searchFields' => 't3ce_example_text',
                     ],
                     'types' => [

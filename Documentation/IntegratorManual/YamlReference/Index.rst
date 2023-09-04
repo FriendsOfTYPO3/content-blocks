@@ -174,7 +174,18 @@ sortable
    :sep:`|` :aspect:`Type:` boolean
    :sep:`|` :aspect:`Default:` true
 
-   Tracks the order of records. Disabling this option removes this information.
+   Tracks the order of records. Arrows will appear to sort records explicitly.
+   Disabling this option removes this functionality. It is still possible to
+   define :yaml:`sortField`. This corresponds to the TCA option :php:`sortby`.
+
+sortField
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` null
+
+   The field identifier to use for sorting records. If set, this will disable
+   the :yaml:`sortable` option automatically. This corresponds to the TCA option
+   :php:`default_sortby`.
 
 Field definitions
 =================

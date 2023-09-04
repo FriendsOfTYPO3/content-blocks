@@ -34,22 +34,24 @@ final class TableDefinitionCapability
     private bool $trackUpdateDate = true;
     private bool $sortable = true;
     private bool $trackAncestorReference = true;
+    private string $sortField = '';
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
         $capability = new TableDefinitionCapability();
-        $capability->languageAware = $definition['languageAware'] ?? $capability->languageAware;
-        $capability->workspaceAware = $definition['workspaceAware'] ?? $capability->workspaceAware;
-        $capability->trackAncestorReference = $definition['trackAncestorReference'] ?? $capability->trackAncestorReference;
-        $capability->disabledRestriction = $definition['restriction']['disabled'] ?? $capability->disabledRestriction;
-        $capability->startTimeRestriction = $definition['restriction']['startTime'] ?? $capability->startTimeRestriction;
-        $capability->endTimeRestriction = $definition['restriction']['endTime'] ?? $capability->endTimeRestriction;
-        $capability->userGroupRestriction = $definition['restriction']['userGroup'] ?? $capability->userGroupRestriction;
-        $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
-        $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
-        $capability->trackCreationDate = $definition['trackCreationDate'] ?? $capability->trackCreationDate;
-        $capability->trackUpdateDate = $definition['trackUpdateDate'] ?? $capability->trackUpdateDate;
-        $capability->sortable = $definition['sortable'] ?? $capability->sortable;
+        $capability->languageAware = (bool)($definition['languageAware'] ?? $capability->languageAware);
+        $capability->workspaceAware = (bool)($definition['workspaceAware'] ?? $capability->workspaceAware);
+        $capability->trackAncestorReference = (bool)($definition['trackAncestorReference'] ?? $capability->trackAncestorReference);
+        $capability->disabledRestriction = (bool)($definition['restriction']['disabled'] ?? $capability->disabledRestriction);
+        $capability->startTimeRestriction = (bool)($definition['restriction']['startTime'] ?? $capability->startTimeRestriction);
+        $capability->endTimeRestriction = (bool)($definition['restriction']['endTime'] ?? $capability->endTimeRestriction);
+        $capability->userGroupRestriction = (bool)($definition['restriction']['userGroup'] ?? $capability->userGroupRestriction);
+        $capability->editLocking = (bool)($definition['editLocking'] ?? $capability->editLocking);
+        $capability->softDelete = (bool)($definition['softDelete'] ?? $capability->softDelete);
+        $capability->trackCreationDate = (bool)($definition['trackCreationDate'] ?? $capability->trackCreationDate);
+        $capability->trackUpdateDate = (bool)($definition['trackUpdateDate'] ?? $capability->trackUpdateDate);
+        $capability->sortable = (bool)($definition['sortable'] ?? $capability->sortable);
+        $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
         return $capability;
     }
 
@@ -111,6 +113,16 @@ final class TableDefinitionCapability
     public function isSortable(): bool
     {
         return $this->sortable;
+    }
+
+    public function hasSortField(): bool
+    {
+        return $this->sortField !== '';
+    }
+
+    public function getSortField(): string
+    {
+        return $this->sortField;
     }
 
     public function getRestrictionsTca(): array
