@@ -512,7 +512,6 @@ class TcaGenerator
             'title' => $tableDefinition->getTable(),
             'label' => $this->resolveLabelField($tableDefinition),
             'sortby' => 'sorting',
-            'tstamp' => 'tstamp',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->getRestrictionsTca(),
             'security' => [
@@ -534,6 +533,9 @@ class TcaGenerator
         }
         if ($capability->hasCreatedAtField()) {
             $ctrl['crdate'] = 'crdate';
+        }
+        if ($capability->hasUpdatedAtField()) {
+            $ctrl['tstamp'] = 'tstamp';
         }
         if ($capability->isWorkspaceAware()) {
             $ctrl['versioningWS'] = true;
