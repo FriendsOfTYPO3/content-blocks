@@ -428,16 +428,23 @@ class TcaGenerator
 
     protected function getRecordTypeStandardShowItem(array $showItems, TableDefinition $tableDefinition): string
     {
+        $capability = $tableDefinition->getCapability();
         $parts[] = implode(',', $showItems);
-        if ($tableDefinition->getCapability()->isLanguageAware()) {
+        if ($capability->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
             $parts[] = '--palette--;;language';
         }
-        $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access';
-        $parts[] = '--palette--;;hidden';
-        $parts[] = '--palette--;;access';
-
-        return implode(',', $parts);
+        if ($capability->hasDisabledRestriction() || $capability->hasAccessPalette()) {
+            $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access';
+            if ($capability->hasDisabledRestriction()) {
+                $parts[] = '--palette--;;hidden';
+            }
+            if ($capability->hasAccessPalette()) {
+                $parts[] = '--palette--;;access';
+            }
+        }
+        $showItem = implode(',', $parts);
+        return $showItem;
     }
 
     protected function getPageTypeStandardShowItem(array $showItems): string
@@ -463,8 +470,8 @@ class TcaGenerator
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
             'rowDescription',
         ];
-
-        return implode(',', $parts);
+        $showItem = implode(',', $parts);
+        return $showItem;
     }
 
     /**
@@ -510,12 +517,7 @@ class TcaGenerator
             'delete' => 'deleted',
             'editlock' => 'editlock',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
-            'enablecolumns' => [
-                'disabled' => 'hidden',
-                'starttime' => 'starttime',
-                'endtime' => 'endtime',
-                'fe_group' => 'fe_group',
-            ],
+            'enablecolumns' => $capability->getRestrictionsTca(),
             'security' => [
                 'ignorePageTypeRestriction' => true,
             ],
@@ -548,21 +550,19 @@ class TcaGenerator
                 'showitem' => 'sys_language_uid,l10n_parent',
             ];
         }
-        $palettes['hidden'] = [
-            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
-            'showitem' => 'hidden',
-        ];
-        $palettes['access'] = [
-            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-            'showitem' => implode(',', [
-                'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel',
-                'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
-                '--linebreak--',
-                'fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel',
-                '--linebreak--',
-                'editlock',
-            ]),
-        ];
+        if ($capability->hasDisabledRestriction()) {
+            $palettes['hidden'] = [
+                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                'showitem' => 'hidden',
+            ];
+        }
+        $access = $capability->getAccessShowItemTca();
+        if ($access !== '') {
+            $palettes['access'] = [
+                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                'showitem' => $access,
+            ];
+        }
 
         $columns = [];
         $columns['editlock'] = [
@@ -573,63 +573,71 @@ class TcaGenerator
                 'renderType' => 'checkboxToggle',
             ],
         ];
-        $columns['hidden'] = [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-            'config' => [
-                'type' => 'check',
-                'renderType' => 'checkboxToggle',
-            ],
-        ];
-        $columns['fe_group'] = [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectMultipleSideBySide',
-                'size' => 5,
-                'maxitems' => 20,
-                'items' => [
-                    [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                        'value' => -1,
+        if ($capability->hasDisabledRestriction()) {
+            $columns['hidden'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
+                'config' => [
+                    'type' => 'check',
+                    'renderType' => 'checkboxToggle',
+                ],
+            ];
+        }
+        if ($capability->hasUserGroupRestriction()) {
+            $columns['fe_group'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+                'config' => [
+                    'type' => 'select',
+                    'renderType' => 'selectMultipleSideBySide',
+                    'size' => 5,
+                    'maxitems' => 20,
+                    'items' => [
+                        [
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                            'value' => -1,
+                        ],
+                        [
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                            'value' => -2,
+                        ],
+                        [
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                            'value' => '--div--',
+                        ],
                     ],
-                    [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                        'value' => -2,
-                    ],
-                    [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                        'value' => '--div--',
+                    'exclusiveKeys' => '-1,-2',
+                    'foreign_table' => 'fe_groups',
+                ],
+            ];
+        }
+        if ($capability->hasStartTimeRestriction()) {
+            $columns['starttime'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+                'config' => [
+                    'type' => 'datetime',
+                    'default' => 0,
+                ],
+                'l10n_mode' => 'exclude',
+                'l10n_display' => 'defaultAsReadonly',
+            ];
+        }
+        if ($capability->hasEndTimeRestriction()) {
+            $columns['endtime'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+                'config' => [
+                    'type' => 'datetime',
+                    'default' => 0,
+                    'range' => [
+                        'upper' => mktime(0, 0, 0, 1, 1, 2038),
                     ],
                 ],
-                'exclusiveKeys' => '-1,-2',
-                'foreign_table' => 'fe_groups',
-            ],
-        ];
-        $columns['starttime'] = [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-            'config' => [
-                'type' => 'datetime',
-                'default' => 0,
-            ],
-            'l10n_mode' => 'exclude',
-            'l10n_display' => 'defaultAsReadonly',
-        ];
-        $columns['endtime'] = [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-            'config' => [
-                'type' => 'datetime',
-                'default' => 0,
-                'range' => [
-                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                ],
-            ],
-            'l10n_mode' => 'exclude',
-            'l10n_display' => 'defaultAsReadonly',
-        ];
+                'l10n_mode' => 'exclude',
+                'l10n_display' => 'defaultAsReadonly',
+            ];
+        }
         if ($capability->isLanguageAware()) {
             $columns['sys_language_uid'] = [
                 'exclude' => true,
