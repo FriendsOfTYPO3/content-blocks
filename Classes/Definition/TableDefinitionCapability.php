@@ -30,6 +30,7 @@ final class TableDefinitionCapability
     private bool $endTimeRestriction = true;
     private bool $userGroupRestriction = true;
     private bool $editLocking = true;
+    private bool $softDelete = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -42,6 +43,7 @@ final class TableDefinitionCapability
         $capability->endTimeRestriction = $definition['restriction']['endtime'] ?? $capability->endTimeRestriction;
         $capability->userGroupRestriction = $definition['restriction']['usergroup'] ?? $capability->userGroupRestriction;
         $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
+        $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
         return $capability;
     }
 
@@ -83,6 +85,11 @@ final class TableDefinitionCapability
     public function isEditLockingEnabled(): bool
     {
         return $this->editLocking;
+    }
+
+    public function hasSoftDelete(): bool
+    {
+        return $this->softDelete;
     }
 
     public function getRestrictionsTca(): array
