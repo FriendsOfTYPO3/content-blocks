@@ -161,6 +161,14 @@ createdAtField
    Tracks the timestamp of the creation date. Disabling this option removes this
    information.
 
+updatedAtField
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+
+   Tracks the timestamp of the last update. Disabling this option removes this
+   information.
+
 Field definitions
 =================
 

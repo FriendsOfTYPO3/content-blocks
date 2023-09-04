@@ -32,6 +32,7 @@ final class TableDefinitionCapability
     private bool $editLocking = true;
     private bool $softDelete = true;
     private bool $createdAtField = true;
+    private bool $updatedAtField = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -46,6 +47,7 @@ final class TableDefinitionCapability
         $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
         $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
         $capability->createdAtField = $definition['createdAtField'] ?? $capability->createdAtField;
+        $capability->updatedAtField = $definition['updatedAtField'] ?? $capability->updatedAtField;
         return $capability;
     }
 
@@ -97,6 +99,11 @@ final class TableDefinitionCapability
     public function hasCreatedAtField(): bool
     {
         return $this->createdAtField;
+    }
+
+    public function hasUpdatedAtField(): bool
+    {
+        return $this->updatedAtField;
     }
 
     public function getRestrictionsTca(): array
