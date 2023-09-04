@@ -536,7 +536,7 @@ class TcaGenerator
         if ($capability->shallTrackUpdateDate()) {
             $ctrl['tstamp'] = 'tstamp';
         }
-        if ($capability->shallTrackSorting()) {
+        if ($capability->isSortable()) {
             $ctrl['sortby'] = 'sorting';
         }
         if ($capability->isWorkspaceAware()) {

@@ -1080,8 +1080,8 @@ final class TcaGeneratorTest extends UnitTestCase
                         'softDelete' => false,
                         'trackCreationDate' => false,
                         'trackUpdateDate' => false,
-                        'trackSorting' => false,
                         'trackAncestorReference' => false,
+                        'sortable' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
