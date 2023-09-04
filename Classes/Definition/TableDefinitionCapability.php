@@ -39,9 +39,9 @@ final class TableDefinitionCapability
         $capability->workspaceAware = $definition['workspaceAware'] ?? $capability->workspaceAware;
         $capability->ancestorReferenceField = $definition['ancestorReferenceField'] ?? $capability->ancestorReferenceField;
         $capability->disabledRestriction = $definition['restriction']['disabled'] ?? $capability->disabledRestriction;
-        $capability->startTimeRestriction = $definition['restriction']['starttime'] ?? $capability->startTimeRestriction;
-        $capability->endTimeRestriction = $definition['restriction']['endtime'] ?? $capability->endTimeRestriction;
-        $capability->userGroupRestriction = $definition['restriction']['usergroup'] ?? $capability->userGroupRestriction;
+        $capability->startTimeRestriction = $definition['restriction']['startTime'] ?? $capability->startTimeRestriction;
+        $capability->endTimeRestriction = $definition['restriction']['endTime'] ?? $capability->endTimeRestriction;
+        $capability->userGroupRestriction = $definition['restriction']['userGroup'] ?? $capability->userGroupRestriction;
         $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
         $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
         return $capability;
