@@ -29,9 +29,7 @@ final class TableDefinition
     private bool $isAggregateRoot = true;
     private ?string $typeField = null;
     private string $useAsLabel = '';
-    private bool $languageAware = true;
-    private bool $workspaceAware = true;
-    private bool $ancestorReferenceField = true;
+    private TableDefinitionCapability $capability;
     private ?ContentType $contentType = null;
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
     private ?SqlDefinition $sqlDefinition = null;
@@ -51,9 +49,7 @@ final class TableDefinition
             ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
-            ->withLanguageAware($definition['languageAware'] ?? $tableDefinition->languageAware)
-            ->withWorkspaceAware($definition['workspaceAware'] ?? $tableDefinition->workspaceAware)
-            ->withAncestorReferenceField($definition['ancestorReferenceField'] ?? $tableDefinition->ancestorReferenceField)
+            ->withCapability(TableDefinitionCapability::createFromArray($definition))
             ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
@@ -96,19 +92,9 @@ final class TableDefinition
         return $this->useAsLabel !== '';
     }
 
-    public function isLanguageAware(): bool
+    public function getCapability(): TableDefinitionCapability
     {
-        return $this->languageAware;
-    }
-
-    public function isWorkspaceAware(): bool
-    {
-        return $this->workspaceAware;
-    }
-
-    public function hasAncestorReferenceField(): bool
-    {
-        return $this->ancestorReferenceField;
+        return $this->capability;
     }
 
     public function getContentType(): ContentType
@@ -171,24 +157,10 @@ final class TableDefinition
         return $clone;
     }
 
-    public function withLanguageAware(bool $languageAware): TableDefinition
+    public function withCapability(TableDefinitionCapability $capability): TableDefinition
     {
         $clone = clone $this;
-        $clone->languageAware = $languageAware;
-        return $clone;
-    }
-
-    public function withWorkspaceAware(bool $workspaceAware): TableDefinition
-    {
-        $clone = clone $this;
-        $clone->workspaceAware = $workspaceAware;
-        return $clone;
-    }
-
-    public function withAncestorReferenceField(bool $ancestorReferenceField): TableDefinition
-    {
-        $clone = clone $this;
-        $clone->ancestorReferenceField = $ancestorReferenceField;
+        $clone->capability = $capability;
         return $clone;
     }
 

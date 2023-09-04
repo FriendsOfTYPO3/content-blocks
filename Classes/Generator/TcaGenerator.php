@@ -429,7 +429,7 @@ class TcaGenerator
     protected function getRecordTypeStandardShowItem(array $showItems, TableDefinition $tableDefinition): string
     {
         $parts[] = implode(',', $showItems);
-        if ($tableDefinition->isLanguageAware()) {
+        if ($tableDefinition->getCapability()->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
             $parts[] = '--palette--;;language';
         }
@@ -500,6 +500,7 @@ class TcaGenerator
 
     protected function getCollectionTableStandardTca(TableDefinition $tableDefinition): array
     {
+        $capability = $tableDefinition->getCapability();
         $ctrl = [
             'title' => $tableDefinition->getTable(),
             'label' => $this->resolveLabelField($tableDefinition),
@@ -524,15 +525,15 @@ class TcaGenerator
             $ctrl['type'] = $tableDefinition->getTypeField();
         }
 
-        if ($tableDefinition->hasAncestorReferenceField()) {
+        if ($capability->hasAncestorReferenceField()) {
             $ctrl['origUid'] = 't3_origuid';
         }
 
-        if ($tableDefinition->isWorkspaceAware()) {
+        if ($capability->isWorkspaceAware()) {
             $ctrl['versioningWS'] = true;
         }
 
-        if ($tableDefinition->isLanguageAware()) {
+        if ($capability->isLanguageAware()) {
             $ctrl += [
                 'transOrigPointerField' => 'l10n_parent',
                 'translationSource' => 'l10n_source',
@@ -542,7 +543,7 @@ class TcaGenerator
         }
 
         $palettes = [];
-        if ($tableDefinition->isLanguageAware()) {
+        if ($capability->isLanguageAware()) {
             $palettes['language'] = [
                 'showitem' => 'sys_language_uid,l10n_parent',
             ];
@@ -629,7 +630,7 @@ class TcaGenerator
             'l10n_mode' => 'exclude',
             'l10n_display' => 'defaultAsReadonly',
         ];
-        if ($tableDefinition->isLanguageAware()) {
+        if ($capability->isLanguageAware()) {
             $columns['sys_language_uid'] = [
                 'exclude' => true,
                 'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
