@@ -1072,16 +1072,16 @@ final class TcaGeneratorTest extends UnitTestCase
                         'table' => 'foobar',
                         'languageAware' => false,
                         'workspaceAware' => false,
-                        'ancestorReferenceField' => false,
                         'restriction' => [
                             'disabled' => false,
                             'startTime' => false,
                         ],
                         'editLocking' => false,
                         'softDelete' => false,
-                        'createdAtField' => false,
-                        'updatedAtField' => false,
+                        'trackCreationDate' => false,
+                        'trackUpdateDate' => false,
                         'trackSorting' => false,
+                        'trackAncestorReference' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',

@@ -521,7 +521,7 @@ class TcaGenerator
         if ($tableDefinition->getTypeField() !== null) {
             $ctrl['type'] = $tableDefinition->getTypeField();
         }
-        if ($capability->hasAncestorReferenceField()) {
+        if ($capability->shallTrackAncestorReference()) {
             $ctrl['origUid'] = 't3_origuid';
         }
         if ($capability->isEditLockingEnabled()) {
@@ -530,10 +530,10 @@ class TcaGenerator
         if ($capability->hasSoftDelete()) {
             $ctrl['delete'] = 'deleted';
         }
-        if ($capability->hasCreatedAtField()) {
+        if ($capability->shallTrackCreationDate()) {
             $ctrl['crdate'] = 'crdate';
         }
-        if ($capability->hasUpdatedAtField()) {
+        if ($capability->shallTrackUpdateDate()) {
             $ctrl['tstamp'] = 'tstamp';
         }
         if ($capability->shallTrackSorting()) {
