@@ -24,31 +24,31 @@ final class TableDefinitionCapability
 {
     private bool $languageAware = true;
     private bool $workspaceAware = true;
-    private bool $ancestorReferenceField = true;
     private bool $disabledRestriction = true;
     private bool $startTimeRestriction = true;
     private bool $endTimeRestriction = true;
     private bool $userGroupRestriction = true;
     private bool $editLocking = true;
     private bool $softDelete = true;
-    private bool $createdAtField = true;
-    private bool $updatedAtField = true;
+    private bool $trackCreationDate = true;
+    private bool $trackUpdateDate = true;
     private bool $trackSorting = true;
+    private bool $trackAncestorReference = true;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
         $capability = new TableDefinitionCapability();
         $capability->languageAware = $definition['languageAware'] ?? $capability->languageAware;
         $capability->workspaceAware = $definition['workspaceAware'] ?? $capability->workspaceAware;
-        $capability->ancestorReferenceField = $definition['ancestorReferenceField'] ?? $capability->ancestorReferenceField;
+        $capability->trackAncestorReference = $definition['trackAncestorReference'] ?? $capability->trackAncestorReference;
         $capability->disabledRestriction = $definition['restriction']['disabled'] ?? $capability->disabledRestriction;
         $capability->startTimeRestriction = $definition['restriction']['startTime'] ?? $capability->startTimeRestriction;
         $capability->endTimeRestriction = $definition['restriction']['endTime'] ?? $capability->endTimeRestriction;
         $capability->userGroupRestriction = $definition['restriction']['userGroup'] ?? $capability->userGroupRestriction;
         $capability->editLocking = $definition['editLocking'] ?? $capability->editLocking;
         $capability->softDelete = $definition['softDelete'] ?? $capability->softDelete;
-        $capability->createdAtField = $definition['createdAtField'] ?? $capability->createdAtField;
-        $capability->updatedAtField = $definition['updatedAtField'] ?? $capability->updatedAtField;
+        $capability->trackCreationDate = $definition['trackCreationDate'] ?? $capability->trackCreationDate;
+        $capability->trackUpdateDate = $definition['trackUpdateDate'] ?? $capability->trackUpdateDate;
         $capability->trackSorting = $definition['trackSorting'] ?? $capability->trackSorting;
         return $capability;
     }
@@ -63,9 +63,9 @@ final class TableDefinitionCapability
         return $this->workspaceAware;
     }
 
-    public function hasAncestorReferenceField(): bool
+    public function shallTrackAncestorReference(): bool
     {
-        return $this->ancestorReferenceField;
+        return $this->trackAncestorReference;
     }
 
     public function hasDisabledRestriction(): bool
@@ -98,14 +98,14 @@ final class TableDefinitionCapability
         return $this->softDelete;
     }
 
-    public function hasCreatedAtField(): bool
+    public function shallTrackCreationDate(): bool
     {
-        return $this->createdAtField;
+        return $this->trackCreationDate;
     }
 
-    public function hasUpdatedAtField(): bool
+    public function shallTrackUpdateDate(): bool
     {
-        return $this->updatedAtField;
+        return $this->trackUpdateDate;
     }
 
     public function shallTrackSorting(): bool

@@ -117,15 +117,6 @@ workspaceAware
    If set to :yaml:`false`, workspace related fields are not created. Namely
    :sql:`t3ver_oid`, :sql:`t3ver_wsid`, :sql:`t3ver_state` and :sql:`t3ver_stage`.
 
-ancestorReferenceField
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` true
-   :sep:`|`
-
-   If set to :yaml:`false`, the tracking field for the original record will not
-   be created. Namely :sql:`t3_origuid`.
-
 editLocking
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` boolean
@@ -153,7 +144,7 @@ softDelete
    the database. They are merely flagged as deleted. Disabling this option,
    removes this safety net.
 
-createdAtField
+trackCreationDate
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` boolean
    :sep:`|` :aspect:`Default:` true
@@ -161,7 +152,7 @@ createdAtField
    Tracks the timestamp of the creation date. Disabling this option removes this
    information.
 
-updatedAtField
+trackUpdateDate
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` boolean
    :sep:`|` :aspect:`Default:` true
@@ -175,6 +166,15 @@ trackSorting
    :sep:`|` :aspect:`Default:` true
 
    Tracks the order of records. Disabling this option removes this information.
+
+trackAncestorReference
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   If set to :yaml:`false`, the tracking field for the original record will not
+   be created. Namely :sql:`t3_origuid`.
 
 Field definitions
 =================
