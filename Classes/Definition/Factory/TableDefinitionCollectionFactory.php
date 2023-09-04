@@ -128,6 +128,7 @@ class TableDefinitionCollectionFactory
 
                 $field['languagePath'] = clone $input->languagePath;
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
+                $result->tableDefinition->raw['sortField'] = $this->resolveSortField($input, $field, $uniqueIdentifier);
                 $fieldArray = [
                     'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
@@ -545,5 +546,14 @@ class TableDefinitionCollectionFactory
                 );
             }
         }
+    }
+
+    private function resolveSortField(ProcessingInput $input, mixed $field, string $uniqueIdentifier): string
+    {
+        $sortField = (string)($input->yaml['sortField'] ?? null);
+        if ($sortField !== '' && $sortField === $field['identifier']) {
+            return $uniqueIdentifier;
+        }
+        return $sortField;
     }
 }
