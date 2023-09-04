@@ -141,8 +141,8 @@ restriction
    :sep:`|`
 
    There are several restrictions in TYPO3, which filter records by certain
-   constraints. These are :yaml:`disabled`, :yaml:`starttime`, :yaml:`endtime`,
-   and :yaml:`usergroup`. Setting these keys to :yaml:`false` will remove them.
+   constraints. These are :yaml:`disabled`, :yaml:`startTime`, :yaml:`endTime`,
+   and :yaml:`userGroup`. Setting these keys to :yaml:`false` removes them.
 
 softDelete
    :sep:`|` :aspect:`Required:` false

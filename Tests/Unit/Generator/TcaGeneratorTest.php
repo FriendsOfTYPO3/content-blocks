@@ -1075,7 +1075,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'ancestorReferenceField' => false,
                         'restriction' => [
                             'disabled' => false,
-                            'starttime' => false,
+                            'startTime' => false,
                         ],
                         'editLocking' => false,
                         'softDelete' => false,
