@@ -1078,6 +1078,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'starttime' => false,
                         ],
                         'editLocking' => false,
+                        'softDelete' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1095,7 +1096,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
-                        'delete' => 'deleted',
                         'hideTable' => false,
                         'enablecolumns' => [
                             'endtime' => 'endtime',

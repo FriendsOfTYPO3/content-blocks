@@ -514,7 +514,6 @@ class TcaGenerator
             'sortby' => 'sorting',
             'tstamp' => 'tstamp',
             'crdate' => 'crdate',
-            'delete' => 'deleted',
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->getRestrictionsTca(),
             'security' => [
@@ -532,6 +531,10 @@ class TcaGenerator
 
         if ($capability->isEditLockingEnabled()) {
             $ctrl['editlock'] = 'editlock';
+        }
+
+        if ($capability->hasSoftDelete()) {
+            $ctrl['delete'] = 'deleted';
         }
 
         if ($capability->isWorkspaceAware()) {

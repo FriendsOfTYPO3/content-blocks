@@ -144,6 +144,15 @@ restriction
    constraints. These are :yaml:`disabled`, :yaml:`starttime`, :yaml:`endtime`,
    and :yaml:`usergroup`. Setting these keys to :yaml:`false` will remove them.
 
+softDelete
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+
+   When deleting records in the TYPO3 backend, they are not really deleted in
+   the database. They are merely flagged as deleted. Disabling this option,
+   removes this safety net.
+
 Field definitions
 =================
 
