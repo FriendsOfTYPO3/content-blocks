@@ -517,9 +517,6 @@ class TcaGenerator
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->getRestrictionsTca(),
-            'security' => [
-                'ignorePageTypeRestriction' => true,
-            ],
         ];
 
         if ($tableDefinition->getTypeField() !== null) {
@@ -564,7 +561,12 @@ class TcaGenerator
         if ($rootLevelCapability->shallIgnoreRootLevelRestriction()) {
             $ctrl['security']['ignoreRootLevelRestriction'] = true;
         }
-
+        if ($capability->isIgnoreWebMountRestriction()) {
+            $ctrl['security']['ignoreWebMountRestriction'] = true;
+        }
+        if ($capability->isIgnorePageTypeRestriction()) {
+            $ctrl['security']['ignorePageTypeRestriction'] = true;
+        }
         if ($capability->isLanguageAware()) {
             $ctrl += [
                 'transOrigPointerField' => 'l10n_parent',
