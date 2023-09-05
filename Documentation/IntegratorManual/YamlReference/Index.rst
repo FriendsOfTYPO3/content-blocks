@@ -110,8 +110,8 @@ fallbackLabelFields
    :sep:`|`
 
    Defines which fields should be used as fallback, if :yaml:`useAsLabel` is not
-   filled. Can only be used, if there is only one :yaml:`useAsLabel` field
-   defined.
+   filled. The first filled field which is found will be used. Can only be used,
+   if there is only one :yaml:`useAsLabel` field defined.
 
 aggregateRoot
    :sep:`|` :aspect:`Required:` false
