@@ -493,9 +493,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'content-blocks',
                         ],
-                        'security' => [
-                            'ignorePageTypeRestriction' => true,
-                        ],
                         'searchFields' => 'text,text2,palette_field1,palette_field2',
                     ],
                     'types' => [
@@ -708,9 +705,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'typeicon_classes' => [
                             'default' => 'content-blocks',
-                        ],
-                        'security' => [
-                            'ignorePageTypeRestriction' => true,
                         ],
                         'searchFields' => 'text,text2',
                     ],
@@ -925,9 +919,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'content-blocks',
                         ],
-                        'security' => [
-                            'ignorePageTypeRestriction' => true,
-                        ],
                         'searchFields' => 't3ce_example_text',
                     ],
                     'types' => [
@@ -1085,7 +1076,9 @@ final class TcaGeneratorTest extends UnitTestCase
                         'internalDescription' => true,
                         'rootLevelType' => 'onlyOnRootLevel',
                         'security' => [
+                            'ignoreWebMountRestriction' => true,
                             'ignoreRootLevelRestriction' => true,
+                            'ignorePageTypeRestriction' => true,
                         ],
                         'fields' => [
                             [
@@ -1111,8 +1104,9 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'rootLevel' => 1,
                         'security' => [
-                            'ignorePageTypeRestriction' => true,
+                            'ignoreWebMountRestriction' => true,
                             'ignoreRootLevelRestriction' => true,
+                            'ignorePageTypeRestriction' => true,
                         ],
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
@@ -1263,9 +1257,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'example' => 'example-icon',
                             'example2' => 'example2-icon',
                             'default' => 'content-blocks',
-                        ],
-                        'security' => [
-                            'ignorePageTypeRestriction' => true,
                         ],
                         'searchFields' => 'text,text2',
                     ],
@@ -1565,9 +1556,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'typeicon_classes' => [
                             'default' => 'content-blocks',
-                        ],
-                        'security' => [
-                            'ignorePageTypeRestriction' => true,
                         ],
                         'searchFields' => 'text',
                     ],

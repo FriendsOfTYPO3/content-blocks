@@ -38,6 +38,8 @@ final class TableDefinitionCapability
     private bool $internalDescription = false;
     private string $sortField = '';
     private string $useAsLabel = '';
+    private bool $ignoreWebMountRestriction = false;
+    private bool $ignorePageTypeRestriction = false;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -57,6 +59,8 @@ final class TableDefinitionCapability
         $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
         $capability->useAsLabel = (string)($definition['useAsLabel'] ?? $capability->useAsLabel);
         $capability->internalDescription = (bool)($definition['internalDescription'] ?? $capability->internalDescription);
+        $capability->ignoreWebMountRestriction = (bool)($definition['security']['ignoreWebMountRestriction'] ?? $capability->ignoreWebMountRestriction);
+        $capability->ignorePageTypeRestriction = (bool)($definition['security']['ignorePageTypeRestriction'] ?? $capability->ignorePageTypeRestriction);
         $capability->rootLevelCapability = RootLevelCapability::createFromArray($definition);
         return $capability;
     }
@@ -149,6 +153,16 @@ final class TableDefinitionCapability
     public function getRootLevelCapability(): RootLevelCapability
     {
         return $this->rootLevelCapability;
+    }
+
+    public function isIgnoreWebMountRestriction(): bool
+    {
+        return $this->ignoreWebMountRestriction;
+    }
+
+    public function isIgnorePageTypeRestriction(): bool
+    {
+        return $this->ignorePageTypeRestriction;
     }
 
     public function getRestrictionsTca(): array

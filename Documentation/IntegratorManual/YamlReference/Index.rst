@@ -210,9 +210,16 @@ security
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` array
 
+   :yaml:`ignoreWebMountRestriction`: default false, Allows users to access
+   records that are not in their defined web-mount, thus bypassing this
+   restriction.
+
    :yaml:`ignoreRootLevelRestriction`: default false, Allows non-admin users to
    access records that are on the root-level (page ID 0), thus bypassing this
    usual restriction.
+
+   :yaml:`ignorePageTypeRestriction`: default false, Allows to use the record on
+   any kind of page type.
 
 Field definitions
 =================
