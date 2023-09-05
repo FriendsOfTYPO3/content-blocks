@@ -391,9 +391,10 @@ class TcaGenerator
 
     protected function resolveLabelField(TableDefinition $tableDefinition): string
     {
+        $capability = $tableDefinition->getCapability();
         $labelFallback = '';
-        if ($tableDefinition->hasUseAsLabel()) {
-            $labelFallback = $tableDefinition->getUseAsLabel();
+        if ($capability->hasUseAsLabel()) {
+            $labelFallback = $capability->getUseAsLabel();
         } else {
             // If there is no user-defined label field, use first field as label.
             foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {

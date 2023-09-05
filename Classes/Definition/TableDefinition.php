@@ -28,7 +28,6 @@ final class TableDefinition
     private bool $isRootTable = false;
     private bool $isAggregateRoot = true;
     private ?string $typeField = null;
-    private string $useAsLabel = '';
     private TableDefinitionCapability $capability;
     private ?ContentType $contentType = null;
     private ?TypeDefinitionCollection $typeDefinitionCollection = null;
@@ -45,7 +44,6 @@ final class TableDefinition
         $tableDefinition = new self();
         $tableDefinition = $tableDefinition
             ->withTable($table)
-            ->withUseAsLabel($definition['useAsLabel'] ?? '')
             ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
@@ -80,16 +78,6 @@ final class TableDefinition
     public function getTypeField(): ?string
     {
         return $this->typeField;
-    }
-
-    public function getUseAsLabel(): string
-    {
-        return $this->useAsLabel;
-    }
-
-    public function hasUseAsLabel(): bool
-    {
-        return $this->useAsLabel !== '';
     }
 
     public function getCapability(): TableDefinitionCapability
@@ -147,13 +135,6 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->typeField = $typeField;
-        return $clone;
-    }
-
-    public function withUseAsLabel(string $useAsLabel): TableDefinition
-    {
-        $clone = clone $this;
-        $clone->useAsLabel = $useAsLabel;
         return $clone;
     }
 

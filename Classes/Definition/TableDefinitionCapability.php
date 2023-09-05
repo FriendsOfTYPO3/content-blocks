@@ -35,6 +35,7 @@ final class TableDefinitionCapability
     private bool $sortable = true;
     private bool $trackAncestorReference = true;
     private string $sortField = '';
+    private string $useAsLabel = '';
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -52,6 +53,7 @@ final class TableDefinitionCapability
         $capability->trackUpdateDate = (bool)($definition['trackUpdateDate'] ?? $capability->trackUpdateDate);
         $capability->sortable = (bool)($definition['sortable'] ?? $capability->sortable);
         $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
+        $capability->useAsLabel = (string)($definition['useAsLabel'] ?? $capability->useAsLabel);
         return $capability;
     }
 
@@ -123,6 +125,16 @@ final class TableDefinitionCapability
     public function getSortField(): string
     {
         return $this->sortField;
+    }
+
+    public function hasUseAsLabel(): bool
+    {
+        return $this->useAsLabel !== '';
+    }
+
+    public function getUseAsLabel(): string
+    {
+        return $this->useAsLabel;
     }
 
     public function getRestrictionsTca(): array
