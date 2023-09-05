@@ -392,22 +392,25 @@ class TcaGenerator
 
     protected function resolveLabelField(TableDefinition $tableDefinition): string
     {
-        $capability = $tableDefinition->getCapability();
-        $labelFallback = '';
-        if ($capability->hasUseAsLabel()) {
-            $labelFallback = $capability->getUseAsLabel();
-        } else {
-            // If there is no user-defined label field, use first field as label.
+        $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
+        $labelField = null;
+        if ($labelCapability->hasUseAsLabel()) {
+            $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
+            $labelField = $tableDefinition->getTcaColumnsDefinition()->getField($labelFieldIdentifier);
+        }
+        // If there is no user-defined label field, use first field as label.
+        if (!$labelField?->getFieldType()->isSearchable()) {
             foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
                 // Ignore fields for label, which can't be searched properly.
                 if (!$columnFieldDefinition->getFieldType()->isSearchable()) {
                     continue;
                 }
-                $labelFallback = $columnFieldDefinition->getUniqueIdentifier();
+                $labelField = $columnFieldDefinition;
                 break;
             }
         }
-        return $labelFallback;
+
+        return $labelField->getUniqueIdentifier();
     }
 
     protected function getContentElementStandardShowItem(array $showItems): string
@@ -519,6 +522,11 @@ class TcaGenerator
             'enablecolumns' => $capability->getRestrictionsTca(),
         ];
 
+        $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
+        if ($labelCapability->hasAdditionalLabelFields()) {
+            $ctrl['label_alt'] = $labelCapability->getAdditionalLabelFieldsAsString();
+            $ctrl['label_alt_force'] = true;
+        }
         if ($tableDefinition->getTypeField() !== null) {
             $ctrl['type'] = $tableDefinition->getTypeField();
         }

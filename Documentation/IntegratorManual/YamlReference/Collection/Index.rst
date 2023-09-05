@@ -17,30 +17,10 @@ SQL overrides via `alternativeSql` allowed: no.
 First-level options
 ===================
 
+All options, which can be defined for :ref:`Record Types <yaml_reference_record_type>`
+can be used here as well.
+
 .. rst-class:: dl-parameters
-
-useAsLabel
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
-
-   Defines which field of the collection item should be used as the title of the
-   inline element. If not defined, the first child field will be used as the
-   label.
-
-   Example:
-
-   .. code-block:: yaml
-
-      identifier: collection
-      type: Collection
-      useAsLabel: text
-      fields:
-        - identifier: image
-          type: File
-        - identifier: text
-          type: Text
 
 fields
    :sep:`|` :aspect:`Required:` true

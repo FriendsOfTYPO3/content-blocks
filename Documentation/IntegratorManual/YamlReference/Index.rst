@@ -34,6 +34,17 @@ name
    unique and must have at least 3 characters. Content Blocks which are placed in the `ContentBlocks/ContentTypes` folder at any of
    your extensions will be determined and loaded automatically.
 
+prefixFields
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` true
+   :sep:`|`
+
+   By default, all fields are prefixed with the name of the content block to
+   prevent collisions. In order to better reuse fields between content blocks,
+   it can be useful to deactivate this option. Read more about
+   :ref:`reusing fields here <cb_reuse_existing_fields>`.
+
 priority
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` integer
@@ -44,6 +55,20 @@ priority
    order. The default loading order is alphabetically. Higher priorities will be
    loaded before lower ones. This affects e.g. the order in the "New Content
    Element Wizard".
+
+typeName
+   :sep:`|` :aspect:`Required:` false (Page Type: true)
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` 1 or automatically generated
+   :sep:`|`
+
+   The identifier of the new content type. It is automatically generated from
+   the name, if not defined manually. This is required for Page Types.
+
+Record Type only
+================
+
+.. _yaml_reference_record_type:
 
 table
    :sep:`|` :aspect:`Required:` false
@@ -59,31 +84,24 @@ table
 typeField
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` CType
    :sep:`|`
 
-   The field to use as the type switch. Should be a type Select field. Useful in
-   combination with another :yaml:`table`.
+   The field identifier to use as the type switch. This field will be
+   automatically generated and prepended as the very first field. The item list
+   is filled automatically as well. There is no need to define this field
+   manually in your fields list. Useful, if you want to define multiple types
+   for a single table (single table inheritance).
 
-typeName
+useAsLabel
    :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` 1 or automatically generated
+   :sep:`|` :aspect:`Type:` string|array
+   :sep:`|` :aspect:`Default:` ''
    :sep:`|`
 
-   The identifier of the new content type. It is automatically generated from
-   the name, if not defined manually.
-
-prefixFields
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` true
-   :sep:`|`
-
-   By default, all fields are prefixed with the name of the content block to
-   prevent collisions. In order to better reuse fields between content blocks,
-   it can be useful to deactivate this option. Read more about
-   :ref:`reusing fields here <cb_reuse_existing_fields>`.
+   Defines which field should be used as the title of the record. If not
+   defined, the first valid child field will be used as the label. It is
+   possible to define an array of fields, which will be displayed
+   comma-separated in the backend.
 
 aggregateRoot
    :sep:`|` :aspect:`Required:` false
@@ -252,6 +270,8 @@ appendLabelAtCopy
 
 Field definitions
 =================
+
+Field options, which can be defined inside the :yaml:`fields` array.
 
 Common field properties
 -----------------------

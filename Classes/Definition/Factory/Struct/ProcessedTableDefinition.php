@@ -26,7 +26,7 @@ final class ProcessedTableDefinition
 {
     public array $palettes = [];
     public array $fields = [];
-    public string $useAsLabel = '';
+    public string|array $useAsLabel = '';
     public ?string $typeField = null;
     public bool $isRootTable = true;
     public ?bool $isAggregateRoot = null;

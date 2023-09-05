@@ -1061,6 +1061,10 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
+                        'useAsLabel' => [
+                            'text',
+                            'text2',
+                        ],
                         'languageAware' => false,
                         'workspaceAware' => false,
                         'restriction' => [
@@ -1089,6 +1093,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'identifier' => 'text',
                                 'type' => 'Text',
                             ],
+                            [
+                                'identifier' => 'text2',
+                                'type' => 'Text',
+                            ],
                         ],
                     ],
                 ],
@@ -1098,6 +1106,8 @@ final class TcaGeneratorTest extends UnitTestCase
                     'ctrl' => [
                         'title' => 'foobar',
                         'label' => 't3ce_example_text',
+                        'label_alt' => 't3ce_example_text2',
+                        'label_alt_force' => true,
                         'hideTable' => false,
                         'enablecolumns' => [
                             'endtime' => 'endtime',
@@ -1117,11 +1127,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'prependAtCopy' => 'banana',
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
-                        'searchFields' => 't3ce_example_text,t3ce_example_internal_description',
+                        'searchFields' => 't3ce_example_text,t3ce_example_text2,t3ce_example_internal_description',
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => 't3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,t3ce_example_internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
+                            'showitem' => 't3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,t3ce_example_internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1174,6 +1184,14 @@ final class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        't3ce_example_text2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text2.description',
                             'config' => [
                                 'type' => 'input',
                             ],
