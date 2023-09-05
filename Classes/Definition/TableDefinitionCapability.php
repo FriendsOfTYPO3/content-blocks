@@ -40,6 +40,8 @@ final class TableDefinitionCapability
     private string $useAsLabel = '';
     private bool $ignoreWebMountRestriction = false;
     private bool $ignorePageTypeRestriction = false;
+    private bool $readOnly = false;
+    private bool $adminOnly = false;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -61,6 +63,8 @@ final class TableDefinitionCapability
         $capability->internalDescription = (bool)($definition['internalDescription'] ?? $capability->internalDescription);
         $capability->ignoreWebMountRestriction = (bool)($definition['security']['ignoreWebMountRestriction'] ?? $capability->ignoreWebMountRestriction);
         $capability->ignorePageTypeRestriction = (bool)($definition['security']['ignorePageTypeRestriction'] ?? $capability->ignorePageTypeRestriction);
+        $capability->readOnly = (bool)($definition['readOnly'] ?? $capability->readOnly);
+        $capability->adminOnly = (bool)($definition['adminOnly'] ?? $capability->adminOnly);
         $capability->rootLevelCapability = RootLevelCapability::createFromArray($definition);
         return $capability;
     }
@@ -163,6 +167,16 @@ final class TableDefinitionCapability
     public function isIgnorePageTypeRestriction(): bool
     {
         return $this->ignorePageTypeRestriction;
+    }
+
+    public function isReadOnly(): bool
+    {
+        return $this->readOnly;
+    }
+
+    public function isAdminOnly(): bool
+    {
+        return $this->adminOnly;
     }
 
     public function getRestrictionsTca(): array

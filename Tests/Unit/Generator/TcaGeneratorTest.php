@@ -1080,6 +1080,8 @@ final class TcaGeneratorTest extends UnitTestCase
                             'ignoreRootLevelRestriction' => true,
                             'ignorePageTypeRestriction' => true,
                         ],
+                        'adminOnly' => true,
+                        'readOnly' => true,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1108,6 +1110,8 @@ final class TcaGeneratorTest extends UnitTestCase
                             'ignoreRootLevelRestriction' => true,
                             'ignorePageTypeRestriction' => true,
                         ],
+                        'adminOnly' => true,
+                        'readOnly' => true,
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
                         'searchFields' => 't3ce_example_text,t3ce_example_internal_description',
