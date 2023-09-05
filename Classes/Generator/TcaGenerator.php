@@ -519,13 +519,16 @@ class TcaGenerator
             'title' => $tableDefinition->getTable(),
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
-            'enablecolumns' => $capability->getRestrictionsTca(),
+            'enablecolumns' => $capability->buildRestrictionsTca(),
         ];
 
         $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
         if ($labelCapability->hasAdditionalLabelFields()) {
             $ctrl['label_alt'] = $labelCapability->getAdditionalLabelFieldsAsString();
             $ctrl['label_alt_force'] = true;
+        }
+        if ($labelCapability->hasFallbackLabelFields()) {
+            $ctrl['label_alt'] = $labelCapability->getFallbackLabelFieldsAsString();
         }
         if ($tableDefinition->getTypeField() !== null) {
             $ctrl['type'] = $tableDefinition->getTypeField();
@@ -607,7 +610,7 @@ class TcaGenerator
                 'showitem' => 'hidden',
             ];
         }
-        $access = $capability->getAccessShowItemTca();
+        $access = $capability->buildAccessShowItemTca();
         if ($access !== '') {
             $palettes['access'] = [
                 'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
