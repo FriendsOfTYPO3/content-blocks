@@ -23,6 +23,7 @@ final class LabelCapability
      * @var string|string[]
      */
     private string|array $useAsLabel = '';
+    private array $fallbackLabelFields = [];
 
     public static function createFromArray(array $definition): LabelCapability
     {
@@ -36,6 +37,7 @@ final class LabelCapability
         ) {
             $self->useAsLabel = $useAsLabel;
         }
+        $self->fallbackLabelFields = $definition['fallbackLabelFields'] ?? $self->fallbackLabelFields;
         return $self;
     }
 
@@ -74,5 +76,27 @@ final class LabelCapability
         $additionalLabelFields = array_slice($this->useAsLabel, 1);
         $additionalLabelFieldsAsString = implode(',', $additionalLabelFields);
         return $additionalLabelFieldsAsString;
+    }
+
+    public function hasFallbackLabelFields(): bool
+    {
+        if ($this->hasAdditionalLabelFields()) {
+            return false;
+        }
+        return $this->fallbackLabelFields !== [];
+    }
+
+    public function getFallbackLabelFieldsAsString(): string
+    {
+        if (!$this->hasFallbackLabelFields()) {
+            return '';
+        }
+        $fallbackLabelFieldsAsString = implode(',', $this->fallbackLabelFields);
+        return $fallbackLabelFieldsAsString;
+    }
+
+    public function getFallbackLabelFields(): array
+    {
+        return $this->fallbackLabelFields;
     }
 }

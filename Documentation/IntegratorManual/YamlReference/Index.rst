@@ -103,6 +103,16 @@ useAsLabel
    possible to define an array of fields, which will be displayed
    comma-separated in the backend.
 
+fallbackLabelFields
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` array
+   :sep:`|` :aspect:`Default:` []
+   :sep:`|`
+
+   Defines which fields should be used as fallback, if :yaml:`useAsLabel` is not
+   filled. Can only be used, if there is only one :yaml:`useAsLabel` field
+   defined.
+
 aggregateRoot
    :sep:`|` :aspect:`Required:` false
    :sep:`|` :aspect:`Type:` boolean

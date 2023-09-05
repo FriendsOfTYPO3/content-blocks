@@ -137,6 +137,7 @@ class TableDefinitionCollectionFactory
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
                 $this->prefixSortFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $this->prefixUseAsLabelIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
+                $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $fieldArray = [
                     'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
@@ -375,6 +376,25 @@ class TableDefinitionCollectionFactory
                     $result->tableDefinition->raw['useAsLabel'] = [];
                 }
                 $result->tableDefinition->raw['useAsLabel'][$i] = $uniqueIdentifier;
+            }
+        }
+    }
+
+    private function prefixFallbackLabelFieldsIfNecessary(
+        ProcessingInput $input,
+        ProcessedFieldsResult $result,
+        mixed $identifier,
+        string $uniqueIdentifier
+    ): void {
+        $labelCapability = LabelCapability::createFromArray($input->yaml);
+        if (!$labelCapability->hasFallbackLabelFields()) {
+            return;
+        }
+        $fallbackLabelFields = $labelCapability->getFallbackLabelFields();
+        for ($i = 0; $i < count($fallbackLabelFields); $i++) {
+            $currentLabelField = $fallbackLabelFields[$i];
+            if ($currentLabelField === $identifier) {
+                $result->tableDefinition->raw['fallbackLabelFields'][$i] = $uniqueIdentifier;
             }
         }
     }

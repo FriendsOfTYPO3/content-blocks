@@ -197,7 +197,7 @@ final class TableDefinitionCapability
         return $this->appendLabelAtCopy;
     }
 
-    public function getRestrictionsTca(): array
+    public function buildRestrictionsTca(): array
     {
         $restrictions = [];
         if ($this->hasDisabledRestriction()) {
@@ -215,7 +215,7 @@ final class TableDefinitionCapability
         return $restrictions;
     }
 
-    public function getAccessShowItemTca(): string
+    public function buildAccessShowItemTca(): string
     {
         if (!$this->hasAccessPalette()) {
             return '';
@@ -236,6 +236,9 @@ final class TableDefinitionCapability
         }
         if ($this->isEditLockingEnabled()) {
             $access[] = 'editlock';
+        }
+        if ($access[count($access) - 1] === '--linebreak--') {
+            array_pop($access);
         }
         $accessTcaString = implode(',', $access);
         return $accessTcaString;

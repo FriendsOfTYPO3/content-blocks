@@ -133,6 +133,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'useAsLabel' => 'text2',
+                                'fallbackLabelFields' => [
+                                    'text',
+                                ],
                                 'fields' => [
                                     [
                                         'identifier' => 'text',
@@ -472,6 +475,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'ctrl' => [
                         'title' => 't3ce_example_collection',
                         'label' => 'text2',
+                        'label_alt' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
@@ -1137,7 +1141,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'palettes' => [
                         'access' => [
                             'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                            'showitem' => 'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--',
+                            'showitem' => 'endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel',
                         ],
                     ],
                     'columns' => [
@@ -1204,6 +1208,144 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'text',
                                 'rows' => 5,
                                 'cols' => 30,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'Content Block creating a new custom root table with TYPO3 specific features disabled / enabled 2' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'path' => 'EXT:foo/ContentBlocks/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'useAsLabel' => [
+                            'text',
+                        ],
+                        'fallbackLabelFields' => [
+                            'text2',
+                        ],
+                        'languageAware' => false,
+                        'workspaceAware' => false,
+                        'restriction' => [
+                            'endTime' => false,
+                            'editLocking' => false,
+                        ],
+                        'editLocking' => false,
+                        'softDelete' => false,
+                        'sortable' => false,
+                        'trackCreationDate' => false,
+                        'trackUpdateDate' => false,
+                        'trackAncestorReference' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'text2',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'foobar' => [
+                    'ctrl' => [
+                        'title' => 'foobar',
+                        'label' => 't3ce_example_text',
+                        'label_alt' => 't3ce_example_text2',
+                        'hideTable' => false,
+                        'enablecolumns' => [
+                            'starttime' => 'starttime',
+                            'disabled' => 'hidden',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'typeicon_classes' => [
+                            'default' => 'content-blocks',
+                        ],
+                        'searchFields' => 't3ce_example_text,t3ce_example_text2',
+                    ],
+                    'types' => [
+                        '1' => [
+                            'showitem' => 't3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                        ],
+                    ],
+                    'palettes' => [
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel',
+                        ],
+                    ],
+                    'columns' => [
+                        'fe_group' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectMultipleSideBySide',
+                                'size' => 5,
+                                'maxitems' => 20,
+                                'items' => [
+                                    [
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                                        'value' => -1,
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                                        'value' => -2,
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                                        'value' => '--div--',
+                                    ],
+                                ],
+                                'exclusiveKeys' => '-1,-2',
+                                'foreign_table' => 'fe_groups',
+                            ],
+                        ],
+                        'starttime' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+                            'config' => [
+                                'type' => 'datetime',
+                                'default' => 0,
+                            ],
+                            'l10n_mode' => 'exclude',
+                            'l10n_display' => 'defaultAsReadonly',
+                        ],
+                        'hidden' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
+                            'config' => [
+                                'type' => 'check',
+                                'renderType' => 'checkboxToggle',
+                            ],
+                        ],
+                        't3ce_example_text' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        't3ce_example_text2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text2.description',
+                            'config' => [
+                                'type' => 'input',
                             ],
                         ],
                     ],
