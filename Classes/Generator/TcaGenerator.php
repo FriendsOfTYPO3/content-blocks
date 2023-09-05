@@ -21,6 +21,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
@@ -554,6 +555,14 @@ class TcaGenerator
                     'type' => 'passthrough',
                 ],
             ];
+        }
+
+        $rootLevelCapability = $capability->getRootLevelCapability();
+        if ($rootLevelCapability->getRootLevelType() !== RootLevelType::ONLY_ON_PAGES) {
+            $ctrl['rootLevel'] = $rootLevelCapability->getRootLevelType()->getTcaValue();
+        }
+        if ($rootLevelCapability->shallIgnoreRootLevelRestriction()) {
+            $ctrl['security']['ignoreRootLevelRestriction'] = true;
         }
 
         if ($capability->isLanguageAware()) {

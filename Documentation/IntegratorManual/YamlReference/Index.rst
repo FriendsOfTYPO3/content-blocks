@@ -197,6 +197,23 @@ internalDescription
    corresponds with the TCA ctrl option :php:`descriptionColumn`. This field is
    supposed to be used only for the backend.
 
+rootLevelType
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+   :sep:`|` :aspect:`Default:` onlyOnPages
+
+   Restricts the place, where the record can be created. Possible values are
+   :yaml:`onlyOnPages` (default), :yaml:`onlyOnRootLevel` and :yaml:`both`. This
+   corresponds to the TCA ctrl option :php:`rootLevel`.
+
+security
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` array
+
+   :yaml:`ignoreRootLevelRestriction`: default false, Allows non-admin users to
+   access records that are on the root-level (page ID 0), thus bypassing this
+   usual restriction.
+
 Field definitions
 =================
 
