@@ -509,6 +509,8 @@ class TcaGenerator
     protected function getCollectionTableStandardTca(TableDefinition $tableDefinition): array
     {
         $capability = $tableDefinition->getCapability();
+        $palettes = [];
+        $columns = [];
         $ctrl = [
             'title' => $tableDefinition->getTable(),
             'label' => $this->resolveLabelField($tableDefinition),
@@ -547,6 +549,11 @@ class TcaGenerator
             $ctrl['default_sortby'] = $capability->getSortField();
         } elseif ($capability->isSortable()) {
             $ctrl['sortby'] = 'sorting';
+            $columns['sorting'] = [
+                'config' => [
+                    'type' => 'passthrough',
+                ],
+            ];
         }
 
         if ($capability->isLanguageAware()) {
@@ -558,7 +565,6 @@ class TcaGenerator
             ];
         }
 
-        $palettes = [];
         if ($capability->isLanguageAware()) {
             $palettes['language'] = [
                 'showitem' => 'sys_language_uid,l10n_parent',
@@ -578,7 +584,6 @@ class TcaGenerator
             ];
         }
 
-        $columns = [];
         if ($capability->isEditLockingEnabled()) {
             $columns['editlock'] = [
                 'exclude' => true,
@@ -685,11 +690,6 @@ class TcaGenerator
                 ],
             ];
         }
-        $columns['sorting'] = [
-            'config' => [
-                'type' => 'passthrough',
-            ],
-        ];
 
         if (!$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot()) {
             $columns['foreign_table_parent_uid'] = [
