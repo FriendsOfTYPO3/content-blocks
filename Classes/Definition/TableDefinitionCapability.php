@@ -23,6 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 final class TableDefinitionCapability
 {
     private RootLevelCapability $rootLevelCapability;
+    private LabelCapability $labelCapability;
     private bool $languageAware = true;
     private bool $workspaceAware = true;
     private bool $disabledRestriction = true;
@@ -37,7 +38,6 @@ final class TableDefinitionCapability
     private bool $trackAncestorReference = true;
     private bool $internalDescription = false;
     private string $sortField = '';
-    private string $useAsLabel = '';
     private bool $ignoreWebMountRestriction = false;
     private bool $ignorePageTypeRestriction = false;
     private bool $readOnly = false;
@@ -61,7 +61,6 @@ final class TableDefinitionCapability
         $capability->trackUpdateDate = (bool)($definition['trackUpdateDate'] ?? $capability->trackUpdateDate);
         $capability->sortable = (bool)($definition['sortable'] ?? $capability->sortable);
         $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
-        $capability->useAsLabel = (string)($definition['useAsLabel'] ?? $capability->useAsLabel);
         $capability->internalDescription = (bool)($definition['internalDescription'] ?? $capability->internalDescription);
         $capability->ignoreWebMountRestriction = (bool)($definition['security']['ignoreWebMountRestriction'] ?? $capability->ignoreWebMountRestriction);
         $capability->ignorePageTypeRestriction = (bool)($definition['security']['ignorePageTypeRestriction'] ?? $capability->ignorePageTypeRestriction);
@@ -70,6 +69,8 @@ final class TableDefinitionCapability
         $capability->hideAtCopy = (bool)($definition['hideAtCopy'] ?? $capability->hideAtCopy);
         $capability->appendLabelAtCopy = (string)($definition['appendLabelAtCopy'] ?? $capability->appendLabelAtCopy);
         $capability->rootLevelCapability = RootLevelCapability::createFromArray($definition);
+        $capability->labelCapability = LabelCapability::createFromArray($definition);
+
         return $capability;
     }
 
@@ -143,16 +144,6 @@ final class TableDefinitionCapability
         return $this->sortField;
     }
 
-    public function hasUseAsLabel(): bool
-    {
-        return $this->useAsLabel !== '';
-    }
-
-    public function getUseAsLabel(): string
-    {
-        return $this->useAsLabel;
-    }
-
     public function hasInternalDescription(): bool
     {
         return $this->internalDescription;
@@ -161,6 +152,11 @@ final class TableDefinitionCapability
     public function getRootLevelCapability(): RootLevelCapability
     {
         return $this->rootLevelCapability;
+    }
+
+    public function getLabelCapability(): LabelCapability
+    {
+        return $this->labelCapability;
     }
 
     public function isIgnoreWebMountRestriction(): bool

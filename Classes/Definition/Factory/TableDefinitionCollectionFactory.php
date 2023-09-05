@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedTableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessingInput;
+use TYPO3\CMS\ContentBlocks\Definition\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -134,11 +135,8 @@ class TableDefinitionCollectionFactory
 
                 $field['languagePath'] = clone $input->languagePath;
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
-                // Prefix sortField if necessary.
-                $sortField = (string)($input->yaml['sortField'] ?? null);
-                if ($sortField !== '' && $sortField === $field['identifier']) {
-                    $result->tableDefinition->raw['sortField'] = $uniqueIdentifier;
-                }
+                $this->prefixSortFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
+                $this->prefixUseAsLabelIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $fieldArray = [
                     'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
@@ -170,7 +168,6 @@ class TableDefinitionCollectionFactory
         $result->contentType->typeName = $input->getTypeName();
         $result->contentType->table = $input->table;
 
-        $result->tableDefinition->useAsLabel = $input->yaml['useAsLabel'] ?? '';
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
         $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
@@ -348,6 +345,40 @@ class TableDefinitionCollectionFactory
         return $result;
     }
 
+    public function prefixSortFieldIfNecessary(
+        ProcessingInput $input,
+        ProcessedFieldsResult $result,
+        string $identifier,
+        string $uniqueIdentifier,
+    ): void {
+        $sortField = (string)($input->yaml['sortField'] ?? null);
+        if ($sortField !== '' && $sortField === $identifier) {
+            $result->tableDefinition->raw['sortField'] = $uniqueIdentifier;
+        }
+    }
+
+    private function prefixUseAsLabelIfNecessary(
+        ProcessingInput $input,
+        ProcessedFieldsResult $result,
+        string $identifier,
+        string $uniqueIdentifier,
+    ): void {
+        $labelCapability = LabelCapability::createFromArray($input->yaml);
+        if (!$labelCapability->hasUseAsLabel()) {
+            return;
+        }
+        $labelFields = $labelCapability->getLabelFieldsAsArray();
+        for ($i = 0; $i < count($labelFields); $i++) {
+            $currentLabelField = $labelFields[$i];
+            if ($currentLabelField === $identifier) {
+                if (is_string($result->tableDefinition->raw['useAsLabel'])) {
+                    $result->tableDefinition->raw['useAsLabel'] = [];
+                }
+                $result->tableDefinition->raw['useAsLabel'][$i] = $uniqueIdentifier;
+            }
+        }
+    }
+
     private function isPrefixEnabledForField(LoadedContentBlock $contentBlock, array $fieldConfiguration): bool
     {
         if (array_key_exists('useExistingField', $fieldConfiguration)) {
@@ -387,7 +418,6 @@ class TableDefinitionCollectionFactory
     {
         $tableDefinition['palettes'] = $processedTableDefinition->palettes;
         $tableDefinition['fields'] = $processedTableDefinition->fields;
-        $tableDefinition['useAsLabel'] = $processedTableDefinition->useAsLabel;
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
         $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
         $tableDefinition['raw'] = $processedTableDefinition->raw;
