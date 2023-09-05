@@ -567,6 +567,12 @@ class TcaGenerator
         if ($capability->isIgnorePageTypeRestriction()) {
             $ctrl['security']['ignorePageTypeRestriction'] = true;
         }
+        if ($capability->isReadOnly()) {
+            $ctrl['readOnly'] = true;
+        }
+        if ($capability->isAdminOnly()) {
+            $ctrl['adminOnly'] = true;
+        }
         if ($capability->isLanguageAware()) {
             $ctrl += [
                 'transOrigPointerField' => 'l10n_parent',

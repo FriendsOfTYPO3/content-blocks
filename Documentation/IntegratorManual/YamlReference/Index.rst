@@ -221,6 +221,20 @@ security
    :yaml:`ignorePageTypeRestriction`: default false, Allows to use the record on
    any kind of page type.
 
+readOnly
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` false
+
+   If enabled, the record can not be edited in the TYPO3 backend anymore.
+
+adminOnly
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` false
+
+   If enabled, only admins can edit the record.
+
 Field definitions
 =================
 
