@@ -187,6 +187,16 @@ sortField
    the :yaml:`sortable` option automatically. This corresponds to the TCA option
    :php:`default_sortby`.
 
+internalDescription
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` false
+
+   If enabled, this adds a new tab `Notes` with a description field. When filled
+   with text, a record information will be displayed in the editing view. This
+   corresponds with the TCA ctrl option :php:`descriptionColumn`. This field is
+   supposed to be used only for the backend.
+
 Field definitions
 =================
 

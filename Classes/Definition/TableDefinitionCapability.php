@@ -34,6 +34,7 @@ final class TableDefinitionCapability
     private bool $trackUpdateDate = true;
     private bool $sortable = true;
     private bool $trackAncestorReference = true;
+    private bool $internalDescription = false;
     private string $sortField = '';
     private string $useAsLabel = '';
 
@@ -54,6 +55,7 @@ final class TableDefinitionCapability
         $capability->sortable = (bool)($definition['sortable'] ?? $capability->sortable);
         $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
         $capability->useAsLabel = (string)($definition['useAsLabel'] ?? $capability->useAsLabel);
+        $capability->internalDescription = (bool)($definition['internalDescription'] ?? $capability->internalDescription);
         return $capability;
     }
 
@@ -135,6 +137,11 @@ final class TableDefinitionCapability
     public function getUseAsLabel(): string
     {
         return $this->useAsLabel;
+    }
+
+    public function hasInternalDescription(): bool
+    {
+        return $this->internalDescription;
     }
 
     public function getRestrictionsTca(): array
