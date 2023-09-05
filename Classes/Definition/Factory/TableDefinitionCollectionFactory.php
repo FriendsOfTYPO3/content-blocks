@@ -90,6 +90,12 @@ class TableDefinitionCollectionFactory
         ) {
             $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
         }
+        if (
+            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
+            && ($input->yaml['internalDescription'] ?? false)
+        ) {
+            $yamlFields = $this->appendInternalDescription($yamlFields);
+        }
         foreach ($yamlFields as $rootField) {
             $rootFieldType = $this->resolveType($rootField, $input->table);
             $fields = match ($rootFieldType) {
@@ -128,7 +134,11 @@ class TableDefinitionCollectionFactory
 
                 $field['languagePath'] = clone $input->languagePath;
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
-                $result->tableDefinition->raw['sortField'] = $this->resolveSortField($input, $field, $uniqueIdentifier);
+                // Prefix sortField if necessary.
+                $sortField = (string)($input->yaml['sortField'] ?? null);
+                if ($sortField !== '' && $sortField === $field['identifier']) {
+                    $result->tableDefinition->raw['sortField'] = $uniqueIdentifier;
+                }
                 $fieldArray = [
                     'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
@@ -180,6 +190,25 @@ class TableDefinitionCollectionFactory
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
             'items' => [],
         ]);
+        return $yamlFields;
+    }
+
+    private function appendInternalDescription(array $yamlFields): array
+    {
+        $tab = [
+            'identifier' => 'internal_description_tab',
+            'type' => 'Tab',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+        ];
+        $internalDescription = [
+            'identifier' => 'internal_description',
+            'type' => 'Textarea',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
+            'rows' => 5,
+            'cols' => 30,
+        ];
+        $yamlFields[] = $tab;
+        $yamlFields[] = $internalDescription;
         return $yamlFields;
     }
 
@@ -546,14 +575,5 @@ class TableDefinitionCollectionFactory
                 );
             }
         }
-    }
-
-    private function resolveSortField(ProcessingInput $input, mixed $field, string $uniqueIdentifier): string
-    {
-        $sortField = (string)($input->yaml['sortField'] ?? null);
-        if ($sortField !== '' && $sortField === $field['identifier']) {
-            return $uniqueIdentifier;
-        }
-        return $sortField;
     }
 }

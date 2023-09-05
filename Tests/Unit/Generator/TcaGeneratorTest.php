@@ -1061,7 +1061,7 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
 
-        yield 'Content Block creating a new custom root table with TYPO3 specific features disabled' => [
+        yield 'Content Block creating a new custom root table with TYPO3 specific features disabled / enabled' => [
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
@@ -1082,6 +1082,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'trackUpdateDate' => false,
                         'trackAncestorReference' => false,
                         'sortField' => 'text',
+                        'internalDescription' => true,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1108,11 +1109,12 @@ final class TcaGeneratorTest extends UnitTestCase
                             'ignorePageTypeRestriction' => true,
                         ],
                         'default_sortby' => 't3ce_example_text',
-                        'searchFields' => 't3ce_example_text',
+                        'descriptionColumn' => 'internal_description',
+                        'searchFields' => 't3ce_example_text,t3ce_example_internal_description',
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => 't3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
+                            'showitem' => 't3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,t3ce_example_internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1172,6 +1174,16 @@ final class TcaGeneratorTest extends UnitTestCase
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
                             'config' => [
                                 'type' => 'input',
+                            ],
+                        ],
+                        't3ce_example_internal_description' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.description',
+                            'config' => [
+                                'type' => 'text',
+                                'rows' => 5,
+                                'cols' => 30,
                             ],
                         ],
                     ],

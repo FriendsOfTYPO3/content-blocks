@@ -540,6 +540,9 @@ class TcaGenerator
         if ($capability->isWorkspaceAware()) {
             $ctrl['versioningWS'] = true;
         }
+        if ($capability->hasInternalDescription()) {
+            $ctrl['descriptionColumn'] = 'internal_description';
+        }
         if ($capability->hasSortField()) {
             $ctrl['default_sortby'] = $capability->getSortField();
         } elseif ($capability->isSortable()) {
