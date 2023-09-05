@@ -1082,6 +1082,8 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'adminOnly' => true,
                         'readOnly' => true,
+                        'hideAtCopy' => true,
+                        'appendLabelAtCopy' => 'banana',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1112,6 +1114,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'adminOnly' => true,
                         'readOnly' => true,
+                        'prependAtCopy' => 'banana',
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
                         'searchFields' => 't3ce_example_text,t3ce_example_internal_description',

@@ -235,6 +235,21 @@ adminOnly
 
    If enabled, only admins can edit the record.
 
+hideAtCopy
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` boolean
+   :sep:`|` :aspect:`Default:` false
+
+   If enabled, the record will be disabled, when copied. Only works, if
+   :yaml:`restriction.disabled` is set to :yaml:`true`.
+
+appendLabelAtCopy
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` string
+
+   If enabled, the label field :yaml:`useAsLabel` will be appended with this
+   string, when copied.
+
 Field definitions
 =================
 

@@ -573,6 +573,12 @@ class TcaGenerator
         if ($capability->isAdminOnly()) {
             $ctrl['adminOnly'] = true;
         }
+        if ($capability->shallBeHiddenAtCopy()) {
+            $ctrl['hideAtCopy'] = true;
+        }
+        if ($capability->hasAppendLabelAtCopy()) {
+            $ctrl['prependAtCopy'] = $capability->getAppendLabelAtCopy();
+        }
         if ($capability->isLanguageAware()) {
             $ctrl += [
                 'transOrigPointerField' => 'l10n_parent',

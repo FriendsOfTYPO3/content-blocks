@@ -42,6 +42,8 @@ final class TableDefinitionCapability
     private bool $ignorePageTypeRestriction = false;
     private bool $readOnly = false;
     private bool $adminOnly = false;
+    private bool $hideAtCopy = false;
+    private string $appendLabelAtCopy = '';
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -65,6 +67,8 @@ final class TableDefinitionCapability
         $capability->ignorePageTypeRestriction = (bool)($definition['security']['ignorePageTypeRestriction'] ?? $capability->ignorePageTypeRestriction);
         $capability->readOnly = (bool)($definition['readOnly'] ?? $capability->readOnly);
         $capability->adminOnly = (bool)($definition['adminOnly'] ?? $capability->adminOnly);
+        $capability->hideAtCopy = (bool)($definition['hideAtCopy'] ?? $capability->hideAtCopy);
+        $capability->appendLabelAtCopy = (string)($definition['appendLabelAtCopy'] ?? $capability->appendLabelAtCopy);
         $capability->rootLevelCapability = RootLevelCapability::createFromArray($definition);
         return $capability;
     }
@@ -177,6 +181,24 @@ final class TableDefinitionCapability
     public function isAdminOnly(): bool
     {
         return $this->adminOnly;
+    }
+
+    public function shallBeHiddenAtCopy(): bool
+    {
+        if (!$this->disabledRestriction) {
+            return false;
+        }
+        return $this->hideAtCopy;
+    }
+
+    public function hasAppendLabelAtCopy(): bool
+    {
+        return $this->appendLabelAtCopy !== '';
+    }
+
+    public function getAppendLabelAtCopy(): string
+    {
+        return $this->appendLabelAtCopy;
     }
 
     public function getRestrictionsTca(): array
