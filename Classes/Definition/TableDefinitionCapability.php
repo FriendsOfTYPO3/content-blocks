@@ -22,6 +22,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
  */
 final class TableDefinitionCapability
 {
+    private RootLevelCapability $rootLevelCapability;
     private bool $languageAware = true;
     private bool $workspaceAware = true;
     private bool $disabledRestriction = true;
@@ -56,6 +57,7 @@ final class TableDefinitionCapability
         $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
         $capability->useAsLabel = (string)($definition['useAsLabel'] ?? $capability->useAsLabel);
         $capability->internalDescription = (bool)($definition['internalDescription'] ?? $capability->internalDescription);
+        $capability->rootLevelCapability = RootLevelCapability::createFromArray($definition);
         return $capability;
     }
 
@@ -142,6 +144,11 @@ final class TableDefinitionCapability
     public function hasInternalDescription(): bool
     {
         return $this->internalDescription;
+    }
+
+    public function getRootLevelCapability(): RootLevelCapability
+    {
+        return $this->rootLevelCapability;
     }
 
     public function getRestrictionsTca(): array

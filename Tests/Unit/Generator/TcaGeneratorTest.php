@@ -1083,6 +1083,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'trackAncestorReference' => false,
                         'sortField' => 'text',
                         'internalDescription' => true,
+                        'rootLevelType' => 'onlyOnRootLevel',
+                        'security' => [
+                            'ignoreRootLevelRestriction' => true,
+                        ],
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1105,8 +1109,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'content-blocks',
                         ],
+                        'rootLevel' => 1,
                         'security' => [
                             'ignorePageTypeRestriction' => true,
+                            'ignoreRootLevelRestriction' => true,
                         ],
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
