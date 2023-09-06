@@ -120,6 +120,9 @@ class TcaGenerator
                 } else {
                     $tca = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column, $tca);
                 }
+                if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'])) {
+                    $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
+                }
             }
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $tca = $this->processTypeDefinition($typeDefinition, $tableDefinition, $tca);

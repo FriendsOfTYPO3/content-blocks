@@ -338,42 +338,49 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'columns' => [
                         't3ce_example_text' => [
+                            'label' => 'text',
                             'config' => [
                                 'type' => 'input',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_textarea' => [
+                            'label' => 'textarea',
                             'config' => [
                                 'type' => 'text',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_number' => [
+                            'label' => 'number',
                             'config' => [
                                 'type' => 'number',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_email' => [
+                            'label' => 'email',
                             'config' => [
                                 'type' => 'email',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_check' => [
+                            'label' => 'check',
                             'config' => [
                                 'type' => 'check',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_color' => [
+                            'label' => 'color',
                             'config' => [
                                 'type' => 'color',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_file' => [
+                            'label' => 'file',
                             'config' => [
                                 'type' => 'file',
                                 'foreign_table' => 'sys_file_reference',
@@ -389,7 +396,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_category' => [
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.categories',
+                            'label' => 'category',
                             'config' => [
                                 'type' => 'category',
                                 'foreign_table' => 'sys_category',
@@ -408,36 +415,42 @@ final class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_example_datetime' => [
+                            'label' => 'datetime',
                             'config' => [
                                 'type' => 'datetime',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_select' => [
+                            'label' => 'select',
                             'config' => [
                                 'type' => 'select',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_link' => [
+                            'label' => 'link',
                             'config' => [
                                 'type' => 'link',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_radio' => [
+                            'label' => 'radio',
                             'config' => [
                                 'type' => 'radio',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_reference' => [
+                            'label' => 'reference',
                             'config' => [
                                 'type' => 'group',
                             ],
                             'exclude' => true,
                         ],
                         't3ce_example_collection' => [
+                            'label' => 'collection',
                             'config' => [
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection',
@@ -450,6 +463,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         't3ce_testblock_text' => [
+                            'label' => 'text',
                             'config' => [
                                 'type' => 'input',
                             ],
@@ -1579,12 +1593,14 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         'text' => [
+                            'label' => 'text',
                             'exclude' => true,
                             'config' => [
                                 'type' => 'input',
                             ],
                         ],
                         'text2' => [
+                            'label' => 'text2',
                             'exclude' => true,
                             'config' => [
                                 'type' => 'text',
@@ -1678,12 +1694,14 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'columns' => [
                         'text' => [
+                            'label' => 'text',
                             'config' => [
                                 'type' => 'text',
                             ],
                             'exclude' => true,
                         ],
                         'collection' => [
+                            'label' => 'collection',
                             'config' => [
                                 'type' => 'inline',
                                 'foreign_table' => 'collection',
@@ -1696,6 +1714,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                         ],
                         'color' => [
+                            'label' => 'color',
                             'config' => [
                                 'type' => 'color',
                             ],
@@ -2020,6 +2039,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'columns' => [
                         'flex' => [
+                            'label' => 'flex',
                             'config' => [
                                 'type' => 'flex',
                                 'ds_pointerField' => 'CType',
@@ -2434,6 +2454,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'columns' => [
                         'flex' => [
+                            'label' => 'flex',
                             'config' => [
                                 'type' => 'flex',
                                 'ds_pointerField' => 'CType',
