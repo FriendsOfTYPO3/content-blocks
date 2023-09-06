@@ -8,36 +8,25 @@ FAQ
 Overriding of Content Blocks
 ============================
 
-Because Content Block definition packages within the `ContentBlocks` folder of your extension
-are merely an abstraction layer, you can override existing Content Block configurations just
-like you would override a third-party-extension (e.g. by adding corresponding TCA/ TypoScript/
-TSconfig via a sitepackage extension).
-
-@todo TCA overrides won't work. New feature needed for that.
+@todo Right now overriding Content Blocks is not officially supported. There
+is one :ref:`Event <cb_extendTca>`, which you can use to override the generated
+TCA. This Event, however, might disappear in the future in favor of a real
+override API. Overriding TypoScript, TsConfig or UserTsConfig should work as
+well.
 
 Bundling
 ========
 
-One Content Block definition package represents exactly one Content Block. Bundles can be
-realized as distributions (e.g. like TYPO3 minimal distribution) or within
-a bundling extension.
-
-@todo rewrite this to account for the new sub-resource in extensions.
-
-Availability on platforms
-=========================
-
-The Content Blocks won't be available in the TYPO3 extension repository (TER) and on packagist.org.
-Of course it is technically possible to define a Content Block within a separate composer package
-and publish them (e.g. on packagist.org).
-
-@todo rewrite this to account for the new sub-resource in extensions.
+One or more Content Blocks can be hosted by one extension. You can provide one
+extension, which holds all Content Blocks you need or split them into multiple
+extensions.
 
 Can I use common translations from my e.g. sitepackage or other extensions?
 ===========================================================================
 
-Yes you can, but we do not recommend it. The reason is that when you reuse your Content Block
-in another project, you might not have the same translations available.
+Yes you can, but it is not recommend. The reason is that when you reuse your
+Content Block in another project, you might not have the same translations
+available.
 
 To use a translation e.g. from your sitepackage extension, you can do the following as usual:
 
@@ -49,11 +38,11 @@ To use a translation e.g. from your sitepackage extension, you can do the follow
 Can I use a partial from my e.g. sitepackage or other extensions?
 =================================================================
 
-Yes you can, but we do not recommend it. The reason is that when you reuse your Content Block
-in another project, you might not have the same partials available.
+Yes you can, but it is not recommend. The reason is that when you reuse your
+Content Block in another project, you might not have the same partials available.
 
-To use a partial e.g. from your sitepackage extension, you have to add the partials root path
-via TypoScript:
+To use a partial e.g. from your sitepackage extension, you have to add the
+partials root path via TypoScript:
 
 .. code-block:: typoscript
 
@@ -69,8 +58,8 @@ via TypoScript:
 Can I use a script from my e.g. sitepackage or other extensions?
 ================================================================
 
-Yes you can, but we do not recommend it. The reason is that when you reuse your Content Block
-in another project, you might not have the same scripts available.
+Yes you can, but it is not recommend. The reason is that when you reuse your
+Content Block in another project, you might not have the same scripts available.
 
 To use a script e.g. from your sitepackage extension, you can use the AssetCollector as usual:
 
