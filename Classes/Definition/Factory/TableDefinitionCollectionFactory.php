@@ -352,9 +352,38 @@ class TableDefinitionCollectionFactory
         string $identifier,
         string $uniqueIdentifier,
     ): void {
-        $sortField = (string)($input->yaml['sortField'] ?? null);
-        if ($sortField !== '' && $sortField === $identifier) {
-            $result->tableDefinition->raw['sortField'] = $uniqueIdentifier;
+        $sortField = $input->yaml['sortField'] ?? null;
+        if ($sortField === null) {
+            return;
+        }
+        $sortFieldArray = [];
+        if (is_string($sortField)) {
+            $sortFieldArray = [['identifier' => $sortField]];
+            if ($sortField !== $identifier) {
+                return;
+            }
+            $result->tableDefinition->raw['sortField'] = [];
+        }
+        if (is_array($sortField)) {
+            $sortFieldArray = $sortField;
+        }
+        if ($sortFieldArray === []) {
+            return;
+        }
+        for ($i = 0; $i < count($sortFieldArray); $i++) {
+            $sortFieldItem = $sortFieldArray[$i];
+            $sortFieldIdentifier = $sortFieldItem['identifier'];
+            $order = '';
+            if (array_key_exists('order', $sortFieldItem)) {
+                $order = strtolower((string)$sortFieldItem['order']);
+                if (!in_array($order, ['asc', 'desc'], true)) {
+                    throw new \InvalidArgumentException('order for sortField.order must be one of "asc" or "desc". "' . $order . '" provided.', 1694014891);
+                }
+            }
+            if ($sortFieldIdentifier !== '' && $sortFieldIdentifier === $identifier) {
+                $result->tableDefinition->raw['sortField'][$i]['identifier'] = $uniqueIdentifier;
+                $result->tableDefinition->raw['sortField'][$i]['order'] = strtoupper($order);
+            }
         }
     }
 

@@ -37,7 +37,8 @@ final class TableDefinitionCapability
     private bool $sortable = true;
     private bool $trackAncestorReference = true;
     private bool $internalDescription = false;
-    private string $sortField = '';
+    /** @var list<array{identifier: string, order: string}> */
+    private array $sortField = [];
     private bool $ignoreWebMountRestriction = false;
     private bool $ignorePageTypeRestriction = false;
     private bool $readOnly = false;
@@ -60,7 +61,7 @@ final class TableDefinitionCapability
         $capability->trackCreationDate = (bool)($definition['trackCreationDate'] ?? $capability->trackCreationDate);
         $capability->trackUpdateDate = (bool)($definition['trackUpdateDate'] ?? $capability->trackUpdateDate);
         $capability->sortable = (bool)($definition['sortable'] ?? $capability->sortable);
-        $capability->sortField = (string)($definition['sortField'] ?? $capability->sortField);
+        $capability->sortField = (array)($definition['sortField'] ?? $capability->sortField);
         $capability->internalDescription = (bool)($definition['internalDescription'] ?? $capability->internalDescription);
         $capability->ignoreWebMountRestriction = (bool)($definition['security']['ignoreWebMountRestriction'] ?? $capability->ignoreWebMountRestriction);
         $capability->ignorePageTypeRestriction = (bool)($definition['security']['ignorePageTypeRestriction'] ?? $capability->ignorePageTypeRestriction);
@@ -136,12 +137,26 @@ final class TableDefinitionCapability
 
     public function hasSortField(): bool
     {
-        return $this->sortField !== '';
+        return $this->sortField !== [];
     }
 
-    public function getSortField(): string
+    public function getSortField(): array
     {
         return $this->sortField;
+    }
+
+    public function getSortFieldAsString(): string
+    {
+        $parts = [];
+        foreach ($this->sortField as $sortField) {
+            $partString = $sortField['identifier'];
+            if ($sortField['order'] !== '') {
+                $partString .= ' ' . $sortField['order'];
+            }
+            $parts[] = $partString;
+        }
+        $sortFieldString = implode(',', $parts);
+        return $sortFieldString;
     }
 
     public function hasInternalDescription(): bool
