@@ -5,21 +5,19 @@
 Editing interface (YAML reference)
 ==================================
 
-The editing interface configuration contains mostly view-related properties of
-the fields (Exception is field :yaml:`alternativeSql`, which is database-related).
-Therefore, a descriptive language (as YAML) is sufficient and does not open up a
-possible security flaw.
+The heart of a content block is the `EditorInterface.yaml` file. Here you can
+find all possible configuration options. There are slight differences, whether
+you are dealing with Content Elements, Page Types or Record Types. In general
+Content Elements and Page Types are a special concept in TYPO3. The Core already
+defines the table names, the type field, etc. You just have to define a new
+type. This is done by providing the :yaml:`name` attribute, which will be
+converted to the type name. Page Types require an integer value for the type.
+Therefore you need to set it additionally with :yaml:`typeName`.
 
-A strict schema for field types is used to ease up the validation process for
-field definitions. To keep it slim and easy to read, the mapping to TCA uses
-strong defaults for field properties (e.g. default size for input is 30).
-
-The field types for the EditorInterface.yaml are heavily inspired by the
-`Symfony field types <https://symfony.com/doc/current/reference/forms/types.html>`__
-and is mapped to TCA. Because Symfony is quite mainstream, well-established
-and documented it makes it easier to understand those types for TYPO3 newcomers/
-beginners/ frontend-only devs than TYPO3's exclusive TCA, thus providing a kind
-of ubiquitous language.
+With TYPO3 you can also create custom Record Types. They require you to define
+a custom :yaml:`table`, and a :yaml:`useAsLabel` field. Per default all extra
+features like workspaces, language support, frontend restrictions, etc. are
+enabled. You can selectively disable each one of them, if you don't use them.
 
 General definitions
 ===================
@@ -64,6 +62,17 @@ typeName
 
    The identifier of the new content type. It is automatically generated from
    the name, if not defined manually. This is required for Page Types.
+
+fields
+   :sep:`|` :aspect:`Required:` false
+   :sep:`|` :aspect:`Type:` array
+   :sep:`|`
+
+   The main entry point for the field definitions. Fields defined in this array
+   are displayed in the backend exactly in the same order. You can create new
+   custom fields or reuse existing ones, which are defined via TCA. Learn
+   :ref:`here <yaml_reference_field_properties>` what is needed to define a
+   field.
 
 Record Type only
 ================
@@ -285,6 +294,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 Common field properties
 -----------------------
+.. _yaml_reference_field_properties:
+
 .. rst-class:: dl-parameters
 
 identifier
@@ -324,7 +335,8 @@ useExistingField
    :sep:`|`
 
    If set to true, the identifier is treated as an existing field from the Core
-   or your own defined field.
+   or your own defined field in TCA. To learn more about reusing fields read
+   :ref:`this article <cb_reuse_existing_fields>`.
 
 alternativeSql
    :sep:`|` :aspect:`Required:` false
