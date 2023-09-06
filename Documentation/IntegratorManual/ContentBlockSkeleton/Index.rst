@@ -12,9 +12,12 @@ This command creates a bare-minimum content block for your specified
 :bash:`content-type` (one of :bash:`content-element`,
 :bash:`page-type` or :bash:`record-type`). Required options are
 :bash:`vendor`, :bash:`name` and :bash:`extension`. Optionally, you can
-define a custom type identifier by providing the :bash:`type` option. This
-option is required and has to be an integer value, if you chose the
-:bash:`page-type` content type.
+define a custom type identifier by providing the :bash:`type` option.
+
+.. important::
+
+    The :bash:`type` option is required and has to be an integer value, if you
+    choose the :bash:`page-type` content type.
 
 This will give you an overview of all available options:
 

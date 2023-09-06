@@ -8,8 +8,10 @@ Installing a Content Block
 Installation
 ============
 
-Content Blocks can be placed inside the `ContentBlocks/ContentTypes` folder at
-any of your extension. The system determines and loads them automatically.
+Content Blocks can be placed inside the `ContentBlocks/ContentElements`,
+`ContentBlocks/PageTypes` or `ContentBlocks/RecordTypes` folder at
+any of your extension. The system determines the type and loads them
+automatically.
 
 Administration
 ==============
