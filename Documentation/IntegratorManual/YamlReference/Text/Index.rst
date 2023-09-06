@@ -12,68 +12,60 @@ It corresponds with the TCA :php:`type => 'input'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: default
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string
 
    Default value set if a new record is created.
 
-max
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: max
+
+   :Required: false
+   :Type: integer
 
    Value for the `maxlength` attribute of the `<input>` field. Javascript
    prevents adding more than the given number of characters.
 
-min
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '700'
-   :sep:`|`
+.. confval:: min
+
+   :Required: false
+   :Type: integer
 
    Value for the `minlength` attribute of the `<input>` field. Javascript
    prevents adding less than the given number of characters. Note: Empty values
    are still allowed. Use in combination with :yaml:`required` if this should be
    a non-empty value.
 
-placeholder
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: placeholder
+
+   :Required: false
+   :Type: string
 
    Placeholder text for the field.
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
 
-   If set, the field will become mandatory.
+   :Required: false
+   :Type: boolean
+   :Default: false
 
-size
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '20'
-   :sep:`|`
+   If set, the field becomes mandatory.
+
+.. confval:: size
+
+   :Required: false
+   :Type: integer
 
    Abstract value for the width of the `<input>` field.
 
-valuePicker
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: valuePicker
+
+   :Required: false
+   :Type: array
 
    Renders a select box with static values next to the input field. When
    a value is selected in the box, the value is transferred to the field. Keys:

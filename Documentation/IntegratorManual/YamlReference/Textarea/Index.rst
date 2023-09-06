@@ -12,16 +12,14 @@ It corresponds with the TCA :php:`type => 'text'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: enableRichtext
 
-enableRichtext
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+   :Required: false
+   :Type: boolean
+   :Default: false
 
    If set to true, the system renders a Rich Text Editor if that is enabled for
    the editor (default: yes), and if a suitable editor extension is loaded
@@ -30,27 +28,24 @@ enableRichtext
    If either of these requirements is not met, the system falls back to
    a `<textarea>` field.
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: default
+
+   :Required: false
+   :Type: string
 
    Default value set if a new record is created.
 
-placeholder
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: placeholder
+
+   :Required: false
+   :Type: string
 
    Placeholder text for the field.
 
-richtextConfiguration
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: richtextConfiguration
+
+   :Required: false
+   :Type: string
 
    The value is a key in :php:`$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']`
    array and specifies the YAML configuration source field used for that RTE
@@ -67,19 +62,19 @@ richtextConfiguration
    If this property is not specified for an RTE field, the system will fall back
    to the `default` configuration.
 
-rows
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` '5'
-   :sep:`|`
+.. confval:: rows
+
+   :Required: false
+   :Type: integer
+   :Default: 5
 
    Abstract value for the height of the `<textarea>` field. Max value is 20.
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
+
+   :Required: false
+   :Type: boolean
+   :Default: false
 
    If set, the field will become mandatory.
 

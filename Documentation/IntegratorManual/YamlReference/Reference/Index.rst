@@ -12,32 +12,28 @@ It corresponds with the TCA :php:`type => 'group'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: allowed
 
-allowed
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` string (table name, comma-separated)
-   :sep:`|`
+   :Required: true
+   :Type: string (table name, comma-separated)
 
    One or more tables, that should be referenced.
 
-maxitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: maxitems
+
+   :Required: false
+   :Type: integer
 
    Maximum number of items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
-minitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: minitems
+
+   :Required: false
+   :Type: integer
 
    Minimum number of items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.

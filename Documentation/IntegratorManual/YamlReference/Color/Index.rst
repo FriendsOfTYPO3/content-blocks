@@ -11,32 +11,29 @@ It corresponds with the TCA :php:`type => 'color'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: default
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string
+   :Default: ''
 
    Default value set if a new record is created.
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
+
+   :Required: false
+   :Type: boolean
+   :Default: false
 
    If set, the field will become mandatory.
 
-valuePicker
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: valuePicker
+
+   :Required: false
+   :Type: array
 
    Renders a select box with static values next to the input field. When
    a value is selected in the box, the value is transferred to the field. Keys:

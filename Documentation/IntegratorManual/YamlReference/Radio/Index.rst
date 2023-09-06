@@ -11,24 +11,21 @@ It corresponds with the TCA :php:`type => 'radio'`.
 
 SQL overrides via :yaml:`alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: default
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string
+   :Default: ''
 
    Default value set if a new record is created.
 
-items
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: items
+
+   :Required: true
+   :Type: array
 
    Contains the checkbox elements. Each item is an array with the first being
    the label in the select drop-down (LLL reference possible) and the second

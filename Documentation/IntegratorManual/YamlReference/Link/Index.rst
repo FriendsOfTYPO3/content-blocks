@@ -12,32 +12,30 @@ It corresponds with the TCA :php:`type => 'link'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: default
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string
+   :Default: ''
 
    Default value set if a new record is created.
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
 
-   If set, the field will become mandatory.
+   :Required: false
+   :Type: boolean
+   :Default: false
 
-allowedTypes
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` '[*]'
-   :sep:`|`
+   If set, the field becomes mandatory.
+
+.. confval:: allowedTypes
+
+   :Required: false
+   :Type: array
+   :Default: '[*]'
 
    Allow list of link types. Possible values are :yaml:`page`, :yaml:`url`,
    :yaml:`file`, :yaml:`folder`, :yaml:`email`, :yaml:`telephone` and

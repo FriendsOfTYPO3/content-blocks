@@ -13,34 +13,32 @@ It corresponds with the TCA :php:`type => 'email'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameter
+.. confval:: default
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string
+   :Default: ''
 
    Default value set if a new record is created.
 
-placeholder
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: placeholder
+
+   :Required: false
+   :Type: string
+   :Default: ''
 
    Placeholder text for the field.
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
 
-   If set, the field will become mandatory.
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   If set, the field becomes mandatory.
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-email>`.
 

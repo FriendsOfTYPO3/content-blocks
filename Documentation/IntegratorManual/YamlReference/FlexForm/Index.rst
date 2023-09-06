@@ -14,15 +14,13 @@ It corresponds with the TCA :php:`type => 'flex'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
-Top level settings
-==================
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: fields
 
-fields
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|`
+   :Required: true
+   :Type: array
 
    Similar to `Collections` you define the fields to be used inside the FlexForm
    definition.
@@ -47,9 +45,9 @@ Labels
 
 Labels for Sheets have the following convention:
 
-*  <FlexFormIdentifier>.sheets.<SheetIdentifier>.<label>
-*  <FlexFormIdentifier>.sheets.<SheetIdentifier>.<description>
-*  <FlexFormIdentifier>.sheets.<SheetIdentifier>.<linkTitle> (link title of the tabs)
+*  `<FlexFormIdentifier>.sheets.<SheetIdentifier>.label`
+*  `<FlexFormIdentifier>.sheets.<SheetIdentifier>.description`
+*  `<FlexFormIdentifier>.sheets.<SheetIdentifier>.linkTitle (link title of the tabs)`
 
 Sections
 ========
@@ -70,9 +68,9 @@ Labels
 
 Labels for Sections, Container and fields inside Container have the following convention:
 
-*  <FlexFormIdentifier>.sections.<sectionIdentifier>.<label>
-*  <FlexFormIdentifier>.sections.<sectionIdentifier>.container.<containerIdentifier><label>
-*  <FlexFormIdentifier>.sections.<sectionIdentifier>.container.<containerIdentifier><fieldIdentifier><label>
+*  `<FlexFormIdentifier>.sections.<sectionIdentifier>.label`
+*  `<FlexFormIdentifier>.sections.<sectionIdentifier>.container.<containerIdentifier>.label`
+*  `<FlexFormIdentifier>.sections.<sectionIdentifier>.container.<containerIdentifier><fieldIdentifier>.label`
 
 Examples
 ========

@@ -11,24 +11,22 @@ It corresponds with the TCA :php:`type => 'select'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: renderType
 
-renderType
-   :sep:`|` :aspect:`Required:` yes
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|`
+   :Required: yes
+   :Type: string
 
    Choose from one of the available select types: :yaml:`selectSingle`,
    :yaml:`selectCheckBox`, :yaml:`selectSingleBox`, :yaml:`selectTree` or
    :yaml:`selectMultipleSideBySide`.
 
-items
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|`
+.. confval:: renderType
+
+   :Required: yes
+   :Type: array
 
    Contains the elements for the selector box. Each item is an array with the first being
    the label in the select drop-down (LLL reference possible) and the second
@@ -46,29 +44,26 @@ items
         - label: 'The third'
           value: three
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: default
+
+   :Required: false
+   :Type: string
 
    Default value set if a new record is created.
 
-maxitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: maxitems
+
+   :Required: false
+   :Type: integer
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
    If `maxitems` ist set to greater than 1, multiselect is automatically enabled.
 
-minitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: minitems
+
+   :Required: false
+   :Type: integer
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
@@ -116,8 +111,6 @@ Select multiple:
 
 Advanced / use case
 -------------------
-
-.. code-block:: yaml
 
 Select single:
 
