@@ -12,42 +12,36 @@ It corresponds with the TCA :php:`type => 'folder'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Top level settings
-==================
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: recursive
 
-recursive
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|`
+   :Required: false
+   :Type: boolean
+   :Default: false
 
    Files in the selected folder will be resolved recursively.
 
-Properties
-==========
+.. confval:: elementBrowserEntryPoints
 
-elementBrowserEntryPoints
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|`
+   :Required: false
+   :Type: array
 
    Enables to set an entrypoint, from which to select folders by default.
 
-maxitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: maxitems
+
+   :Required: false
+   :Type: integer
 
    Maximum number of items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
-minitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: minitems
+
+   :Required: false
+   :Type: integer
 
    Minimum number of items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.

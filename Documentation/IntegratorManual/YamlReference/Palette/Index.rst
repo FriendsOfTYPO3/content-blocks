@@ -11,7 +11,11 @@ displayed next to each other rather than below each other.
 Labels.xlf
 ==========
 
-The naming convention is [<collection>.<collection2>...]palettes.<identifier>
+The naming convention is `palettes.<identifier>`
+
+If inside Collections, each Collection needs to be prepended:
+
+`<collection1>.<collection2>.palettes.<identifier>`
 
 Examples
 ========

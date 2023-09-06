@@ -12,43 +12,40 @@ It corresponds with the TCA `type => 'datetime'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: default
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string
+   :Default: ''
 
    Default value in `Y-m-d` format. Set if a new record is created.
    For example :yaml:`2023-01-01`.
 
-dbType
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: dbType
 
-   This option changes the date field to a native MySql :sql:`DATE`,
-   :sql:`DATETIME` or :sql:`TIME` field. Possible values are `datetime`, `date`
-   or `time`.
+   :Required: false
+   :Type: string
+   :Default: ''
 
-range
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   This option changes the date field to a native MySql :sql:`DATETIME`,
+   :sql:`DATE` or :sql:`TIME` field. Possible values are `datetime`, `date`
+   or `time` respectively.
+
+.. confval:: range
+
+   :Required: false
+   :Type: array
 
    An array which defines an integer range within which the value must be. Keys:
 
    lower (string in format `H:i Y-m-d`)
-      Defines the lower integer value. Default: 0.
+      Defines the min date.
 
    upper (string in format `H:i Y-m-d`)
-      Defines the upper integer value. Default: 100.
+      Defines the max date.
 
    It is allowed to specify only one of both of them.
 
@@ -60,13 +57,13 @@ range
         lower: '2020-01-01'
         upper: '2020-12-31'
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
 
-   If set, the field will become mandatory.
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   If set, the field becomes mandatory.
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-datetime>`.
 

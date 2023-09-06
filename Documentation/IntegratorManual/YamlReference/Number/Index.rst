@@ -11,42 +11,37 @@ It corresponds with the TCA :php:`type => 'number'`.
 
 SQL overrides via `alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: format
 
-format
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` 'int'
-   :sep:`|`
+   :Required: false
+   :Type: string
+   :Default: 'integer'
 
    Possible values: `integer` (default) or `decimal`.
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: default
+
+   :Required: false
+   :Type: integer
+   :Default: 0
 
    Default value set if a new record is created.
 
-range
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: range
 
-   An array which defines an integer range within which the value must be. Keys:
+   :Required: false
+   :Type: array
+
+   An array which defines an integer range within the value must be.
 
    lower (integer)
-      Defines the lower integer value. Default: 0.
+      Defines the lower integer value.
 
    upper (integer)
-      Defines the upper integer value. Default: none.
-
-   It is allowed to specify only one of both of them.
+      Defines the upper integer value.
 
    Example:
 
@@ -56,19 +51,18 @@ range
         lower: 10
         upper: 999
 
-required
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: required
 
-   If set, the field will become mandatory.
+   :Required: false
+   :Type: boolean
+   :Default: false
 
-slider
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   If set, the field becomes mandatory.
+
+.. confval:: slider
+
+   :Required: false
+   :Type: array
 
    Render a value slider next to the field. Available keys:
 

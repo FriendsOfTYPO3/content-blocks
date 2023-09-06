@@ -20,19 +20,14 @@ First-level options
 All options, which can be defined for :ref:`Record Types <yaml_reference_record_type>`
 can be used here as well.
 
-.. rst-class:: dl-parameters
+.. confval:: fields
 
-fields
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` []
-   :sep:`|`
+   :Required: true
+   :Type: array
 
    Configures a set of fields as repeatable child objects. All fields defined in
-   field types are possible as children. However, consider not to have
-   too many nested Collection fields to avoid performance issues. Content Blocks
-   are not intended to represent complex data structures. Consider to create
-   custom tables for these cases.
+   field types are possible as children. It is also possible to further nest
+   Collection fields.
 
    Example:
 
@@ -44,33 +39,31 @@ fields
         - identifier: image
           type: File
 
-Properties
-==========
+Settings
+========
 
-.. rst-class:: dl-parameters
+.. confval:: maxitems
 
-maxitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+   :Required: false
+   :Type: integer
+   :Default: 0
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
-minitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: minitems
+
+   :Required: false
+   :Type: integer
+   :Default: 0
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
 
-foreign_table
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string (table)
-   :sep:`|`
+.. confval:: foreign_table
+
+   :Required: false
+   :Type: string (table)
 
    It is possible to reference another table instead of creating a new one. This
    table can be defined by another Content Block, but can also be an existing

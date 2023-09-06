@@ -1,6 +1,5 @@
 .. include:: /Includes.rst.txt
 .. _field_type_checkbox:
-.. rst-class:: dl-parameters
 
 ========
 Checkbox
@@ -12,24 +11,23 @@ It corresponds with the TCA :php:`type => 'check'`.
 
 SQL overrides via :yaml:`alternativeSql` allowed: yes.
 
-Properties
-==========
+Settings
+========
 
-default
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer (bit value)
-   :sep:`|` :aspect:`Default:` 0
-   :sep:`|`
+.. confval:: default
+
+   :Required: false
+   :Type: integer (bit value)
+   :Default: 0
 
    The default value corresponds to a bit value. If you only have one checkbox
    having 1 or 0 will work to turn it on or off by default. For more than one
    checkbox you need to calculate the bit representation.
 
-items
-   :sep:`|` :aspect:`Required:` true
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: items
+
+   :Required: false
+   :Type: array
 
    Only necessary if more than one checkbox is desired. Contains the checkbox
    elements as separate array items. The label can also be defined as a
@@ -55,7 +53,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/checkbox
-    group: common
     fields:
       - identifier: checkbox
         type: Checkbox
@@ -68,7 +65,6 @@ Multiple checkboxes:
 .. code-block:: yaml
 
     name: example/checkbox
-    group: common
     fields:
       - identifier: checkbox
         type: Checkbox
@@ -84,7 +80,6 @@ Toggle checkbox:
 .. code-block:: yaml
 
     name: example/checkbox
-    group: common
     fields:
       - identifier: toggle
         type: Checkbox

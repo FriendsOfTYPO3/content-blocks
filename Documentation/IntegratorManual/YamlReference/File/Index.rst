@@ -11,43 +11,41 @@ It corresponds with the TCA :php:`type => 'file'`.
 
 SQL overrides via `alternativeSql` allowed: no.
 
-Properties
-==========
+Settings
+========
 
-enableImageManipulation
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` boolean
-   :sep:`|` :aspect:`Default:` 'false'
-   :sep:`|`
+.. confval:: enableImageManipulation
+
+   :Required: false
+   :Type: boolean
+   :Default: false
 
    If enabled, an additional image palette will be rendered, which consists of
    the fields `crop`, `title`, `alternative`, `link` and `description`.
 
-.. rst-class:: dl-parameters
+.. confval:: allowed
 
-allowed
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` string|array
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   :Required: false
+   :Type: string|array
+   :Default: ''
 
     Possible values: `common-image-types`, `common-media-types` or your custom
     list of file types.
 
-maxitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: maxitems
+
+   :Required: false
+   :Type: integer
+   :Default: 99999
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
-minitems
-   :sep:`|` :aspect:`Required:` false
-   :sep:`|` :aspect:`Type:` integer
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+.. confval:: minitems
+
+   :Required: false
+   :Type: integer
+   :Default: 0
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.

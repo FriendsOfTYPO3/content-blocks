@@ -12,7 +12,11 @@ allowed inside a `Palette`.
 Labels.xlf
 ==========
 
-The naming convention is [<collection>.<collection2>...]tabs.<identifier>
+The naming convention is `tabs.<identifier>`
+
+Inside Collection each identifier must be prepended:
+
+`<collection1>.<collection2>.tabs.<identifier>`
 
 Examples
 ========
