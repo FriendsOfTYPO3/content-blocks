@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
 .. _manual_use:
 
-================
+===============
 For Integrators
-================
+===============
 
 This part of the documentation refers to setup and configuration for usage of
 the Content Blocks.
