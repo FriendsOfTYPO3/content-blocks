@@ -73,7 +73,7 @@ Source/Language/Labels.xlf
 *  define your labels with the XLF links in the configuration file
 
 Labels for the editing interface, as well as frontend labels, are stored in the
-`Source/Language/Labels.xlf`(translated files will be e.g. `de.Labels.xlf`).
+`Source/Language/Labels.xlf` (translated files will be e.g. `de.Labels.xlf`).
 
 It is recommended to apply the :ref:`coding guidelines for labels <t3coreapi:xliff>`
 to your Content Blocks as well. E.g. for backend labels that would be:
