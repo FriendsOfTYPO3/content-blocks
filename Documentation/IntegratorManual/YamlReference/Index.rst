@@ -35,6 +35,10 @@ General definitions
    `vendor/package` notation in a traditional composer.json file. It must be
    unique and must have at least 3 characters.
 
+   .. code-block:: yaml
+
+       name: vendor/content-block-name
+
 .. confval:: prefixFields
 
    :Required: false
@@ -45,6 +49,10 @@ General definitions
    prevent collisions. In order to better reuse fields between content blocks,
    it can be useful to deactivate this option. Read more about
    :ref:`reusing fields here <cb_reuse_existing_fields>`.
+
+   .. code-block:: yaml
+
+       prefixFields: false
 
 .. confval:: priority
 
@@ -57,6 +65,11 @@ General definitions
    loaded before lower ones. This affects e.g. the order in the "New Content
    Element Wizard".
 
+   .. code-block:: yaml
+
+       # this content block will be displayed before others
+       priority: 10
+
 .. confval:: typeName
 
    :Required: false (Page Type: true)
@@ -65,6 +78,14 @@ General definitions
 
    The identifier of the new Content Type. It is automatically generated from
    the name, if not defined manually. This is required for Page Types.
+
+   .. code-block:: yaml
+
+       # Page Types require a numerical type name
+       typeName: 1337
+
+       # Record Types can have a freely chosen type name
+       typeName: type1
 
 .. confval:: fields
 
@@ -76,6 +97,13 @@ General definitions
    custom fields or reuse existing ones, which are defined via TCA. Learn
    :ref:`here <yaml_reference_field_properties>` what is needed to define a
    field.
+
+   .. code-block:: yaml
+
+       fields:
+           - identifier: my_field
+             type: Text
+
 
 Record Types / Collections
 ==========================
@@ -95,6 +123,10 @@ These options are only available for Content Blocks placed inside the
    Collections is determined by the :yaml:`identifier` and thus should not be
    defined there.
 
+   .. code-block:: yaml
+
+       table: my_custom_table_name
+
 .. confval:: typeField
 
    :Required: false
@@ -107,6 +139,10 @@ These options are only available for Content Blocks placed inside the
    for a single table (single table inheritance). Collections don't need this
    option, as they usually only have one type.
 
+   .. code-block:: yaml
+
+       typeField: type
+
 .. confval:: useAsLabel
 
    :Required: false (but highly recommended)
@@ -117,6 +153,16 @@ These options are only available for Content Blocks placed inside the
    possible to define an array of fields, which will be displayed
    comma-separated in the backend.
 
+   .. code-block:: yaml
+
+       # a single field for the label
+       useAsLabel: title
+
+       # multiple fields will be displayed comma-separated
+       useAsLabel:
+           - title
+           - text
+
 .. confval:: fallbackLabelFields
 
    :Required: false
@@ -125,6 +171,14 @@ These options are only available for Content Blocks placed inside the
    Defines which fields should be used as fallback, if :yaml:`useAsLabel` is not
    filled. The first filled field which is found will be used. Can only be used,
    if there is only one :yaml:`useAsLabel` field defined.
+
+   .. code-block:: yaml
+
+       # fallback fields will be used, if title from useAsLabel is empty
+       useAsLabel: title
+       fallbackLabelFields:
+           - text1
+           - text2
 
 .. confval:: aggregateRoot
 
@@ -140,6 +194,11 @@ These options are only available for Content Blocks placed inside the
    When referencing an existing table, you need to take care yourself that these
    fields exist. Also, non-aggregate tables are hidden in the List module.
 
+   .. code-block:: yaml
+
+       # set this for Record Types, if they should be used as foreign_table in Collections
+       aggregateRoot: false
+
 .. confval:: languageAware
 
    :Required: false
@@ -148,6 +207,11 @@ These options are only available for Content Blocks placed inside the
 
    If set to :yaml:`false`, language related fields are not created. Namely
    :sql:`sys_language_uid`, :sql:`l10n_parent`, :sql:`l10n_source` and :sql:`l10n_diffsource`.
+
+   .. code-block:: yaml
+
+       # disable language support
+       languageAware: false
 
 .. confval:: workspaceAware
 
@@ -158,6 +222,11 @@ These options are only available for Content Blocks placed inside the
    If set to :yaml:`false`, workspace related fields are not created. Namely
    :sql:`t3ver_oid`, :sql:`t3ver_wsid`, :sql:`t3ver_state` and :sql:`t3ver_stage`.
 
+   .. code-block:: yaml
+
+       # disable workspaces support
+       workspaceAware: false
+
 .. confval:: editLocking
 
    :Required: false
@@ -166,6 +235,11 @@ These options are only available for Content Blocks placed inside the
 
    If set to :yaml:`false`, the functionality to lock the editing for editors is
    removed. This refers to the :sql:`editlock` field.
+
+   .. code-block:: yaml
+
+       # disable edit lock field
+       editLocking: false
 
 .. confval:: restriction
 
@@ -188,8 +262,6 @@ These options are only available for Content Blocks placed inside the
    :yaml:`userGroup`
       Adds a selection to choose user groups, which are allowed to view the record.
 
-   Example:
-
    .. code-block:: yaml
 
        restriction:
@@ -208,6 +280,11 @@ These options are only available for Content Blocks placed inside the
    the database. They are merely flagged as deleted. Disabling this option,
    removes this safety net.
 
+   .. code-block:: yaml
+
+       # records will be really deleted in the backend
+       softDelete: false
+
 .. confval:: trackCreationDate
 
    :Required: false
@@ -216,6 +293,10 @@ These options are only available for Content Blocks placed inside the
 
    Tracks the timestamp of the creation date. Disabling this option removes this
    information.
+
+   .. code-block:: yaml
+
+       trackCreationDate: false
 
 .. confval:: trackUpdateDate
 
@@ -226,6 +307,10 @@ These options are only available for Content Blocks placed inside the
    Tracks the timestamp of the last update. Disabling this option removes this
    information.
 
+   .. code-block:: yaml
+
+       trackUpdateDate: false
+
 .. confval:: trackAncestorReference
 
    :Required: false
@@ -234,6 +319,10 @@ These options are only available for Content Blocks placed inside the
 
    If set to :yaml:`false`, the tracking field for the original record will not
    be created. Namely :sql:`t3_origuid`.
+
+   .. code-block:: yaml
+
+       trackAncestorReference: false
 
 .. confval:: sortable
 
@@ -245,6 +334,10 @@ These options are only available for Content Blocks placed inside the
    Disabling this option removes this functionality. This corresponds to the
    TCA option :php:`sortby`.
 
+   .. code-block:: yaml
+
+       sortable: false
+
 .. confval:: sortField
 
    :Required: false
@@ -255,8 +348,6 @@ These options are only available for Content Blocks placed inside the
    the :yaml:`sortable` option automatically. This corresponds to the TCA option
    :php:`default_sortby`. It is possible to define multiple sorting fields with
    an array.
-
-   Examples:
 
    .. code-block:: yaml
 
@@ -281,6 +372,10 @@ These options are only available for Content Blocks placed inside the
    corresponds with the TCA ctrl option :php:`descriptionColumn`. This field is
    supposed to be used only for the backend.
 
+   .. code-block:: yaml
+
+       internalDescription: true
+
 .. confval:: rootLevelType
 
    :Required: false
@@ -290,6 +385,10 @@ These options are only available for Content Blocks placed inside the
    Restricts the place, where the record can be created. Possible values are
    :yaml:`onlyOnPages` (default), :yaml:`onlyOnRootLevel` and :yaml:`both`. This
    corresponds to the TCA ctrl option :php:`rootLevel`.
+
+   .. code-block:: yaml
+
+       rootLevelType: 'onlyOnRootLevel'
 
 .. confval:: security
 
@@ -305,6 +404,13 @@ These options are only available for Content Blocks placed inside the
    :yaml:`ignorePageTypeRestriction`
       default false, Allows to use the record on any kind of page type.
 
+   .. code-block:: yaml
+
+       security:
+           ignoreWebMountRestriction: true
+           ignoreRootLevelRestriction: true
+           ignorePageTypeRestriction: true
+
 .. confval:: readOnly
 
    :Required: false
@@ -313,6 +419,10 @@ These options are only available for Content Blocks placed inside the
 
    If enabled, the record can not be edited in the TYPO3 backend anymore.
 
+   .. code-block:: yaml
+
+       readOnly: true
+
 .. confval:: adminOnly
 
    :Required: false
@@ -320,6 +430,10 @@ These options are only available for Content Blocks placed inside the
    :Default: false
 
    If enabled, only admins can edit the record.
+
+   .. code-block:: yaml
+
+       adminOnly: true
 
 .. confval:: hideAtCopy
 
@@ -330,6 +444,10 @@ These options are only available for Content Blocks placed inside the
    If enabled, the record will be disabled, when copied. Only works, if
    :yaml:`restriction.disabled` is set to :yaml:`true`.
 
+   .. code-block:: yaml
+
+       hideAtCopy: true
+
 .. confval:: appendLabelAtCopy
 
    :Required: false
@@ -337,6 +455,10 @@ These options are only available for Content Blocks placed inside the
 
    If set, the label field :yaml:`useAsLabel` will be appended with this
    string, when copied.
+
+   .. code-block:: yaml
+
+       appendLabelAtCopy: append me
 
 Field definitions
 =================
@@ -355,12 +477,24 @@ Common field properties
    The field's identifier has to be unique within a Content Block. Exception is
    within a collections' field array, as this starts a new scope.
 
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
+
 .. confval:: type
 
    :Required: true
    :Type: string
 
    The field's type. See :ref:`field_types`.
+
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
 
 .. confval:: label
 
@@ -371,12 +505,26 @@ Common field properties
    case there is only one language for the backend you may define labels directly
    in the YAML configuration. This has precedence over translation files.
 
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
+           label: Static label
+
 .. confval:: description
 
    :Required: false
    :Type: string
 
    The same as for `label` above.
+
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
+           description: Static description
 
 .. confval:: useExistingField
 
@@ -387,20 +535,27 @@ Common field properties
    or your own defined field in TCA. To learn more about reusing fields read
    :ref:`this article <cb_reuse_existing_fields>`.
 
+   .. code-block:: yaml
+
+       fields:
+           identifier: bodytext
+           useExistingField: true
+
 .. confval:: alternativeSql
 
    :Required: false
    :Type: string (SQL)
 
    It is possible to override the default SQL definition of a field with this
-   option.
+   option. Not every field type can be overridden. Have a look at the standard
+   SQL definition of the corresponding field.
 
-   Example:
+   .. code-block:: yaml
 
-   :sql:`tinyint(2) DEFAULT '0' NOT NULL`.
-
-   Not every field type can be overridden. Have a look at the standard SQL
-   definition of the corresponding field.
+       fields:
+           identifier: my_identifier
+           type: Text
+           alternativeSql: tinyint(2) DEFAULT "0" NOT NULL
 
 .. confval:: prefixField
 
@@ -410,6 +565,13 @@ Common field properties
 
    If set to false, the prefixing is disabled for this field. This overrules the
    global option :yaml:`prefixFields`.
+
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
+           prefixField: false
 
 .. _field_types:
 
