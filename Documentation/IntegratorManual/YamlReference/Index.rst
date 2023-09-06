@@ -248,12 +248,27 @@ These options are only available for Content Blocks placed inside the
 .. confval:: sortField
 
    :Required: false
-   :Type: string @todo should be an array for multi field sorting
+   :Type: string|array
    :Default: true
 
    The field identifier to use for sorting records. If set, this will disable
    the :yaml:`sortable` option automatically. This corresponds to the TCA option
-   :php:`default_sortby`.
+   :php:`default_sortby`. It is possible to define multiple sorting fields with
+   an array.
+
+   Examples:
+
+   .. code-block:: yaml
+
+       # simple sort by one field in ascending order
+       sortField: title
+
+       # sorting by multiple fields with different orders
+       sortField:
+         - identifier: title
+           order: desc
+         - identifier: text
+           order: asc
 
 .. confval:: internalDescription
 

@@ -555,7 +555,7 @@ class TcaGenerator
             $ctrl['descriptionColumn'] = 'internal_description';
         }
         if ($capability->hasSortField()) {
-            $ctrl['default_sortby'] = $capability->getSortField();
+            $ctrl['default_sortby'] = $capability->getSortFieldAsString();
         } elseif ($capability->isSortable()) {
             $ctrl['sortby'] = 'sorting';
             $columns['sorting'] = [

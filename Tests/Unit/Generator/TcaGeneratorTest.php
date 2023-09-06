@@ -1242,6 +1242,16 @@ final class TcaGeneratorTest extends UnitTestCase
                         'trackCreationDate' => false,
                         'trackUpdateDate' => false,
                         'trackAncestorReference' => false,
+                        'sortField' => [
+                            [
+                                'identifier' => 'text',
+                                'order' => 'desc',
+                            ],
+                            [
+                                'identifier' => 'text2',
+                                'order' => 'asc',
+                            ],
+                        ],
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1261,6 +1271,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'title' => 'foobar',
                         'label' => 't3ce_example_text',
                         'label_alt' => 't3ce_example_text2',
+                        'default_sortby' => 't3ce_example_text DESC,t3ce_example_text2 ASC',
                         'hideTable' => false,
                         'enablecolumns' => [
                             'starttime' => 'starttime',
