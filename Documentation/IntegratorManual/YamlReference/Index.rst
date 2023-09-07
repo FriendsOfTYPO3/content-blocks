@@ -15,7 +15,7 @@ converted to the type name. Page Types require an integer value for the type.
 Therefore you need to set it additionally with :yaml:`typeName`.
 
 With TYPO3 you can also create custom Record Types. They require you to define
-a custom :yaml:`table`, and a :yaml:`useAsLabel` field. Per default all extra
+a custom :yaml:`table`, and a :yaml:`labelField` field. Per default all extra
 features like workspaces, language support, frontend restrictions, etc. are
 enabled. You can selectively disable each one of them, if you don't use them.
 
@@ -143,7 +143,7 @@ These options are only available for Content Blocks placed inside the
 
        typeField: type
 
-.. confval:: useAsLabel
+.. confval:: labelField
 
    :Required: false (but highly recommended)
    :Type: string|array
@@ -156,10 +156,10 @@ These options are only available for Content Blocks placed inside the
    .. code-block:: yaml
 
        # a single field for the label
-       useAsLabel: title
+       labelField: title
 
        # multiple fields will be displayed comma-separated
-       useAsLabel:
+       labelField:
            - title
            - text
 
@@ -168,14 +168,14 @@ These options are only available for Content Blocks placed inside the
    :Required: false
    :Type: array
 
-   Defines which fields should be used as fallback, if :yaml:`useAsLabel` is not
+   Defines which fields should be used as fallback, if :yaml:`labelField` is not
    filled. The first filled field which is found will be used. Can only be used,
-   if there is only one :yaml:`useAsLabel` field defined.
+   if there is only one :yaml:`labelField` field defined.
 
    .. code-block:: yaml
 
-       # fallback fields will be used, if title from useAsLabel is empty
-       useAsLabel: title
+       # fallback fields will be used, if title from labelField is empty
+       labelField: title
        fallbackLabelFields:
            - text1
            - text2
@@ -453,7 +453,7 @@ These options are only available for Content Blocks placed inside the
    :Required: false
    :Type: string
 
-   If set, the label field :yaml:`useAsLabel` will be appended with this
+   If set, the label field :yaml:`labelField` will be appended with this
    string, when copied.
 
    .. code-block:: yaml

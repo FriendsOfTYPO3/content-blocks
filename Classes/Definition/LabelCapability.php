@@ -22,42 +22,42 @@ final class LabelCapability
     /**
      * @var string|string[]
      */
-    private string|array $useAsLabel = '';
+    private string|array $labelField = '';
     private array $fallbackLabelFields = [];
 
     public static function createFromArray(array $definition): LabelCapability
     {
         $self = new self();
-        $useAsLabel = $definition['useAsLabel'] ?? null;
+        $labelField = $definition['labelField'] ?? null;
         if (
-            isset($useAsLabel)
+            isset($labelField)
             && (
-                is_array($useAsLabel) || is_string($useAsLabel)
+                is_array($labelField) || is_string($labelField)
             )
         ) {
-            $self->useAsLabel = $useAsLabel;
+            $self->labelField = $labelField;
         }
         $self->fallbackLabelFields = $definition['fallbackLabelFields'] ?? $self->fallbackLabelFields;
         return $self;
     }
 
-    public function hasUseAsLabel(): bool
+    public function hasLabelField(): bool
     {
-        return $this->useAsLabel !== '';
+        return $this->labelField !== '';
     }
 
     public function getPrimaryLabelField(): string
     {
-        if (is_array($this->useAsLabel)) {
-            return $this->useAsLabel[0];
+        if (is_array($this->labelField)) {
+            return $this->labelField[0];
         }
-        return $this->useAsLabel;
+        return $this->labelField;
     }
 
     public function getLabelFieldsAsArray(): array
     {
-        if (is_array($this->useAsLabel)) {
-            return $this->useAsLabel;
+        if (is_array($this->labelField)) {
+            return $this->labelField;
         }
         $primaryField = $this->getPrimaryLabelField();
         return [$primaryField];
@@ -65,7 +65,7 @@ final class LabelCapability
 
     public function hasAdditionalLabelFields(): bool
     {
-        return is_array($this->useAsLabel) && count($this->useAsLabel) > 1;
+        return is_array($this->labelField) && count($this->labelField) > 1;
     }
 
     public function getAdditionalLabelFieldsAsString(): string
@@ -73,7 +73,7 @@ final class LabelCapability
         if (!$this->hasAdditionalLabelFields()) {
             return '';
         }
-        $additionalLabelFields = array_slice($this->useAsLabel, 1);
+        $additionalLabelFields = array_slice($this->labelField, 1);
         $additionalLabelFieldsAsString = implode(',', $additionalLabelFields);
         return $additionalLabelFieldsAsString;
     }

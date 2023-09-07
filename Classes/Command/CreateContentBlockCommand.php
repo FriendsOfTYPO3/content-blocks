@@ -193,7 +193,7 @@ class CreateContentBlockCommand extends Command
             'name' => $vendor . '/' . $name,
             'table' => 'tx_' . $vendor . '_domain_model_' . $name,
             'prefixFields' => false,
-            'useAsLabel' => 'title',
+            'labelField' => 'title',
         ];
         if ($type !== '' && $type !== null) {
             $configuration['typeName'] = $type;

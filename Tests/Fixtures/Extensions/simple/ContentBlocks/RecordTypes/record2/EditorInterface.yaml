@@ -1,7 +1,7 @@
 name: content-blocks/record2
 table: custom_record
 prefixFields: false
-useAsLabel: title
+labelField: title
 languageAware: false
 typeField: type
 typeName: record2

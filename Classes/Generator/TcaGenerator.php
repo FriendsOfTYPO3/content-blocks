@@ -397,7 +397,7 @@ class TcaGenerator
     {
         $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
         $labelField = null;
-        if ($labelCapability->hasUseAsLabel()) {
+        if ($labelCapability->hasLabelField()) {
             $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
             $labelField = $tableDefinition->getTcaColumnsDefinition()->getField($labelFieldIdentifier);
         }

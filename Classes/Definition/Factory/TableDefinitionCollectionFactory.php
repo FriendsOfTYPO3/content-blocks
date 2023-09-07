@@ -136,7 +136,7 @@ class TableDefinitionCollectionFactory
                 $field['languagePath'] = clone $input->languagePath;
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
                 $this->prefixSortFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
-                $this->prefixUseAsLabelIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
+                $this->prefixLabelFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $fieldArray = [
                     'uniqueIdentifier' => $uniqueIdentifier,
@@ -387,24 +387,24 @@ class TableDefinitionCollectionFactory
         }
     }
 
-    private function prefixUseAsLabelIfNecessary(
+    private function prefixLabelFieldIfNecessary(
         ProcessingInput $input,
         ProcessedFieldsResult $result,
         string $identifier,
         string $uniqueIdentifier,
     ): void {
         $labelCapability = LabelCapability::createFromArray($input->yaml);
-        if (!$labelCapability->hasUseAsLabel()) {
+        if (!$labelCapability->hasLabelField()) {
             return;
         }
         $labelFields = $labelCapability->getLabelFieldsAsArray();
         for ($i = 0; $i < count($labelFields); $i++) {
             $currentLabelField = $labelFields[$i];
             if ($currentLabelField === $identifier) {
-                if (is_string($result->tableDefinition->raw['useAsLabel'])) {
-                    $result->tableDefinition->raw['useAsLabel'] = [];
+                if (is_string($result->tableDefinition->raw['labelField'])) {
+                    $result->tableDefinition->raw['labelField'] = [];
                 }
-                $result->tableDefinition->raw['useAsLabel'][$i] = $uniqueIdentifier;
+                $result->tableDefinition->raw['labelField'][$i] = $uniqueIdentifier;
             }
         }
     }
