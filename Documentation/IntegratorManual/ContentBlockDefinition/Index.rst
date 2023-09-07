@@ -27,7 +27,7 @@ A Content Block definition has the following files and directory structure:
 +-------------------------------------------------+------------+--------------------------------+
 | Assets/Frontend.js                              |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
-| Assets/ContentBlockIcon.(svg/png/gif)           |            | x                              |
+| Assets/Icon.(svg/png/gif)                       |            | x                              |
 +-------------------------------------------------+------------+--------------------------------+
 
 Content Block definition files explained
@@ -50,8 +50,8 @@ A field is localize-able by default. Setting the localization explicitly is
 only necessary, if a special localization method is required.
 
 
-ContentBlockIcon.(svg|png|gif)
-------------------------------
+Icon.(svg|png|gif)
+------------------
 
 This is the icon for the Content Block. There is no fallback by intention, but
 it is easy to generate an SVG with the Content Block name as a graphical

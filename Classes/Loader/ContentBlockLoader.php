@@ -186,7 +186,7 @@ class ContentBlockLoader implements LoaderInterface
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
-            icon: $icon ?? 'EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg',
+            icon: $icon ?? 'EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg',
             iconProvider: $iconProviderClass ?? SvgIconProvider::class,
             path: $extPath,
             contentType: $contentType,
