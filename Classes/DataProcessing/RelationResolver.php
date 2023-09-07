@@ -71,8 +71,8 @@ class RelationResolver
             return $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
 
-        if ($fieldType === FieldType::REFERENCE) {
-            return $this->processReference($tcaFieldDefinition, $typeDefinition, $table, $record);
+        if ($fieldType === FieldType::RELATION) {
+            return $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
 
         if ($fieldType === FieldType::FOLDER) {
@@ -115,7 +115,7 @@ class RelationResolver
         return $record[$uniqueIdentifier] ?? '';
     }
 
-    protected function processReference(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): array
+    protected function processRelation(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): array
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         return $this->getRelations(

@@ -43,7 +43,7 @@ class TypeResolver
             'select' => FieldType::SELECT,
             'radio' => FieldType::RADIO,
             'check' => FieldType::CHECKBOX,
-            'group' => FieldType::REFERENCE,
+            'group' => FieldType::RELATION,
             'folder' => FieldType::FOLDER,
             'file' => FieldType::FILE,
             'flex' => FieldType::FLEXFORM,

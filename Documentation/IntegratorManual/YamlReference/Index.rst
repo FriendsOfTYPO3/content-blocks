@@ -597,7 +597,7 @@ Field types
     Number/Index
     Palette/Index
     Radio/Index
-    Reference/Index
+    Relation/Index
     Select/Index
     Tab/Index
     Text/Index

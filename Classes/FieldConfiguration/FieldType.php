@@ -34,7 +34,7 @@ enum FieldType: string
     case NUMBER = 'Number';
     case RADIO = 'Radio';
     case SELECT = 'Select';
-    case REFERENCE = 'Reference';
+    case RELATION = 'Relation';
     case FOLDER = 'Folder';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
@@ -58,7 +58,7 @@ enum FieldType: string
             self::NUMBER => 'number',
             self::RADIO => 'radio',
             self::SELECT => 'select',
-            self::REFERENCE => 'group',
+            self::RELATION => 'group',
             self::FOLDER => 'folder',
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
@@ -100,7 +100,7 @@ enum FieldType: string
             self::NUMBER => NumberFieldConfiguration::createFromArray($config),
             self::RADIO => RadioFieldConfiguration::createFromArray($config),
             self::SELECT => SelectFieldConfiguration::createFromArray($config),
-            self::REFERENCE => ReferenceFieldConfiguration::createFromArray($config),
+            self::RELATION => RelationFieldConfiguration::createFromArray($config),
             self::FOLDER => FolderFieldConfiguration::createFromArray($config),
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),

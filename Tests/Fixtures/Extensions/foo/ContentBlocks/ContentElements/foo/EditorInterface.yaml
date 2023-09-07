@@ -26,14 +26,14 @@ fields:
   - identifier: categories_1m
     type: Category
     relationship: oneToMany
-  - identifier: pages_reference
-    type: Reference
+  - identifier: pages_relation
+    type: Relation
     allowed: pages
-  - identifier: pages_content_reference
-    type: Reference
+  - identifier: pages_content_relation
+    type: Relation
     allowed: pages,tt_content
   - identifier: pages_mm
-    type: Reference
+    type: Relation
     allowed: pages
     MM: block_pages_mm
   - identifier: folder

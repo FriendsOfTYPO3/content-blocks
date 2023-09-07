@@ -1,11 +1,11 @@
 .. include:: /Includes.rst.txt
-.. _field_type_reference:
+.. _field_type_relation:
 
-=========
-Reference
-=========
+========
+Relation
+========
 
-The `Reference` type can handle relations to other record types. They will be
+The `Relation` type can handle relations to other record types. They will be
 available to select from the Record Selector.
 
 It corresponds with the TCA :php:`type => 'group'`.
@@ -49,11 +49,11 @@ Minimal
 
 .. code-block:: yaml
 
-    name: example/reference
+    name: example/relation
     group: common
     fields:
       - identifier: record_select
-        type: Reference
+        type: Relation
         allowed: 'some_table'
 
 Advanced / use case
@@ -61,11 +61,11 @@ Advanced / use case
 
 .. code-block:: yaml
 
-    name: example/reference
+    name: example/relation
     group: common
     fields:
       - identifier: page_select
-        type: Reference
+        type: Relation
         allowed: 'pages'
         maxitems: 1,
         suggestOptions:

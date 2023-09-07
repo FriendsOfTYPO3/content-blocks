@@ -57,7 +57,7 @@ class TcaGenerator
         'MM_hasUidField',
         'MM_oppositeUsage',
         [
-            'type' => 'Reference',
+            'type' => 'Relation',
             'option' => 'allowed',
         ],
         'foreign_table',

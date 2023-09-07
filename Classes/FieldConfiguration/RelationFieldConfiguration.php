@@ -20,11 +20,11 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ReferenceFieldConfiguration implements FieldConfigurationInterface
+final class RelationFieldConfiguration implements FieldConfigurationInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::REFERENCE;
+    private FieldType $fieldType = FieldType::RELATION;
     private ?string $alternativeSql = null;
     private string|int $default = '';
     private string $allowed = '';
@@ -50,7 +50,7 @@ final class ReferenceFieldConfiguration implements FieldConfigurationInterface
     private array $suggestOptions = [];
     private array $appearance = [];
 
-    public static function createFromArray(array $settings): ReferenceFieldConfiguration
+    public static function createFromArray(array $settings): RelationFieldConfiguration
     {
         $self = new self();
         $self->setCommonProperties($settings);

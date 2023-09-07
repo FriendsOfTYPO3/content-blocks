@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\ReferenceFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\RelationFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class ReferenceFieldConfigurationTest extends UnitTestCase
+final class RelationFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -168,7 +168,7 @@ final class ReferenceFieldConfigurationTest extends UnitTestCase
      */
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = ReferenceFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = RelationFieldConfiguration::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -187,7 +187,7 @@ final class ReferenceFieldConfigurationTest extends UnitTestCase
      */
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = ReferenceFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = RelationFieldConfiguration::createFromArray([]);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }
