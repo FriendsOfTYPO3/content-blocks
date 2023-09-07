@@ -81,7 +81,7 @@ class ContentBlockPathUtility
 
     public static function getIconNameWithoutFileExtension(): string
     {
-        return 'ContentBlockIcon';
+        return 'Icon';
     }
 
     public static function getIconPathWithoutFileExtension(): string

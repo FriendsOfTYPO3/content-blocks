@@ -145,7 +145,7 @@ HEREDOC;
             );
         }
         copy(
-            GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/ContentBlockIcon.svg'),
+            GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg'),
             $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg'
         );
     }
