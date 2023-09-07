@@ -297,17 +297,17 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canResolveDbReferences(): void
+    public function canResolveDbRelation(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_reference');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_relation');
         $dummyRecord = [
             'uid' => 1,
-            'typo3tests_foo_pages_reference' => '1,2',
+            'typo3tests_foo_pages_relation' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -321,15 +321,15 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canResolveDbReferencesInWorkspaces(): void
+    public function canResolveDbRelationsInWorkspaces(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_reference');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_relation');
         $this->setUpBackendUser(1);
         $this->setWorkspaceId(1);
         $dummyRecord = [
@@ -337,7 +337,7 @@ final class RelationResolverTest extends FunctionalTestCase
             't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
-            'typo3tests_foo_pages_reference' => '1,2',
+            'typo3tests_foo_pages_relation' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -351,17 +351,17 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canResolveMultipleDbReferences(): void
+    public function canResolveMultipleDbRelations(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference_multiple.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation_multiple.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests/foo');
-        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_content_reference');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_foo_pages_content_relation');
         $dummyRecord = [
             'uid' => 1,
-            'typo3tests_foo_pages_content_reference' => 'pages_1,pages_2,tt_content_1,tt_content_2',
+            'typo3tests_foo_pages_content_relation' => 'pages_1,pages_2,tt_content_1,tt_content_2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
@@ -377,9 +377,9 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canResolveDbReferencesMM(): void
+    public function canResolveDbRelationsMM(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_reference_mm.csv');
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation_mm.csv');
 
         $tableDefinitionCollection = $this->get(LoaderFactory::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');

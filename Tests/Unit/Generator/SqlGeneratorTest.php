@@ -205,8 +205,8 @@ final class SqlGeneratorTest extends UnitTestCase
                                 'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
                             ],
                             [
-                                'identifier' => 'reference',
-                                'type' => 'Reference',
+                                'identifier' => 'relation',
+                                'type' => 'Relation',
                                 'alternativeSql' => 'tinyint(4) DEFAULT \'0\' NOT NULL',
                             ],
                             [
@@ -236,7 +236,7 @@ final class SqlGeneratorTest extends UnitTestCase
                 "CREATE TABLE `tt_content`(`foo_bar_email` tinyint(4) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_link` tinyint(4) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_radio` tinyint(4) DEFAULT '0' NOT NULL);",
-                "CREATE TABLE `tt_content`(`foo_bar_reference` tinyint(4) DEFAULT '0' NOT NULL);",
+                "CREATE TABLE `tt_content`(`foo_bar_relation` tinyint(4) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_select` tinyint(4) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_textfield` tinyint(4) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_textarea` tinyint(4) DEFAULT '0' NOT NULL);",
