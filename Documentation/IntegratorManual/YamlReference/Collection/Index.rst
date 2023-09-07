@@ -102,7 +102,7 @@ Advanced / use case
     fields:
       - identifier: slides
         type: Collection
-        useAsLabel: title
+        labelField: title
         maxitems: 5
         minitems: 1
         fields:

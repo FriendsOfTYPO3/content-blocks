@@ -132,7 +132,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
-                                'useAsLabel' => 'text2',
+                                'labelField' => 'text2',
                                 'fallbackLabelFields' => [
                                     'text',
                                 ],
@@ -1079,7 +1079,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
-                        'useAsLabel' => [
+                        'labelField' => [
                             'text',
                             'text2',
                         ],
@@ -1238,7 +1238,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
-                        'useAsLabel' => [
+                        'labelField' => [
                             'text',
                         ],
                         'fallbackLabelFields' => [
