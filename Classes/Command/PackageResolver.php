@@ -61,6 +61,9 @@ class PackageResolver
     protected function filterNonLocalComposerPackages(array $packages): array
     {
         $composerLockPath = Environment::getProjectPath() . '/composer.lock';
+        if (!file_exists($composerLockPath)) {
+            return $packages;
+        }
         $composerLock = json_decode(file_get_contents($composerLockPath), true);
         $composerLockPackages = array_merge($composerLock['packages'] ?? [], $composerLock['packages-dev'] ?? []);
         $composerLockMap = [];
