@@ -40,10 +40,10 @@ class PackageResolver
     {
         $packages = $this->packageManager->getAvailablePackages();
         $packages = $this->removeFrameworkExtensions($packages);
-        if (!Environment::isComposerMode()) {
-            return $packages;
+        if (Environment::isComposerMode()) {
+            return $this->filterNonLocalComposerPackages($packages);
         }
-        return $this->filterNonLocalComposerPackages($packages);
+        return $packages;
     }
 
     /**
