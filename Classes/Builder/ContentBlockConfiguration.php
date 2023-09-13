@@ -38,12 +38,17 @@ final class ContentBlockConfiguration
 
     public function getVendor(): string
     {
-        return explode('/', $this->yamlConfig['name'])[0];
+        return explode('/', $this->getContentBlockName())[0];
     }
 
     public function getName(): string
     {
-        return explode('/', $this->yamlConfig['name'])[1];
+        return explode('/', $this->getContentBlockName())[1];
+    }
+
+    public function getContentBlockName(): string
+    {
+        return $this->yamlConfig['name'];
     }
 
     public function getBasePath(): string
