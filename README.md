@@ -32,6 +32,7 @@ touch .Build/public/FIRST_INSTALL
 ddev launch
 ```
 
+The default URL is https://content-blocks.ddev.site/.
 Continue with the TYPO3 installation process.
 
 ## Testing

@@ -80,5 +80,10 @@
 		"typo3/cms-workspaces": "^12.4 || ^13.0@dev",
 		"typo3/coding-standards": "^0.7",
 		"typo3/testing-framework": "^8.0"
+	},
+	"scripts": {
+		"pre-autoload-dump": [
+			"[ -d \"config\" ] || cp -a ./Build/config.example ./config"
+		]
 	}
 }
