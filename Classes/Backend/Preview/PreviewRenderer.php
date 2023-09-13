@@ -71,8 +71,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $contentElementDefinition,
             $contentElementTableDefinition,
             $record,
-            $contentElementTable)
-        ;
+            $contentElementTable
+        );
 
         $view->assign('settings', ['name' => $contentElementDefinition->getName()]);
         $view->assign('data', $data);
