@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Command;
+namespace TYPO3\CMS\ContentBlocks\Service;
 
 use Composer\InstalledVersions;
 use TYPO3\CMS\Core\Core\Environment;
