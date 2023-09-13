@@ -23,7 +23,7 @@ Settings
    :yaml:`selectCheckBox`, :yaml:`selectSingleBox`, :yaml:`selectTree` or
    :yaml:`selectMultipleSideBySide`.
 
-.. confval:: renderType
+.. confval:: items
 
    :Required: yes
    :Type: array

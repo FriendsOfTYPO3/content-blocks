@@ -512,6 +512,9 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'content-blocks',
                         ],
                         'searchFields' => 'text,text2,palette_field1,palette_field2',
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
                     ],
                     'types' => [
                         '1' => [
@@ -689,19 +692,19 @@ final class TcaGeneratorTest extends UnitTestCase
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.collection2.description',
                             'config' => [
                                 'type' => 'inline',
-                                'foreign_table' => 't3ce_example_collection2',
+                                'foreign_table' => 'collection2',
                                 'foreign_field' => 'foreign_table_parent_uid',
                                 'foreign_match_fields' => [
-                                    'fieldname' => 't3ce_example_collection2',
+                                    'fieldname' => 'collection2',
                                 ],
                                 'foreign_table_field' => 'tablenames',
                             ],
                         ],
                     ],
                 ],
-                't3ce_example_collection2' => [
+                'collection2' => [
                     'ctrl' => [
-                        'title' => 't3ce_example_collection2',
+                        'title' => 'collection2',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -725,6 +728,9 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'content-blocks',
                         ],
                         'searchFields' => 'text,text2',
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
                     ],
                     'types' => [
                         '1' => [
@@ -829,8 +835,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'value' => 0,
                                     ],
                                 ],
-                                'foreign_table' => 't3ce_example_collection2',
-                                'foreign_table_where' => 'AND t3ce_example_collection2.pid=###CURRENT_PID### AND t3ce_example_collection2.sys_language_uid IN (-1,0)',
+                                'foreign_table' => 'collection2',
+                                'foreign_table_where' => 'AND collection2.pid=###CURRENT_PID### AND collection2.sys_language_uid IN (-1,0)',
                                 'default' => 0,
                             ],
                         ],
@@ -1755,6 +1761,9 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'content-blocks',
                         ],
                         'searchFields' => 'text',
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
                     ],
                     'types' => [
                         '1' => [

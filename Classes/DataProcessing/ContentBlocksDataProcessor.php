@@ -17,16 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
-/**
- * Adds information about the current content block to variable "cb".
- *
- * @internal Not part of TYPO3's public API.
- */
 class ContentBlocksDataProcessor implements DataProcessorInterface
 {
     public function __construct(
@@ -42,19 +36,19 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         array $processedData
     ): array {
         $this->relationResolver->setRequest($cObj->getRequest());
-        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
-        $ttContentDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
-        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($processedData['data'][ContentType::CONTENT_ELEMENT->getTypeField()]);
+        $table = $cObj->getCurrentTable();
+        $tableDefinition = $this->tableDefinitionCollection->getTable($table);
+        $typeField = $tableDefinition->getTypeField();
+        $typeName = $typeField ? $processedData['data'][$typeField] : '1';
+        $contentTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getType($typeName);
+        $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
+        $processedData['data'] = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
+            $contentTypeDefinition,
+            $tableDefinition,
+            $processedData['data'],
+            $table
+        );
 
-        $contentBlockData = [];
-        foreach ($contentElementDefinition->getColumns() as $column) {
-            $tcaFieldDefinition = $ttContentDefinition->getTcaColumnsDefinition()->getField($column);
-            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
-                continue;
-            }
-            $contentBlockData['cb'][$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $processedData['data'], $contentElementTable);
-        }
-
-        return array_merge($processedData, $contentBlockData);
+        return $processedData;
     }
 }

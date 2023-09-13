@@ -402,7 +402,7 @@ These options are only available for Content Blocks placed inside the
       default false, Allows non-admin users to access records that are on the root-level (page ID 0), thus bypassing this usual restriction.
 
    :yaml:`ignorePageTypeRestriction`
-      default false, Allows to use the record on any kind of page type.
+      default false (but true if `aggregateRoot` is false e.g. for Collection fields), Allows to use the record on any kind of page type.
 
    .. code-block:: yaml
 

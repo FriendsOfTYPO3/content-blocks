@@ -578,7 +578,7 @@ class TcaGenerator
         if ($capability->isIgnoreWebMountRestriction()) {
             $ctrl['security']['ignoreWebMountRestriction'] = true;
         }
-        if ($capability->isIgnorePageTypeRestriction()) {
+        if (!$tableDefinition->isAggregateRoot() || $capability->isIgnorePageTypeRestriction()) {
             $ctrl['security']['ignorePageTypeRestriction'] = true;
         }
         if ($capability->isReadOnly()) {

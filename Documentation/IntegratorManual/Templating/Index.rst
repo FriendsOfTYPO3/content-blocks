@@ -2,53 +2,109 @@
 
 .. _cb_templating:
 
-===============================
+==============================
 Templating with Content Blocks
-===============================
+==============================
 
 The following examples are for templating with Fluid.
 
-The Content Blocks bring some additional features like own variables and ViewHelpers with them.
-
+Content Blocks brings some additional features like own variables and
+ViewHelpers with it.
 
 Accessing variables
 ===================
 
-There are all variables available which you are used to in Fluid. E.g. `{data.uid}` or something like
-that will work as expected. Withing a Content Block there is a new area, where you can find the data
-from the database related to a Content Block. This is the `cb` variable. So if you want to access the identifier `myTextField` of a field in the
-root level of a Content Block, you can use `{cb.myTextField}`.
+Inside your `Frontend.html` or `EditorPreview.html` file you can access the
+properties of your Content Element as usual by the :html:`{data}` variable.
+This variable, however, is special. It has real superpowers. Let's have a look
+at the debug output of it:
 
-One big advantage of this is, that e.g. images, files and collections can simply accessed and processed as
-an array. You do not need any additional DataProcessor for that.
+.. code-block:: text
 
-In this example, you can see how to access a field of type File, which is intented to be an image:
+    TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData [prototype] [object]
+       _raw => [private] array(85 items)
+       _processed => [private] array(8 items)
+          uid => 24 (integer)
+          pid => 1 (integer)
+          languageId => 0 (integer)
+          typeName => 'example_element1' (16 chars)
+          updateDate => 1694625077 (integer)
+          creationDate => 1694602137 (integer)
+          header => 'Foo' (3 chars)
+
+As you can see, in contrast to the usual array, we are dealing with an object
+here. This allows us to magically access our own custom properties very easily.
+The object consists of two properties `_raw` and `_processed`. As the names
+suggest, the one is raw and unprocessed and the other one has magic applied from
+Content Blocks. Normally you would access the processed properties. This is done
+by simply accessing the desired property like :html:`{data.header}`. Note, that
+we are omitting `_processed` here. This is important and it won't work
+otherwise. On the other hand, the raw properties have to be accessed by
+:html:`{data._raw.some_field}`. But normally you shouldn't need them.
+
+All fields with relations are resolved automatically to an array. This includes
+`Collection`, `Select`, `Relation`, `File`, `Folder`, `Category` and `FlexForm`
+fields. There is no need to provide additional DataProcessors for them.
+Content Blocks applies relation resolving for you (recursively!).
+
+Have a look at this code example to grasp what's possible:
 
 .. code-block:: html
 
-    <f:for each="{cb.myImage}" as="image">
-        <f:image src="{image.uid}" />
+    <!-- Normal access to custom properties -->
+    {data.my_field}
+
+    <!-- Normal access to custom relational properties -->
+    <f:for each="{data.collection1}" as="item">{item.title}</f:for>
+
+    <!-- Recursive access to custom relational properties -->
+    <f:for each="{data.collection1}" as="item">
+        <f:for each="{item.categories}" as="category">
+            {category.title}
+        </f:for>
     </f:for>
 
+    <!-- There are some special accessors, which are always available: -->
+    {data.uid}
+    {data.pid}
+    {data.typeName} <!-- This is the CType for Content Elements -->
+
+    <!-- These special accessors are available, if the corresponding features are turned on (Always true for Content Elements) -->
+    {data.languageId} <!-- YAML: languageAware: true -->
+    {data.creationDate} <!-- YAML: trackCreationDate: true -->
+    {data.updateDate} <!-- YAML: trackUpdateDate: true -->
+
+    <!-- These special accessors are available depending on the context -->
+    {data.localizedUid}
+    {data.originalUid}
+    {data.originalPid}
+
+    <!-- To access the raw (unprocessed) database record use `_raw` -->
+    {data._raw.some_field}
 
 Frontend & backend
 ==================
 
-The Content Blocks allow you to provide a separate template for the frontend and the backend out of the box. The variables are the same
-for both templates, and while using the asset ViewHelpers, you can also ship JavaScript and CSS as you need. The main goal behind this is,
-that you can provide a better user experience for the editors. With this feature, there is the possibility to provide nearly the same
-layout in the frontend and the backend, so the editors easily find the element they want to edit.
+The Content Blocks allow you to provide a separate template for the frontend and
+the backend out of the box. The variables are the same for both templates, and
+while using the asset ViewHelpers, you can also ship JavaScript and CSS as you
+need. The main goal behind this is, that you can provide a better user
+experience for the editors. With this feature, there is the possibility to
+provide nearly the same layout in the frontend and the backend, so the editors
+easily find the element they want to edit.
 
-The frontend template is located in `Source/Frontend.html` and the backend template in `Source/EditorPreview.html`.
-
+The frontend template is located in `Source/Frontend.html` and the backend
+template in `Source/EditorPreview.html`.
 
 ViewHelper & assets
 ===================
 
-Since Content Blocks are stored in an extra path structure, accessing assets (JavaScript and CSS) can lead to complicated paths.
-So the well known AssetCollector with his related ViewHelpers will work, but it might be very complicated to use. The Content Blocks
-provide new ViewHelpers to access assets from the related Content Block of a template. This asset ViewHelpers looking for the given
-file in the 'Asset' directory of the Content Block.
+Since Content Blocks are stored in an extra path structure, accessing assets
+(JavaScript and CSS) can lead to complicated paths. So the well known
+AssetCollector with his related ViewHelpers will work, but it might be very
+complicated to use. Content Blocks provides new ViewHelpers to access assets
+from the related Content Block of a template. This asset ViewHelpers look for
+the given file in the `Assets` directory of the Content Block.
 
 Example for a CSS file:
 
@@ -59,15 +115,17 @@ Example for a CSS file:
 
 Example for a JavaScript file:
 
-
 .. code-block:: html
 
     <cb:asset.script identifier="myJavascriptIdentifier" file="Frontend.js"/>
 
 
-The mapping between the assets and the Content Block in the ViewHelper is done by the TypoScript configuration of a Content Block
-in `tt_content.content_block_identifier.settings.name = vendor/content-block-name` which is set automatically. But if you try to use a
-asset ViewHelper in e.g. a partial, you have to ship the `settings` to the partial, or you can set the `name` attribute by hand:
+The mapping between the assets and the Content Block in the ViewHelper is done
+by the TypoScript configuration of a Content Block in
+`tt_content.content_block_identifier.settings.name = vendor/content-block-name`
+which is set automatically. But if you try to use a asset ViewHelper in e.g. a
+partial, you have to ship `settings` to the partial, or you can set `name` by
+hand:
 
 .. code-block:: html
 
@@ -77,45 +135,49 @@ asset ViewHelper in e.g. a partial, you have to ship the `settings` to the parti
 ViewHelper & translation
 ========================
 
-Analogue to the asset ViewHelpers, there is also a ViewHelper for translations. This ViewHelper is looking directly in the `Labels.xlf`
-file for the given key.
+Analogous to the asset ViewHelpers, there is also a ViewHelper for translations.
+This ViewHelper looks directly in the `Labels.xlf` file for the given key.
 
 .. code-block:: html
 
     <cb:translate key="my.contentblock.header" />
 
-As described above in the asset ViewHelper, the mapping between the Content Block and the translation file is done by the TypoScript
-configuration of a Content Block in `tt_content.content_block_identifier.settings.name = vendor/content-block-name` which is set automatically.
-But if you try to use a translation ViewHelper in e.g. a partial, you have to ship the `settings` to the partial, or you can set the
-`name` attribute by hand:
+As described above in the asset ViewHelper, the mapping between the Content
+Block and the translation file is done by the TypoScript configuration of a
+Content Block. You can also set `name` by hand:
 
 .. code-block:: html
 
     <cb:translate key="my.contentblock.header" name="vendor/content-block-name" />
 
-
 Partials
 ========
 
-Partials are a very useful feature of Fluid. You can use them to split up your templates into smaller parts. If you want to use a partial
-in a Content Block, you can create a subdirectory `Partials` in the `Source` directory and dump your partials there.
+Partials are a very useful feature of Fluid. You can use them to split up your
+templates into smaller parts. If you want to use a partial in a Content Block,
+you can create a subdirectory `Partials` in the `Source` directory and place
+your partials there.
 
-This part is automatically added, but you can also extend or overwrite this TypoScript configuration in your sitepackage.
+This part is automatically added, but you can also extend or overwrite this
+TypoScript configuration in your sitepackage.
 
-Remember, that you should ship the `settings` to the partial if you want to use the asset or translation ViewHelpers within.
-
+Remember, that you should ship the `settings` to the partial if you want to use
+the asset or translation ViewHelpers within.
 
 Layouts
 =======
 
-Analogue to the partials, you can also use layouts. You can create a subdirectory `Layouts` in the `Source` directory and dump your
-layouts there. This part is automatically added, but you can also extend or overwrite this TypoScript configuration in your sitepackage.
-Afterwards you can use your layouts as usual in Fluid.
-
+Analogous to partials, you can also use layouts. You can create a subdirectory
+`Layouts` in the `Source` directory and place your layouts there. The
+configuration is added automatically, but you can also extend or overwrite the
+TypoScript configuration in your sitepackage. Afterwards you can use your
+layouts as usual in Fluid.
 
 Shareable resources
-====================
+===================
 
-Despite there is the technical possibility to use resources from the whole TYPO3 setup (e.g. translations, scripts, or partials from other extensions),
-we do not recommend to do so. Since the Content Blocks are intended to be easily copied and pasted between different projects, your Content Block might
-get broken and you loose this initial benefit.
+There is the technical possibility to use resources from the whole TYPO3 setup
+(e.g. translations, scripts, or partials from other extensions), but we do not
+recommend to do so. Since the Content Blocks are intended to be easily copied
+and pasted between different projects, your Content Block might break and you
+lose this initial benefit.

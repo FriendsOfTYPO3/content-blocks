@@ -31,23 +31,23 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
 
     public function addType(ContentTypeInterface $definition): void
     {
-        if (!$this->hasType($definition->getIdentifier())) {
-            $this->definitions[$definition->getIdentifier()] = $definition;
+        if (!$this->hasType($definition->getTypeName())) {
+            $this->definitions[$definition->getTypeName()] = $definition;
         }
     }
 
-    public function hasType(string $identifier): bool
+    public function hasType(string $typeName): bool
     {
-        return isset($this->definitions[$identifier]);
+        return isset($this->definitions[$typeName]);
     }
 
-    public function getType(string $identifier): ContentTypeInterface
+    public function getType(string $typeName): ContentTypeInterface
     {
-        if ($this->hasType($identifier)) {
-            return $this->definitions[$identifier];
+        if ($this->hasType($typeName)) {
+            return $this->definitions[$typeName];
         }
 
-        throw new \OutOfBoundsException('A type with the identifier "' . $identifier . '" does not exist in table "' . $this->table . '".', 1629292879);
+        throw new \OutOfBoundsException('A type with the identifier "' . $typeName . '" does not exist in table "' . $this->table . '".', 1629292879);
     }
 
     public function getFirst(): ContentTypeInterface

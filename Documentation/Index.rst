@@ -84,6 +84,18 @@ use content types as sub-resources inside extensions.
 
             Reference of all available settings.
 
+   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+
+      .. container:: card px-0 h-100
+
+         .. rst-class:: card-header h3
+
+            .. rubric:: :ref:`Fluid templating <cb_templating>`
+
+         .. container:: card-body
+
+            Learn to use Content Blocks inside your Fluid template.
+
 **Table of Contents**
 
 ..  toctree::
