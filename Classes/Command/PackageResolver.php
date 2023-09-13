@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Command;
 
+use Composer\InstalledVersions;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -70,9 +71,13 @@ class PackageResolver
         foreach ($composerLockPackages as $package) {
             $composerLockMap[$package['name']] = $package['dist']['type'] ?? null;
         }
-        return array_filter(
-            $packages,
-            fn (PackageInterface $package): bool => $composerLockMap[$package->getValueFromComposerManifest('name')] === 'path'
-        );
+        $filterPackages = function (PackageInterface $package) use ($composerLockMap): bool {
+            $name = $package->getValueFromComposerManifest('name');
+            if (array_key_exists($name, $composerLockMap)) {
+                return $composerLockMap[$name] === 'path';
+            }
+            return InstalledVersions::getRootPackage()['name'] === $name;
+        };
+        return array_filter($packages, $filterPackages);
     }
 }
