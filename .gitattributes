@@ -1,0 +1,7 @@
+/.ddev/ export-ignore
+/.github/ export-ignore
+/Build/ export-ignore
+/Tests/ export-ignore
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
