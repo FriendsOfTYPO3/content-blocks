@@ -29,5 +29,6 @@
 .. highlight
 .. ---------
 
-.. By default, code blocks are php
-.. highlight:: php
+.. By default, code blocks use YAML syntax highlighting
+
+.. highlight:: yaml

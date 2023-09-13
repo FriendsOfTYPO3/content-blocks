@@ -113,7 +113,7 @@ class TableDefinitionCollectionFactory
                 }
 
                 if ($fieldType === FieldType::COLLECTION) {
-                    $inlineTable = $this->chooseInlineTableName($input->contentBlock, $field);
+                    $inlineTable = $this->chooseIdentifier($input, $field);
                     $field['foreign_table'] ??= $inlineTable;
                     $field['foreign_match_fields'] = [
                         'fieldname' => $inlineTable,
@@ -453,13 +453,6 @@ class TableDefinitionCollectionFactory
             : $field['identifier'];
     }
 
-    private function chooseInlineTableName(LoadedContentBlock $contentBlock, array $field): string
-    {
-        return $this->isPrefixEnabledForField($contentBlock, $field)
-            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($contentBlock->getName(), $field['identifier'])
-            : $field['identifier'];
-    }
-
     /**
      * @see TableDefinition
      */
@@ -514,6 +507,13 @@ class TableDefinitionCollectionFactory
         $uniquePaletteIdentifiers = [];
         $uniqueTabIdentifiers = [];
         foreach ($yaml['fields'] as $rootField) {
+            // @todo validate for existing type. Exceptions are Linebreaks and useExistingField: true
+            //            if (!isset($rootField['type'])) {
+            //                throw new \InvalidArgumentException(
+            //                    'A field is missing the required "type" in content block "' . $contentBlock->getName() . '".',
+            //                    1679226075
+            //                );
+            //            }
             $rootFieldType = $this->resolveType($rootField, $table);
             if ($rootFieldType === FieldType::LINEBREAK) {
                 throw new \InvalidArgumentException(
@@ -587,8 +587,10 @@ class TableDefinitionCollectionFactory
 
                 // Recursive call for Collection (inline) fields.
                 if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
-                    $inlineTable = $this->chooseInlineTableName($contentBlock, $field);
-                    $this->validateContentBlock($field, $contentBlock, $inlineTable);
+                    // @todo Input is needed for chooseIdentifier. Either initialize it here or think about moving
+                    // @todo the validation back to the main method.
+                    // $inlineTable = $this->chooseIdentifier($contentBlock, $field);
+                    // $this->validateContentBlock($field, $contentBlock, $inlineTable);
                 }
             }
         }

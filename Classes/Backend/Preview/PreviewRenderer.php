@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
+use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataResolver;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -44,7 +45,9 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         $record = $item->getRecord();
-        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($record[ContentType::CONTENT_ELEMENT->getTypeField()]);
+        $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
+        $typeName = $record[$typeField];
+        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($typeName);
         $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
         $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolder();
 
@@ -59,20 +62,20 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
         $view->setRequest($GLOBALS['TYPO3_REQUEST']);
 
+        $this->relationResolver->setRequest($GLOBALS['TYPO3_REQUEST']);
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
-        $contentBlockData = [];
-        foreach ($contentElementDefinition->getColumns() as $column) {
-            $tcaFieldDefinition = $contentElementTableDefinition->getTcaColumnsDefinition()->getField($column);
-            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
-                continue;
-            }
-            $contentBlockData[$tcaFieldDefinition->getIdentifier()] = $this->relationResolver->processField($tcaFieldDefinition, $contentElementDefinition, $record, $contentElementTable);
-        }
+
+        $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
+        $data = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
+            $contentElementDefinition,
+            $contentElementTableDefinition,
+            $record,
+            $contentElementTable)
+        ;
 
         $view->assign('settings', ['name' => $contentElementDefinition->getName()]);
-        $view->assign('data', $record);
-        $view->assign('cb', $contentBlockData);
+        $view->assign('data', $data);
 
         return $view->render();
     }
