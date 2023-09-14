@@ -54,7 +54,7 @@ final class ContentBlockData extends \stdClass
     public function __construct(
         private readonly string $_name = '',
         private readonly array $_raw = [],
-        private readonly array $processed = [],
+        private readonly array $_processed = [],
     ) {
     }
 
@@ -68,8 +68,8 @@ final class ContentBlockData extends \stdClass
             return $this->_raw;
         }
 
-        if (array_key_exists($name, $this->processed)) {
-            return $this->processed[$name];
+        if (array_key_exists($name, $this->_processed)) {
+            return $this->_processed[$name];
         }
 
         return null;
