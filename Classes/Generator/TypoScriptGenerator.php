@@ -65,7 +65,6 @@ tt_content.{$typeDefinition->getTypeName()} {
     layoutRootPaths {
         20 = $privatePath/Layouts
     }
-    settings.name = {$typeDefinition->getName()}
 }
 HEREDOC;
     }

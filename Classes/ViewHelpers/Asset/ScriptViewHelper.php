@@ -120,7 +120,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
             }
         }
 
-        $name = $attributes['name'] ?? $this->templateVariableContainer->get('settings.name');
+        $name = $attributes['name'] ?? $this->templateVariableContainer->get('data._name');
         $file = $attributes['file'];
         unset(
             $attributes['name'],

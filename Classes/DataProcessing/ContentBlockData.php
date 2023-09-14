@@ -52,19 +52,24 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 final class ContentBlockData extends \stdClass
 {
     public function __construct(
+        private readonly string $_name = '',
         private readonly array $_raw = [],
-        private readonly array $_processed = [],
+        private readonly array $processed = [],
     ) {
     }
 
     public function __get(string $name): mixed
     {
+        if ($name === '_name') {
+            return $this->_name;
+        }
+
         if ($name === '_raw') {
             return $this->_raw;
         }
 
-        if (array_key_exists($name, $this->_processed)) {
-            return $this->_processed[$name];
+        if (array_key_exists($name, $this->processed)) {
+            return $this->processed[$name];
         }
 
         return null;

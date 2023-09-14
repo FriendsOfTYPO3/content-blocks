@@ -122,7 +122,7 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
             $attributes['disabled'] = 'disabled';
         }
 
-        $name = $attributes['name'] ?? $this->templateVariableContainer->get('settings.name');
+        $name = $attributes['name'] ?? $this->templateVariableContainer->get('data._name');
         $file = $attributes['file'];
         unset(
             $attributes['name'],
