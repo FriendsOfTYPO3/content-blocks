@@ -82,7 +82,7 @@ final class ContentBlockDataResolver
         ];
         $baseData = $this->enrichBaseDataWithComputedProperties($baseData, $data);
         $contentBlockDataArray = $baseData + $processedContentBlockData;
-        $contentBlockData = new ContentBlockData($data, $contentBlockDataArray);
+        $contentBlockData = new ContentBlockData($contentType->getName(), $data, $contentBlockDataArray);
 
         // Add dynamic fields so that Fluid can detect them with `property_exists()`.
         foreach ($baseData as $key => $baseDataItem) {

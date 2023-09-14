@@ -23,7 +23,7 @@ at the debug output of it:
 
     TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData [prototype] [object]
        _raw => [private] array(85 items)
-       _processed => [private] array(8 items)
+       processed => [private] array(8 items)
           uid => 24 (integer)
           pid => 1 (integer)
           languageId => 0 (integer)
@@ -34,13 +34,14 @@ at the debug output of it:
 
 As you can see, in contrast to the usual array, we are dealing with an object
 here. This allows us to magically access our own custom properties very easily.
-The object consists of two properties `_raw` and `_processed`. As the names
+The object consists of two properties `_raw` and `processed`. As the names
 suggest, the one is raw and unprocessed and the other one has magic applied from
 Content Blocks. Normally you would access the processed properties. This is done
 by simply accessing the desired property like :html:`{data.header}`. Note, that
-we are omitting `_processed` here. This is important and it won't work
-otherwise. On the other hand, the raw properties have to be accessed by
-:html:`{data._raw.some_field}`. But normally you shouldn't need them.
+we are omitting `processed` here. This is important to remember, as this would
+access a custom field named `processed`. On the other hand, the raw properties
+have to be accessed by :html:`{data._raw.some_field}`. But most of the time you
+shouldn't need them.
 
 All fields with relations are resolved automatically to an array. This includes
 `Collection`, `Select`, `Relation`, `File`, `Folder`, `Category` and `FlexForm`
@@ -121,11 +122,9 @@ Example for a JavaScript file:
 
 
 The mapping between the assets and the Content Block in the ViewHelper is done
-by the TypoScript configuration of a Content Block in
-`tt_content.content_block_identifier.settings.name = vendor/content-block-name`
-which is set automatically. But if you try to use a asset ViewHelper in e.g. a
-partial, you have to ship `settings` to the partial, or you can set `name` by
-hand:
+by the :html:`{data}` object which is set automatically. But if you try to use
+an asset ViewHelper in e.g. a partial, you have to ship :html:`{data}` to the
+partial, or you can set :html:`name` by hand:
 
 .. code-block:: html
 
@@ -143,8 +142,8 @@ This ViewHelper looks directly in the `Labels.xlf` file for the given key.
     <cb:translate key="my.contentblock.header" />
 
 As described above in the asset ViewHelper, the mapping between the Content
-Block and the translation file is done by the TypoScript configuration of a
-Content Block. You can also set `name` by hand:
+Block and the translation file is done by the :html:`{data}` variable in the
+Fluid template of a Content Block. You can also set :html:`name` by hand:
 
 .. code-block:: html
 
@@ -161,8 +160,8 @@ your partials there.
 This part is automatically added, but you can also extend or overwrite this
 TypoScript configuration in your sitepackage.
 
-Remember, that you should ship the `settings` to the partial if you want to use
-the asset or translation ViewHelpers within.
+Remember, that you should ship the :html:`{data}` variable to the partial if you
+want to use the asset or translation ViewHelpers within.
 
 Layouts
 =======

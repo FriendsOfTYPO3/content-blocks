@@ -51,7 +51,7 @@ class TranslateViewHelper extends AbstractViewHelper
 
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
     {
-        $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('settings.name'));
+        $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('data._name'));
         $key = (string)$arguments['key'];
         $default = (string)($arguments['default'] ?? $renderChildrenClosure() ?? '');
         $translateArguments = $arguments['arguments'];
