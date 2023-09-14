@@ -23,7 +23,7 @@ at the debug output of it:
 
     TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData [prototype] [object]
        _raw => [private] array(85 items)
-       processed => [private] array(8 items)
+       _processed => [private] array(8 items)
           uid => 24 (integer)
           pid => 1 (integer)
           languageId => 0 (integer)
@@ -34,12 +34,12 @@ at the debug output of it:
 
 As you can see, in contrast to the usual array, we are dealing with an object
 here. This allows us to magically access our own custom properties very easily.
-The object consists of two properties `_raw` and `processed`. As the names
+The object consists of two properties `_raw` and `_processed`. As the names
 suggest, the one is raw and unprocessed and the other one has magic applied from
 Content Blocks. Normally you would access the processed properties. This is done
 by simply accessing the desired property like :html:`{data.header}`. Note, that
-we are omitting `processed` here. This is important to remember, as this would
-access a custom field named `processed`. On the other hand, the raw properties
+we are omitting `_processed` here. This is important to remember, as this would
+access a custom field named `_processed`. On the other hand, the raw properties
 have to be accessed by :html:`{data._raw.some_field}`. But most of the time you
 shouldn't need them.
 
