@@ -97,9 +97,8 @@ class TableDefinitionCollectionFactory
             $yamlFields = $this->appendInternalDescription($yamlFields);
         }
         foreach ($yamlFields as $rootField) {
-            $rootFieldType = $this->resolveType($rootField, $input->table);
+            $rootFieldType = $this->resolveType($rootField, $input->table, $input);
             $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
-            $this->assertIdentifierExists($rootField, $input->contentBlock);
             $fields = match ($rootFieldType) {
                 Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
                 FieldType::TAB => $this->handleTab($input, $result, $rootField),
@@ -108,7 +107,7 @@ class TableDefinitionCollectionFactory
             foreach ($fields as $field) {
                 $this->assertUniqueFieldIdentifier($field['identifier'], $result, $input->contentBlock);
                 $result->uniqueFieldIdentifiers[] = $field['identifier'];
-                $fieldType = $this->resolveType($field, $input->table);
+                $fieldType = $this->resolveType($field, $input->table, $input);
                 $input->languagePath->addPathSegment($field['identifier']);
 
                 if ($fieldType === FieldType::FLEXFORM) {
@@ -232,7 +231,7 @@ class TableDefinitionCollectionFactory
         $fields = [];
         $paletteShowItems = [];
         foreach ($rootPalette['fields'] as $paletteField) {
-            $paletteFieldType = $this->resolveType($paletteField, $input->table);
+            $paletteFieldType = $this->resolveType($paletteField, $input->table, $input);
             if ($paletteFieldType === FieldType::LINEBREAK) {
                 $paletteShowItems[] = '--linebreak--';
             } else {
@@ -450,11 +449,20 @@ class TableDefinitionCollectionFactory
         return $contentBlock->prefixFields();
     }
 
-    private function resolveType(array $field, string $table): FieldType
+    private function resolveType(array $field, string $table, ProcessingInput $input): FieldType
     {
-        return ($field['useExistingField'] ?? false)
-            ? TypeResolver::resolve($field['identifier'] ?? '', $table)
-            : FieldType::from($field['type']);
+        $isExistingField = ($field['useExistingField'] ?? false);
+        if ($isExistingField) {
+            $this->assertIdentifierExists($field, $input);
+            $fieldType = TypeResolver::resolve($field['identifier'], $table);
+            return $fieldType;
+        }
+        $this->assertTypeExists($field, $input);
+        $fieldType = FieldType::from($field['type']);
+        if ($fieldType !== FieldType::LINEBREAK) {
+            $this->assertIdentifierExists($field, $input);
+        }
+        return $fieldType;
     }
 
     private function chooseIdentifier(ProcessingInput $input, array $field): string
@@ -522,12 +530,22 @@ class TableDefinitionCollectionFactory
         }
     }
 
-    private function assertIdentifierExists(array $field, LoadedContentBlock $contentBlock): void
+    private function assertIdentifierExists(array $field, ProcessingInput $input): void
     {
         if (!isset($field['identifier'])) {
             throw new \InvalidArgumentException(
-                'A field is missing the required "identifier" in content block "' . $contentBlock->getName() . '".',
+                'A field is missing the required "identifier" in content block "' . $input->contentBlock->getName() . '".',
                 1679226075
+            );
+        }
+    }
+
+    private function assertTypeExists(array $field, ProcessingInput $input): void
+    {
+        if (!isset($field['type'])) {
+            throw new \InvalidArgumentException(
+                'The field "' . ($field['identifier'] ?? '') . '" is missing the required "type" in content block "' . $input->contentBlock->getName() . '".',
+                1694768937
             );
         }
     }
