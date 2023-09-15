@@ -73,7 +73,7 @@ final class ContentBlockDataResolver
         return $this->buildContentBlockDataObject($data, $processedContentBlockData, $contentTypeDefinition);
     }
 
-    protected function buildContentBlockDataObject(
+    private function buildContentBlockDataObject(
         array $data,
         array $processedContentBlockData,
         ContentTypeInterface $contentType,
@@ -100,7 +100,7 @@ final class ContentBlockDataResolver
         return $contentBlockData;
     }
 
-    protected function enrichBaseDataWithComputedProperties(array $baseData, array $data): array
+    private function enrichBaseDataWithComputedProperties(array $baseData, array $data): array
     {
         $computedProperties = [
             'localizedUid' => '_LOCALIZED_UID',
