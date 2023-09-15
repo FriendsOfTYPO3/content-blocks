@@ -49,7 +49,6 @@ class TableDefinitionCollectionFactory
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
-            $this->validateContentBlock($contentBlock->getYaml(), $contentBlock, $table);
             $languagePath = new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
             $processingInput = new ProcessingInput(
                 yaml: $contentBlock->getYaml(),
@@ -99,16 +98,22 @@ class TableDefinitionCollectionFactory
         }
         foreach ($yamlFields as $rootField) {
             $rootFieldType = $this->resolveType($rootField, $input->table);
+            $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
+            $this->assertIdentifierExists($rootField, $input->contentBlock);
             $fields = match ($rootFieldType) {
                 Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
                 FieldType::TAB => $this->handleTab($input, $result, $rootField),
                 default => $this->handleDefault($input, $result, $rootField)
             };
             foreach ($fields as $field) {
+                $this->assertUniqueFieldIdentifier($field['identifier'], $result, $input->contentBlock);
+                $result->uniqueFieldIdentifiers[] = $field['identifier'];
                 $fieldType = $this->resolveType($field, $input->table);
                 $input->languagePath->addPathSegment($field['identifier']);
 
                 if ($fieldType === FieldType::FLEXFORM) {
+                    $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
+                    $this->validateFlexFormContainsValidFieldTypes($field, $input->contentBlock);
                     $field = $this->processFlexForm($field, $input->getTypeField(), $input->getTypeName(), $input->languagePath);
                 }
 
@@ -218,6 +223,8 @@ class TableDefinitionCollectionFactory
 
     private function handlePalette(ProcessingInput $input, ProcessedFieldsResult $result, array $rootPalette): array
     {
+        $this->assertUniquePaletteIdentifier($rootPalette['identifier'], $result, $input->contentBlock);
+        $result->uniquePaletteIdentifiers[] = $rootPalette['identifier'];
         // Ignore empty Palettes.
         if (($rootPalette['fields'] ?? []) === []) {
             return [];
@@ -229,6 +236,8 @@ class TableDefinitionCollectionFactory
             if ($paletteFieldType === FieldType::LINEBREAK) {
                 $paletteShowItems[] = '--linebreak--';
             } else {
+                $this->assertNoPaletteInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
+                $this->assertNoTabInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
                 $fields[] = $paletteField;
                 $paletteShowItems[] = $this->chooseIdentifier($input, $paletteField);
             }
@@ -250,6 +259,8 @@ class TableDefinitionCollectionFactory
 
     private function handleTab(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
     {
+        $this->assertUniqueTabIdentifier($field['identifier'], $result, $input->contentBlock);
+        $result->uniqueTabIdentifiers[] = $field['identifier'];
         $input->languagePath->addPathSegment('tabs.' . $field['identifier']);
         $label = ($field['label'] ?? '') !== '' ? $field['label'] : $input->languagePath->getCurrentPath();
         $result->contentType->showItems[] = '--div--;' . $label;
@@ -501,98 +512,73 @@ class TableDefinitionCollectionFactory
         return $element;
     }
 
-    private function validateContentBlock(array $yaml, LoadedContentBlock $contentBlock, string $table): void
+    private function assertNoLinebreakOutsideOfPalette(FieldType $fieldType, LoadedContentBlock $contentBlock): void
     {
-        $uniqueIdentifiers = [];
-        $uniquePaletteIdentifiers = [];
-        $uniqueTabIdentifiers = [];
-        foreach ($yaml['fields'] as $rootField) {
-            // @todo validate for existing type. Exceptions are Linebreaks and useExistingField: true
-            //            if (!isset($rootField['type'])) {
-            //                throw new \InvalidArgumentException(
-            //                    'A field is missing the required "type" in content block "' . $contentBlock->getName() . '".',
-            //                    1679226075
-            //                );
-            //            }
-            $rootFieldType = $this->resolveType($rootField, $table);
-            if ($rootFieldType === FieldType::LINEBREAK) {
-                throw new \InvalidArgumentException(
-                    'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
-                    1679224392
-                );
-            }
-            if (!isset($rootField['identifier'])) {
-                throw new \InvalidArgumentException(
-                    'A field is missing the required "identifier" in content block "' . $contentBlock->getName() . '".',
-                    1679226075
-                );
-            }
-            $rootFieldIdentifier = $rootField['identifier'];
-            if ($rootFieldType === FieldType::PALETTE) {
-                // Ignore empty Palettes.
-                if (($rootField['fields'] ?? []) === []) {
-                    continue;
-                }
-                if (in_array($rootFieldIdentifier, $uniquePaletteIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The palette identifier "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
-                        1679168022
-                    );
-                }
-                $uniquePaletteIdentifiers[] = $rootFieldIdentifier;
-                $fields = [];
-                foreach ($rootField['fields'] as $paletteField) {
-                    $paletteFieldType = $this->resolveType($paletteField, $table);
-                    if ($paletteFieldType === FieldType::PALETTE) {
-                        throw new \InvalidArgumentException(
-                            'Palette "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
-                            1679168602
-                        );
-                    }
-                    if ($paletteFieldType === FieldType::TAB) {
-                        throw new \InvalidArgumentException(
-                            'Tab "' . $paletteField['identifier'] . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
-                            1679245193
-                        );
-                    }
-                }
-            } elseif ($rootFieldType === FieldType::TAB) {
-                if (in_array($rootFieldIdentifier, $uniqueTabIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The tab identifier "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
-                        1679243686
-                    );
-                }
-                $uniqueTabIdentifiers[] = $rootFieldIdentifier;
-                continue;
-            } else {
-                $fields = [$rootField];
-            }
+        if ($fieldType === FieldType::LINEBREAK) {
+            throw new \InvalidArgumentException(
+                'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
+                1679224392
+            );
+        }
+    }
 
-            foreach ($fields as $field) {
-                $identifier = $field['identifier'];
-                $fieldType = $this->resolveType($field, $table);
-                if (in_array($identifier, $uniqueIdentifiers, true)) {
-                    throw new \InvalidArgumentException(
-                        'The identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
-                        1677407942
-                    );
-                }
-                $uniqueIdentifiers[] = $identifier;
+    private function assertIdentifierExists(array $field, LoadedContentBlock $contentBlock): void
+    {
+        if (!isset($field['identifier'])) {
+            throw new \InvalidArgumentException(
+                'A field is missing the required "identifier" in content block "' . $contentBlock->getName() . '".',
+                1679226075
+            );
+        }
+    }
 
-                if ($fieldType === FieldType::FLEXFORM) {
-                    $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $contentBlock);
-                    $this->validateFlexFormContainsValidFieldTypes($field, $contentBlock);
-                }
+    private function assertUniquePaletteIdentifier(string $identifier, ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
+    {
+        if (in_array($identifier, $result->uniquePaletteIdentifiers, true)) {
+            throw new \InvalidArgumentException(
+                'The palette identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                1679168022
+            );
+        }
+    }
 
-                // Recursive call for Collection (inline) fields.
-                if ($fieldType === FieldType::COLLECTION && !empty($field['fields'])) {
-                    // @todo Input is needed for chooseIdentifier. Either initialize it here or think about moving
-                    // @todo the validation back to the main method.
-                    // $inlineTable = $this->chooseIdentifier($contentBlock, $field);
-                    // $this->validateContentBlock($field, $contentBlock, $inlineTable);
-                }
-            }
+    private function assertNoPaletteInPalette(FieldType $fieldType, string $identifier, string $rootFieldIdentifier, LoadedContentBlock $contentBlock): void
+    {
+        if ($fieldType === FieldType::PALETTE) {
+            throw new \InvalidArgumentException(
+                'Palette "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
+                1679168602
+            );
+        }
+    }
+
+    private function assertNoTabInPalette(FieldType $fieldType, string $identifier, string $rootFieldIdentifier, LoadedContentBlock $contentBlock): void
+    {
+        if ($fieldType === FieldType::TAB) {
+            throw new \InvalidArgumentException(
+                'Tab "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
+                1679245193
+            );
+        }
+    }
+
+    private function assertUniqueTabIdentifier(string $identifier, ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
+    {
+        if (in_array($identifier, $result->uniqueTabIdentifiers, true)) {
+            throw new \InvalidArgumentException(
+                'The tab identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                1679243686
+            );
+        }
+    }
+
+    private function assertUniqueFieldIdentifier(string $identifier, ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
+    {
+        if (in_array($identifier, $result->uniqueFieldIdentifiers, true)) {
+            throw new \InvalidArgumentException(
+                'The identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                1677407942
+            );
         }
     }
 
