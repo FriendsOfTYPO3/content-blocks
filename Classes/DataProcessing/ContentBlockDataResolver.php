@@ -47,18 +47,24 @@ final class ContentBlockDataResolver
                 continue;
             }
             // RelationResolver already processes the fields recursively. Run it only on root level.
-            if ($depth === 0) {
-                $processedField = $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table);
-            } else {
-                $processedField = $data[$tcaFieldDefinition->getUniqueIdentifier()];
-            }
+            $processedField = $depth === 0
+                ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
+                : $data[$tcaFieldDefinition->getUniqueIdentifier()];
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
                 foreach ($processedField as $key => $processedFieldItem) {
                     $identifier = $tcaFieldDefinition->getUniqueIdentifier();
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($identifier);
-                    $typeName = $collectionTableDefinition->getTypeField() ? $processedFieldItem[$collectionTableDefinition->getTypeField()] : '1';
+                    $typeName = $collectionTableDefinition->getTypeField()
+                        ? $processedFieldItem[$collectionTableDefinition->getTypeField()]
+                        : '1';
                     $typeDefinition = $collectionTableDefinition->getTypeDefinitionCollection()->getType($typeName);
-                    $processedField[$key] = $this->buildContentBlockDataObjectRecursive($typeDefinition, $collectionTableDefinition, $processedFieldItem, $identifier, ++$depth);
+                    $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
+                        $typeDefinition,
+                        $collectionTableDefinition,
+                        $processedFieldItem,
+                        $identifier,
+                        ++$depth
+                    );
                 }
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
