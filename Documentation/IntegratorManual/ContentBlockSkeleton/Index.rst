@@ -63,3 +63,17 @@ Example interaction:
    Choose an extension in which the content block should be stored:
    [sitepackage] Test Package for content blocks
    > sitepackage
+
+
+After running the make command
+==============================
+
+In order to create the newly added database tables or fields, first you have to
+clear the caches and then run the database compare. You can do the same in the
+TYPO3 Backend by using the Database Analyzer. Repeat this step every time you
+add new fields to your Content Block definition.
+
+.. code-block:: bash
+
+   vendor/bin/typo3 cache:flush -g system
+   vendor/bin/typo3 extension:setup --extension=my_sitepackage

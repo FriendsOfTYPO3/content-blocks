@@ -80,7 +80,7 @@ class TcaGenerator
     ];
 
     public function __construct(
-        protected readonly LoaderInterface $loader,
+        protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
@@ -90,23 +90,22 @@ class TcaGenerator
 
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
-        $tableDefinitionCollection = $this->loader->load(false);
-        $event->setTca(array_replace_recursive($event->getTca(), $this->generate($tableDefinitionCollection)));
+        $event->setTca(array_replace_recursive($event->getTca(), $this->generate()));
 
         // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
         $tcaBackup = $GLOBALS['TCA'];
         $GLOBALS['TCA'] = $event->getTca();
-        $this->fillTypeFieldSelectItems($tableDefinitionCollection);
+        $this->fillTypeFieldSelectItems();
         $event->setTca($GLOBALS['TCA']);
         $GLOBALS['TCA'] = $tcaBackup;
 
         $event->setTca($this->eventDispatcher->dispatch(new AfterContentBlocksTcaCompilationEvent($event->getTca()))->getTca());
     }
 
-    public function generate(TableDefinitionCollection $tableDefinitionCollection): array
+    public function generate(): array
     {
         $tca = [];
-        foreach ($tableDefinitionCollection as $tableDefinition) {
+        foreach ($this->tableDefinitionCollection as $tableDefinition) {
             if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
                 $tca[$tableDefinition->getTable()] = $this->getCollectionTableStandardTca($tableDefinition);
             }
@@ -133,9 +132,9 @@ class TcaGenerator
         return $this->tcaPreparation->prepare($tca);
     }
 
-    protected function fillTypeFieldSelectItems(TableDefinitionCollection $tableDefinitionCollection): void
+    protected function fillTypeFieldSelectItems(): void
     {
-        foreach ($tableDefinitionCollection as $tableDefinition) {
+        foreach ($this->tableDefinitionCollection as $tableDefinition) {
             // This definition has only one type (the default type "1"). There is no type select to add it to.
             if ($tableDefinition->getTypeField() === null) {
                 continue;
