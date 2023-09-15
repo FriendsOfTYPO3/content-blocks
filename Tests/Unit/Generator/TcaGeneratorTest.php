@@ -1945,11 +1945,10 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $loader = new TestLoader($tableDefinitionCollection);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
+        $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
 
-        $tca = $tcaGenerator->generate($tableDefinitionCollection);
+        $tca = $tcaGenerator->generate();
 
         self::assertEquals($expected, $tca);
     }
@@ -2571,11 +2570,10 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $loader = new TestLoader($tableDefinitionCollection);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
-        $tcaGenerator = new TcaGenerator($loader, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
+        $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
 
-        $tca = $tcaGenerator->generate($tableDefinitionCollection);
+        $tca = $tcaGenerator->generate();
 
         self::assertEquals($expected, $tca);
     }
