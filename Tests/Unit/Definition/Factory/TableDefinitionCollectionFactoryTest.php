@@ -631,6 +631,37 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
     /**
      * @test
      */
+    public function typeIsRequired(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'text1',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1694768937);
+        $this->expectExceptionMessage('The field "text1" is missing the required "type" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+    }
+
+    /**
+     * @test
+     */
     public function identifierIsRequiredInsideCollections(): void
     {
         $contentBlocks = [
