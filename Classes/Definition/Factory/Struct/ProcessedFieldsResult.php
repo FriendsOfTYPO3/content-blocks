@@ -25,6 +25,12 @@ final class ProcessedFieldsResult
     public array $tableDefinitionList = [];
     public ProcessedTableDefinition $tableDefinition;
     public ProcessedContentType $contentType;
+    /** @var string[] */
+    public array $uniqueFieldIdentifiers = [];
+    /** @var string[] */
+    public array $uniquePaletteIdentifiers = [];
+    /** @var string[] */
+    public array $uniqueTabIdentifiers = [];
 
     public function __construct()
     {

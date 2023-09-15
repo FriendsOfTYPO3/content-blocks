@@ -113,13 +113,12 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function notUniqueIdentifiersWithinCollectionThrowAnException(array $contentBlocks): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1677407942);
-        //        $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1677407942);
+        $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -166,45 +165,44 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function paletteInsidePaletteInsideCollectionIsNotAllowed(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'palette_1',
-        //                                    'type' => 'Palette',
-        //                                    'fields' => [
-        //                                        [
-        //                                            'identifier' => 'palette_inside_palette',
-        //                                            'type' => 'Palette',
-        //                                            'fields' => [],
-        //                                        ],
-        //                                    ],
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'palette_inside_palette',
+                                            'type' => 'Palette',
+                                            'fields' => [],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1679168602);
-        //        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679168602);
+        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -268,62 +266,61 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function paletteWithSameIdentifierInsideCollectionIsNotAllowed(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'palette_1',
-        //                                    'type' => 'Palette',
-        //                                    'fields' => [
-        //                                        [
-        //                                            'identifier' => 'field1',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                        [
-        //                                            'identifier' => 'field2',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                    ],
-        //                                ],
-        //                                [
-        //                                    'identifier' => 'palette_1',
-        //                                    'type' => 'Palette',
-        //                                    'fields' => [
-        //                                        [
-        //                                            'identifier' => 'field3',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                        [
-        //                                            'identifier' => 'field4',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                    ],
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'field1',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'field2',
+                                            'type' => 'Text',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'field3',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'field4',
+                                            'type' => 'Text',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1679168022);
-        //        $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679168022);
+        $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -371,46 +368,45 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function tabWithSameIdentifierInsideCollectionIsNotAllowed(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'tab_1',
-        //                                    'type' => 'Tab',
-        //                                ],
-        //                                [
-        //                                    'identifier' => 'tab_2',
-        //                                    'type' => 'Tab',
-        //                                ],
-        //                                [
-        //                                    'identifier' => 'tab_1',
-        //                                    'type' => 'Tab',
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
-        //
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1679243686);
-        //        $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'tab_1',
+                                    'type' => 'Tab',
+                                ],
+                                [
+                                    'identifier' => 'tab_2',
+                                    'type' => 'Tab',
+                                ],
+                                [
+                                    'identifier' => 'tab_1',
+                                    'type' => 'Tab',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679243686);
+        $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -456,43 +452,43 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function tabInsidePaletteInsideCollectionIsNotAllowed(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'palette_1',
-        //                                    'type' => 'Palette',
-        //                                    'fields' => [
-        //                                        [
-        //                                            'identifier' => 'tab_1',
-        //                                            'type' => 'Tab',
-        //                                        ],
-        //                                    ],
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1679245193);
-        //        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'tab_1',
+                                            'type' => 'Tab',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679245193);
+        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -548,54 +544,53 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function linebreaksAreOnlyAllowedWithinPalettesInsideCollections(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'palette_1',
-        //                                    'type' => 'Palette',
-        //                                    'fields' => [
-        //                                        [
-        //                                            'identifier' => 'field1',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                        [
-        //                                            'type' => 'Linebreak',
-        //                                        ],
-        //                                        [
-        //                                            'identifier' => 'field2',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                    ],
-        //                                ],
-        //                                [
-        //                                    'type' => 'Linebreak',
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
-        //
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1679224392);
-        //        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'palette_1',
+                                    'type' => 'Palette',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'field1',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'type' => 'Linebreak',
+                                        ],
+                                        [
+                                            'identifier' => 'field2',
+                                            'type' => 'Text',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'Linebreak',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679224392);
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -638,41 +633,40 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function identifierIsRequiredInsideCollections(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'text1',
-        //                                    'type' => 'Text',
-        //                                ],
-        //                                [
-        //                                    'type' => 'Text',
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
-        //
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionCode(1679226075);
-        //        $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'text1',
+                                    'type' => 'Text',
+                                ],
+                                [
+                                    'type' => 'Text',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1679226075);
+        $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     /**
@@ -680,54 +674,53 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function flexFieldIsNotAllowedToMixNonSheetAndSheet(): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $contentBlocks = [
-        //            [
-        //                'name' => 'foo/bar',
-        //                'icon' => '',
-        //                'iconProvider' => '',
-        //                'path' => 'EXT:example/ContentBlocks/foo',
-        //                'yaml' => [
-        //                    'table' => 'tt_content',
-        //                    'typeField' => 'CType',
-        //                    'fields' => [
-        //                        [
-        //                            'identifier' => 'inline',
-        //                            'type' => 'Collection',
-        //                            'fields' => [
-        //                                [
-        //                                    'identifier' => 'flexField',
-        //                                    'type' => 'FlexForm',
-        //                                    'fields' => [
-        //                                        [
-        //                                            'identifier' => 'foo',
-        //                                            'type' => 'Text',
-        //                                        ],
-        //                                        [
-        //                                            'identifier' => 'aSheet',
-        //                                            'type' => 'Sheet',
-        //                                            'fields' => [
-        //                                                [
-        //                                                    'identifier' => 'bar',
-        //                                                    'type' => 'Text',
-        //                                                ],
-        //                                            ],
-        //                                        ],
-        //                                    ],
-        //                                ],
-        //                            ],
-        //                        ],
-        //                    ],
-        //                ],
-        //            ],
-        //        ];
-        //
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in content block "foo/bar".');
-        //        $this->expectExceptionCode(1685217163);
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => '',
+                'iconProvider' => '',
+                'path' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'fields' => [
+                        [
+                            'identifier' => 'inline',
+                            'type' => 'Collection',
+                            'fields' => [
+                                [
+                                    'identifier' => 'flexField',
+                                    'type' => 'FlexForm',
+                                    'fields' => [
+                                        [
+                                            'identifier' => 'foo',
+                                            'type' => 'Text',
+                                        ],
+                                        [
+                                            'identifier' => 'aSheet',
+                                            'type' => 'Sheet',
+                                            'fields' => [
+                                                [
+                                                    'identifier' => 'bar',
+                                                    'type' => 'Text',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in content block "foo/bar".');
+        $this->expectExceptionCode(1685217163);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     public static function structuralFieldTypesAreNotAllowedInFlexFormDataProvider(): iterable
@@ -831,13 +824,12 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function structuralFieldTypesAreNotAllowedInFlexForm(array $contentBlocks, string $message): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionMessage($message);
-        //        $this->expectExceptionCode(1685220309);
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1685220309);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     public static function sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider(): iterable
@@ -883,13 +875,12 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function sectionsHaveAtLeastOneContainerExceptionIsThrown(array $contentBlocks, string $message): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionMessage($message);
-        //        $this->expectExceptionCode(1686330220);
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1686330220);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     public static function containerHaveAtLeastOneFieldExceptionIsThrownDataProvider(): iterable
@@ -941,13 +932,12 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function containerHaveAtLeastOneFieldExceptionIsThrown(array $contentBlocks, string $message): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionMessage($message);
-        //        $this->expectExceptionCode(1686331469);
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1686331469);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
     public static function containerContainsValidFieldTypeExceptionIsThrownDataProvider(): iterable
@@ -1004,12 +994,11 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
      */
     public function containerContainsValidFieldTypeExceptionIsThrown(array $contentBlocks, string $message): void
     {
-        // @todo activate again, when recursive validation works.
-        //        $this->expectException(\InvalidArgumentException::class);
-        //        $this->expectExceptionMessage($message);
-        //        $this->expectExceptionCode(1686330594);
-        //
-        //        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        //        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(1686330594);
+
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 }
