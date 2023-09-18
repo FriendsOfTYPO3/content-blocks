@@ -28,8 +28,7 @@ final class ContentBlockConfiguration
         private readonly array $yamlConfig,
         private readonly string $basePath,
         private readonly ContentType $contentType,
-    ) {
-    }
+    ) {}
 
     public function getYamlConfig(): array
     {

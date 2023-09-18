@@ -30,8 +30,7 @@ class PageTsConfigGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ModifyLoadedPageTsConfigEvent $event): void
     {

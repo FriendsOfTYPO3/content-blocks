@@ -21,8 +21,7 @@ final class AfterContentBlocksTcaCompilationEvent
 {
     public function __construct(
         private array $tca
-    ) {
-    }
+    ) {}
 
     public function getTca(): array
     {

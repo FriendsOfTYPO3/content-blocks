@@ -31,8 +31,7 @@ class PageTypeGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly PageDoktypeRegistry $pageDoktypeRegistry,
-    ) {
-    }
+    ) {}
 
     public function __invoke(BootCompletedEvent $event): void
     {

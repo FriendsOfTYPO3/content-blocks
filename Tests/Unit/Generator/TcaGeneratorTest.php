@@ -24,7 +24,6 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
-use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestLoader;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;

@@ -29,8 +29,7 @@ class IconGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly IconRegistry $iconRegistry,
-    ) {
-    }
+    ) {}
 
     public function __invoke(BootCompletedEvent $event): void
     {

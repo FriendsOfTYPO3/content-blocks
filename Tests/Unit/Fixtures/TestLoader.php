@@ -22,9 +22,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 
 class TestLoader implements LoaderInterface
 {
-    public function __construct(protected TableDefinitionCollection $tableDefinitionCollection)
-    {
-    }
+    public function __construct(protected TableDefinitionCollection $tableDefinitionCollection) {}
 
     public function load(bool $allowCache = true): TableDefinitionCollection
     {

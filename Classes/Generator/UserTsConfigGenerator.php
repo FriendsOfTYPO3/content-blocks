@@ -29,8 +29,7 @@ class UserTsConfigGenerator
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-    ) {
-    }
+    ) {}
 
     public function __invoke(BootCompletedEvent $event): void
     {

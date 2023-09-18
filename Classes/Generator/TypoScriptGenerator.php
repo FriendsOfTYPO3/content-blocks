@@ -33,8 +33,7 @@ class TypoScriptGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
-    ) {
-    }
+    ) {}
 
     public function __invoke(BootCompletedEvent $event): void
     {

@@ -31,8 +31,7 @@ final class LoadedContentBlock
         private readonly string $iconProvider,
         private readonly string $path,
         private readonly ContentType $contentType,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $array): LoadedContentBlock
     {

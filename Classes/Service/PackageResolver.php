@@ -29,9 +29,7 @@ use TYPO3\CMS\Core\Package\PackageManager;
  */
 class PackageResolver
 {
-    public function __construct(protected PackageManager $packageManager)
-    {
-    }
+    public function __construct(protected PackageManager $packageManager) {}
 
     /**
      * @return array<string, PackageInterface>

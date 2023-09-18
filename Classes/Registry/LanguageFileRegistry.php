@@ -31,8 +31,7 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
 
     public function __construct(
         protected readonly XliffParser $xliffParser,
-    ) {
-    }
+    ) {}
 
     public function register(LoadedContentBlock $contentBlock): void
     {

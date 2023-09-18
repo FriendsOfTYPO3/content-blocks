@@ -26,9 +26,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
  */
 class TypeDefinitionLabelService
 {
-    public function __construct(protected readonly ContentBlockRegistry $contentBlockRegistry)
-    {
-    }
+    public function __construct(protected readonly ContentBlockRegistry $contentBlockRegistry) {}
 
     public function getLLLPathForTitle(ContentTypeInterface $typeDefinition): string
     {

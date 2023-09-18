@@ -30,8 +30,7 @@ final class ContentBlockDataResolver
     public function __construct(
         private readonly RelationResolver $relationResolver,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
-    ) {
-    }
+    ) {}
 
     public function buildContentBlockDataObjectRecursive(
         ContentTypeInterface $contentTypeDefinition,

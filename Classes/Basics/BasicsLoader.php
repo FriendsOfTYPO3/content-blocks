@@ -30,8 +30,7 @@ class BasicsLoader
     public function __construct(
         protected readonly BasicsRegistry $basicsRegistry,
         protected readonly PackageManager $packageManager,
-    ) {
-    }
+    ) {}
 
     public function load(): void
     {

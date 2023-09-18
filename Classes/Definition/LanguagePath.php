@@ -25,8 +25,7 @@ final class LanguagePath
     public function __construct(
         private readonly string $basePath,
         private array $path = [],
-    ) {
-    }
+    ) {}
 
     public function getCurrentPath(): string
     {

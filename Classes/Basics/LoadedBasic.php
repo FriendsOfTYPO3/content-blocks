@@ -25,8 +25,7 @@ final class LoadedBasic
     public function __construct(
         private readonly string $identifier,
         private readonly array $fields
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $array): LoadedBasic
     {

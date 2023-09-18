@@ -27,7 +27,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
-use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
@@ -85,8 +84,7 @@ class TcaGenerator
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,
-    ) {
-    }
+    ) {}
 
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
