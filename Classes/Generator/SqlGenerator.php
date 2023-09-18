@@ -27,8 +27,7 @@ class SqlGenerator
 {
     public function __construct(
         protected readonly LoaderInterface $loader
-    ) {
-    }
+    ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void
     {

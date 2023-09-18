@@ -52,8 +52,7 @@ class ContentBlockLoader implements LoaderInterface
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
         protected readonly PageTypeNameValidator $pageTypeNameValidator,
-    ) {
-    }
+    ) {}
 
     public function load(bool $allowCache = true): TableDefinitionCollection
     {

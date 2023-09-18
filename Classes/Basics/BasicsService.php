@@ -22,9 +22,7 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
  */
 class BasicsService
 {
-    public function __construct(protected readonly BasicsRegistry $basicsRegistry)
-    {
-    }
+    public function __construct(protected readonly BasicsRegistry $basicsRegistry) {}
 
     public function applyBasics(array $yaml): array
     {

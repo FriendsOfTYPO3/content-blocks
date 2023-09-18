@@ -30,8 +30,7 @@ class ContentBlockSkeletonBuilder
 {
     public function __construct(
         protected HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
-    ) {
-    }
+    ) {}
 
     /**
      * Writes a ContentBlock to file system.

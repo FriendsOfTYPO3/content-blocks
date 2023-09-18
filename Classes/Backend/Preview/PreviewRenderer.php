@@ -39,8 +39,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected TableDefinitionCollection $tableDefinitionCollection,
         protected RelationResolver $relationResolver,
         protected ContentBlockRegistry $contentBlockRegistry,
-    ) {
-    }
+    ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {

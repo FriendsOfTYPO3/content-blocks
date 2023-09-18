@@ -36,9 +36,7 @@ class PageTypeNameValidator
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
-    public function __construct(protected readonly PageDoktypeRegistry $pageDoktypeRegistry)
-    {
-    }
+    public function __construct(protected readonly PageDoktypeRegistry $pageDoktypeRegistry) {}
 
     public function validate(string|int $typeName, string $contentBlockName): void
     {

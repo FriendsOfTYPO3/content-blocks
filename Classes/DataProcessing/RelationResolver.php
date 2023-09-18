@@ -40,8 +40,7 @@ class RelationResolver
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly FlexFormService $flexFormService,
-    ) {
-    }
+    ) {}
 
     public function processField(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, array $record, string $table): mixed
     {

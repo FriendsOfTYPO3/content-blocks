@@ -26,8 +26,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly RelationResolver $relationResolver,
-    ) {
-    }
+    ) {}
 
     public function process(
         ContentObjectRenderer $cObj,
