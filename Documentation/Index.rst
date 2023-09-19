@@ -42,6 +42,18 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
+            .. rubric:: :ref:`Introduction <introduction>`
+
+         .. container:: card-body
+
+            What is a Content Block?
+
+   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+
+      .. container:: card px-0 h-100
+
+         .. rst-class:: card-header h3
+
             .. rubric:: :ref:`Installation <extension_installation>`
 
          .. container:: card-body
