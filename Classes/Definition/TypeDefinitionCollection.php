@@ -25,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentTypeFactory;
  */
 final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
 {
-    /** @var ContentTypeInterface[] */
+    /** @var array<string|int, ContentTypeInterface> */
     private array $definitions = [];
     private string $table = '';
 
@@ -36,12 +36,12 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
         }
     }
 
-    public function hasType(string $typeName): bool
+    public function hasType(string|int $typeName): bool
     {
         return isset($this->definitions[$typeName]);
     }
 
-    public function getType(string $typeName): ContentTypeInterface
+    public function getType(string|int $typeName): ContentTypeInterface
     {
         if ($this->hasType($typeName)) {
             return $this->definitions[$typeName];
