@@ -208,6 +208,9 @@ class TcaGenerator
             $typeDefinitionArray = [
                 'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition),
             ];
+            if ($tableDefinition->getTypeField() !== null) {
+                $tca[$typeDefinition->getTable()]['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
+            }
             $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
             if ($tableDefinition->getTypeField() !== null && $columnsOverrides !== []) {
                 $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;

@@ -1450,6 +1450,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'type' => 'type',
+                        'typeicon_column' => 'type',
                         'typeicon_classes' => [
                             'example' => 'example-icon',
                             'example2' => 'example2-icon',
