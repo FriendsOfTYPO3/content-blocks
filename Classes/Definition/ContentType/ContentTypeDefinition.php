@@ -121,6 +121,11 @@ abstract class ContentTypeDefinition
         return $this->iconProviderClassName;
     }
 
+    public function hasIcon(): bool
+    {
+        return $this->typeIconPath !== null && $this->getIconProviderClassName() !== '';
+    }
+
     public function withIdentifier(string $identifier): static
     {
         $clone = clone $this;
