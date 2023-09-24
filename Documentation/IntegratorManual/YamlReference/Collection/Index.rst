@@ -75,6 +75,15 @@ Settings
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline>`
 
+Custom icon
+===========
+
+In order to define a custom icon for your Collection field, you may place an
+image file inside `Assets` called `{identifier}.svg`. So for example if your
+identifier for the Collection is `my_collection`, then your image should be
+named `my_collection.svg`. Alternatively, you can also provide png or gif files.
+These should be 64x64px.
+
 Example
 =======
 

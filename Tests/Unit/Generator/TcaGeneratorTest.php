@@ -509,7 +509,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'content-blocks',
+                            'default' => 't3ce_example_collection-1-icon',
                         ],
                         'searchFields' => 'text,text2,palette_field1,palette_field2',
                         'security' => [
@@ -725,7 +725,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'content-blocks',
+                            'default' => 'collection2-1-icon',
                         ],
                         'searchFields' => 'text,text2',
                         'security' => [
@@ -1759,7 +1759,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'content-blocks',
+                            'default' => 'collection-1-icon',
                         ],
                         'searchFields' => 'text',
                         'security' => [
