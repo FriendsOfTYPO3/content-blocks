@@ -160,7 +160,7 @@ class TableDefinitionCollectionFactory
         // Collect table definitions and content types and carry it over to the next stack.
         // This will be merged at the very end.
         $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $this->createInputArrayForTableDefinition($result->tableDefinition);
-        $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType);
+        $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType, $input->isRootTable());
         return $result->tableDefinitionList;
     }
 
@@ -496,7 +496,7 @@ class TableDefinitionCollectionFactory
     /**
      * @see ContentTypeDefinition
      */
-    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType): array
+    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType, bool $isRootTable): array
     {
         [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
         $element = [
@@ -506,11 +506,14 @@ class TableDefinitionCollectionFactory
             'overrideColumns' => $contentType->overrideColumns,
             'vendor' => $vendor,
             'package' => $package,
-            'icon' => $contentType->contentBlock->getIcon(),
-            'iconProvider' => $contentType->contentBlock->getIconProvider(),
             'typeName' => $contentType->typeName,
-            'priority' => (int)($contentType->contentBlock->getYaml()['priority'] ?? 0),
         ];
+        // Only root tables receive an icon and priority.
+        if ($isRootTable) {
+            $element['icon'] = $contentType->contentBlock->getIcon();
+            $element['iconProvider'] = $contentType->contentBlock->getIconProvider();
+            $element['priority'] = (int)($contentType->contentBlock->getYaml()['priority'] ?? 0);
+        }
         if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
         }
