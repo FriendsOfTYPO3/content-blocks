@@ -159,8 +159,27 @@ class ContentBlockLoader implements LoaderInterface
             throw new \RuntimeException('Content Block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
         }
 
-        $icon = null;
-        $iconProviderClass = null;
+        // Override table and typeField for Content Elements and Page Types.
+        if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
+            $yaml['table'] = $contentType->getTable();
+            $yaml['typeField'] = $contentType->getTypeField();
+        }
+
+        $yaml = $this->basicsService->applyBasics($yaml);
+        $contentBlockIcon = $this->resolveContentBlockIcon($name, $absolutePath, $extPath);
+
+        return new LoadedContentBlock(
+            name: $name,
+            yaml: $yaml,
+            icon: $contentBlockIcon->icon,
+            iconProvider: $contentBlockIcon->iconProvider,
+            path: $extPath,
+            contentType: $contentType,
+        );
+    }
+
+    protected function resolveContentBlockIcon(string $name, string $absolutePath, string $extPath): ContentBlockIcon
+    {
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
             $iconPathWithoutFileExtension = ContentBlockPathUtility::getIconPathWithoutFileExtension();
             $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
@@ -173,27 +192,17 @@ class ContentBlockLoader implements LoaderInterface
                 false => $extPath,
             };
             $iconNameWithoutFileExtension = ContentBlockPathUtility::getIconNameWithoutFileExtension();
+            $contentBlockIcon = new ContentBlockIcon();
             $icon = $prefixPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
             $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
-            break;
+            $contentBlockIcon->icon = $icon;
+            $contentBlockIcon->iconProvider = $iconProviderClass;
+            return $contentBlockIcon;
         }
-
-        // Override table and typeField for Content Elements and Page Types.
-        if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
-            $yaml['table'] = $contentType->getTable();
-            $yaml['typeField'] = $contentType->getTypeField();
-        }
-
-        $yaml = $this->basicsService->applyBasics($yaml);
-
-        return new LoadedContentBlock(
-            name: $name,
-            yaml: $yaml,
-            icon: $icon ?? 'EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg',
-            iconProvider: $iconProviderClass ?? SvgIconProvider::class,
-            path: $extPath,
-            contentType: $contentType,
-        );
+        $contentBlockIcon = new ContentBlockIcon();
+        $contentBlockIcon->icon = 'EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg';
+        $contentBlockIcon->iconProvider = SvgIconProvider::class;
+        return $contentBlockIcon;
     }
 
     /**
