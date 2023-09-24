@@ -64,24 +64,13 @@ services:
     public: true
 
   TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
-    tags:
-      - name: cb.loader
-        identifier: content-block
     arguments:
       $cache: '@cache.core'
-
-  TYPO3\CMS\ContentBlocks\Loader\LoaderFactory:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Loader\LoaderInterface:
-    factory:
-      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderFactory'
-      - 'create'
 
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
     shared: false
     factory:
-      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderFactory'
+      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderInterface'
       - 'load'
 
   TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand:
