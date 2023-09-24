@@ -156,22 +156,26 @@ class ContentBlockLoader implements LoaderInterface
         array $yaml = [],
     ): LoadedContentBlock {
         if (!file_exists($absolutePath)) {
-            throw new \RuntimeException('Content block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
+            throw new \RuntimeException('Content Block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
         }
 
         $icon = null;
         $iconProviderClass = null;
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $relativeIconPath = ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.' . $fileExtension;
+            $iconPathWithoutFileExtension = ContentBlockPathUtility::getIconPathWithoutFileExtension();
+            $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
             $checkIconPath = $absolutePath . '/' . $relativeIconPath;
-            if (is_readable($checkIconPath)) {
-                $prefixPath = Environment::isComposerMode()
-                    ? Environment::getPublicPath() . '/' . ContentBlockPathUtility::getSymlinkedAssetsPath($name)
-                    : $extPath;
-                $icon = $prefixPath . '/' . ContentBlockPathUtility::getIconNameWithoutFileExtension() . '.' . $fileExtension;
-                $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
-                break;
+            if (!is_readable($checkIconPath)) {
+                continue;
             }
+            $prefixPath = match (Environment::isComposerMode()) {
+                true => Environment::getPublicPath() . '/' . ContentBlockPathUtility::getSymlinkedAssetsPath($name),
+                false => $extPath,
+            };
+            $iconNameWithoutFileExtension = ContentBlockPathUtility::getIconNameWithoutFileExtension();
+            $icon = $prefixPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
+            $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
+            break;
         }
 
         // Override table and typeField for Content Elements and Page Types.
