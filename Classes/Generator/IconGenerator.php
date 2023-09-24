@@ -35,9 +35,6 @@ class IconGenerator
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if (!$typeDefinition->hasIcon()) {
-                    continue;
-                }
                 $this->iconRegistry->registerIcon(
                     identifier: $typeDefinition->getTypeIconIdentifier(),
                     iconProviderClassName: $typeDefinition->getIconProviderClassName(),

@@ -213,11 +213,7 @@ class TcaGenerator
                 // @todo Add possibility to define (global) default icon for Record Types with multiple types.
                 $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
             } else {
-                if ($typeDefinition->hasIcon()) {
-                    $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = $typeDefinition->getTypeIconIdentifier();
-                } else {
-                    $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = 'content-blocks';
-                }
+                $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] = $typeDefinition->getTypeIconIdentifier();
             }
             if ($tableDefinition->getTypeField() !== null && $columnsOverrides !== []) {
                 $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;

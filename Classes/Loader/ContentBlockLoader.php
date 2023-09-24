@@ -27,12 +27,11 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -166,43 +165,17 @@ class ContentBlockLoader implements LoaderInterface
         }
 
         $yaml = $this->basicsService->applyBasics($yaml);
-        $contentBlockIcon = $this->resolveContentBlockIcon($name, $absolutePath, $extPath);
+        $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
+        $contentBlockIcon = ContentTypeIconResolver::resolve($name, $absolutePath, $extPath, $iconIdentifier);
 
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
-            icon: $contentBlockIcon->icon,
+            icon: $contentBlockIcon->iconPath,
             iconProvider: $contentBlockIcon->iconProvider,
             path: $extPath,
             contentType: $contentType,
         );
-    }
-
-    protected function resolveContentBlockIcon(string $name, string $absolutePath, string $extPath): ContentBlockIcon
-    {
-        foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $iconPathWithoutFileExtension = ContentBlockPathUtility::getIconPathWithoutFileExtension();
-            $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
-            $checkIconPath = $absolutePath . '/' . $relativeIconPath;
-            if (!is_readable($checkIconPath)) {
-                continue;
-            }
-            $prefixPath = match (Environment::isComposerMode()) {
-                true => Environment::getPublicPath() . '/' . ContentBlockPathUtility::getSymlinkedAssetsPath($name),
-                false => $extPath,
-            };
-            $iconNameWithoutFileExtension = ContentBlockPathUtility::getIconNameWithoutFileExtension();
-            $contentBlockIcon = new ContentBlockIcon();
-            $icon = $prefixPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
-            $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
-            $contentBlockIcon->icon = $icon;
-            $contentBlockIcon->iconProvider = $iconProviderClass;
-            return $contentBlockIcon;
-        }
-        $contentBlockIcon = new ContentBlockIcon();
-        $contentBlockIcon->icon = 'EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg';
-        $contentBlockIcon->iconProvider = SvgIconProvider::class;
-        return $contentBlockIcon;
     }
 
     /**

@@ -15,13 +15,13 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Loader;
+namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ContentBlockIcon
+final class ContentTypeIcon
 {
-    public string $icon;
+    public string $iconPath;
     public string $iconProvider;
 }

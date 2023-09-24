@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedTableDefinition;
@@ -31,6 +32,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TypeResolver;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -160,7 +162,7 @@ class TableDefinitionCollectionFactory
         // Collect table definitions and content types and carry it over to the next stack.
         // This will be merged at the very end.
         $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $this->createInputArrayForTableDefinition($result->tableDefinition);
-        $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType, $input->isRootTable());
+        $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType, $input);
         return $result->tableDefinitionList;
     }
 
@@ -496,7 +498,7 @@ class TableDefinitionCollectionFactory
     /**
      * @see ContentTypeDefinition
      */
-    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType, bool $isRootTable): array
+    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType, ProcessingInput $input): array
     {
         [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
         $element = [
@@ -508,13 +510,23 @@ class TableDefinitionCollectionFactory
             'package' => $package,
             'typeName' => $contentType->typeName,
         ];
-        // Only root tables receive an icon and priority.
-        if ($isRootTable) {
-            $element['typeIconPath'] = $contentType->contentBlock->getIcon();
-            $element['iconProvider'] = $contentType->contentBlock->getIconProvider();
-            $element['typeIconIdentifier'] = $contentType->table . '-' . $contentType->typeName . '-icon';
+        if ($input->isRootTable()) {
+            $contentTypeIcon = new ContentTypeIcon();
+            $contentTypeIcon->iconPath = $contentType->contentBlock->getIcon();
+            $contentTypeIcon->iconProvider = $contentType->contentBlock->getIconProvider();
             $element['priority'] = (int)($contentType->contentBlock->getYaml()['priority'] ?? 0);
+        } else {
+            $absolutePath = GeneralUtility::getFileAbsFileName($contentType->contentBlock->getPath());
+            $contentTypeIcon = ContentTypeIconResolver::resolve(
+                $contentType->contentBlock->getName(),
+                $absolutePath,
+                $contentType->contentBlock->getPath(),
+                $input->yaml['identifier']
+            );
         }
+        $element['typeIconPath'] = $contentTypeIcon->iconPath;
+        $element['iconProvider'] = $contentTypeIcon->iconProvider;
+        $element['typeIconIdentifier'] = $contentType->table . '-' . $contentType->typeName . '-icon';
         if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
         }

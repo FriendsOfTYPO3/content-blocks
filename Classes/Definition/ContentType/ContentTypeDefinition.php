@@ -37,9 +37,9 @@ abstract class ContentTypeDefinition
     protected string $vendor = '';
     protected string $package = '';
     protected int $priority = 0;
-    protected ?string $typeIconIdentifier = null;
-    protected ?string $typeIconPath = null;
-    protected ?string $iconProviderClassName = null;
+    protected string $typeIconPath;
+    protected string $iconProviderClassName;
+    protected string $typeIconIdentifier;
 
     public function getIdentifier(): string
     {
@@ -54,11 +54,6 @@ abstract class ContentTypeDefinition
     public function getTypeName(): string|int
     {
         return $this->typeName;
-    }
-
-    public function getTypeIconIdentifier(): ?string
-    {
-        return $this->typeIconIdentifier;
     }
 
     public function getVendor(): string
@@ -112,21 +107,19 @@ abstract class ContentTypeDefinition
         return $this->priority;
     }
 
-    public function getTypeIconPath(): ?string
+    public function getTypeIconPath(): string
     {
         return $this->typeIconPath;
     }
 
-    public function getIconProviderClassName(): ?string
+    public function getIconProviderClassName(): string
     {
         return $this->iconProviderClassName;
     }
 
-    public function hasIcon(): bool
+    public function getTypeIconIdentifier(): string
     {
-        return $this->typeIconPath !== null
-            && $this->getIconProviderClassName() !== null
-            && $this->typeIconIdentifier !== null;
+        return $this->typeIconIdentifier;
     }
 
     public function withIdentifier(string $identifier): static
@@ -208,21 +201,21 @@ abstract class ContentTypeDefinition
         return $clone;
     }
 
-    public function withTypeIconPath(?string $typeIconPath): static
+    public function withTypeIconPath(string $typeIconPath): static
     {
         $clone = clone $this;
         $clone->typeIconPath = $typeIconPath;
         return $clone;
     }
 
-    public function withIconProviderClassName(?string $iconProvider): static
+    public function withIconProviderClassName(string $iconProvider): static
     {
         $clone = clone $this;
         $clone->iconProviderClassName = $iconProvider;
         return $clone;
     }
 
-    public function withTypeIconIdentifier(?string $typeIconIdentifier): static
+    public function withTypeIconIdentifier(string $typeIconIdentifier): static
     {
         $clone = clone $this;
         $clone->typeIconIdentifier = $typeIconIdentifier;
