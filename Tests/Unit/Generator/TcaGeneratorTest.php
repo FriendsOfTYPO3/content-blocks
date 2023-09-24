@@ -1455,7 +1455,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'example' => 'foobar-example-icon',
                             'example2' => 'foobar-example2-icon',
-                            'default' => 'content-blocks',
+                            'default' => 'content-blocks-default-icon',
                         ],
                         'searchFields' => 'text,text2',
                     ],
