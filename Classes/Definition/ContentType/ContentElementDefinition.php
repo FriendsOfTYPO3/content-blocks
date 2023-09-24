@@ -42,7 +42,7 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
-            ->withPriority($array['priority'] ?? '')
+            ->withPriority($array['priority'] ?? 0)
             ->withDescription($array['description'] ?? '')
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')

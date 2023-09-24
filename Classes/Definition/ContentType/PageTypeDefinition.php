@@ -37,6 +37,6 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withPackage($array['package'] ?? '')
             ->withTypeIconPath($array['icon'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? '')
-            ->withPriority($array['priority'] ?? '');
+            ->withPriority($array['priority'] ?? 0);
     }
 }
