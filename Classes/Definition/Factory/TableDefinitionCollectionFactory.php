@@ -510,8 +510,9 @@ class TableDefinitionCollectionFactory
         ];
         // Only root tables receive an icon and priority.
         if ($isRootTable) {
-            $element['icon'] = $contentType->contentBlock->getIcon();
+            $element['typeIconPath'] = $contentType->contentBlock->getIcon();
             $element['iconProvider'] = $contentType->contentBlock->getIconProvider();
+            $element['typeIconIdentifier'] = $contentType->table . '-' . $contentType->typeName . '-icon';
             $element['priority'] = (int)($contentType->contentBlock->getYaml()['priority'] ?? 0);
         }
         if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
