@@ -42,9 +42,11 @@ class TypeDefinitionLabelService
 
     protected function getBasePath(ContentTypeInterface $typeDefinition): string
     {
-        $basePath = 'LLL:' . $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/'
-            . ContentBlockPathUtility::getLanguageFilePath()
-            . ':' . $typeDefinition->getVendor() . '.' . $typeDefinition->getPackage();
+        $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName());
+        $languageFilePath = ContentBlockPathUtility::getLanguageFilePath();
+        $vendor = $typeDefinition->getVendor();
+        $package = $typeDefinition->getPackage();
+        $basePath = 'LLL:' . $contentBlockPath . '/' . $languageFilePath . ':' . $vendor . '.' . $package;
         return $basePath;
     }
 }
