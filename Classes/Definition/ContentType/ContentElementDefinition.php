@@ -48,9 +48,9 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
             ->withWizardGroup($array['wizardGroup'])
-            ->withWizardIconPath($array['icon'] ?? '')
-            ->withTypeIconPath($array['icon'] ?? null)
-            ->withIconProviderClassName($array['iconProvider'] ?? '');
+            ->withTypeIconPath($array['typeIconPath'] ?? null)
+            ->withIconProviderClassName($array['iconProvider'] ?? null)
+            ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null);
     }
 
     public function getDescription(): string
@@ -80,7 +80,7 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
 
     public function getWizardIconIdentifier(): string
     {
-        return $this->typeName . '-icon';
+        return $this->getTypeIconIdentifier();
     }
 
     public function hasSaveAndClose(): bool
@@ -120,13 +120,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     {
         $clone = clone $this;
         $clone->wizardGroup = $wizardGroup;
-        return $clone;
-    }
-
-    public function withWizardIconPath(string $icon): self
-    {
-        $clone = clone $this;
-        $clone->wizardIconPath = $icon;
         return $clone;
     }
 }

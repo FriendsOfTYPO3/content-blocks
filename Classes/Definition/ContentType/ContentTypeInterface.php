@@ -34,6 +34,6 @@ interface ContentTypeInterface
     public function getShowItems(): array;
     public function hasColumn(string $column): bool;
     public function getColumns(): array;
-    public function getTypeIconIdentifier(): string;
+    public function getTypeIconIdentifier(): ?string;
     public function hasIcon(): bool;
 }

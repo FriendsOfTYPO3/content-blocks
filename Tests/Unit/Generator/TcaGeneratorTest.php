@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -212,8 +213,8 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 't3ce_example-icon',
-                            't3ce_testblock' => 't3ce_testblock-icon',
+                            't3ce_example' => 'tt_content-t3ce_example-icon',
+                            't3ce_testblock' => 'tt_content-t3ce_testblock-icon',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_testblock_text,t3ce_example_text,t3ce_example_textarea,t3ce_example_email',
                     ],
@@ -902,9 +903,9 @@ final class TcaGeneratorTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'path' => 'EXT:foo/ContentBlocks/example',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'path' => 'EXT:foo/ContentBlocks/RecordTypes/example',
+                    'icon' => 'EXT:foo/ContentBlocks/RecordTypes/example/Assets/Icon.svg',
+                    'iconProvider' => SvgIconProvider::class,
                     'yaml' => [
                         'table' => 'foobar',
                         'fields' => [
@@ -940,7 +941,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'content-blocks',
+                            'default' => 'foobar-1-icon',
                         ],
                         'searchFields' => 't3ce_example_text',
                     ],
@@ -1064,8 +1065,8 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         't3ce_example_text' => [
                             'exclude' => true,
-                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
-                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.description',
                             'config' => [
                                 'type' => 'input',
                             ],
@@ -1137,7 +1138,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'content-blocks',
+                            'default' => 'foobar-1-icon',
                         ],
                         'rootLevel' => 1,
                         'security' => [
@@ -1298,7 +1299,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'content-blocks',
+                            'default' => 'foobar-1-icon',
                         ],
                         'searchFields' => 't3ce_example_text,t3ce_example_text2',
                     ],
@@ -1452,8 +1453,8 @@ final class TcaGeneratorTest extends UnitTestCase
                         'type' => 'type',
                         'typeicon_column' => 'type',
                         'typeicon_classes' => [
-                            'example' => 'example-icon',
-                            'example2' => 'example2-icon',
+                            'example' => 'foobar-example-icon',
+                            'example2' => 'foobar-example2-icon',
                             'default' => 'content-blocks',
                         ],
                         'searchFields' => 'text,text2',
@@ -1671,7 +1672,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 't3ce_example-icon',
+                            't3ce_example' => 'tt_content-t3ce_example-icon',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,text',
                     ],
@@ -2016,8 +2017,8 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 't3ce_example-icon',
-                            't3ce_testblock' => 't3ce_testblock-icon',
+                            't3ce_example' => 'tt_content-t3ce_example-icon',
+                            't3ce_testblock' => 'tt_content-t3ce_testblock-icon',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
@@ -2230,9 +2231,9 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 't3ce_example-icon',
-                            't3ce_example2' => 't3ce_example2-icon',
-                            't3ce_example3' => 't3ce_example3-icon',
+                            't3ce_example' => 'tt_content-t3ce_example-icon',
+                            't3ce_example2' => 'tt_content-t3ce_example2-icon',
+                            't3ce_example3' => 'tt_content-t3ce_example3-icon',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
@@ -2443,7 +2444,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 't3ce_example-icon',
+                            't3ce_example' => 'tt_content-t3ce_example-icon',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
