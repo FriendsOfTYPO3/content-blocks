@@ -24,7 +24,7 @@ This is an example on how to add the classic Fluid Styled Content "Appearance"
 Tab.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentTypes/YourContentBlock/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
 
     name: example/basics
     basics:
@@ -41,7 +41,7 @@ The second way is to use Basics directly between your custom fields. This can
 be done by using the identifier and the type :yaml:`Basic`.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentTypes/YourContentBlock/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
 
     name: example/basics
     basics:

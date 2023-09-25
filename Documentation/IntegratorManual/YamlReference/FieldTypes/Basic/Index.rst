@@ -11,7 +11,7 @@ article about Basics :ref:`here <basics>`.
 Example:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentTypes/YourContentBlock/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
 
     name: example/basics
     basics:
