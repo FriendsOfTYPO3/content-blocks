@@ -66,11 +66,11 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
-            .. rubric:: :ref:`Skeleton Builder <cb_skeleton>`
+            .. rubric:: :ref:`Content Block Definition <cb_definition>`
 
          .. container:: card-body
 
-            Kickstart a new Content Block.
+            Learn about which parts a Content Block consists.
 
    .. container:: col-md-6 pl-0 pr-3 py-3 m-0
 
@@ -78,11 +78,11 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
-            .. rubric:: :ref:`Content Block Definition <cb_definition>`
+            .. rubric:: :ref:`Skeleton Builder <cb_skeleton>`
 
          .. container:: card-body
 
-            Learn about which parts a Content Block consists.
+            Kickstart a new Content Block.
 
    .. container:: col-md-6 pl-0 pr-3 py-3 m-0
 
