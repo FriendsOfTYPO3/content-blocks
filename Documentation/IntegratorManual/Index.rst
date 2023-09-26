@@ -17,9 +17,9 @@ the Content Blocks.
     Installation/Index
     ContentBlockDefinition/Index
     ContentBlockSkeleton/Index
-    ExtendContentBlockTCA/Index
-    ParseFunc/Index
+    YamlReference/Index
+    Templating/Index
     ReuseExistingFields/Index
     Basics/Index
-    Templating/Index
-    YamlReference/Index
+    ParseFunc/Index
+    ExtendContentBlockTCA/Index

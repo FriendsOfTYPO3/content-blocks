@@ -5,6 +5,11 @@
 Extend TCA of Content Blocks
 ============================
 
+.. warning::
+
+    This way of overriding Content Blocks TCA will with high probability be
+    replaced with another, better, approach.
+
 The Content Blocks TCA generation happens after all TCA (overrides) from files
 are processed. This means, TCA overrides will not work.
 

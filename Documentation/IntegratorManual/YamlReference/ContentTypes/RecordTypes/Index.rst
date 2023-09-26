@@ -8,7 +8,7 @@ Record Types
 Folder: `ContentBlocks/RecordTypes`.
 
 Record Types are generic Content Types in TYPO3. Basically everything, which is
-not defined by the TYPO3 Core itself. Adding custom Record requires you to
+not defined by the TYPO3 Core itself. Adding custom records requires you to
 define a :yaml:`table` name. A minimal example looks like this:
 
 .. code-block:: yaml
@@ -16,6 +16,7 @@ define a :yaml:`table` name. A minimal example looks like this:
 
     name: example/my-record-type
     table: my_record_type
+    labelField: title
     fields:
       -
         identifier: title
@@ -35,6 +36,7 @@ you have to enable :yaml:`ignorePageTypeRestriction`:
 
     name: example/my-record-type
     table: my_record_type
+    labelField: title
     security:
       ignorePageTypeRestriction: true
     fields:
@@ -140,7 +142,7 @@ Options
    :Type: array
 
    Defines which fields should be used as fallback, if :yaml:`labelField` is not
-   filled. The first filled field which is found will be used. Can only be used,
+   filled. The first filled field which is found will be used. Can only be used
    if there is only one :yaml:`labelField` field defined.
 
    .. code-block:: yaml
@@ -167,7 +169,7 @@ Options
 
    .. code-block:: yaml
 
-       # set this for Record Types, if they should be used as foreign_table in Collections
+       # set this for Record Types if they should be used as `foreign_table` in Collections
        aggregateRoot: false
 
 .. confval:: languageAware

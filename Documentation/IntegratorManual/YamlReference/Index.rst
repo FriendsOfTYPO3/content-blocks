@@ -17,29 +17,24 @@ type name. Page Types require an integer value for the type. Therefore you need
 to set it additionally with :yaml:`typeName`.
 
 With TYPO3 you can also create custom Record Types. They require you to define
-a custom :yaml:`table`, and a :yaml:`labelField` field. Per default all extra
+a custom :yaml:`table` and a :yaml:`labelField` field. Per default all extra
 features like workspaces, language support, frontend restrictions, etc. are
 enabled. You can selectively disable each one of them, if you don't use them.
 
-.. _content_types:
+Full examples can be found in the examples repository: https://github.com/TYPO3-Initiatives/content-blocks-examples
 
-Content Types
-=============
+**Table of Contents**
 
 .. toctree::
-    :titlesonly:
+   :titlesonly:
+   :maxdepth: 1
 
-    ContentTypes/ContentElements/Index
-    ContentTypes/PageTypes/Index
-    ContentTypes/RecordTypes/Index
+   ContentTypes/ContentElements/Index
+   ContentTypes/PageTypes/Index
+   ContentTypes/RecordTypes/Index
+   FieldTypes/Index
 
-Table of contents
-=================
-
-..  contents::
-    :local:
-
-General definitions
+Common root options
 ===================
 
 .. confval:: name
@@ -120,143 +115,3 @@ General definitions
        fields:
            - identifier: my_field
              type: Text
-
-Common field properties
-=======================
-.. _yaml_reference_field_properties:
-
-Field options, which can be defined inside the :yaml:`fields` array.
-
-.. confval:: identifier
-
-   :Required: true
-   :Type: string
-
-   The field's identifier has to be unique within a Content Block. Exception is
-   within a collections' field array, as this starts a new scope.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-
-.. confval:: type
-
-   :Required: true
-   :Type: string
-
-   The field's type. See :ref:`field_types`.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-
-.. confval:: label
-
-   :Required: false
-   :Type: string
-
-   By default labels should be defined inside the :file:`Labels.xml` file. But in
-   case there is only one language for the backend you may define labels directly
-   in the YAML configuration. This has precedence over translation files.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-           label: Static label
-
-.. confval:: description
-
-   :Required: false
-   :Type: string
-
-   The same as for `label` above.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-           description: Static description
-
-.. confval:: useExistingField
-
-   :Required: false
-   :Type: bool
-
-   If set to true, the identifier is treated as an existing field from the Core
-   or your own defined field in TCA. To learn more about reusing fields read
-   :ref:`this article <cb_reuse_existing_fields>`.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: bodytext
-           useExistingField: true
-
-.. confval:: alternativeSql
-
-   :Required: false
-   :Type: string (SQL)
-
-   It is possible to override the default SQL definition of a field with this
-   option. Not every field type can be overridden. Have a look at the standard
-   SQL definition of the corresponding field.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-           alternativeSql: tinyint(2) DEFAULT "0" NOT NULL
-
-.. confval:: prefixField
-
-   :Required: false
-   :Type: boolean
-   :Default: true
-
-   If set to false, the prefixing is disabled for this field. This overrules the
-   global option :yaml:`prefixFields`.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-           prefixField: false
-
-.. _field_types:
-
-Field types
-===========
-
-.. toctree::
-    :maxdepth: 1
-    :titlesonly:
-
-    FieldTypes/Basic/Index
-    FieldTypes/Category/Index
-    FieldTypes/Checkbox/Index
-    FieldTypes/Collection/Index
-    FieldTypes/Color/Index
-    FieldTypes/DateTime/Index
-    FieldTypes/Email/Index
-    FieldTypes/File/Index
-    FieldTypes/FlexForm/Index
-    FieldTypes/Folder/Index
-    FieldTypes/Linebreak/Index
-    FieldTypes/Link/Index
-    FieldTypes/Number/Index
-    FieldTypes/Palette/Index
-    FieldTypes/Radio/Index
-    FieldTypes/Relation/Index
-    FieldTypes/Select/Index
-    FieldTypes/Tab/Index
-    FieldTypes/Text/Index
-    FieldTypes/Textarea/Index
