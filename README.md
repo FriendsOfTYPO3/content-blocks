@@ -1,24 +1,33 @@
+[![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-12.4-ff8700?maxAge=3600&logo=typo3)](https://get.typo3.org/)
+
 # TYPO3 Content Blocks
 
-This is the standalone repository for the Content Blocks project. Content Blocks
-provide a new API to create custom Content Types like Content Elements, Page
-Types or generic Record Types.
+This is the standalone repository for the TYPO3 Content Blocks project. Content
+Blocks provides a new API to create custom Content Types like Content Elements,
+Page Types or generic Record Types. Use it now in your TYPO3 v12 project and
+eventually this will become a system extension in TYPO3 v13.
 
-The repository is kept in sync with the pending Core patch on
-[Gerrit](https://review.typo3.org/c/Packages/TYPO3.CMS/+/77518).
+|                  | URL                                                              |
+|------------------|------------------------------------------------------------------|
+| **Repository:**  | https://github.com/nhovratov/content-blocks                      |
+| **Read online:** | https://docs.typo3.org/c/contentblocks/content-blocks/main/en-us |
+| **TER:**         | https://extensions.typo3.org/extension/content_blocks            |
 
 ## Installation
 
-This package can be only installed with composer right now. It is compatible
-with TYPO3 v12.4 or current main only.
+Require this package via composer:
 
 ```
-composer req contentblocks/content-blocks:@dev
+composer req contentblocks/content-blocks
 ```
+
+Or install it via the Extension Manager in the TYPO3 backend. The extension key
+is `content_blocks`.
 
 ## Usage
 
-Refer to the Documentation on how to use the Content Blocks API
+Refer to the [Documentation](https://docs.typo3.org/c/contentblocks/content-blocks/main/en-us)
+on how to use the Content Blocks API.
 
 ## Developing
 
