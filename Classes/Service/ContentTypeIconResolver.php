@@ -39,7 +39,7 @@ class ContentTypeIconResolver
             }
             $prefixPath = match (Environment::isComposerMode()) {
                 true => Environment::getPublicPath() . '/' . ContentBlockPathUtility::getSymlinkedAssetsPath($name),
-                false => $extPath,
+                false => $extPath . '/' . ContentBlockPathUtility::getPublicFolder(),
             };
             $iconNameWithoutFileExtension = $identifier;
             $contentTypeIcon = new ContentTypeIcon();
