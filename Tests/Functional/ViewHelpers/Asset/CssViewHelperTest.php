@@ -27,12 +27,13 @@ final class CssViewHelperTest extends FunctionalTestCase
     protected bool $initializeDatabase = false;
 
     protected array $coreExtensionsToLoad = [
-        'content_blocks',
+//        'content_blocks',
     ];
 
     protected array $testExtensionsToLoad = [
-       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
-       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/bar',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/foo',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/bar',
+        'typo3conf/ext/content_blocks',
     ];
 
     /**

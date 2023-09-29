@@ -30,16 +30,17 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 final class RelationResolverTest extends FunctionalTestCase
 {
     protected array $coreExtensionsToLoad = [
-        'content_blocks',
+//        'content_blocks',
         'workspaces',
     ];
 
     protected array $testExtensionsToLoad = [
-       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/foo',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/foo',
+        'typo3conf/ext/content_blocks',
     ];
 
     protected array $pathsToProvideInTestInstance = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/TestFolder/' => 'fileadmin/',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/TestFolder/' => 'fileadmin/',
     ];
 
     /**

@@ -22,11 +22,12 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 final class TcaGeneratorTest extends FunctionalTestCase
 {
     protected array $coreExtensionsToLoad = [
-        'content_blocks',
+//        'content_blocks',
     ];
 
     protected array $testExtensionsToLoad = [
-       'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks',
     ];
 
     /**

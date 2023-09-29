@@ -26,11 +26,12 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     use SiteBasedTestTrait;
 
     protected array $coreExtensionsToLoad = [
-        'content_blocks',
+//        'content_blocks',
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3/sysext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks',
     ];
 
     protected const LANGUAGE_PRESETS = [
@@ -42,7 +43,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->importCSVDataSet('typo3/sysext/content_blocks/Tests/Functional/Frontend/Fixtures/frontend.csv');
+        $this->importCSVDataSet('typo3conf/ext/content_blocks/Tests/Functional/Frontend/Fixtures/frontend.csv');
         $this->writeSiteConfiguration(
             'fluid_template',
             $this->buildSiteConfiguration(self::ROOT_PAGE_ID, '/'),
@@ -57,7 +58,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_ID,
             [
-                'typo3/sysext/content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+                'typo3conf/ext/content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
             ]
         );
         $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
