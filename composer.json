@@ -1,6 +1,6 @@
 {
 	"name": "contentblocks/content-blocks",
-	"type": "typo3-cms-framework",
+	"type": "typo3-cms-extension",
 	"description": "TYPO3 CMS Content Blocks - Content Types API.",
 	"homepage": "https://typo3.org",
 	"license": ["GPL-2.0-or-later"],
