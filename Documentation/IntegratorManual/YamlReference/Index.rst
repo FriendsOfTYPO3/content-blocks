@@ -45,11 +45,12 @@ Common root options
    Every editing interface configuration must contain exactly one name. The name
    is made up of vendor and content block name separated by a `/` just like the
    `vendor/package` notation in a traditional composer.json file. It must be
-   unique and must have at least 3 characters.
+   unique and must have at least 3 characters. Both parts, the vendor and
+   content block name, have to be lowercase and be separated by a dash `-`.
 
    .. code-block:: yaml
 
-       name: vendor/content-block-name
+       name: my-vendor/my-content-block-name
 
 .. confval:: prefixFields
 

@@ -29,6 +29,7 @@ use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Core\Environment;
@@ -123,6 +124,13 @@ class ContentBlockLoader implements LoaderInterface
             $yamlContent = Yaml::parseFile($yamlPath);
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
                 throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".', 1678224283);
+            }
+            [$vendor, $name] = explode('/', $yamlContent['name']);
+            if (!ContentBlockNameValidator::isValid($vendor)) {
+                throw new \InvalidArgumentException('Invalid vendor name for Content Block "' . $vendor . '". The vendor must be lowercase and consist of words separated by -', 1696004679);
+            }
+            if (!ContentBlockNameValidator::isValid($name)) {
+                throw new \InvalidArgumentException('Invalid name for Content Block "' . $name . '". The name must be lowercase and consist of words separated by -', 1696004684);
             }
             if ($contentType === ContentType::PAGE_TYPE) {
                 if (!array_key_exists('typeName', $yamlContent)) {
