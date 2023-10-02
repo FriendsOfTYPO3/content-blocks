@@ -29,6 +29,7 @@ use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Service\PackageResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Package\PackageInterface;
 
@@ -45,8 +46,8 @@ class CreateContentBlockCommand extends Command
     public function configure(): void
     {
         $this->addOption('content-type', '', InputOption::VALUE_OPTIONAL, 'Content type of content block. One of: ' . implode(', ', array_keys($this->getSupportedTypes())) . '.');
-        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block (lowercase).');
-        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block (lowercase).');
+        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block (The name must be lowercase and consist of words separated by -).');
+        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block (The name must be lowercase and consist of words separated by -).');
         $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'Type identifier of content block. Falls back to combination of "vendor" and "name". Must be integer value for content type "page-type".');
         $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Host extension in which the content block should be stored.');
     }
@@ -78,14 +79,30 @@ class CreateContentBlockCommand extends Command
         };
         if ($input->getOption('vendor')) {
             $vendor = $input->getOption('vendor');
+            if (!ContentBlockNameValidator::isValid($vendor)) {
+                $output->writeln('<error>Your vendor name does not match the requirement.</error>');
+                return Command::INVALID;
+            }
         } else {
-            $vendor = $io->askQuestion(new Question('Enter your vendor name'));
+            $contentBlockVendorQuestion = new Question('Enter your vendor name (The name must be lowercase and consist of words separated by -)');
+            $contentBlockVendorQuestion->setValidator($this->validateName(...));
+            while (($vendor = $io->askQuestion($contentBlockVendorQuestion)) === false) {
+                $output->writeln('<error>Your vendor name does not match the requirement.</error>');
+            }
         }
         $vendor = strtolower($vendor);
         if ($input->getOption('name')) {
             $name = $input->getOption('name');
+            if (!ContentBlockNameValidator::isValid($name)) {
+                $output->writeln('<error>Your content block name does not match the requirement.</error>');
+                return Command::INVALID;
+            }
         } else {
-            $name = $io->askQuestion(new Question('Enter your content block name'));
+            $contentBlockNameQuestion = new Question('Enter your content block name (The name must be lowercase and consist of words separated by -)');
+            $contentBlockNameQuestion->setValidator($this->validateName(...));
+            while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
+                $output->writeln('<error>Your content block name does not match the requirement.</error>');
+            }
         }
         $name = strtolower($name);
         if ($contentType === ContentType::PAGE_TYPE) {
@@ -121,7 +138,21 @@ class CreateContentBlockCommand extends Command
 
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
+        $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');
+        $output->writeln('<question>Please run the following commands now and every time you change the EditorInterface.yaml file:</question>');
+        $output->writeln('<question>(Or flush the system cache in the backend and run the Database Analyzer)</question>');
+        $output->writeln('vendor/bin/typo3 cache:flush -g system');
+        $output->writeln('vendor/bin/typo3 extension:setup --extension=' . $extension);
+
         return Command::SUCCESS;
+    }
+
+    protected function validateName(string $name): string|bool
+    {
+        if (ContentBlockNameValidator::isValid($name)) {
+            return $name;
+        }
+        return false;
     }
 
     /**
