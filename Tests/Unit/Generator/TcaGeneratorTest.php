@@ -213,8 +213,8 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 'tt_content-t3ce_example-icon',
-                            't3ce_testblock' => 'tt_content-t3ce_testblock-icon',
+                            't3ce_example' => 'tt_content-t3ce_example',
+                            't3ce_testblock' => 'tt_content-t3ce_testblock',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_testblock_text,t3ce_example_text,t3ce_example_textarea,t3ce_example_email',
                     ],
@@ -509,7 +509,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 't3ce_example_collection-1-icon',
+                            'default' => 't3ce_example_collection-1',
                         ],
                         'searchFields' => 'text,text2,palette_field1,palette_field2',
                         'security' => [
@@ -725,7 +725,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'collection2-1-icon',
+                            'default' => 'collection2-1',
                         ],
                         'searchFields' => 'text,text2',
                         'security' => [
@@ -941,7 +941,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'foobar-1-icon',
+                            'default' => 'foobar-1',
                         ],
                         'searchFields' => 't3ce_example_text',
                     ],
@@ -1138,7 +1138,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'foobar-1-icon',
+                            'default' => 'foobar-1',
                         ],
                         'rootLevel' => 1,
                         'security' => [
@@ -1299,7 +1299,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'foobar-1-icon',
+                            'default' => 'foobar-1',
                         ],
                         'searchFields' => 't3ce_example_text,t3ce_example_text2',
                     ],
@@ -1453,9 +1453,9 @@ final class TcaGeneratorTest extends UnitTestCase
                         'type' => 'type',
                         'typeicon_column' => 'type',
                         'typeicon_classes' => [
-                            'example' => 'foobar-example-icon',
-                            'example2' => 'foobar-example2-icon',
-                            'default' => 'foobar-example-icon',
+                            'example' => 'foobar-example',
+                            'example2' => 'foobar-example2',
+                            'default' => 'foobar-example',
                         ],
                         'searchFields' => 'text,text2',
                     ],
@@ -1672,7 +1672,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 'tt_content-t3ce_example-icon',
+                            't3ce_example' => 'tt_content-t3ce_example',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,text',
                     ],
@@ -1759,7 +1759,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'fe_group' => 'fe_group',
                         ],
                         'typeicon_classes' => [
-                            'default' => 'collection-1-icon',
+                            'default' => 'collection-1',
                         ],
                         'searchFields' => 'text',
                         'security' => [
@@ -2017,8 +2017,8 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 'tt_content-t3ce_example-icon',
-                            't3ce_testblock' => 'tt_content-t3ce_testblock-icon',
+                            't3ce_example' => 'tt_content-t3ce_example',
+                            't3ce_testblock' => 'tt_content-t3ce_testblock',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
@@ -2231,9 +2231,9 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 'tt_content-t3ce_example-icon',
-                            't3ce_example2' => 'tt_content-t3ce_example2-icon',
-                            't3ce_example3' => 'tt_content-t3ce_example3-icon',
+                            't3ce_example' => 'tt_content-t3ce_example',
+                            't3ce_example2' => 'tt_content-t3ce_example2',
+                            't3ce_example3' => 'tt_content-t3ce_example3',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
@@ -2444,7 +2444,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'tt_content' => [
                     'ctrl' => [
                         'typeicon_classes' => [
-                            't3ce_example' => 'tt_content-t3ce_example-icon',
+                            't3ce_example' => 'tt_content-t3ce_example',
                         ],
                         'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
