@@ -526,7 +526,7 @@ class TableDefinitionCollectionFactory
         }
         $element['typeIconPath'] = $contentTypeIcon->iconPath;
         $element['iconProvider'] = $contentTypeIcon->iconProvider;
-        $element['typeIconIdentifier'] = $contentType->table . '-' . $contentType->typeName . '-icon';
+        $element['typeIconIdentifier'] = $this->buildTypeIconIdentifier($contentType, $contentTypeIcon);
         if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
         }
@@ -534,6 +534,23 @@ class TableDefinitionCollectionFactory
             // @todo what does a page type need?
         }
         return $element;
+    }
+
+    /**
+     * We add a part of the md5 hash here in order to mitigate browser caching issues when changing the Content Block
+     * Icon. Otherwise, the icon identifier would always be the same and stored in the local storage.
+     */
+    private function buildTypeIconIdentifier(ProcessedContentType $contentType, ContentTypeIcon $contentTypeIcon): string
+    {
+        $typeIconIdentifier = $contentType->table . '-' . $contentType->typeName;
+        $absolutePath = GeneralUtility::getFileAbsFileName($contentTypeIcon->iconPath);
+        if ($absolutePath !== '') {
+            $contents = file_get_contents($absolutePath);
+            $hash = md5($contents);
+            $hasSubString = substr($hash, 0, 7);
+            $typeIconIdentifier .= '-' . $hasSubString;
+        }
+        return $typeIconIdentifier;
     }
 
     private function assertNoLinebreakOutsideOfPalette(FieldType $fieldType, LoadedContentBlock $contentBlock): void

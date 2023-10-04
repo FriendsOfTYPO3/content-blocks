@@ -30,9 +30,9 @@ final class IconGeneratorTest extends FunctionalTestCase
 
     public static function contentBlockIconsAreRegisteredDataProvider(): iterable
     {
-        yield ['tt_content-simple_simple-icon'];
-        yield ['tt_content-simple_simple2-icon'];
-        yield ['tt_content-simple_basics-icon'];
+        yield ['tt_content-simple_simple-175ef6f'];
+        yield ['tt_content-simple_simple2-175ef6f'];
+        yield ['tt_content-simple_basics-175ef6f'];
     }
 
     /**
@@ -49,7 +49,7 @@ final class IconGeneratorTest extends FunctionalTestCase
     public static function registeredContentBlockIconsHaveCorrectConfigurationDataProvider(): iterable
     {
         yield [
-            'tt_content-simple_simple-icon',
+            'tt_content-simple_simple-175ef6f',
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
@@ -58,7 +58,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             ],
         ];
         yield [
-            'tt_content-simple_simple2-icon',
+            'tt_content-simple_simple2-175ef6f',
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
@@ -67,7 +67,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             ],
         ];
         yield [
-            'tt_content-simple_basics-icon',
+            'tt_content-simple_basics-175ef6f',
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
