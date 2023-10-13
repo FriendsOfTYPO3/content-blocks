@@ -55,7 +55,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
 
         $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
@@ -83,7 +83,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
 
@@ -133,7 +133,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getTypeDefinitionCollection();
         $result = [];

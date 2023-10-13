@@ -61,7 +61,7 @@ class ContentBlockLoader implements LoaderInterface
         }
 
         if ($allowCache && is_array($contentBlocks = $this->cache->require('content-blocks'))) {
-            $contentBlocks = array_map(fn (array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+            $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
             foreach ($contentBlocks as $contentBlock) {
                 $this->contentBlockRegistry->register($contentBlock);
                 $this->languageFileRegistry->register($contentBlock);
@@ -94,7 +94,7 @@ class ContentBlockLoader implements LoaderInterface
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
         $this->checkForUniqueness($loadedContentBlocks);
         // Sort content blocks by priority.
-        usort($loadedContentBlocks, fn (LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0));
+        usort($loadedContentBlocks, fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0));
         foreach ($loadedContentBlocks as $contentBlock) {
             $this->contentBlockRegistry->register($contentBlock);
             $this->languageFileRegistry->register($contentBlock);
@@ -105,7 +105,7 @@ class ContentBlockLoader implements LoaderInterface
         $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($loadedContentBlocks);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
 
-        $cache = array_map(fn (LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
+        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
 
         return $this->tableDefinitionCollection;
