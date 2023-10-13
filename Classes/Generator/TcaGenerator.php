@@ -154,7 +154,7 @@ class TcaGenerator
                 $group = match ($tableDefinition->getContentType()) {
                     ContentType::CONTENT_ELEMENT => 'content_blocks',
                     ContentType::PAGE_TYPE => 'default',
-                    default => '',
+                    ContentType::RECORD_TYPE => '',
                 };
                 ExtensionManagementUtility::addTcaSelectItem(
                     table: $typeDefinition->getTable(),

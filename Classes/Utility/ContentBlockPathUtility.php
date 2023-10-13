@@ -29,7 +29,7 @@ class ContentBlockPathUtility
         $contentTypeFolder = match ($contentType) {
             ContentType::CONTENT_ELEMENT => self::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => self::getRelativePageTypesPath(),
-            default => self::getRelativeRecordTypesPath(),
+            ContentType::RECORD_TYPE => self::getRelativeRecordTypesPath(),
         };
         return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $name;
     }
