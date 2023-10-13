@@ -41,7 +41,7 @@ final class ContentTypeFactory
         return match ($contentType) {
             ContentType::CONTENT_ELEMENT => ContentElementDefinition::createFromArray($typeDefinition, $table),
             ContentType::PAGE_TYPE => PageTypeDefinition::createFromArray($typeDefinition, $table),
-            default => RecordTypeDefinition::createFromArray($typeDefinition, $table)
+            ContentType::RECORD_TYPE => RecordTypeDefinition::createFromArray($typeDefinition, $table)
         };
     }
 }
