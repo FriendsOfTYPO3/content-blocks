@@ -65,6 +65,9 @@ final class SqlDefinition implements \IteratorAggregate, \Countable
         return $sqlDefinition;
     }
 
+    /**
+     * @return \Traversable<SqlColumnDefinition>
+     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
