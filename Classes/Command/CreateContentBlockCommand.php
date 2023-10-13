@@ -46,8 +46,8 @@ class CreateContentBlockCommand extends Command
     public function configure(): void
     {
         $this->addOption('content-type', '', InputOption::VALUE_OPTIONAL, 'Content type of content block. One of: ' . implode(', ', array_keys($this->getSupportedTypes())) . '.');
-        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block (The name must be lowercase and consist of words separated by -).');
-        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block (The name must be lowercase and consist of words separated by -).');
+        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block (The name must be lowercase and consist of words separated by dashes "-").');
+        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block (The name must be lowercase and consist of words separated by dashes "-").');
         $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'Type identifier of content block. Falls back to combination of "vendor" and "name". Must be integer value for content type "page-type".');
         $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Host extension in which the content block should be stored.');
     }
@@ -84,7 +84,7 @@ class CreateContentBlockCommand extends Command
                 return Command::INVALID;
             }
         } else {
-            $contentBlockVendorQuestion = new Question('Enter your vendor name (The name must be lowercase and consist of words separated by -)');
+            $contentBlockVendorQuestion = new Question('Enter your vendor name (lowercase, separated by dashes "-")');
             $contentBlockVendorQuestion->setValidator($this->validateName(...));
             while (($vendor = $io->askQuestion($contentBlockVendorQuestion)) === false) {
                 $output->writeln('<error>Your vendor name does not match the requirement.</error>');
@@ -98,7 +98,7 @@ class CreateContentBlockCommand extends Command
                 return Command::INVALID;
             }
         } else {
-            $contentBlockNameQuestion = new Question('Enter your content block name (The name must be lowercase and consist of words separated by -)');
+            $contentBlockNameQuestion = new Question('Enter your content block name (lowercase, separated by dashes "-")');
             $contentBlockNameQuestion->setValidator($this->validateName(...));
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
                 $output->writeln('<error>Your content block name does not match the requirement.</error>');
