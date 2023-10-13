@@ -64,19 +64,17 @@ class CreateContentBlockCommand extends Command
 
         if ($input->getOption('content-type')) {
             $contentTypeFromInput = $input->getOption('content-type');
-            if (!array_key_exists($contentTypeFromInput, $this->getSupportedTypes())) {
-                throw new \RuntimeException(
-                    'Content type "' . $contentTypeFromInput . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
-                    1678781014
-                );
-            }
         } else {
             $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
         }
         $contentType = match ($contentTypeFromInput) {
             'content-element' => ContentType::CONTENT_ELEMENT,
             'page-type' => ContentType::PAGE_TYPE,
-            default => ContentType::RECORD_TYPE
+            'record-type' => ContentType::RECORD_TYPE,
+            default => throw new \RuntimeException(
+                'Content type "' . $contentTypeFromInput . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
+                1678781014
+            )
         };
         if ($input->getOption('vendor')) {
             $vendor = $input->getOption('vendor');
@@ -189,7 +187,7 @@ class CreateContentBlockCommand extends Command
         return match ($contentType) {
             ContentType::CONTENT_ELEMENT => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
-            default => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
+            ContentType::RECORD_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
         };
     }
 
