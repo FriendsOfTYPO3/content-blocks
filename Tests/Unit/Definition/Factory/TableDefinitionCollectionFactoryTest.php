@@ -65,7 +65,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1677407942);
         $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -117,7 +117,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1677407942);
         $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -156,7 +156,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168602);
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -201,7 +201,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168602);
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -257,7 +257,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168022);
         $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -319,7 +319,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168022);
         $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -359,7 +359,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679243686);
         $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -405,7 +405,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679243686);
         $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -443,7 +443,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679245193);
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -487,7 +487,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679245193);
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -535,7 +535,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679224392);
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -589,7 +589,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679224392);
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -624,7 +624,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679226075);
         $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -655,7 +655,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1694768937);
         $this->expectExceptionMessage('The field "text1" is missing the required "type" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -696,7 +696,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679226075);
         $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -750,7 +750,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in content block "foo/bar".');
         $this->expectExceptionCode(1685217163);
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -859,7 +859,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1685220309);
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -910,7 +910,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1686330220);
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -967,7 +967,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1686331469);
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 
@@ -1029,7 +1029,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1686330594);
 
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
     }
 }

@@ -342,7 +342,7 @@ final class SqlGeneratorTest extends UnitTestCase
      */
     public function generateReturnsExpectedSqlStatements(array $array, array $expected): void
     {
-        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $array);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $array);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $loader = new TestLoader($tableDefinitionCollection);
         $sqlGenerator = new SqlGenerator($loader);

@@ -25,7 +25,7 @@ class UniqueNameUtility
     public static function contentBlockNameToTypeIdentifier(string $name): string
     {
         $parts = explode('/', $name);
-        $removeDashes = fn (string $name): string => str_replace('-', '', $name);
+        $removeDashes = fn(string $name): string => str_replace('-', '', $name);
         return implode('_', array_map($removeDashes, $parts));
     }
 
