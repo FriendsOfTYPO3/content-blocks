@@ -28,6 +28,9 @@ final class TableDefinitionCollection implements \IteratorAggregate
     /** @var TableDefinition[] */
     private array $definitions = [];
 
+    /**
+     * @return \Traversable<TableDefinition>
+     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->definitions);
