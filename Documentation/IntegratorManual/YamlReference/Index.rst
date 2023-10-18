@@ -83,23 +83,6 @@ Common root options
        # this content block will be displayed before others
        priority: 10
 
-.. confval:: typeName
-
-   :Required: false (Page Type: true)
-   :Type: string
-   :Default: automatically generated from :yaml:`name`
-
-   The identifier of the new Content Type. It is automatically generated from
-   the name, if not defined manually. This is required for Page Types.
-
-   .. code-block:: yaml
-
-       # Page Types require a numerical type name
-       typeName: 1337
-
-       # Record Types can have a freely chosen type name
-       typeName: type1
-
 .. confval:: fields
 
    :Required: false

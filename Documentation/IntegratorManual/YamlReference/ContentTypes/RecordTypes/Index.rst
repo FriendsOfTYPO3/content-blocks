@@ -116,6 +116,19 @@ Options
 
        typeField: type
 
+.. confval:: typeName
+
+   :Required: false
+   :Type: string
+   :Default: automatically generated from :yaml:`name`
+
+   The identifier of the new Record Type. It is automatically generated from
+   the name, if not defined manually.
+
+   .. code-block:: yaml
+
+       typeName: type1
+
 .. confval:: labelField
 
    :Required: false (but highly recommended)
