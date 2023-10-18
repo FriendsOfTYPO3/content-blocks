@@ -25,7 +25,6 @@ use TYPO3\CMS\ContentBlocks\Definition\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
@@ -86,6 +85,7 @@ class TcaGenerator
         protected readonly TcaPreparation $tcaPreparation,
     ) {}
 
+    // @todo this is unused in v12. Replace with BeforeTcaOverridesEvent in v13.
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
         $event->setTca(array_replace_recursive($event->getTca(), $this->generate()));
@@ -96,8 +96,21 @@ class TcaGenerator
         $this->fillTypeFieldSelectItems();
         $event->setTca($GLOBALS['TCA']);
         $GLOBALS['TCA'] = $tcaBackup;
+    }
 
-        $event->setTca($this->eventDispatcher->dispatch(new AfterContentBlocksTcaCompilationEvent($event->getTca()))->getTca());
+    // @todo Remove in v13.
+    public function generateTcaOverrides(): array
+    {
+        $tca = array_replace_recursive($GLOBALS['TCA'], $this->generate());
+
+        // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
+        $tcaBackup = $GLOBALS['TCA'];
+        $GLOBALS['TCA'] = $tca;
+        $this->fillTypeFieldSelectItems();
+        $tca = $GLOBALS['TCA'];
+        $GLOBALS['TCA'] = $tcaBackup;
+
+        return $tca;
     }
 
     public function generate(): array

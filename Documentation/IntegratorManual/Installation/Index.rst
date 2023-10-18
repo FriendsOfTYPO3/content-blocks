@@ -11,7 +11,9 @@ Installation
 Content Blocks can be placed inside the `ContentBlocks/ContentElements`,
 `ContentBlocks/PageTypes` or `ContentBlocks/RecordTypes` folder at
 any of your extension. The system determines the type and loads them
-automatically.
+automatically. Make sure to add Content Blocks as a dependency in the host
+extension. This will ensure correct loading order an enables to override
+Content Blocks TCA.
 
 Administration
 ==============

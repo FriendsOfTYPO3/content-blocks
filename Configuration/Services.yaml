@@ -7,12 +7,13 @@ services:
   TYPO3\CMS\ContentBlocks\:
     resource: '../Classes/*'
 
+# @todo change to BeforeTcaOverridesEvent for v13
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-tca'
-        event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
+#    tags:
+#      - name: event.listener
+#        identifier: 'content-blocks-tca'
+#        event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
 
   TYPO3\CMS\ContentBlocks\Generator\PageTypeGenerator:
     public: true
