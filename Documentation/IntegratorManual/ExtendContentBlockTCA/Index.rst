@@ -5,54 +5,62 @@
 Extend TCA of Content Blocks
 ============================
 
-.. warning::
+Content Blocks generates a lot of boilerplate :ref:`TCA <t3tca:start>`
+(Table Configuration Array) for you. Usually you don't need to write own TCA,
+but in some cases, where you want to override the TCA from Content Blocks, you
+can do it with own TCA overrides.
 
-    This way of overriding Content Blocks TCA will with high probability be
-    replaced with another, better, approach.
+How to override Content Blocks TCA
+==================================
 
-The Content Blocks TCA generation happens after all TCA (overrides) from files
-are processed. This means, TCA overrides will not work.
+.. note::
 
-For this reason, we there is a :php:`TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent`
-event, on which you can hook in and extend the TCA of the Content Blocks.
+   First make sure, you've added Content Blocks as a dependency in your
+   extension.
 
-Thus you directly get the generated TCA and are able to add your configuration
-in a smart way.
+Finding the correct identifier
+------------------------------
 
-First of all you need a class, which does the TCA customisation:
-(E.g. in your extension: Classes/Generator/TcaCustomisation.php)
+The identifier to use in TCA depends on whether the Content Block uses
+:yaml:`prefixFields` or not. If this feature is enabled, your field identifiers
+are prefixed with the vendor and content block name. Example:
+:yaml:`my-vendor/my-content-block` and field identifier :yaml:`header` result
+in :php:`myvendor_mycontentblock_header`. See how dashes are removed and the two
+parts are glued together with an underscore. The same goes for the table name of
+:yaml:`Collection` fields. `myvendor_mycontentblock` is also the resulting
+:yaml:`typeName`, if not set explicitly. This can be used to override the TCA
+:php:`types` array. Otherwise, the field and table identifiers defined in the
+YAML config are identical to the TCA one.
+
+Fields in tt_content
+--------------------
+
+It works exactly like overriding core TCA.
+
+Example:
 
 .. code-block:: php
+   :caption: EXT:sitepackage/Configuration/TCA/Overrides/tt_content.php
 
-    <?php
-    declare(strict_types=1);
+   $GLOBALS['TCA']['tt_content']['columns']['myvendor_mycontentblock_header']['config']['some_option'] = 'some_value';
+   $GLOBALS['TCA']['tt_content']['types']['myvendor_mycontentblock']['some_option'] = 'some_value';
 
-    namespace Vendor\MyExtension\Generator;
+Fields in custom tables / record types
+--------------------------------------
 
-    use TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent;
+As soon as you create a :ref:`Collection <field_type_collection>` field,
+Content Blocks creates a new custom table. Therefore you need to change the key
+to the table's name. Extend the TCA in `Configuration/TCA/Overrides/myvendor_mycontentblock_mycollection.php`.
+For record types you already defined a :yaml:`tableName`, so use this as the key.
 
-    class TcaCustomisation
-    {
-        public function extendTcaOfContentBlocks(AfterContentBlocksTcaCompilationEvent $event): void
-        {
-            $tca = $event->getTca();
-            $tca['tt_content']['columns']['vendor_package_fieldidentifier']['config']['enableRichtext'] = true;
-            $event->setTca($tca);
-        }
-    }
+Example:
 
+.. code-block:: php
+   :caption: EXT:sitepackage/Configuration/TCA/Overrides/myvendor_mycontentblock_mycollection.php
 
-Then you need to register the event listener for your class in your Configuration/Services.yaml:
+   $GLOBALS['TCA']['myvendor_mycontentblock_mycollection']['columns']['your_field']['config']['some_option'] = 'some_value';
 
-.. code-block:: yaml
+.. code-block:: php
+   :caption: EXT:sitepackage/Configuration/TCA/Overrides/my_record_type_table.php
 
-    Vendor\MyExtension\Generator\TcaCustomisation:
-      tags:
-        - name: event.listener
-          identifier: 'vendor-myextension-tcacustomisation'
-          event: 'TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent'
-          method: 'extendTcaOfContentBlocks'
-
-
-See also:
-:ref:`EventDispatcher (PSR-14 Events) <t3coreapi:EventDispatcher>`
+   $GLOBALS['TCA']['my_record_type_table']['columns']['your_field']['config']['some_option'] = 'some_value';
