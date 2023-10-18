@@ -460,7 +460,14 @@ class TableDefinitionCollectionFactory
             return $fieldType;
         }
         $this->assertTypeExists($field, $input);
-        $fieldType = FieldType::from($field['type']);
+        $fieldType = FieldType::tryFrom($field['type']);
+        if ($fieldType === null) {
+            $validTypes = implode(', ', array_map(fn(FieldType $fieldType) => $fieldType->value, FieldType::cases()));
+            throw new \InvalidArgumentException(
+                'The type "' . $field['type'] . '" is not a valid type in Content Block "' . $input->contentBlock->getName() . '". Valid types are: ' . $validTypes . '.',
+                1697625849
+            );
+        }
         if ($fieldType !== FieldType::LINEBREAK) {
             $this->assertIdentifierExists($field, $input);
         }
