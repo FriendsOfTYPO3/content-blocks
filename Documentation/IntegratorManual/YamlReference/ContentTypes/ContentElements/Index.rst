@@ -38,3 +38,19 @@ Basics to your definition:
         useExistingField: true
 
 The Appearance tab will then be added after all your custom fields.
+
+Options
+=======
+
+.. confval:: typeName
+
+   :Required: false
+   :Type: string
+   :Default: automatically generated from :yaml:`name`
+
+   The identifier of the new Content Element. It is automatically generated from
+   the name, if not defined manually.
+
+   .. code-block:: yaml
+
+       typeName: my_content_element

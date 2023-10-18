@@ -23,7 +23,17 @@ minimal Page Type looks like this:
 This will create a new Page Type entry above the page tree, which you can drag
 and drop as usual. Your custom fields will be added after the `nav_title` field.
 
-.. important::
+Options
+=======
 
-    The :yaml:`typeName` has to be a numerical value for Page Types. There are
+.. confval:: typeName
+
+   :Required: true
+   :Type: integer
+
+    The :yaml:`typeName` has to be a numerical value. There are
     some reserved numbers, which you can't use either: 1, 3, 4, 6, 7, 199, 254, 255.
+
+   .. code-block:: yaml
+
+       typeName: 1337
