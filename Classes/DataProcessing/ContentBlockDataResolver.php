@@ -82,6 +82,7 @@ final class ContentBlockDataResolver
             'pid' => $data['pid'],
             'languageId' => $data['sys_language_uid'],
             'typeName' => $contentType->getTypeName(),
+            'tableName' => $contentType->getTable(),
             'updateDate' => $data['tstamp'],
             'creationDate' => $data['crdate'],
         ];
