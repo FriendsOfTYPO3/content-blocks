@@ -55,6 +55,8 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                 'eval' => ['trim', 'lower'],
                 'enableRichtext' => 1,
                 'richtextConfiguration' => 'default',
+                'renderType' => 'foo',
+                'format' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -85,6 +87,8 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                     'wrap' => 'off',
                     'enableRichtext' => true,
                     'richtextConfiguration' => 'default',
+                    'renderType' => 'foo',
+                    'format' => 'foo',
                 ],
             ],
         ];
@@ -121,6 +125,8 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                 'fixedFont' => 0,
                 'enableRichtext' => 0,
                 'richtextConfiguration' => '',
+                'renderType' => '',
+                'format' => '',
             ],
             'expectedTca' => [
                 'config' => [
