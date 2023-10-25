@@ -36,6 +36,7 @@ services:
         identifier: 'content-blocks-typoscript'
         event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
 
+#  @todo Use BeforeLoadedPageTsConfigEvent in v13
   TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator:
     public: true
     tags:
@@ -43,6 +44,7 @@ services:
         identifier: 'content-blocks-page-tsconfig'
         event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
 
+#  @todo Use BeforeLoadedUserTsConfigEvent in v13
   TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator:
     public: true
     tags:
