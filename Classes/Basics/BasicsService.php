@@ -34,7 +34,7 @@ class BasicsService
                 );
             }
         }
-        $yaml['fields'] = $this->applyBasicsToSubFields($yaml['fields']);
+        $yaml['fields'] = $this->applyBasicsToSubFields($yaml['fields'] ?? []);
 
         return $yaml;
     }
