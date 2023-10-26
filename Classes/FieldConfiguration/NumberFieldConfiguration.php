@@ -117,7 +117,7 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
             $null = '';
         }
         if ($this->format === 'decimal') {
-            return "`$uniqueColumnName` float DEFAULT '0'" . $null;
+            return "`$uniqueColumnName` decimal(10,2) DEFAULT '0.00'" . $null;
         }
 
         return "`$uniqueColumnName` int(11) DEFAULT '0'" . $null;
