@@ -178,12 +178,12 @@ final class NumberFieldConfigurationTest extends UnitTestCase
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
         ];
-        yield 'float column' => [
+        yield 'decimal column' => [
             'config' => [
                 'format' => 'decimal',
             ],
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` float DEFAULT \'0\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` decimal(10,2) DEFAULT \'0.00\' NOT NULL',
         ];
     }
 
