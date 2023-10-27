@@ -65,6 +65,11 @@ final class LoadedContentBlock
         return $this->name;
     }
 
+    public function getVendor(): string
+    {
+        return explode('/', $this->name)[0];
+    }
+
     public function getYaml(): array
     {
         return $this->yaml;
