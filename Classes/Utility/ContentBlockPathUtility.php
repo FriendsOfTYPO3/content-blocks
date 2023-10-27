@@ -136,12 +136,12 @@ class ContentBlockPathUtility
 
     public static function getPublicAssetsFolder(): string
     {
-        return '_assets/cb';
+        return '_assets';
     }
 
     public static function getSymlinkedAssetsPath(string $name): string
     {
-        return self::getPublicAssetsFolder() . '/' . $name;
+        return self::getPublicAssetsFolder() . '/' . md5($name);
     }
 
     public static function getBasicsFolder(): string
