@@ -214,16 +214,13 @@ class ContentBlockLoader implements LoaderInterface
 
         $fileSystem = new Filesystem();
         $assetsPath = Environment::getPublicPath() . '/' . ContentBlockPathUtility::getPublicAssetsFolder();
-        $fileSystem->remove($assetsPath);
-        $fileSystem->mkdir($assetsPath);
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
                 $loadedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
-            $contentBlockAssetsTargetDirectory = $assetsPath . '/' . $loadedContentBlock->getName();
-            $contentBlockAssetsVendorDirectory = $assetsPath . '/' . $loadedContentBlock->getVendor();
 
-            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $contentBlockAssetsVendorDirectory);
+            $contentBlockAssetsTargetDirectory = $assetsPath . '/' . md5($loadedContentBlock->getName());
+            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $assetsPath);
             if (!$fileSystem->exists($contentBlockAssetsTargetDirectory)) {
                 $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
             }
