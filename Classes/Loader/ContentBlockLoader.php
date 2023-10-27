@@ -220,9 +220,12 @@ class ContentBlockLoader implements LoaderInterface
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
                 $loadedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
-            $contentBlockAssetsPathDestination = $assetsPath . '/' . $loadedContentBlock->getName();
-            if (!$fileSystem->exists($contentBlockAssetsPathDestination)) {
-                $fileSystem->symlink($absolutContentBlockPublicPath, $contentBlockAssetsPathDestination);
+            $contentBlockAssetsTargetDirectory = $assetsPath . '/' . $loadedContentBlock->getName();
+            $contentBlockAssetsVendorDirectory = $assetsPath . '/' . $loadedContentBlock->getVendor();
+
+            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $contentBlockAssetsVendorDirectory);
+            if (!$fileSystem->exists($contentBlockAssetsTargetDirectory)) {
+                $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
             }
         }
     }
