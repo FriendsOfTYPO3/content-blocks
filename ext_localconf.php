@@ -8,7 +8,7 @@ ExtensionManagementUtility::addTypoScriptSetup('
 lib.contentBlock = FLUIDTEMPLATE
 lib.contentBlock {
     dataProcessing {
-        10 = TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor
+        10 = content-blocks
     }
 }
 ');

@@ -65,6 +65,8 @@ services:
   TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
     autoconfigure: false
     public: true
+    tags:
+      - { name: 'data.processor', identifier: 'content-blocks' }
 
   TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
     arguments:
