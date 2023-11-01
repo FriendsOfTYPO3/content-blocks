@@ -9,7 +9,6 @@ fields:
     label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.palettes.seo
     fields:
       - identifier: seo_title
-        label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.seo_title
         useExistingField: true
       - type: Linebreak
       - identifier: description
@@ -20,10 +19,8 @@ fields:
     label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.palettes.robots
     fields:
       - identifier: no_index
-        label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.no_index_formlabel
         useExistingField: true
       - identifier: no_follow
-        label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.no_follow_formlabel
         useExistingField: true
   - identifier: palette_canonical
     type: Palette
