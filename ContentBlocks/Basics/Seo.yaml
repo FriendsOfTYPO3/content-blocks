@@ -1,0 +1,41 @@
+# To be used within PageTypes
+identifier: TYPO3/Seo
+fields:
+  - identifier: seo_tab
+    type: Tab
+    label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo
+  - identifier: palette_seo
+    type: Palette
+    label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.palettes.seo
+    fields:
+      - identifier: seo_title
+        label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.seo_title
+        useExistingField: true
+      - type: Linebreak
+      - identifier: description
+        label: LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.description_formlabel
+        useExistingField: true
+  - identifier: palette_robots
+    type: Palette
+    label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.palettes.robots
+    fields:
+      - identifier: no_index
+        label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.no_index_formlabel
+        useExistingField: true
+      - identifier: no_follow
+        label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.no_follow_formlabel
+        useExistingField: true
+  - identifier: palette_canonical
+    type: Palette
+    label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.palettes.canonical
+    fields:
+      - identifier: canonical_link
+        useExistingField: true
+  - identifier: palette_sitemap
+    type: Palette
+    label: LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.palettes.sitemap
+    fields:
+      - identifier: sitemap_changefreq
+        useExistingField: true
+      - identifier: sitemap_priority
+        useExistingField: true
