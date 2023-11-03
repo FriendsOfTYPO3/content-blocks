@@ -22,22 +22,22 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
  */
 enum FieldType: string
 {
-    case CATEGORY = 'Category';
-    case CHECKBOX = 'Checkbox';
-    case COLLECTION = 'Collection';
-    case COLOR = 'Color';
-    case DATETIME = 'DateTime';
-    case EMAIL = 'Email';
-    case FILE = 'File';
-    case LANGUAGE = 'Language';
-    case LINK = 'Link';
-    case NUMBER = 'Number';
-    case RADIO = 'Radio';
-    case SELECT = 'Select';
-    case RELATION = 'Relation';
-    case FOLDER = 'Folder';
     case TEXT = 'Text';
     case TEXTAREA = 'Textarea';
+    case EMAIL = 'Email';
+    case NUMBER = 'Number';
+    case LINK = 'Link';
+    case COLOR = 'Color';
+    case DATETIME = 'DateTime';
+    case SELECT = 'Select';
+    case LANGUAGE = 'Language';
+    case CATEGORY = 'Category';
+    case RADIO = 'Radio';
+    case CHECKBOX = 'Checkbox';
+    case COLLECTION = 'Collection';
+    case FILE = 'File';
+    case FOLDER = 'Folder';
+    case RELATION = 'Relation';
     case FLEXFORM = 'FlexForm';
     case PALETTE = 'Palette';
     case LINEBREAK = 'Linebreak';
