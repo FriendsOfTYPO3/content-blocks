@@ -222,9 +222,11 @@ class CreateContentBlockCommand extends Command
 
     private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, ?string $type = ''): array
     {
+        $vendorWithoutSeparator = str_replace('-', '', $vendor);
+        $nameWithoutSeparator = str_replace('-', '', $name);
         $configuration = [
             'name' => $vendor . '/' . $name,
-            'table' => 'tx_' . $vendor . '_domain_model_' . $name,
+            'table' => 'tx_' . $vendorWithoutSeparator . '_domain_model_' . $nameWithoutSeparator,
             'prefixFields' => false,
             'labelField' => 'title',
         ];
