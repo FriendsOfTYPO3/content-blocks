@@ -31,6 +31,7 @@ some additional options, which are not available in TCA to ease the usage.
     Radio/Index
     Relation/Index
     Select/Index
+    Slug/Index
     Tab/Index
     Text/Index
     Textarea/Index

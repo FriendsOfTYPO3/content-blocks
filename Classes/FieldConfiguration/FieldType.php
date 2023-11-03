@@ -29,6 +29,7 @@ enum FieldType: string
     case LINK = 'Link';
     case COLOR = 'Color';
     case DATETIME = 'DateTime';
+    case SLUG = 'Slug';
     case SELECT = 'Select';
     case LANGUAGE = 'Language';
     case CATEGORY = 'Category';
@@ -51,6 +52,7 @@ enum FieldType: string
             self::COLLECTION => 'inline',
             self::COLOR => 'color',
             self::DATETIME => 'datetime',
+            self::SLUG => 'slug',
             self::EMAIL => 'email',
             self::FILE => 'file',
             self::LANGUAGE => 'language',
@@ -93,6 +95,7 @@ enum FieldType: string
             self::COLLECTION => CollectionFieldConfiguration::createFromArray($config),
             self::COLOR => ColorFieldConfiguration::createFromArray($config),
             self::DATETIME => DateTimeFieldConfiguration::createFromArray($config),
+            self::SLUG => SlugFieldConfiguration::createFromArray($config),
             self::EMAIL => EmailFieldConfiguration::createFromArray($config),
             self::FILE => FileFieldConfiguration::createFromArray($config),
             self::LANGUAGE => LanguageFieldConfiguration::createFromArray($config),
