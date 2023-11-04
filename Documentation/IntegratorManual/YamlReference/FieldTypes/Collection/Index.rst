@@ -124,11 +124,13 @@ Advanced / use case
 
 .. code-block:: yaml
 
-    # This custom table needs to be defined in a separate Content Block
+    # This custom table needs to be defined as a :ref:`Record Type <yaml_reference_record_type>`
     name: example/slide
     table: my_slide
     aggregateRoot: false
     fields:
+      - identifier: title
+        type: Text
       - identifier: image
         type: File
 
