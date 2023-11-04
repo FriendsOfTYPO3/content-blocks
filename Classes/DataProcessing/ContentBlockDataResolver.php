@@ -50,6 +50,7 @@ final class ContentBlockDataResolver
                 ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
+                // @todo add tests
                 foreach ($processedField as $key => $processedFieldItem) {
                     $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
