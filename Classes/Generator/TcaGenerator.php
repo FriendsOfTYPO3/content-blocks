@@ -429,8 +429,8 @@ class TcaGenerator
         }
 
         // @todo handle missing label field.
-//        if ($labelField === null) {
-//        }
+        //        if ($labelField === null) {
+        //        }
 
         return $labelField->getUniqueIdentifier();
     }
