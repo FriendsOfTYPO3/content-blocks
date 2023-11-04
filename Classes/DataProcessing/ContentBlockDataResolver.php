@@ -51,8 +51,8 @@ final class ContentBlockDataResolver
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
                 foreach ($processedField as $key => $processedFieldItem) {
-                    $identifier = $tcaFieldDefinition->getUniqueIdentifier();
-                    $collectionTableDefinition = $this->tableDefinitionCollection->getTable($identifier);
+                    $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+                    $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
                     $typeName = $collectionTableDefinition->getTypeField()
                         ? $processedFieldItem[$collectionTableDefinition->getTypeField()]
                         : '1';
@@ -61,7 +61,7 @@ final class ContentBlockDataResolver
                         $typeDefinition,
                         $collectionTableDefinition,
                         $processedFieldItem,
-                        $identifier,
+                        $collectionTable,
                         ++$depth
                     );
                 }
