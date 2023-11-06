@@ -541,6 +541,7 @@ class TcaGenerator
         $palettes = [];
         $columns = [];
         $ctrl = [
+            // @todo This could be the Content Block title for record types.
             'title' => $tableDefinition->getTable(),
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
