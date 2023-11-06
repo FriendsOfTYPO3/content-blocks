@@ -7,6 +7,17 @@
 <cb:asset.css identifier="content-block-css" file="Frontend.css"/>
 <cb:asset.script identifier="content-block-script" file="Frontend.js"/>
 
-<f:for each="{data.collection}" as="item">
-    fieldA{item.uid}: {item.fieldA}
-</f:for>
+<f:if condition="{data.collection}">
+    <f:for each="{data.collection}" as="item">
+        fieldA{item.uid}: {item.fieldA}
+    </f:for>
+</f:if>
+
+<f:if condition="{data.collection_recursive}">
+    <f:for each="{data.collection_recursive}" as="item">
+        fieldA{item.uid}: {item.fieldA}
+        <f:for each="{item.collection_inner}" as="item_inner">
+            fieldB{item_inner.uid}: {item_inner.fieldB}
+        </f:for>
+    </f:for>
+</f:if>

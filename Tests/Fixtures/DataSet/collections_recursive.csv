@@ -6,3 +6,6 @@
 ,"uid","pid","fieldB","foreign_table_parent_uid","tablenames","fieldname"
 ,1,1,"lorem foo bar B",1,"typo3tests_contentelementb_collection_recursive","collection_inner"
 ,2,1,"lorem foo bar B2",1,"typo3tests_contentelementb_collection_recursive","collection_inner"
+"tt_content"
+,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection_recursive","CType"
+,1,1,0,0,0,2,"typo3tests_contentelementb"

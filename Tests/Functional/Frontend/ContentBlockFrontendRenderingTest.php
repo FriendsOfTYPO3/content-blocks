@@ -97,4 +97,25 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('fieldA1: lorem foo bar', $html);
         self::assertStringContainsString('fieldA2: lorem foo bar 2', $html);
     }
+
+    /**
+     * @test
+     */
+    public function relationsAreResolvedForCollectionsRecursive(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections_recursive.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('fieldA1: lorem foo bar A', $html);
+        self::assertStringContainsString('fieldB1: lorem foo bar B', $html);
+        self::assertStringContainsString('fieldB2: lorem foo bar B2', $html);
+        self::assertStringContainsString('fieldA2: lorem foo bar A2', $html);
+    }
 }
