@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Localization\Locale;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -66,7 +67,10 @@ class TranslateViewHelper extends AbstractViewHelper
             $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $key;
         }
 
-        $request = $renderingContext->getRequest();
+        $request = null;
+        if ($renderingContext instanceof RenderingContext) {
+            $request = $renderingContext->getRequest();
+        }
         $value = self::getLanguageService($request, $arguments['languageKey'])->sL($languagePath);
         if (empty($value)) {
             // In case $value is empty (LLL: could not be resolved) fall back to the default.
