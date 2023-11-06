@@ -53,7 +53,7 @@ final class ContentBlockDataResolver
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
                 // @todo add tests
                 $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
-                if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
+                if (is_array($processedField) && $this->tableDefinitionCollection->hasTable($collectionTable)) {
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
                     foreach ($processedField as $key => $processedFieldItem) {
                         $typeName = $collectionTableDefinition->getTypeField()
