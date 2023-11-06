@@ -51,42 +51,24 @@ final class ContentBlockDataResolver
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
 
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
-                // @todo add tests
                 $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
                 if (is_array($processedField) && $this->tableDefinitionCollection->hasTable($collectionTable)) {
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
                     foreach ($processedField as $key => $processedFieldItem) {
-                        $typeName = $collectionTableDefinition->getTypeField()
-                            ? $processedFieldItem[$collectionTableDefinition->getTypeField()]
-                            : '1';
-                        $typeDefinition = $collectionTableDefinition->getTypeDefinitionCollection()->getType($typeName);
-                        $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
-                            $typeDefinition,
-                            $collectionTableDefinition,
-                            $processedFieldItem,
-                            $collectionTable,
-                            ++$depth
-                        );
+                        $processedField[$key] = $this->transformRelation($collectionTableDefinition, $processedFieldItem, $collectionTable, $depth);
                     }
                 }
             }
-            // @todo add tests, renderType selectSingle without array.
             if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '') {
                 $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
-                if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+                if (is_array($processedField) && $this->tableDefinitionCollection->hasTable($foreignTable)) {
                     $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
-                    foreach ($processedField as $key => $processedFieldItem) {
-                        $typeName = $foreignTableDefinition->getTypeField()
-                            ? $processedFieldItem[$foreignTableDefinition->getTypeField()]
-                            : '1';
-                        $typeDefinition = $foreignTableDefinition->getTypeDefinitionCollection()->getType($typeName);
-                        $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
-                            $typeDefinition,
-                            $foreignTableDefinition,
-                            $processedFieldItem,
-                            $foreignTable,
-                            ++$depth
-                        );
+                    if (($tcaFieldDefinition->getTca()['config']['renderType'] ?? '') === 'selectSingle') {
+                        $processedField = $this->transformRelation($foreignTableDefinition, $processedField, $foreignTable, $depth);
+                    } else {
+                        foreach ($processedField as $key => $processedFieldItem) {
+                            $processedField[$key] = $this->transformRelation($foreignTableDefinition, $processedFieldItem, $foreignTable, $depth);
+                        }
                     }
                 }
             }
@@ -94,6 +76,22 @@ final class ContentBlockDataResolver
         }
 
         return $this->buildContentBlockDataObject($data, $processedContentBlockData, $contentTypeDefinition);
+    }
+
+    private function transformRelation(TableDefinition $tableDefinition, array $fieldItem, string $foreignTable, int $depth): ContentBlockData
+    {
+        $typeName = $tableDefinition->getTypeField()
+            ? $fieldItem[$tableDefinition->getTypeField()]
+            : '1';
+        $typeDefinition = $tableDefinition->getTypeDefinitionCollection()->getType($typeName);
+        $contentBlockData = $this->buildContentBlockDataObjectRecursive(
+            $typeDefinition,
+            $tableDefinition,
+            $fieldItem,
+            $foreignTable,
+            ++$depth
+        );
+        return $contentBlockData;
     }
 
     private function buildContentBlockDataObject(

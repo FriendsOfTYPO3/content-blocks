@@ -462,7 +462,7 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canResolveSelectForeignTable(): void
+    public function canResolveSelectForeignTableSingle(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
@@ -471,7 +471,28 @@ final class RelationResolverTest extends FunctionalTestCase
         $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_contentelementb_select_foreign');
         $dummyRecord = [
             'uid' => 1,
-            'typo3tests_contentelementb_select_foreign' => '1,2',
+            'typo3tests_contentelementb_select_foreign' => '1',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame('Page 1', $result['title']);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveSelectForeignTableMultiple(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
+        $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_contentelementb_select_foreign_multiple');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_select_foreign_multiple' => '1,2',
         ];
 
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());

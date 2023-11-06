@@ -1,0 +1,10 @@
+name: simple/simple-relation
+fields:
+  - identifier: record
+    type: Select
+    renderType: selectSingle
+    foreign_table: custom_record
+  - identifier: record_multiple
+    type: Select
+    renderType: selectMultipleSideBySide
+    foreign_table: custom_record

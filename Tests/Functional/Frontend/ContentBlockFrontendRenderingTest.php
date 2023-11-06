@@ -118,4 +118,41 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('fieldB2: lorem foo bar B2', $html);
         self::assertStringContainsString('fieldA2: lorem foo bar A2', $html);
     }
+
+    /**
+     * @test
+     */
+    public function relationsAreResolvedForSelectSingleForeignTable(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/foreign_table_select.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Title: Custom Record 1', $html);
+    }
+
+    /**
+     * @test
+     */
+    public function relationsAreResolvedForSelectMultipleForeignTable(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/foreign_table_select_multiple.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Title: Custom Record 1', $html);
+        self::assertStringContainsString('Title: Custom Record 2', $html);
+    }
 }
