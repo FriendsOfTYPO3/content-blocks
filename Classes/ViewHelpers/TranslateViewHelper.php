@@ -17,10 +17,13 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\ViewHelpers;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
+use TYPO3\CMS\Core\Localization\Locale;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -47,6 +50,7 @@ class TranslateViewHelper extends AbstractViewHelper
         $this->registerArgument('name', 'string', 'The vendor/package of the Content Block.');
         $this->registerArgument('default', 'string', 'If the given locallang key could not be found, this value is used. If this argument is not set, child nodes will be used to render the default');
         $this->registerArgument('arguments', 'array', 'Arguments to be replaced in the resulting string');
+        $this->registerArgument('languageKey', 'string', 'Language key ("da" for example) or "default" to use. If empty, use current language.');
     }
 
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
@@ -62,7 +66,8 @@ class TranslateViewHelper extends AbstractViewHelper
             $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $key;
         }
 
-        $value = self::getLanguageService()->sL($languagePath);
+        $request = $renderingContext->getRequest();
+        $value = self::getLanguageService($request, $arguments['languageKey'])->sL($languagePath);
         if (empty($value)) {
             // In case $value is empty (LLL: could not be resolved) fall back to the default.
             $value = $default;
@@ -73,14 +78,16 @@ class TranslateViewHelper extends AbstractViewHelper
         return $value;
     }
 
-    protected static function getLanguageService(): LanguageService
+    protected static function getLanguageService(ServerRequestInterface $request = null, string|Locale $languageKey = null): LanguageService
     {
         $languageServiceFactory = GeneralUtility::makeInstance(LanguageServiceFactory::class);
-        if ($GLOBALS['TYPO3_REQUEST'] !== null && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            return $languageServiceFactory->createFromSiteLanguage($GLOBALS['TYPO3_REQUEST']->getAttribute('language')
-                ?? $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getDefaultLanguage());
+        if ($languageKey) {
+            return $languageServiceFactory->create($languageKey);
         }
-        
+        if ($request !== null && ApplicationType::fromRequest($request)->isFrontend()) {
+            return $languageServiceFactory->createFromSiteLanguage($request->getAttribute('language')
+                ?? $request->getAttribute('site')->getDefaultLanguage());
+        }
         return $languageServiceFactory->createFromUserPreferences($GLOBALS['BE_USER'] ?? null);
     }
 }
