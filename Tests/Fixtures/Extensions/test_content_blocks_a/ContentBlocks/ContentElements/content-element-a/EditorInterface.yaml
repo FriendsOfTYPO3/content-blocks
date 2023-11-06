@@ -1,5 +1,5 @@
 group: common
-name: typo3tests/bar
+name: typo3tests/content-element-a
 fields:
   - identifier: image
     useExistingField: true
@@ -71,7 +71,6 @@ fields:
             value: '2'
           - label: 'Foo 3'
             value: '3'
-
       - identifier: select_foreign
         type: Select
         renderType: selectSingle

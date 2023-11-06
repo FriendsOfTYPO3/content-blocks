@@ -31,8 +31,8 @@ final class CssViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/foo',
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/bar',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_a',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -42,12 +42,12 @@ final class CssViewHelperTest extends FunctionalTestCase
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/foo" identifier="test" file="Frontend.css" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/content-element-b" identifier="test" file="Frontend.css" priority="0"/>');
 
         (new TemplateView($context))->render();
 
         $collectedStyleSheets = $this->get(AssetCollector::class)->getStyleSheets();
-        self::assertSame('EXT:foo/ContentBlocks/ContentElements/foo/Assets/Frontend.css', $collectedStyleSheets['test']['source']);
+        self::assertSame('EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/Assets/Frontend.css', $collectedStyleSheets['test']['source']);
         self::assertSame([], $collectedStyleSheets['test']['attributes']);
     }
 
@@ -57,12 +57,12 @@ final class CssViewHelperTest extends FunctionalTestCase
     public function booleanAttributesAreProperlyConverted(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/bar" identifier="test" file="my.css" disabled="1" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/content-element-a" identifier="test" file="my.css" disabled="1" priority="0"/>');
 
         (new TemplateView($context))->render();
 
         $collectedStyleSheets = $this->get(AssetCollector::class)->getStyleSheets();
-        self::assertSame('EXT:bar/ContentBlocks/ContentElements/bar/Assets/my.css', $collectedStyleSheets['test']['source']);
+        self::assertSame('EXT:test_content_blocks_a/ContentBlocks/ContentElements/content-element-a/Assets/my.css', $collectedStyleSheets['test']['source']);
         self::assertSame(['disabled' => 'disabled'], $collectedStyleSheets['test']['attributes']);
     }
 }

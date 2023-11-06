@@ -3,10 +3,10 @@
 	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
 		<header/>
 		<body>
-			<trans-unit id="bar.foo.title" xml:space="preserve">
+			<trans-unit id="typo3tests.content-element-a.title" xml:space="preserve">
 				<source>Content Block title</source>
 			</trans-unit>
-			<trans-unit id="bar.foo.description" xml:space="preserve">
+			<trans-unit id="typo3tests.content-element-a.description" xml:space="preserve">
 				<source>This is your content block description</source>
 			</trans-unit>
         </body>

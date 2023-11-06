@@ -26,7 +26,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -44,7 +44,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
     public function coreLabelsAreOverriddenIfTranslationExistsInLanguageFile(): void
     {
         self::assertSame(
-            'LLL:EXT:simple/ContentBlocks/ContentElements/simple2/Source/Language/Labels.xlf:header.label',
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple2/Source/Language/Labels.xlf:header.label',
             $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['columnsOverrides']['header']['label']
         );
     }
@@ -167,13 +167,13 @@ final class TcaGeneratorTest extends FunctionalTestCase
         self::assertSame(
             [
                 [
-                    'label' => 'LLL:EXT:simple/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:content-blocks.record1.title',
+                    'label' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:content-blocks.record1.title',
                     'value' => 'record1',
                     'icon' => 'custom_record-record1-175ef6f',
                     'group' => '',
                 ],
                 [
-                    'label' => 'LLL:EXT:simple/ContentBlocks/RecordTypes/record2/Source/Language/Labels.xlf:content-blocks.record2.title',
+                    'label' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record2/Source/Language/Labels.xlf:content-blocks.record2.title',
                     'value' => 'record2',
                     'icon' => 'custom_record-record2-175ef6f',
                     'group' => '',
