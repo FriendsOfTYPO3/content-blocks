@@ -52,38 +52,42 @@ final class ContentBlockDataResolver
 
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
                 // @todo add tests
-                foreach ($processedField as $key => $processedFieldItem) {
-                    $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+                $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+                if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
-                    $typeName = $collectionTableDefinition->getTypeField()
-                        ? $processedFieldItem[$collectionTableDefinition->getTypeField()]
-                        : '1';
-                    $typeDefinition = $collectionTableDefinition->getTypeDefinitionCollection()->getType($typeName);
-                    $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
-                        $typeDefinition,
-                        $collectionTableDefinition,
-                        $processedFieldItem,
-                        $collectionTable,
-                        ++$depth
-                    );
+                    foreach ($processedField as $key => $processedFieldItem) {
+                        $typeName = $collectionTableDefinition->getTypeField()
+                            ? $processedFieldItem[$collectionTableDefinition->getTypeField()]
+                            : '1';
+                        $typeDefinition = $collectionTableDefinition->getTypeDefinitionCollection()->getType($typeName);
+                        $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
+                            $typeDefinition,
+                            $collectionTableDefinition,
+                            $processedFieldItem,
+                            $collectionTable,
+                            ++$depth
+                        );
+                    }
                 }
             }
             // @todo add tests, renderType selectSingle without array.
             if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '') {
                 $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
-                $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
-                foreach ($processedField as $key => $processedFieldItem) {
-                    $typeName = $foreignTableDefinition->getTypeField()
-                        ? $processedFieldItem[$foreignTableDefinition->getTypeField()]
-                        : '1';
-                    $typeDefinition = $foreignTableDefinition->getTypeDefinitionCollection()->getType($typeName);
-                    $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
-                        $typeDefinition,
-                        $foreignTableDefinition,
-                        $processedFieldItem,
-                        $foreignTable,
-                        ++$depth
-                    );
+                if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+                    $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+                    foreach ($processedField as $key => $processedFieldItem) {
+                        $typeName = $foreignTableDefinition->getTypeField()
+                            ? $processedFieldItem[$foreignTableDefinition->getTypeField()]
+                            : '1';
+                        $typeDefinition = $foreignTableDefinition->getTypeDefinitionCollection()->getType($typeName);
+                        $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
+                            $typeDefinition,
+                            $foreignTableDefinition,
+                            $processedFieldItem,
+                            $foreignTable,
+                            ++$depth
+                        );
+                    }
                 }
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
