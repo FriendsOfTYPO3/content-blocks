@@ -48,7 +48,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveFileReferences(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/file_reference.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/file_reference.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -71,7 +71,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveFilesFromFolder(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/folder_files.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/folder_files.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -94,7 +94,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveFilesFromFolderRecursive(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/folder_files.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/folder_files.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -118,7 +118,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCollections(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -142,7 +142,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCollectionsRecursively(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections_recursive.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_recursive.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -169,7 +169,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCollectionsInWorkspaces(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
@@ -199,7 +199,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesManyToMany(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_many_to_many.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -223,7 +223,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesManyToManyInWorkspaces(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_many_to_many.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_many_to_many.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
@@ -253,7 +253,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesOneToOne(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_one_to_one.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_one_to_one.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -276,7 +276,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveCategoriesOneToMany(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/category_one_to_many.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_one_to_many.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -300,7 +300,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveDbRelation(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -324,7 +324,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveDbRelationsInWorkspaces(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
@@ -354,7 +354,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveMultipleDbRelations(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation_multiple.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_multiple.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -380,7 +380,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveDbRelationsMM(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/db_relation_mm.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_mm.csv');
 
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
@@ -464,7 +464,7 @@ final class RelationResolverTest extends FunctionalTestCase
      */
     public function canResolveSelectForeignTable(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/select_foreign.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
         $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests_contentelementb');
