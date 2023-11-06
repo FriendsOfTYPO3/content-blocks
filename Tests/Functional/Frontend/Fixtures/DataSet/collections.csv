@@ -1,0 +1,10 @@
+"typo3tests_contentelementb_collection"
+,"uid","pid","fieldA","foreign_table_parent_uid","tablenames","fieldname","t3_origuid","t3ver_oid","t3ver_wsid"
+,1,1,"lorem foo bar",1,"tt_content","typo3tests_contentelementb_collection",0,0,0
+,2,1,"lorem foo bar 2",1,"tt_content","typo3tests_contentelementb_collection",0,0,0
+,3,1,"lorem foo bar WS",1,"tt_content","typo3tests_contentelementb_collection",1,1,1
+,4,1,"lorem foo bar 2 WS",1,"tt_content","typo3tests_contentelementb_collection",2,2,1
+"tt_content"
+,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection","CType"
+,1,1,0,0,0,2,"typo3tests_contentelementb"
+,2,1,1,1,1,2,"typo3tests_contentelementb"
