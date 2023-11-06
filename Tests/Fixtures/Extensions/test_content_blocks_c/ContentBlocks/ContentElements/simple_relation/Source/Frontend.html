@@ -1,0 +1,14 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:if condition="{data.record}">
+Title: {data.record.title}
+</f:if>
+<f:if condition="{data.record_multiple}">
+    <f:for each="{data.record_multiple}" as="record">
+        Title: {record.title}
+    </f:for>
+</f:if>

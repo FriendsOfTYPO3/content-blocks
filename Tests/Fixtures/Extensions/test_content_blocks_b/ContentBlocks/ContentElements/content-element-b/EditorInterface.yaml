@@ -79,6 +79,10 @@ fields:
         type: Select
         renderType: selectSingle
         foreign_table: pages
+      - identifier: select_foreign_multiple
+        type: Select
+        renderType: selectMultipleSideBySide
+        foreign_table: pages
   - identifier: flexfield
     type: FlexForm
     fields:

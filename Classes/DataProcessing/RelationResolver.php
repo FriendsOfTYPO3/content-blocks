@@ -99,7 +99,7 @@ class RelationResolver
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
-            return $this->getRelations(
+            $result = $this->getRelations(
                 uidList: (string)($record[$uniqueIdentifier] ?? ''),
                 tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
                 mmTable: $tcaFieldConfig['config']['MM'] ?? '',
@@ -107,6 +107,10 @@ class RelationResolver
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
+            if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
+                return $result[0] ?? null;
+            }
+            return $result;
         }
         if (in_array(($tcaFieldConfig['config']['renderType'] ?? ''), ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'], true)) {
             return ($record[$uniqueIdentifier] ?? '') !== '' ? explode(',', $record[$uniqueIdentifier]) : [];
