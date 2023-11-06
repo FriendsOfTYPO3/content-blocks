@@ -49,6 +49,7 @@ final class ContentBlockDataResolver
             $processedField = $depth === 0
                 ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
+
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
                 // @todo add tests
                 foreach ($processedField as $key => $processedFieldItem) {
@@ -67,6 +68,24 @@ final class ContentBlockDataResolver
                     );
                 }
             }
+            // @todo add tests, renderType selectSingle without array.
+            if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '') {
+                $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+                $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+                foreach ($processedField as $key => $processedFieldItem) {
+                    $typeName = $foreignTableDefinition->getTypeField()
+                        ? $processedFieldItem[$foreignTableDefinition->getTypeField()]
+                        : '1';
+                    $typeDefinition = $foreignTableDefinition->getTypeDefinitionCollection()->getType($typeName);
+                    $processedField[$key] = $this->buildContentBlockDataObjectRecursive(
+                        $typeDefinition,
+                        $foreignTableDefinition,
+                        $processedFieldItem,
+                        $foreignTable,
+                        ++$depth
+                    );
+                }
+            }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
         }
 
@@ -81,12 +100,18 @@ final class ContentBlockDataResolver
         $baseData = [
             'uid' => $data['uid'],
             'pid' => $data['pid'],
-            'languageId' => $data['sys_language_uid'],
             'typeName' => $contentType->getTypeName(),
             'tableName' => $contentType->getTable(),
-            'updateDate' => $data['tstamp'],
-            'creationDate' => $data['crdate'],
         ];
+        if (array_key_exists('sys_language_uid', $data)) {
+            $baseData['languageId'] = $data['sys_language_uid'];
+        }
+        if (array_key_exists('tstamp', $data)) {
+            $baseData['updateDate'] = $data['tstamp'];
+        }
+        if (array_key_exists('crdate', $data)) {
+            $baseData['creationDate'] = $data['crdate'];
+        }
         $baseData = $this->enrichBaseDataWithComputedProperties($baseData, $data);
         $contentBlockDataArray = $baseData + $processedContentBlockData;
         $contentBlockData = new ContentBlockData($contentType->getName(), $data, $contentBlockDataArray);
