@@ -5,18 +5,13 @@ basics:
   - TYPO3/Links
   - TYPO3/Categories
 fields:
-  -
-    identifier: palette
+  - identifier: palette
     type: Palette
     fields:
-      -
-        identifier: header
+      - identifier: header
         useExistingField: true
-      -
-        type: Linebreak
-      -
-        identifier: bodytext
+      - type: Linebreak
+      - identifier: bodytext
         useExistingField: true
-      -
-        identifier: Simple/Basic
+      - identifier: Simple/Basic
         type: Basic

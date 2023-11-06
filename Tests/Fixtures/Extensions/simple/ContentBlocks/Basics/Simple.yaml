@@ -1,5 +1,4 @@
 identifier: Simple/Basic
 fields:
-  -
-    identifier: basic_field
+  - identifier: basic_field
     type: Text
