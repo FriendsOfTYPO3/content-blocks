@@ -33,7 +33,7 @@ final class TranslateViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/foo',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -41,23 +41,23 @@ final class TranslateViewHelperTest extends FunctionalTestCase
     {
         return [
             'fallback to default attribute for not existing label' => [
-                '<cb:translate name="typo3tests/foo" key="iDoNotExist" default="myDefault" />',
+                '<cb:translate name="typo3tests/content-element-b" key="iDoNotExist" default="myDefault" />',
                 'myDefault',
             ],
             'fallback to default attribute for static label' => [
-                '<cb:translate name="typo3tests/foo" key="static label" default="myDefault" />',
+                '<cb:translate name="typo3tests/content-element-b" key="static label" default="myDefault" />',
                 'myDefault',
             ],
             'fallback to child for not existing label' => [
-                '<cb:translate name="typo3tests/foo" key="iDoNotExist">myDefault</cb:translate>',
+                '<cb:translate name="typo3tests/content-element-b" key="iDoNotExist">myDefault</cb:translate>',
                 'myDefault',
             ],
             'fallback to child for static label' => [
-                '<cb:translate name="typo3tests/foo" key="static label">myDefault</cb:translate>',
+                '<cb:translate name="typo3tests/content-element-b" key="static label">myDefault</cb:translate>',
                 'myDefault',
             ],
             'key and name given' => [
-                '<cb:translate key="foo.bar.title" name="typo3tests/foo" />',
+                '<cb:translate key="typo3tests.content-element-b.title" name="typo3tests/content-element-b" />',
                 'Content Block title',
             ],
         ];
@@ -112,7 +112,7 @@ final class TranslateViewHelperTest extends FunctionalTestCase
     {
         $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:translate key="" name="typo3tests/foo" />');
+        $context->getTemplatePaths()->setTemplateSource('<cb:translate key="" name="typo3tests/content-element-b" />');
 
         $this->expectException(Exception::class);
         $this->expectExceptionCode(1699271873);

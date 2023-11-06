@@ -1,11 +1,11 @@
 {
-	"name": "typo3tests/bar",
+	"name": "typo3tests/test-content-blocks-a",
 	"type": "typo3-cms-extension",
 	"description": "This is a dummy extension to host content blocks.",
 	"license": "GPL-2.0-or-later",
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "bar"
+			"extension-key": "test_content_blocks_a"
 		}
 	}
 }

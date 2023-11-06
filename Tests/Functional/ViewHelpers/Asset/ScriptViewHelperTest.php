@@ -31,8 +31,8 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/foo',
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/bar',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_a',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -42,12 +42,12 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="typo3tests/foo" identifier="test" file="Frontend.js" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="typo3tests/content-element-b" identifier="test" file="Frontend.js" priority="0"/>');
 
         (new TemplateView($context))->render();
 
         $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
-        self::assertSame('EXT:foo/ContentBlocks/ContentElements/foo/Assets/Frontend.js', $collectedJavaScripts['test']['source']);
+        self::assertSame('EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/Assets/Frontend.js', $collectedJavaScripts['test']['source']);
         self::assertSame([], $collectedJavaScripts['test']['attributes']);
     }
 
@@ -57,12 +57,12 @@ final class ScriptViewHelperTest extends FunctionalTestCase
     public function booleanAttributesAreProperlyConverted(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="typo3tests/bar" identifier="test" file="my.js" async="1" defer="1" nomodule="1" priority="0"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.script name="typo3tests/content-element-a" identifier="test" file="my.js" async="1" defer="1" nomodule="1" priority="0"/>');
 
         (new TemplateView($context))->render();
 
         $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
-        self::assertSame('EXT:bar/ContentBlocks/ContentElements/bar/Assets/my.js', $collectedJavaScripts['test']['source']);
+        self::assertSame('EXT:test_content_blocks_a/ContentBlocks/ContentElements/content-element-a/Assets/my.js', $collectedJavaScripts['test']['source']);
         self::assertSame(['async' => 'async', 'defer' => 'defer', 'nomodule' => 'nomodule'], $collectedJavaScripts['test']['attributes']);
     }
 }

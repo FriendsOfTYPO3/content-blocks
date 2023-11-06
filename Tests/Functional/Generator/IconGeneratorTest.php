@@ -24,7 +24,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 final class IconGeneratorTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -53,7 +53,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:simple/ContentBlocks/ContentElements/simple/Assets/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Icon.svg',
                 ],
             ],
         ];
@@ -62,7 +62,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:simple/ContentBlocks/ContentElements/simple2/Assets/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple2/Assets/Icon.svg',
                 ],
             ],
         ];
@@ -71,7 +71,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:simple/ContentBlocks/ContentElements/simple_with_basics/Assets/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple_with_basics/Assets/Icon.svg',
                 ],
             ],
         ];

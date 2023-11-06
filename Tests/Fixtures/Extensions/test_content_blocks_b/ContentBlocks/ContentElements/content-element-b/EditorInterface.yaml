@@ -1,5 +1,5 @@
 group: common
-name: typo3tests/foo
+name: typo3tests/content-element-b
 fields:
   - identifier: image
     useExistingField: true

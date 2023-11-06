@@ -30,7 +30,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/simple',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -73,7 +73,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('<p>tableName:tt_content</p>', $html);
         self::assertStringContainsString('<p>creationDate:1697810914</p>', $html);
         self::assertStringContainsString('<p>updateDate:1697810925</p>', $html);
-        self::assertStringContainsString('<link href="/typo3conf/ext/simple/ContentBlocks/ContentElements/simple/Assets/Frontend.css', $html);
-        self::assertStringContainsString('<script src="/typo3conf/ext/simple/ContentBlocks/ContentElements/simple/Assets/Frontend.js', $html);
+        self::assertStringContainsString('<link href="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.css', $html);
+        self::assertStringContainsString('<script src="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.js', $html);
     }
 }

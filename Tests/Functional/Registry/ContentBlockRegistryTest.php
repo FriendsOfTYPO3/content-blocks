@@ -29,8 +29,8 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/foo',
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/bar',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_a',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -41,14 +41,14 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
 
     public static function canRetrieveContentBlockPathByNameDataProvider(): iterable
     {
-        yield 'Extension path for foo' => [
-            'name' => 'typo3tests/foo',
-            'expected' => 'EXT:foo/ContentBlocks/ContentElements/foo',
+        yield 'Extension path A' => [
+            'name' => 'typo3tests/content-element-a',
+            'expected' => 'EXT:test_content_blocks_a/ContentBlocks/ContentElements/content-element-a',
         ];
 
-        yield 'Extension path for bar' => [
-            'name' => 'typo3tests/bar',
-            'expected' => 'EXT:bar/ContentBlocks/ContentElements/bar',
+        yield 'Extension path B' => [
+            'name' => 'typo3tests/content-element-b',
+            'expected' => 'EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b',
         ];
     }
 
