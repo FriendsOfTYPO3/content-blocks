@@ -58,13 +58,11 @@ class TranslateViewHelper extends AbstractViewHelper
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
     {
         $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('data._name'));
-
         if ($name === '') {
             throw new Exception('\TYPO3\CMS\ContentBlocks\ViewHelpers\TranslateViewHelper seemingly called outside Content Blocks context.', 1699271759);
         }
 
         $key = (string)$arguments['key'];
-
         if ($key === '') {
             throw new Exception('Value for "key" must not be empty.', 1699271873);
         }
