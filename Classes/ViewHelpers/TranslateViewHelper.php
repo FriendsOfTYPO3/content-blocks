@@ -29,6 +29,7 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
+use TYPO3Fluid\Fluid\Exception;
 
 /**
  * TranslateViewHelper
@@ -57,15 +58,25 @@ class TranslateViewHelper extends AbstractViewHelper
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
     {
         $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('data._name'));
+
+        if ($name === '') {
+            throw new Exception('\TYPO3\CMS\ContentBlocks\ViewHelpers\TranslateViewHelper seemingly called outside Content Blocks context.', 1699271759);
+        }
+
         $key = (string)$arguments['key'];
+
+        if ($key === '') {
+            throw new Exception('Value for "key" must not be empty.', 1699271873);
+        }
+
         $default = (string)($arguments['default'] ?? $renderChildrenClosure() ?? '');
         $translateArguments = $arguments['arguments'];
 
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-        $languagePath = '';
-        if ($contentBlockRegistry->hasContentBlock($name)) {
-            $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $key;
+        if (!$contentBlockRegistry->hasContentBlock($name)) {
+            throw new Exception('Content block with the name "' . $name . '" is not registered.', 1699272189);
         }
+        $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $key;
 
         $request = null;
         if ($renderingContext instanceof RenderingContext) {

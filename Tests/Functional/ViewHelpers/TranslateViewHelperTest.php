@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\Exception;
 use TYPO3Fluid\Fluid\View\TemplateView;
 
 final class TranslateViewHelperTest extends FunctionalTestCase
@@ -59,10 +60,6 @@ final class TranslateViewHelperTest extends FunctionalTestCase
                 '<cb:translate key="foo.bar.title" name="typo3tests/foo" />',
                 'Content Block title',
             ],
-            'empty string on invalid content block' => [
-                '<cb:translate key="dummy" name="fizz/buzz" />',
-                '',
-            ],
         ];
     }
 
@@ -76,5 +73,50 @@ final class TranslateViewHelperTest extends FunctionalTestCase
         $context = $this->get(RenderingContextFactory::class)->create();
         $context->getTemplatePaths()->setTemplateSource($template);
         self::assertSame($expected, (new TemplateView($context))->render());
+    }
+
+    /**
+     * @test
+     */
+    public function invalidContentBlockThrowsFluidException(): void
+    {
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:translate key="dummy" name="fizz/buzz" />');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(1699272189);
+
+        (new TemplateView($context))->render();
+    }
+
+    /**
+     * @test
+     */
+    public function missingNameThrowsFluidException(): void
+    {
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:translate key="dummy" />');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(1699271759);
+
+        (new TemplateView($context))->render();
+    }
+
+    /**
+     * @test
+     */
+    public function emptyKeyThrowsFluidException(): void
+    {
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('<cb:translate key="" name="typo3tests/foo" />');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(1699271873);
+
+        (new TemplateView($context))->render();
     }
 }
