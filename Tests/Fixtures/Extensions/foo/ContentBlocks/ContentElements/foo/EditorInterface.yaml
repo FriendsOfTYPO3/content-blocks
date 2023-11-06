@@ -82,9 +82,7 @@ fields:
   - identifier: flexfield
     type: FlexForm
     fields:
-      -
-        identifier: header
+      - identifier: header
         type: Text
-      -
-        identifier: textarea
+      - identifier: textarea
         type: Textarea

@@ -7,6 +7,5 @@ typeField: type
 typeName: record2
 priority: 10
 fields:
-  -
-    identifier: title
+  - identifier: title
     type: Text
