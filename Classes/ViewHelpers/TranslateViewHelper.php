@@ -75,11 +75,12 @@ class TranslateViewHelper extends AbstractViewHelper
 
     protected static function getLanguageService(): LanguageService
     {
-        if (isset($GLOBALS['LANG'])) {
-            return $GLOBALS['LANG'];
-        }
         $languageServiceFactory = GeneralUtility::makeInstance(LanguageServiceFactory::class);
-        $GLOBALS['LANG'] = $languageServiceFactory->createFromUserPreferences($GLOBALS['BE_USER'] ?? null);
-        return $GLOBALS['LANG'];
+        if ($GLOBALS['TYPO3_REQUEST'] !== null && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+            return $languageServiceFactory->createFromSiteLanguage($GLOBALS['TYPO3_REQUEST']->getAttribute('language')
+                ?? $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getDefaultLanguage());
+        }
+        
+        return $languageServiceFactory->createFromUserPreferences($GLOBALS['BE_USER'] ?? null);
     }
 }
