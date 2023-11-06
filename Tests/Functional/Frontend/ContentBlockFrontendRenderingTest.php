@@ -44,7 +44,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->importCSVDataSet(__DIR__ . '/Fixtures/frontend.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/base.csv');
         $this->writeSiteConfiguration(
             'fluid_template',
             $this->buildSiteConfiguration(self::ROOT_PAGE_ID, '/'),
@@ -56,7 +56,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
      */
     public function variablesAndAssetsRendered(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/Fixtures/frontend-simple-element.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/frontend_simple_element.csv');
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_ID,
             [
@@ -84,7 +84,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
      */
     public function relationsAreResolvedForCollections(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_ID,
             [
@@ -103,7 +103,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
      */
     public function relationsAreResolvedForCollectionsRecursive(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections_recursive.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_recursive.csv');
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_ID,
             [
