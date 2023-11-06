@@ -30,6 +30,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
     ];
@@ -43,7 +44,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->importCSVDataSet('typo3conf/ext/content_blocks/Tests/Functional/Frontend/Fixtures/frontend.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/frontend.csv');
         $this->writeSiteConfiguration(
             'fluid_template',
             $this->buildSiteConfiguration(self::ROOT_PAGE_ID, '/'),
@@ -55,10 +56,11 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
      */
     public function variablesAndAssetsRendered(): void
     {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/frontend-simple-element.csv');
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_ID,
             [
-                'typo3conf/ext/content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
             ]
         );
         $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
@@ -75,5 +77,24 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('<p>updateDate:1697810925</p>', $html);
         self::assertStringContainsString('<link href="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.css', $html);
         self::assertStringContainsString('<script src="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.js', $html);
+    }
+
+    /**
+     * @test
+     */
+    public function relationsAreResolvedForCollections(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../../Fixtures/DataSet/collections.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('fieldA1: lorem foo bar', $html);
+        self::assertStringContainsString('fieldA2: lorem foo bar 2', $html);
     }
 }
