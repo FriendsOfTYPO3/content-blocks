@@ -78,11 +78,11 @@ fields:
       - identifier: select_foreign
         type: Select
         renderType: selectSingle
-        foreign_table: pages
+        foreign_table: test_record
       - identifier: select_foreign_multiple
         type: Select
         renderType: selectMultipleSideBySide
-        foreign_table: pages
+        foreign_table: test_record
   - identifier: flexfield
     type: FlexForm
     fields:

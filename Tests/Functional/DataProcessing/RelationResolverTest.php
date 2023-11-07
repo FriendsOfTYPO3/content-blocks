@@ -477,7 +477,7 @@ final class RelationResolverTest extends FunctionalTestCase
         $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
-        self::assertSame('Page 1', $result['title']);
+        self::assertSame('Record 1', $result['title']);
     }
 
     /**
@@ -499,8 +499,31 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Page 1', $result[0]['title']);
-        self::assertSame('Page 2', $result[1]['title']);
+        self::assertSame('Record 1', $result[0]['title']);
+        self::assertSame('Record 2', $result[1]['title']);
+    }
+
+    /**
+     * @test
+     */
+    public function canResolveSelectForeignTableRecursive(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_recursive.csv');
+        $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_contentelementb_select_foreign');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_select_foreign' => '1',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame('Record 1', $result['title']);
+        self::assertCount(1, $result['record_collection']);
+        self::assertSame('Collection 1', $result['record_collection'][0]['text']);
     }
 
     /**
