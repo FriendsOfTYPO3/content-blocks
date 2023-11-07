@@ -112,9 +112,13 @@ class RelationResolver
                 $tableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
                 foreach ($result as $index => $row) {
                     foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
-                        $result[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
+                        $typeName = $tableDefinition->getTypeField() !== null
+                            ? $row[$tableDefinition->getTypeField()]
+                            : '1';
+                        $foreignTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getType($typeName);
+                        $result[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
                             tcaFieldDefinition: $childTcaFieldDefinition,
-                            typeDefinition: $typeDefinition,
+                            typeDefinition: $foreignTypeDefinition,
                             record: $row,
                             table: $foreignTable,
                         );
@@ -181,9 +185,13 @@ class RelationResolver
         $tableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
         foreach ($data as $index => $row) {
             foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
-                $data[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
+                $typeName = $tableDefinition->getTypeField() !== null
+                    ? $row[$tableDefinition->getTypeField()]
+                    : '1';
+                $childTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getType($typeName);
+                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
                     tcaFieldDefinition: $childTcaFieldDefinition,
-                    typeDefinition: $typeDefinition,
+                    typeDefinition: $childTypeDefinition,
                     record: $row,
                     table: $collectionTable,
                 );
