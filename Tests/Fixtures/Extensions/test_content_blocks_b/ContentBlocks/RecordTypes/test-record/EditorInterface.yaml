@@ -1,0 +1,13 @@
+name: typo3tests/test-record
+table: test_record
+prefixFields: false
+labelField: title
+languageAware: false
+fields:
+  - identifier: title
+    type: Text
+  - identifier: record_collection
+    type: Collection
+    fields:
+      - identifier: text
+        type: Text

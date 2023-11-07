@@ -99,14 +99,28 @@ class RelationResolver
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
+            $foreignTable = $tcaFieldConfig['config']['foreign_table'];
             $result = $this->getRelations(
                 uidList: (string)($record[$uniqueIdentifier] ?? ''),
-                tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
+                tableList: $foreignTable,
                 mmTable: $tcaFieldConfig['config']['MM'] ?? '',
                 uid: $this->getUidOfCurrentRecord($record),
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
+            if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+                $tableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+                foreach ($result as $index => $row) {
+                    foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
+                        $result[$index][$childTcaFieldDefinition->getIdentifier()] = $this->processField(
+                            tcaFieldDefinition: $childTcaFieldDefinition,
+                            typeDefinition: $typeDefinition,
+                            record: $row,
+                            table: $foreignTable,
+                        );
+                    }
+                }
+            }
             if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
                 return $result[0] ?? null;
             }
