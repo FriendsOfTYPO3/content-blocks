@@ -80,10 +80,7 @@ final class ContentBlockDataResolver
 
     private function transformRelation(TableDefinition $tableDefinition, array $fieldItem, string $foreignTable, int $depth): ContentBlockData
     {
-        $typeName = $tableDefinition->getTypeField()
-            ? $fieldItem[$tableDefinition->getTypeField()]
-            : '1';
-        $typeDefinition = $tableDefinition->getTypeDefinitionCollection()->getType($typeName);
+        $typeDefinition = ContentTypeResolver::resolve($tableDefinition, $fieldItem);
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $typeDefinition,
             $tableDefinition,

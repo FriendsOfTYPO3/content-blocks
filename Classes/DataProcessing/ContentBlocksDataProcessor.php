@@ -37,13 +37,10 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $this->relationResolver->setRequest($cObj->getRequest());
         $table = $cObj->getCurrentTable();
         $tableDefinition = $this->tableDefinitionCollection->getTable($table);
-        $typeField = $tableDefinition->getTypeField();
-        $typeName = $typeField ? $processedData['data'][$typeField] : '1';
-        $typeDefinitionCollection = $tableDefinition->getTypeDefinitionCollection();
-        if (!$typeDefinitionCollection->hasType($typeName)) {
+        $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $processedData['data']);
+        if ($contentTypeDefinition === null) {
             return $processedData;
         }
-        $contentTypeDefinition = $typeDefinitionCollection->getType($typeName);
         $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
         $processedData['data'] = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
