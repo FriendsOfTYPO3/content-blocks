@@ -146,7 +146,8 @@ class RelationResolver
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
 
-        if ($this->tableDefinitionCollection->hasTable($allowed)) {
+        // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
+        if (!str_contains($allowed, ',') && $this->tableDefinitionCollection->hasTable($allowed)) {
             $tableDefinition = $this->tableDefinitionCollection->getTable($allowed);
             foreach ($result as $index => $row) {
                 foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
