@@ -71,7 +71,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple_with_basics/Assets/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-with-basics/Assets/Icon.svg',
                 ],
             ],
         ];
