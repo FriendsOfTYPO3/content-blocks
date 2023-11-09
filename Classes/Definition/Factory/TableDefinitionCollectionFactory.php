@@ -479,9 +479,12 @@ class TableDefinitionCollectionFactory
         if (!$input->isRootTable()) {
             return $field['identifier'];
         }
-        return $this->isPrefixEnabledForField($input->contentBlock, $field)
-            ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $field['identifier'])
-            : $field['identifier'];
+        $prefixEnabled = $this->isPrefixEnabledForField($input->contentBlock, $field);
+        if (!$prefixEnabled) {
+            return $field['identifier'];
+        }
+        $uniqueIdentifier = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $field['identifier']);
+        return $uniqueIdentifier;
     }
 
     /**
