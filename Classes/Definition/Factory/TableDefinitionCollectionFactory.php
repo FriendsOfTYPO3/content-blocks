@@ -476,7 +476,10 @@ class TableDefinitionCollectionFactory
 
     private function chooseIdentifier(ProcessingInput $input, array $field): string
     {
-        return $input->isRootTable() && $this->isPrefixEnabledForField($input->contentBlock, $field)
+        if (!$input->isRootTable()) {
+            return $field['identifier'];
+        }
+        return $this->isPrefixEnabledForField($input->contentBlock, $field)
             ? UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $field['identifier'])
             : $field['identifier'];
     }
