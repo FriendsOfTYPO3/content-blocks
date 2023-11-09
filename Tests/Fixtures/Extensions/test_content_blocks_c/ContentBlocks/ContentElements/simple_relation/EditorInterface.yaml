@@ -8,3 +8,6 @@ fields:
     type: Select
     renderType: selectMultipleSideBySide
     foreign_table: custom_record
+  - identifier: relation
+    type: Relation
+    allowed: custom_record
