@@ -50,24 +50,36 @@ final class ContentBlockDataResolver
                 ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
 
-            if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION) {
+            if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION && is_array($processedField)) {
                 $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
-                if (is_array($processedField) && $this->tableDefinitionCollection->hasTable($collectionTable)) {
+                if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
                     foreach ($processedField as $key => $processedFieldItem) {
                         $processedField[$key] = $this->transformRelation($collectionTableDefinition, $processedFieldItem, $collectionTable, $depth);
                     }
                 }
             }
-            if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '') {
+            if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '' && is_array($processedField)) {
                 $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
-                if (is_array($processedField) && $this->tableDefinitionCollection->hasTable($foreignTable)) {
+                if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
                     $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
                     if (($tcaFieldDefinition->getTca()['config']['renderType'] ?? '') === 'selectSingle') {
                         $processedField = $this->transformRelation($foreignTableDefinition, $processedField, $foreignTable, $depth);
                     } else {
                         foreach ($processedField as $key => $processedFieldItem) {
                             $processedField[$key] = $this->transformRelation($foreignTableDefinition, $processedFieldItem, $foreignTable, $depth);
+                        }
+                    }
+                }
+            }
+            if ($tcaFieldDefinition->getFieldType() === FieldType::RELATION && is_array($processedField)) {
+                $allowed = $tcaFieldDefinition->getTca()['config']['allowed'];
+                // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
+                if (!str_contains($allowed, ',')) {
+                    if ($this->tableDefinitionCollection->hasTable($allowed)) {
+                        $foreignTableDefinition = $this->tableDefinitionCollection->getTable($allowed);
+                        foreach ($processedField as $key => $processedFieldItem) {
+                            $processedField[$key] = $this->transformRelation($foreignTableDefinition, $processedFieldItem, $allowed, $depth);
                         }
                     }
                 }

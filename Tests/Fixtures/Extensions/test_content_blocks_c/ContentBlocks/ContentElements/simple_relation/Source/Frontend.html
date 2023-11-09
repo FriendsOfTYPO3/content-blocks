@@ -5,10 +5,18 @@
 >
 
 <f:if condition="{data.record}">
+TypeName: {data.record.typeName}
 Title: {data.record.title}
 </f:if>
 <f:if condition="{data.record_multiple}">
     <f:for each="{data.record_multiple}" as="record">
+        TypeName: {record.typeName}
         Title: {record.title}
+    </f:for>
+</f:if>
+<f:if condition="{data.relation}">
+    <f:for each="{data.relation}" as="record">
+        TypeName: {record.typeName}
+        Title Relation: {record.title}
     </f:for>
 </f:if>

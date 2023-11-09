@@ -134,6 +134,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
         $html = (string)$response->getBody();
 
+        self::assertStringContainsString('TypeName: record1', $html);
         self::assertStringContainsString('Title: Custom Record 1', $html);
     }
 
@@ -152,7 +153,28 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
         $html = (string)$response->getBody();
 
+        self::assertStringContainsString('TypeName: record1', $html);
         self::assertStringContainsString('Title: Custom Record 1', $html);
         self::assertStringContainsString('Title: Custom Record 2', $html);
+    }
+
+    /**
+     * @test
+     */
+    public function relationsAreResolvedForTypeRelation(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/relation.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('TypeName: record1', $html);
+        self::assertStringContainsString('Title Relation: Custom Record 1', $html);
+        self::assertStringContainsString('Title Relation: Custom Record 2', $html);
     }
 }

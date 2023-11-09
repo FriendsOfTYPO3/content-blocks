@@ -1,0 +1,10 @@
+"pages"
+,"uid","pid","title","doktype"
+,2,1,"Record Storage",254
+"custom_record"
+,"uid","pid","title","type"
+,1,2,"Custom Record 1","record1"
+,2,2,"Custom Record 2","record2"
+"tt_content"
+,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","simple_simplerelation_relation","CType"
+,1,1,0,0,0,"1,2","simple_simplerelation"
