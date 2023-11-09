@@ -51,7 +51,7 @@ final class ContentBlockDataResolver
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
 
             if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION && is_array($processedField)) {
-                $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+                $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'];
                 if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
                     $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
                     foreach ($processedField as $key => $processedFieldItem) {
@@ -60,7 +60,7 @@ final class ContentBlockDataResolver
                 }
             }
             if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '' && is_array($processedField)) {
-                $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+                $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'];
                 if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
                     $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
                     if (($tcaFieldDefinition->getTca()['config']['renderType'] ?? '') === 'selectSingle') {
@@ -73,7 +73,7 @@ final class ContentBlockDataResolver
                 }
             }
             if ($tcaFieldDefinition->getFieldType() === FieldType::RELATION && is_array($processedField)) {
-                $allowed = $tcaFieldDefinition->getTca()['config']['allowed'];
+                $allowed = $tcaFieldDefinition->getTca()['config']['allowed'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['allowed'];
                 // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
                 if (!str_contains($allowed, ',')) {
                     if ($this->tableDefinitionCollection->hasTable($allowed)) {
