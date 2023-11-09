@@ -177,4 +177,21 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Title Relation: Custom Record 1', $html);
         self::assertStringContainsString('Title Relation: Custom Record 2', $html);
     }
+
+    public function vendorPrefixedFieldsCanBeAccessedByNormalIdentifier(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/vendor_prefix.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('My Field: Simple Text', $html);
+        self::assertStringContainsString('Full prefix: Text full prefix', $html);
+        self::assertStringContainsString('Collection Text: lorem foo bar', $html);
+    }
 }

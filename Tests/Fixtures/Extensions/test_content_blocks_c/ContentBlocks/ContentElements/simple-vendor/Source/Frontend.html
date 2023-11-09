@@ -1,0 +1,11 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+My Field: {data.my_field}
+<f:for each="{data.my_collection}" as="item">
+    Collection Text: {item.text}
+</f:for>
+Full prefix: {data.my_field_full_prefix}
