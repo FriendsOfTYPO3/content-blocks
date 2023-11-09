@@ -113,6 +113,9 @@ class RelationResolver
                 foreach ($result as $index => $row) {
                     foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
                         $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                        if ($foreignTypeDefinition === null) {
+                            continue;
+                        }
                         $result[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
                             tcaFieldDefinition: $childTcaFieldDefinition,
                             typeDefinition: $foreignTypeDefinition,
@@ -152,6 +155,9 @@ class RelationResolver
             foreach ($result as $index => $row) {
                 foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
                     $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                    if ($foreignTypeDefinition === null) {
+                        continue;
+                    }
                     $result[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
                         tcaFieldDefinition: $childTcaFieldDefinition,
                         typeDefinition: $foreignTypeDefinition,
@@ -203,6 +209,9 @@ class RelationResolver
         foreach ($data as $index => $row) {
             foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
                 $childTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                if ($childTypeDefinition === null) {
+                    continue;
+                }
                 $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
                     tcaFieldDefinition: $childTcaFieldDefinition,
                     typeDefinition: $childTypeDefinition,

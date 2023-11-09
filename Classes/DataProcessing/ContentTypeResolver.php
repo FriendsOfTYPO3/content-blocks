@@ -28,8 +28,11 @@ class ContentTypeResolver
     public static function resolve(TableDefinition $tableDefinition, array $record): ?ContentTypeInterface
     {
         $typeName = $tableDefinition->getTypeField() !== null
-            ? $record[$tableDefinition->getTypeField()]
+            ? ($record[$tableDefinition->getTypeField()] ?? null)
             : '1';
+        if ($typeName === null) {
+            return null;
+        }
         $typeDefinitionCollection = $tableDefinition->getTypeDefinitionCollection();
         if (!$typeDefinitionCollection->hasType($typeName)) {
             return null;
