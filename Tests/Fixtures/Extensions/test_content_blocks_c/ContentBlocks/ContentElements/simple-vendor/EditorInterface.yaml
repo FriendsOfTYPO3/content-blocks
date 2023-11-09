@@ -1,0 +1,15 @@
+group: common
+name: my-vendor/simple-vendor
+prefixFields: true
+prefixType: vendor
+fields:
+  - identifier: my_field
+    type: Text
+  - identifier: my_collection
+    type: Collection
+    fields:
+      - identifier: text
+        type: Text
+  - identifier: my_field_full_prefix
+    type: Text
+    prefixType: full

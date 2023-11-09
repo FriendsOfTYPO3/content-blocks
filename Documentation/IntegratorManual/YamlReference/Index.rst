@@ -67,6 +67,20 @@ Common root options
 
        prefixFields: false
 
+.. confval:: prefixType
+
+   :Required: false
+   :Type: string
+   :Default: full
+
+   Determines how to prefix the field if :yaml:`prefixFields` is enabled. Can
+   be either :yaml:`full` (default) or :yaml:`vendor`.
+
+   .. code-block:: yaml
+
+       prefixFields: true
+       prefixType: vendor
+
 .. confval:: priority
 
    :Required: false

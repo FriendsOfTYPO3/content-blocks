@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -65,6 +66,11 @@ final class LoadedContentBlock
         return $this->name;
     }
 
+    public function getVendor(): string
+    {
+        return explode('/', $this->name)[0];
+    }
+
     public function getYaml(): array
     {
         return $this->yaml;
@@ -88,6 +94,14 @@ final class LoadedContentBlock
     public function prefixFields(): bool
     {
         return (bool)($this->yaml['prefixFields'] ?? true);
+    }
+
+    public function getPrefixType(): PrefixType
+    {
+        if (array_key_exists('prefixType', $this->yaml)) {
+            return PrefixType::from($this->yaml['prefixType']);
+        }
+        return PrefixType::FULL;
     }
 
     public function getContentType(): ContentType

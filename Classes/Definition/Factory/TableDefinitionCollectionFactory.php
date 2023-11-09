@@ -34,7 +34,6 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\ContentBlocks\Utility\UniqueNameUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -451,6 +450,14 @@ class TableDefinitionCollectionFactory
         return $contentBlock->prefixFields();
     }
 
+    private function getPrefixType(LoadedContentBlock $contentBlock, array $fieldConfiguration): PrefixType
+    {
+        if (array_key_exists('prefixType', $fieldConfiguration)) {
+            return PrefixType::from($fieldConfiguration['prefixType']);
+        }
+        return $contentBlock->getPrefixType();
+    }
+
     private function resolveType(array $field, string $table, ProcessingInput $input): FieldType
     {
         $isExistingField = ($field['useExistingField'] ?? false);
@@ -483,7 +490,8 @@ class TableDefinitionCollectionFactory
         if (!$prefixEnabled) {
             return $field['identifier'];
         }
-        $uniqueIdentifier = UniqueNameUtility::createUniqueColumnNameFromContentBlockName($input->contentBlock->getName(), $field['identifier']);
+        $prefixType = $this->getPrefixType($input->contentBlock, $field);
+        $uniqueIdentifier = UniqueIdentifierCreator::prefixIdentifier($input->contentBlock, $prefixType, $field['identifier']);
         return $uniqueIdentifier;
     }
 

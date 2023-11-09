@@ -146,3 +146,21 @@ Field options, which can be defined inside the :yaml:`fields` array.
            identifier: my_identifier
            type: Text
            prefixField: false
+
+.. confval:: prefixType
+
+   :Required: false
+   :Type: string
+   :Default: full
+
+   Determines how to prefix the field if local :yaml:`prefixField` or global
+   :yaml:`prefixFields` is enabled. Can be either :yaml:`full` (default) or
+   :yaml:`vendor`.
+
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
+           prefixField: true
+           prefixType: vendor
