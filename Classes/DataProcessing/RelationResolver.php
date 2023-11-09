@@ -136,21 +136,39 @@ class RelationResolver
     protected function processRelation(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): array
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
-        return $this->getRelations(
+        $allowed = $tcaFieldConfig['config']['allowed'];
+        $result = $this->getRelations(
             uidList: (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? ''),
-            tableList: $tcaFieldConfig['config']['allowed'] ?? '',
+            tableList: $allowed,
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: $this->getUidOfCurrentRecord($record),
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
+
+        if ($this->tableDefinitionCollection->hasTable($allowed)) {
+            $tableDefinition = $this->tableDefinitionCollection->getTable($allowed);
+            foreach ($result as $index => $row) {
+                foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
+                    $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                    $result[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
+                        tcaFieldDefinition: $childTcaFieldDefinition,
+                        typeDefinition: $foreignTypeDefinition,
+                        record: $row,
+                        table: $allowed,
+                    );
+                }
+            }
+        }
+
+        return $result;
     }
 
     protected function processCategory(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, string $parentTable, array $record): array
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
-        return $this->getRelations(
+        $result = $this->getRelations(
             uidList: $uidList,
             tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
@@ -158,6 +176,7 @@ class RelationResolver
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
+        return $result;
     }
 
     protected function processCollection(string $parentTable, array $record, TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition): array
