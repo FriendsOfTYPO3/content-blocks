@@ -29,6 +29,9 @@ fields:
   - identifier: pages_relation
     type: Relation
     allowed: pages
+  - identifier: record_relation_recursive
+    type: Relation
+    allowed: test_record
   - identifier: pages_content_relation
     type: Relation
     allowed: pages,tt_content

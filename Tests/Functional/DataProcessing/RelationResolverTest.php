@@ -322,6 +322,33 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function canResolveDbRelationRecursive(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_recursive.csv');
+
+        $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField('typo3tests_contentelementb_record_relation_recursive');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_record_relation_recursive' => '1,2',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame('Record 1', $result[0]['title']);
+        self::assertSame('Record 2', $result[1]['title']);
+        self::assertCount(1, $result[0]['record_collection']);
+        self::assertCount(1, $result[1]['record_collection']);
+        self::assertSame('Collection 1', $result[0]['record_collection'][0]['text']);
+        self::assertSame('Collection 2', $result[1]['record_collection'][0]['text']);
+    }
+
+    /**
+     * @test
+     */
     public function canResolveDbRelationsInWorkspaces(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
