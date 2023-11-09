@@ -537,9 +537,6 @@ class TableDefinitionCollectionFactory
         if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
         }
-        if ($contentType->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
-            // @todo what does a page type need?
-        }
         return $element;
     }
 
