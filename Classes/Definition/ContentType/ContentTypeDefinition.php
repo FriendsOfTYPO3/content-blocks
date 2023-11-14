@@ -66,11 +66,6 @@ abstract class ContentTypeDefinition
         return $this->package;
     }
 
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
     /**
      * @return string[] $columns
      */
@@ -133,13 +128,6 @@ abstract class ContentTypeDefinition
     {
         $clone = clone $this;
         $clone->table = $table;
-        return $clone;
-    }
-
-    public function withLabel(string $label): static
-    {
-        $clone = clone $this;
-        $clone->label = $label;
         return $clone;
     }
 

@@ -29,7 +29,6 @@ final class RecordTypeDefinition extends ContentTypeDefinition implements Conten
             ->withTable($table)
             ->withIdentifier($array['identifier'])
             ->withTypeName($array['typeName'])
-            ->withLabel($array['label'] ?? '')
             ->withColumns($array['columns'] ?? [])
             ->withShowItems($array['showItems'] ?? [])
             ->withOverrideColumns($array['overrideColumns'] ?? [])

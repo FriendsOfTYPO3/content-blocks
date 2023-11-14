@@ -36,7 +36,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withTable($table)
             ->withIdentifier($array['identifier'])
             ->withTypeName($array['typeName'])
-            ->withLabel($array['label'] ?? '')
             ->withColumns($array['columns'] ?? [])
             ->withShowItems($array['showItems'] ?? [])
             ->withOverrideColumns($array['overrideColumns'] ?? [])
