@@ -487,7 +487,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
-                        'title' => 't3ce_example_collection',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 'text2',
                         'label_alt' => 'text',
                         'sortby' => 'sorting',
@@ -704,7 +704,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection2' => [
                     'ctrl' => [
-                        'title' => 'collection2',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -920,7 +920,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'foobar',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 't3ce_example_text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1128,7 +1128,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'foobar',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 't3ce_example_text',
                         'label_alt' => 't3ce_example_text2',
                         'label_alt_force' => true,
@@ -1288,7 +1288,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'foobar',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 't3ce_example_text',
                         'label_alt' => 't3ce_example_text2',
                         'default_sortby' => 't3ce_example_text DESC,t3ce_example_text2 ASC',
@@ -1430,7 +1430,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'foobar',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1738,7 +1738,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection' => [
                     'ctrl' => [
-                        'title' => 'collection',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1945,8 +1945,12 @@ final class TcaGeneratorTest extends UnitTestCase
         $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register($contentBlock);
+        }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
+        $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
 
         $tca = $tcaGenerator->generate();

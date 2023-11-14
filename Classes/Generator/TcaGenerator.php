@@ -537,12 +537,12 @@ class TcaGenerator
 
     protected function generateTableTca(TableDefinition $tableDefinition): array
     {
+        $defaultTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
         $capability = $tableDefinition->getCapability();
         $palettes = [];
         $columns = [];
         $ctrl = [
-            // @todo This could be the Content Block title for record types.
-            'title' => $tableDefinition->getTable(),
+            'title' => $this->typeDefinitionLabelService->getLLLPathForTitle($defaultTypeDefinition),
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->buildRestrictionsTca(),
