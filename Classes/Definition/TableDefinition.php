@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -58,6 +59,17 @@ final class TableDefinition
         }
 
         return $tableDefinition;
+    }
+
+    public function getDefaultTypeDefinition(): ContentTypeInterface
+    {
+        $typeDefinitionCollection = $this->getTypeDefinitionCollection();
+        if ($typeDefinitionCollection->hasType('1')) {
+            $defaultTypeDefinition = $typeDefinitionCollection->getType('1');
+        } else {
+            $defaultTypeDefinition = $typeDefinitionCollection->getFirst();
+        }
+        return $defaultTypeDefinition;
     }
 
     public function getTable(): string
