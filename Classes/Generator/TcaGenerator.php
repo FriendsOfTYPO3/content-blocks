@@ -119,7 +119,7 @@ class TcaGenerator
         $tca = [];
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
-                $tca[$tableDefinition->getTable()] = $this->getCollectionTableStandardTca($tableDefinition);
+                $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition);
             }
             foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
                 $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
@@ -535,7 +535,7 @@ class TcaGenerator
         return $andWhere;
     }
 
-    protected function getCollectionTableStandardTca(TableDefinition $tableDefinition): array
+    protected function generateTableTca(TableDefinition $tableDefinition): array
     {
         $capability = $tableDefinition->getCapability();
         $palettes = [];
