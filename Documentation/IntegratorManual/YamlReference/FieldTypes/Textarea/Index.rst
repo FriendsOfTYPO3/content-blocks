@@ -92,6 +92,19 @@ Minimal
       - identifier: textarea
         type: Textarea
 
+Richtext field
+--------------
+
+.. code-block:: yaml
+
+    name: example/richtext
+    group: common
+    fields:
+      - identifier: textarea
+        type: Textarea
+        enableRichtext: true
+        richtextConfiguration: full
+
 Advanced / use case
 -------------------
 
@@ -102,8 +115,6 @@ Advanced / use case
     fields:
       - identifier: textarea
         type: Textarea
-        enableRichtext: true
-        richtextConfiguration: full
-        default: 'Default value'
-        placeholder: 'Placeholder text'
+        default: "Default value"
+        placeholder: "Placeholder text"
         rows: 15
