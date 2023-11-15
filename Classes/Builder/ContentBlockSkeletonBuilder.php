@@ -62,14 +62,14 @@ class ContentBlockSkeletonBuilder
 
         $utc = new \DateTimeZone('UTC');
         $date = (new \DateTime())->setTimezone($utc)->format('c');
-        $languageContent = match ($contentType) {
+        $xliffContent = match ($contentType) {
             ContentType::CONTENT_ELEMENT => $this->getXliffMarkupForContentElement($vendor, $name, $date),
             ContentType::PAGE_TYPE => $this->getXliffMarkupForPageType($vendor, $name, $date),
             ContentType::RECORD_TYPE => $this->getXliffMarkupForRecordType($vendor, $name, $date),
         };
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
-            $languageContent
+            $xliffContent
         );
         if ($contentType === ContentType::CONTENT_ELEMENT) {
             file_put_contents(
@@ -101,7 +101,7 @@ class ContentBlockSkeletonBuilder
 
     protected function getXliffMarkupForContentElement(string $vendor, string $name, string $date): string
     {
-        $languageContent = <<<HEREDOC
+        $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
@@ -121,12 +121,12 @@ class ContentBlockSkeletonBuilder
 </xliff>
 
 HEREDOC;
-        return $languageContent;
+        return $xliffContent;
     }
 
     protected function getXliffMarkupForPageType(string $vendor, string $name, string $date): string
     {
-        $languageContent = <<<HEREDOC
+        $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
@@ -146,12 +146,12 @@ HEREDOC;
 </xliff>
 
 HEREDOC;
-        return $languageContent;
+        return $xliffContent;
     }
 
     protected function getXliffMarkupForRecordType(string $vendor, string $name, string $date): string
     {
-        $languageContent = <<<HEREDOC
+        $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
@@ -168,6 +168,6 @@ HEREDOC;
 </xliff>
 
 HEREDOC;
-        return $languageContent;
+        return $xliffContent;
     }
 }
