@@ -61,68 +61,11 @@ class ContentBlockSkeletonBuilder
 
         $utc = new \DateTimeZone('UTC');
         $date = (new \DateTime())->setTimezone($utc)->format('c');
-        if ($contentBlockConfiguration->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $languageContent = <<<HEREDOC
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
-		<header/>
-		<body>
-			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
-				<source>Content Block: $name</source>
-			</trans-unit>
-			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
-				<source>This is your content block description</source>
-			</trans-unit>
-			<trans-unit id="header.label" resname="title.label">
-				<source>Custom header title</source>
-			</trans-unit>
-		</body>
-	</file>
-</xliff>
-
-HEREDOC;
-        } elseif ($contentBlockConfiguration->getContentType() === ContentType::RECORD_TYPE) {
-            $languageContent = <<<HEREDOC
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
-		<header/>
-		<body>
-			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
-				<source>Content Block: $name</source>
-			</trans-unit>
-			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
-				<source>This is your content block description</source>
-			</trans-unit>
-			<trans-unit id="title.label" resname="title.label">
-				<source>Custom title</source>
-			</trans-unit>
-		</body>
-	</file>
-</xliff>
-
-HEREDOC;
-        } else {
-            $languageContent = <<<HEREDOC
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
-		<header/>
-		<body>
-			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
-				<source>Content Block: $name</source>
-			</trans-unit>
-			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
-				<source>This is your content block description</source>
-			</trans-unit>
-		</body>
-	</file>
-</xliff>
-
-HEREDOC;
-        }
-
+        $languageContent = match ($contentBlockConfiguration->getContentType()) {
+            ContentType::CONTENT_ELEMENT => $this->getXliffMarkupForContentElement($vendor, $name, $date),
+            ContentType::PAGE_TYPE => $this->getXliffMarkupForPageType($vendor, $name, $date),
+            ContentType::RECORD_TYPE => $this->getXliffMarkupForRecordType($vendor, $name, $date),
+        };
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
             $languageContent
@@ -153,5 +96,77 @@ HEREDOC;
             GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg'),
             $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg'
         );
+    }
+
+    protected function getXliffMarkupForContentElement(string $vendor, string $name, string $date): string
+    {
+        $languageContent = <<<HEREDOC
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
+		<header/>
+		<body>
+			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
+				<source>Content Block: $name</source>
+			</trans-unit>
+			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
+				<source>This is your content block description</source>
+			</trans-unit>
+			<trans-unit id="header.label" resname="title.label">
+				<source>Custom header title</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
+
+HEREDOC;
+        return $languageContent;
+    }
+
+    protected function getXliffMarkupForPageType(string $vendor, string $name, string $date): string
+    {
+        $languageContent = <<<HEREDOC
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
+		<header/>
+		<body>
+			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
+				<source>Content Block: $name</source>
+			</trans-unit>
+			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
+				<source>This is your content block description</source>
+			</trans-unit>
+			<trans-unit id="title.label" resname="title.label">
+				<source>Custom title</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
+
+HEREDOC;
+        return $languageContent;
+    }
+
+    protected function getXliffMarkupForRecordType(string $vendor, string $name, string $date): string
+    {
+        $languageContent = <<<HEREDOC
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
+		<header/>
+		<body>
+			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
+				<source>Content Block: $name</source>
+			</trans-unit>
+			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
+				<source>This is your content block description</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
+
+HEREDOC;
+        return $languageContent;
     }
 }
