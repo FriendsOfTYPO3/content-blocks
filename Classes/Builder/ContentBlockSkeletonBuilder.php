@@ -40,6 +40,7 @@ class ContentBlockSkeletonBuilder
         $vendor = $contentBlockConfiguration->getVendor();
         $name = $contentBlockConfiguration->getName();
         $basePath = $contentBlockConfiguration->getBasePath();
+        $contentType = $contentBlockConfiguration->getContentType();
         if ($basePath === '') {
             throw new \RuntimeException('Path to package "' . $name . '" cannot be empty.', 1674225339);
         }
@@ -61,7 +62,7 @@ class ContentBlockSkeletonBuilder
 
         $utc = new \DateTimeZone('UTC');
         $date = (new \DateTime())->setTimezone($utc)->format('c');
-        $languageContent = match ($contentBlockConfiguration->getContentType()) {
+        $languageContent = match ($contentType) {
             ContentType::CONTENT_ELEMENT => $this->getXliffMarkupForContentElement($vendor, $name, $date),
             ContentType::PAGE_TYPE => $this->getXliffMarkupForPageType($vendor, $name, $date),
             ContentType::RECORD_TYPE => $this->getXliffMarkupForRecordType($vendor, $name, $date),
@@ -70,7 +71,7 @@ class ContentBlockSkeletonBuilder
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
             $languageContent
         );
-        if ($contentBlockConfiguration->getContentType() === ContentType::CONTENT_ELEMENT) {
+        if ($contentType === ContentType::CONTENT_ELEMENT) {
             file_put_contents(
                 $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
                 $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlockConfiguration)
