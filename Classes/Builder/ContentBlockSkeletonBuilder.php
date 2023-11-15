@@ -33,7 +33,7 @@ class ContentBlockSkeletonBuilder
     ) {}
 
     /**
-     * Writes a ContentBlock to file system.
+     * Writes a Content Block to file system.
      */
     public function create(ContentBlockConfiguration $contentBlockConfiguration): void
     {
