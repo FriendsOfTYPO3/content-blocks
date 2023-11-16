@@ -504,12 +504,14 @@ class TcaGenerator
 
     protected function getPageTypeStandardShowItem(array $showItems): string
     {
-        $parts = [
+        $general = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
             '--palette--;;standard',
             '--palette--;;titleonly',
             'nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel',
-            implode(',', $showItems),
+        ];
+
+        $systemTabs = [
             '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
             '--palette--;;backend_layout',
             '--palette--;;replace',
@@ -528,7 +530,12 @@ class TcaGenerator
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
             'rowDescription',
         ];
-        $showItem = implode(',', $parts);
+
+        $parts[] = $general;
+        $parts[] = $showItems;
+        $parts[] = $systemTabs;
+
+        $showItem = implode(',', array_merge([], ...$parts));
         return $showItem;
     }
 
