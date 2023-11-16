@@ -5,15 +5,6 @@
 FAQ
 ===
 
-Overriding of Content Blocks
-============================
-
-@todo Right now overriding Content Blocks is not officially supported. There
-is one :ref:`Event <cb_extendTca>`, which you can use to override the generated
-TCA. This Event, however, might disappear in the future in favor of a real
-override API. Overriding TypoScript, TsConfig or UserTsConfig should work as
-well.
-
 Bundling
 ========
 
