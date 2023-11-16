@@ -49,11 +49,9 @@ Settings
 
       valuePicker:
         items:
-          [
-            ['Red', '#FF0000'],
-            ['Green', '#008000'],
-            ['Blue', '#0000FF'],
-          ]
+          - [ 'Red', '#FF0000' ]
+          - [ 'Green', '#008000' ]
+          - [ 'Blue', '#0000FF' ]
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-color>`.
 
@@ -85,8 +83,6 @@ Advanced / use case
         default: '#0000FF'
         valuePicker:
           items:
-            [
-              ['Red', '#FF0000'],
-              ['Green', '#008000'],
-              ['Blue', '#0000FF'],
-            ]
+            - [ 'Red', '#FF0000' ]
+            - [ 'Green', '#008000' ]
+            - [ 'Blue', '#0000FF' ]

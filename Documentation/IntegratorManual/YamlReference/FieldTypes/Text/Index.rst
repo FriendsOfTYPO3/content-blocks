@@ -81,10 +81,8 @@ Settings
 
       valuePicker:
         items:
-          [
-            [ 'Want to join our team? Take the initiative!', 'Job offer general' ],
-            [ 'We are looking for ...', 'Job offer specific' ],
-          ]
+          - [ 'Want to join our team? Take the initiative!', 'Job offer general' ],
+          - [ 'We are looking for ...', 'Job offer specific' ],
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-input>`.
 
