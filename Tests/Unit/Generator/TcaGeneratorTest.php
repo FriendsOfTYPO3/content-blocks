@@ -2068,6 +2068,42 @@ final class TcaGeneratorTest extends UnitTestCase
         self::assertEquals($expected, $tca);
     }
 
+    /**
+     * @test
+     */
+    public function missingLabelFieldThrowsException(): void
+    {
+        $yaml = [
+            'name' => 'test/test',
+            'path' => 'dummyPath',
+            'icon' => '',
+            'iconProvider' => '',
+            'yaml' => [
+                'table' => 'my_custom_table',
+            ],
+        ];
+        $contentBlock = LoadedContentBlock::fromArray($yaml);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry->register($contentBlock);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks([$contentBlock]);
+        $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            new NoopEventDispatcher(),
+            $typeDefinitionLabelService,
+            new NoopLanguageFileRegistry(),
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1700157578);
+        $this->expectExceptionMessage('Option "labelField" is missing for custom table "my_custom_table" and no field could be automatically determined.');
+
+        $tcaGenerator->generate();
+    }
+
     public static function checkFlexFormTcaDataProvider(): iterable
     {
         yield 'Two content blocks sharing a new flex form field by disabling prefixes' => [

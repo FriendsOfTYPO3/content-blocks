@@ -458,9 +458,12 @@ class TcaGenerator
             }
         }
 
-        // @todo handle missing label field.
-        //        if ($labelField === null) {
-        //        }
+        if ($labelField === null) {
+            throw new \InvalidArgumentException(
+                'Option "labelField" is missing for custom table "' . $tableDefinition->getTable() . '" and no field could be automatically determined.',
+                1700157578,
+            );
+        }
 
         return $labelField->getUniqueIdentifier();
     }
