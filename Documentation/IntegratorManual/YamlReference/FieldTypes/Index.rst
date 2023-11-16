@@ -75,7 +75,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    :Required: false
    :Type: string
 
-   By default labels should be defined inside the :file:`Labels.xml` file. But in
+   By default labels should be defined inside the :file:`Labels.xlf` file. But in
    case there is only one language for the backend you may define labels directly
    in the YAML configuration. This has precedence over translation files.
 
