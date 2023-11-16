@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
 
@@ -30,6 +31,7 @@ class PageTsConfigGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
+        protected readonly LanguageFileRegistryInterface $languageFileRegistry,
     ) {}
 
     public function __invoke(ModifyLoadedPageTsConfigEvent $event): void
@@ -46,6 +48,10 @@ class PageTsConfigGenerator
     protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $title = $this->typeDefinitionLabelService->getLLLPathForTitle($contentElementDefinition);
+        $key = $this->typeDefinitionLabelService->buildTitleKey($contentElementDefinition);
+        if (!$this->languageFileRegistry->isset($contentElementDefinition->getName(), $key)) {
+            $title = $contentElementDefinition->getName();
+        }
         $description = $this->typeDefinitionLabelService->getLLLPathForDescription($contentElementDefinition);
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {

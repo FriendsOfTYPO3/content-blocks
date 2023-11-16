@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2023-11-16T23:59:48+00:00" product-name="record1">
+		<header/>
+		<body>
+			<trans-unit id="content-blocks.record1.title" resname="content-blocks.record1.title">
+				<source>Content Block: record1</source>
+			</trans-unit>
+			<trans-unit id="content-blocks.record1.description" resname="content-blocks.record1.description">
+				<source>This is your content block description</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

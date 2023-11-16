@@ -27,7 +27,6 @@ abstract class ContentTypeDefinition
     protected string $identifier = '';
     protected string $table = '';
     protected string|int $typeName = '';
-    protected string $label = '';
     /** @var string[] */
     protected array $columns = [];
     /** @var string[] */

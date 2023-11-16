@@ -173,7 +173,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
                     'group' => '',
                 ],
                 [
-                    'label' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record2/Source/Language/Labels.xlf:content-blocks.record2.title',
+                    'label' => 'content-blocks/record2',
                     'value' => 'record2',
                     'icon' => 'custom_record-record2-3efdfd2',
                     'group' => '',

@@ -172,11 +172,16 @@ class TcaGenerator
                     ContentType::PAGE_TYPE => 'default',
                     ContentType::RECORD_TYPE => '',
                 };
+                $label = $this->typeDefinitionLabelService->getLLLPathForTitle($typeDefinition);
+                $key = $this->typeDefinitionLabelService->buildTitleKey($typeDefinition);
+                if (!$this->languageFileRegistry->isset($typeDefinition->getName(), $key)) {
+                    $label = $typeDefinition->getName();
+                }
                 ExtensionManagementUtility::addTcaSelectItem(
                     table: $typeDefinition->getTable(),
                     field: $tableDefinition->getTypeField(),
                     item: [
-                        'label' => $this->typeDefinitionLabelService->getLLLPathForTitle($typeDefinition),
+                        'label' => $label,
                         'value' => $typeDefinition->getTypeName(),
                         'icon' => $typeDefinition->getTypeIconIdentifier(),
                         'group' => $group,
@@ -601,8 +606,16 @@ class TcaGenerator
         $capability = $tableDefinition->getCapability();
         $palettes = [];
         $columns = [];
+        // @todo Right now, for inline Collections, the label of the parent Content Block is used for the title, as the
+        // @todo vendor and name are inherited from it.
+        // @todo The correct title should be the according field label. This information is not available here, though.
+        $title = $this->typeDefinitionLabelService->getLLLPathForTitle($defaultTypeDefinition);
+        $key = $this->typeDefinitionLabelService->buildTitleKey($defaultTypeDefinition);
+        if (!$this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $key)) {
+            $title = $defaultTypeDefinition->getName();
+        }
         $ctrl = [
-            'title' => $this->typeDefinitionLabelService->getLLLPathForTitle($defaultTypeDefinition),
+            'title' => $title,
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->buildRestrictionsTca(),
