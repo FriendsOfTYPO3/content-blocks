@@ -82,5 +82,5 @@ services:
     tags:
       - name: 'console.command'
         command: 'make:content-block'
-        description: 'Create a content block skeleton.'
+        description: 'Create a Content Block'
         schedulable: false
