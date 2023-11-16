@@ -17,7 +17,7 @@ Settings
 .. confval:: default
 
    :Required: false
-   :Type: string
+   :Type: string|int
    :Default: ''
 
    Default value set if a new record is created.
@@ -36,11 +36,12 @@ Settings
    .. code-block:: yaml
 
       items:
-        [
-          [ 'one', 'one' ],
-          [ 'two', 'two' ],
-          [ 'three', 'three' ],
-        ]
+        - label: 'First option'
+          value: 0
+        - label: 'Second option'
+          value: 1
+        - label: 'Third option'
+          value: 2
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-radio>`.
 
@@ -58,10 +59,10 @@ Minimal
       - identifier: radioboxes
         type: Radio
         items:
-          [
-            [ 'one', 'one' ],
-            [ 'two', 'two' ],
-          ]
+          - label: 'First option'
+            value: 0
+          - label: 'Second option'
+            value: 1
 
 Advanced / use case
 -------------------
@@ -73,11 +74,11 @@ Advanced / use case
     fields:
       - identifier: radioboxes
         type: Radio
-        default: one
+        default: 'one'
         items:
-          - label: 'The first'
-            value: one
-          - label: 'The second'
-            value: two
-          - label: 'The third'
-            value: three
+          - label: 'First option'
+            value: 'one'
+          - label: 'Second option'
+            value: 'two'
+          - label: 'Third option'
+            value: 'three'
