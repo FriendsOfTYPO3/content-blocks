@@ -21,11 +21,10 @@ Settings
    :Default: true
 
    If enabled, an additional image or media palette will be rendered. For
-   image files it consists of the fields `crop`, `title`, `alternative`, `link`
-   and `description`. For audio and media files it consists of `title`,
-   `description` and `autoplay`. For other file types, like plain text, this
-   option has no effect. Disable this option, if you don't need these additional
-   fields.
+   image files it consists of the additional fields `crop`, `alternative` and
+   `link`. For audio and media files an additional `autoplay` field is added.
+   For other file types, like plain text, this option has no effect. Disable
+   this option, if you don't need these additional fields.
 
 .. confval:: allowed
 
