@@ -71,7 +71,7 @@ enum FieldType: string
 
     public function isSearchable(): bool
     {
-        return in_array($this, [FieldType::TEXT, FieldType::TEXTAREA, FieldType::EMAIL], true);
+        return in_array($this, [self::TEXT, self::TEXTAREA, self::EMAIL], true);
     }
 
     public function isRenderable(): bool
@@ -79,12 +79,17 @@ enum FieldType: string
         return !in_array($this, [self::PALETTE, self::LINEBREAK, self::TAB], true);
     }
 
+    public function isRelation(): bool
+    {
+        return in_array($this, [self::SELECT, self::COLLECTION, self::RELATION]);
+    }
+
     public static function isValidFlexFormField(FieldType $type): bool
     {
         if (!$type->isRenderable()) {
             return false;
         }
-        return $type !== FieldType::FLEXFORM;
+        return $type !== self::FLEXFORM;
     }
 
     public function getFieldConfiguration(array $config): FieldConfigurationInterface

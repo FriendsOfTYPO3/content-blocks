@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 
 /**
@@ -50,57 +51,90 @@ final class ContentBlockDataResolver
                 ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
 
-            if ($tcaFieldDefinition->getFieldType() === FieldType::COLLECTION && is_array($processedField)) {
-                $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'];
-                if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
-                    $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
-                    foreach ($processedField as $key => $processedFieldItem) {
-                        $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $processedFieldItem);
-                        if ($typeDefinition === null) {
-                            continue;
-                        }
-                        $processedField[$key] = $this->transformRelation($collectionTableDefinition, $typeDefinition, $processedFieldItem, $collectionTable, $depth);
-                    }
-                }
-            }
-            if ($tcaFieldDefinition->getFieldType() === FieldType::SELECT && ($tcaFieldDefinition->getTca()['config']['foreign_table'] ?? '') !== '' && is_array($processedField)) {
-                $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'];
-                if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
-                    $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
-                    if (($tcaFieldDefinition->getTca()['config']['renderType'] ?? '') === 'selectSingle') {
-                        $typeDefinition = ContentTypeResolver::resolve($foreignTableDefinition, $processedField);
-                        if ($typeDefinition !== null) {
-                            $processedField = $this->transformRelation($foreignTableDefinition, $typeDefinition, $processedField, $foreignTable, $depth);
-                        }
-                    } else {
-                        foreach ($processedField as $key => $processedFieldItem) {
-                            $typeDefinition = ContentTypeResolver::resolve($foreignTableDefinition, $processedFieldItem);
-                            if ($typeDefinition === null) {
-                                continue;
-                            }
-                            $processedField[$key] = $this->transformRelation($foreignTableDefinition, $typeDefinition, $processedFieldItem, $foreignTable, $depth);
-                        }
-                    }
-                }
-            }
-            if ($tcaFieldDefinition->getFieldType() === FieldType::RELATION && is_array($processedField)) {
-                $allowed = $tcaFieldDefinition->getTca()['config']['allowed'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['allowed'];
-                // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
-                if (!str_contains($allowed, ',') && $this->tableDefinitionCollection->hasTable($allowed)) {
-                    $foreignTableDefinition = $this->tableDefinitionCollection->getTable($allowed);
-                    foreach ($processedField as $key => $processedFieldItem) {
-                        $typeDefinition = ContentTypeResolver::resolve($foreignTableDefinition, $processedFieldItem);
-                        if ($typeDefinition === null) {
-                            continue;
-                        }
-                        $processedField[$key] = $this->transformRelation($foreignTableDefinition, $typeDefinition, $processedFieldItem, $allowed, $depth);
-                    }
-                }
+            if (is_array($processedField) && $tcaFieldDefinition->getFieldType()->isRelation()) {
+                $processedField = match ($tcaFieldDefinition->getFieldType()) {
+                    FieldType::COLLECTION => $this->transformCollectionRelation($processedField, $tcaFieldDefinition, $table, $depth),
+                    FieldType::SELECT => $this->transformSelectRelation($processedField, $tcaFieldDefinition, $table, $depth),
+                    FieldType::RELATION => $this->transformRelationRelation($processedField, $tcaFieldDefinition, $table, $depth),
+                    default => $processedField,
+                };
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
         }
 
         return $this->buildContentBlockDataObject($data, $processedContentBlockData, $contentTypeDefinition);
+    }
+
+    private function transformCollectionRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): array
+    {
+        $collectionTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'] ?? '';
+        if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
+            $collectionTableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
+            foreach ($processedField as $key => $processedFieldItem) {
+                $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $processedFieldItem);
+                if ($typeDefinition === null) {
+                    continue;
+                }
+                $processedField[$key] = $this->transformRelation($collectionTableDefinition, $typeDefinition, $processedFieldItem, $collectionTable, $depth);
+            }
+        }
+        return $processedField;
+    }
+
+    private function transformSelectRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): array|ContentBlockData
+    {
+        if (($tcaFieldDefinition->getTca()['config']['renderType'] ?? '') === 'selectSingle') {
+            $processedField = $this->transformSelectSingleRelation($processedField, $tcaFieldDefinition, $table, $depth);
+        } else {
+            $processedField = $this->transformSelectMultipleRelation($processedField, $tcaFieldDefinition, $table, $depth);
+        }
+        return $processedField;
+    }
+
+    private function transformSelectSingleRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): ContentBlockData
+    {
+        $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'] ?? '';
+        if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+            $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+            $typeDefinition = ContentTypeResolver::resolve($foreignTableDefinition, $processedField);
+            if ($typeDefinition !== null) {
+                $processedField = $this->transformRelation($foreignTableDefinition, $typeDefinition, $processedField, $foreignTable, $depth);
+            }
+        }
+        return $processedField;
+    }
+
+    private function transformSelectMultipleRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): array
+    {
+        $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'] ?? '';
+        if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+            $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+            foreach ($processedField as $key => $processedFieldItem) {
+                $typeDefinition = ContentTypeResolver::resolve($foreignTableDefinition, $processedFieldItem);
+                if ($typeDefinition === null) {
+                    continue;
+                }
+                $processedField[$key] = $this->transformRelation($foreignTableDefinition, $typeDefinition, $processedFieldItem, $foreignTable, $depth);
+            }
+        }
+        return $processedField;
+    }
+
+    private function transformRelationRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): array
+    {
+        $allowed = $tcaFieldDefinition->getTca()['config']['allowed'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['allowed'] ?? '';
+        // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
+        if (!str_contains($allowed, ',') && $this->tableDefinitionCollection->hasTable($allowed)) {
+            $foreignTableDefinition = $this->tableDefinitionCollection->getTable($allowed);
+            foreach ($processedField as $key => $processedFieldItem) {
+                $typeDefinition = ContentTypeResolver::resolve($foreignTableDefinition, $processedFieldItem);
+                if ($typeDefinition === null) {
+                    continue;
+                }
+                $processedField[$key] = $this->transformRelation($foreignTableDefinition, $typeDefinition, $processedFieldItem, $allowed, $depth);
+            }
+        }
+        return $processedField;
     }
 
     private function transformRelation(TableDefinition $tableDefinition, ContentTypeInterface $typeDefinition, array $fieldItem, string $foreignTable, int $depth): ContentBlockData
