@@ -34,6 +34,7 @@ class PageTypeNameValidator
         PageRepository::DOKTYPE_BE_USER_SECTION,
         PageRepository::DOKTYPE_SPACER,
         PageRepository::DOKTYPE_SYSFOLDER,
+        PageRepository::DOKTYPE_RECYCLER, // @todo remove in v13
     ];
 
     public function __construct(protected readonly PageDoktypeRegistry $pageDoktypeRegistry) {}
