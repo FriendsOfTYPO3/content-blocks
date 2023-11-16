@@ -186,6 +186,66 @@ class TcaGenerator
 
     protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition, array $tca): array
     {
+        $columnsOverrides = $this->getColumnsOverrides($typeDefinition);
+        $tca = match ($tableDefinition->getContentType()) {
+            ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides, $tca),
+            ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides, $tca),
+            ContentType::RECORD_TYPE => $this->processRecordType($typeDefinition, $columnsOverrides, $tca, $tableDefinition),
+        };
+        if ($tableDefinition->getTypeField() !== null) {
+            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
+        }
+        return $tca;
+    }
+
+    protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca): array
+    {
+        $typeDefinitionArray = [
+            'previewRenderer' => PreviewRenderer::class,
+            'showitem' => $this->getContentElementStandardShowItem($typeDefinition->getShowItems()),
+        ];
+        if ($columnsOverrides !== []) {
+            $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+        }
+        if ($typeDefinition->hasColumn('bodytext')) {
+            $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
+            $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
+        }
+        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
+        return $tca;
+    }
+
+    protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca): array
+    {
+        $typeDefinitionArray = [
+            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
+        ];
+        if ($columnsOverrides !== []) {
+            $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+        }
+        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
+        return $tca;
+    }
+
+    protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca, TableDefinition $tableDefinition): array
+    {
+        $typeDefinitionArray = [
+            'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition),
+        ];
+        if ($tableDefinition->getTypeField() !== null) {
+            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
+        }
+        $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
+
+        if ($tableDefinition->getTypeField() !== null && $columnsOverrides !== []) {
+            $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+        }
+        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
+        return $tca;
+    }
+
+    protected function getColumnsOverrides(ContentTypeInterface $typeDefinition): array
+    {
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
             $overrideTca = $overrideColumn->getTca();
@@ -197,45 +257,13 @@ class TcaGenerator
                 unset($overrideTca['config'][$optionKey]);
                 unset($overrideTca[$optionKey]);
             }
-            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription($typeDefinition, $overrideColumn, $overrideTca);
+            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription(
+                $typeDefinition,
+                $overrideColumn,
+                $overrideTca,
+            );
         }
-        if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $typeDefinitionArray = [
-                'previewRenderer' => PreviewRenderer::class,
-                'showitem' => $this->getContentElementStandardShowItem($typeDefinition->getShowItems()),
-            ];
-            if ($columnsOverrides !== []) {
-                $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
-            }
-            if ($typeDefinition->hasColumn('bodytext')) {
-                $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
-                $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
-            }
-        } elseif ($tableDefinition->getContentType() === ContentType::PAGE_TYPE) {
-            $typeDefinitionArray = [
-                'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
-            ];
-            if ($columnsOverrides !== []) {
-                $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
-            }
-        } else {
-            $typeDefinitionArray = [
-                'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition),
-            ];
-            if ($tableDefinition->getTypeField() !== null) {
-                $tca[$typeDefinition->getTable()]['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
-            }
-            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
-
-            if ($tableDefinition->getTypeField() !== null && $columnsOverrides !== []) {
-                $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
-            }
-        }
-        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-        if ($tableDefinition->getTypeField() !== null) {
-            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
-        }
-        return $tca;
+        return $columnsOverrides;
     }
 
     /**
