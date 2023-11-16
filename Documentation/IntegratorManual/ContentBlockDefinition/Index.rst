@@ -49,20 +49,18 @@ See :ref:`yaml_reference`.
 A field is localize-able by default. Setting the localization explicitly is
 only necessary, if a special localization method is required.
 
-
 Icon.(svg|png|gif)
 ------------------
 
-This is the icon for the Content Block. There is no fallback by intention, but
-it is easy to generate an SVG with the Content Block name as a graphical
-representation.
+This is the icon for the Content Block. There is a fallback to a default icon,
+but it is recommended to replace it with your own, custom icon. You can find
+many official TYPO3 icons `here <https://typo3.github.io/TYPO3.Icons/icons/content.html>`__.
 
-**You must**
+**You should**
 
 *  provide this file
 *  provide that file in the format svg or png or gif
 *  provide a file with 1:1 dimensions
-
 
 Source/Language/Labels.xlf
 --------------------------
