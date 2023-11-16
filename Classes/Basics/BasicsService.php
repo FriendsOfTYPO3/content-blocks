@@ -29,7 +29,7 @@ class BasicsService
         if (is_array($yaml['basics'] ?? null)) {
             foreach ($yaml['basics'] as $basics) {
                 $yaml['fields'] = $this->addBasicsToFields(
-                    $yaml['fields'],
+                    $yaml['fields'] ?? [],
                     $basics
                 );
             }
