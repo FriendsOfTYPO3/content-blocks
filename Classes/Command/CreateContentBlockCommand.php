@@ -108,15 +108,22 @@ class CreateContentBlockCommand extends Command
             if ($input->getOption('type')) {
                 $type = $input->getOption('type');
             } else {
-                $type = $io->askQuestion(new Question('Enter a unique integer type'));
+                $currentTimeStamp = time();
+                $type = $io->askQuestion(new Question('Enter a unique integer type. Press enter for current timestamp "' . $currentTimeStamp . '"'));
+                if ($type === null) {
+                    $type = $currentTimeStamp;
+                }
             }
             $this->pageTypeNameValidator->validate($type, $vendor . '/' . $name);
-            $yamlConfiguration = $this->createContentBlockPageTypeConfiguration($vendor, $name, (int)$type);
-        } elseif ($contentType === ContentType::CONTENT_ELEMENT) {
-            $yamlConfiguration = $this->createContentBlockContentElementConfiguration($vendor, $name, $type);
-        } else {
-            $yamlConfiguration = $this->createContentBlockRecordTypeConfiguration($vendor, $name, $type);
+            $type = (int)$type;
         }
+
+        $yamlConfiguration = match ($contentType) {
+            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $type),
+            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $type),
+            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $type),
+        };
+
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
             if (!array_key_exists($extension, $availablePackages)) {
@@ -197,6 +204,7 @@ class CreateContentBlockCommand extends Command
             'name' => $vendor . '/' . $name,
             'group' => 'common',
             'prefixFields' => true,
+            'prefixType' => 'full',
         ];
         if ($type !== '' && $type !== null) {
             $configuration['typeName'] = $type;
@@ -216,7 +224,7 @@ class CreateContentBlockCommand extends Command
             'name' => $vendor . '/' . $name,
             'typeName' => $type,
             'prefixFields' => true,
-            'fields' => [],
+            'prefixType' => 'full',
         ];
     }
 
