@@ -14,16 +14,18 @@ SQL overrides via `alternativeSql` allowed: no.
 Settings
 ========
 
-.. confval:: enableImageManipulation
+.. confval:: extendedPalette
 
    :Required: false
    :Type: boolean
    :Default: true
 
-   If enabled, an additional image palette will be rendered, which consists of
-   the fields `crop`, `title`, `alternative`, `link` and `description`. It also
-   depends on the file type, whether this palette is rendered. For plain text
-   files, this won't be shown for example.
+   If enabled, an additional image or media palette will be rendered. For
+   image files it consists of the fields `crop`, `title`, `alternative`, `link`
+   and `description`. For audio and media files it consists of `title`,
+   `description` and `autoplay`. For other file types, like plain text, this
+   option has no effect. Disable this option, if you don't need these additional
+   fields.
 
 .. confval:: allowed
 
@@ -79,7 +81,7 @@ Advanced / use case
     fields:
       - identifier: image
         type: File
-        enableImageManipulation: true
+        extendedPalette: false
         maxitems: 10
         minitems: 1
         allowed: common-image-types

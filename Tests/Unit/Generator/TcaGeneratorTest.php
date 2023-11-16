@@ -89,12 +89,12 @@ final class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'file',
                                 'type' => 'File',
-                                'enableImageManipulation' => 0,
+                                'extendedPalette' => 1,
                             ],
                             [
                                 'identifier' => 'assets',
                                 'useExistingField' => true,
-                                'enableImageManipulation' => 0,
+                                'extendedPalette' => 1,
                                 'allowed' => 'png',
                             ],
                             [

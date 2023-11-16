@@ -36,7 +36,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
-                'enableImageManipulation' => 1,
+                'extendedPalette' => 1,
                 'non_available_field' => 'foo',
                 'allowed' => 'common-image-types',
                 'disallowed' => 'png',
@@ -73,28 +73,6 @@ final class FileFieldConfigurationTest extends UnitTestCase
                     'readOnly' => true,
                     'minitems' => 1,
                     'maxitems' => 1,
-                    'overrideChildTca' => [
-                        'types' => [
-                            '0' => [
-                                'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
-                            ],
-                            AbstractFile::FILETYPE_TEXT => [
-                                'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
-                            ],
-                            AbstractFile::FILETYPE_IMAGE => [
-                                'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
-                            ],
-                            AbstractFile::FILETYPE_AUDIO => [
-                                'showitem' => '--palette--;;audioOverlayPalette,--palette--;;filePalette',
-                            ],
-                            AbstractFile::FILETYPE_VIDEO => [
-                                'showitem' => '--palette--;;videoOverlayPalette,--palette--;;filePalette',
-                            ],
-                            AbstractFile::FILETYPE_APPLICATION => [
-                                'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
-                            ],
-                        ],
-                    ],
                 ],
             ],
         ];
@@ -108,7 +86,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => '',
                 'onChange' => '',
                 'exclude' => false,
-                'enableImageManipulation' => 0,
+                'extendedPalette' => 0,
                 'non_available_field' => 'foo',
                 'allowed' => '',
                 'disallowed' => '',
@@ -121,13 +99,25 @@ final class FileFieldConfigurationTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'file',
+                    'overrideChildTca' => [
+                        'types' => [
+                            AbstractFile::FILETYPE_IMAGE => [
+                                'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
+                            ],
+                            AbstractFile::FILETYPE_AUDIO => [
+                                'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
+                            ],
+                            AbstractFile::FILETYPE_VIDEO => [
+                                'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
 
         yield 'allowed and disallowed accept arrays' => [
             'config' => [
-                'enableImageManipulation' => 0,
                 'non_available_field' => 'foo',
                 'allowed' => ['common-image-types'],
                 'disallowed' => ['png'],

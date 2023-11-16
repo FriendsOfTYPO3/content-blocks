@@ -36,7 +36,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
     private bool $readOnly = false;
     private int $minitems = 0;
     private int $maxitems = 0;
-    private bool $enableImageManipulation = true;
+    private bool $extendedPalette = true;
 
     public static function createFromArray(array $settings): FileFieldConfiguration
     {
@@ -55,7 +55,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
         $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
-        $self->enableImageManipulation = (bool)($settings['enableImageManipulation'] ?? $self->enableImageManipulation);
+        $self->extendedPalette = (bool)($settings['extendedPalette'] ?? $self->extendedPalette);
         return $self;
     }
 
@@ -84,26 +84,17 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         if ($this->maxitems > 0) {
             $config['maxitems'] = $this->maxitems;
         }
-        if ($this->enableImageManipulation) {
+        if (!$this->extendedPalette) {
             $config['overrideChildTca'] = [
                 'types' => [
-                    '0' => [
-                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
-                    ],
-                    AbstractFile::FILETYPE_TEXT => [
-                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
-                    ],
                     AbstractFile::FILETYPE_IMAGE => [
-                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
+                        'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                     ],
                     AbstractFile::FILETYPE_AUDIO => [
-                        'showitem' => '--palette--;;audioOverlayPalette,--palette--;;filePalette',
+                        'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                     ],
                     AbstractFile::FILETYPE_VIDEO => [
-                        'showitem' => '--palette--;;videoOverlayPalette,--palette--;;filePalette',
-                    ],
-                    AbstractFile::FILETYPE_APPLICATION => [
-                        'showitem' => '--palette--;;imageoverlayPalette,--palette--;;filePalette',
+                        'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                     ],
                 ],
             ];
