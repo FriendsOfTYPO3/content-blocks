@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
@@ -1951,7 +1952,116 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
-        $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            new NoopEventDispatcher(),
+            $typeDefinitionLabelService,
+            new NoopLanguageFileRegistry(),
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+        );
+
+        $tca = $tcaGenerator->generate();
+
+        self::assertEquals($expected, $tca);
+    }
+
+    public static function pageTypesGenerateCorrectTcaDataProvider(): iterable
+    {
+        yield 'simple custom page type is added' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'content-blocks/custom-page-type',
+                    'path' => 'EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'pages',
+                        'typeField' => 'doktype',
+                        'typeName' => 1700156757,
+                    ],
+                ],
+            ],
+            'seoExtensionLoaded' => false,
+            'expected' => [
+                'pages' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            '1700156757' => 'pages-1700156757',
+                        ],
+                        'searchFields' => '',
+                    ],
+                    'types' => [
+                        '1700156757' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;titleonly,nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'seo tab is added if seo extension is loaded' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'content-blocks/custom-page-type',
+                    'path' => 'EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'pages',
+                        'typeField' => 'doktype',
+                        'typeName' => 1700156757,
+                    ],
+                ],
+            ],
+            'seoExtensionLoaded' => true,
+            'expected' => [
+                'pages' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            '1700156757' => 'pages-1700156757',
+                        ],
+                        'searchFields' => '',
+                    ],
+                    'types' => [
+                        '1700156757' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;titleonly,nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo,--palette--;;seo,--palette--;;robots,--palette--;;canonical,--palette--;;sitemap,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.socialmedia,--palette--;;opengraph,--palette--;;twittercards,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider pageTypesGenerateCorrectTcaDataProvider
+     */
+    public function pageTypesGenerateCorrectTca(array $contentBlocks, bool $seoExtensionLoaded, array $expected): void
+    {
+        $GLOBALS['TCA']['pages']['ctrl']['type'] = 'doktype';
+        $GLOBALS['TCA']['pages']['ctrl']['label'] = 'title';
+
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register($contentBlock);
+        }
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        if ($seoExtensionLoaded) {
+            $systemExtensionAvailability->addAvailableExtension('seo');
+        }
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            new NoopEventDispatcher(),
+            $typeDefinitionLabelService,
+            new NoopLanguageFileRegistry(),
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+        );
 
         $tca = $tcaGenerator->generate();
 
@@ -2576,7 +2686,15 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
-        $tcaGenerator = new TcaGenerator($tableDefinitionCollection, new NoopEventDispatcher(), $typeDefinitionLabelService, new NoopLanguageFileRegistry(), new TcaPreparation());
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            new NoopEventDispatcher(),
+            $typeDefinitionLabelService,
+            new NoopLanguageFileRegistry(),
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+        );
 
         $tca = $tcaGenerator->generate();
 

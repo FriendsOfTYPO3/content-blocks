@@ -27,6 +27,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
+use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 // @todo changed namespace in v13
@@ -84,6 +85,7 @@ class TcaGenerator
         protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,
+        protected readonly SystemExtensionAvailabilityInterface $systemExtensionAvailability,
     ) {}
 
     // @todo this is unused in v12. Replace with BeforeTcaOverridesEvent in v13.
@@ -511,6 +513,11 @@ class TcaGenerator
             'nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel',
         ];
 
+        $metaTab = [
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata',
+            '--palette--;;metatags',
+        ];
+
         $systemTabs = [
             '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
             '--palette--;;backend_layout',
@@ -531,8 +538,23 @@ class TcaGenerator
             'rowDescription',
         ];
 
+        $seoTab = [
+            '--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo',
+            '--palette--;;seo',
+            '--palette--;;robots',
+            '--palette--;;canonical',
+            '--palette--;;sitemap',
+            '--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.socialmedia',
+            '--palette--;;opengraph',
+            '--palette--;;twittercards',
+        ];
+
         $parts[] = $general;
         $parts[] = $showItems;
+        $parts[] = $metaTab;
+        if ($this->systemExtensionAvailability->isAvailable('seo')) {
+            $parts[] = $seoTab;
+        }
         $parts[] = $systemTabs;
 
         $showItem = implode(',', array_merge([], ...$parts));

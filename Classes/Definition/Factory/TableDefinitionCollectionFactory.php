@@ -82,7 +82,7 @@ class TableDefinitionCollectionFactory
     private function processFields(ProcessingInput $input): array
     {
         $result = $this->initializeResult($input);
-        $yamlFields = $input->yaml['fields'];
+        $yamlFields = $input->yaml['fields'] ?? [];
 
         // Automatically add a `type` field for record types.
         if (
