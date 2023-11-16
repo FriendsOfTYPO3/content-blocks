@@ -131,7 +131,7 @@ Options
 
 .. confval:: labelField
 
-   :Required: false (but highly recommended)
+   :Required: true
    :Type: string|array
 
    Defines which field should be used as the title of the record. If not
