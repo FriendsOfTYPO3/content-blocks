@@ -18,10 +18,12 @@ Settings
 
    :Required: false
    :Type: boolean
-   :Default: false
+   :Default: true
 
    If enabled, an additional image palette will be rendered, which consists of
-   the fields `crop`, `title`, `alternative`, `link` and `description`.
+   the fields `crop`, `title`, `alternative`, `link` and `description`. It also
+   depends on the file type, whether this palette is rendered. For plain text
+   files, this won't be shown for example.
 
 .. confval:: allowed
 
