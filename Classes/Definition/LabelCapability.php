@@ -17,6 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 final class LabelCapability
 {
     /**
