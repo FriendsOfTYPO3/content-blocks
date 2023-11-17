@@ -15,18 +15,24 @@ define a :yaml:`table` name. A minimal example looks like this:
    :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/EditorInterface.yaml
 
     name: example/my-record-type
-    table: my_record_type
+    table: tx_vendor_my_record_type
     labelField: title
     fields:
       -
         identifier: title
         type: Text
 
-This example will create a new table `my_record_type`. Usually Record Types are
-added in folders, so you first have to create a new folder page in the page
+This example will create a new table `tx_vendor_my_record_type`. Usually Record
+Types are added in folders, so you first have to create a new folder in the page
 tree. After that, you can switch to the **List** module and click
-"Create new record". There you will find your newly created Record Type under
-the group "System Records".
+"Create new record". There you will find your newly created Record Type.
+
+.. tip::
+
+    If you prefix your table with `tx_`, TYPO3 will assume this record belongs
+    to an extension and will group it separately by the extension title. This is
+    either taken from `ext_emconf.php` (title) or `composer.json` (description).
+    Otherwise, the record will be grouped under "System Records".
 
 It is also possible to allow creation of Record Types in normal pages. For that
 you have to enable :yaml:`ignorePageTypeRestriction`:
@@ -98,7 +104,7 @@ Options
 
    .. code-block:: yaml
 
-       table: my_custom_table_name
+       table: tx_vendor_my_custom_table_name
 
 .. confval:: typeField
 
