@@ -62,9 +62,9 @@ final class PaletteDefinitionCollection implements \IteratorAggregate, \Countabl
     }
 
     /**
-     * @return \Traversable<PaletteDefinition>
+     * @return \Iterator<PaletteDefinition>
      */
-    public function getIterator(): \Traversable
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->definitions);
     }

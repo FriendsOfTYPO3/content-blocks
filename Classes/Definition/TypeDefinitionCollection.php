@@ -71,9 +71,9 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \Traversable<ContentTypeInterface>
+     * @return \Iterator<ContentTypeInterface>
      */
-    public function getIterator(): \Traversable
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->sort());
     }
