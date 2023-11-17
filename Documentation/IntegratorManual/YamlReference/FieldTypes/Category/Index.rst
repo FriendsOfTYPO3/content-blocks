@@ -60,7 +60,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/category
-    group: common
     fields:
       - identifier: categories
         type: Category
@@ -71,7 +70,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/category
-    group: common
     fields:
       - identifier: categories
         type: Category

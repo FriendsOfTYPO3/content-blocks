@@ -95,7 +95,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/text
-    group: common
     fields:
       - identifier: text
         type: Text
@@ -106,11 +105,10 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/text
-    group: common
     fields:
       - identifier: text
         type: Text
         default: 'Default value'
-        max: 15
         min: 4
+        max: 15
         required: true

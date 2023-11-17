@@ -27,7 +27,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/tab
-    group: common
     fields:
       - identifier: text
         type: Text

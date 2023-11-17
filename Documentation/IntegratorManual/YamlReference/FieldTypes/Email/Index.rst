@@ -51,7 +51,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/email
-    group: common
     fields:
       - identifier: email
         type: Email
@@ -62,7 +61,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/email
-    group: common
     fields:
       - identifier: email
         type: Email

@@ -52,7 +52,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/link
-    group: common
     fields:
       - identifier: url
         type: Link
@@ -63,7 +62,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/link
-    group: common
     fields:
       - identifier: url
         type: Link

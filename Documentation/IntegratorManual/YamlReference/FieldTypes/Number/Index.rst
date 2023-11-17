@@ -92,7 +92,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/number
-    group: common
     fields:
       - identifier: number
         type: Number
@@ -103,7 +102,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/number
-    group: common
     fields:
       - identifier: number
         type: Number

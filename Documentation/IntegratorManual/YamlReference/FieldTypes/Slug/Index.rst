@@ -53,7 +53,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/slug
-    group: common
     fields:
       - identifier: slug
         type: Slug
@@ -68,7 +67,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/slug
-    group: common
     fields:
       - identifier: slug
         type: Slug

@@ -26,7 +26,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/palette
-    group: common
     fields:
       - identifier: palette_1
         type: Palette

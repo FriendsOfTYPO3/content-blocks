@@ -67,15 +67,11 @@ For example, if you want to use the existing column :sql:`bodytext`, or
 .. code-block:: yaml
 
     name: vendor/content-block-name
-    group: common
     fields:
-        -
-            identifier: header
-            useExistingField: true
-        -
-            identifier: bodytext
-            useExistingField: true
-            enableRichtext: true
-        -
-            identifier: image
-            useExistingField: true
+        - identifier: header
+          useExistingField: true
+        - identifier: bodytext
+          useExistingField: true
+          enableRichtext: true
+        - identifier: image
+          useExistingField: true

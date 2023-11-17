@@ -64,7 +64,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/color
-    group: common
     fields:
       - identifier: color
         type: Color
@@ -75,7 +74,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/color
-    group: common
     fields:
       - identifier: color
         type: Color

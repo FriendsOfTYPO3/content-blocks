@@ -54,7 +54,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/radio
-    group: common
     fields:
       - identifier: radioboxes
         type: Radio
@@ -70,7 +69,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/radio
-    group: common
     fields:
       - identifier: radioboxes
         type: Radio

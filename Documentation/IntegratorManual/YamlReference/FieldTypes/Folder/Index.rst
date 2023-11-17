@@ -58,7 +58,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/folder
-    group: common
     fields:
       - identifier: folder
         type: Folder
@@ -69,7 +68,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/folder
-    group: common
     fields:
       - identifier: folder
         type: Folder

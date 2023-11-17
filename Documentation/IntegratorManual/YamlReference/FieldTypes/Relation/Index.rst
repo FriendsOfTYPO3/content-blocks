@@ -50,7 +50,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/relation
-    group: common
     fields:
       - identifier: record_select
         type: Relation
@@ -62,7 +61,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/relation
-    group: common
     fields:
       - identifier: page_select
         type: Relation

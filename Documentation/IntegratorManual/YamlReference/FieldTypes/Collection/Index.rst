@@ -93,7 +93,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/collection
-    group: common
     fields:
       - identifier: collection
         type: Collection
@@ -107,7 +106,6 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/collection
-    group: common
     fields:
       - identifier: slides
         type: Collection
@@ -122,9 +120,12 @@ Advanced / use case
           - identifier: title
             type: Text
 
+This custom table :yaml:`my_slide` needs to be defined as a
+:ref:`Record Type <yaml_reference_record_type>` in order to be used as a foreign
+table in :yaml:`slides`.
+
 .. code-block:: yaml
 
-    # This custom table needs to be defined as a :ref:`Record Type <yaml_reference_record_type>`
     name: example/slide
     table: my_slide
     aggregateRoot: false
@@ -135,7 +136,6 @@ Advanced / use case
         type: File
 
     name: example/collection
-    group: common
     fields:
       - identifier: slides
         type: Collection

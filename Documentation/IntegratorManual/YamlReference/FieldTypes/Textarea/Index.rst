@@ -87,7 +87,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/textarea
-    group: common
     fields:
       - identifier: textarea
         type: Textarea
@@ -98,7 +97,6 @@ Richtext field
 .. code-block:: yaml
 
     name: example/richtext
-    group: common
     fields:
       - identifier: textarea
         type: Textarea
@@ -111,10 +109,10 @@ Advanced / use case
 .. code-block:: yaml
 
     name: example/textarea
-    group: common
     fields:
       - identifier: textarea
         type: Textarea
         default: "Default value"
         placeholder: "Placeholder text"
+        required: true
         rows: 15

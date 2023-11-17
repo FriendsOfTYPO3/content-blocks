@@ -82,7 +82,6 @@ Select single:
 .. code-block:: yaml
 
     name: example/select
-    group: common
     fields:
       - identifier: select
         type: Select
@@ -98,7 +97,6 @@ Select multiple:
 .. code-block:: yaml
 
     name: example/select
-    group: common
     fields:
       - identifier: select_side_by_side
         type: Select
@@ -117,7 +115,6 @@ Select single:
 .. code-block:: yaml
 
     name: example/select
-    group: common
     fields:
       - identifier: select
         type: Select
@@ -140,7 +137,6 @@ Select multiple:
 .. code-block:: yaml
 
     name: example/select
-    group: common
     fields:
       - identifier: select_side_by_side
         type: Select
@@ -163,7 +159,6 @@ Select tree:
 .. code-block:: yaml
 
     name: example/select
-    group: common
     fields:
       - identifier: select_tree
         type: Select

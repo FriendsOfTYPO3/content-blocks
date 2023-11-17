@@ -81,7 +81,6 @@ Minimal
 .. code-block:: yaml
 
     name: example/flex
-    group: common
     fields:
       - identifier: my_flexform
         type: FlexForm
@@ -97,7 +96,6 @@ With Sheets
 .. code-block:: yaml
 
     name: example/flex
-    group: common
     fields:
       - identifier: my_flexform
         type: FlexForm
@@ -123,7 +121,6 @@ With Sections and Container
 .. code-block:: yaml
 
     name: cbteam/flexform
-    group: common
     fields:
       - identifier: pi_flexform
         useExistingField: true
