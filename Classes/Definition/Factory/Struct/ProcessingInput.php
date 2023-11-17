@@ -18,8 +18,8 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
-use TYPO3\CMS\ContentBlocks\Definition\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
