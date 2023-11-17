@@ -27,8 +27,6 @@ final class TcaFieldDefinition
 {
     private string $identifier = '';
     private string $uniqueIdentifier = '';
-    private string $label = '';
-    private string $description = '';
     private LanguagePath $languagePath;
     private bool $useExistingField = false;
     private ?FieldConfigurationInterface $fieldConfiguration = null;
@@ -47,8 +45,6 @@ final class TcaFieldDefinition
         return $self
             ->withUniqueIdentifier($uniqueIdentifier)
             ->withIdentifier($array['config']['identifier'])
-            ->withLabel($array['label'] ?? '')
-            ->withDescription($array['description'] ?? '')
             ->withLanguagePath($array['config']['languagePath'])
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
             ->withFieldConfiguration($array['type']->getFieldConfiguration($array['config']));
@@ -67,16 +63,6 @@ final class TcaFieldDefinition
     public function getIdentifier(): string
     {
         return $this->identifier;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
     }
 
     public function getLanguagePath(): LanguagePath
