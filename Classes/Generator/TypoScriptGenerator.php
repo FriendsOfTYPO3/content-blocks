@@ -56,13 +56,13 @@ tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
 tt_content.{$typeDefinition->getTypeName()} {
     templateName = {$template}
     templateRootPaths {
-        20 = $privatePath
+        20 = $privatePath/
     }
     partialRootPaths {
-        20 = $privatePath/Partials
+        20 = $privatePath/Partials/
     }
     layoutRootPaths {
-        20 = $privatePath/Layouts
+        20 = $privatePath/Layouts/
     }
 }
 HEREDOC;
