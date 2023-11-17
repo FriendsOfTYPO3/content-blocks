@@ -24,6 +24,10 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessedTableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Struct\ProcessingInput;
+use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
@@ -270,42 +274,45 @@ class TableDefinitionCollectionFactory
 
     private function processFlexForm(array $field, string $typeField, string $typeName, LanguagePath $languagePath): array
     {
-        $flexFormSheets = [];
-        $sheetKey = 'sDEF';
-        foreach ($field['fields'] ?? [] as $flexFormField) {
-            if (FlexFormSubType::tryFrom($flexFormField['type']) === FlexFormSubType::SHEET) {
-                $sheetKey = $flexFormField['identifier'];
-                foreach ($flexFormField['fields'] ?? [] as $sheetField) {
-                    $flexFormSheets[$sheetKey][$sheetField['identifier']] = $this->resolveFlexFormField($languagePath, $sheetField);
-                }
-                continue;
+        $flexFormDefinition = new FlexFormDefinition();
+        $flexFormDefinition->setTypeName($typeName);
+        $sheetDefinition = new SheetDefinition();
+        $fields = $field['fields'] ?? [];
+        if ($this->flexFormDefinitionHasDefaultSheet($fields)) {
+            foreach ($fields as $flexFormField) {
+                $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($languagePath, $flexFormField));
             }
-            $flexFormSheets[$sheetKey][$flexFormField['identifier']] = $this->resolveFlexFormField($languagePath, $flexFormField);
-        }
-        $sheets = [];
-        foreach ($flexFormSheets as $sheetIdentifier => $sheet) {
-            $root = [
-                'type' => 'array',
-                'el' => $sheet,
-            ];
-            if (count($flexFormSheets) > 1) {
-                $languagePath->addPathSegment('sheets.' . $sheetIdentifier);
-                $root['sheetTitle'] = $languagePath->getCurrentPath() . '.label';
-                $root['sheetDescription'] = $languagePath->getCurrentPath() . '.description';
-                $root['sheetShortDescr'] = $languagePath->getCurrentPath() . '.linkTitle';
+            $flexFormDefinition->addSheet($sheetDefinition);
+        } else {
+            foreach ($fields as $sheet) {
+                $sheetDefinition = new SheetDefinition();
+                $sheetDefinition->setKey($sheet['identifier']);
+                $languagePath->addPathSegment('sheets.' . $sheetDefinition->getKey());
+                $sheetDefinition->setLabel($languagePath->getCurrentPath() . '.label');
+                $sheetDefinition->setDescription($languagePath->getCurrentPath() . '.description');
+                $sheetDefinition->setLinkTitle($languagePath->getCurrentPath() . '.linkTitle');
                 $languagePath->popSegment();
+                foreach ($sheet['fields'] ?? [] as $sheetField) {
+                    $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($languagePath, $sheetField));
+                }
+                $flexFormDefinition->addSheet($sheetDefinition);
             }
-            $sheets[$sheetIdentifier] = [
-                'ROOT' => $root,
-            ];
         }
-        $dataStructure['sheets'] = $sheets;
+
         $field['ds_pointerField'] = $typeField;
-        $field['ds'][$typeName] = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
+        $field['flexFormDefinitions'][$flexFormDefinition->getTypeName()] = $flexFormDefinition;
         return $field;
     }
 
-    private function resolveFlexFormField(LanguagePath $languagePath, array $flexFormField): array
+    private function flexFormDefinitionHasDefaultSheet(array $fields): bool
+    {
+        foreach ($fields as $flexFormField) {
+            return FlexFormSubType::tryFrom($flexFormField['type']) !== FlexFormSubType::SHEET;
+        }
+        return true;
+    }
+
+    private function resolveFlexFormField(LanguagePath $languagePath, array $flexFormField): TcaFieldDefinition|SectionDefinition
     {
         $languagePath->addPathSegment($flexFormField['identifier']);
         $flexFormField['languagePath'] = clone $languagePath;
@@ -321,40 +328,30 @@ class TableDefinitionCollectionFactory
             'type' => FieldType::from($flexFormField['type']),
         ];
         $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
-        $flexFormTca = $flexFormTcaDefinition->getTca();
-        // FlexForm child fields can't be excluded.
-        unset($flexFormTca['exclude']);
-        $flexFormTca['label'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.label';
-        $flexFormTca['description'] = $flexFormTcaDefinition->getLanguagePath()->getCurrentPath() . '.description';
-        return $flexFormTca;
+        return $flexFormTcaDefinition;
     }
 
-    private function processFlexFormSection(array $section, LanguagePath $languagePath): array
+    private function processFlexFormSection(array $section, LanguagePath $languagePath): SectionDefinition
     {
-        $languagePath->addPathSegment('sections.' . $section['identifier']);
-        $result = [
-            'title' => $languagePath->getCurrentPath() . '.title',
-            'type' => 'array',
-            'section' => 1,
-        ];
-        $processedContainers = [];
+        $sectionDefinition = new SectionDefinition();
+        $sectionDefinition->setIdentifier($section['identifier']);
+        $languagePath->addPathSegment('sections.' . $sectionDefinition->getIdentifier());
+        $sectionTitle = $languagePath->getCurrentPath() . '.title';
+        $sectionDefinition->setLanguagePath($sectionTitle);
         foreach ($section['container'] as $container) {
-            $languagePath->addPathSegment('container.' . $container['identifier']);
-            $containerResult = [
-                'title' => $languagePath->getCurrentPath() . '.title',
-                'type' => 'array',
-            ];
-            $processedContainerFields = [];
+            $containerDefinition = new ContainerDefinition();
+            $containerDefinition->setIdentifier($container['identifier']);
+            $languagePath->addPathSegment('container.' . $containerDefinition->getIdentifier());
+            $containerTitle = $languagePath->getCurrentPath() . '.title';
+            $containerDefinition->setLanguagePath($containerTitle);
             foreach ($container['fields'] as $containerField) {
-                $processedContainerFields[$containerField['identifier']] = $this->resolveFlexFormField($languagePath, $containerField);
+                $containerDefinition->addField($this->resolveFlexFormField($languagePath, $containerField));
             }
-            $containerResult['el'] = $processedContainerFields;
-            $processedContainers[$container['identifier']] = $containerResult;
+            $sectionDefinition->addContainer($containerDefinition);
             $languagePath->popSegment();
         }
-        $result['el'] = $processedContainers;
         $languagePath->popSegment();
-        return $result;
+        return $sectionDefinition;
     }
 
     public function prefixSortFieldIfNecessary(

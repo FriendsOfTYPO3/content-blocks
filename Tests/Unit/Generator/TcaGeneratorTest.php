@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -1953,6 +1954,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $flexFormGenerator = new FlexFormGenerator();
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -1960,6 +1962,7 @@ final class TcaGeneratorTest extends UnitTestCase
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
+            $flexFormGenerator,
         );
 
         $tca = $tcaGenerator->generate();
@@ -2054,6 +2057,7 @@ final class TcaGeneratorTest extends UnitTestCase
         if ($seoExtensionLoaded) {
             $systemExtensionAvailability->addAvailableExtension('seo');
         }
+        $flexFormGenerator = new FlexFormGenerator();
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -2061,6 +2065,7 @@ final class TcaGeneratorTest extends UnitTestCase
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
+            $flexFormGenerator,
         );
 
         $tca = $tcaGenerator->generate();
@@ -2088,6 +2093,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks([$contentBlock]);
         $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $flexFormGenerator = new FlexFormGenerator();
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -2095,6 +2101,7 @@ final class TcaGeneratorTest extends UnitTestCase
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
+            $flexFormGenerator,
         );
 
         $this->expectException(\InvalidArgumentException::class);
@@ -2723,6 +2730,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $flexFormGenerator = new FlexFormGenerator();
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -2730,6 +2738,7 @@ final class TcaGeneratorTest extends UnitTestCase
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
+            $flexFormGenerator,
         );
 
         $tca = $tcaGenerator->generate();

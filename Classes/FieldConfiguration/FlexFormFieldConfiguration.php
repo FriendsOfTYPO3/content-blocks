@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
+use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -25,6 +27,8 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::FLEXFORM;
+    /** @var FlexFormDefinition[] */
+    private array $flexFormDefinitions = [];
     private string $ds_pointerField = '';
     private array $ds = [];
 
@@ -34,6 +38,7 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
         $self->setCommonProperties($settings);
         $self->ds_pointerField = (string)($settings['ds_pointerField'] ?? $self->ds_pointerField);
         $self->ds = (array)($settings['ds'] ?? $self->ds);
+        $self->flexFormDefinitions = $settings['flexFormDefinitions'] ?? [];
         return $self;
     }
 
@@ -55,5 +60,18 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
     public function getFieldType(): FieldType
     {
         return $this->fieldType;
+    }
+
+    /**
+     * @return FlexFormDefinition[]
+     */
+    public function getFlexFormDefinitions(): array
+    {
+        return $this->flexFormDefinitions;
+    }
+
+    public function setDataStructure(array $dataStructure): void
+    {
+        $this->ds = $dataStructure;
     }
 }

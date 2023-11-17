@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
@@ -86,6 +87,7 @@ class TcaGenerator
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,
         protected readonly SystemExtensionAvailabilityInterface $systemExtensionAvailability,
+        protected readonly FlexFormGenerator $flexFormGenerator,
     ) {}
 
     // @todo this is unused in v12. Replace with BeforeTcaOverridesEvent in v13.
@@ -128,6 +130,14 @@ class TcaGenerator
             }
             $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
             foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
+                if ($column->getFieldConfiguration() instanceof FlexFormFieldConfiguration) {
+                    $fieldConfiguration = $column->getFieldConfiguration();
+                    $dataStructure = [];
+                    foreach ($fieldConfiguration->getFlexFormDefinitions() as $flexFormDefinition) {
+                        $dataStructure[$flexFormDefinition->getTypeName()] = $this->flexFormGenerator->generate($flexFormDefinition);
+                    }
+                    $fieldConfiguration->setDataStructure($dataStructure);
+                }
                 if ($isRootTableWithTypeField) {
                     $tca = $this->getTcaForRootTableWithTypeField($tableDefinition, $column, $tca);
                 } else {
