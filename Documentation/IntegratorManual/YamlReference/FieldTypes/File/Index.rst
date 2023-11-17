@@ -62,25 +62,38 @@ Example
 Minimal
 -------
 
+All file types allowed, no restrictions.
+
 .. code-block:: yaml
 
     name: example/file
-    group: common
     fields:
-      - identifier: image
+      - identifier: my_file_field
         type: File
 
 Advanced / use case
 -------------------
 
+Allow only image types, disable extended palette (no cropping field), require
+at least one image and set limit to 10 images.
+
 .. code-block:: yaml
 
-    name: example/file
-    group: common
+    name: example/image
     fields:
       - identifier: image
         type: File
         extendedPalette: false
-        maxitems: 10
         minitems: 1
+        maxitems: 10
         allowed: common-image-types
+
+Allow media types like audio, video and youtube (or vimeo).
+
+.. code-block:: yaml
+
+    name: example/media
+    fields:
+      - identifier: media
+        type: File
+        allowed: common-media-types
