@@ -12,11 +12,11 @@ per element level. It is highly recommend to use the `header` field this way,
 because it is used for the title on different places in the backend.
 
 Reusing fields between different Content Blocks is only possible, if the option
-:yaml:`prefixFields: false` is turned off. As soon as the :yaml:`identifier`
-is the same, the field will only be generated once. Be careful to define the
-same :yaml:`type` for the field. Settings can be overridden on a per
-element basis the same way as with core fields. Here it is not needed to define
-:yaml:`useExistingField`.
+:yaml:`prefixField(s)` is turned off :yaml:`false` or :yaml:`prefixType` is set
+to :yaml:`vendor`. As soon as the :yaml:`identifier` is the same, the field will
+only be generated once. Be careful to define the same :yaml:`type` for the
+field. Settings can be overridden on a per element basis the same way as with
+core fields. Here it is not needed to define :yaml:`useExistingField`.
 
 It's recommended to use existing fields whenever possible instead of creating
 new ones. This also avoids the risk of the :ref:`"Row size too large" <row-size-too-large>`
@@ -30,38 +30,20 @@ have a specific use and should not be misused due to the potential for negative
 side effects. Below we have listed the fields from the table :sql:`tt_content`
 that are eligible for reuse:
 
-*   header
-*   header_layout
-*   header_position
-*   date
-*   header_link
-*   subheader
-*   bodytext
-*   assets
-*   image
-*   media
-*   imagewidth
-*   imageheight
-*   imageborder
-*   imageorient
-*   imagecols
-*   image_zoom
-*   bullets_type
-*   table_delimiter
-*   table_enclosure
-*   table_caption
-*   file_collections
-*   filelink_sorting
-*   filelink_sorting_direction
-*   target
-*   filelink_size
-*   uploads_description
-*   uploads_type
-*   pages
-*   selected_categories
-*   category_field
+*  `header`
+*  `header_layout`
+*  `header_position`
+*  `header_link`
+*  `subheader`
+*  `bodytext`
+*  `date`
+*  `assets`
+*  `image`
+*  `media`
+*  `categories`
+*  `pages`
 
-For example, if you want to use the existing column :sql:`bodytext`, or
+For example, if you want to use the existing column :sql:`bodytext`,
 :sql:`header` or :sql:`image` you can do one of the following:
 
 .. code-block:: yaml
@@ -75,3 +57,16 @@ For example, if you want to use the existing column :sql:`bodytext`, or
           enableRichtext: true
         - identifier: image
           useExistingField: true
+
+For page types, you may reuse the `media` field, which is commonly known from
+the "Resources" tab. It is not included by default, but can be used as needed.
+
+The full list:
+
+*  `media`
+*  `categories`
+*  `layout`
+*  `author`
+*  `author_email`
+*  `newUntil`
+*  `lastUpdated`
