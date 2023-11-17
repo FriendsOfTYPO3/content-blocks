@@ -30,25 +30,12 @@ class TypeResolver
         if ($tca === [] || !isset($tca['config']['type'])) {
             throw new \InvalidArgumentException('Tried to resolve type of non-existing field "' . $field . '" of table "' . $table . '".', 1680110446);
         }
-
-        return match ($tca['config']['type']) {
-            'input' => FieldType::TEXT,
-            'text' => FieldType::TEXTAREA,
-            'color' => FieldType::COLOR,
-            'language' => FieldType::LANGUAGE,
-            'link' => FieldType::LINK,
-            'datetime' => FieldType::DATETIME,
-            'email' => FieldType::EMAIL,
-            'number' => FieldType::NUMBER,
-            'select' => FieldType::SELECT,
-            'radio' => FieldType::RADIO,
-            'check' => FieldType::CHECKBOX,
-            'group' => FieldType::RELATION,
-            'folder' => FieldType::FOLDER,
-            'file' => FieldType::FILE,
-            'flex' => FieldType::FLEXFORM,
-            'category' => FieldType::CATEGORY,
-            default => throw new \InvalidArgumentException('Field type "' . $tca['config']['type'] . '" is either not implemented or cannot be shared in Content Blocks.', 1680110918)
-        };
+        $tcaType = $tca['config']['type'];
+        foreach (FieldType::cases() as $enum) {
+            if ($enum->getTcaType() === $tcaType) {
+                return $enum;
+            }
+        }
+        throw new \InvalidArgumentException('Field type "' . $tcaType . '" is either not implemented or cannot be shared in Content Blocks.', 1680110918);
     }
 }
