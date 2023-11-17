@@ -15,20 +15,19 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Struct;
+namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ProcessedTableDefinition
+final class ProcessedContentType
 {
-    public array $palettes = [];
-    public array $fields = [];
-    public ?string $typeField = null;
-    public bool $isRootTable = true;
-    public ?bool $isAggregateRoot = null;
-    public array $raw = [];
-    public ?ContentType $contentType = null;
+    public string $table = '';
+    public LoadedContentBlock $contentBlock;
+    public array $columns = [];
+    public array $showItems = [];
+    public array $overrideColumns = [];
+    public string|int $typeName = '';
 }
