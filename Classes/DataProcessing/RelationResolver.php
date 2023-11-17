@@ -111,7 +111,7 @@ class RelationResolver
             if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
                 $tableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
                 foreach ($result as $index => $row) {
-                    foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
+                    foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                         $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                         if ($foreignTypeDefinition === null) {
                             continue;
@@ -153,7 +153,7 @@ class RelationResolver
         if (!str_contains($allowed, ',') && $this->tableDefinitionCollection->hasTable($allowed)) {
             $tableDefinition = $this->tableDefinitionCollection->getTable($allowed);
             foreach ($result as $index => $row) {
-                foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
+                foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                     $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                     if ($foreignTypeDefinition === null) {
                         continue;
@@ -207,7 +207,7 @@ class RelationResolver
 
         $tableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
         foreach ($data as $index => $row) {
-            foreach ($tableDefinition->getTcaColumnsDefinition() as $childTcaFieldDefinition) {
+            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                 $childTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                 if ($childTypeDefinition === null) {
                     continue;

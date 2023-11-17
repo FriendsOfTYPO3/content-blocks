@@ -34,7 +34,7 @@ class IconGenerator
     public function __invoke(BootCompletedEvent $event): void
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $this->iconRegistry->registerIcon(
                     identifier: $typeDefinition->getTypeIconIdentifier(),
                     iconProviderClassName: $typeDefinition->getIconProviderClassName(),

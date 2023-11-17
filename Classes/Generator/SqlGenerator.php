@@ -39,7 +39,7 @@ class SqlGenerator
         $tableDefinitionCollection = $this->loader->load(false);
         $sql = [];
         foreach ($tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getSqlDefinition() as $column) {
+            foreach ($tableDefinition->getSqlColumnDefinitionCollection() as $column) {
                 if ($column->getSql() === '') {
                     continue;
                 }

@@ -33,7 +33,7 @@ class ContentTypeResolver
         if ($typeName === null) {
             return null;
         }
-        $typeDefinitionCollection = $tableDefinition->getTypeDefinitionCollection();
+        $typeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
         if (!$typeDefinitionCollection->hasType($typeName)) {
             return null;
         }

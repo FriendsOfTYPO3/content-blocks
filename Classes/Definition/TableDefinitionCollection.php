@@ -61,7 +61,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
         if (!$this->hasTable(ContentType::CONTENT_ELEMENT->getTable())) {
             return null;
         }
-        foreach ($this->getTable(ContentType::CONTENT_ELEMENT->getTable())->getTypeDefinitionCollection() as $typeDefinition) {
+        foreach ($this->getTable(ContentType::CONTENT_ELEMENT->getTable())->getContentTypeDefinitionCollection() as $typeDefinition) {
             if (!$typeDefinition instanceof ContentElementDefinition) {
                 continue;
             }

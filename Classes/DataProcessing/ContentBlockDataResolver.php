@@ -42,7 +42,7 @@ final class ContentBlockDataResolver
     ): ContentBlockData {
         $processedContentBlockData = [];
         foreach ($contentTypeDefinition->getColumns() as $column) {
-            $tcaFieldDefinition = $tableDefinition->getTcaColumnsDefinition()->getField($column);
+            $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }

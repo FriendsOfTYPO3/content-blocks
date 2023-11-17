@@ -40,7 +40,7 @@ class PageTypeGenerator
         }
         $tableDefinition = $this->tableDefinitionCollection->getTable(ContentType::PAGE_TYPE->getTable());
         /** @var ContentTypeInterface $typeDefinition */
-        foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+        foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
             $this->pageDoktypeRegistry->add($typeDefinition->getTypeName(), []);
         }
     }

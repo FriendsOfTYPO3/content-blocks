@@ -37,7 +37,7 @@ class PageTsConfigGenerator
     public function __invoke(ModifyLoadedPageTsConfigEvent $event): void
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($typeDefinition instanceof ContentElementDefinition) {
                     $event->addTsConfig($this->generate($typeDefinition));
                 }

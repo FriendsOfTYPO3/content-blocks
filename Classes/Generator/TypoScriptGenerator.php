@@ -38,7 +38,7 @@ class TypoScriptGenerator
     public function __invoke(BootCompletedEvent $event): void
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
                     ExtensionManagementUtility::addTypoScriptSetup($this->generate($typeDefinition));
                 }

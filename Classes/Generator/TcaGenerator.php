@@ -130,9 +130,9 @@ class TcaGenerator
                 $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
             }
             $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
-            foreach ($tableDefinition->getTcaColumnsDefinition() as $column) {
-                if ($column->getFieldConfiguration() instanceof FlexFormFieldConfiguration) {
-                    $fieldConfiguration = $column->getFieldConfiguration();
+            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $column) {
+                $fieldConfiguration = $column->getFieldConfiguration();
+                if ($fieldConfiguration instanceof FlexFormFieldConfiguration) {
                     $dataStructure = [];
                     foreach ($fieldConfiguration->getFlexFormDefinitions() as $flexFormDefinition) {
                         $dataStructure[$flexFormDefinition->getTypeName()] = $this->flexFormGenerator->generate($flexFormDefinition);
@@ -148,7 +148,7 @@ class TcaGenerator
                     $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
                 }
             }
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $tca = $this->processTypeDefinition($typeDefinition, $tableDefinition, $tca);
             }
             $tca[$tableDefinition->getTable()]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
@@ -164,7 +164,7 @@ class TcaGenerator
             if ($tableDefinition->getTypeField() === null) {
                 continue;
             }
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 // @todo Right now we hard-code a new group for the type select of content elements.
                 // @todo The default destination should be made configurable, so e.g. the standard
                 // @todo group could be chosen.
@@ -370,7 +370,7 @@ class TcaGenerator
      */
     protected function getTcaForNonRootTableOrWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $tca): array
     {
-        $standardTypeDefinition = $tableDefinition->getTypeDefinitionCollection()->getFirst();
+        $standardTypeDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getFirst();
         $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
         $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()] = $columnTca;
         return $tca;
@@ -459,11 +459,11 @@ class TcaGenerator
         $labelField = null;
         if ($labelCapability->hasLabelField()) {
             $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
-            $labelField = $tableDefinition->getTcaColumnsDefinition()->getField($labelFieldIdentifier);
+            $labelField = $tableDefinition->getTcaFieldDefinitionCollection()->getField($labelFieldIdentifier);
         }
         // If there is no user-defined label field, use first field as label.
         if (!$labelField?->getFieldType()->isSearchable()) {
-            foreach ($tableDefinition->getTcaColumnsDefinition() as $columnFieldDefinition) {
+            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
                 // Ignore fields for label, which can't be searched properly.
                 if (!$columnFieldDefinition->getFieldType()->isSearchable()) {
                     continue;
@@ -587,7 +587,7 @@ class TcaGenerator
         $searchFieldsString = $GLOBALS['TCA'][$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
 
-        foreach ($tableDefinition->getTcaColumnsDefinition() as $field) {
+        foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $field) {
             if ($field->getFieldType()->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
                 $searchFields[] = $field->getUniqueIdentifier();
             }

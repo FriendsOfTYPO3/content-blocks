@@ -34,7 +34,7 @@ class UserTsConfigGenerator
     public function __invoke(BootCompletedEvent $event): void
     {
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($typeDefinition instanceof PageTypeDefinition) {
                     ExtensionManagementUtility::addUserTSConfig($this->generatePageTypeTsConfig($typeDefinition));
                 }

@@ -135,7 +135,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
 
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getTypeDefinitionCollection();
+        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {
             $result[] = $typeDefinition->getName();

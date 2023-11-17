@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\Capability\TableDefinitionCapability;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 
 /**
@@ -32,9 +33,9 @@ final class TableDefinition
     private ?string $typeField = null;
     private TableDefinitionCapability $capability;
     private ?ContentType $contentType = null;
-    private ?TypeDefinitionCollection $typeDefinitionCollection = null;
-    private ?SqlDefinition $sqlDefinition = null;
-    private ?TcaColumnsDefinition $tcaColumnsDefinition = null;
+    private ?ContentTypeDefinitionCollection $contentTypeDefinitionCollection = null;
+    private ?SqlColumnDefinitionCollection $sqlColumnDefinitionCollection = null;
+    private ?TcaFieldDefinitionCollection $tcaFieldDefinitionCollection = null;
     private ?PaletteDefinitionCollection $paletteDefinitionCollection = null;
 
     public static function createFromTableArray(string $table, array $definition): TableDefinition
@@ -51,12 +52,12 @@ final class TableDefinition
             ->withTypeField($definition['typeField'] ?? null)
             ->withCapability(TableDefinitionCapability::createFromArray($definition['raw']))
             ->withContentType($definition['contentType'] ?? null)
-            ->withTcaColumnsDefinition(TcaColumnsDefinition::createFromArray($definition['fields'] ?? [], $table))
-            ->withSqlDefinition(SqlDefinition::createFromArray($definition['fields'] ?? [], $table))
+            ->withTcaColumnsDefinition(TcaFieldDefinitionCollection::createFromArray($definition['fields'] ?? [], $table))
+            ->withSqlDefinition(SqlColumnDefinitionCollection::createFromArray($definition['fields'] ?? [], $table))
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
 
         if (!empty($definition['elements'])) {
-            $tableDefinition = $tableDefinition->withTypeDefinitionCollection(TypeDefinitionCollection::createFromArray($definition['elements'], $table));
+            $tableDefinition = $tableDefinition->withTypeDefinitionCollection(ContentTypeDefinitionCollection::createFromArray($definition['elements'], $table));
         }
 
         return $tableDefinition;
@@ -64,7 +65,7 @@ final class TableDefinition
 
     public function getDefaultTypeDefinition(): ContentTypeInterface
     {
-        $typeDefinitionCollection = $this->getTypeDefinitionCollection();
+        $typeDefinitionCollection = $this->getContentTypeDefinitionCollection();
         if ($typeDefinitionCollection->hasType('1')) {
             $defaultTypeDefinition = $typeDefinitionCollection->getType('1');
         } else {
@@ -103,19 +104,19 @@ final class TableDefinition
         return $this->contentType;
     }
 
-    public function getTypeDefinitionCollection(): ?TypeDefinitionCollection
+    public function getContentTypeDefinitionCollection(): ?ContentTypeDefinitionCollection
     {
-        return $this->typeDefinitionCollection;
+        return $this->contentTypeDefinitionCollection;
     }
 
-    public function getSqlDefinition(): SqlDefinition
+    public function getSqlColumnDefinitionCollection(): SqlColumnDefinitionCollection
     {
-        return $this->sqlDefinition;
+        return $this->sqlColumnDefinitionCollection;
     }
 
-    public function getTcaColumnsDefinition(): TcaColumnsDefinition
+    public function getTcaFieldDefinitionCollection(): TcaFieldDefinitionCollection
     {
-        return $this->tcaColumnsDefinition;
+        return $this->tcaFieldDefinitionCollection;
     }
 
     public function getPaletteDefinitionCollection(): PaletteDefinitionCollection
@@ -165,24 +166,24 @@ final class TableDefinition
         return $clone;
     }
 
-    public function withTypeDefinitionCollection(TypeDefinitionCollection $typeDefinitionCollection): TableDefinition
+    public function withTypeDefinitionCollection(ContentTypeDefinitionCollection $typeDefinitionCollection): TableDefinition
     {
         $clone = clone $this;
-        $clone->typeDefinitionCollection = $typeDefinitionCollection;
+        $clone->contentTypeDefinitionCollection = $typeDefinitionCollection;
         return $clone;
     }
 
-    public function withSqlDefinition(SqlDefinition $sqlDefinition): TableDefinition
+    public function withSqlDefinition(SqlColumnDefinitionCollection $sqlDefinition): TableDefinition
     {
         $clone = clone $this;
-        $clone->sqlDefinition = $sqlDefinition;
+        $clone->sqlColumnDefinitionCollection = $sqlDefinition;
         return $clone;
     }
 
-    public function withTcaColumnsDefinition(TcaColumnsDefinition $tcaColumnsDefinition): TableDefinition
+    public function withTcaColumnsDefinition(TcaFieldDefinitionCollection $tcaColumnsDefinition): TableDefinition
     {
         $clone = clone $this;
-        $clone->tcaColumnsDefinition = $tcaColumnsDefinition;
+        $clone->tcaFieldDefinitionCollection = $tcaColumnsDefinition;
         return $clone;
     }
 

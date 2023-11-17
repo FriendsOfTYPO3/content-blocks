@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
+final class TcaFieldDefinitionCollection implements \IteratorAggregate, \Countable
 {
     /** @var TcaFieldDefinition[] */
     private array $definitions = [];
@@ -52,7 +52,7 @@ final class TcaColumnsDefinition implements \IteratorAggregate, \Countable
         return $this->table;
     }
 
-    public static function createFromArray(array $tca, string $table): TcaColumnsDefinition
+    public static function createFromArray(array $tca, string $table): TcaFieldDefinitionCollection
     {
         $tcaDefinition = new self();
         $tcaDefinition->table = $table;

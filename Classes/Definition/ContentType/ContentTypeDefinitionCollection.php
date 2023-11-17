@@ -15,15 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition;
+namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentTypeFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
+final class ContentTypeDefinitionCollection implements \IteratorAggregate, \Countable
 {
     /** @var array<string|int, ContentTypeInterface> */
     private array $definitions = [];
@@ -58,7 +57,7 @@ final class TypeDefinitionCollection implements \IteratorAggregate, \Countable
         return current($this->definitions);
     }
 
-    public static function createFromArray(array $array, string $table): TypeDefinitionCollection
+    public static function createFromArray(array $array, string $table): ContentTypeDefinitionCollection
     {
         $contentTypeFactory = new ContentTypeFactory();
         $typeDefinitionCollection = new self();

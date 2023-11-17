@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class SqlDefinition implements \IteratorAggregate, \Countable
+final class SqlColumnDefinitionCollection implements \IteratorAggregate, \Countable
 {
     private string $table = '';
     /** @var SqlColumnDefinition[] */
@@ -52,7 +52,7 @@ final class SqlDefinition implements \IteratorAggregate, \Countable
         return $this->table;
     }
 
-    public static function createFromArray(array $array, string $table): SqlDefinition
+    public static function createFromArray(array $array, string $table): SqlColumnDefinitionCollection
     {
         $sqlDefinition = new self();
         $sqlDefinition->table = $table;
