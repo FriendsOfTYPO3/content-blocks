@@ -26,7 +26,7 @@ final class PaletteDefinition
     private string $label = '';
     private string $description = '';
     /** @var string[] */
-    public array $showitem = [];
+    private array $showitem = [];
 
     public function __construct(string $identifier, string $label, string $description, array $showitem)
     {
