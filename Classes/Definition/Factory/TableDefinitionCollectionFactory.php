@@ -339,13 +339,13 @@ class TableDefinitionCollectionFactory
         $sectionDefinition->setIdentifier($section['identifier']);
         $languagePath->addPathSegment('sections.' . $sectionDefinition->getIdentifier());
         $sectionTitle = $languagePath->getCurrentPath() . '.title';
-        $sectionDefinition->setLanguagePath($sectionTitle);
+        $sectionDefinition->setLabelPath($sectionTitle);
         foreach ($section['container'] as $container) {
             $containerDefinition = new ContainerDefinition();
             $containerDefinition->setIdentifier($container['identifier']);
             $languagePath->addPathSegment('container.' . $containerDefinition->getIdentifier());
             $containerTitle = $languagePath->getCurrentPath() . '.title';
-            $containerDefinition->setLanguagePath($containerTitle);
+            $containerDefinition->setLabelPath($containerTitle);
             foreach ($container['fields'] as $containerField) {
                 $containerDefinition->addField($this->resolveFlexFormField($languagePath, $containerField));
             }

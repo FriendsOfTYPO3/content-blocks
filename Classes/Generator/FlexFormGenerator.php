@@ -70,14 +70,14 @@ class FlexFormGenerator
     protected function processSection(SectionDefinition $sectionDefinition, FlexFormDefinition $flexFormDefinition): array
     {
         $result = [
-            'title' => $sectionDefinition->getLanguagePath(),
+            'title' => $sectionDefinition->getLabelPath(),
             'type' => 'array',
             'section' => 1,
         ];
         $processedContainers = [];
         foreach ($sectionDefinition as $container) {
             $containerResult = [
-                'title' => $container->getLanguagePath(),
+                'title' => $container->getLabelPath(),
                 'type' => 'array',
             ];
             $processedContainerFields = [];

@@ -25,7 +25,7 @@ final class SectionDefinition implements \IteratorAggregate
     private string $identifier = '';
     /** @var ContainerDefinition[] */
     private array $container = [];
-    private string $languagePath;
+    private string $labelPath;
 
     /**
      * @return \Iterator<ContainerDefinition>
@@ -40,14 +40,14 @@ final class SectionDefinition implements \IteratorAggregate
         $this->container[] = $container;
     }
 
-    public function getLanguagePath(): string
+    public function getLabelPath(): string
     {
-        return $this->languagePath;
+        return $this->labelPath;
     }
 
-    public function setLanguagePath(string $languagePath): void
+    public function setLabelPath(string $labelPath): void
     {
-        $this->languagePath = $languagePath;
+        $this->labelPath = $labelPath;
     }
 
     public function getIdentifier(): string
