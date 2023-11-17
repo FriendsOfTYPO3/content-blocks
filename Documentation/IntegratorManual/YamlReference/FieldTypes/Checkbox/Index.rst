@@ -30,7 +30,7 @@ Settings
    :Type: array
 
    Only necessary if more than one checkbox is desired. Contains the checkbox
-   elements as separate array items. The label can also be defined as a
+   elements as separate array items. The `label` can also be defined as a
    LLL-reference.
 
    Example:

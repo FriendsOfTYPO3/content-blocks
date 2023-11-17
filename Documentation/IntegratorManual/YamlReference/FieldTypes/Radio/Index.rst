@@ -5,7 +5,9 @@
 Radio
 =====
 
-The `Radio` type generates a number of radio fields.
+The `Radio` type creates a set of radio buttons. The value is typically stored
+as integer value, each radio item has one assigned number, but it can be a
+string, too.
 
 It corresponds with the TCA :php:`type => 'radio'`.
 
@@ -27,9 +29,8 @@ Settings
    :Required: true
    :Type: array
 
-   Contains the checkbox elements. Each item is an array with the first being
-   the label in the select drop-down (LLL reference possible) and the second
-   being the value transferred to the input field.
+   Contains the radio items. Each item is an array with the keys `label` and
+   `value`. Values are usually integers, but can also be strings if desired.
 
    Example:
 
