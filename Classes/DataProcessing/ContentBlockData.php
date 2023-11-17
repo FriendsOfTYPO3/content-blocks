@@ -57,7 +57,7 @@ final class ContentBlockData extends \stdClass
         private readonly array $_processed = [],
     ) {}
 
-    public function __get(string $name): mixed
+    public function __get(string $name = ''): mixed
     {
         if ($name === '_name') {
             return $this->_name;
