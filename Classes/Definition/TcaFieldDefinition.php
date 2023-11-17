@@ -27,7 +27,8 @@ final class TcaFieldDefinition
 {
     private string $identifier = '';
     private string $uniqueIdentifier = '';
-    private LanguagePath $languagePath;
+    private string $labelPath = '';
+    private string $descriptionPath = '';
     private bool $useExistingField = false;
     private ?FieldConfigurationInterface $fieldConfiguration = null;
 
@@ -45,7 +46,8 @@ final class TcaFieldDefinition
         return $self
             ->withUniqueIdentifier($uniqueIdentifier)
             ->withIdentifier($array['config']['identifier'])
-            ->withLanguagePath($array['config']['languagePath'])
+            ->withLabelPath($array['labelPath'] ?? '')
+            ->withDescriptionPath($array['descriptionPath'] ?? '')
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
             ->withFieldConfiguration($array['type']->getFieldConfiguration($array['config']));
     }
@@ -65,9 +67,14 @@ final class TcaFieldDefinition
         return $this->identifier;
     }
 
-    public function getLanguagePath(): LanguagePath
+    public function getLabelPath(): string
     {
-        return $this->languagePath;
+        return $this->labelPath;
+    }
+
+    public function getDescriptionPath(): string
+    {
+        return $this->descriptionPath;
     }
 
     public function useExistingField(): bool
@@ -102,24 +109,17 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withLabel(string $label): TcaFieldDefinition
+    public function withLabelPath(string $labelPath): TcaFieldDefinition
     {
         $clone = clone $this;
-        $clone->label = $label;
+        $clone->labelPath = $labelPath;
         return $clone;
     }
 
-    public function withDescription(string $description): TcaFieldDefinition
+    public function withDescriptionPath(string $descriptionPath): TcaFieldDefinition
     {
         $clone = clone $this;
-        $clone->description = $description;
-        return $clone;
-    }
-
-    public function withLanguagePath(LanguagePath $languagePath): TcaFieldDefinition
-    {
-        $clone = clone $this;
-        $clone->languagePath = $languagePath;
+        $clone->descriptionPath = $descriptionPath;
         return $clone;
     }
 

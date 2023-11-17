@@ -46,6 +46,10 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
 
     public function isset(string $name, string $key): bool
     {
+        if (str_starts_with($key, 'LLL:EXT:')) {
+            $parts = explode(':', $key);
+            $key = $parts[3];
+        }
         return isset($this->parsedLanguageFiles[$name]['default'][$key]);
     }
 }

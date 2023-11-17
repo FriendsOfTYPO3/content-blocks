@@ -1954,7 +1954,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
-        $flexFormGenerator = new FlexFormGenerator();
+        $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -2057,7 +2057,7 @@ final class TcaGeneratorTest extends UnitTestCase
         if ($seoExtensionLoaded) {
             $systemExtensionAvailability->addAvailableExtension('seo');
         }
-        $flexFormGenerator = new FlexFormGenerator();
+        $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -2093,7 +2093,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks([$contentBlock]);
         $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
-        $flexFormGenerator = new FlexFormGenerator();
+        $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
@@ -2730,7 +2730,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
-        $flexFormGenerator = new FlexFormGenerator();
+        $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),

@@ -22,6 +22,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\FlexForm;
  */
 final class FlexFormDefinition implements \IteratorAggregate
 {
+    private string $contentBlockName = '';
     private string $typeName = '';
 
     /**
@@ -55,5 +56,15 @@ final class FlexFormDefinition implements \IteratorAggregate
     public function hasDefaultSheet(): bool
     {
         return count($this->sheets) === 1;
+    }
+
+    public function getContentBlockName(): string
+    {
+        return $this->contentBlockName;
+    }
+
+    public function setContentBlockName(string $contentBlockName): void
+    {
+        $this->contentBlockName = $contentBlockName;
     }
 }

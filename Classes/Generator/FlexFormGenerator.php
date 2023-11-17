@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -28,11 +29,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FlexFormGenerator
 {
+    public function __construct(protected readonly LanguageFileRegistryInterface $languageFileRegistry) {}
+
     public function generate(FlexFormDefinition $flexFormDefinition): string
     {
         $sheets = [];
         foreach ($flexFormDefinition as $sheetDefinition) {
-            $sheet = $this->processSheet($sheetDefinition);
+            $sheet = $this->processSheet($sheetDefinition, $flexFormDefinition);
             $root = [
                 'type' => 'array',
                 'el' => $sheet,
@@ -51,20 +54,20 @@ class FlexFormGenerator
         return $flexForm;
     }
 
-    protected function processSheet(SheetDefinition $sheetDefinition): array
+    protected function processSheet(SheetDefinition $sheetDefinition, FlexFormDefinition $flexFormDefinition): array
     {
         $fields = [];
         foreach ($sheetDefinition as $tcaFieldOrSection) {
             $field = match ($tcaFieldOrSection::class) {
-                SectionDefinition::class => $this->processSection($tcaFieldOrSection),
-                TcaFieldDefinition::class => $this->processTcaField($tcaFieldOrSection),
+                SectionDefinition::class => $this->processSection($tcaFieldOrSection, $flexFormDefinition),
+                TcaFieldDefinition::class => $this->processTcaField($tcaFieldOrSection, $flexFormDefinition),
             };
             $fields[$tcaFieldOrSection->getIdentifier()] = $field;
         }
         return $fields;
     }
 
-    protected function processSection(SectionDefinition $sectionDefinition): array
+    protected function processSection(SectionDefinition $sectionDefinition, FlexFormDefinition $flexFormDefinition): array
     {
         $result = [
             'title' => $sectionDefinition->getLanguagePath(),
@@ -79,7 +82,7 @@ class FlexFormGenerator
             ];
             $processedContainerFields = [];
             foreach ($container as $containerField) {
-                $processedContainerFields[$containerField->getIdentifier()] = $this->processTcaField($containerField);
+                $processedContainerFields[$containerField->getIdentifier()] = $this->processTcaField($containerField, $flexFormDefinition);
             }
             $containerResult['el'] = $processedContainerFields;
             $processedContainers[$container->getIdentifier()] = $containerResult;
@@ -88,14 +91,33 @@ class FlexFormGenerator
         return $result;
     }
 
-    protected function processTcaField(TcaFieldDefinition $flexFormTcaDefinition): array
+    protected function processTcaField(TcaFieldDefinition $flexFormTcaDefinition, FlexFormDefinition $flexFormDefinition): array
     {
         $flexFormTca = $flexFormTcaDefinition->getTca();
-        $languagePath = $flexFormTcaDefinition->getLanguagePath();
         // FlexForm child fields can't be excluded.
         unset($flexFormTca['exclude']);
-        $flexFormTca['label'] = $languagePath->getCurrentPath() . '.label';
-        $flexFormTca['description'] = $languagePath->getCurrentPath() . '.description';
+
+        $tcaLabel = $flexFormTcaDefinition->getTca()['label'] ?? '';
+        $labelPath = $flexFormTcaDefinition->getLabelPath();
+        if ($tcaLabel === '') {
+            if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $labelPath)) {
+                $flexFormTca['label'] = $labelPath;
+            } else {
+                $flexFormTca['label'] = $flexFormTcaDefinition->getIdentifier();
+            }
+        } else {
+            $flexFormTca['label'] = $tcaLabel;
+        }
+
+        $tcaDescription = $flexFormTcaDefinition->getTca()['description'] ?? '';
+        $descriptionPath = $flexFormTcaDefinition->getDescriptionPath();
+        if ($tcaDescription === '') {
+            if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $descriptionPath)) {
+                $flexFormTca['description'] = $descriptionPath;
+            }
+        } else {
+            $flexFormTca['description'] = $tcaDescription;
+        }
         return $flexFormTca;
     }
 }
