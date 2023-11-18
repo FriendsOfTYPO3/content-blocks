@@ -43,11 +43,25 @@ cosmetical and, like Palettes and Tabs, has no effect on Frontend rendering.
 Labels
 ------
 
-Labels for Sheets have the following convention:
+You can set a :yaml:`label`, :yaml:`description` and :yaml:`linkTitle` for the
+sheet either directly in the YAML config or via XLF translation keys. The link
+title is displayed when hovering over the tab.
 
-*  `<FlexFormIdentifier>.sheets.<SheetIdentifier>.label`
-*  `<FlexFormIdentifier>.sheets.<SheetIdentifier>.description`
-*  `<FlexFormIdentifier>.sheets.<SheetIdentifier>.linkTitle (link title of the tabs)`
+XLF translation keys for Sheets have the following convention:
+
+.. code-block:: xml
+
+    <body>
+        <trans-unit id="FIELD_IDENTIFIER.sheets.SHEET_IDENTIFIER.label">
+            <source>Label for Sheet</source>
+        </trans-unit>
+        <trans-unit id="FIELD_IDENTIFIER.sheets.SHEET_IDENTIFIER.description">
+            <source>Description for Sheet</source>
+        </trans-unit>
+        <trans-unit id="FIELD_IDENTIFIER.sheets.SHEET_IDENTIFIER.linkTitle">
+            <source>Link title for Sheet</source>
+        </trans-unit>
+    </body>
 
 Sections
 ========
@@ -102,6 +116,9 @@ With Sheets
         fields:
           - identifier: sheet1
             type: Sheet
+            label: Sheet 1
+            description: Description for Sheet 1
+            linkTitle: Link title for Sheet 1
             fields:
               - identifier: header
                 type: Text
@@ -114,6 +131,12 @@ With Sheets
                 type: Link
               - identifier: radio
                 type: Radio
+                default: 0
+                items:
+                  - label: Option 1
+                    value: 0
+                  - label: Option2 2
+                    value: 1
 
 With Sections and Container
 ---------------------------

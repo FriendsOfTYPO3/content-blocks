@@ -41,11 +41,9 @@ class FlexFormGenerator
                 'el' => $sheet,
             ];
             if (!$flexFormDefinition->hasDefaultSheet()) {
-                $root['sheetTitle'] = $sheetDefinition->getLabel();
-                $root['sheetDescription'] = $sheetDefinition->getDescription();
-                $root['sheetShortDescr'] = $sheetDefinition->getLinkTitle();
+                $root = $this->resolveLabels($flexFormDefinition, $sheetDefinition, $root);
             }
-            $sheets[$sheetDefinition->getKey()] = [
+            $sheets[$sheetDefinition->getIdentifier()] = [
                 'ROOT' => $root,
             ];
         }
@@ -119,5 +117,29 @@ class FlexFormGenerator
             $flexFormTca['description'] = $tcaDescription;
         }
         return $flexFormTca;
+    }
+
+    protected function resolveLabels(FlexFormDefinition $flexFormDefinition, SheetDefinition $sheetDefinition, array $root): array
+    {
+        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $sheetDefinition->getLanguagePathLabel())) {
+            $root['sheetTitle'] = $sheetDefinition->getLanguagePathLabel();
+        } else {
+            if ($sheetDefinition->hasLabel()) {
+                $root['sheetTitle'] = $sheetDefinition->getLabel();
+            } else {
+                $root['sheetTitle'] = $sheetDefinition->getIdentifier();
+            }
+        }
+        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $sheetDefinition->getLanguagePathDescription())) {
+            $root['sheetDescription'] = $sheetDefinition->getLanguagePathDescription();
+        } elseif ($sheetDefinition->hasDescription()) {
+            $root['sheetDescription'] = $sheetDefinition->getDescription();
+        }
+        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $sheetDefinition->getLanguagePathLinkTitle())) {
+            $root['sheetShortDescr'] = $sheetDefinition->getLanguagePathLinkTitle();
+        } elseif ($sheetDefinition->hasLinkTitle()) {
+            $root['sheetShortDescr'] = $sheetDefinition->getLinkTitle();
+        }
+        return $root;
     }
 }

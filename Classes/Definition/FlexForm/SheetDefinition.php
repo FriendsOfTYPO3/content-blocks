@@ -24,7 +24,10 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
  */
 final class SheetDefinition implements \IteratorAggregate
 {
-    private string $key = 'sDEF';
+    private string $identifier = 'sDEF';
+    private string $languagePathLabel = '';
+    private string $languagePathDescription = '';
+    private string $languagePathLinkTitle = '';
     private string $label = '';
     private string $description = '';
     private string $linkTitle = '';
@@ -47,19 +50,54 @@ final class SheetDefinition implements \IteratorAggregate
         $this->fields[] = $fieldOrSection;
     }
 
-    public function setKey(string $key): void
+    public function setIdentifier(string $identifier): void
     {
-        $this->key = $key;
+        $this->identifier = $identifier;
     }
 
-    public function getKey(): string
+    public function getIdentifier(): string
     {
-        return $this->key;
+        return $this->identifier;
+    }
+
+    public function getLanguagePathLabel(): string
+    {
+        return $this->languagePathLabel;
+    }
+
+    public function setLanguagePathLabel(string $languagePathLabel): void
+    {
+        $this->languagePathLabel = $languagePathLabel;
+    }
+
+    public function getLanguagePathDescription(): string
+    {
+        return $this->languagePathDescription;
+    }
+
+    public function setLanguagePathDescription(string $languagePathDescription): void
+    {
+        $this->languagePathDescription = $languagePathDescription;
+    }
+
+    public function getLanguagePathLinkTitle(): string
+    {
+        return $this->languagePathLinkTitle;
+    }
+
+    public function setLanguagePathLinkTitle(string $languagePathLinkTitle): void
+    {
+        $this->languagePathLinkTitle = $languagePathLinkTitle;
     }
 
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    public function hasLabel(): bool
+    {
+        return $this->label !== '';
     }
 
     public function setLabel(string $label): void
@@ -72,6 +110,11 @@ final class SheetDefinition implements \IteratorAggregate
         return $this->description;
     }
 
+    public function hasDescription(): bool
+    {
+        return $this->description !== '';
+    }
+
     public function setDescription(string $description): void
     {
         $this->description = $description;
@@ -80,6 +123,11 @@ final class SheetDefinition implements \IteratorAggregate
     public function getLinkTitle(): string
     {
         return $this->linkTitle;
+    }
+
+    public function hasLinkTitle(): bool
+    {
+        return $this->linkTitle !== '';
     }
 
     public function setLinkTitle(string $linkTitle): void

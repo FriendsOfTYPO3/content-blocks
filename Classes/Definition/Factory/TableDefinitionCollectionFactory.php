@@ -286,11 +286,14 @@ class TableDefinitionCollectionFactory
         } else {
             foreach ($fields as $sheet) {
                 $sheetDefinition = new SheetDefinition();
-                $sheetDefinition->setKey($sheet['identifier']);
-                $input->languagePath->addPathSegment('sheets.' . $sheetDefinition->getKey());
-                $sheetDefinition->setLabel($input->languagePath->getCurrentPath() . '.label');
-                $sheetDefinition->setDescription($input->languagePath->getCurrentPath() . '.description');
-                $sheetDefinition->setLinkTitle($input->languagePath->getCurrentPath() . '.linkTitle');
+                $sheetDefinition->setIdentifier($sheet['identifier']);
+                $input->languagePath->addPathSegment('sheets.' . $sheetDefinition->getIdentifier());
+                $sheetDefinition->setLanguagePathLabel($input->languagePath->getCurrentPath() . '.label');
+                $sheetDefinition->setLanguagePathDescription($input->languagePath->getCurrentPath() . '.description');
+                $sheetDefinition->setLanguagePathLinkTitle($input->languagePath->getCurrentPath() . '.linkTitle');
+                $sheetDefinition->setLabel($sheet['label'] ?? '');
+                $sheetDefinition->setDescription($sheet['description'] ?? '');
+                $sheetDefinition->setLinkTitle($sheet['linkTitle'] ?? '');
                 $input->languagePath->popSegment();
                 foreach ($sheet['fields'] ?? [] as $sheetField) {
                     $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($input->languagePath, $sheetField));
