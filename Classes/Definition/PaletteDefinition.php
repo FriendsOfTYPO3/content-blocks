@@ -38,7 +38,7 @@ final class PaletteDefinition
         }
         $self = new self();
         $self->identifier = (string)$array['identifier'];
-        $self->contentBlockName = (string)$array['contentBlockName'] ?? '';
+        $self->contentBlockName = (string)($array['contentBlockName'] ?? '');
         $self->label = (string)($array['label'] ?? '');
         $self->description = (string)($array['description'] ?? '');
         $self->languagePathLabel = (string)($array['languagePathLabel'] ?? '');
