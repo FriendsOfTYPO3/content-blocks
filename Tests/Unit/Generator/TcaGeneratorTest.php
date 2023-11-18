@@ -1224,7 +1224,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         't3ce_example_internal_description' => [
                             'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.description',
                             'config' => [
                                 'type' => 'text',

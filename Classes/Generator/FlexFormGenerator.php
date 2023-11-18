@@ -95,25 +95,23 @@ class FlexFormGenerator
         // FlexForm child fields can't be excluded.
         unset($flexFormTca['exclude']);
 
-        $tcaLabel = $flexFormTcaDefinition->getTca()['label'] ?? '';
         $labelPath = $flexFormTcaDefinition->getLabelPath();
-        if ($tcaLabel === '') {
-            if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $labelPath)) {
-                $flexFormTca['label'] = $labelPath;
+        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $labelPath)) {
+            $flexFormTca['label'] = $labelPath;
+        } else {
+            $tcaLabel = $flexFormTcaDefinition->getTca()['label'] ?? '';
+            if ($tcaLabel !== '') {
+                $flexFormTca['label'] = $tcaLabel;
             } else {
                 $flexFormTca['label'] = $flexFormTcaDefinition->getIdentifier();
             }
-        } else {
-            $flexFormTca['label'] = $tcaLabel;
         }
 
         $tcaDescription = $flexFormTcaDefinition->getTca()['description'] ?? '';
         $descriptionPath = $flexFormTcaDefinition->getDescriptionPath();
-        if ($tcaDescription === '') {
-            if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $descriptionPath)) {
-                $flexFormTca['description'] = $descriptionPath;
-            }
-        } else {
+        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $descriptionPath)) {
+            $flexFormTca['description'] = $descriptionPath;
+        } elseif ($tcaDescription !== '') {
             $flexFormTca['description'] = $tcaDescription;
         }
         return $flexFormTca;
