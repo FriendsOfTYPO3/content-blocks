@@ -5,14 +5,13 @@
 Collection
 ==========
 
-The `Collection` type generates a field for Inline-Relational-Record-Editing
-(IRRE), which allows nesting of other field types as children.
-This field type allows building structures like image sliders, accordion, tabs
-and so on.
+:php:`type => 'inline' // TCA`
+:yaml:`alternativeSql: false`
 
-It corresponds with the TCA :php:`type => 'inline'`.
-
-SQL overrides via `alternativeSql` allowed: no.
+The :yaml:`Collection` type generates a field for
+Inline-Relational-Record-Editing (IRRE), which allows nesting of other field
+types as children. This field type allows building structures like image
+sliders, accordion, tabs and so on.
 
 First-level options
 ===================

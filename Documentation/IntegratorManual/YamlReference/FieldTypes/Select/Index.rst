@@ -5,11 +5,10 @@
 Select
 ======
 
-The `Select` type generates a simple select field.
+:php:`type => 'select' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'select'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Select` type generates a simple select field.
 
 Settings
 ========
@@ -19,9 +18,11 @@ Settings
    :Required: yes
    :Type: string
 
-   Choose from one of the available select types: :yaml:`selectSingle`,
-   :yaml:`selectCheckBox`, :yaml:`selectSingleBox`, :yaml:`selectTree` or
-   :yaml:`selectMultipleSideBySide`.
+   *  :yaml:`selectSingle`
+   *  :yaml:`selectCheckBox`
+   *  :yaml:`selectSingleBox`
+   *  :yaml:`selectTree`
+   *  :yaml:`selectMultipleSideBySide`
 
 .. confval:: items
 

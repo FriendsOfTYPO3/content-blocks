@@ -5,11 +5,10 @@
 File
 ====
 
-The `File` type generates a field for file relations.
+:php:`type => 'file' // TCA`
+:yaml:`alternativeSql: false`
 
-It corresponds with the TCA :php:`type => 'file'`.
-
-SQL overrides via `alternativeSql` allowed: no.
+The :yaml:`File` type generates a field for file relations.
 
 Settings
 ========

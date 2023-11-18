@@ -5,11 +5,10 @@
 Number
 ======
 
-The `Number` only allows integers or decimals as input values.
+:php:`type => 'number' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'number'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Number` only allows integers or decimals as input values.
 
 Settings
 ========

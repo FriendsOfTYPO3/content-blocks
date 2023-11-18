@@ -5,12 +5,11 @@
 Slug
 ====
 
-The `Slug` type generates a slug field, which generates a unique string for the
-record.
+:php:`type => 'slug' // TCA`
+:yaml:`alternativeSql: false`
 
-It corresponds with the TCA :php:`type => 'slug'`.
-
-SQL overrides via `alternativeSql` allowed: no.
+The :yaml:`Slug` type generates a slug field, which generates a unique string
+for the record.
 
 Settings
 ========

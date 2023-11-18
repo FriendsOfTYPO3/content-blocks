@@ -5,12 +5,11 @@
 Folder
 ======
 
-The `Folder` type enables to select one or more folders. Files within these
-folders will be resolved automatically and are available in Fluid.
+:php:`type => 'folder' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'folder'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Folder` type enables to select one or more folders. Files within
+these folders will be resolved automatically and are available in Fluid.
 
 Settings
 ========

@@ -5,12 +5,11 @@
 DateTime
 ========
 
-The `DateTime` type provides a date picker. If not configured otherwise, the
-value is stored as a timestamp.
+:php:`type => 'datetime' // TCA`
+:yaml:`alternativeSql: false`
 
-It corresponds with the TCA `type => 'datetime'`.
-
-SQL overrides via `alternativeSql` allowed: no.
+The :yaml:`DateTime` type provides a date picker. If not configured otherwise,
+the value is stored as a timestamp.
 
 Settings
 ========

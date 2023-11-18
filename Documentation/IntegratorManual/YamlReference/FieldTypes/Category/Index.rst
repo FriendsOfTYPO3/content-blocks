@@ -5,12 +5,11 @@
 Category
 ========
 
-The `Category` type can handle relations to categories. The categories are taken
-from the system table :sql:`sys_categories`.
+:php:`type => 'category' // TCA`
+:yaml:`alternativeSql: false`
 
-It corresponds with the TCA :php:`type => 'category'`.
-
-SQL overrides via `alternativeSql` allowed: no.
+The :yaml:`Category` type can handle relations to categories. The categories are
+taken from the system table :sql:`sys_categories`.
 
 Settings
 ========

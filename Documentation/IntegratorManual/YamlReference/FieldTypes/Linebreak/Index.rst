@@ -5,9 +5,10 @@
 Linebreak
 =========
 
-The `Linebreak` field is used inside `Palette` fields to add a manual linebreak.
-Otherwise all fields within a Palette are displayed next to each other. Note:
-Contrary to all other field types, Linebreaks don't need an :yaml:`identifier`.
+The :yaml:`Linebreak` field is used inside `Palette` fields to add a manual
+linebreak. Otherwise all fields within a Palette are displayed next to each
+other. Note: Contrary to all other field types, Linebreaks don't need an
+:yaml:`identifier`.
 
 Examples
 ========

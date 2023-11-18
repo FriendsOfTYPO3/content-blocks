@@ -5,12 +5,11 @@
 Text
 ====
 
-The `Text` type generates a simple input field, possibly with additional
+:php:`type => 'input' // TCA`
+:yaml:`alternativeSql: true`
+
+The :yaml:`Text` type generates a simple input field, possibly with additional
 features applied.
-
-It corresponds with the TCA :php:`type => 'input'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
 
 Settings
 ========

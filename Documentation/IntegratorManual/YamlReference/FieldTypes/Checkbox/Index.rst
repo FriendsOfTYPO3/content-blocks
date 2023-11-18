@@ -5,11 +5,10 @@
 Checkbox
 ========
 
-The `Checkbox` type generates one or more checkbox fields.
+:php:`type => 'check' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'check'`.
-
-SQL overrides via :yaml:`alternativeSql` allowed: yes.
+The :yaml:`Checkbox` type generates one or more checkbox fields.
 
 Settings
 ========

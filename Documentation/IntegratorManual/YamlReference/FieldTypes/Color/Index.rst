@@ -5,11 +5,10 @@
 Color
 =====
 
-The `Color` type provides a simple color picker.
+:php:`type => 'color' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'color'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Color` type provides a simple color picker.
 
 Settings
 ========

@@ -5,13 +5,12 @@
 Radio
 =====
 
-The `Radio` type creates a set of radio buttons. The value is typically stored
-as integer value, each radio item has one assigned number, but it can be a
-string, too.
+:php:`type => 'radio' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'radio'`.
-
-SQL overrides via :yaml:`alternativeSql` allowed: yes.
+The :yaml:`Radio` type creates a set of radio buttons. The value is typically
+stored as integer value, each radio item has one assigned number, but it can be
+a string, too.
 
 Settings
 ========
@@ -29,8 +28,9 @@ Settings
    :Required: true
    :Type: array
 
-   Contains the radio items. Each item is an array with the keys `label` and
-   `value`. Values are usually integers, but can also be strings if desired.
+   Contains the radio items. Each item is an array with the keys :yaml:`label`
+   and :yaml:`value`. Values are usually integers, but can also be strings if
+   desired.
 
    Example:
 

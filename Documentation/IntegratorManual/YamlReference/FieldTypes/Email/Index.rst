@@ -5,13 +5,12 @@
 Email
 =====
 
-The `Email` type creates an input field, which is validated against an email
-pattern. If the input does not contain a valid email address, a flash message
-warning will be displayed.
+:php:`type => 'email' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'email'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Email` type creates an input field, which is validated against an
+email pattern. If the input does not contain a valid email address, a flash
+message warning will be displayed.
 
 Settings
 ========

@@ -5,8 +5,8 @@
 Basic
 =====
 
-The Basic type can be used to include a pre-defined set of fields. Read the main
-article about Basics :ref:`here <basics>`.
+The :yaml:`Basic` type can be used to include a pre-defined set of fields. Read
+the main article about Basics :ref:`here <basics>`.
 
 Example:
 

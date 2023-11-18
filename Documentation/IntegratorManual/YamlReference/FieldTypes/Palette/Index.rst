@@ -11,7 +11,7 @@ displayed next to each other rather than below each other.
 Labels
 ======
 
-XLF translation keys for Sheets have the following convention:
+XLF translation keys for Palettes have the following convention:
 
 .. code-block:: xml
 

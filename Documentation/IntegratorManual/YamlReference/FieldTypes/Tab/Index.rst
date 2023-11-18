@@ -5,18 +5,29 @@
 Tab
 ===
 
-The `Tab` field can be used to create a new tab in the editor interface. It
-needs an unique `identifier` and can be placed between any two fields. Note: Not
-allowed inside a `Palette`.
+The :yaml:`Tab` field can be used to create a new tab in the editor interface.
+It needs an unique `identifier` and can be placed between any two fields. Note:
+Prohibited inside `Palettes`.
 
-Labels.xlf
-==========
+Labels
+======
 
-The naming convention is `tabs.<identifier>`
+XLF translation keys for Tabs have the following convention:
 
-Inside Collection each identifier must be prepended:
+.. code-block:: xml
 
-`<collection1>.<collection2>.tabs.<identifier>`
+    <body>
+        <trans-unit id="tabs.TAB_IDENTIFIER">
+            <source>Label for Tab</source>
+        </trans-unit>
+        <trans-unit id="COLLECTION_IDENTIFIER.tabs.TAB_IDENTIFIER">
+            <source>Label for Tab in Collection</source>
+        </trans-unit>
+        <trans-unit id="COLLECTION_IDENTIFIER1.COLLECTION_IDENTIFIER2.tabs.TAB_IDENTIFIER">
+            <source>Label for Tab in nested Collection</source>
+        </trans-unit>
+    </body>
+
 
 Examples
 ========

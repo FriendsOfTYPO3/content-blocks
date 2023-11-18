@@ -5,12 +5,11 @@
 Link
 ====
 
-The `Link` type creates a field with a link wizard. It is possible to link to
-pages, files or even records (if configured).
+:php:`type => 'link' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'link'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Link` type creates a field with a link wizard. It is possible to link
+to pages, files or even records (if configured).
 
 Settings
 ========

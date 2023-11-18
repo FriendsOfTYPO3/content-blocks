@@ -5,28 +5,14 @@
 Textarea
 ========
 
-The `Textarea` type is for multi line text input. A Rich Text Editor can be
-enabled.
+:php:`type => 'text' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'text'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Textarea` type is for multi line text input. A Rich Text Editor can
+be enabled.
 
 Settings
 ========
-
-.. confval:: enableRichtext
-
-   :Required: false
-   :Type: boolean
-   :Default: false
-
-   If set to true, the system renders a Rich Text Editor if that is enabled for
-   the editor (default: yes), and if a suitable editor extension is loaded
-   (default: rte_ckeditor).
-
-   If either of these requirements is not met, the system falls back to
-   a `<textarea>` field.
 
 .. confval:: default
 
@@ -41,6 +27,35 @@ Settings
    :Type: string
 
    Placeholder text for the field.
+
+.. confval:: rows
+
+   :Required: false
+   :Type: integer
+   :Default: 5
+
+   Abstract value for the height of the `<textarea>` field. Max value is 20.
+
+.. confval:: required
+
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   If set, the field will become mandatory.
+
+.. confval:: enableRichtext
+
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   If set to true, the system renders a Rich Text Editor if that is enabled for
+   the editor (default: yes), and if a suitable editor extension is loaded
+   (default: rte_ckeditor).
+
+   If either of these requirements is not met, the system falls back to
+   a `<textarea>` field.
 
 .. confval:: richtextConfiguration
 
@@ -61,22 +76,6 @@ Settings
 
    If this property is not specified for an RTE field, the system will fall back
    to the `default` configuration.
-
-.. confval:: rows
-
-   :Required: false
-   :Type: integer
-   :Default: 5
-
-   Abstract value for the height of the `<textarea>` field. Max value is 20.
-
-.. confval:: required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
-
-   If set, the field will become mandatory.
 
 Examples
 ========

@@ -5,12 +5,11 @@
 Relation
 ========
 
-The `Relation` type can handle relations to other record types. They will be
-available to select from the Record Selector.
+:php:`type => 'group' // TCA`
+:yaml:`alternativeSql: true`
 
-It corresponds with the TCA :php:`type => 'group'`.
-
-SQL overrides via `alternativeSql` allowed: yes.
+The :yaml:`Relation` type can handle relations to other record types. They will
+be available to select from the Record Selector.
 
 Settings
 ========
@@ -21,6 +20,9 @@ Settings
    :Type: string (table name, comma-separated)
 
    One or more tables, that should be referenced.
+
+   This table can be defined by another Content Block, but can also be an
+   existing table defined by the Core or another extension.
 
 .. confval:: maxitems
 
