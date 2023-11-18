@@ -53,10 +53,8 @@ final class PaletteDefinitionCollection implements \IteratorAggregate, \Countabl
     {
         $paletteDefinitionCollection = new self();
         $paletteDefinitionCollection->table = $table;
-        foreach ($array as $key => $palette) {
-            $paletteDefinitionCollection->addPalette(
-                new PaletteDefinition($key, $palette['label'] ?? '', $palette['description'] ?? '', $palette['showitem'] ?? [])
-            );
+        foreach ($array as $palette) {
+            $paletteDefinitionCollection->addPalette(PaletteDefinition::createFromArray($palette));
         }
         return $paletteDefinitionCollection;
     }

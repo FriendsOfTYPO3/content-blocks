@@ -23,21 +23,28 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 final class PaletteDefinition
 {
     private string $identifier = '';
+    private string $contentBlockName = '';
     private string $label = '';
     private string $description = '';
+    private string $languagePathLabel = '';
+    private string $languagePathDescription = '';
     /** @var string[] */
-    private array $showitem = [];
+    private array $fieldIdentifiers = [];
 
-    public function __construct(string $identifier, string $label, string $description, array $showitem)
+    public static function createFromArray(array $array): PaletteDefinition
     {
-        if ($identifier === '') {
+        if (($array['identifier'] ?? '') === '') {
             throw new \InvalidArgumentException('Palette identifier must not be empty.', 1629293639);
         }
-
-        $this->identifier = $identifier;
-        $this->label = $label;
-        $this->description = $description;
-        $this->showitem = $showitem;
+        $self = new self();
+        $self->identifier = (string)$array['identifier'];
+        $self->contentBlockName = (string)$array['contentBlockName'] ?? '';
+        $self->label = (string)($array['label'] ?? '');
+        $self->description = (string)($array['description'] ?? '');
+        $self->languagePathLabel = (string)($array['languagePathLabel'] ?? '');
+        $self->languagePathDescription = (string)($array['languagePathDescription'] ?? '');
+        $self->fieldIdentifiers = (array)($array['fieldIdentifiers'] ?? []);
+        return $self;
     }
 
     public function getIdentifier(): string
@@ -50,17 +57,39 @@ final class PaletteDefinition
         return $this->label;
     }
 
+    public function hasLabel(): bool
+    {
+        return $this->label !== '';
+    }
+
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function getTca(): array
+    public function hasDescription(): bool
     {
-        return [
-            'label' => $this->label,
-            'description' => $this->description,
-            'showitem' => implode(',', $this->showitem),
-        ];
+        return $this->description !== '';
+    }
+
+    public function getShowItem(): string
+    {
+        $showItem = implode(',', $this->fieldIdentifiers);
+        return $showItem;
+    }
+
+    public function getLanguagePathLabel(): string
+    {
+        return $this->languagePathLabel;
+    }
+
+    public function getLanguagePathDescription(): string
+    {
+        return $this->languagePathDescription;
+    }
+
+    public function getContentBlockName(): string
+    {
+        return $this->contentBlockName;
     }
 }

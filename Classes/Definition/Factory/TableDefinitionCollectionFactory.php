@@ -233,27 +233,33 @@ final class TableDefinitionCollectionFactory
             return [];
         }
         $fields = [];
-        $paletteShowItems = [];
+        $paletteFieldIdentifiers = [];
         foreach ($rootPalette['fields'] as $paletteField) {
             $paletteFieldType = $this->resolveType($paletteField, $input->table, $input);
             if ($paletteFieldType === FieldType::LINEBREAK) {
-                $paletteShowItems[] = '--linebreak--';
+                $paletteFieldIdentifiers[] = '--linebreak--';
             } else {
                 $this->assertNoPaletteInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
                 $this->assertNoTabInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
                 $fields[] = $paletteField;
-                $paletteShowItems[] = $this->chooseIdentifier($input, $paletteField);
+                $paletteFieldIdentifiers[] = $this->chooseIdentifier($input, $paletteField);
             }
         }
         $input->languagePath->addPathSegment('palettes.' . $rootPalette['identifier']);
         $label = $rootPalette['label'] ?? '';
         $description = $rootPalette['description'] ?? '';
-        $palette = [
-            'label' => $label !== '' ? $label : $input->languagePath->getCurrentPath() . '.label',
-            'description' => $description !== '' ? $description : $input->languagePath->getCurrentPath() . '.description',
-            'showitem' => $paletteShowItems,
-        ];
+        $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';
+        $languagePathDescription = $input->languagePath->getCurrentPath() . '.description';
         $paletteIdentifier = $this->chooseIdentifier($input, $rootPalette);
+        $palette = [
+            'contentBlockName' => $input->contentBlock->getName(),
+            'identifier' => $paletteIdentifier,
+            'label' => $label,
+            'description' => $description,
+            'languagePathLabel' => $languagePathLabel,
+            'languagePathDescription' => $languagePathDescription,
+            'fieldIdentifiers' => $paletteFieldIdentifiers,
+        ];
         $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
         $result->contentType->showItems[] = '--palette--;;' . $paletteIdentifier;
         $input->languagePath->popSegment();

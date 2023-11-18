@@ -126,9 +126,7 @@ class TcaGenerator
             if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
                 $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition);
             }
-            foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
-                $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteDefinition->getTca();
-            }
+            $tca = $this->enrichWithPalettes($tableDefinition, $tca);
             $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $column) {
                 $fieldConfiguration = $column->getFieldConfiguration();
@@ -155,6 +153,27 @@ class TcaGenerator
         }
 
         return $this->tcaPreparation->prepare($tca);
+    }
+
+    protected function enrichWithPalettes(mixed $tableDefinition, array $tca): array
+    {
+        foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
+            $paletteTca = [
+                'showitem' => $paletteDefinition->getShowItem(),
+            ];
+            if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathLabel())) {
+                $paletteTca['label'] = $paletteDefinition->getLanguagePathLabel();
+            } elseif ($paletteDefinition->hasLabel()) {
+                $paletteTca['label'] = $paletteDefinition->getLabel();
+            }
+            if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathDescription())) {
+                $paletteTca['description'] = $paletteDefinition->getLanguagePathDescription();
+            } elseif ($paletteDefinition->hasDescription()) {
+                $paletteTca['description'] = $paletteDefinition->getDescription();
+            }
+            $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteTca;
+        }
+        return $tca;
     }
 
     protected function fillTypeFieldSelectItems(): void

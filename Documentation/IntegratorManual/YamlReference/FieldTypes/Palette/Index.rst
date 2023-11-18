@@ -5,17 +5,30 @@
 Palette
 =======
 
-The `Palette` field is used to group other fields. Grouped fields will be
+The :yaml:`Palette` field is used to group other fields. Grouped fields will be
 displayed next to each other rather than below each other.
 
-Labels.xlf
-==========
+Labels
+======
 
-The naming convention is `palettes.<identifier>`
+XLF translation keys for Sheets have the following convention:
 
-If inside Collections, each Collection needs to be prepended:
+.. code-block:: xml
 
-`<collection1>.<collection2>.palettes.<identifier>`
+    <body>
+        <trans-unit id="palettes.PALETTE_IDENTIFIER.label">
+            <source>Label for Palette</source>
+        </trans-unit>
+        <trans-unit id="palettes.PALETTE_IDENTIFIER.description">
+            <source>Description for Palette</source>
+        </trans-unit>
+        <trans-unit id="COLLECTION_IDENTIFIER.palettes.PALETTE_IDENTIFIER.label">
+            <source>Label for Palette in Collection</source>
+        </trans-unit>
+        <trans-unit id="COLLECTION_IDENTIFIER1.COLLECTION_IDENTIFIER2.palettes.PALETTE_IDENTIFIER.label">
+            <source>Label for Palette in nested Collection</source>
+        </trans-unit>
+    </body>
 
 Examples
 ========
@@ -29,6 +42,8 @@ Minimal
     fields:
       - identifier: palette_1
         type: Palette
+        label: Palette 1
+        description: My palette description
         fields:
           - identifier: number
             type: Number
