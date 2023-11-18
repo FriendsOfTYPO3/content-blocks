@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
@@ -27,6 +29,7 @@ final class ProcessedContentType
     public string $table = '';
     public LoadedContentBlock $contentBlock;
     public array $columns = [];
+    /** @var array<string|PaletteDefinition|TabDefinition> */
     public array $showItems = [];
     public array $overrideColumns = [];
     public string|int $typeName = '';

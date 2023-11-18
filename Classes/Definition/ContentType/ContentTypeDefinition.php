@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 
 /**
@@ -29,7 +31,7 @@ abstract class ContentTypeDefinition
     protected string|int $typeName = '';
     /** @var string[] */
     protected array $columns = [];
-    /** @var string[] */
+    /** @var array<string|PaletteDefinition|TabDefinition> */
     protected array $showItems = [];
     /** @var array<TcaFieldDefinition> */
     protected array $overrideColumns = [];
@@ -66,7 +68,7 @@ abstract class ContentTypeDefinition
     }
 
     /**
-     * @return string[] $columns
+     * @return string[]
      */
     public function getColumns(): array
     {
@@ -74,7 +76,7 @@ abstract class ContentTypeDefinition
     }
 
     /**
-     * @return string[] $columns
+     * @return array<string|PaletteDefinition|TabDefinition>
      */
     public function getShowItems(): array
     {
@@ -141,7 +143,7 @@ abstract class ContentTypeDefinition
     }
 
     /**
-     * @param string[] $showItems
+     * @param array<string|PaletteDefinition|TabDefinition> $showItems
      */
     public function withShowItems(array $showItems): static
     {

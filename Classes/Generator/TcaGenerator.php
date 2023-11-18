@@ -22,6 +22,8 @@ use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
@@ -237,9 +239,10 @@ class TcaGenerator
 
     protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca): array
     {
+        $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
             'previewRenderer' => PreviewRenderer::class,
-            'showitem' => $this->getContentElementStandardShowItem($typeDefinition->getShowItems()),
+            'showitem' => $this->getContentElementStandardShowItem($showItem),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -254,8 +257,9 @@ class TcaGenerator
 
     protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca): array
     {
+        $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
-            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
+            'showitem' => $this->getPageTypeStandardShowItem($showItem),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -266,8 +270,9 @@ class TcaGenerator
 
     protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca, TableDefinition $tableDefinition): array
     {
+        $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
-            'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition),
+            'showitem' => $this->getRecordTypeStandardShowItem($showItem, $tableDefinition),
         ];
         if ($tableDefinition->getTypeField() !== null) {
             $tca[$typeDefinition->getTable()]['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
@@ -279,6 +284,36 @@ class TcaGenerator
         }
         $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
         return $tca;
+    }
+
+    /**
+     * @param array<string|PaletteDefinition|TabDefinition> $showItemInput
+     */
+    protected function processShowItem(array $showItemInput): string
+    {
+        $showItem = [];
+        foreach ($showItemInput as $inputItem) {
+            if ($inputItem instanceof PaletteDefinition) {
+                $showItem[] = '--palette--;;' . $inputItem->getIdentifier();
+            } elseif ($inputItem instanceof TabDefinition) {
+                $tab = '--div--;';
+                $languagePathLabel = $inputItem->getLanguagePathLabel();
+                if ($this->languageFileRegistry->isset($inputItem->getContentBlockName(), $languagePathLabel)) {
+                    $tab .= $languagePathLabel;
+                } else {
+                    if ($inputItem->hasLabel()) {
+                        $tab .= $inputItem->getLabel();
+                    } else {
+                        $tab .= $inputItem->getIdentifier();
+                    }
+                }
+                $showItem[] = $tab;
+            } else {
+                $showItem[] = $inputItem;
+            }
+        }
+        $showItemString = implode(',', $showItem);
+        return $showItemString;
     }
 
     protected function getColumnsOverrides(ContentTypeInterface $typeDefinition): array
@@ -498,12 +533,12 @@ class TcaGenerator
         return $labelField->getUniqueIdentifier();
     }
 
-    protected function getContentElementStandardShowItem(array $showItems): string
+    protected function getContentElementStandardShowItem(string $showItem): string
     {
         $parts = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
             '--palette--;;general',
-            implode(',', $showItems),
+            $showItem,
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
             '--palette--;;language',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
@@ -516,10 +551,10 @@ class TcaGenerator
         return implode(',', $parts);
     }
 
-    protected function getRecordTypeStandardShowItem(array $showItems, TableDefinition $tableDefinition): string
+    protected function getRecordTypeStandardShowItem(string $showItem, TableDefinition $tableDefinition): string
     {
         $capability = $tableDefinition->getCapability();
-        $parts[] = implode(',', $showItems);
+        $parts[] = $showItem;
         if ($capability->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
             $parts[] = '--palette--;;language';
@@ -537,7 +572,7 @@ class TcaGenerator
         return $showItem;
     }
 
-    protected function getPageTypeStandardShowItem(array $showItems): string
+    protected function getPageTypeStandardShowItem(string $showItem): string
     {
         $general = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
@@ -583,7 +618,9 @@ class TcaGenerator
         ];
 
         $parts[] = $general;
-        $parts[] = $showItems;
+        if ($showItem !== '') {
+            $parts[] = [$showItem];
+        }
         $parts[] = $metaTab;
         if ($this->systemExtensionAvailability->isAvailable('seo')) {
             $parts[] = $seoTab;

@@ -1157,7 +1157,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => 't3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,t3ce_example_internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
+                            'showitem' => 't3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.internal_description_tab,t3ce_example_internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
                         ],
                     ],
                     'palettes' => [

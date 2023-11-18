@@ -29,6 +29,8 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
@@ -261,19 +263,28 @@ final class TableDefinitionCollectionFactory
             'fieldIdentifiers' => $paletteFieldIdentifiers,
         ];
         $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
-        $result->contentType->showItems[] = '--palette--;;' . $paletteIdentifier;
+        $result->contentType->showItems[] = PaletteDefinition::createFromArray($palette);
         $input->languagePath->popSegment();
         return $fields;
     }
 
     private function handleTab(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
     {
-        $this->assertUniqueTabIdentifier($field['identifier'], $result, $input->contentBlock);
-        $result->uniqueTabIdentifiers[] = $field['identifier'];
-        $input->languagePath->addPathSegment('tabs.' . $field['identifier']);
-        $label = ($field['label'] ?? '') !== '' ? $field['label'] : $input->languagePath->getCurrentPath();
-        $result->contentType->showItems[] = '--div--;' . $label;
+        $identifier = $field['identifier'];
+        $this->assertUniqueTabIdentifier($identifier, $result, $input->contentBlock);
+        $result->uniqueTabIdentifiers[] = $identifier;
+        $label = $field['label'] ?? '';
+        $input->languagePath->addPathSegment('tabs.' . $identifier);
+        $languagePathLabel = $input->languagePath->getCurrentPath();
         $input->languagePath->popSegment();
+        $tabDefinitionArray = [
+            'identifier' => $identifier,
+            'contentBlockName' => $input->contentBlock->getName(),
+            'label' => $label,
+            'languagePathLabel' => $languagePathLabel,
+        ];
+        $tabDefinition = TabDefinition::createFromArray($tabDefinitionArray);
+        $result->contentType->showItems[] = $tabDefinition;
         return [];
     }
 
