@@ -5,14 +5,20 @@
 FlexForm
 ========
 
-The `FlexForm` field allows to group multiple fields into one database column.
-It is mostly used to store configuration options, rather than actual content.
-By using FlexForm it is possible to conserve the database, but it also has its
-limitations. For example nesting of Collections is disallowed.
+:php:`type => 'flex'`
+:yaml:`alternativeSql: false`
 
-It corresponds with the TCA :php:`type => 'flex'`.
+The :yaml:`FlexForm` field allows you to group multiple fields into one database
+column. It is mostly used to store configuration options, rather than actual
+content. By using FlexForm it is possible to conserve the database, but it also
+has its limitations. For example nesting of Collections is disallowed.
 
-SQL overrides via `alternativeSql` allowed: no.
+.. toctree::
+    :maxdepth: 1
+    :titlesonly:
+
+    Sheet/Index
+    Section/Index
 
 Settings
 ========
@@ -22,136 +28,16 @@ Settings
    :Required: true
    :Type: array
 
-   Similar to `Collections` you define the fields to be used inside the FlexForm
-   definition.
+   Fields to be used inside the FlexForm definition.
 
-Sheets
-======
+Sheets, Sections and Containers
+===============================
 
-Sheets are used to further group FlexForm fields into separate tabs. This is
-done by defining the type :yaml:`Sheet`, which itself can hold further
-:yaml:`fields`. It is mandatory to define an :yaml:`identifier` for the Sheet.
-See the advanced example on how to use it. Note that you need at
-least 2 Sheets for a tab navigation to appear in the backend. This is purely
-cosmetical and, like Palettes and Tabs, has no effect on Frontend rendering.
+FlexForm provides a way to organize your fields in **Sheets**. Sheets create a
+tab navigation in the editing interface. Learn more about :ref:`Sheets <field_type_flexform_sheet>`.
 
-..  warning::
-    Due to the fact that FlexForm is stored as XML in the database, changing the
-    Sheet identifiers (or moving fields into other Sheets) retrospectively is
-    destructive. You will lose your data.
-
-Labels
-------
-
-You can set a :yaml:`label`, :yaml:`description` and :yaml:`linkTitle` for the
-sheet either directly in the YAML config or via XLF translation keys. The link
-title is displayed when hovering over the tab.
-
-XLF translation keys for Sheets have the following convention:
-
-.. code-block:: xml
-
-    <body>
-        <trans-unit id="FIELD_IDENTIFIER.sheets.SHEET_IDENTIFIER.label">
-            <source>Label for Sheet</source>
-        </trans-unit>
-        <trans-unit id="FIELD_IDENTIFIER.sheets.SHEET_IDENTIFIER.description">
-            <source>Description for Sheet</source>
-        </trans-unit>
-        <trans-unit id="FIELD_IDENTIFIER.sheets.SHEET_IDENTIFIER.linkTitle">
-            <source>Link title for Sheet</source>
-        </trans-unit>
-    </body>
-
-Sections
-========
-
-:yaml:`type: Section`
-
-Sections are like Collections for FlexForm. The difference is, that you can't
-reference foreign types. Instead you define anonymous structures, which are only
-available for this specific FlexForm field.
-
-A Section requires you to define at least one :yaml:`Container`, which holds
-the available fields. You can have multiple Containers with different fields. If
-you define more than one Container, the editing interface will display multiple
-buttons to choose from.
-
-Settings
---------
-
-.. confval:: identifier
-
-   :Required: true
-   :Type: string
-
-   A unique identifier
-
-.. confval:: label
-
-   :Required: false
-   :Type: string
-
-   Define a label. If not defined, :yaml:`identifier` is used as fallback.
-
-.. confval:: container
-
-   :Required: true
-   :Type: array
-
-   Define one or more Containers with fields.
-
-   identifier
-      A unique identifier
-
-   label
-      Define a label. If not defined, :yaml:`identifier` is used as fallback.
-
-   fields
-      Define available fields. These field types are prohibited: :yaml:`FlexForm`, :yaml:`File`, :yaml:`Collection`.
-
-Example:
-
-.. code-block:: yaml
-
-  - identifier: pi_flexform
-    useExistingField: true
-    fields:
-      - identifier: section1
-        type: Section
-        label: Section 1
-        container:
-          - identifier: container1
-            label: Container 1
-            fields:
-              - identifier: container_field
-                type: Text
-                label: Container field
-          - identifier: container2
-            label: Container 2
-            fields:
-              - identifier: container_field2
-                type: Textarea
-                label: Container field 2
-
-Labels
-------
-
-XLF translation keys for Sections and Containers have the following convention:
-
-.. code-block:: xml
-
-    <body>
-        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.label">
-            <source>Label for Section</source>
-        </trans-unit>
-        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.label">
-            <source>Label for Container</source>
-        </trans-unit>
-        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.FIELD_IDENTIFIER.label">
-            <source>Label for field in Container</source>
-        </trans-unit>
-    </body>
+An alternative way of defining repeating content are **Sections**. Sections can
+have multiple **Containers**. Learn more about :ref:`Sections <field_type_flexform_section>`.
 
 Examples
 ========
@@ -193,6 +79,7 @@ With Sheets
                 type: Checkbox
           - identifier: sheet2
             type: Sheet
+            label: Sheet 2
             fields:
               - identifier: link
                 type: Link
