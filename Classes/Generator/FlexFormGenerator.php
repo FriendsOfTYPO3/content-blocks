@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
+use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
@@ -41,7 +42,7 @@ class FlexFormGenerator
                 'el' => $sheet,
             ];
             if (!$flexFormDefinition->hasDefaultSheet()) {
-                $root = $this->resolveLabels($flexFormDefinition, $sheetDefinition, $root);
+                $root = $this->enrichSheetLabels($flexFormDefinition, $sheetDefinition, $root);
             }
             $sheets[$sheetDefinition->getIdentifier()] = [
                 'ROOT' => $root,
@@ -67,15 +68,17 @@ class FlexFormGenerator
 
     protected function processSection(SectionDefinition $sectionDefinition, FlexFormDefinition $flexFormDefinition): array
     {
+        $sectionTitle = $this->resolveLabel($flexFormDefinition, $sectionDefinition);
         $result = [
-            'title' => $sectionDefinition->getLabelPath(),
+            'title' => $sectionTitle,
             'type' => 'array',
             'section' => 1,
         ];
         $processedContainers = [];
         foreach ($sectionDefinition as $container) {
+            $containerTitle = $this->resolveLabel($flexFormDefinition, $container);
             $containerResult = [
-                'title' => $container->getLabelPath(),
+                'title' => $containerTitle,
                 'type' => 'array',
             ];
             $processedContainerFields = [];
@@ -117,17 +120,9 @@ class FlexFormGenerator
         return $flexFormTca;
     }
 
-    protected function resolveLabels(FlexFormDefinition $flexFormDefinition, SheetDefinition $sheetDefinition, array $root): array
+    protected function enrichSheetLabels(FlexFormDefinition $flexFormDefinition, SheetDefinition $sheetDefinition, array $root): array
     {
-        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $sheetDefinition->getLanguagePathLabel())) {
-            $root['sheetTitle'] = $sheetDefinition->getLanguagePathLabel();
-        } else {
-            if ($sheetDefinition->hasLabel()) {
-                $root['sheetTitle'] = $sheetDefinition->getLabel();
-            } else {
-                $root['sheetTitle'] = $sheetDefinition->getIdentifier();
-            }
-        }
+        $root['sheetTitle'] = $this->resolveLabel($flexFormDefinition, $sheetDefinition);
         if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $sheetDefinition->getLanguagePathDescription())) {
             $root['sheetDescription'] = $sheetDefinition->getLanguagePathDescription();
         } elseif ($sheetDefinition->hasDescription()) {
@@ -139,5 +134,19 @@ class FlexFormGenerator
             $root['sheetShortDescr'] = $sheetDefinition->getLinkTitle();
         }
         return $root;
+    }
+
+    protected function resolveLabel(FlexFormDefinition $flexFormDefinition, SheetDefinition|SectionDefinition|ContainerDefinition $definition): string
+    {
+        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $definition->getLanguagePathLabel())) {
+            $label = $definition->getLanguagePathLabel();
+        } else {
+            if ($definition->hasLabel()) {
+                $label = $definition->getLabel();
+            } else {
+                $label = $definition->getIdentifier();
+            }
+        }
+        return $label;
     }
 }

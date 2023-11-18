@@ -27,7 +27,8 @@ final class ContainerDefinition implements \IteratorAggregate
     private string $identifier = '';
     /** @var TcaFieldDefinition[] */
     private array $fields = [];
-    private string $labelPath;
+    private string $languagePathLabel = '';
+    private string $label = '';
 
     /**
      * @return \Iterator<TcaFieldDefinition>
@@ -42,14 +43,14 @@ final class ContainerDefinition implements \IteratorAggregate
         $this->fields[] = $field;
     }
 
-    public function getLabelPath(): string
+    public function getLanguagePathLabel(): string
     {
-        return $this->labelPath;
+        return $this->languagePathLabel;
     }
 
-    public function setLabelPath(string $labelPath): void
+    public function setLanguagePathLabel(string $languagePathLabel): void
     {
-        $this->labelPath = $labelPath;
+        $this->languagePathLabel = $languagePathLabel;
     }
 
     public function getIdentifier(): string
@@ -60,5 +61,20 @@ final class ContainerDefinition implements \IteratorAggregate
     public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function hasLabel(): bool
+    {
+        return $this->label !== '';
+    }
+
+    public function setLabel(string $label): void
+    {
+        $this->label = $label;
     }
 }

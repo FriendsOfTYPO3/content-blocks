@@ -66,25 +66,92 @@ XLF translation keys for Sheets have the following convention:
 Sections
 ========
 
+:yaml:`type: Section`
+
 Sections are like Collections for FlexForm. The difference is, that you can't
 reference foreign types. Instead you define anonymous structures, which are only
-available for this specific FlexForm field. They also require you to set the
-type :yaml:`Section` and a unique :yaml:`identifier`. Inside a Section, you
-define the key :yaml:`container`, which contains a list of containers. It is
-required to have at least one container. A container has two required keys:
-again :yaml:`identifier` and :yaml:`fields`. A type must not be set, as it is
-the only allowed type inside sections. **Not** allowed types inside container
-are: :yaml:`FlexForm`, :yaml:`File`, :yaml:`Collection`, :yaml:`Sheet` and
-:yaml:`Section`.
+available for this specific FlexForm field.
+
+A Section requires you to define at least one :yaml:`Container`, which holds
+the available fields. You can have multiple Containers with different fields. If
+you define more than one Container, the editing interface will display multiple
+buttons to choose from.
+
+Settings
+--------
+
+.. confval:: identifier
+
+   :Required: true
+   :Type: string
+
+   A unique identifier
+
+.. confval:: label
+
+   :Required: false
+   :Type: string
+
+   Define a label. If not defined, :yaml:`identifier` is used as fallback.
+
+.. confval:: container
+
+   :Required: true
+   :Type: array
+
+   Define one or more Containers with fields.
+
+   identifier
+      A unique identifier
+
+   label
+      Define a label. If not defined, :yaml:`identifier` is used as fallback.
+
+   fields
+      Define available fields. These field types are prohibited: :yaml:`FlexForm`, :yaml:`File`, :yaml:`Collection`.
+
+Example:
+
+.. code-block:: yaml
+
+  - identifier: pi_flexform
+    useExistingField: true
+    fields:
+      - identifier: section1
+        type: Section
+        label: Section 1
+        container:
+          - identifier: container1
+            label: Container 1
+            fields:
+              - identifier: container_field
+                type: Text
+                label: Container field
+          - identifier: container2
+            label: Container 2
+            fields:
+              - identifier: container_field2
+                type: Textarea
+                label: Container field 2
 
 Labels
 ------
 
-Labels for Sections, Container and fields inside Container have the following convention:
+XLF translation keys for Sections and Containers have the following convention:
 
-*  `<FlexFormIdentifier>.sections.<sectionIdentifier>.label`
-*  `<FlexFormIdentifier>.sections.<sectionIdentifier>.container.<containerIdentifier>.label`
-*  `<FlexFormIdentifier>.sections.<sectionIdentifier>.container.<containerIdentifier><fieldIdentifier>.label`
+.. code-block:: xml
+
+    <body>
+        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.label">
+            <source>Label for Section</source>
+        </trans-unit>
+        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.label">
+            <source>Label for Container</source>
+        </trans-unit>
+        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.FIELD_IDENTIFIER.label">
+            <source>Label for field in Container</source>
+        </trans-unit>
+    </body>
 
 Examples
 ========
@@ -138,8 +205,8 @@ With Sheets
                   - label: Option2 2
                     value: 1
 
-With Sections and Container
----------------------------
+With Sections and Containers
+----------------------------
 
 .. code-block:: yaml
 
@@ -147,25 +214,31 @@ With Sections and Container
     fields:
       - identifier: pi_flexform
         useExistingField: true
+        label: My FlexForm field
         fields:
           - type: Sheet
             identifier: sheet1
+            label: Sheet 1
             fields:
               - identifier: link1
                 type: Link
               - identifier: section1
                 type: Section
+                label: Section 1
                 container:
                   - identifier: container1
+                    label: Container 1
                     fields:
                       - identifier: container_field
                         type: Text
                   - identifier: container2
+                    label: Container 2
                     fields:
                       - identifier: container_field2
                         type: Textarea
           - type: Sheet
             identifier: sheet2
+            label: Sheet 2
             fields:
               - identifier: header2
                 type: Text

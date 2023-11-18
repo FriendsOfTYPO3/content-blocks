@@ -340,13 +340,15 @@ final class TableDefinitionCollectionFactory
         $sectionDefinition->setIdentifier($section['identifier']);
         $languagePath->addPathSegment('sections.' . $sectionDefinition->getIdentifier());
         $sectionTitle = $languagePath->getCurrentPath() . '.title';
-        $sectionDefinition->setLabelPath($sectionTitle);
+        $sectionDefinition->setLanguagePathLabel($sectionTitle);
+        $sectionDefinition->setLabel($section['label'] ?? '');
         foreach ($section['container'] as $container) {
             $containerDefinition = new ContainerDefinition();
             $containerDefinition->setIdentifier($container['identifier']);
             $languagePath->addPathSegment('container.' . $containerDefinition->getIdentifier());
             $containerTitle = $languagePath->getCurrentPath() . '.title';
-            $containerDefinition->setLabelPath($containerTitle);
+            $containerDefinition->setLanguagePathLabel($containerTitle);
+            $containerDefinition->setLabel($container['label'] ?? '');
             foreach ($container['fields'] as $containerField) {
                 $containerDefinition->addField($this->resolveFlexFormField($languagePath, $containerField));
             }
