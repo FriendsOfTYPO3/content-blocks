@@ -5,13 +5,13 @@
 	"homepage": "https://typo3.org",
 	"license": ["GPL-2.0-or-later"],
 	"authors": [{
-		"name": "TYPO3 Core Team",
+		"name": "TYPO3 CMS Content Types Team",
 		"email": "typo3cms@typo3.org",
 		"role": "Developer"
 	}],
 	"support": {
 		"chat": "https://typo3.org/help",
-		"docs": "https://docs.typo3.org/c/typo3/cms-content-blocks/main/en-us/",
+		"docs": "https://docs.typo3.org/p/contentblocks/content-blocks/main/en-us/",
 		"issues": "https://forge.typo3.org",
 		"source": "https://github.com/typo3/typo3"
 	},
