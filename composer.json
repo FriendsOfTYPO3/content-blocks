@@ -5,7 +5,7 @@
 	"homepage": "https://typo3.org",
 	"license": ["GPL-2.0-or-later"],
 	"authors": [{
-		"name": "TYPO3 CMS Content Types Team",
+		"name": "TYPO3 Content Types Team",
 		"email": "typo3cms@typo3.org",
 		"role": "Developer"
 	}],
