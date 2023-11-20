@@ -1153,11 +1153,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'prependAtCopy' => 'banana',
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
-                        'searchFields' => 't3ce_example_text,t3ce_example_text2,t3ce_example_internal_description',
+                        'searchFields' => 't3ce_example_text,t3ce_example_text2,internal_description',
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => 't3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.internal_description_tab,t3ce_example_internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
+                            'showitem' => 't3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.internal_description_tab,internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1222,7 +1222,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'input',
                             ],
                         ],
-                        't3ce_example_internal_description' => [
+                        'internal_description' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.description',
