@@ -211,6 +211,7 @@ final class TableDefinitionCollectionFactory
         $internalDescription = [
             'identifier' => 'internal_description',
             'type' => 'Textarea',
+            'prefixField' => false,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
             'rows' => 5,
             'cols' => 30,
