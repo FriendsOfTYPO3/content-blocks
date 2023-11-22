@@ -20,7 +20,7 @@ stored in a dedicated cache. Content Blocks is not there (and not able) to
 replace the current system, but adds another abstraction layer to a complicated
 API.
 
-For more insights about what Content Blocks replaces, read :ref:`this article <core-content-types>`.
+For more insights about what Content Blocks replaces, read :ref:`this appendix <core-content-types>`.
 
 Structure
 =========
@@ -51,6 +51,8 @@ The `Assets` folder can be compared with the `Resources/Public` folder and the
 automatically for the Content Type icon. Only Content Elements can have a
 `EditorPreview.html` and `Frontend.html` file. The backend translations are put
 inside `Source/Language/Labels.xlf`.
+
+Learn more a
 
 EditorInterface.yaml
 ^^^^^^^^^^^^^^^^^^^^
@@ -108,11 +110,3 @@ For frontend translations Content Blocks also provides its own translation
 ViewHelper. This can be seen as a simplified :html:`f:translate` ViewHelper.
 The only required argument is :html:`key`. The ViewHelper will automatically
 resolve the path to the `Labels.xlf` file of the current Content Block.
-
-**Further reading**
-
-..  toctree::
-    :maxdepth: 1
-    :titlesonly:
-
-    CoreContentTypes/Index

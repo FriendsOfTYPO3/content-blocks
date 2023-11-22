@@ -116,10 +116,15 @@ use content types as sub-resources inside extensions.
 
     Introduction/Index
     Installation/Index
-    IntegratorManual/Index
+    ContentBlockDefinition/Index
+    Registration/Index
+    ContentBlockSkeleton/Index
+    YamlReference/Index
+    Templating/Index
+    ReuseExistingFields/Index
     FAQ/Index
     KnownProblems/Index
-    History/Index
+    Appendix/Index
 
 ..  Meta Menu
 

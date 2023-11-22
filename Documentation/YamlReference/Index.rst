@@ -5,7 +5,7 @@
 Editing interface (YAML reference)
 ==================================
 
-The heart of a content block is the `EditorInterface.yaml` file. Here you can
+The heart of a Content Block is the `EditorInterface.yaml` file. Here you can
 find all possible configuration options. There are slight differences, whether
 you are dealing with :ref:`Content Elements <yaml_reference_content_element>`,
 :ref:`Page Types <yaml_reference_page_types>` or
@@ -33,6 +33,7 @@ Full examples can be found in the examples repository: https://github.com/TYPO3-
    ContentTypes/PageTypes/Index
    ContentTypes/RecordTypes/Index
    FieldTypes/Index
+   Basics/Index
 
 Common root options
 ===================
