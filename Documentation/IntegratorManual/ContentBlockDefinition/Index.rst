@@ -51,8 +51,8 @@ See :ref:`yaml_reference`.
 A field is localize-able by default. Setting the localization explicitly is
 only necessary, if a special localization method is required.
 
-Icon.(svg|png|gif)
-------------------
+Assets/Icon.(svg|png|gif)
+-------------------------
 
 This is the icon for the Content Block. There is a fallback to a default icon,
 but it is recommended to replace it with your own, custom icon. You can find
@@ -70,28 +70,40 @@ Source/Language/Labels.xlf
 **You may**
 
 *  provide that file
-*  define your labels with the XLF links in the configuration file
+*  define your labels with the XLF paths in the configuration file
 
 Labels for the editing interface, as well as frontend labels, are stored in the
 `Source/Language/Labels.xlf` (translated files will be e.g. `de.Labels.xlf`).
 
-It is recommended to apply the :ref:`coding guidelines for labels <t3coreapi:xliff>`
-to your Content Blocks as well. E.g. for backend labels that would be:
-`<content-block-identifier>.<field-identifier>.title`
+It is recommended to apply the :ref:`coding guidelines for the XLIFF Format <t3coreapi:xliff>`.
 
-Labels and descriptions for the backend and the editing interface will get automatically
-registered by convention. See the following examples how this works:
+Labels and descriptions for the backend preview and the editing interface will
+be automatically registered by a convention. See the following examples on how
+this works:
 
-The title and description in the backend, e.g. in the newContentElementWizard:
-`<content-block-vendor>.<content-block-package-name>.title` and
-`<content-block-vendor>.<content-block-package-name>.description`
+.. code-block:: xml
 
-Example for a label of a field:
-`<field-identifier>.label`
+    <?xml version="1.0"?>
+    <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file datatype="plaintext" original="Labels.xlf" source-language="en" product-name="example">
+            <header/>
+            <body>
+                <trans-unit id="title" resname="title">
+                    <source>This is the backend title</source>
+                </trans-unit>
+                <trans-unit id="description" resname="description">
+                    <source>This is the backend description</source>
+                </trans-unit>
+                <trans-unit id="FIELD_IDENTIFIER.label" resname="FIELD_IDENTIFIER.label">
+                    <source>This is the backend label for FIELD_IDENTIFIER</source>
+                </trans-unit>
+                <trans-unit id="COLLECTION_IDENTIFIER.FIELD_IDENTIFIER.label" resname="COLLECTION_IDENTIFIER.FIELD_IDENTIFIER.label">
+                    <source>This is the backend label for FIELD_IDENTIFIER in Collection COLLECTION_IDENTIFIER</source>
+                </trans-unit>
+            </body>
+        </file>
+    </xliff>
 
-Example for a description of a field:
-`<field-identifier>.description`
-
-This goes analogously for collection fields, in this case the field identifier
-of the collection field is used as a prefix:
-`<collection-field-identifier>.<field-identifier>.label`
+There are more conventions for special field types like
+:ref:`Palettes <field_type_palette>` and :ref:`Tabs <field_type_tab>`. See the
+respective documentation for more insights.
