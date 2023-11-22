@@ -174,7 +174,7 @@ class ContentBlockLoader implements LoaderInterface
 
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
-        $contentBlockIcon = ContentTypeIconResolver::resolve($name, $absolutePath, $extPath, $iconIdentifier);
+        $contentBlockIcon = ContentTypeIconResolver::resolve($name, $absolutePath, $extPath, $iconIdentifier, $contentType);
 
         return new LoadedContentBlock(
             name: $name,

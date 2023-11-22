@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -95,10 +96,10 @@ class ContentBlockSkeletonBuilder
                 '/* Created by Content Block skeleton builder */'
             );
         }
-        copy(
-            GeneralUtility::getFileAbsFileName('EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg'),
-            $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg'
-        );
+        $defaultIcon = ContentTypeIconResolver::getDefaultContentTypeIcon($contentType);
+        $absoluteDefaultIconPath = GeneralUtility::getFileAbsFileName($defaultIcon);
+        $contentBlockIconPath = $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg';
+        copy($absoluteDefaultIconPath, $contentBlockIconPath);
     }
 
     protected function getXliffMarkupForContentElement(string $vendor, string $name, string $date): string

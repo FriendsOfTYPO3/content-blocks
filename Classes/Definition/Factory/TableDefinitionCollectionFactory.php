@@ -562,7 +562,8 @@ final class TableDefinitionCollectionFactory
                 $contentType->contentBlock->getName(),
                 $absolutePath,
                 $contentType->contentBlock->getPath(),
-                $input->yaml['identifier']
+                $input->yaml['identifier'],
+                $contentType->contentBlock->getContentType(),
             );
         }
         $element['typeIconPath'] = $contentTypeIcon->iconPath;

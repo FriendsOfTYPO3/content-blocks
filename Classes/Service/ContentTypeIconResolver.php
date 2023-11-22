@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Service;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Core\Environment;
@@ -28,7 +29,7 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
  */
 class ContentTypeIconResolver
 {
-    public static function resolve(string $name, string $absolutePath, string $extPath, string $identifier): ContentTypeIcon
+    public static function resolve(string $name, string $absolutePath, string $extPath, string $identifier, ContentType $contentType): ContentTypeIcon
     {
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
             $iconPathWithoutFileExtension = ContentBlockPathUtility::getPublicFolder() . '/' . $identifier;
@@ -50,8 +51,18 @@ class ContentTypeIconResolver
             return $contentTypeIcon;
         }
         $contentTypeIcon = new ContentTypeIcon();
-        $contentTypeIcon->iconPath = 'EXT:content_blocks/Resources/Public/Icons/DefaultIcon.svg';
+        $contentTypeIcon->iconPath = self::getDefaultContentTypeIcon($contentType);
         $contentTypeIcon->iconProvider = SvgIconProvider::class;
         return $contentTypeIcon;
+    }
+
+    public static function getDefaultContentTypeIcon(ContentType $contentType): string
+    {
+        $iconPath = match ($contentType) {
+            ContentType::CONTENT_ELEMENT => 'EXT:content_blocks/Resources/Public/Icons/DefaultContentElementIcon.svg',
+            ContentType::PAGE_TYPE => 'EXT:content_blocks/Resources/Public/Icons/DefaultPageTypeIcon.svg',
+            ContentType::RECORD_TYPE => 'EXT:content_blocks/Resources/Public/Icons/DefaultRecordTypeIcon.svg',
+        };
+        return $iconPath;
     }
 }
