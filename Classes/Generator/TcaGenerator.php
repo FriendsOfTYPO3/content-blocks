@@ -203,7 +203,7 @@ class TcaGenerator
                     ContentType::RECORD_TYPE => '',
                 };
                 $label = $this->typeDefinitionLabelService->getLLLPathForTitle($typeDefinition);
-                $key = $this->typeDefinitionLabelService->buildTitleKey($typeDefinition);
+                $key = $this->typeDefinitionLabelService->getTitleKey();
                 if (!$this->languageFileRegistry->isset($typeDefinition->getName(), $key)) {
                     $label = $typeDefinition->getName();
                 }
@@ -670,7 +670,7 @@ class TcaGenerator
         // @todo vendor and name are inherited from it.
         // @todo The correct title should be the according field label. This information is not available here, though.
         $title = $this->typeDefinitionLabelService->getLLLPathForTitle($defaultTypeDefinition);
-        $key = $this->typeDefinitionLabelService->buildTitleKey($defaultTypeDefinition);
+        $key = $this->typeDefinitionLabelService->getTitleKey();
         if (!$this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $key)) {
             $title = $defaultTypeDefinition->getName();
         }

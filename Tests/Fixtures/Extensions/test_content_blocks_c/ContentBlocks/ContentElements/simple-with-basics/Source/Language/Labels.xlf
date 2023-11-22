@@ -3,10 +3,10 @@
 	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
 		<header/>
 		<body>
-			<trans-unit id="simple.simple.title" xml:space="preserve">
+			<trans-unit id="title" xml:space="preserve">
 				<source>Simple Content Block</source>
 			</trans-unit>
-			<trans-unit id="simple.simple.description" xml:space="preserve">
+			<trans-unit id="description" xml:space="preserve">
 				<source>Simple Content Block description</source>
 			</trans-unit>
 		</body>

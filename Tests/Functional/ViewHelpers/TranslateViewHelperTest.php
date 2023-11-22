@@ -57,7 +57,7 @@ final class TranslateViewHelperTest extends FunctionalTestCase
                 'myDefault',
             ],
             'key and name given' => [
-                '<cb:translate key="typo3tests.content-element-b.title" name="typo3tests/content-element-b" />',
+                '<cb:translate key="title" name="typo3tests/content-element-b" />',
                 'Content Block title',
             ],
         ];

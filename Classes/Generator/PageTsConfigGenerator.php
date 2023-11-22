@@ -48,7 +48,7 @@ class PageTsConfigGenerator
     protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
         $title = $this->typeDefinitionLabelService->getLLLPathForTitle($contentElementDefinition);
-        $key = $this->typeDefinitionLabelService->buildTitleKey($contentElementDefinition);
+        $key = $this->typeDefinitionLabelService->getTitleKey();
         if (!$this->languageFileRegistry->isset($contentElementDefinition->getName(), $key)) {
             $title = $contentElementDefinition->getName();
         }

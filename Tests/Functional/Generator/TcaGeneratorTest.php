@@ -167,7 +167,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         self::assertSame(
             [
                 [
-                    'label' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:content-blocks.record1.title',
+                    'label' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:title',
                     'value' => 'record1',
                     'icon' => 'custom_record-record1-3efdfd2',
                     'group' => '',

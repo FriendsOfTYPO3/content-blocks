@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -29,7 +30,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ContentBlockSkeletonBuilder
 {
     public function __construct(
-        protected HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
+        protected readonly HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
+        protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
     ) {}
 
     /**
@@ -101,19 +103,21 @@ class ContentBlockSkeletonBuilder
 
     protected function getXliffMarkupForContentElement(string $vendor, string $name, string $date): string
     {
+        $titleKey = $this->typeDefinitionLabelService->getTitleKey();
+        $descriptionKey = $this->typeDefinitionLabelService->getDescriptionKey();
         $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
 		<header/>
 		<body>
-			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
-				<source>Content Block: $name</source>
+			<trans-unit id="$titleKey" resname="$titleKey">
+				<source>Content Element: $vendor/$name</source>
 			</trans-unit>
-			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
-				<source>This is your content block description</source>
+			<trans-unit id="$descriptionKey" resname="$descriptionKey">
+				<source>This is your Content Element description</source>
 			</trans-unit>
-			<trans-unit id="header.label" resname="title.label">
+			<trans-unit id="header.label" resname="header.label">
 				<source>Custom header title</source>
 			</trans-unit>
 		</body>
@@ -126,20 +130,19 @@ HEREDOC;
 
     protected function getXliffMarkupForPageType(string $vendor, string $name, string $date): string
     {
+        $titleKey = $this->typeDefinitionLabelService->getTitleKey();
+        $descriptionKey = $this->typeDefinitionLabelService->getDescriptionKey();
         $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
 		<header/>
 		<body>
-			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
-				<source>Content Block: $name</source>
+			<trans-unit id="$titleKey" resname="$titleKey">
+				<source>Page Type: $vendor/$name</source>
 			</trans-unit>
-			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
-				<source>This is your content block description</source>
-			</trans-unit>
-			<trans-unit id="title.label" resname="title.label">
-				<source>Custom title</source>
+			<trans-unit id="$descriptionKey" resname="$descriptionKey">
+				<source>This is your Page Type description</source>
 			</trans-unit>
 		</body>
 	</file>
@@ -151,17 +154,22 @@ HEREDOC;
 
     protected function getXliffMarkupForRecordType(string $vendor, string $name, string $date): string
     {
+        $titleKey = $this->typeDefinitionLabelService->getTitleKey();
+        $descriptionKey = $this->typeDefinitionLabelService->getDescriptionKey();
         $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$name">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
 		<header/>
 		<body>
-			<trans-unit id="$vendor.$name.title" resname="$vendor.$name.title">
-				<source>Content Block: $name</source>
+			<trans-unit id="$titleKey" resname="$titleKey">
+				<source>Record Type: $vendor/$name</source>
 			</trans-unit>
-			<trans-unit id="$vendor.$name.description" resname="$vendor.$name.description">
-				<source>This is your content block description</source>
+			<trans-unit id="$descriptionKey" resname="$descriptionKey">
+				<source>This is your Record Type description</source>
+			</trans-unit>
+			<trans-unit id="title.label" resname="title.label">
+				<source>Custom title</source>
 			</trans-unit>
 		</body>
 	</file>

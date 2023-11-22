@@ -489,7 +489,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
                         'label' => 'text2',
                         'label_alt' => 'text',
                         'sortby' => 'sorting',
@@ -706,7 +706,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection2' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -922,7 +922,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:title',
                         'label' => 't3ce_example_text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1130,7 +1130,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
                         'label' => 't3ce_example_text',
                         'label_alt' => 't3ce_example_text2',
                         'label_alt_force' => true,
@@ -1290,7 +1290,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
                         'label' => 't3ce_example_text',
                         'label_alt' => 't3ce_example_text2',
                         'default_sortby' => 't3ce_example_text DESC,t3ce_example_text2 ASC',
@@ -1432,7 +1432,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'foobar' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1740,7 +1740,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:t3ce.example.title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',

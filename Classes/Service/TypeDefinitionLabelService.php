@@ -30,30 +30,14 @@ class TypeDefinitionLabelService
 
     public function getLLLPathForTitle(ContentTypeInterface $typeDefinition): string
     {
-        $label = $this->getBasePath($typeDefinition) . ':' . $this->buildTitleKey($typeDefinition);
+        $label = $this->getBasePath($typeDefinition) . ':' . $this->getTitleKey();
         return $label;
     }
 
     public function getLLLPathForDescription(ContentTypeInterface $typeDefinition): string
     {
-        $label = $this->getBasePath($typeDefinition) . ':' . $this->buildDescriptionKey($typeDefinition);
+        $label = $this->getBasePath($typeDefinition) . ':' . $this->getDescriptionKey();
         return $label;
-    }
-
-    public function buildTitleKey(ContentTypeInterface $typeDefinition): string
-    {
-        $vendor = $typeDefinition->getVendor();
-        $package = $typeDefinition->getPackage();
-        $key = $vendor . '.' . $package . '.title';
-        return $key;
-    }
-
-    public function buildDescriptionKey(ContentTypeInterface $typeDefinition): string
-    {
-        $vendor = $typeDefinition->getVendor();
-        $package = $typeDefinition->getPackage();
-        $key = $vendor . '.' . $package . '.description';
-        return $key;
     }
 
     public function getBasePath(ContentTypeInterface $typeDefinition): string
@@ -62,5 +46,15 @@ class TypeDefinitionLabelService
         $languageFilePath = ContentBlockPathUtility::getLanguageFilePath();
         $basePath = 'LLL:' . $contentBlockPath . '/' . $languageFilePath;
         return $basePath;
+    }
+
+    public function getTitleKey(): string
+    {
+        return 'title';
+    }
+
+    public function getDescriptionKey(): string
+    {
+        return 'description';
     }
 }
