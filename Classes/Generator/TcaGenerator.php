@@ -33,11 +33,9 @@ use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
 use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
-use TYPO3\CMS\Core\Preparations\TcaPreparation;
+use TYPO3\CMS\Core\Preparations\TcaPreparation; // @todo changed namespace in v13
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-// @todo changed namespace in v13
 
 /**
  * @internal Not part of TYPO3's public API.
