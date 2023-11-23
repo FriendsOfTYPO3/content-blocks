@@ -35,7 +35,7 @@ class ContentTypeIconResolver
             $iconPathWithoutFileExtension = ContentBlockPathUtility::getPublicFolder() . '/' . $identifier;
             $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
             $checkIconPath = $absolutePath . '/' . $relativeIconPath;
-            if (!is_readable($checkIconPath)) {
+            if (!file_exists($checkIconPath)) {
                 continue;
             }
             $prefixPath = match (Environment::isComposerMode()) {
