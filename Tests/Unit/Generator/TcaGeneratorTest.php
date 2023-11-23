@@ -131,6 +131,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'Relation',
                             ],
                             [
+                                'identifier' => 'password',
+                                'type' => 'Password',
+                            ],
+                            [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'labelField' => 'text2',
@@ -221,7 +225,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,assets,pages,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_relation,t3ce_example_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,assets,pages,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_relation,t3ce_example_password,t3ce_example_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'bodytext' => [
@@ -316,6 +320,11 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'pages' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pages.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pages.description',
+                                    'config' => [],
+                                ],
+                                't3ce_example_password' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:password.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:password.description',
                                     'config' => [],
                                 ],
                             ],
@@ -476,6 +485,13 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\' OR {#CType}=\'t3ce_example\' OR {#CType}=\'t3ce_testblock\'',
                                 ],
                             ],
+                        ],
+                        't3ce_example_password' => [
+                            'label' => 'password',
+                            'config' => [
+                                'type' => 'password',
+                            ],
+                            'exclude' => true,
                         ],
                     ],
                     'palettes' => [

@@ -40,6 +40,7 @@ enum FieldType: string
     case FOLDER = 'Folder';
     case RELATION = 'Relation';
     case FLEXFORM = 'FlexForm';
+    case PASSWORD = 'Password';
     case PALETTE = 'Palette';
     case LINEBREAK = 'Linebreak';
     case TAB = 'Tab';
@@ -65,6 +66,7 @@ enum FieldType: string
             self::TEXT => 'input',
             self::TEXTAREA => 'text',
             self::FLEXFORM => 'flex',
+            self::PASSWORD => 'password',
             self::PALETTE, self::LINEBREAK, self::TAB => '',
         };
     }
@@ -113,6 +115,7 @@ enum FieldType: string
             self::TEXT => TextFieldConfiguration::createFromArray($config),
             self::TEXTAREA => TextareaFieldConfiguration::createFromArray($config),
             self::FLEXFORM => FlexFormFieldConfiguration::createFromArray($config),
+            self::PASSWORD => PasswordFieldConfiguration::createFromArray($config),
             self::PALETTE => PaletteFieldConfiguration::createFromArray($config),
             self::LINEBREAK => LinebreakFieldConfiguration::createFromArray($config),
             self::TAB => TabFieldConfiguration::createFromArray($config),

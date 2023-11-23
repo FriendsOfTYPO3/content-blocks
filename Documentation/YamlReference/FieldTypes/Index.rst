@@ -28,6 +28,7 @@ some additional options, which are not available in TCA to ease the usage.
     Link/Index
     Number/Index
     Palette/Index
+    Password/Index
     Radio/Index
     Relation/Index
     Select/Index
