@@ -13,6 +13,5 @@ beyond the basic documentation.
     :titlesonly:
 
     CoreContentTypes/Index
-    ExtendContentBlockTCA/Index
     ParseFunc/Index
     History/Index

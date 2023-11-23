@@ -122,7 +122,7 @@ use content types as sub-resources inside extensions.
     YamlReference/Index
     Templating/Index
     ReuseExistingFields/Index
-    FAQ/Index
+    Guides/Index
     KnownProblems/Index
     Appendix/Index
 
