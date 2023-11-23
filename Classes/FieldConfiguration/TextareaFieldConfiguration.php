@@ -43,7 +43,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
     private string $wrap = '';
     private bool $enableRichtext = false;
     private string $richtextConfiguration = '';
-    private string $renderType = '';
     private string $format = '';
 
     public static function createFromArray(array $settings): TextareaFieldConfiguration
@@ -68,7 +67,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
         $self->wrap = (string)($settings['wrap'] ?? $self->wrap);
         $self->enableRichtext = (bool)($settings['enableRichtext'] ?? $self->enableRichtext);
         $self->richtextConfiguration = (string)($settings['richtextConfiguration'] ?? $self->richtextConfiguration);
-        $self->renderType = (string)($settings['renderType'] ?? $self->renderType);
         $self->format = (string)($settings['format'] ?? $self->format);
 
         return $self;
@@ -128,9 +126,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->richtextConfiguration !== '') {
             $config['richtextConfiguration'] = $this->richtextConfiguration;
-        }
-        if ($this->renderType !== '') {
-            $config['renderType'] = $this->renderType;
         }
         if ($this->format !== '') {
             $config['format'] = $this->format;

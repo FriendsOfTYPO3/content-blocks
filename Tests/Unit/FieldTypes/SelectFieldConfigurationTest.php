@@ -89,8 +89,8 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'select',
                     'renderType' => 'selectSingle',
+                    'type' => 'select',
                     'default' => 1,
                     'readOnly' => true,
                     'size' => 1,

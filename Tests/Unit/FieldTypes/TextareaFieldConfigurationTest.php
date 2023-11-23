@@ -69,6 +69,7 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'renderType' => 'foo',
                     'type' => 'text',
                     'default' => 'Default value',
                     'readOnly' => true,
@@ -87,7 +88,6 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                     'wrap' => 'off',
                     'enableRichtext' => true,
                     'richtextConfiguration' => 'default',
-                    'renderType' => 'foo',
                     'format' => 'foo',
                 ],
             ],

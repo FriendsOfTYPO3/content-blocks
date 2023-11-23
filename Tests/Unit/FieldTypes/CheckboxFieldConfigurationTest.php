@@ -61,8 +61,8 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'check',
                     'renderType' => 'checkboxToggle',
+                    'type' => 'check',
                     'default' => 1,
                     'readOnly' => true,
                     'itemsProcFunc' => 'foo->bar',

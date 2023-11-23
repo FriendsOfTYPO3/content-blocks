@@ -32,6 +32,7 @@ trait WithCommonProperties
     private array $fieldWizard = [];
     private array $fieldControl = [];
     private array $fieldInformation = [];
+    private string $renderType = '';
 
     protected function setCommonProperties(array $settings): void
     {
@@ -49,6 +50,7 @@ trait WithCommonProperties
         $this->fieldWizard = (array)($settings['fieldWizard'] ?? $this->fieldWizard);
         $this->fieldControl = (array)($settings['fieldControl'] ?? $this->fieldControl);
         $this->fieldInformation = (array)($settings['fieldInformation'] ?? $this->fieldInformation);
+        $this->renderType = (string)($settings['renderType'] ?? $this->renderType);
     }
 
     protected function toTca(array $tca = []): array
@@ -82,6 +84,9 @@ trait WithCommonProperties
         }
         if ($this->fieldInformation !== []) {
             $tca['config']['fieldInformation'] = $this->fieldInformation;
+        }
+        if ($this->renderType !== '') {
+            $tca['config']['renderType'] = $this->renderType;
         }
         return $tca;
     }

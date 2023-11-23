@@ -26,7 +26,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 
     private FieldType $fieldType = FieldType::CHECKBOX;
     private ?string $alternativeSql = null;
-    private string $renderType = '';
     private int $default = 0;
     private bool $readOnly = false;
     private bool $invertStateDisplay = false;
@@ -41,7 +40,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         $self = new self();
         $self->setCommonProperties($settings);
         $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
-        $self->renderType = (string)($settings['renderType'] ?? $self->renderType);
         $self->default = (int)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
@@ -58,9 +56,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
     {
         $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
-        if ($this->renderType !== '') {
-            $config['renderType'] = $this->renderType;
-        }
         if ($this->default > 0) {
             $config['default'] = $this->default;
         }

@@ -27,7 +27,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     private FieldType $fieldType = FieldType::SELECT;
     private ?string $alternativeSql = null;
     private string|int $default = '';
-    private string $renderType = '';
     private bool $readOnly = false;
     private int $size = 0;
     private string $MM = '';
@@ -67,7 +66,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
         }
-        $self->renderType = (string)($settings['renderType'] ?? $self->renderType);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->MM = (string)($settings['MM'] ?? $self->MM);
@@ -101,9 +99,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     {
         $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
-        if ($this->renderType !== '') {
-            $config['renderType'] = $this->renderType;
-        }
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
