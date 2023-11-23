@@ -106,7 +106,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         if ($this->format !== '') {
             $config['format'] = $this->format;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

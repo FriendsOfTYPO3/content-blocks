@@ -99,7 +99,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
                 ],
             ];
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

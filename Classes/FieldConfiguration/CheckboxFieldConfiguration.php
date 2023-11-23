@@ -85,7 +85,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         if ($this->invertStateDisplay) {
             $config['items'][0]['invertStateDisplay'] = true;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

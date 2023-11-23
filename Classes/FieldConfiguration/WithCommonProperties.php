@@ -29,6 +29,9 @@ trait WithCommonProperties
     private string $l10n_mode = '';
     private string $onChange = '';
     private bool $exclude = true;
+    private array $fieldWizard = [];
+    private array $fieldControl = [];
+    private array $fieldInformation = [];
 
     protected function setCommonProperties(array $settings): void
     {
@@ -43,6 +46,9 @@ trait WithCommonProperties
         $this->l10n_mode = (string)($settings['l10n_mode'] ?? $this->l10n_mode);
         $this->onChange = (string)($settings['onChange'] ?? $this->onChange);
         $this->exclude = (bool)($settings['exclude'] ?? $this->exclude);
+        $this->fieldWizard = (array)($settings['fieldWizard'] ?? $this->fieldWizard);
+        $this->fieldControl = (array)($settings['fieldControl'] ?? $this->fieldControl);
+        $this->fieldInformation = (array)($settings['fieldInformation'] ?? $this->fieldInformation);
     }
 
     protected function toTca(array $tca = []): array
@@ -67,6 +73,15 @@ trait WithCommonProperties
         }
         if ($this->exclude) {
             $tca['exclude'] = $this->exclude;
+        }
+        if ($this->fieldWizard !== []) {
+            $tca['config']['fieldWizard'] = $this->fieldWizard;
+        }
+        if ($this->fieldControl !== []) {
+            $tca['config']['fieldControl'] = $this->fieldControl;
+        }
+        if ($this->fieldInformation !== []) {
+            $tca['config']['fieldInformation'] = $this->fieldInformation;
         }
         return $tca;
     }

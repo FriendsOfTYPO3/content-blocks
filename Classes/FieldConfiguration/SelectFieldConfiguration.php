@@ -180,7 +180,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         if ($this->treeConfig !== []) {
             $config['treeConfig'] = $this->treeConfig;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

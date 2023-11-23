@@ -63,7 +63,7 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
         if ($this->items !== []) {
             $config['items'] = $this->items;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

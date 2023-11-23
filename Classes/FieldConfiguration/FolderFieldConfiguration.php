@@ -87,7 +87,7 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
         if ($this->elementBrowserEntryPoints !== []) {
             $config['elementBrowserEntryPoints'] = $this->elementBrowserEntryPoints;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

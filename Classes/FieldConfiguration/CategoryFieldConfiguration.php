@@ -81,7 +81,7 @@ final class CategoryFieldConfiguration implements FieldConfigurationInterface
         if ($this->relationship !== '') {
             $config['relationship'] = $this->relationship;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

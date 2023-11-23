@@ -162,7 +162,7 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
         if ($this->symmetric_sortby !== '') {
             $config['symmetric_sortby'] = $this->symmetric_sortby;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

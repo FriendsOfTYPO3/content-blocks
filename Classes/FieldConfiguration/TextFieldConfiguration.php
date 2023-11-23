@@ -107,7 +107,7 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
         if (($this->valuePicker['items'] ?? []) !== []) {
             $config['valuePicker'] = $this->valuePicker;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

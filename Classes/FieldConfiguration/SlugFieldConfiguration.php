@@ -72,7 +72,7 @@ final class SlugFieldConfiguration implements FieldConfigurationInterface
         if ($this->prependSlash) {
             $config['prependSlash'] = $this->prependSlash;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 

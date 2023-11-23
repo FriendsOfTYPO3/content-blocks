@@ -35,6 +35,15 @@ final class RelationFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
+                'fieldWizard' => [
+                    'foo' => 'bar',
+                ],
+                'fieldControl' => [
+                    'foo' => 'bar',
+                ],
+                'fieldInformation' => [
+                    'foo' => 'bar',
+                ],
                 'non_available_field' => 'foo',
                 'default' => 1,
                 'allowed' => 'foo',
@@ -81,6 +90,15 @@ final class RelationFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'fieldWizard' => [
+                        'foo' => 'bar',
+                    ],
+                    'fieldControl' => [
+                        'foo' => 'bar',
+                    ],
+                    'fieldInformation' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'group',
                     'default' => 1,
                     'allowed' => 'foo',
@@ -153,6 +171,9 @@ final class RelationFieldConfigurationTest extends UnitTestCase
                 'filter' => [],
                 'suggestOptions' => [],
                 'appearance' => [],
+                'fieldWizard' => [],
+                'fieldControl' => [],
+                'fieldInformation' => [],
             ],
             'expectedTca' => [
                 'config' => [

@@ -97,7 +97,7 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
         if ($this->appearance !== []) {
             $config['appearance'] = $this->appearance;
         }
-        $tca['config'] = $config;
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 
