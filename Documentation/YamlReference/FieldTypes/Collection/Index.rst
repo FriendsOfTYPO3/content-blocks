@@ -16,8 +16,8 @@ sliders, accordion, tabs and so on.
 First-level options
 ===================
 
-All options, which can be defined for :ref:`Record Types <yaml_reference_record_type>`
-can be used here as well.
+All options, which can be defined for :ref:`Record Types <yaml_reference_record_type_collections>`
+can be used here as well. **Note** that :ref:`labelField <yaml_reference_record_type_labelField>` is required.
 
 .. confval:: fields
 
@@ -41,15 +41,6 @@ can be used here as well.
 Settings
 ========
 
-.. confval:: maxitems
-
-   :Required: false
-   :Type: integer
-   :Default: 0
-
-   Maximum number of child items. Defaults to a high value. JavaScript record
-   validation prevents the record from being saved if the limit is not satisfied.
-
 .. confval:: minitems
 
    :Required: false
@@ -58,6 +49,15 @@ Settings
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
+
+.. confval:: maxitems
+
+   :Required: false
+   :Type: integer
+   :Default: 0
+
+   Maximum number of child items. Defaults to a high value. JavaScript record
+   validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: foreign_table
 
