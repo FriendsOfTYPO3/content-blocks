@@ -95,6 +95,7 @@ Minimal
     fields:
       - identifier: collection
         type: Collection
+        labelField: text
         fields:
           - identifier: text
             type: Text
@@ -128,6 +129,7 @@ table in :yaml:`slides`.
     name: example/slide
     table: my_slide
     aggregateRoot: false
+    labelField: title
     fields:
       - identifier: title
         type: Text
