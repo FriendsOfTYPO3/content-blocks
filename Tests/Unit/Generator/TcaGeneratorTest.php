@@ -23,7 +23,6 @@ use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
@@ -489,7 +488,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.label',
                         'label' => 'text2',
                         'label_alt' => 'text',
                         'sortby' => 'sorting',
@@ -706,7 +705,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection2' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.collection2.label',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1740,7 +1739,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:title',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.label',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -1952,13 +1951,11 @@ final class TcaGeneratorTest extends UnitTestCase
             $contentBlockRegistry->register($contentBlock);
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
-            $typeDefinitionLabelService,
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
@@ -2052,7 +2049,6 @@ final class TcaGeneratorTest extends UnitTestCase
             $contentBlockRegistry->register($contentBlock);
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         if ($seoExtensionLoaded) {
             $systemExtensionAvailability->addAvailableExtension('seo');
@@ -2061,7 +2057,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
-            $typeDefinitionLabelService,
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
@@ -2091,13 +2086,11 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks([$contentBlock]);
-        $typeDefinitionLabelService = new TypeDefinitionLabelService($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
-            $typeDefinitionLabelService,
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,
@@ -2728,13 +2721,11 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
-        $typeDefinitionLabelService = new TypeDefinitionLabelService(new ContentBlockRegistry());
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $flexFormGenerator = new FlexFormGenerator(new NoopLanguageFileRegistry());
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             new NoopEventDispatcher(),
-            $typeDefinitionLabelService,
             new NoopLanguageFileRegistry(),
             new TcaPreparation(),
             $systemExtensionAvailability,

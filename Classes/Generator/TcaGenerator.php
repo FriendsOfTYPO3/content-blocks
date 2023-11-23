@@ -31,7 +31,6 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
-use TYPO3\CMS\ContentBlocks\Service\TypeDefinitionLabelService;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation; // @todo changed namespace in v13
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -84,7 +83,6 @@ class TcaGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly EventDispatcherInterface $eventDispatcher,
-        protected readonly TypeDefinitionLabelService $typeDefinitionLabelService,
         protected readonly LanguageFileRegistryInterface $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,
         protected readonly SystemExtensionAvailabilityInterface $systemExtensionAvailability,
@@ -202,9 +200,8 @@ class TcaGenerator
                     ContentType::PAGE_TYPE => 'default',
                     ContentType::RECORD_TYPE => '',
                 };
-                $label = $this->typeDefinitionLabelService->getLLLPathForTitle($typeDefinition);
-                $key = $this->typeDefinitionLabelService->getTitleKey();
-                if (!$this->languageFileRegistry->isset($typeDefinition->getName(), $key)) {
+                $label = $typeDefinition->getLanguagePathTitle();
+                if (!$this->languageFileRegistry->isset($typeDefinition->getName(), $label)) {
                     $label = $typeDefinition->getName();
                 }
                 ExtensionManagementUtility::addTcaSelectItem(
@@ -666,13 +663,9 @@ class TcaGenerator
         $capability = $tableDefinition->getCapability();
         $palettes = [];
         $columns = [];
-        // @todo Right now, for inline Collections, the label of the parent Content Block is used for the title, as the
-        // @todo vendor and name are inherited from it.
-        // @todo The correct title should be the according field label. This information is not available here, though.
-        $title = $this->typeDefinitionLabelService->getLLLPathForTitle($defaultTypeDefinition);
-        $key = $this->typeDefinitionLabelService->getTitleKey();
-        if (!$this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $key)) {
-            $title = $defaultTypeDefinition->getName();
+        $title = $defaultTypeDefinition->getLanguagePathTitle();
+        if (!$this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $title)) {
+            $title = $defaultTypeDefinition->getTable();
         }
         $ctrl = [
             'title' => $title,

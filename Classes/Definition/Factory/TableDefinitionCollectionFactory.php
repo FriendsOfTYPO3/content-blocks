@@ -178,6 +178,13 @@ final class TableDefinitionCollectionFactory
         $result->contentType->contentBlock = $input->contentBlock;
         $result->contentType->typeName = $input->getTypeName();
         $result->contentType->table = $input->table;
+        if ($input->isRootTable()) {
+            $result->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . 'title';
+            $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . 'description';
+        } else {
+            $result->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . '.label';
+            $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . '.description';
+        }
 
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
@@ -539,40 +546,42 @@ final class TableDefinitionCollectionFactory
     /**
      * @see ContentTypeDefinition
      */
-    private function createInputArrayForTypeDefinition(ProcessedContentType $contentType, ProcessingInput $input): array
+    private function createInputArrayForTypeDefinition(ProcessedContentType $processedContentType, ProcessingInput $input): array
     {
-        [$vendor, $package] = explode('/', $contentType->contentBlock->getName());
-        $element = [
-            'identifier' => $contentType->contentBlock->getName(),
-            'columns' => $contentType->columns,
-            'showItems' => $contentType->showItems,
-            'overrideColumns' => $contentType->overrideColumns,
+        [$vendor, $package] = explode('/', $processedContentType->contentBlock->getName());
+        $contentType = [
+            'identifier' => $processedContentType->contentBlock->getName(),
+            'columns' => $processedContentType->columns,
+            'showItems' => $processedContentType->showItems,
+            'overrideColumns' => $processedContentType->overrideColumns,
             'vendor' => $vendor,
             'package' => $package,
-            'typeName' => $contentType->typeName,
+            'typeName' => $processedContentType->typeName,
+            'languagePathTitle' => $processedContentType->languagePathTitle,
+            'languagePathDescription' => $processedContentType->languagePathDescription,
         ];
         if ($input->isRootTable()) {
             $contentTypeIcon = new ContentTypeIcon();
-            $contentTypeIcon->iconPath = $contentType->contentBlock->getIcon();
-            $contentTypeIcon->iconProvider = $contentType->contentBlock->getIconProvider();
-            $element['priority'] = (int)($contentType->contentBlock->getYaml()['priority'] ?? 0);
+            $contentTypeIcon->iconPath = $processedContentType->contentBlock->getIcon();
+            $contentTypeIcon->iconProvider = $processedContentType->contentBlock->getIconProvider();
+            $contentType['priority'] = (int)($processedContentType->contentBlock->getYaml()['priority'] ?? 0);
         } else {
-            $absolutePath = GeneralUtility::getFileAbsFileName($contentType->contentBlock->getPath());
+            $absolutePath = GeneralUtility::getFileAbsFileName($processedContentType->contentBlock->getPath());
             $contentTypeIcon = ContentTypeIconResolver::resolve(
-                $contentType->contentBlock->getName(),
+                $processedContentType->contentBlock->getName(),
                 $absolutePath,
-                $contentType->contentBlock->getPath(),
+                $processedContentType->contentBlock->getPath(),
                 $input->yaml['identifier'],
                 $input->contentType,
             );
         }
-        $element['typeIconPath'] = $contentTypeIcon->iconPath;
-        $element['iconProvider'] = $contentTypeIcon->iconProvider;
-        $element['typeIconIdentifier'] = $this->buildTypeIconIdentifier($contentType, $contentTypeIcon);
-        if ($contentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $element['wizardGroup'] = $contentType->contentBlock->getYaml()['group'] ?? 'common';
+        $contentType['typeIconPath'] = $contentTypeIcon->iconPath;
+        $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
+        $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($processedContentType, $contentTypeIcon);
+        if ($processedContentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
+            $contentType['wizardGroup'] = $processedContentType->contentBlock->getYaml()['group'] ?? 'common';
         }
-        return $element;
+        return $contentType;
     }
 
     /**

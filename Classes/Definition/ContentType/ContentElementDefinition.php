@@ -22,7 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private string $description = '';
     private string $contentElementIcon = '';
     private string $contentElementIconOverlay = '';
     private bool $saveAndClose = false;
@@ -42,19 +41,15 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
             ->withPriority($array['priority'] ?? 0)
-            ->withDescription($array['description'] ?? '')
             ->withContentElementIcon($array['contentElementIcon'] ?? '')
             ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
             ->withWizardGroup($array['wizardGroup'])
             ->withTypeIconPath($array['typeIconPath'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? null)
-            ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null);
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
+            ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
+            ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
+            ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
     }
 
     public function getContentElementIcon(): string
@@ -85,13 +80,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
-    }
-
-    public function withDescription(string $description): self
-    {
-        $clone = clone $this;
-        $clone->description = $description;
-        return $clone;
     }
 
     public function withContentElementIcon(string $contentElementIcon): self

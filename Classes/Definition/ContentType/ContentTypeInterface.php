@@ -37,4 +37,6 @@ interface ContentTypeInterface
     public function getTypeIconIdentifier(): ?string;
     public function getIconProviderClassName(): string;
     public function getTypeIconPath(): string;
+    public function getLanguagePathTitle(): string;
+    public function getLanguagePathDescription(): string;
 }

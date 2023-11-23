@@ -37,6 +37,8 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withTypeIconPath($array['typeIconPath'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? null)
             ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
-            ->withPriority($array['priority'] ?? 0);
+            ->withPriority($array['priority'] ?? 0)
+            ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
+            ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
     }
 }

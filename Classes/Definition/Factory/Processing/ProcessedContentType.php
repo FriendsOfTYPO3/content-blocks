@@ -33,4 +33,6 @@ final class ProcessedContentType
     public array $showItems = [];
     public array $overrideColumns = [];
     public string|int $typeName = '';
+    public string $languagePathTitle = '';
+    public string $languagePathDescription = '';
 }

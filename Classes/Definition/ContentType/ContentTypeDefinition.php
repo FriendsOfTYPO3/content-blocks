@@ -41,6 +41,8 @@ abstract class ContentTypeDefinition
     protected string $typeIconPath;
     protected string $iconProviderClassName;
     protected string $typeIconIdentifier;
+    protected string $languagePathTitle;
+    protected string $languagePathDescription;
 
     public function getIdentifier(): string
     {
@@ -116,6 +118,16 @@ abstract class ContentTypeDefinition
     public function getTypeIconIdentifier(): string
     {
         return $this->typeIconIdentifier;
+    }
+
+    public function getLanguagePathTitle(): string
+    {
+        return $this->languagePathTitle;
+    }
+
+    public function getLanguagePathDescription(): string
+    {
+        return $this->languagePathDescription;
     }
 
     public function withIdentifier(string $identifier): static
@@ -208,6 +220,20 @@ abstract class ContentTypeDefinition
     {
         $clone = clone $this;
         $clone->typeIconIdentifier = $typeIconIdentifier;
+        return $clone;
+    }
+
+    public function withLanguagePathTitle(string $languagePathTitle): static
+    {
+        $clone = clone $this;
+        $clone->languagePathTitle = $languagePathTitle;
+        return $clone;
+    }
+
+    public function withLanguagePathDescription(string $languagePathDescription): static
+    {
+        $clone = clone $this;
+        $clone->languagePathDescription = $languagePathDescription;
         return $clone;
     }
 }
