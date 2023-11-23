@@ -16,9 +16,9 @@ a set of fields that are always available for a Content Block.
 
 List of the standard Basics shipped with Content Blocks:
 
-*  TYPO3/Appearance
-*  TYPO3/Links
-*  TYPO3/Categories
+*  :yaml:`TYPO3/Appearance`
+*  :yaml:`TYPO3/Links`
+*  :yaml:`TYPO3/Categories`
 
 This is an example on how to add the classic Fluid Styled Content "Appearance"
 Tab and the additional "Links" palette.
@@ -51,6 +51,9 @@ be done by using the identifier and the type :yaml:`Basic`.
           useExistingField: true
         - identifier: TYPO3/Links
           type: Basic
+
+Define own Basics
+=================
 
 You can define your own Basics by placing one or more YAML files into
 `ContentBlocks/Basics`. The name of the YAML file can be chosen freely.
