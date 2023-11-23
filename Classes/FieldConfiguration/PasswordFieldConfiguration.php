@@ -101,7 +101,11 @@ final class PasswordFieldConfiguration implements FieldConfigurationInterface
         if ($this->alternativeSql !== null) {
             return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
         }
-        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
+        $null = ' NOT NULL';
+        if ($this->nullable) {
+            $null = '';
+        }
+        return "`$uniqueColumnName` VARCHAR(255) DEFAULT ''" . $null;
     }
 
     public function getFieldType(): FieldType
