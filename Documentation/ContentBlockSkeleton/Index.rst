@@ -5,14 +5,45 @@
 Create a Content Block skeleton
 ===============================
 
-Create a Content Block skeleton in your terminal
-================================================
+The command :bash:`make:content-block` creates a bare-minimum Content Block.
 
-This command creates a bare-minimum content block for your specified
-:bash:`content-type` (one of :bash:`content-element`,
-:bash:`page-type` or :bash:`record-type`). Required options are
-:bash:`vendor`, :bash:`name` and :bash:`extension`. Optionally, you can
-define a custom type identifier by providing the :bash:`type` option.
+Arguments
+=========
+
+.. confval:: content-type
+
+   :Required: true
+   :Type: string
+
+   :bash:`content-element`, :bash:`page-type` or :bash:`record-type`
+
+.. confval:: vendor
+
+   :Required: true
+   :Type: string
+
+   Your vendor name. Lowercase, separated by dashes.
+
+.. confval:: name
+
+   :Required: true
+   :Type: string
+
+   Your Content Block name (this is not the title). Lowercase, separated by dashes.
+
+.. confval:: extension
+
+   :Required: true
+   :Type: string
+
+   The host extension, where to store your new Content Block.
+
+.. confval:: type
+
+   :Required: false
+   :Type: string|int
+
+   Custom type name. Required for content-type :bash:`page-type` (must be int).
 
 .. important::
 
