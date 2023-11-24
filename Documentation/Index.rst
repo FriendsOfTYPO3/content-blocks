@@ -66,7 +66,7 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
-            .. rubric:: :ref:`Content Block Definition <cb_definition>`
+            .. rubric:: :ref:`Definition <cb_definition>`
 
          .. container:: card-body
 
@@ -78,7 +78,7 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
-            .. rubric:: :ref:`Skeleton Builder <cb_skeleton>`
+            .. rubric:: :ref:`Kickstart command <cb_skeleton>`
 
          .. container:: card-body
 
@@ -90,7 +90,7 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
-            .. rubric:: :ref:`YAML-Reference <yaml_reference>`
+            .. rubric:: :ref:`YAML reference <yaml_reference>`
 
          .. container:: card-body
 
@@ -102,7 +102,7 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
-            .. rubric:: :ref:`Fluid templating <cb_templating>`
+            .. rubric:: :ref:`Templating <cb_templating>`
 
          .. container:: card-body
 
