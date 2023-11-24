@@ -39,7 +39,7 @@ The outcome of the research and the discussions in the community is:
 *  A content block is not a TYPO3 Extension but a sub-resource, so there is no PHP, TypoScript, SQL nor TSconfig inside
 *  The configuration for a new content element is stored in a YAML file, the EditorInterface.yaml
 *  Content blocks are made for frontend developers / TYPO3 beginners as main target group
-*  As a common best practice in TYPO3, labels and every other language related stuff is stored in a XLF file. This will be registered an processed by convention
+*  As a common best practice in TYPO3, labels and every other language related stuff is stored in a XLF file. This will be registered and processed by convention
 *  The entered name (vendor/name) in the EditorInterface.yaml file defines the identifier of a content block
 *  GUI to create / kickstart a new content block
 *  If there are breaking changes, support e.g via UpgradeWizards to migrate easily to the new version
