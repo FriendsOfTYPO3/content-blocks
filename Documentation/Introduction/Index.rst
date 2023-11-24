@@ -53,10 +53,11 @@ automatically for the Content Type icon. Only Content Elements can have a
 `EditorPreview.html` and `Frontend.html` file. The backend translations are put
 inside `Source/Language/Labels.xlf`.
 
-Learn more a
+*  Learn more about the the :ref:`Content Block definition <cb_definition>`.
+*  Kickstart a Content Block with the :ref:`skeleton builder <cb_skeleton>`.
 
 EditorInterface.yaml
-^^^^^^^^^^^^^^^^^^^^
+====================
 
 The heart of a Content Block is the `EditorInterface.yaml` file. This YAML file
 defines both the available fields and the structure:
@@ -85,8 +86,12 @@ Content Blocks with different configuration. Be aware that system fields
 shouldn't be reused. A list of sane reusable fields can be referenced in the
 documentation. Of course, own custom fields can be reused as well.
 
+*  Refer to the :ref:`YAML reference <yaml_reference>` for a complete overview.
+*  Learn more about :ref:`reusing fields <cb_reuse_existing_fields>`.
+*  Learn how to :ref:`extend TCA <cb_extendTca>` of Content Blocks.
+
 Fluid templating
-^^^^^^^^^^^^^^^^
+================
 
 The `EditorPreview.html` is the Fluid template for the backend preview and the
 `Frontend.html` template for the frontend. Both contain the above defined fields
@@ -111,3 +116,6 @@ For frontend translations Content Blocks also provides its own translation
 ViewHelper. This can be seen as a simplified :html:`f:translate` ViewHelper.
 The only required argument is :html:`key`. The ViewHelper will automatically
 resolve the path to the `Labels.xlf` file of the current Content Block.
+
+*  Here is the main article for :ref:`templating with Content Blocks <cb_templating>`.
+*  Learn how to :ref:`share Partials <cb_extension_partials>` between Content Blocks.
