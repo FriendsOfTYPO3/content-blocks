@@ -2,9 +2,9 @@
 
 .. _cb_templating:
 
-==============================
-Templating with Content Blocks
-==============================
+==========
+Templating
+==========
 
 The following examples are for templating with Fluid.
 

@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
 .. _yaml_reference:
 
-==================================
-Editing interface (YAML reference)
-==================================
+==============
+YAML reference
+==============
 
 The heart of a Content Block is the `EditorInterface.yaml` file. Here you can
 find all possible configuration options. There are slight differences, whether

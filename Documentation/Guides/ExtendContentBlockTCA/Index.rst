@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
 .. _cb_extendTca:
 
-============================
-Extend TCA of Content Blocks
-============================
+==========
+Extend TCA
+==========
 
 Content Blocks generates a lot of boilerplate :ref:`TCA <t3tca:start>`
 (Table Configuration Array) for you. Usually you don't need to write own TCA,

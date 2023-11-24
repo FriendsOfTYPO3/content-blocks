@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
 .. _cb_skeleton:
 
-===============================
-Create a Content Block skeleton
-===============================
+=================
+Kickstart command
+=================
 
 The command :bash:`make:content-block` creates a bare-minimum Content Block.
 

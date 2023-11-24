@@ -2,9 +2,9 @@
 
 .. _cb_history:
 
-=========================
-History of Content Blocks
-=========================
+=======
+History
+=======
 
 The beginning
 =============
@@ -105,8 +105,8 @@ The possible solutions were:
 
 The result of the research was, that the best solution is to store the data in the database.
 
-Summary of the decision:
-------------------------
+Summary of the decision
+-----------------------
 
 **FlexForm:**
 
@@ -177,8 +177,8 @@ and has a lot of experience with the TYPO3 core and the issues which are address
 We decided to join forces and bring together the best of both worlds.
 
 
-Developing for the core sysext
-==============================
+Developing a Core system extension
+==================================
 
 As we started to develop the system extension, we had to better adapt to core standards.
 The content blocks extension is developed completely from scratch in a new way.
@@ -197,13 +197,3 @@ the core extensions. The reasons for this are:
 * The GUI should not stuck to the release scheduling of the core, so we can add features faster
 * There is the vision, that the GUI should be a website and/or a backend module
 * Platform for sharing content blocks, where you can create and download content blocks
-
-**Introduced an event after TCA is generated:**
-
-To have a more modern way to extend the TCA, the content blocks extension listens to the
-:php:`\TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent` event. This event is triggered when
-TCA and TCA Overrides are compiled. So the content blocks TCA is rendered at the very end.
-To extend or override the content blocks TCA, the content blocks extension provides an own
-event to listen to:
-
-:php:`\TYPO3\CMS\ContentBlocks\Event\AfterContentBlocksTcaCompilationEvent`

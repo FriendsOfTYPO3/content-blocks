@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
 .. _cb_definition:
 
-========================
-Defining a Content Block
-========================
+==========
+Definition
+==========
 
 Directory structure of a Content Block
 ======================================
