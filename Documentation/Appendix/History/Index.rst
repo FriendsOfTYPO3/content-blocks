@@ -2,9 +2,9 @@
 
 .. _cb_history:
 
-=============================
-History of the Content Blocks
-=============================
+=========================
+History of Content Blocks
+=========================
 
 The beginning
 =============

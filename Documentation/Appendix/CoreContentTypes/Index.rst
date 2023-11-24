@@ -9,7 +9,7 @@ Here is an overview of the required and optional languages / places for defining
 new Content Types the Core way (without Content Blocks). See also:
 :ref:`Create a custom content element type <t3coreapi:adding-your-own-content-elements>`.
 Note that Content Blocks uses these technologies under the hood and you should
-still learn these to understand how TYPO3 works without internally.
+still learn these to understand how TYPO3 works internally.
 
 **SQL**
 
