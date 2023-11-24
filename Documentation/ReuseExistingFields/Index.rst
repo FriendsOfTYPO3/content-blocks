@@ -8,15 +8,73 @@ Reuse existing fields
 
 It's possible to reuse already existing fields by using the :yaml:`useExistingField`
 flag. By doing so, you can extend existing fields with your own properties on a
-per element level. It is highly recommend to use the `header` field this way,
-because it is used for the title on different places in the backend.
+per element level.
+
+Reusing base fields
+===================
+
+Base fields are fields, which are defined by extensions in
+`Configuration/TCA/table_name.php`. They serve as a basis and can be reused in
+different Content Types. For Content Elements it's highly recommended to reuse
+the :yaml:`header` field this way, because it is used for the title on different
+places in the backend.
+
+.. code-block:: yaml
+
+    name: example/block
+    fields:
+      - identifier: header
+        useExistingField: true
+
+Reusing custom fields
+=====================
+
+Custom fields are fields, which are defined by extensions in
+`Configuration/TCA/Overrides/*.php`. They extend the basic set of fields. These
+can also be reused in Content Blocks, but you have to define the :yaml:`type`
+explicitly in contrast to base fields. For this, you have to know the
+:ref:`type mapping <type_mapping>` from TCA type to Content Blocks type.
+
+.. code-block:: yaml
+
+    name: example/block
+    fields:
+      - identifier: my_custom_field
+        type: Text
+        useExistingField: true
+
+Reusing Content Block fields
+============================
 
 Reusing fields between different Content Blocks is only possible, if the option
-:yaml:`prefixField(s)` is turned off :yaml:`false` or :yaml:`prefixType` is set
-to :yaml:`vendor`. As soon as the :yaml:`identifier` is the same, the field will
-only be generated once. Be careful to define the same :yaml:`type` for the
-field. Settings can be overridden on a per element basis the same way as with
-core fields. Here it is not needed to define :yaml:`useExistingField`.
+:yaml:`prefixField(s)` is turned off. Inside the same project with same vendor
+names you can also set :yaml:`prefixType` to :yaml:`vendor`. As soon as
+the :yaml:`identifier` is the same, the field will only be generated once. Be
+careful to define the same :yaml:`type` for the field. Settings can be
+overridden on a per element basis. Here it is not needed to define
+:yaml:`useExistingField`.
+
+.. code-block:: yaml
+
+    name: example/block1
+    prefixFields: false # prefixing disabled
+    fields:
+      - identifier: my_custom_field # same identifier
+        type: Text # same type
+        required: true # different settings
+
+.. code-block:: yaml
+
+    name: example/block2
+    prefixFields: false # prefixing disabled
+    fields:
+      - identifier: my_custom_field # same identifier
+        type: Text # same type
+        max: 10 # different settings
+
+
+Best practice
+=============
 
 It's recommended to use existing fields whenever possible instead of creating
 new ones. This also avoids the risk of the :ref:`"Row size too large" <row-size-too-large>`

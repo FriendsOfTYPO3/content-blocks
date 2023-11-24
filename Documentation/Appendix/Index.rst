@@ -13,5 +13,6 @@ beyond the basic documentation.
     :titlesonly:
 
     CoreContentTypes/Index
+    TcaTypeMapping/Index
     ParseFunc/Index
     History/Index

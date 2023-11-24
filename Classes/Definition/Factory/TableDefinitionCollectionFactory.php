@@ -490,13 +490,18 @@ final class TableDefinitionCollectionFactory
         $isExistingField = ($field['useExistingField'] ?? false);
         if ($isExistingField) {
             $this->assertIdentifierExists($field, $input);
-            $fieldType = TypeResolver::resolve($field['identifier'], $table);
-            return $fieldType;
+            $identifier = $field['identifier'];
+            // Check if the field is defined as a "base" TCA field (NOT defined in TCA/Overrides).
+            if (($GLOBALS['TCA'][$table]['columns'][$identifier] ?? []) !== []) {
+                $fieldType = TypeResolver::resolve($field['identifier'], $table);
+                return $fieldType;
+            }
         }
         $this->assertTypeExists($field, $input);
         $fieldType = FieldType::tryFrom($field['type']);
         if ($fieldType === null) {
-            $validTypes = implode(', ', array_map(fn(FieldType $fieldType) => $fieldType->value, FieldType::cases()));
+            $validTypesList = array_map(fn(FieldType $fieldType) => $fieldType->value, FieldType::cases());
+            $validTypes = implode(', ', $validTypesList);
             throw new \InvalidArgumentException(
                 'The type "' . $field['type'] . '" is not a valid type in Content Block "' . $input->contentBlock->getName() . '". Valid types are: ' . $validTypes . '.',
                 1697625849
