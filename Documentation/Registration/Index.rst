@@ -19,8 +19,8 @@ directories, which has a file with the name `EditorInterface.yaml`. Refer to the
 
 .. tip::
 
-   Use the command :bash:`make:content-block` to quickly create a new Content
-   Block.
+   Use the command :ref:`make:content-block <cb_skeleton>` to quickly create a
+   new Content Block.
 
 .. tip::
 
