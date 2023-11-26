@@ -6,10 +6,8 @@
 Templating
 ==========
 
-The following examples are for templating with Fluid.
-
-Content Blocks brings some additional features like own variables and
-ViewHelpers with it.
+The following examples are for templating with Fluid. Content Blocks brings some
+additional features like own variables and ViewHelpers with it.
 
 Accessing variables
 ===================
@@ -97,42 +95,34 @@ easily find the element they want to edit.
 The frontend template is located in `Source/Frontend.html` and the backend
 template in `Source/EditorPreview.html`.
 
-ViewHelper & assets
-===================
+Asset ViewHelpers
+=================
 
-Since Content Blocks are stored in an extra path structure, accessing assets
-(JavaScript and CSS) can lead to complicated paths. So the well known
-AssetCollector with his related ViewHelpers will work, but it might be very
-complicated to use. Content Blocks provides new ViewHelpers to access assets
-from the related Content Block of a template. This asset ViewHelpers look for
-the given file in the `Assets` directory of the Content Block.
-
-Example for a CSS file:
+Content Blocks provides new asset ViewHelpers to access assets from within the
+current Content Block in the template. These ViewHelpers look for the given file
+in the `Assets` directory.
 
 .. code-block:: html
 
+    <f:comment><!-- Include the Assets/Frontend.css stylesheet --></f:comment>
     <cb:asset.css identifier="myCssIdentifier" file="Frontend.css"/>
 
-
-Example for a JavaScript file:
-
-.. code-block:: html
-
+    <f:comment><!-- Include the Assets/Frontend.js script --></f:comment>
     <cb:asset.script identifier="myJavascriptIdentifier" file="Frontend.js"/>
 
-
-The mapping between the assets and the Content Block in the ViewHelper is done
-by the :html:`{data}` object which is set automatically. But if you try to use
-an asset ViewHelper in e.g. a partial, you have to ship :html:`{data}` to the
-partial, or you can set :html:`name` by hand:
+The information of the current Content Block is stored in :html:`{data}`. This
+means if you use an asset ViewHelper in a partial, you have to provide
+:html:`{data}` as an argument to that partial. Alternatively, you can set
+:html:`name` by hand:
 
 .. code-block:: html
 
-    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/content-block-name" file="Frontend.js"/>
+    <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
+    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="Frontend.js"/>
 
 
-ViewHelper & translation
-========================
+Translation ViewHelper
+======================
 
 Analogous to the asset ViewHelpers, there is also a ViewHelper for translations.
 This ViewHelper looks directly in the `Labels.xlf` file for the given key.
@@ -141,13 +131,13 @@ This ViewHelper looks directly in the `Labels.xlf` file for the given key.
 
     <cb:translate key="my.contentblock.header" />
 
-As described above in the asset ViewHelper, the mapping between the Content
-Block and the translation file is done by the :html:`{data}` variable in the
-Fluid template of a Content Block. You can also set :html:`name` by hand:
+As described above in the asset ViewHelper, the :html:`{data}` variable is
+required to resolve the Content Block automatically. You can also set
+:html:`name` by hand:
 
 .. code-block:: html
 
-    <cb:translate key="my.contentblock.header" name="vendor/content-block-name" />
+    <cb:translate key="my.contentblock.header" name="vendor/name" />
 
 Partials
 ========
@@ -161,7 +151,7 @@ This part is automatically added, but you can also extend or overwrite this
 TypoScript configuration in your sitepackage.
 
 Remember, that you should ship the :html:`{data}` variable to the partial if you
-want to use the asset or translation ViewHelpers within.
+want to make use of automatic detection of the current Content Block.
 
 Layouts
 =======
@@ -177,6 +167,6 @@ Shareable resources
 
 There is the technical possibility to use resources from the whole TYPO3 setup
 (e.g. translations, scripts, or partials from other extensions), but we do not
-recommend to do so. Since the Content Blocks are intended to be easily copied
-and pasted between different projects, your Content Block might break and you
-lose this initial benefit.
+recommend to do so. Content Blocks are intended to work independent of external
+resources so they can be easily copy-pasted between projects. Be aware of this
+downside, when you add dependencies to your Content Block.
