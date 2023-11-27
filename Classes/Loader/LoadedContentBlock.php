@@ -30,6 +30,7 @@ final class LoadedContentBlock
         private readonly array $yaml,
         private readonly string $icon,
         private readonly string $iconProvider,
+        private readonly string $hostExtension,
         private readonly string $extPath,
         private readonly ContentType $contentType,
     ) {}
@@ -45,6 +46,7 @@ final class LoadedContentBlock
             yaml: (array)($array['yaml'] ?? []),
             icon: (string)($array['icon'] ?? ''),
             iconProvider: (string)($array['iconProvider'] ?? ''),
+            hostExtension: (string)($array['hostExtension'] ?? ''),
             extPath: (string)($array['extPath'] ?? ''),
             contentType: ContentType::getByTable($table)
         );
@@ -57,6 +59,7 @@ final class LoadedContentBlock
             'yaml' => $this->yaml,
             'icon' => $this->icon,
             'iconProvider' => $this->iconProvider,
+            'hostExtension' => $this->hostExtension,
             'extPath' => $this->extPath,
         ];
     }
@@ -84,6 +87,11 @@ final class LoadedContentBlock
     public function getIconProvider(): string
     {
         return $this->iconProvider;
+    }
+
+    public function getHostExtension(): string
+    {
+        return $this->hostExtension;
     }
 
     public function getExtPath(): string

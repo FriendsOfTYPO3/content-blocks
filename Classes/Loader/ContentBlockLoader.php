@@ -128,6 +128,7 @@ class ContentBlockLoader implements LoaderInterface
                 $editorInterfaceYaml['name'],
                 $contentType,
                 $absoluteContentBlockPath,
+                $extensionKey,
                 $contentBlockExtPath,
                 $editorInterfaceYaml,
             );
@@ -178,6 +179,7 @@ class ContentBlockLoader implements LoaderInterface
         string $name,
         ContentType $contentType,
         string $absolutePath,
+        string $extensionKey,
         string $extPath,
         array $yaml,
     ): LoadedContentBlock {
@@ -200,6 +202,7 @@ class ContentBlockLoader implements LoaderInterface
             yaml: $yaml,
             icon: $contentBlockIcon->iconPath,
             iconProvider: $contentBlockIcon->iconProvider,
+            hostExtension: $extensionKey,
             extPath: $extPath,
             contentType: $contentType,
         );

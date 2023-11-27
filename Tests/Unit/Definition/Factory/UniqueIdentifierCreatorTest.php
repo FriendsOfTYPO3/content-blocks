@@ -44,14 +44,10 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
      */
     public function contentBlockNameToContentTypeIdentifierTest(string $contentBlockName, string $expected): void
     {
-        $contentBlock = new LoadedContentBlock(
-            $contentBlockName,
-            [],
-            '',
-            '',
-            '',
-            ContentType::CONTENT_ELEMENT,
-        );
+        $contentBlock = LoadedContentBlock::fromArray([
+            'name' => $contentBlockName,
+            'yaml' => ['table' => ContentType::CONTENT_ELEMENT->getTable()],
+        ]);
         self::assertSame($expected, UniqueIdentifierCreator::createContentTypeIdentifier($contentBlock));
     }
 
@@ -92,14 +88,10 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
      */
     public function createUniqueFieldIdentifierTest(string $contentBlockName, PrefixType $prefixType, string $identifier, string $expected): void
     {
-        $contentBlock = new LoadedContentBlock(
-            $contentBlockName,
-            [],
-            '',
-            '',
-            '',
-            ContentType::CONTENT_ELEMENT,
-        );
+        $contentBlock = LoadedContentBlock::fromArray([
+            'name' => $contentBlockName,
+            'yaml' => ['table' => ContentType::CONTENT_ELEMENT->getTable()],
+        ]);
         self::assertSame($expected, UniqueIdentifierCreator::prefixIdentifier($contentBlock, $prefixType, $identifier));
     }
 }
