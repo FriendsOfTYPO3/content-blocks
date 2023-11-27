@@ -94,6 +94,11 @@ final class TableDefinition
         return $this->typeField;
     }
 
+    public function hasTypeField(): bool
+    {
+        return $this->typeField !== null;
+    }
+
     public function getCapability(): TableDefinitionCapability
     {
         return $this->capability;

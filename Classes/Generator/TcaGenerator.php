@@ -121,57 +121,86 @@ class TcaGenerator
     {
         $tca = [];
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
-                $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition);
-            }
-            $tca = $this->enrichWithPalettes($tableDefinition, $tca);
-            $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->getTypeField() !== null;
-            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $column) {
-                $fieldConfiguration = $column->getFieldConfiguration();
-                if ($fieldConfiguration instanceof FlexFormFieldConfiguration) {
-                    $dataStructure = [];
-                    foreach ($fieldConfiguration->getFlexFormDefinitions() as $flexFormDefinition) {
-                        $dataStructure[$flexFormDefinition->getTypeName()] = $this->flexFormGenerator->generate($flexFormDefinition);
-                    }
-                    $fieldConfiguration->setDataStructure($dataStructure);
-                }
-                if ($isRootTableWithTypeField) {
-                    $tca = $this->getTcaForRootTableWithTypeField($tableDefinition, $column, $tca);
-                } else {
-                    $tca = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column, $tca);
-                }
-                if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'])) {
-                    $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
-                }
-            }
-            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                $tca = $this->processTypeDefinition($typeDefinition, $tableDefinition, $tca);
-            }
-            $tca[$tableDefinition->getTable()]['ctrl']['searchFields'] = $this->addSearchFields($tableDefinition);
+            $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition);
         }
-
-        return $this->tcaPreparation->prepare($tca);
+        $tca = $this->tcaPreparation->prepare($tca);
+        return $tca;
     }
 
-    protected function enrichWithPalettes(mixed $tableDefinition, array $tca): array
+    protected function generateTableTca(TableDefinition $tableDefinition): array
     {
-        foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
-            $paletteTca = [
-                'showitem' => $paletteDefinition->getShowItem(),
-            ];
-            if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathLabel())) {
-                $paletteTca['label'] = $paletteDefinition->getLanguagePathLabel();
-            } elseif ($paletteDefinition->hasLabel()) {
-                $paletteTca['label'] = $paletteDefinition->getLabel();
-            }
-            if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathDescription())) {
-                $paletteTca['description'] = $paletteDefinition->getLanguagePathDescription();
-            } elseif ($paletteDefinition->hasDescription()) {
-                $paletteTca['description'] = $paletteDefinition->getDescription();
-            }
-            $tca[$tableDefinition->getTable()]['palettes'][$paletteDefinition->getIdentifier()] = $paletteTca;
+        $tca = [];
+        if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
+            $tca = $this->generateBaseTableTca($tableDefinition);
         }
+        $currentPalettesTca = $tca['palettes'] ?? [];
+        $tca['palettes'] = $currentPalettesTca + $this->generatePalettesTca($tableDefinition);
+        $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->hasTypeField();
+        foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $column) {
+            $fieldConfiguration = $column->getFieldConfiguration();
+            if ($fieldConfiguration instanceof FlexFormFieldConfiguration) {
+                $dataStructure = [];
+                foreach ($fieldConfiguration->getFlexFormDefinitions() as $flexFormDefinition) {
+                    $dataStructure[$flexFormDefinition->getTypeName()] = $this->flexFormGenerator->generate($flexFormDefinition);
+                }
+                $fieldConfiguration->setDataStructure($dataStructure);
+            }
+            if ($isRootTableWithTypeField) {
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->getTcaForRootTableWithTypeField($tableDefinition, $column);
+            } else {
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column);
+            }
+            if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'])) {
+                $tca['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
+            }
+        }
+        foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
+            if ($tableDefinition->hasTypeField()) {
+                $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
+            }
+            if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
+                $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
+                if ($tableDefinition->hasTypeField()) {
+                    $tca['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
+                }
+            }
+            if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT && $typeDefinition->hasColumn('bodytext')) {
+                $tca['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
+                $tca['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
+            }
+        }
+        $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition);
+        $tca = $this->cleanTableTca($tca);
         return $tca;
+    }
+
+    protected function generatePalettesTca(TableDefinition $tableDefinition): array
+    {
+        $palettes = [];
+        foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
+            $paletteTca = $this->generatePalettesTcaSingle($paletteDefinition);
+            $palettes[$paletteDefinition->getIdentifier()] = $paletteTca;
+        }
+        return $palettes;
+    }
+
+    protected function generatePalettesTcaSingle(PaletteDefinition $paletteDefinition): array
+    {
+        $paletteTca = [
+            'showitem' => $paletteDefinition->getShowItem(),
+        ];
+        if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathLabel())) {
+            $paletteTca['label'] = $paletteDefinition->getLanguagePathLabel();
+        } elseif ($paletteDefinition->hasLabel()) {
+            $paletteTca['label'] = $paletteDefinition->getLabel();
+        }
+        if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathDescription())) {
+            $paletteTca['description'] = $paletteDefinition->getLanguagePathDescription();
+        } elseif ($paletteDefinition->hasDescription()) {
+            $paletteTca['description'] = $paletteDefinition->getDescription();
+        }
+        return $paletteTca;
     }
 
     protected function fillTypeFieldSelectItems(): void
@@ -218,21 +247,18 @@ class TcaGenerator
         }
     }
 
-    protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition, array $tca): array
+    protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
         $columnsOverrides = $this->getColumnsOverrides($typeDefinition);
         $tca = match ($tableDefinition->getContentType()) {
-            ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides, $tca),
-            ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides, $tca),
-            ContentType::RECORD_TYPE => $this->processRecordType($typeDefinition, $columnsOverrides, $tca, $tableDefinition),
+            ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides),
+            ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides),
+            ContentType::RECORD_TYPE => $this->processRecordType($typeDefinition, $columnsOverrides, $tableDefinition),
         };
-        if ($tableDefinition->getTypeField() !== null) {
-            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
-        }
         return $tca;
     }
 
-    protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca): array
+    protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
         $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
@@ -242,15 +268,10 @@ class TcaGenerator
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
         }
-        if ($typeDefinition->hasColumn('bodytext')) {
-            $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
-            $tca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
-        }
-        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-        return $tca;
+        return $typeDefinitionArray;
     }
 
-    protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca): array
+    protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
         $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
@@ -259,26 +280,19 @@ class TcaGenerator
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
         }
-        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-        return $tca;
+        return $typeDefinitionArray;
     }
 
-    protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, array $tca, TableDefinition $tableDefinition): array
+    protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
     {
         $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
             'showitem' => $this->getRecordTypeStandardShowItem($showItem, $tableDefinition),
         ];
-        if ($tableDefinition->getTypeField() !== null) {
-            $tca[$typeDefinition->getTable()]['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
-        }
-        $tca[$typeDefinition->getTable()]['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
-
-        if ($tableDefinition->getTypeField() !== null && $columnsOverrides !== []) {
+        if ($tableDefinition->hasTypeField() && $columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
         }
-        $tca[$typeDefinition->getTable()]['types'][$typeDefinition->getTypeName()] = $typeDefinitionArray;
-        return $tca;
+        return $typeDefinitionArray;
     }
 
     /**
@@ -337,8 +351,9 @@ class TcaGenerator
      * Fields on root tables are defined with minimal setup. Actual configuration goes into type overrides.
      * But only, if a custom typeField is defined.
      */
-    protected function getTcaForRootTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $tca): array
+    protected function getTcaForRootTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
     {
+        $columnTca = [];
         $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
         foreach ($iterateOptions as $option) {
             $optionKey = $this->getOptionKey($option, $column);
@@ -361,17 +376,17 @@ class TcaGenerator
                     }
                 }
 
-                $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config'][$optionKey] = $configuration;
+                $columnTca['config'][$optionKey] = $configuration;
             }
             if (array_key_exists($optionKey, $column->getTca())) {
-                $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()][$optionKey] = $column->getTca()[$optionKey];
+                $columnTca[$optionKey] = $column->getTca()[$optionKey];
             }
         }
         // Add TCA for automatically added typeField.
         if ($tableDefinition->getTypeField() === $column->getIdentifier()) {
-            $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()] = $column->getTca();
+            $columnTca = $column->getTca();
         }
-        return $tca;
+        return $columnTca;
     }
 
     protected function getDefaultFlexFormDefinition(): string
@@ -417,12 +432,11 @@ class TcaGenerator
      * Non-root tables should not be able to reuse fields. They can only be reused as a whole.
      * Also, root tables which didn't define a custom typeField get the full TCA.
      */
-    protected function getTcaForNonRootTableOrWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $tca): array
+    protected function getTcaForNonRootTableOrWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
     {
         $standardTypeDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getFirst();
         $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
-        $tca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()] = $columnTca;
-        return $tca;
+        return $columnTca;
     }
 
     /**
@@ -627,9 +641,9 @@ class TcaGenerator
     }
 
     /**
-     * Add search fields to find content elements
+     * Generate search fields in order to find content elements in global backend search.
      */
-    public function addSearchFields(TableDefinition $tableDefinition): string
+    public function generateSearchFields(TableDefinition $tableDefinition): string
     {
         $searchFieldsString = $GLOBALS['TCA'][$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
@@ -643,8 +657,8 @@ class TcaGenerator
         if ($searchFields === []) {
             return '';
         }
-
-        return implode(',', $searchFields);
+        $searchFieldsCommaSeparated = implode(',', $searchFields);
+        return $searchFieldsCommaSeparated;
     }
 
     protected function extendBodyTextSearchAndWhere(ContentTypeInterface $contentTypeDefinition): string
@@ -657,7 +671,7 @@ class TcaGenerator
         return $andWhere;
     }
 
-    protected function generateTableTca(TableDefinition $tableDefinition): array
+    protected function generateBaseTableTca(TableDefinition $tableDefinition): array
     {
         $defaultTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
         $capability = $tableDefinition->getCapability();
@@ -900,5 +914,18 @@ class TcaGenerator
             'palettes' => $palettes,
             'columns' => $columns,
         ];
+    }
+
+    protected function cleanTableTca(array $tca): array
+    {
+        if (isset($tca['palettes']) && $tca['palettes'] === []) {
+            unset($tca['palettes']);
+        }
+        foreach ($tca['columns'] ?? [] as $identifier => $column) {
+            if ($tca['columns'][$identifier] === []) {
+                unset($tca['columns'][$identifier]);
+            }
+        }
+        return $tca;
     }
 }
