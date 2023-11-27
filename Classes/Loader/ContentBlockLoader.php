@@ -123,18 +123,30 @@ class ContentBlockLoader implements LoaderInterface
             $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName();
             $yamlContent = Yaml::parseFile($yamlPath);
             if (!is_array($yamlContent) || strlen($yamlContent['name'] ?? '') < 3 || !str_contains($yamlContent['name'], '/')) {
-                throw new \RuntimeException('Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".', 1678224283);
+                throw new \RuntimeException(
+                    'Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".',
+                    1678224283
+                );
             }
             [$vendor, $name] = explode('/', $yamlContent['name']);
             if (!ContentBlockNameValidator::isValid($vendor)) {
-                throw new \InvalidArgumentException('Invalid vendor name for Content Block "' . $vendor . '". The vendor must be lowercase and consist of words separated by -', 1696004679);
+                throw new \InvalidArgumentException(
+                    'Invalid vendor name for Content Block "' . $vendor . '". The vendor must be lowercase and consist of words separated by -',
+                    1696004679
+                );
             }
             if (!ContentBlockNameValidator::isValid($name)) {
-                throw new \InvalidArgumentException('Invalid name for Content Block "' . $name . '". The name must be lowercase and consist of words separated by -', 1696004684);
+                throw new \InvalidArgumentException(
+                    'Invalid name for Content Block "' . $name . '". The name must be lowercase and consist of words separated by -',
+                    1696004684
+                );
             }
             if ($contentType === ContentType::PAGE_TYPE) {
                 if (!array_key_exists('typeName', $yamlContent)) {
-                    throw new \InvalidArgumentException('Missing mandatory integer value for "typeName" in ContentBlock "' . $yamlContent['name'] . '".', 1689286814);
+                    throw new \InvalidArgumentException(
+                        'Missing mandatory integer value for "typeName" in ContentBlock "' . $yamlContent['name'] . '".',
+                        1689286814
+                    );
                 }
                 // Skip validation, if cache is disabled or else this will always fail
                 // as the PageDoktypeRegistry is already loaded with types from Content Blocks.
