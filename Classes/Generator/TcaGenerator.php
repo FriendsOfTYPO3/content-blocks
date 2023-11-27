@@ -135,7 +135,6 @@ class TcaGenerator
         }
         $currentPalettesTca = $tca['palettes'] ?? [];
         $tca['palettes'] = $currentPalettesTca + $this->generatePalettesTca($tableDefinition);
-        $isRootTableWithTypeField = $tableDefinition->isRootTable() && $tableDefinition->hasTypeField();
         foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $column) {
             $fieldConfiguration = $column->getFieldConfiguration();
             if ($fieldConfiguration instanceof FlexFormFieldConfiguration) {
@@ -145,10 +144,10 @@ class TcaGenerator
                 }
                 $fieldConfiguration->setDataStructure($dataStructure);
             }
-            if ($isRootTableWithTypeField) {
-                $tca['columns'][$column->getUniqueIdentifier()] = $this->getTcaForRootTableWithTypeField($tableDefinition, $column);
+            if ($tableDefinition->hasTypeField()) {
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column);
             } else {
-                $tca['columns'][$column->getUniqueIdentifier()] = $this->getTcaForNonRootTableOrWithoutTypeField($tableDefinition, $column);
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithoutTypeField($tableDefinition, $column);
             }
             if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'])) {
                 $tca['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
@@ -348,10 +347,20 @@ class TcaGenerator
     }
 
     /**
-     * Fields on root tables are defined with minimal setup. Actual configuration goes into type overrides.
-     * But only, if a custom typeField is defined.
+     * Record Types which didn't define a custom typeField or Collections get their full TCA in their columns section.
      */
-    protected function getTcaForRootTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
+    protected function getColumnTcaForTableWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
+    {
+        $standardTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
+        $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
+        return $columnTca;
+    }
+
+    /**
+     * Content Elements, Page Types and Record Types with defined typeField only get minimal (non-shareable) TCA in
+     * their columns section. The actual config goes into columnsOverrides for the related type.
+     */
+    protected function getColumnTcaForTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
     {
         $columnTca = [];
         $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
@@ -426,17 +435,6 @@ class TcaGenerator
             return $option['option'];
         }
         return null;
-    }
-
-    /**
-     * Non-root tables should not be able to reuse fields. They can only be reused as a whole.
-     * Also, root tables which didn't define a custom typeField get the full TCA.
-     */
-    protected function getTcaForNonRootTableOrWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
-    {
-        $standardTypeDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getFirst();
-        $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
-        return $columnTca;
     }
 
     /**
