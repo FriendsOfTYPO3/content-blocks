@@ -24,14 +24,14 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
  */
 class ContentBlockPathUtility
 {
-    public static function getContentBlockExtPath(string $extensionKey, string $name, ContentType $contentType): string
+    public static function getContentBlockExtPath(string $extensionKey, string $contentBlockFolderName, ContentType $contentType): string
     {
         $contentTypeFolder = match ($contentType) {
             ContentType::CONTENT_ELEMENT => self::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => self::getRelativePageTypesPath(),
             ContentType::RECORD_TYPE => self::getRelativeRecordTypesPath(),
         };
-        return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $name;
+        return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $contentBlockFolderName;
     }
 
     public static function getContentBlockDefinitionFileName(): string

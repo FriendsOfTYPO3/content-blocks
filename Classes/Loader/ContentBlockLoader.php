@@ -120,13 +120,14 @@ class ContentBlockLoader implements LoaderInterface
         $finder = new Finder();
         $finder->directories()->depth(0)->in($path);
         foreach ($finder as $splFileInfo) {
-            $yamlPath = $splFileInfo->getPathname() . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName();
-            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($yamlPath, $contentType, $allowCache);
-            $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $splFileInfo->getRelativePathname(), $contentType);
+            $absoluteContentBlockPath = $splFileInfo->getPathname();
+            $contentBlockFolderName = $splFileInfo->getRelativePathname();
+            $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
+            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentType, $allowCache);
             $result[] = $this->loadSingleContentBlock(
                 $editorInterfaceYaml['name'],
                 $contentType,
-                $splFileInfo->getPathname(),
+                $absoluteContentBlockPath,
                 $contentBlockExtPath,
                 $editorInterfaceYaml,
             );
@@ -134,8 +135,9 @@ class ContentBlockLoader implements LoaderInterface
         return $result;
     }
 
-    protected function parseEditorInterfaceYaml(string $yamlPath, mixed $contentType, bool $allowCache): array
+    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, mixed $contentType, bool $allowCache): array
     {
+        $yamlPath = $absoluteContentBlockPath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName();
         $editorInterfaceYaml = Yaml::parseFile($yamlPath);
         if (!is_array($editorInterfaceYaml) || strlen($editorInterfaceYaml['name'] ?? '') < 3 || !str_contains($editorInterfaceYaml['name'], '/')) {
             throw new \RuntimeException(
@@ -175,9 +177,9 @@ class ContentBlockLoader implements LoaderInterface
     protected function loadSingleContentBlock(
         string $name,
         ContentType $contentType,
-        string $absolutePath = '',
-        string $extPath = '',
-        array $yaml = [],
+        string $absolutePath,
+        string $extPath,
+        array $yaml,
     ): LoadedContentBlock {
         if (!file_exists($absolutePath)) {
             throw new \RuntimeException('Content Block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
