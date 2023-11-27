@@ -46,7 +46,9 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
     {
         $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
-        $config['ds_pointerField'] = $this->ds_pointerField;
+        if ($this->ds_pointerField !== '') {
+            $config['ds_pointerField'] = $this->ds_pointerField;
+        }
         $config['ds'] = $this->ds;
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

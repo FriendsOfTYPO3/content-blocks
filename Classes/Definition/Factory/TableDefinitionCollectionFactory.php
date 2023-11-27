@@ -299,7 +299,8 @@ final class TableDefinitionCollectionFactory
     private function processFlexForm(array $field, ProcessingInput $input): array
     {
         $flexFormDefinition = new FlexFormDefinition();
-        $flexFormDefinition->setTypeName($input->getTypeName());
+        $flexFormTypeName = $input->getTypeField() !== null ? $input->getTypeName() : 'default';
+        $flexFormDefinition->setTypeName($flexFormTypeName);
         $flexFormDefinition->setContentBlockName($input->contentBlock->getName());
         $sheetDefinition = new SheetDefinition();
         $fields = $field['fields'] ?? [];
@@ -327,7 +328,9 @@ final class TableDefinitionCollectionFactory
             }
         }
 
-        $field['ds_pointerField'] = $input->getTypeField();
+        if ($input->getTypeField() !== null) {
+            $field['ds_pointerField'] = $input->getTypeField();
+        }
         $field['flexFormDefinitions'][$flexFormDefinition->getTypeName()] = $flexFormDefinition;
         return $field;
     }
