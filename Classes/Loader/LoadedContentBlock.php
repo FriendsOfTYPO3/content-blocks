@@ -30,7 +30,7 @@ final class LoadedContentBlock
         private readonly array $yaml,
         private readonly string $icon,
         private readonly string $iconProvider,
-        private readonly string $path,
+        private readonly string $extPath,
         private readonly ContentType $contentType,
     ) {}
 
@@ -45,7 +45,7 @@ final class LoadedContentBlock
             yaml: (array)($array['yaml'] ?? []),
             icon: (string)($array['icon'] ?? ''),
             iconProvider: (string)($array['iconProvider'] ?? ''),
-            path: (string)($array['path'] ?? ''),
+            extPath: (string)($array['extPath'] ?? ''),
             contentType: ContentType::getByTable($table)
         );
     }
@@ -57,7 +57,7 @@ final class LoadedContentBlock
             'yaml' => $this->yaml,
             'icon' => $this->icon,
             'iconProvider' => $this->iconProvider,
-            'path' => $this->path,
+            'extPath' => $this->extPath,
         ];
     }
 
@@ -86,9 +86,9 @@ final class LoadedContentBlock
         return $this->iconProvider;
     }
 
-    public function getPath(): string
+    public function getExtPath(): string
     {
-        return $this->path;
+        return $this->extPath;
     }
 
     public function prefixFields(): bool

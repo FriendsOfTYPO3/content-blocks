@@ -200,7 +200,7 @@ class ContentBlockLoader implements LoaderInterface
             yaml: $yaml,
             icon: $contentBlockIcon->iconPath,
             iconProvider: $contentBlockIcon->iconProvider,
-            path: $extPath,
+            extPath: $extPath,
             contentType: $contentType,
         );
     }
@@ -235,7 +235,7 @@ class ContentBlockLoader implements LoaderInterface
         $assetsPath = Environment::getPublicPath() . '/' . ContentBlockPathUtility::getPublicAssetsFolder();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $loadedContentBlock->getPath() . '/' . ContentBlockPathUtility::getPublicFolder()
+                $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
 
             $contentBlockAssetsTargetDirectory = $assetsPath . '/' . md5($loadedContentBlock->getName());

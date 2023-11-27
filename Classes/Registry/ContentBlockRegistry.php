@@ -50,6 +50,6 @@ class ContentBlockRegistry implements SingletonInterface
 
     public function getContentBlockPath(string $name): string
     {
-        return $this->getContentBlock($name)->getPath();
+        return $this->getContentBlock($name)->getExtPath();
     }
 }

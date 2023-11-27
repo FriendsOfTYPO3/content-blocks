@@ -54,7 +54,7 @@ final class TableDefinitionCollectionFactory
         $tableDefinitionList = [];
         foreach ($contentBlocks as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
-            $languagePath = new LanguagePath('LLL:' . $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
+            $languagePath = new LanguagePath('LLL:' . $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
             $processingInput = new ProcessingInput(
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
@@ -571,11 +571,11 @@ final class TableDefinitionCollectionFactory
             $contentTypeIcon->iconProvider = $processedContentType->contentBlock->getIconProvider();
             $contentType['priority'] = (int)($processedContentType->contentBlock->getYaml()['priority'] ?? 0);
         } else {
-            $absolutePath = GeneralUtility::getFileAbsFileName($processedContentType->contentBlock->getPath());
+            $absolutePath = GeneralUtility::getFileAbsFileName($processedContentType->contentBlock->getExtPath());
             $contentTypeIcon = ContentTypeIconResolver::resolve(
                 $processedContentType->contentBlock->getName(),
                 $absolutePath,
-                $processedContentType->contentBlock->getPath(),
+                $processedContentType->contentBlock->getExtPath(),
                 $input->yaml['identifier'],
                 $input->contentType,
             );

@@ -33,7 +33,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
-                'path' => 'EXT:example/ContentBlocks/foo',
+                'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
@@ -44,7 +44,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
-                'path' => 'EXT:example/ContentBlocks/example',
+                'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
@@ -74,7 +74,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
-                'path' => 'EXT:example/ContentBlocks/example',
+                'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
@@ -100,7 +100,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'foo/bar',
                 'icon' => '',
                 'iconProvider' => '',
-                'path' => 'EXT:example/ContentBlocks/foo',
+                'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
@@ -111,7 +111,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 't3ce/example',
                 'icon' => '',
                 'iconProvider' => '',
-                'path' => 'EXT:example/ContentBlocks/example',
+                'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
@@ -123,7 +123,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
                 'name' => 'fizz/bar',
                 'icon' => '',
                 'iconProvider' => '',
-                'path' => 'EXT:example/ContentBlocks/fizz',
+                'extPath' => 'EXT:example/ContentBlocks/fizz',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',

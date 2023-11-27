@@ -36,7 +36,7 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
     public function register(LoadedContentBlock $contentBlock): void
     {
         if (!array_key_exists($contentBlock->getName(), $this->parsedLanguageFiles)) {
-            $languagePath = $contentBlock->getPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
+            $languagePath = $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
             $absoluteLanguagePath = GeneralUtility::getFileAbsFileName($languagePath);
             if (file_exists($absoluteLanguagePath)) {
                 $this->parsedLanguageFiles[$contentBlock->getName()] = $this->xliffParser->getParsedData($absoluteLanguagePath, 'default');
