@@ -19,6 +19,9 @@ namespace TYPO3\CMS\ContentBlocks\Service;
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 class SystemExtensionAvailability
 {
     public function isAvailable(string $extensionKey): bool
