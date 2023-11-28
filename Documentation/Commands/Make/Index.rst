@@ -6,6 +6,8 @@ Kickstart command
 =================
 
 The command :bash:`make:content-block` creates a bare-minimum Content Block.
+This is actually an alias for :bash:`content-blocks:create`, which is inspired
+by the `EXT:make` extension.
 
 Options
 =======
