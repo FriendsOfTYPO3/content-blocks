@@ -22,7 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -30,7 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FlexFormGenerator
 {
-    public function __construct(protected readonly LanguageFileRegistryInterface $languageFileRegistry) {}
+    public function __construct(protected readonly LanguageFileRegistry $languageFileRegistry) {}
 
     public function generate(FlexFormDefinition $flexFormDefinition): string
     {

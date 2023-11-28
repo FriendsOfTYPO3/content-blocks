@@ -18,8 +18,7 @@ class CreateContentType
         string $table = 'tt_content',
         string $typeField = 'CType',
         ?string $type = ''
-    ): array
-    {
+    ): array {
         $configuration = [
             'name' => $vendor . '/' . $name,
             'group' => $group,
@@ -28,7 +27,7 @@ class CreateContentType
             'table' => $table,
             'typeField' => $typeField,
             'basics' => $basics,
-            'fields' => $fields
+            'fields' => $fields,
         ];
         if ($type !== '' && $type !== null) {
             $configuration['typeName'] = $type;

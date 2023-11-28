@@ -29,7 +29,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
-use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation; // @todo changed namespace in v13
@@ -83,7 +83,7 @@ class TcaGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly EventDispatcherInterface $eventDispatcher,
-        protected readonly LanguageFileRegistryInterface $languageFileRegistry,
+        protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,
         protected readonly SystemExtensionAvailabilityInterface $systemExtensionAvailability,
         protected readonly FlexFormGenerator $flexFormGenerator,

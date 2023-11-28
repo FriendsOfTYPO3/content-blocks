@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryInterface;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
 
 /**
@@ -29,7 +29,7 @@ class PageTsConfigGenerator
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly LanguageFileRegistryInterface $languageFileRegistry,
+        protected readonly LanguageFileRegistry $languageFileRegistry,
     ) {}
 
     public function __invoke(ModifyLoadedPageTsConfigEvent $event): void

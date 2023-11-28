@@ -25,7 +25,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class LanguageFileRegistry implements LanguageFileRegistryInterface
+class LanguageFileRegistry
 {
     protected array $parsedLanguageFiles = [];
 
