@@ -30,7 +30,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
-use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
+use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation; // @todo changed namespace in v13
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -85,7 +85,7 @@ class TcaGenerator
         protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,
-        protected readonly SystemExtensionAvailabilityInterface $systemExtensionAvailability,
+        protected readonly SystemExtensionAvailability $systemExtensionAvailability,
         protected readonly FlexFormGenerator $flexFormGenerator,
     ) {}
 

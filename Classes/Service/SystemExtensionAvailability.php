@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Service;
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-class SystemExtensionAvailability implements SystemExtensionAvailabilityInterface
+class SystemExtensionAvailability
 {
     public function isAvailable(string $extensionKey): bool
     {

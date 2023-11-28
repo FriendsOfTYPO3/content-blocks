@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures;
 
-use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailabilityInterface;
+use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 
-class TestSystemExtensionAvailability implements SystemExtensionAvailabilityInterface
+class TestSystemExtensionAvailability extends SystemExtensionAvailability
 {
     protected array $availableExtensions = [];
 
