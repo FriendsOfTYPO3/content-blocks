@@ -129,7 +129,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
         if (Environment::isComposerMode()) {
             $src = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . '/' . $file;
         } else {
-            $src = $this->contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getPublicFolder() . '/' . $file;
+            $src = $this->contentBlockRegistry->getContentBlockExtPath($name) . '/' . ContentBlockPathUtility::getPublicFolder() . '/' . $file;
         }
 
         $options = [

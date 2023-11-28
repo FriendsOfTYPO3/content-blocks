@@ -59,7 +59,7 @@ class TranslateViewHelper extends AbstractViewHelper
     {
         $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('data._name'));
         if ($name === '') {
-            throw new Exception('\TYPO3\CMS\ContentBlocks\ViewHelpers\TranslateViewHelper seemingly called outside Content Blocks context.', 1699271759);
+            throw new Exception(__CLASS__ . ' seemingly called outside Content Blocks context.', 1699271759);
         }
 
         $key = (string)$arguments['key'];
@@ -74,7 +74,7 @@ class TranslateViewHelper extends AbstractViewHelper
         if (!$contentBlockRegistry->hasContentBlock($name)) {
             throw new Exception('Content block with the name "' . $name . '" is not registered.', 1699272189);
         }
-        $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $key;
+        $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockExtPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath() . ':' . $key;
 
         $request = null;
         if ($renderingContext instanceof RenderingContext) {

@@ -47,7 +47,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
         $typeName = $record[$typeField];
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($typeName);
-        $contentBlockPath = $this->contentBlockRegistry->getContentBlockPath($contentElementDefinition->getName());
+        $contentBlockPath = $this->contentBlockRegistry->getContentBlockExtPath($contentElementDefinition->getName());
         $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolder();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.

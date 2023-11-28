@@ -60,7 +60,7 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
     {
         $contentBlocksRegistry = $this->get(ContentBlockRegistry::class);
 
-        $path = $contentBlocksRegistry->getContentBlockPath($name);
+        $path = $contentBlocksRegistry->getContentBlockExtPath($name);
 
         self::assertSame($expected, $path);
     }
@@ -76,6 +76,6 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
         $this->expectExceptionCode(1678478902);
         $this->expectExceptionMessage('Content block with the name "not/available" is not registered.');
 
-        $contentBlocksRegistry->getContentBlockPath('not/available');
+        $contentBlocksRegistry->getContentBlockExtPath('not/available');
     }
 }

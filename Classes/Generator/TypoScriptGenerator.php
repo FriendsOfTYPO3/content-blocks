@@ -48,7 +48,7 @@ class TypoScriptGenerator
 
     protected function generate(ContentTypeInterface $typeDefinition): string
     {
-        $privatePath = $this->contentBlockRegistry->getContentBlockPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $privatePath = $this->contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName()) . '/' . ContentBlockPathUtility::getPrivateFolder();
         $template = ContentBlockPathUtility::getFrontendTemplateFileNameWithoutExtension();
 
         return <<<HEREDOC
