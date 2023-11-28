@@ -121,10 +121,32 @@ means if you use an asset ViewHelper in a partial, you have to provide
     <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="Frontend.js"/>
 
 
+Resource URI ViewHelper
+=======================
+
+The ViewHelper can be used to generate a URI relative to the Assets folder.
+
+.. code-block:: html
+
+    <img src="{cb:uri.resource(path: 'Icon.svg')}" alt="">
+
+To generate an absolute URI, activate the :html:`absolute` parameter.
+
+.. code-block:: html
+
+    <img src="{cb:uri.resource(path: 'Icon.svg', absolute: '1')}" alt="">
+
+As described above in the asset ViewHelper, the :html:`{data}` variable is
+required to resolve the Content Block automatically. You can also set
+:html:`name` by hand:
+
+.. code-block:: html
+
+    <img src="{cb:uri.resource(path: 'Icon.svg', name: 'vendor/name')}" alt="">
+
 Translation ViewHelper
 ======================
 
-Analogous to the asset ViewHelpers, there is also a ViewHelper for translations.
 This ViewHelper looks directly in the `Labels.xlf` file for the given key.
 
 .. code-block:: html

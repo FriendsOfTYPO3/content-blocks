@@ -77,6 +77,8 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('<p>updateDate:1697810925</p>', $html);
         self::assertStringContainsString('<link href="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.css', $html);
         self::assertStringContainsString('<script src="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.js', $html);
+        self::assertStringContainsString('<img src="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Icon.svg', $html);
+        self::assertStringContainsString('<img src="http://localhost/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Icon.svg', $html);
     }
 
     /**
