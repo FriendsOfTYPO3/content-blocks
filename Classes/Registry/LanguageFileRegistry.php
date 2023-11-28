@@ -53,8 +53,13 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
         return isset($this->parsedLanguageFiles[$name]['default'][$key]);
     }
 
-    public function getParsedLanguageFile(string $name = ''): array
+    public function getAllLanguageFiles(): array
     {
-        return empty($name) ? $this->parsedLanguageFiles : $this->parsedLanguageFiles[$name];
+        return $this->parsedLanguageFiles;
+    }
+
+    public function getLanguageFile(string $name): array
+    {
+        return $this->parsedLanguageFiles[$name];
     }
 }
