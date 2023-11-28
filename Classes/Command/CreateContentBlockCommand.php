@@ -149,7 +149,7 @@ class CreateContentBlockCommand extends Command
 
         $contentBlockConfiguration = new ContentBlockConfiguration(
             yamlConfig: $yamlConfiguration,
-            basePath: $this->getBasePath($availablePackages, $extension, $contentType),
+            basePath: $this->createContentType->getBasePath($availablePackages, $extension, $contentType),
             contentType: $contentType
         );
 
@@ -198,14 +198,5 @@ class CreateContentBlockCommand extends Command
     protected function getSupportedTypes(): array
     {
         return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
-    }
-
-    protected function getBasePath(array $availablePackages, string $extension, ContentType $contentType): string
-    {
-        return match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
-            ContentType::PAGE_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
-            ContentType::RECORD_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
-        };
     }
 }

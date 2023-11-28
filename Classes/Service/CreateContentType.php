@@ -2,6 +2,9 @@
 
 namespace TYPO3\CMS\ContentBlocks\Service;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+
 class CreateContentType
 {
     public function createContentBlockContentElementConfiguration(
@@ -63,5 +66,14 @@ class CreateContentType
             ],
         ];
         return $configuration;
+    }
+
+    public function getBasePath(array $availablePackages, string $extension, ContentType $contentType): string
+    {
+        return match ($contentType) {
+            ContentType::CONTENT_ELEMENT => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
+            ContentType::PAGE_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
+            ContentType::RECORD_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
+        };
     }
 }
