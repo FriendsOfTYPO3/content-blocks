@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Loader\LoaderInterface;
+use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
 /**
@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 class SqlGenerator
 {
     public function __construct(
-        protected readonly LoaderInterface $loader
+        protected readonly ContentBlockLoader $loader
     ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void

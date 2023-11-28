@@ -75,7 +75,7 @@ services:
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
     shared: false
     factory:
-      - '@TYPO3\CMS\ContentBlocks\Loader\LoaderInterface'
+      - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
       - 'load'
 
   TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand:
