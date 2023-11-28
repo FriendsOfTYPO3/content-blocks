@@ -35,17 +35,17 @@ Example output:
 
 .. code-block:: bash
 
-    +-----------+-------------------+-------------------------+-----------------+---------------------------------------+
-    | vendor    | name              | extension               | content-type    | table                                 |
-    +-----------+-------------------+-------------------------+-----------------+---------------------------------------+
-    | example   | tabs              | content_blocks_examples | Content Element | tt_content                            |
-    | example   | accordion         | content_blocks_examples | Content Element | tt_content                            |
-    | example   | card-group        | content_blocks_examples | Content Element | tt_content                            |
-    | example   | cta               | content_blocks_examples | Content Element | tt_content                            |
-    | example   | icon-group        | content_blocks_examples | Content Element | tt_content                            |
-    | example   | imageslider       | content_blocks_examples | Content Element | tt_content                            |
-    | example   | example-page-type | content_blocks_examples | Page Type       | pages                                 |
-    | hov       | record1           | content_blocks_examples | Record Type     | tx_hov_domain_model_record1           |
-    | hov       | record2           | content_blocks_examples | Record Type     | tx_hov_domain_model_record1           |
-    | hov       | notype            | content_blocks_examples | Record Type     | tx_hov_domain_model_notype            |
-    +-----------+-------------------+-------------------------+-----------------+---------------------------------------+
+    +-----------+-------------------+-------------------------+-----------------+-----------------------------+
+    | vendor    | name              | extension               | content-type    | table                       |
+    +-----------+-------------------+-------------------------+-----------------+-----------------------------+
+    | example   | tabs              | content_blocks_examples | Content Element | tt_content                  |
+    | example   | accordion         | content_blocks_examples | Content Element | tt_content                  |
+    | example   | card-group        | content_blocks_examples | Content Element | tt_content                  |
+    | example   | cta               | content_blocks_examples | Content Element | tt_content                  |
+    | example   | icon-group        | content_blocks_examples | Content Element | tt_content                  |
+    | example   | imageslider       | content_blocks_examples | Content Element | tt_content                  |
+    | example   | example-page-type | content_blocks_examples | Page Type       | pages                       |
+    | hov       | record1           | content_blocks_examples | Record Type     | tx_hov_domain_model_record1 |
+    | hov       | record2           | content_blocks_examples | Record Type     | tx_hov_domain_model_record1 |
+    | hov       | notype            | content_blocks_examples | Record Type     | tx_hov_domain_model_notype  |
+    +-----------+-------------------+-------------------------+-----------------+-----------------------------+
