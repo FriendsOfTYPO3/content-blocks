@@ -52,4 +52,9 @@ class LanguageFileRegistry implements LanguageFileRegistryInterface
         }
         return isset($this->parsedLanguageFiles[$name]['default'][$key]);
     }
+
+    public function getParsedLanguageFile(string $name = ''): array
+    {
+        return empty($name) ? $this->parsedLanguageFiles : $this->parsedLanguageFiles[$name];
+    }
 }
