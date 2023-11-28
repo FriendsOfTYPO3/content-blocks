@@ -118,7 +118,7 @@ use content types as sub-resources inside extensions.
     Installation/Index
     ContentBlockDefinition/Index
     Registration/Index
-    ContentBlockSkeleton/Index
+    Commands/Index
     YamlReference/Index
     Templating/Index
     ReuseExistingFields/Index

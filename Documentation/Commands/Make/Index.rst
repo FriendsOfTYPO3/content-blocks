@@ -7,8 +7,8 @@ Kickstart command
 
 The command :bash:`make:content-block` creates a bare-minimum Content Block.
 
-Arguments
-=========
+Options
+=======
 
 .. confval:: content-type
 

@@ -52,4 +52,12 @@ class ContentBlockRegistry implements SingletonInterface
     {
         return $this->getContentBlock($name)->getExtPath();
     }
+
+    /**
+     * @return LoadedContentBlock[]
+     */
+    public function getAll(): array
+    {
+        return $this->contentBlocks;
+    }
 }

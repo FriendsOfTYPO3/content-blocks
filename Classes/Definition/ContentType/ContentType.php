@@ -52,4 +52,13 @@ enum ContentType
             default => self::RECORD_TYPE,
         };
     }
+
+    public function getHumanReadable(): string
+    {
+        return match ($this) {
+            self::CONTENT_ELEMENT => 'Content Element',
+            self::PAGE_TYPE => 'Page Type',
+            self::RECORD_TYPE => 'Record Type',
+        };
+    }
 }
