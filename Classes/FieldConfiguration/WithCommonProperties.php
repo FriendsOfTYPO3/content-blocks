@@ -24,7 +24,7 @@ trait WithCommonProperties
 {
     private ?string $label = null;
     private ?string $description = null;
-    private array $displayCond = [];
+    private null|string|array $displayCond = null;
     private string $l10n_display = '';
     private string $l10n_mode = '';
     private string $onChange = '';
@@ -42,7 +42,10 @@ trait WithCommonProperties
         if (isset($settings['description'])) {
             $this->description = (string)$settings['description'];
         }
-        $this->displayCond = (array)($settings['displayCond'] ?? $this->displayCond);
+        $displayCond = $settings['displayCond'] ?? null;
+        if (isset($displayCond) && (is_string($displayCond) || is_array($displayCond))) {
+            $this->displayCond = $displayCond;
+        }
         $this->l10n_display = (string)($settings['l10n_display'] ?? $this->l10n_display);
         $this->l10n_mode = (string)($settings['l10n_mode'] ?? $this->l10n_mode);
         $this->onChange = (string)($settings['onChange'] ?? $this->onChange);
@@ -61,7 +64,7 @@ trait WithCommonProperties
         if ($this->description !== null) {
             $tca['description'] = $this->description;
         }
-        if ($this->displayCond !== []) {
+        if ($this->displayCond !== null && $this->displayCond !== '' && $this->displayCond !== []) {
             $tca['displayCond'] = $this->displayCond;
         }
         if ($this->l10n_display !== '') {
