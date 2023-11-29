@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Validation;
 
-use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
@@ -37,9 +36,7 @@ class PageTypeNameValidator
         PageRepository::DOKTYPE_RECYCLER, // @todo remove in v13
     ];
 
-    public function __construct(protected readonly PageDoktypeRegistry $pageDoktypeRegistry) {}
-
-    public function validate(string|int $typeName, string $contentBlockName): void
+    public static function validate(string|int $typeName, string $contentBlockName): void
     {
         $integerTypeName = (int)$typeName;
         if (!MathUtility::canBeInterpretedAsInteger($typeName) || $integerTypeName < 0 || in_array($integerTypeName, self::$reservedPageTypes, true)) {
@@ -47,12 +44,6 @@ class PageTypeNameValidator
                 'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' . $contentBlockName . '". Value must be a positive integer and not one of the reserved page types: '
                 . implode(', ', self::$reservedPageTypes),
                 1689287031
-            );
-        }
-        if (in_array($integerTypeName, $this->pageDoktypeRegistry->getRegisteredDoktypes(), true)) {
-            throw new \InvalidArgumentException(
-                'Invalid value "' . $integerTypeName . '" for "typeName" in ContentBlock "' . $contentBlockName . '". This type name is already registered.',
-                1690823712
             );
         }
     }

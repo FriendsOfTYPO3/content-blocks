@@ -34,6 +34,8 @@ class BasicsLoader
 
     public function load(): void
     {
+        // Reset BasicsRegistry before loading.
+        $this->basicsRegistry->flush();
         foreach ($this->packageManager->getActivePackages() as $package) {
             $pathToBasics = $package->getPackagePath() . ContentBlockPathUtility::getRelativeBasicsPath();
             if (!is_dir($pathToBasics)) {

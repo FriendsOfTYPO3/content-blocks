@@ -51,16 +51,15 @@ class ContentBlockLoader
         protected readonly BasicsLoader $basicsLoader,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
-        protected readonly PageTypeNameValidator $pageTypeNameValidator,
     ) {}
 
-    public function load(bool $allowCache = true): TableDefinitionCollection
+    public function load(): TableDefinitionCollection
     {
-        if ($allowCache && $this->tableDefinitionCollection instanceof TableDefinitionCollection) {
+        if ($this->tableDefinitionCollection instanceof TableDefinitionCollection) {
             return $this->tableDefinitionCollection;
         }
 
-        if ($allowCache && is_array($contentBlocks = $this->cache->require('content-blocks'))) {
+        if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
             foreach ($contentBlocks as $contentBlock) {
                 $this->contentBlockRegistry->register($contentBlock);
@@ -71,6 +70,11 @@ class ContentBlockLoader
             return $this->tableDefinitionCollection;
         }
 
+        return $this->loadUncached();
+    }
+
+    public function loadUncached(): TableDefinitionCollection
+    {
         // Load Basics before content block types.
         $this->basicsLoader->load();
 
@@ -84,7 +88,7 @@ class ContentBlockLoader
             }
             $pageTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath();
             if (is_dir($pageTypesFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($pageTypesFolder, $extensionKey, ContentType::PAGE_TYPE, $allowCache);
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($pageTypesFolder, $extensionKey, ContentType::PAGE_TYPE);
             }
             $recordTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath();
             if (is_dir($recordTypesFolder)) {
@@ -114,7 +118,7 @@ class ContentBlockLoader
     /**
      * @return LoadedContentBlock[]
      */
-    protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType, bool $allowCache = true): array
+    protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType): array
     {
         $result = [];
         $finder = new Finder();
@@ -123,7 +127,7 @@ class ContentBlockLoader
             $absoluteContentBlockPath = $splFileInfo->getPathname();
             $contentBlockFolderName = $splFileInfo->getRelativePathname();
             $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
-            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentType, $allowCache);
+            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentType);
             $result[] = $this->loadSingleContentBlock(
                 $editorInterfaceYaml['name'],
                 $contentType,
@@ -136,7 +140,7 @@ class ContentBlockLoader
         return $result;
     }
 
-    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, mixed $contentType, bool $allowCache): array
+    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, mixed $contentType): array
     {
         $yamlPath = $absoluteContentBlockPath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName();
         $editorInterfaceYaml = Yaml::parseFile($yamlPath);
@@ -166,11 +170,7 @@ class ContentBlockLoader
                     1689286814
                 );
             }
-            // Skip validation, if cache is disabled or else this will always fail
-            // as the PageDoktypeRegistry is already loaded with types from Content Blocks.
-            if ($allowCache) {
-                $this->pageTypeNameValidator->validate($editorInterfaceYaml['typeName'], $editorInterfaceYaml['name']);
-            }
+            PageTypeNameValidator::validate($editorInterfaceYaml['typeName'], $editorInterfaceYaml['name']);
         }
         return $editorInterfaceYaml;
     }

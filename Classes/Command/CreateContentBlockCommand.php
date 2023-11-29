@@ -40,7 +40,6 @@ class CreateContentBlockCommand extends Command
     public function __construct(
         protected readonly ContentBlockSkeletonBuilder $contentBlockBuilder,
         protected readonly PackageResolver $packageResolver,
-        protected readonly PageTypeNameValidator $pageTypeNameValidator,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {
         parent::__construct();
@@ -116,7 +115,7 @@ class CreateContentBlockCommand extends Command
                     $type = $currentTimeStamp;
                 }
             }
-            $this->pageTypeNameValidator->validate($type, $vendor . '/' . $name);
+            PageTypeNameValidator::validate($type, $vendor . '/' . $name);
             $type = (int)$type;
         }
 

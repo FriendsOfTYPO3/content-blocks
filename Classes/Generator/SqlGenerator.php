@@ -36,7 +36,7 @@ class SqlGenerator
 
     public function generate(): array
     {
-        $tableDefinitionCollection = $this->loader->load(false);
+        $tableDefinitionCollection = $this->loader->loadUncached();
         $sql = [];
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getSqlColumnDefinitionCollection() as $column) {

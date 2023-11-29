@@ -57,4 +57,9 @@ class BasicsRegistry implements SingletonInterface
     {
         return $this->basics;
     }
+
+    public function flush(): void
+    {
+        $this->basics = [];
+    }
 }
