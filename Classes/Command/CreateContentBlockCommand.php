@@ -27,6 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\PackageResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
@@ -40,6 +41,7 @@ class CreateContentBlockCommand extends Command
         protected readonly ContentBlockSkeletonBuilder $contentBlockBuilder,
         protected readonly PackageResolver $packageResolver,
         protected readonly PageTypeNameValidator $pageTypeNameValidator,
+        protected readonly ContentBlockRegistry $contentBlockRegistry
     ) {
         parent::__construct();
     }
@@ -102,6 +104,10 @@ class CreateContentBlockCommand extends Command
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
                 $output->writeln('<error>Your content block name does not match the requirement.</error>');
             }
+        }
+        if($this->contentBlockRegistry->hasContentBlock($vendor . '/' . $name)) {
+            $output->writeln('<error>A content block with the name "' . $vendor . '/' . $name . '" already exists. Please run the command again and specify a different combination of vendor name and content block name</error>');
+            return Command::INVALID;
         }
         $name = strtolower($name);
         if ($contentType === ContentType::PAGE_TYPE) {
