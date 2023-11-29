@@ -95,6 +95,8 @@ definition to a separate Record Type and use :yaml:`foreign_table` instead.
 Options
 =======
 
+Here you can find all :ref:`common root options <yaml_reference_common>`.
+
 .. confval:: table
 
    :Required: true (false for Collections)

@@ -42,6 +42,8 @@ The Appearance tab will then be added after all your custom fields.
 Options
 =======
 
+Here you can find all :ref:`common root options <yaml_reference_common>`.
+
 .. confval:: group
 
    :Required: false

@@ -35,6 +35,8 @@ Full examples can be found in the examples repository: https://github.com/TYPO3-
    FieldTypes/Index
    Basics/Index
 
+.. _yaml_reference_common:
+
 Common root options
 ===================
 

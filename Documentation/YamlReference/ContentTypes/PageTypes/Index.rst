@@ -26,6 +26,8 @@ and drop as usual. Your custom fields will be added after the `nav_title` field.
 Options
 =======
 
+Here you can find all :ref:`common root options <yaml_reference_common>`.
+
 .. confval:: typeName
 
    :Required: true
