@@ -48,6 +48,12 @@ class ListContentBlocksCommand extends Command
             return Command::INVALID;
         }
         $availableContentBlocks = $this->getAvailableContentBlocks();
+
+        if ($availableContentBlocks === []) {
+            $output->writeln('<info>There aren\'t any content blocks on your system. Use `make:content-block` to create your first one.</info>');
+            return Command::SUCCESS;
+        }
+
         usort($availableContentBlocks, function (array $a, array $b) use ($order): int {
             if ($order === 'content-type') {
                 return $a[$order] <=> $b[$order];
