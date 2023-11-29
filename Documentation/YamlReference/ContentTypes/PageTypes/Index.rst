@@ -15,7 +15,7 @@ minimal Page Type looks like this:
    :caption: EXT:your_extension/ContentBlocks/PageType/blog/EditorInterface.yaml
 
     name: example/blog
-    typeName: 942
+    typeName: 1701284006
     fields:
       - identifier: additional_field
         type: Text
@@ -38,4 +38,10 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
    .. code-block:: yaml
 
-       typeName: 1337
+       typeName: 1701284021
+
+   .. tip::
+
+      We recommend to use the **current unix timestamp** fo your type name. This
+      is almost guaranteed unique. The kickstart command will default to the
+      current timestamp as well.

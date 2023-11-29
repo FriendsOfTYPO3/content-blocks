@@ -33,7 +33,7 @@ class PageTypeNameValidator
         PageRepository::DOKTYPE_BE_USER_SECTION,
         PageRepository::DOKTYPE_SPACER,
         PageRepository::DOKTYPE_SYSFOLDER,
-        PageRepository::DOKTYPE_RECYCLER, // @todo remove in v13
+        PageRepository::DOKTYPE_RECYCLER, // @todo remove in v13 (Also in docs!)
     ];
 
     public static function validate(string|int $typeName, string $contentBlockName): void
