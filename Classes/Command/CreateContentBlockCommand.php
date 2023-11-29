@@ -123,7 +123,7 @@ class CreateContentBlockCommand extends Command
         $contentBlockName = $vendor . '/' . $name;
         if ($this->contentBlockRegistry->hasContentBlock($contentBlockName)) {
             $output->writeln(
-                '<error>A content block with the name "' . $contentBlockName. '" already exists. Please run '
+                '<error>A content block with the name "' . $contentBlockName . '" already exists. Please run '
                 . 'the command again and specify a different combination of vendor name and content block name.</error>'
             );
             return Command::INVALID;
