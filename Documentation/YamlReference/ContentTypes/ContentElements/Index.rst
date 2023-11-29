@@ -42,6 +42,28 @@ The Appearance tab will then be added after all your custom fields.
 Options
 =======
 
+.. confval:: group
+
+   :Required: false
+   :Type: string
+   :Default: common
+
+   By default, all new Content Elements are placed in the `common` tab of the
+   "New Content Element Wizard". You can choose another tab, if you want to
+   group your elements.
+
+   .. code-block:: yaml
+
+       group: special
+
+   The Core defines these standard tabs, which are always available:
+
+   *  `common`
+   *  `menu`
+   *  `special`
+   *  `forms`
+   *  `plugins`
+
 .. confval:: typeName
 
    :Required: false
