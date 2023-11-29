@@ -31,6 +31,12 @@ class BasicsRegistry implements SingletonInterface
 
     public function register(LoadedBasic $basic): void
     {
+        if ($this->hasBasic($basic->getIdentifier())) {
+            throw new \RuntimeException(
+                'The Content Block Basic "' . $basic->getIdentifier() . '" already exists. Please choose another identifier.',
+                1701279535
+            );
+        }
         $this->basics[$basic->getIdentifier()] = $basic;
     }
 

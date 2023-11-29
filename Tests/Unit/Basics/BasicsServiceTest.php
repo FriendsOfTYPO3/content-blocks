@@ -493,4 +493,36 @@ final class BasicsServiceTest extends UnitTestCase
 
         self::assertSame($expected, $basicsService->applyBasics($yaml));
     }
+
+    /**
+     * @test
+     */
+    public function basicWithSameIdentifierThrowsException(): void
+    {
+        $basic1 = new LoadedBasic('Basic1', [
+            [
+                'identifier' => 'a_tab',
+                'type' => 'Tab',
+            ],
+            [
+                'identifier' => 'foo',
+                'type' => 'Text',
+            ],
+        ]);
+
+        $basic2 = new LoadedBasic('Basic1', [
+            [
+                'identifier' => 'bar',
+                'type' => 'Textarea',
+            ],
+        ]);
+
+        $basicsRegistry = new BasicsRegistry();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionCode(1701279535);
+
+        $basicsRegistry->register($basic1);
+        $basicsRegistry->register($basic2);
+    }
 }
