@@ -345,7 +345,7 @@ final class SqlGeneratorTest extends UnitTestCase
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $array);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
         $loader = $this->createMock(ContentBlockLoader::class);
-        $loader->method('load')->willReturn($tableDefinitionCollection);
+        $loader->method('loadUncached')->willReturn($tableDefinitionCollection);
         $sqlGenerator = new SqlGenerator($loader);
 
         $result = $sqlGenerator->generate();
