@@ -41,7 +41,7 @@ class CreateContentBlockCommand extends Command
         protected readonly ContentBlockSkeletonBuilder $contentBlockBuilder,
         protected readonly PackageResolver $packageResolver,
         protected readonly PageTypeNameValidator $pageTypeNameValidator,
-        protected readonly ContentBlockRegistry $contentBlockRegistry
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {
         parent::__construct();
     }
@@ -105,10 +105,6 @@ class CreateContentBlockCommand extends Command
                 $output->writeln('<error>Your content block name does not match the requirement.</error>');
             }
         }
-        if($this->contentBlockRegistry->hasContentBlock($vendor . '/' . $name)) {
-            $output->writeln('<error>A content block with the name "' . $vendor . '/' . $name . '" already exists. Please run the command again and specify a different combination of vendor name and content block name</error>');
-            return Command::INVALID;
-        }
         $name = strtolower($name);
         if ($contentType === ContentType::PAGE_TYPE) {
             if ($input->getOption('type')) {
@@ -122,6 +118,15 @@ class CreateContentBlockCommand extends Command
             }
             $this->pageTypeNameValidator->validate($type, $vendor . '/' . $name);
             $type = (int)$type;
+        }
+
+        $contentBlockName = $vendor . '/' . $name;
+        if ($this->contentBlockRegistry->hasContentBlock($contentBlockName)) {
+            $output->writeln(
+                '<error>A content block with the name "' . $contentBlockName. '" already exists. Please run '
+                . 'the command again and specify a different combination of vendor name and content block name.</error>'
+            );
+            return Command::INVALID;
         }
 
         $yamlConfiguration = match ($contentType) {
