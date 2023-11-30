@@ -75,6 +75,7 @@ class ContentBlockLoader
 
     public function loadUncached(): TableDefinitionCollection
     {
+        $this->contentBlockRegistry->flush();
         // Load Basics before content block types.
         $this->basicsLoader->load();
 
@@ -96,9 +97,8 @@ class ContentBlockLoader
             }
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
-        $this->checkForUniqueness($loadedContentBlocks);
-        // Sort content blocks by priority.
-        usort($loadedContentBlocks, fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0));
+        $sortByPriority = fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
+        usort($loadedContentBlocks, $sortByPriority);
         foreach ($loadedContentBlocks as $contentBlock) {
             $this->contentBlockRegistry->register($contentBlock);
             $this->languageFileRegistry->register($contentBlock);
@@ -206,23 +206,6 @@ class ContentBlockLoader
             extPath: $extPath,
             contentType: $contentType,
         );
-    }
-
-    /**
-     * @param LoadedContentBlock[] $loadedContentBlocks
-     */
-    protected function checkForUniqueness(array $loadedContentBlocks): void
-    {
-        $uniqueNames = [];
-        foreach ($loadedContentBlocks as $loadedContentBlock) {
-            if (in_array($loadedContentBlock->getName(), $uniqueNames, true)) {
-                throw new \InvalidArgumentException(
-                    'The content block with the name "' . $loadedContentBlock->getName() . '" exists more than once. Please choose another name.',
-                    1678474766
-                );
-            }
-            $uniqueNames[] = $loadedContentBlock->getName();
-        }
     }
 
     /**

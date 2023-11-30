@@ -32,6 +32,12 @@ class ContentBlockRegistry implements SingletonInterface
 
     public function register(LoadedContentBlock $contentBlock): void
     {
+        if ($this->hasContentBlock($contentBlock->getName())) {
+            throw new \InvalidArgumentException(
+                'The Content Block with the name "' . $contentBlock->getName() . '" exists more than once. Please choose another name.',
+                1678474766
+            );
+        }
         $this->contentBlocks[$contentBlock->getName()] = $contentBlock;
     }
 
@@ -59,5 +65,10 @@ class ContentBlockRegistry implements SingletonInterface
     public function getAll(): array
     {
         return $this->contentBlocks;
+    }
+
+    public function flush(): void
+    {
+        $this->contentBlocks = [];
     }
 }
