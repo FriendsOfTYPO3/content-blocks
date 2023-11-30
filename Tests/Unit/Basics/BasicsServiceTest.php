@@ -531,7 +531,6 @@ final class BasicsServiceTest extends UnitTestCase
 
         $basic2 = new LoadedBasic(
             'foo',
-
             'Basic1',
             [
                 [
