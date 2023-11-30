@@ -23,13 +23,15 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
 final class LoadedBasic
 {
     public function __construct(
+        private readonly string $hostExtension,
         private readonly string $identifier,
-        private readonly array $fields
+        private readonly array $fields,
     ) {}
 
-    public static function fromArray(array $array): LoadedBasic
+    public static function fromArray(array $array, string $hostExtension): LoadedBasic
     {
         return new self(
+            hostExtension: $hostExtension,
             identifier: (string)($array['identifier'] ?? ''),
             fields: (array)($array['fields'] ?? [])
         );
@@ -51,5 +53,10 @@ final class LoadedBasic
     public function getFields(): array
     {
         return $this->fields;
+    }
+
+    public function getHostExtension(): string
+    {
+        return $this->hostExtension;
     }
 }

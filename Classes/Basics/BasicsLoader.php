@@ -48,7 +48,7 @@ class BasicsLoader
                 if (!is_array($yamlContent) || ($yamlContent['identifier'] ?? '') === '') {
                     throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname() . '"' . ': Cannot find an identifier.', 1689095524);
                 }
-                $loadedBasic = LoadedBasic::fromArray($yamlContent);
+                $loadedBasic = LoadedBasic::fromArray($yamlContent, $package->getPackageKey());
                 $this->basicsRegistry->register($loadedBasic);
             }
         }
