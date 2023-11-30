@@ -682,7 +682,7 @@ class TcaGenerator
         $ctrl = [
             'title' => $title,
             'label' => $this->resolveLabelField($tableDefinition),
-            'hideTable' => !$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot(),
+            'hideTable' => !$tableDefinition->isAggregateRoot(),
             'enablecolumns' => $capability->buildRestrictionsTca(),
         ];
 
@@ -889,7 +889,8 @@ class TcaGenerator
             ];
         }
 
-        if (!$tableDefinition->isRootTable() || !$tableDefinition->isAggregateRoot()) {
+        // This is a child table and can only be created by the parent.
+        if (!$tableDefinition->isAggregateRoot()) {
             $columns['foreign_table_parent_uid'] = [
                 'config' => [
                     'type' => 'passthrough',
