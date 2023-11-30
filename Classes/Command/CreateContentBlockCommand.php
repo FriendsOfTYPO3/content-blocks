@@ -179,8 +179,8 @@ class CreateContentBlockCommand extends Command
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
         $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');
-        $output->writeln('<question>Please run the following commands now and every time you change the EditorInterface.yaml file:</question>');
-        $output->writeln('<question>(Or flush the system cache in the backend and run the Database Analyzer)</question>');
+        $output->writeln('<comment>Please run the following commands now and every time you change the EditorInterface.yaml file.</comment>');
+        $output->writeln('<comment>Alternatively, flush the system cache in the backend and run the Database Analyzer.</comment>');
 
         $command = Environment::isComposerMode() ? 'vendor/bin/typo3' : 'typo3/sysext/core/bin/typo3';
         $output->writeln($command . ' cache:flush -g system');
