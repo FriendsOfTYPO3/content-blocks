@@ -222,10 +222,11 @@ class TcaGenerator
                         position: 'after:default',
                     );
                 }
-                // @todo hard-coded "default" group for pages. Make target group configurable.
                 $group = match ($tableDefinition->getContentType()) {
                     ContentType::CONTENT_ELEMENT => 'content_blocks',
+                    // @todo hard-coded "default" group for pages. Make target group configurable.
                     ContentType::PAGE_TYPE => 'default',
+                    // @todo Type select grouping is not possible right now for Record Types.
                     ContentType::RECORD_TYPE => '',
                 };
                 $label = $typeDefinition->getLanguagePathTitle();
