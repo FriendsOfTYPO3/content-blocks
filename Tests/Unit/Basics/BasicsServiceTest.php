@@ -40,6 +40,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'SimpleBasic',
                 [
                     [
@@ -84,6 +85,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'PaletteBasic',
                 [
                     [
@@ -140,6 +142,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'TabBasic',
                 [
                     [
@@ -198,6 +201,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'SimpleBasic',
                 [
                     [
@@ -264,6 +268,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'SimpleBasic',
                 [
                     [
@@ -310,6 +315,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'PaletteBasic',
                 [
                     [
@@ -368,6 +374,7 @@ final class BasicsServiceTest extends UnitTestCase
                 ],
             ],
             'basic' => new LoadedBasic(
+                'foo',
                 'TabBasic',
                 [
                     [
@@ -429,23 +436,31 @@ final class BasicsServiceTest extends UnitTestCase
      */
     public function multipleBasicsAreAppendedByTopLevelBasicsArray(): void
     {
-        $basic1 = new LoadedBasic('Basic1', [
+        $basic1 = new LoadedBasic(
+            'foo',
+            'Basic1',
             [
-                'identifier' => 'a_tab',
-                'type' => 'Tab',
-            ],
-            [
-                'identifier' => 'foo',
-                'type' => 'Text',
-            ],
-        ]);
+                [
+                    'identifier' => 'a_tab',
+                    'type' => 'Tab',
+                ],
+                [
+                    'identifier' => 'foo',
+                    'type' => 'Text',
+                ],
+            ]
+        );
 
-        $basic2 = new LoadedBasic('Basic2', [
+        $basic2 = new LoadedBasic(
+            'foo',
+            'Basic2',
             [
-                'identifier' => 'bar',
-                'type' => 'Textarea',
-            ],
-        ]);
+                [
+                    'identifier' => 'bar',
+                    'type' => 'Textarea',
+                ],
+            ]
+        );
 
         $basicsRegistry = new BasicsRegistry();
         $basicsRegistry->register($basic1);
@@ -499,23 +514,32 @@ final class BasicsServiceTest extends UnitTestCase
      */
     public function basicWithSameIdentifierThrowsException(): void
     {
-        $basic1 = new LoadedBasic('Basic1', [
+        $basic1 = new LoadedBasic(
+            'foo',
+            'Basic1',
             [
-                'identifier' => 'a_tab',
-                'type' => 'Tab',
-            ],
-            [
-                'identifier' => 'foo',
-                'type' => 'Text',
-            ],
-        ]);
+                [
+                    'identifier' => 'a_tab',
+                    'type' => 'Tab',
+                ],
+                [
+                    'identifier' => 'foo',
+                    'type' => 'Text',
+                ],
+            ]
+        );
 
-        $basic2 = new LoadedBasic('Basic1', [
+        $basic2 = new LoadedBasic(
+            'foo',
+
+            'Basic1',
             [
-                'identifier' => 'bar',
-                'type' => 'Textarea',
-            ],
-        ]);
+                [
+                    'identifier' => 'bar',
+                    'type' => 'Textarea',
+                ],
+            ]
+        );
 
         $basicsRegistry = new BasicsRegistry();
 
