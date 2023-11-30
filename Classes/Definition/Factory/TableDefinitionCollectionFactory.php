@@ -179,12 +179,14 @@ final class TableDefinitionCollectionFactory
         $result->contentType->typeName = $input->getTypeName();
         $result->contentType->table = $input->table;
         if ($input->isRootTable()) {
-            $result->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . 'title';
-            $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . 'description';
+            $languagePathTitle = 'title';
+            $languagePathDescription = 'description';
         } else {
-            $result->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . '.label';
-            $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . '.description';
+            $languagePathTitle = '.label';
+            $languagePathDescription = '.description';
         }
+        $result->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . $languagePathTitle;
+        $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
 
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
