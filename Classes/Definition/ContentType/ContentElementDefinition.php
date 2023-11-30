@@ -22,11 +22,9 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private string $contentElementIcon = '';
-    private string $contentElementIconOverlay = '';
+    // @todo implement saveAndClose.
     private bool $saveAndClose = false;
-    private string $wizardGroup = '';
-    private string $wizardIconPath = '';
+    private string $group = '';
 
     public static function createFromArray(array $array, string $table): ContentElementDefinition
     {
@@ -41,10 +39,8 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
             ->withPriority($array['priority'] ?? 0)
-            ->withContentElementIcon($array['contentElementIcon'] ?? '')
-            ->withContentElementIconOverlay($array['contentElementIconOverlay'] ?? '')
             ->withSaveAndClose(!empty($array['saveAndClose']))
-            ->withWizardGroup($array['wizardGroup'])
+            ->withGroup($array['group'])
             ->withTypeIconPath($array['typeIconPath'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? null)
             ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
@@ -52,48 +48,14 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
     }
 
-    public function getContentElementIcon(): string
+    public function getGroup(): string
     {
-        return $this->contentElementIcon;
-    }
-
-    public function getContentElementIconOverlay(): string
-    {
-        return $this->contentElementIconOverlay;
-    }
-
-    public function getWizardGroup(): string
-    {
-        return $this->wizardGroup;
-    }
-
-    public function getWizardIconPath(): string
-    {
-        return $this->wizardIconPath;
-    }
-
-    public function getWizardIconIdentifier(): string
-    {
-        return $this->getTypeIconIdentifier();
+        return $this->group;
     }
 
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
-    }
-
-    public function withContentElementIcon(string $contentElementIcon): self
-    {
-        $clone = clone $this;
-        $clone->contentElementIcon = $contentElementIcon;
-        return $clone;
-    }
-
-    public function withContentElementIconOverlay(string $contentElementIconOverlay): self
-    {
-        $clone = clone $this;
-        $clone->contentElementIconOverlay = $contentElementIconOverlay;
-        return $clone;
     }
 
     public function withSaveAndClose(bool $saveAndClose): self
@@ -103,10 +65,10 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
         return $clone;
     }
 
-    public function withWizardGroup(string $wizardGroup): self
+    public function withGroup(string $group): self
     {
         $clone = clone $this;
-        $clone->wizardGroup = $wizardGroup;
+        $clone->group = $group;
         return $clone;
     }
 }

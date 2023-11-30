@@ -556,9 +556,11 @@ final class TableDefinitionCollectionFactory
      */
     private function createInputArrayForTypeDefinition(ProcessedContentType $processedContentType, ProcessingInput $input): array
     {
-        [$vendor, $package] = explode('/', $processedContentType->contentBlock->getName());
+        $contentBlock = $processedContentType->contentBlock;
+        $vendor = $contentBlock->getVendor();
+        $package = $contentBlock->getPackage();
         $contentType = [
-            'identifier' => $processedContentType->contentBlock->getName(),
+            'identifier' => $contentBlock->getName(),
             'columns' => $processedContentType->columns,
             'showItems' => $processedContentType->showItems,
             'overrideColumns' => $processedContentType->overrideColumns,
@@ -570,15 +572,15 @@ final class TableDefinitionCollectionFactory
         ];
         if ($input->isRootTable()) {
             $contentTypeIcon = new ContentTypeIcon();
-            $contentTypeIcon->iconPath = $processedContentType->contentBlock->getIcon();
-            $contentTypeIcon->iconProvider = $processedContentType->contentBlock->getIconProvider();
-            $contentType['priority'] = (int)($processedContentType->contentBlock->getYaml()['priority'] ?? 0);
+            $contentTypeIcon->iconPath = $contentBlock->getIcon();
+            $contentTypeIcon->iconProvider = $contentBlock->getIconProvider();
+            $contentType['priority'] = (int)($contentBlock->getYaml()['priority'] ?? 0);
         } else {
-            $absolutePath = GeneralUtility::getFileAbsFileName($processedContentType->contentBlock->getExtPath());
+            $absolutePath = GeneralUtility::getFileAbsFileName($contentBlock->getExtPath());
             $contentTypeIcon = ContentTypeIconResolver::resolve(
-                $processedContentType->contentBlock->getName(),
+                $contentBlock->getName(),
                 $absolutePath,
-                $processedContentType->contentBlock->getExtPath(),
+                $contentBlock->getExtPath(),
                 $input->yaml['identifier'],
                 $input->contentType,
             );
@@ -586,8 +588,8 @@ final class TableDefinitionCollectionFactory
         $contentType['typeIconPath'] = $contentTypeIcon->iconPath;
         $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
         $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($processedContentType, $contentTypeIcon);
-        if ($processedContentType->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $contentType['wizardGroup'] = $processedContentType->contentBlock->getYaml()['group'] ?? 'common';
+        if ($contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
+            $contentType['group'] = $contentBlock->getYaml()['group'] ?? $contentBlock->getContentType()->getDefaultGroup();
         }
         return $contentType;
     }

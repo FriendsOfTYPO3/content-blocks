@@ -61,4 +61,12 @@ enum ContentType
             self::RECORD_TYPE => 'Record Type',
         };
     }
+
+    public function getDefaultGroup(): ?string
+    {
+        return match ($this) {
+            self::CONTENT_ELEMENT => 'common',
+            self::PAGE_TYPE, self::RECORD_TYPE => null,
+        };
+    }
 }

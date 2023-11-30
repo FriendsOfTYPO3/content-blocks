@@ -51,10 +51,10 @@ class PageTsConfigGenerator
         }
         $description = $contentElementDefinition->getLanguagePathDescription();
         return <<<HEREDOC
-mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getWizardGroup()} {
+mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getGroup()} {
     elements {
         {$contentElementDefinition->getTypeName()} {
-            iconIdentifier = {$contentElementDefinition->getWizardIconIdentifier()}
+            iconIdentifier = {$contentElementDefinition->getTypeIconIdentifier()}
             title = $title
             description = $description
             tt_content_defValues {
