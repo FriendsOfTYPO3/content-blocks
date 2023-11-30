@@ -17,7 +17,7 @@ Options
    :Type: string
    :Shortcut: o
 
-   :bash:`vendor`, :bash:`name`, :bash:`extension`, :bash:`content-type` or :bash:`table`
+   :bash:`vendor`, :bash:`name`, :bash:`table`, :bash:`type-name`, :bash:`content-type` or :bash:`extension`
 
 This will give you an overview of all available Content Blocks:
 

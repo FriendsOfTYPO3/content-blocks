@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 
 class ListContentBlocksCommand extends Command
@@ -35,12 +36,13 @@ class ListContentBlocksCommand extends Command
 
     public function configure(): void
     {
-        $this->addOption('order', 'o', InputOption::VALUE_OPTIONAL, 'Order result by one of "vendor", "name", "extension", "content-type" or "table".', 'vendor');
+        $orderDescription = 'Order result by one of "vendor", "name", "table", "type-name", "content-type" or "extension".';
+        $this->addOption('order', 'o', InputOption::VALUE_OPTIONAL, $orderDescription, 'vendor');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $headers = ['vendor', 'name', 'extension', 'content-type', 'table'];
+        $headers = ['vendor', 'name', 'table', 'type-name', 'content-type', 'extension'];
         $order = $input->getOption('order');
         if (!in_array($order, $headers, true)) {
             $errorMessage = '<error>Order "' . $order . '" is not allowed. Please use one of ' . implode(', ', $headers) . '.</error>';
@@ -75,12 +77,17 @@ class ListContentBlocksCommand extends Command
                 ContentType::CONTENT_ELEMENT, ContentType::PAGE_TYPE => $loadedContentBlock->getContentType()->getTable(),
                 ContentType::RECORD_TYPE => $loadedContentBlock->getYaml()['table'],
             };
+            $typeName = $loadedContentBlock->getYaml()['typeName'] ?? null;
+            if ($typeName === null) {
+                $typeName = UniqueIdentifierCreator::createContentTypeIdentifier($loadedContentBlock);
+            }
             $list[] = [
                 'vendor' => $loadedContentBlock->getVendor(),
                 'name' => $loadedContentBlock->getPackage(),
-                'extension' => $loadedContentBlock->getHostExtension(),
-                'content-type' => $loadedContentBlock->getContentType()->getHumanReadable(),
                 'table' => $table,
+                'type-name' => $typeName,
+                'content-type' => $loadedContentBlock->getContentType()->getHumanReadable(),
+                'extension' => $loadedContentBlock->getHostExtension(),
             ];
         }
         return $list;
