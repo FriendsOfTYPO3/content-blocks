@@ -28,8 +28,8 @@ final class PaletteDefinition
     private string $description = '';
     private string $languagePathLabel = '';
     private string $languagePathDescription = '';
-    /** @var string[] */
-    private array $fieldIdentifiers = [];
+    /** @var array<string|LinebreakDefinition> */
+    private array $items = [];
 
     public static function createFromArray(array $array): PaletteDefinition
     {
@@ -43,7 +43,7 @@ final class PaletteDefinition
         $self->description = (string)($array['description'] ?? '');
         $self->languagePathLabel = (string)($array['languagePathLabel'] ?? '');
         $self->languagePathDescription = (string)($array['languagePathDescription'] ?? '');
-        $self->fieldIdentifiers = (array)($array['fieldIdentifiers'] ?? []);
+        $self->items = (array)($array['items'] ?? []);
         return $self;
     }
 
@@ -72,10 +72,18 @@ final class PaletteDefinition
         return $this->description !== '';
     }
 
-    public function getShowItem(): string
+    public function getShowItemTca(): string
     {
-        $showItem = implode(',', $this->fieldIdentifiers);
-        return $showItem;
+        $showItem = [];
+        foreach ($this->items as $fieldIdentifier) {
+            if ($fieldIdentifier instanceof LinebreakDefinition) {
+                $showItem[] = $fieldIdentifier->getTca();
+            } else {
+                $showItem[] = $fieldIdentifier;
+            }
+        }
+        $showItemString = implode(',', $showItem);
+        return $showItemString;
     }
 
     public function getLanguagePathLabel(): string

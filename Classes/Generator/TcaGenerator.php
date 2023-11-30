@@ -187,7 +187,7 @@ class TcaGenerator
     protected function generatePalettesTcaSingle(PaletteDefinition $paletteDefinition): array
     {
         $paletteTca = [
-            'showitem' => $paletteDefinition->getShowItem(),
+            'showitem' => $paletteDefinition->getShowItemTca(),
         ];
         if ($this->languageFileRegistry->isset($paletteDefinition->getContentBlockName(), $paletteDefinition->getLanguagePathLabel())) {
             $paletteTca['label'] = $paletteDefinition->getLanguagePathLabel();

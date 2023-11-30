@@ -29,6 +29,7 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
@@ -245,16 +246,16 @@ final class TableDefinitionCollectionFactory
             return [];
         }
         $fields = [];
-        $paletteFieldIdentifiers = [];
+        $paletteItems = [];
         foreach ($rootPalette['fields'] as $paletteField) {
             $paletteFieldType = $this->resolveType($paletteField, $input->table, $input);
             if ($paletteFieldType === FieldType::LINEBREAK) {
-                $paletteFieldIdentifiers[] = '--linebreak--';
+                $paletteItems[] = new LinebreakDefinition();
             } else {
                 $this->assertNoPaletteInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
                 $this->assertNoTabInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
                 $fields[] = $paletteField;
-                $paletteFieldIdentifiers[] = $this->chooseIdentifier($input, $paletteField);
+                $paletteItems[] = $this->chooseIdentifier($input, $paletteField);
             }
         }
         $input->languagePath->addPathSegment('palettes.' . $rootPalette['identifier']);
@@ -270,7 +271,7 @@ final class TableDefinitionCollectionFactory
             'description' => $description,
             'languagePathLabel' => $languagePathLabel,
             'languagePathDescription' => $languagePathDescription,
-            'fieldIdentifiers' => $paletteFieldIdentifiers,
+            'items' => $paletteItems,
         ];
         $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
         $result->contentType->showItems[] = PaletteDefinition::createFromArray($palette);
