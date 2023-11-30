@@ -540,7 +540,6 @@ final class TableDefinitionCollectionFactory
         $tableDefinition['palettes'] = $processedTableDefinition->palettes;
         $tableDefinition['fields'] = $processedTableDefinition->fields;
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
-        $tableDefinition['isRootTable'] = $processedTableDefinition->isRootTable;
         $tableDefinition['raw'] = $processedTableDefinition->raw;
         $tableDefinition['contentType'] = $processedTableDefinition->contentType;
         if ($processedTableDefinition->isRootTable) {

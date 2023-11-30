@@ -28,7 +28,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 final class TableDefinition
 {
     private string $table = '';
-    private bool $isRootTable = false;
     private bool $isAggregateRoot = true;
     private ?string $typeField = null;
     private TableDefinitionCapability $capability;
@@ -47,7 +46,6 @@ final class TableDefinition
         $tableDefinition = new self();
         $tableDefinition = $tableDefinition
             ->withTable($table)
-            ->withIsRootTable($definition['isRootTable'] ?? false)
             ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
             ->withCapability(TableDefinitionCapability::createFromArray($definition['raw']))
@@ -77,11 +75,6 @@ final class TableDefinition
     public function getTable(): string
     {
         return $this->table;
-    }
-
-    public function isRootTable(): bool
-    {
-        return $this->isRootTable;
     }
 
     public function isAggregateRoot(): bool
@@ -133,13 +126,6 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->table = $table;
-        return $clone;
-    }
-
-    public function withIsRootTable(bool $isRootTable): TableDefinition
-    {
-        $clone = clone $this;
-        $clone->isRootTable = $isRootTable;
         return $clone;
     }
 
