@@ -26,23 +26,23 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
  */
 abstract class ContentTypeDefinition
 {
-    protected string $identifier = '';
-    protected string $table = '';
-    protected string|int $typeName = '';
+    private string $identifier = '';
+    private string $table = '';
+    private string|int $typeName = '';
     /** @var string[] */
-    protected array $columns = [];
+    private array $columns = [];
     /** @var array<string|PaletteDefinition|TabDefinition> */
-    protected array $showItems = [];
+    private array $showItems = [];
     /** @var array<TcaFieldDefinition> */
-    protected array $overrideColumns = [];
-    protected string $vendor = '';
-    protected string $package = '';
-    protected int $priority = 0;
-    protected string $typeIconPath;
-    protected string $iconProviderClassName;
-    protected string $typeIconIdentifier;
-    protected string $languagePathTitle;
-    protected string $languagePathDescription;
+    private array $overrideColumns = [];
+    private string $vendor = '';
+    private string $package = '';
+    private int $priority = 0;
+    private string $typeIconPath;
+    private string $iconProviderClassName;
+    private string $typeIconIdentifier;
+    private string $languagePathTitle;
+    private string $languagePathDescription;
 
     public function getIdentifier(): string
     {
