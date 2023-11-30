@@ -40,7 +40,7 @@ Options
 
    The host extension, where to store your new Content Block.
 
-.. confval:: type
+.. confval:: type-name
 
    :Required: false
    :Type: string|int
@@ -49,7 +49,7 @@ Options
 
 .. important::
 
-    The :bash:`type` option is required and has to be an integer value, if you
+    The :bash:`type-name` option is required and has to be an integer value, if you
     choose the :bash:`page-type` content type.
 
 This will give you an overview of all available options:

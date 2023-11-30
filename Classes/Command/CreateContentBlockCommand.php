@@ -47,17 +47,42 @@ class CreateContentBlockCommand extends Command
 
     public function configure(): void
     {
-        $this->addOption('content-type', '', InputOption::VALUE_OPTIONAL, 'Content type of content block. One of: ' . implode(', ', array_keys($this->getSupportedTypes())) . '.');
-        $this->addOption('vendor', '', InputOption::VALUE_OPTIONAL, 'Vendor of content block (The name must be lowercase and consist of words separated by dashes "-").');
-        $this->addOption('name', '', InputOption::VALUE_OPTIONAL, 'Name of content block (The name must be lowercase and consist of words separated by dashes "-").');
-        $this->addOption('type', '', InputOption::VALUE_OPTIONAL, 'Type identifier of content block. Falls back to combination of "vendor" and "name". Must be integer value for content type "page-type".');
-        $this->addOption('extension', '', InputOption::VALUE_OPTIONAL, 'Host extension in which the content block should be stored.');
+        $this->addOption(
+            'content-type',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'Content type of Content Block. One of: ' . implode(', ', array_keys($this->getSupportedTypes())) . '.'
+        );
+        $this->addOption(
+            'vendor',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'Vendor of Content Block (The name must be lowercase and consist of words separated by dashes "-").'
+        );
+        $this->addOption(
+            'name',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'Name of Content Block (The name must be lowercase and consist of words separated by dashes "-").'
+        );
+        $this->addOption(
+            'type-name',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'Type identifier of Content Block. Falls back to combination of "vendor" and "name". Must be integer value for content type "page-type".'
+        );
+        $this->addOption(
+            'extension',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'Host extension in which the Content Block should be stored.'
+        );
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $type = $input->getOption('type');
+        $typeName = $input->getOption('type-name');
         $availablePackages = $this->packageResolver->getAvailablePackages();
         if ($availablePackages === []) {
             throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
@@ -106,17 +131,16 @@ class CreateContentBlockCommand extends Command
         }
         $name = strtolower($name);
         if ($contentType === ContentType::PAGE_TYPE) {
-            if ($input->getOption('type')) {
-                $type = $input->getOption('type');
-            } else {
+            if ($typeName === null) {
                 $currentTimeStamp = time();
-                $type = $io->askQuestion(new Question('Enter a unique integer type. Press enter for current timestamp "' . $currentTimeStamp . '"'));
-                if ($type === null) {
-                    $type = $currentTimeStamp;
+                $whatIsTheTypeName = new Question('Enter a unique integer type. Press enter for current timestamp "' . $currentTimeStamp . '"');
+                $typeName = $io->askQuestion($whatIsTheTypeName);
+                if ($typeName === null) {
+                    $typeName = $currentTimeStamp;
                 }
             }
-            PageTypeNameValidator::validate($type, $vendor . '/' . $name);
-            $type = (int)$type;
+            PageTypeNameValidator::validate($typeName, $vendor . '/' . $name);
+            $typeName = (int)$typeName;
         }
 
         $contentBlockName = $vendor . '/' . $name;
@@ -129,9 +153,9 @@ class CreateContentBlockCommand extends Command
         }
 
         $yamlConfiguration = match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $type),
-            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $type),
-            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $type),
+            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $typeName),
+            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName),
+            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $typeName),
         };
 
         if ($input->getOption('extension')) {
@@ -208,7 +232,7 @@ class CreateContentBlockCommand extends Command
         };
     }
 
-    private function createContentBlockContentElementConfiguration(string $vendor, string $name, ?string $type = ''): array
+    private function createContentBlockContentElementConfiguration(string $vendor, string $name, ?string $typeName = ''): array
     {
         $configuration = [
             'name' => $vendor . '/' . $name,
@@ -216,8 +240,8 @@ class CreateContentBlockCommand extends Command
             'prefixFields' => true,
             'prefixType' => 'full',
         ];
-        if ($type !== '' && $type !== null) {
-            $configuration['typeName'] = $type;
+        if ($typeName !== '' && $typeName !== null) {
+            $configuration['typeName'] = $typeName;
         }
         $configuration['fields'] = [
             [
@@ -228,17 +252,17 @@ class CreateContentBlockCommand extends Command
         return $configuration;
     }
 
-    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $type): array
+    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $typeName): array
     {
         return [
             'name' => $vendor . '/' . $name,
-            'typeName' => $type,
+            'typeName' => $typeName,
             'prefixFields' => true,
             'prefixType' => 'full',
         ];
     }
 
-    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, ?string $type = ''): array
+    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, ?string $typeName = ''): array
     {
         $vendorWithoutSeparator = str_replace('-', '', $vendor);
         $nameWithoutSeparator = str_replace('-', '', $name);
@@ -248,8 +272,8 @@ class CreateContentBlockCommand extends Command
             'prefixFields' => false,
             'labelField' => 'title',
         ];
-        if ($type !== '' && $type !== null) {
-            $configuration['typeName'] = $type;
+        if ($typeName !== '' && $typeName !== null) {
+            $configuration['typeName'] = $typeName;
         }
         $configuration['fields'] = [
             [
