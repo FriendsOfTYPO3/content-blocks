@@ -268,7 +268,7 @@ class CreateContentBlockCommand extends Command
         $nameWithoutSeparator = str_replace('-', '', $name);
         $configuration = [
             'name' => $vendor . '/' . $name,
-            'table' => 'tx_' . $vendorWithoutSeparator . '_domain_model_' . $nameWithoutSeparator,
+            'table' => 'tx_' . $vendorWithoutSeparator . '_' . $nameWithoutSeparator,
             'prefixFields' => false,
             'labelField' => 'title',
         ];
