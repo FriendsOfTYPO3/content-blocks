@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\Core\SingletonInterface;
 
@@ -29,16 +30,48 @@ class ContentBlockRegistry implements SingletonInterface
      * @var LoadedContentBlock[]
      */
     protected array $contentBlocks = [];
+    protected array $typeNamesByTable = [];
 
     public function register(LoadedContentBlock $contentBlock): void
     {
         if ($this->hasContentBlock($contentBlock->getName())) {
             throw new \InvalidArgumentException(
-                'The Content Block with the name "' . $contentBlock->getName() . '" exists more than once. Please choose another name.',
+                'The Content Block with the name "' . $contentBlock->getName() . '" exists more than once.'
+                . ' Please choose another name.',
                 1678474766
             );
         }
         $this->contentBlocks[$contentBlock->getName()] = $contentBlock;
+        $this->registerTypeName($contentBlock);
+    }
+
+    protected function registerTypeName(LoadedContentBlock $contentBlock): void
+    {
+        // If typeName is not set explicitly, then it is inferred from the name, which is unique.
+        $yaml = $contentBlock->getYaml();
+        if (!array_key_exists('typeName', $yaml)) {
+            return;
+        }
+
+        // The typeName has to be unique per table. Get it from the YAML for Record Types.
+        $contentType = $contentBlock->getContentType();
+        $typeName = (string)$yaml['typeName'];
+        $table = $contentType->getTable() ?? $yaml['table'];
+        if (!isset($this->typeNamesByTable[$table][$typeName])) {
+            $this->typeNamesByTable[$table][$typeName] = $typeName;
+            return;
+        }
+
+        // Duplicate typeName detected. Fail hard.
+        $tableInfo = '';
+        if ($contentType === ContentType::RECORD_TYPE) {
+            $tableInfo = ' for table "' . $table . '"';
+        }
+        throw new \InvalidArgumentException(
+            'The ' . $contentType->getHumanReadable() . ' with the typeName "' . $typeName . '"'
+            . $tableInfo . ' exists more than once. Please choose another typeName.',
+            1701351270
+        );
     }
 
     public function hasContentBlock(string $name): bool
@@ -70,5 +103,6 @@ class ContentBlockRegistry implements SingletonInterface
     public function flush(): void
     {
         $this->contentBlocks = [];
+        $this->typeNamesByTable = [];
     }
 }
