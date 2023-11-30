@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -72,18 +74,12 @@ final class PaletteDefinition
         return $this->description !== '';
     }
 
-    public function getShowItemTca(): string
+    /**
+     * @return array<string|LinebreakDefinition>
+     */
+    public function getItems(): array
     {
-        $showItem = [];
-        foreach ($this->items as $fieldIdentifier) {
-            if ($fieldIdentifier instanceof LinebreakDefinition) {
-                $showItem[] = $fieldIdentifier->getTca();
-            } else {
-                $showItem[] = $fieldIdentifier;
-            }
-        }
-        $showItemString = implode(',', $showItem);
-        return $showItemString;
+        return $this->items;
     }
 
     public function getLanguagePathLabel(): string

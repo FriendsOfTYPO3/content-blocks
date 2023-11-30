@@ -15,15 +15,9 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition;
+namespace TYPO3\CMS\ContentBlocks\Definition\TCA;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class LinebreakDefinition
-{
-    public function getTca(): string
-    {
-        return '--linebreak--';
-    }
-}
+final class LinebreakDefinition {}

@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TabDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 
 /**
