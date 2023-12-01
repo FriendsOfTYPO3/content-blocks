@@ -163,8 +163,10 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    :Type: boolean
    :Default: true
 
-   If set to :yaml:`false`, workspace related fields are not created. Namely
-   :sql:`t3ver_oid`, :sql:`t3ver_wsid`, :sql:`t3ver_state` and :sql:`t3ver_stage`.
+   Creates workspace related fields. Namely :sql:`t3ver_oid`, :sql:`t3ver_wsid`,
+   :sql:`t3ver_state` and :sql:`t3ver_stage`. If
+   :ref:`EXT:workspaces <t3coreapi:workspaces>` is not installed, these fields
+   won't be created.
 
    .. code-block:: yaml
 
