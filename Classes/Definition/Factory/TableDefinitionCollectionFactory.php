@@ -79,13 +79,13 @@ final class TableDefinitionCollectionFactory
             // Enrich local Collections.
             $parentReferences = $newTableDefinition->getParentReferences();
             if ($parentReferences !== null) {
-                $newTableDefinition = $this->enrichTableDefinition($parentReferences, $newTableDefinition, $contentBlockRegistry);
+                $newTableDefinition = $this->enrichTableDefinition($parentReferences, $newTableDefinition);
             }
             // Enrich external Collections.
             if (isset($this->externalParentReferences[$newTableDefinition->getTable()])) {
                 $references = $this->externalParentReferences[$newTableDefinition->getTable()];
                 $tcaFieldDefinitionCollection = TcaFieldDefinitionCollection::createFromArray($references, $newTableDefinition->getTable());
-                $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition, $contentBlockRegistry);
+                $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition);
             }
             $tableDefinitionCollection->addTable($newTableDefinition);
         }
@@ -107,14 +107,11 @@ final class TableDefinitionCollectionFactory
     private function enrichTableDefinition(
         TcaFieldDefinitionCollection $references,
         TableDefinition $newTableDefinition,
-        ContentBlockRegistry $contentBlockRegistry,
     ): TableDefinition {
         $newTableDefinition = $newTableDefinition->withParentReferences($references);
         // If root Content Type is a Content Element, allow the external table to be put in standard pages.
         foreach ($references as $reference) {
-            $contentBlockName = $reference->getContentBlockName();
-            $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
-            if ($contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
+            if ($reference->getParentContentType() === ContentType::CONTENT_ELEMENT) {
                 $capability = $newTableDefinition->getCapability();
                 $capability = $capability->withIgnorePageTypeRestriction(true);
                 $newTableDefinition = $newTableDefinition->withCapability($capability);
@@ -166,7 +163,7 @@ final class TableDefinitionCollectionFactory
                 $this->prefixLabelFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $tcaFieldDefinition = [
-                    'contentBlockName' => $input->contentBlock->getName(),
+                    'parentTable' => $input->contentBlock->getContentType()->getTable(),
                     'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
                     'type' => $fieldType,

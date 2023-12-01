@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 
@@ -25,7 +26,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
  */
 final class TcaFieldDefinition
 {
-    private string $contentBlockName = '';
+    private ?ContentType $parentContentType = null;
     private string $identifier = '';
     private string $uniqueIdentifier = '';
     private string $labelPath = '';
@@ -45,7 +46,7 @@ final class TcaFieldDefinition
 
         $self = new self();
         return $self
-            ->withContentBlockName($array['contentBlockName'] ?? '')
+            ->withParentContentType(ContentType::getByTable($array['parentTable'] ?? ''))
             ->withUniqueIdentifier($uniqueIdentifier)
             ->withIdentifier($array['config']['identifier'])
             ->withLabelPath($array['labelPath'] ?? '')
@@ -79,9 +80,9 @@ final class TcaFieldDefinition
         return $this->descriptionPath;
     }
 
-    public function getContentBlockName(): string
+    public function getParentContentType(): ContentType
     {
-        return $this->contentBlockName;
+        return $this->parentContentType;
     }
 
     public function useExistingField(): bool
@@ -144,10 +145,10 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withContentBlockName(string $contentBlockName): TcaFieldDefinition
+    public function withParentContentType(ContentType $parentContentType): TcaFieldDefinition
     {
         $clone = clone $this;
-        $clone->contentBlockName = $contentBlockName;
+        $clone->parentContentType = $parentContentType;
         return $clone;
     }
 }
