@@ -23,7 +23,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedFieldsResult;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedTableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessingInput;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
@@ -207,7 +206,7 @@ final class TableDefinitionCollectionFactory
 
         // Collect table definitions and content types and carry it over to the next stack.
         // This will be merged at the very end.
-        $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $this->createInputArrayForTableDefinition($result->tableDefinition);
+        $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $result->tableDefinition->toArray();
         $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType, $input);
         return $result->tableDefinitionList;
     }
@@ -570,19 +569,6 @@ final class TableDefinitionCollectionFactory
         $prefixType = $this->getPrefixType($input->contentBlock, $field);
         $uniqueIdentifier = UniqueIdentifierCreator::prefixIdentifier($input->contentBlock, $prefixType, $field['identifier']);
         return $uniqueIdentifier;
-    }
-
-    /**
-     * @see TableDefinition
-     */
-    private function createInputArrayForTableDefinition(ProcessedTableDefinition $processedTableDefinition): array
-    {
-        $tableDefinition['palettes'] = $processedTableDefinition->palettes;
-        $tableDefinition['fields'] = $processedTableDefinition->fields;
-        $tableDefinition['typeField'] = $processedTableDefinition->typeField;
-        $tableDefinition['raw'] = $processedTableDefinition->raw;
-        $tableDefinition['contentType'] = $processedTableDefinition->contentType;
-        return $tableDefinition;
     }
 
     /**

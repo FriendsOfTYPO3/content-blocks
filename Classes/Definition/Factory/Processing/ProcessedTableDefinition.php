@@ -18,8 +18,10 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 
 /**
+ * @see TableDefinition
  * @internal Not part of TYPO3's public API.
  */
 final class ProcessedTableDefinition
@@ -29,4 +31,16 @@ final class ProcessedTableDefinition
     public ?string $typeField = null;
     public array $raw = [];
     public ?ContentType $contentType = null;
+
+    public function toArray(): array
+    {
+        $tableDefinition = [
+            'palettes' => $this->palettes,
+            'fields' => $this->fields,
+            'typeField' => $this->typeField,
+            'raw' => $this->raw,
+            'contentType' => $this->contentType,
+        ];
+        return $tableDefinition;
+    }
 }
