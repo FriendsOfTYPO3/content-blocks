@@ -26,6 +26,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     use SiteBasedTestTrait;
 
     protected array $coreExtensionsToLoad = [
+        'workspaces',
 //        'content_blocks',
     ];
 

@@ -1927,6 +1927,7 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
         $xliffParserMock = $this->createMock(XliffParser::class);
         $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
@@ -2026,6 +2027,7 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
         if ($seoExtensionLoaded) {
             $systemExtensionAvailability->addAvailableExtension('seo');
         }
@@ -2065,6 +2067,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlockRegistry->register($contentBlock);
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
         $xliffParserMock = $this->createMock(XliffParser::class);
         $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
@@ -2705,6 +2708,7 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
         $xliffParserMock = $this->createMock(XliffParser::class);
         $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);

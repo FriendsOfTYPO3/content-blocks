@@ -730,7 +730,7 @@ class TcaGenerator
         if ($capability->shallTrackUpdateDate()) {
             $ctrl['tstamp'] = 'tstamp';
         }
-        if ($capability->isWorkspaceAware()) {
+        if ($capability->isWorkspaceAware() && $this->systemExtensionAvailability->isAvailable('workspaces')) {
             $ctrl['versioningWS'] = true;
         }
         if ($capability->hasInternalDescription()) {
