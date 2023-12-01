@@ -466,10 +466,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection',
                                 'foreign_field' => 'foreign_table_parent_uid',
-                                'foreign_table_field' => 'tablenames',
-                                'foreign_match_fields' => [
-                                    'fieldname' => 't3ce_example_collection',
-                                ],
                             ],
                             'exclude' => true,
                         ],
@@ -662,16 +658,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'passthrough',
                             ],
                         ],
-                        'tablenames' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
-                        'fieldname' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.text.label',
@@ -712,10 +698,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'inline',
                                 'foreign_table' => 'collection2',
                                 'foreign_field' => 'foreign_table_parent_uid',
-                                'foreign_match_fields' => [
-                                    'fieldname' => 'collection2',
-                                ],
-                                'foreign_table_field' => 'tablenames',
                             ],
                         ],
                     ],
@@ -869,16 +851,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         'foreign_table_parent_uid' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
-                        'tablenames' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
-                        'fieldname' => [
                             'config' => [
                                 'type' => 'passthrough',
                             ],
@@ -1730,10 +1702,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'config' => [
                                 'type' => 'inline',
                                 'foreign_table' => 'collection',
-                                'foreign_table_field' => 'tablenames',
-                                'foreign_match_fields' => [
-                                    'fieldname' => 'collection',
-                                ],
                                 'foreign_field' => 'foreign_table_parent_uid',
                             ],
                             'exclude' => true,
@@ -1915,16 +1883,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'passthrough',
                             ],
                         ],
-                        'tablenames' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
-                        'fieldname' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                     ],
                 ],
             ],
@@ -1967,7 +1925,7 @@ final class TcaGeneratorTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $xliffParserMock = $this->createMock(XliffParser::class);
         $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
@@ -2066,7 +2024,7 @@ final class TcaGeneratorTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         if ($seoExtensionLoaded) {
             $systemExtensionAvailability->addAvailableExtension('seo');
@@ -2105,7 +2063,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlock = LoadedContentBlock::fromArray($yaml);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks([$contentBlock]);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $xliffParserMock = $this->createMock(XliffParser::class);
         $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
@@ -2741,8 +2699,11 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
         $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
-        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $xliffParserMock = $this->createMock(XliffParser::class);
         $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);

@@ -3,6 +3,6 @@
 ,1,1,"Record 1",1
 ,2,1,"Record 2",1
 "record_collection"
-,"uid","pid","text","foreign_table_parent_uid","fieldname","tablenames"
-,1,1,"Collection 1",1,"record_collection","test_record"
-,2,1,"Collection 2",2,"record_collection","test_record"
+,"uid","pid","text","foreign_table_parent_uid",
+,1,1,"Collection 1",1
+,2,1,"Collection 2",2,

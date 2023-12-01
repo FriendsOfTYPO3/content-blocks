@@ -28,7 +28,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 final class TableDefinition
 {
     private string $table = '';
-    private bool $isAggregateRoot = true;
     private ?string $typeField = null;
     private TableDefinitionCapability $capability;
     private ?ContentType $contentType = null;
@@ -36,6 +35,7 @@ final class TableDefinition
     private ?SqlColumnDefinitionCollection $sqlColumnDefinitionCollection = null;
     private ?TcaFieldDefinitionCollection $tcaFieldDefinitionCollection = null;
     private ?PaletteDefinitionCollection $paletteDefinitionCollection = null;
+    private ?TcaFieldDefinitionCollection $parentReferences = null;
 
     public static function createFromTableArray(string $table, array $definition): TableDefinition
     {
@@ -46,13 +46,13 @@ final class TableDefinition
         $tableDefinition = new self();
         $tableDefinition = $tableDefinition
             ->withTable($table)
-            ->withIsAggregateRoot((bool)($definition['aggregateRoot'] ?? true))
             ->withTypeField($definition['typeField'] ?? null)
             ->withCapability(TableDefinitionCapability::createFromArray($definition['raw']))
             ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaFieldDefinitionCollection::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlColumnDefinitionCollection::createFromArray($definition['fields'] ?? [], $table))
-            ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table));
+            ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table))
+            ->withParentReferences(TcaFieldDefinitionCollection::createFromArray($definition['parentReferences'] ?? [], $table));
 
         if (!empty($definition['elements'])) {
             $tableDefinition = $tableDefinition->withTypeDefinitionCollection(ContentTypeDefinitionCollection::createFromArray($definition['elements'], $table));
@@ -75,11 +75,6 @@ final class TableDefinition
     public function getTable(): string
     {
         return $this->table;
-    }
-
-    public function isAggregateRoot(): bool
-    {
-        return $this->isAggregateRoot;
     }
 
     public function getTypeField(): ?string
@@ -122,17 +117,15 @@ final class TableDefinition
         return $this->paletteDefinitionCollection;
     }
 
+    public function getParentReferences(): ?TcaFieldDefinitionCollection
+    {
+        return $this->parentReferences;
+    }
+
     public function withTable(string $table): TableDefinition
     {
         $clone = clone $this;
         $clone->table = $table;
-        return $clone;
-    }
-
-    public function withIsAggregateRoot(bool $isAggregateRoot): TableDefinition
-    {
-        $clone = clone $this;
-        $clone->isAggregateRoot = $isAggregateRoot;
         return $clone;
     }
 
@@ -182,6 +175,17 @@ final class TableDefinition
     {
         $clone = clone $this;
         $clone->paletteDefinitionCollection = $paletteDefinitionCollection;
+        return $clone;
+    }
+
+    public function withParentReferences(TcaFieldDefinitionCollection $parentReferences): TableDefinition
+    {
+        // Do not store empty parent references.
+        if ($parentReferences->count() === 0) {
+            return $this;
+        }
+        $clone = clone $this;
+        $clone->parentReferences = $parentReferences;
         return $clone;
     }
 }

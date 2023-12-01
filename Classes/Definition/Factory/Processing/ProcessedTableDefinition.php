@@ -28,7 +28,7 @@ final class ProcessedTableDefinition
     public array $fields = [];
     public ?string $typeField = null;
     public bool $isRootTable = true;
-    public ?bool $isAggregateRoot = null;
     public array $raw = [];
     public ?ContentType $contentType = null;
+    public array $parentReferences = [];
 }

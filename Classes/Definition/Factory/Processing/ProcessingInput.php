@@ -39,6 +39,7 @@ final class ProcessingInput
         public LanguagePath $languagePath,
         public ContentType $contentType,
         public array $tableDefinitionList = [],
+        public ?array $parentReference = null,
     ) {
         $this->isRootTable = $this->table === $this->rootTable;
         $this->typeField = $yaml['typeField'] ?? $GLOBALS['TCA'][$this->table]['ctrl']['type'] ?? null;

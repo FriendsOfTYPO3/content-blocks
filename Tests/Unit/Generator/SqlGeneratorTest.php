@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class SqlGeneratorTest extends UnitTestCase
@@ -78,13 +79,25 @@ final class SqlGeneratorTest extends UnitTestCase
             ],
         ];
 
-        yield 'simple fields in custom foobar table with aggregateRoot = false' => [
+        yield 'simple fields in custom foobar table with parent reference' => [
             'array' => [
+                [
+                    'name' => 'foo/parent',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'fields' => [
+                            [
+                                'identifier' => 'collection',
+                                'type' => 'Collection',
+                                'foreign_table' => 'foobar',
+                            ],
+                        ],
+                    ],
+                ],
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
                         'table' => 'foobar',
-                        'aggregateRoot' => false,
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -99,6 +112,7 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
+                "CREATE TABLE `tt_content`(`foo_parent_collection` int(11) UNSIGNED DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `foobar`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foobar`(`foo_bar_number` int(11) DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `foobar`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
@@ -272,8 +286,6 @@ final class SqlGeneratorTest extends UnitTestCase
             'expected' => [
                 "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `foo_bar_collection`(`tablenames` varchar(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `foo_bar_collection`(`fieldname` varchar(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_collection` int(11) UNSIGNED DEFAULT '0' NOT NULL);",
             ],
@@ -323,13 +335,9 @@ final class SqlGeneratorTest extends UnitTestCase
             'expected' => [
                 "CREATE TABLE `collection2`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `collection2`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `collection2`(`tablenames` varchar(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `collection2`(`fieldname` varchar(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`collection2` int(11) UNSIGNED DEFAULT '0' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `foo_bar_collection`(`tablenames` varchar(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `foo_bar_collection`(`fieldname` varchar(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `tt_content`(`foo_bar_collection` int(11) UNSIGNED DEFAULT '0' NOT NULL);",
             ],
@@ -340,10 +348,13 @@ final class SqlGeneratorTest extends UnitTestCase
      * @dataProvider generateReturnsExpectedSqlStatementsDataProvider
      * @test
      */
-    public function generateReturnsExpectedSqlStatements(array $array, array $expected): void
+    public function generateReturnsExpectedSqlStatements(array $contentBlocks, array $expected): void
     {
-        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $array);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlocks);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
         $loader = $this->createMock(ContentBlockLoader::class);
         $loader->method('loadUncached')->willReturn($tableDefinitionCollection);
         $sqlGenerator = new SqlGenerator($loader);

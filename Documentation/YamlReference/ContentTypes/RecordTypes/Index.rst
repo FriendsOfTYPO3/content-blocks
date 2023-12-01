@@ -88,9 +88,9 @@ Collections are a :ref:`field type <field_type_collection>`, which you can only
 define in the :yaml:`fields` array. They will create custom tables automatically
 and use the :yaml:`identifier` as table name. Therefore they don't require you
 to define a :yaml:`table`. Collections are always hidden in the **List** module.
-This is controlled by the :yaml:`aggregateRoot` setting. Usually Collections
-only have one type. To realise multiple types it is recommended to extract the
-definition to a separate Record Type and use :yaml:`foreign_table` instead.
+Usually Collections only have one type. To realise multiple types it is
+recommended to extract the definition to a separate Record Type and use
+:yaml:`foreign_table` instead.
 
 Options
 =======
@@ -176,25 +176,6 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        fallbackLabelFields:
            - text1
            - text2
-
-.. confval:: aggregateRoot
-
-   :Required: false
-   :Type: boolean
-   :Default: true (false for Collections)
-
-   By default, all tables are treated as `aggregateRoot`. This means, this table
-   is not a child-table of another root. By assigning this option the `false`
-   value, additional fields are created to enable a reference to a parent table:
-   :sql:`foreign_table_parent_uid`, :sql:`tablenames` and :sql:`fieldname`. Now,
-   a type Collection field can define :yaml:`foreign_table` with this table.
-   When referencing an existing table, you need to take care yourself that these
-   fields exist. Also, non-aggregate tables are hidden in the List module.
-
-   .. code-block:: yaml
-
-       # set this for Record Types if they should be used as `foreign_table` in Collections
-       aggregateRoot: false
 
 .. confval:: languageAware
 
@@ -399,7 +380,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
       default false, Allows non-admin users to access records that are on the root-level (page ID 0), thus bypassing this usual restriction.
 
    :yaml:`ignorePageTypeRestriction`
-      default false (but true if `aggregateRoot` is false e.g. for Collection fields), Allows to use the record on any kind of page type.
+      default false (but true if table is used as :yaml:`foreign_table`), Allows to use the record on any kind of page type.
 
    .. code-block:: yaml
 

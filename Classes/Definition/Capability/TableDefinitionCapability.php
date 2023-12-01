@@ -212,6 +212,13 @@ final class TableDefinitionCapability
         return $this->appendLabelAtCopy;
     }
 
+    public function withIgnorePageTypeRestriction(bool $ignorePageTypeRestriction): TableDefinitionCapability
+    {
+        $self = clone $this;
+        $self->ignorePageTypeRestriction = $ignorePageTypeRestriction;
+        return $self;
+    }
+
     public function buildRestrictionsTca(): array
     {
         $restrictions = [];

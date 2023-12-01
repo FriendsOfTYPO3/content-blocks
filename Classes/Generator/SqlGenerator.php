@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
@@ -45,10 +46,36 @@ class SqlGenerator
                 }
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
             }
-            if (!$tableDefinition->isAggregateRoot()) {
-                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`foreign_table_parent_uid` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (foreign_table_parent_uid));';
-                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`tablenames` varchar(255) DEFAULT \'\' NOT NULL);';
-                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`fieldname` varchar(255) DEFAULT \'\' NOT NULL);';
+            $resultSql = $this->handleParentReferences($tableDefinition);
+            $sql = array_merge($sql, $resultSql);
+        }
+        return $sql;
+    }
+
+    protected function handleParentReferences(TableDefinition $tableDefinition): array
+    {
+        $sql = [];
+        foreach ($tableDefinition->getParentReferences() ?? [] as $parentReference) {
+            $parentTcaConfig = $parentReference->getTca()['config'];
+            if (isset($parentTcaConfig['foreign_field'])) {
+                $foreignField = $parentTcaConfig['foreign_field'];
+                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`' . $foreignField . '` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (' . $foreignField . '));';
+                if (!in_array($sqlStatement, $sql, true)) {
+                    $sql[] = $sqlStatement;
+                }
+            }
+            if (isset($parentTcaConfig['foreign_table_field'])) {
+                $foreignTableField = $parentTcaConfig['foreign_table_field'];
+                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`' . $foreignTableField . '` varchar(255) DEFAULT \'\' NOT NULL);';
+                if (!in_array($sqlStatement, $sql, true)) {
+                    $sql[] = $sqlStatement;
+                }
+            }
+            foreach ($parentTcaConfig['foreign_match_fields'] ?? [] as $foreignMatchField => $foreignMatchValue) {
+                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`' . $foreignMatchField . '` varchar(255) DEFAULT \'\' NOT NULL);';
+                if (!in_array($sqlStatement, $sql, true)) {
+                    $sql[] = $sqlStatement;
+                }
             }
         }
         return $sql;

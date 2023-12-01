@@ -8,6 +8,9 @@ fields:
     fields:
       - identifier: fieldA
         type: Text
+  - identifier: collection_external
+    type: Collection
+    foreign_table: test_record
   - identifier: collection_recursive
     type: Collection
     fields:

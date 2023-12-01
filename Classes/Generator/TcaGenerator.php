@@ -700,7 +700,7 @@ class TcaGenerator
         $ctrl = [
             'title' => $title,
             'label' => $this->resolveLabelField($tableDefinition),
-            'hideTable' => !$tableDefinition->isAggregateRoot(),
+            'hideTable' => $tableDefinition->getParentReferences() !== null,
             'enablecolumns' => $capability->buildRestrictionsTca(),
         ];
 
@@ -757,7 +757,7 @@ class TcaGenerator
         if ($capability->isIgnoreWebMountRestriction()) {
             $ctrl['security']['ignoreWebMountRestriction'] = true;
         }
-        if (!$tableDefinition->isAggregateRoot() || $capability->isIgnorePageTypeRestriction()) {
+        if ($capability->isIgnorePageTypeRestriction()) {
             $ctrl['security']['ignorePageTypeRestriction'] = true;
         }
         if ($capability->isReadOnly()) {
@@ -908,22 +908,31 @@ class TcaGenerator
         }
 
         // This is a child table and can only be created by the parent.
-        if (!$tableDefinition->isAggregateRoot()) {
-            $columns['foreign_table_parent_uid'] = [
-                'config' => [
-                    'type' => 'passthrough',
-                ],
-            ];
-            $columns['tablenames'] = [
-                'config' => [
-                    'type' => 'passthrough',
-                ],
-            ];
-            $columns['fieldname'] = [
-                'config' => [
-                    'type' => 'passthrough',
-                ],
-            ];
+        foreach ($tableDefinition->getParentReferences() ?? [] as $parentReference) {
+            $parentTcaConfig = $parentReference->getTca()['config'];
+            if (isset($parentTcaConfig['foreign_field'])) {
+                $foreignField = $parentTcaConfig['foreign_field'];
+                $columns[$foreignField] = [
+                    'config' => [
+                        'type' => 'passthrough',
+                    ],
+                ];
+            }
+            if (isset($parentTcaConfig['foreign_table_field'])) {
+                $foreignTableField = $parentTcaConfig['foreign_table_field'];
+                $columns[$foreignTableField] = [
+                    'config' => [
+                        'type' => 'passthrough',
+                    ],
+                ];
+            }
+            foreach ($parentTcaConfig['foreign_match_fields'] ?? [] as $foreignMatchField => $foreignMatchValue) {
+                $columns[$foreignMatchField] = [
+                    'config' => [
+                        'type' => 'passthrough',
+                    ],
+                ];
+            }
         }
 
         return [

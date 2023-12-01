@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
  */
 final class TcaFieldDefinition
 {
+    private string $contentBlockName = '';
     private string $identifier = '';
     private string $uniqueIdentifier = '';
     private string $labelPath = '';
@@ -44,6 +45,7 @@ final class TcaFieldDefinition
 
         $self = new self();
         return $self
+            ->withContentBlockName($array['contentBlockName'] ?? '')
             ->withUniqueIdentifier($uniqueIdentifier)
             ->withIdentifier($array['config']['identifier'])
             ->withLabelPath($array['labelPath'] ?? '')
@@ -75,6 +77,11 @@ final class TcaFieldDefinition
     public function getDescriptionPath(): string
     {
         return $this->descriptionPath;
+    }
+
+    public function getContentBlockName(): string
+    {
+        return $this->contentBlockName;
     }
 
     public function useExistingField(): bool
@@ -134,6 +141,13 @@ final class TcaFieldDefinition
     {
         $clone = clone $this;
         $clone->fieldConfiguration = $fieldConfiguration;
+        return $clone;
+    }
+
+    public function withContentBlockName(string $contentBlockName): TcaFieldDefinition
+    {
+        $clone = clone $this;
+        $clone->contentBlockName = $contentBlockName;
         return $clone;
     }
 }

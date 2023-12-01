@@ -65,7 +65,7 @@ class ContentBlockLoader
                 $this->contentBlockRegistry->register($contentBlock);
                 $this->languageFileRegistry->register($contentBlock);
             }
-            $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($contentBlocks);
+            $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($this->contentBlockRegistry);
             $this->tableDefinitionCollection = $tableDefinitionCollection;
             return $this->tableDefinitionCollection;
         }
@@ -106,7 +106,7 @@ class ContentBlockLoader
 
         $this->publishAssets($loadedContentBlocks);
 
-        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($loadedContentBlocks);
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($this->contentBlockRegistry);
         $this->tableDefinitionCollection = $tableDefinitionCollection;
 
         $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);

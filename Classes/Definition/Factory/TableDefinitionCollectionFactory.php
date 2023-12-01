@@ -35,8 +35,10 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -47,13 +49,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 final class TableDefinitionCollectionFactory
 {
     /**
-     * @param LoadedContentBlock[] $contentBlocks
+     * This property tracks external foreign_table parent references.
+     * It is needed, because there can be a references to a Content Block (or native) table,
+     * which isn't processed yet. Thus, it needs to be collected until the very end.
      */
-    public function createFromLoadedContentBlocks(array $contentBlocks): TableDefinitionCollection
+    private array $externalParentReferences = [];
+
+    public function createFromLoadedContentBlocks(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
     {
         $tableDefinitionCollection = new TableDefinitionCollection();
         $tableDefinitionList = [];
-        foreach ($contentBlocks as $contentBlock) {
+        foreach ($contentBlockRegistry->getAll() as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
             $languagePath = new LanguagePath('LLL:' . $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
             $processingInput = new ProcessingInput(
@@ -69,8 +75,22 @@ final class TableDefinitionCollectionFactory
         }
         $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
         foreach ($mergedTableDefinitionList as $table => $tableDefinition) {
-            $tableDefinitionCollection->addTable(TableDefinition::createFromTableArray($table, $tableDefinition));
+            $newTableDefinition = TableDefinition::createFromTableArray($table, $tableDefinition);
+            // Enrich local Collections.
+            $parentReferences = $newTableDefinition->getParentReferences();
+            if ($parentReferences !== null) {
+                $newTableDefinition = $this->enrichTableDefinition($parentReferences, $newTableDefinition, $contentBlockRegistry);
+            }
+            // Enrich external Collections.
+            if (isset($this->externalParentReferences[$newTableDefinition->getTable()])) {
+                $references = $this->externalParentReferences[$newTableDefinition->getTable()];
+                $tcaFieldDefinitionCollection = TcaFieldDefinitionCollection::createFromArray($references, $newTableDefinition->getTable());
+                $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition, $contentBlockRegistry);
+            }
+            $tableDefinitionCollection->addTable($newTableDefinition);
         }
+        // Reset state.
+        $this->externalParentReferences = [];
         return $tableDefinitionCollection;
     }
 
@@ -82,6 +102,25 @@ final class TableDefinitionCollectionFactory
             $mergedResult[$table]['elements'] = $definition['elements'];
         }
         return $mergedResult;
+    }
+
+    private function enrichTableDefinition(
+        TcaFieldDefinitionCollection $references,
+        TableDefinition $newTableDefinition,
+        ContentBlockRegistry $contentBlockRegistry,
+    ): TableDefinition {
+        $newTableDefinition = $newTableDefinition->withParentReferences($references);
+        // If root Content Type is a Content Element, allow the external table to be put in standard pages.
+        foreach ($references as $reference) {
+            $contentBlockName = $reference->getContentBlockName();
+            $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
+            if ($contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
+                $capability = $newTableDefinition->getCapability();
+                $capability = $capability->withIgnorePageTypeRestriction(true);
+                $newTableDefinition = $newTableDefinition->withCapability($capability);
+            }
+        }
+        return $newTableDefinition;
     }
 
     private function processFields(ProcessingInput $input): array
@@ -122,42 +161,51 @@ final class TableDefinitionCollectionFactory
                     $field = $this->processFlexForm($field, $input);
                 }
 
-                if ($fieldType === FieldType::COLLECTION) {
-                    $inlineTable = $this->chooseIdentifier($input, $field);
-                    $field['foreign_table'] ??= $inlineTable;
-                    $field['foreign_match_fields'] = [
-                        'fieldname' => $inlineTable,
-                    ];
-                    if (!empty($field['fields'])) {
-                        $result->tableDefinitionList = $this->processFields(
-                            new ProcessingInput(
-                                yaml: $field,
-                                contentBlock: $input->contentBlock,
-                                table: $inlineTable,
-                                rootTable: $input->rootTable,
-                                languagePath: $input->languagePath,
-                                contentType: ContentType::RECORD_TYPE,
-                                tableDefinitionList: $result->tableDefinitionList
-                            )
-                        );
-                    }
-                }
-
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
                 $this->prefixSortFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $this->prefixLabelFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
-                $fieldArray = [
+                $tcaFieldDefinition = [
+                    'contentBlockName' => $input->contentBlock->getName(),
                     'uniqueIdentifier' => $uniqueIdentifier,
                     'config' => $field,
                     'type' => $fieldType,
                     'labelPath' => $input->languagePath->getCurrentPath() . '.label',
                     'descriptionPath' => $input->languagePath->getCurrentPath() . '.description',
                 ];
-                $result->tableDefinition->fields[$uniqueIdentifier] = $fieldArray;
+
+                if ($fieldType === FieldType::COLLECTION) {
+                    $isExternalCollection = array_key_exists('foreign_table', $field);
+                    $tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
+                    if ($isExternalCollection) {
+                        $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
+                        // @todo shareable Collection fields should be an extra option.
+                        $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
+                        $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
+                        $this->externalParentReferences[$foreignTable][] = $tcaFieldDefinition;
+                    } else {
+                        $tcaFieldDefinition['config']['foreign_table'] = $uniqueIdentifier;
+                    }
+                    if (!empty($field['fields'])) {
+                        $result->tableDefinitionList = $this->processFields(
+                            new ProcessingInput(
+                                yaml: $field,
+                                contentBlock: $input->contentBlock,
+                                table: $uniqueIdentifier,
+                                rootTable: $input->rootTable,
+                                languagePath: $input->languagePath,
+                                contentType: ContentType::RECORD_TYPE,
+                                tableDefinitionList: $result->tableDefinitionList,
+                                parentReference: $tcaFieldDefinition,
+                            )
+                        );
+                    }
+                }
+
+                $result->tableDefinition->fields[$uniqueIdentifier] = $tcaFieldDefinition;
                 $result->contentType->columns[] = $uniqueIdentifier;
                 if ($uniqueIdentifier !== $result->tableDefinition->typeField) {
-                    $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($fieldArray);
+                    $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($tcaFieldDefinition);
                 }
 
                 $input->languagePath->popSegment();
@@ -191,9 +239,11 @@ final class TableDefinitionCollectionFactory
 
         $result->tableDefinition->typeField = $input->getTypeField();
         $result->tableDefinition->isRootTable = $input->isRootTable();
-        $result->tableDefinition->isAggregateRoot = $input->yaml['aggregateRoot'] ?? null;
         $result->tableDefinition->raw = $input->yaml;
         $result->tableDefinition->contentType = $input->contentType;
+        if ($input->parentReference !== null) {
+            $result->tableDefinition->parentReferences[] = $input->parentReference;
+        }
         return $result;
     }
 
@@ -543,13 +593,7 @@ final class TableDefinitionCollectionFactory
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
         $tableDefinition['raw'] = $processedTableDefinition->raw;
         $tableDefinition['contentType'] = $processedTableDefinition->contentType;
-        if ($processedTableDefinition->isRootTable) {
-            if ($processedTableDefinition->isAggregateRoot !== null) {
-                $tableDefinition['aggregateRoot'] = $processedTableDefinition->isAggregateRoot;
-            }
-        } else {
-            $tableDefinition['aggregateRoot'] = false;
-        }
+        $tableDefinition['parentReferences'] = $processedTableDefinition->parentReferences;
         return $tableDefinition;
     }
 
