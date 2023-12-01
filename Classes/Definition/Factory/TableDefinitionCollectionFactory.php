@@ -231,7 +231,6 @@ final class TableDefinitionCollectionFactory
         $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
 
         $result->tableDefinition->typeField = $input->getTypeField();
-        $result->tableDefinition->isRootTable = $input->isRootTable();
         $result->tableDefinition->raw = $input->yaml;
         $result->tableDefinition->contentType = $input->contentType;
         return $result;

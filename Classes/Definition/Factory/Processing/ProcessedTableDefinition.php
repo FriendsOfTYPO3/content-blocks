@@ -27,7 +27,6 @@ final class ProcessedTableDefinition
     public array $palettes = [];
     public array $fields = [];
     public ?string $typeField = null;
-    public bool $isRootTable = true;
     public array $raw = [];
     public ?ContentType $contentType = null;
 }
