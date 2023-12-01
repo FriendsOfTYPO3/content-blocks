@@ -166,9 +166,12 @@ final class TableDefinitionCollectionFactory
                     $isExternalCollection = array_key_exists('foreign_table', $field);
                     $tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
                     if ($isExternalCollection) {
-                        $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
-                        // @todo shareable Collection fields should be an extra option.
-                        $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
+                        if ($field['shareAcrossTables'] ?? false) {
+                            $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
+                        }
+                        if ($field['shareAcrossFields'] ?? false) {
+                            $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
+                        }
                     } else {
                         $tcaFieldDefinition['config']['foreign_table'] = $field['table'] ?? $uniqueIdentifier;
                     }

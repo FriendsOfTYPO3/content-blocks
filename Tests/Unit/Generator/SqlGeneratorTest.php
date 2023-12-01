@@ -90,6 +90,8 @@ final class SqlGeneratorTest extends UnitTestCase
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'foreign_table' => 'foobar',
+                                'shareAcrossTables' => true,
+                                'shareAcrossFields' => true,
                             ],
                         ],
                     ],

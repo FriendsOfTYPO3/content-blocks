@@ -86,6 +86,44 @@ Settings
    manually define the :sql:`foreign_table_parent_uid`, :sql:`tablenames` and
    :sql:`fieldname` fields.
 
+.. confval:: foreign_field
+
+   :Required: false
+   :Type: string (field)
+
+   It is possible to override the field name pointing to the parent record. Per
+   default it is called :sql:`foreign_table_parent_uid`. This corresponds with
+   the TCA option :ref:`foreign_field <t3tca:columns-inline-properties-foreign-field>`.
+
+.. confval:: shareAcrossTables
+
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   Allows to reference a Record Type across multiple **tables**, if
+   :ref:`foreign_table <field_type_collection_foreign_table>` is used.
+
+   Make sure to add this to **every** Collection, which shares the table.
+
+   This will create a new field called :sql:`tablenames`. It corresponds to the
+   TCA option :ref:`foreign_table_field <t3tca:columns-inline-properties-foreign-table-field>`.
+   The field name can be overridden by defining :yaml:`foreign_table_field` explicitly.
+
+.. confval:: shareAcrossFields
+
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   Allows to reference a Record Type across multiple **fields**, if
+   :ref:`foreign_table <field_type_collection_foreign_table>` is used.
+
+   Make sure to add this to **every** Collection, which shares the table.
+
+   This will create a new field called :sql:`fieldname`. It corresponds to the
+   TCA option :ref:`foreign_match_fields <t3tca:columns-inline-properties-foreign-match-fields>`.
+
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline-properties>`
 
 Custom icon
@@ -149,8 +187,12 @@ table in :yaml:`slides`.
       - identifier: image
         type: File
 
+.. code-block:: yaml
+
     name: example/collection
     fields:
       - identifier: slides
         type: Collection
         foreign_table: my_slide
+        shareAcrossTables: true
+        shareAcrossFields: true

@@ -80,6 +80,35 @@ dropdown. The different types will be also added automatically to the list:
       - identifier: title
         type: Text
 
+Use as child table in Collection
+================================
+
+It is possible to create a new Record Type, which is used as a child table
+inside a Collection. This is simply done by defining
+:ref:`foreign_table <field_type_collection_foreign_table>` inside the Collection.
+
+.. code-block:: yaml
+
+    name: example/slide
+    table: my_slide
+    labelField: title
+    fields:
+      - identifier: title
+        type: Text
+      - identifier: image
+        type: File
+
+.. code-block:: yaml
+
+    name: example/collection
+    fields:
+      - identifier: slides
+        type: Collection
+        foreign_table: my_slide
+        shareAcrossTables: true
+        shareAcrossFields: true
+
+
 Options
 =======
 

@@ -17,6 +17,8 @@ fields:
   - identifier: collection_external
     type: Collection
     foreign_table: test_record
+    shareAcrossTables: true
+    shareAcrossFields: true
   - identifier: collection_recursive
     type: Collection
     fields:
