@@ -113,7 +113,7 @@ final class TableDefinitionCollectionFactory
 
     private function processFields(ProcessingInput $input): array
     {
-        $result = $this->initializeResult($input);
+        $result = new ProcessedFieldsResult($input);
         $yamlFields = $input->yaml['fields'] ?? [];
 
         // Automatically add a `type` field for record types.
@@ -205,30 +205,6 @@ final class TableDefinitionCollectionFactory
         $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
         $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
         return $result->tableDefinitionList;
-    }
-
-    private function initializeResult(ProcessingInput $input): ProcessedFieldsResult
-    {
-        $result = new ProcessedFieldsResult();
-        $result->tableDefinitionList = $input->tableDefinitionList;
-
-        $result->contentType->contentBlock = $input->contentBlock;
-        $result->contentType->typeName = $input->getTypeName();
-        $result->contentType->table = $input->table;
-        if ($input->isRootTable()) {
-            $languagePathTitle = 'title';
-            $languagePathDescription = 'description';
-        } else {
-            $languagePathTitle = '.label';
-            $languagePathDescription = '.description';
-        }
-        $result->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . $languagePathTitle;
-        $result->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
-
-        $result->tableDefinition->typeField = $input->getTypeField();
-        $result->tableDefinition->raw = $input->yaml;
-        $result->tableDefinition->contentType = $input->contentType;
-        return $result;
     }
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array

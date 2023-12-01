@@ -32,9 +32,25 @@ final class ProcessedFieldsResult
     /** @var string[] */
     public array $uniqueTabIdentifiers = [];
 
-    public function __construct()
+    public function __construct(ProcessingInput $input)
     {
         $this->tableDefinition = new ProcessedTableDefinition();
         $this->contentType = new ProcessedContentType();
+        $this->tableDefinitionList = $input->tableDefinitionList;
+        $this->contentType->contentBlock = $input->contentBlock;
+        $this->contentType->typeName = $input->getTypeName();
+        $this->contentType->table = $input->table;
+        if ($input->isRootTable()) {
+            $languagePathTitle = 'title';
+            $languagePathDescription = 'description';
+        } else {
+            $languagePathTitle = '.label';
+            $languagePathDescription = '.description';
+        }
+        $this->contentType->languagePathTitle = $input->languagePath->getCurrentPath() . $languagePathTitle;
+        $this->contentType->languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
+        $this->tableDefinition->typeField = $input->getTypeField();
+        $this->tableDefinition->raw = $input->yaml;
+        $this->tableDefinition->contentType = $input->contentType;
     }
 }
