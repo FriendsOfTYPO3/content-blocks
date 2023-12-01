@@ -30,5 +30,4 @@ final class ProcessedTableDefinition
     public bool $isRootTable = true;
     public array $raw = [];
     public ?ContentType $contentType = null;
-    public array $parentReferences = [];
 }

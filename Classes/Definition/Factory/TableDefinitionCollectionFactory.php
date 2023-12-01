@@ -49,11 +49,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 final class TableDefinitionCollectionFactory
 {
     /**
-     * This property tracks external foreign_table parent references.
-     * It is needed, because there can be a references to a Content Block (or native) table,
-     * which isn't processed yet. Thus, it needs to be collected until the very end.
+     * This property tracks Collection foreign_table parent references.
+     * It is needed, because there can be a references to a Content Block,
+     * which isn't processed yet. Thus, it needs to be collected throughout the run.
+     *
+     * @var array<string, array>
      */
-    private array $externalParentReferences = [];
+    private array $parentReferences = [];
 
     public function createFromLoadedContentBlocks(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
     {
@@ -76,21 +78,16 @@ final class TableDefinitionCollectionFactory
         $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
         foreach ($mergedTableDefinitionList as $table => $tableDefinition) {
             $newTableDefinition = TableDefinition::createFromTableArray($table, $tableDefinition);
-            // Enrich local Collections.
-            $parentReferences = $newTableDefinition->getParentReferences();
-            if ($parentReferences !== null) {
-                $newTableDefinition = $this->enrichTableDefinition($parentReferences, $newTableDefinition);
-            }
-            // Enrich external Collections.
-            if (isset($this->externalParentReferences[$newTableDefinition->getTable()])) {
-                $references = $this->externalParentReferences[$newTableDefinition->getTable()];
+            // Enrich Collections with parent reference information.
+            if (isset($this->parentReferences[$newTableDefinition->getTable()])) {
+                $references = $this->parentReferences[$newTableDefinition->getTable()];
                 $tcaFieldDefinitionCollection = TcaFieldDefinitionCollection::createFromArray($references, $newTableDefinition->getTable());
                 $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition);
             }
             $tableDefinitionCollection->addTable($newTableDefinition);
         }
         // Reset state.
-        $this->externalParentReferences = [];
+        $this->parentReferences = [];
         return $tableDefinitionCollection;
     }
 
@@ -178,11 +175,11 @@ final class TableDefinitionCollectionFactory
                         $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
                         // @todo shareable Collection fields should be an extra option.
                         $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
-                        $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
-                        $this->externalParentReferences[$foreignTable][] = $tcaFieldDefinition;
                     } else {
                         $tcaFieldDefinition['config']['foreign_table'] = $uniqueIdentifier;
                     }
+                    $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
+                    $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
                     if (!empty($field['fields'])) {
                         $result->tableDefinitionList = $this->processFields(
                             new ProcessingInput(
@@ -193,7 +190,6 @@ final class TableDefinitionCollectionFactory
                                 languagePath: $input->languagePath,
                                 contentType: ContentType::RECORD_TYPE,
                                 tableDefinitionList: $result->tableDefinitionList,
-                                parentReference: $tcaFieldDefinition,
                             )
                         );
                     }
@@ -238,9 +234,6 @@ final class TableDefinitionCollectionFactory
         $result->tableDefinition->isRootTable = $input->isRootTable();
         $result->tableDefinition->raw = $input->yaml;
         $result->tableDefinition->contentType = $input->contentType;
-        if ($input->parentReference !== null) {
-            $result->tableDefinition->parentReferences[] = $input->parentReference;
-        }
         return $result;
     }
 
@@ -590,7 +583,6 @@ final class TableDefinitionCollectionFactory
         $tableDefinition['typeField'] = $processedTableDefinition->typeField;
         $tableDefinition['raw'] = $processedTableDefinition->raw;
         $tableDefinition['contentType'] = $processedTableDefinition->contentType;
-        $tableDefinition['parentReferences'] = $processedTableDefinition->parentReferences;
         return $tableDefinition;
     }
 
