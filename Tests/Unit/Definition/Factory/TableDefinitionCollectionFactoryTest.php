@@ -1093,4 +1093,51 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         }
         (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
     }
+
+    public static function localCollectionsCanHaveTableOverriddenDataProvider(): iterable
+    {
+        yield 'two collections with the same identifier' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'fields' => [
+                            [
+                                'identifier' => 'my_collection',
+                                'type' => 'Collection',
+                                'table' => 'my_other_table_name',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'text',
+                                        'type' => 'Text',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expectedTable' => 'my_other_table_name',
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider localCollectionsCanHaveTableOverriddenDataProvider
+     */
+    public function localCollectionsCanHaveTableOverridden(array $contentBlocks, string $expectedTable): void
+    {
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory())->createFromLoadedContentBlocks($contentBlockRegistry);
+
+        self::assertTrue($tableDefinitionCollection->hasTable($expectedTable));
+    }
 }

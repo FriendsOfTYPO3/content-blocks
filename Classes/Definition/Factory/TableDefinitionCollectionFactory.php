@@ -170,7 +170,7 @@ final class TableDefinitionCollectionFactory
                         // @todo shareable Collection fields should be an extra option.
                         $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
                     } else {
-                        $tcaFieldDefinition['config']['foreign_table'] = $uniqueIdentifier;
+                        $tcaFieldDefinition['config']['foreign_table'] = $field['table'] ?? $uniqueIdentifier;
                     }
                     $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
                     $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
@@ -179,7 +179,7 @@ final class TableDefinitionCollectionFactory
                             new ProcessingInput(
                                 yaml: $field,
                                 contentBlock: $input->contentBlock,
-                                table: $uniqueIdentifier,
+                                table: $foreignTable,
                                 rootTable: $input->rootTable,
                                 languagePath: $input->languagePath,
                                 contentType: ContentType::RECORD_TYPE,

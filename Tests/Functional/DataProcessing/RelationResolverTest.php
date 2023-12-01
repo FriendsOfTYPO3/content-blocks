@@ -140,6 +140,30 @@ final class RelationResolverTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function canResolveCollectionsWithAlternativeTableName(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_alternative_table_name.csv');
+
+        $tableDefinitionCollection = $this->get(ContentBlockLoader::class)->load();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_collection2');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_collection2' => 2,
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(2, $result);
+        self::assertSame('lorem foo bar', $result[0]['fieldA']);
+        self::assertSame('lorem foo bar 2', $result[1]['fieldA']);
+    }
+
+    /**
+     * @test
+     */
     public function canResolveCollectionsExternal(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_external.csv');
