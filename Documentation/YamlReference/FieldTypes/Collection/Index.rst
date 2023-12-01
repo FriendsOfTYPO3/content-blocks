@@ -9,15 +9,34 @@ Collection
 :yaml:`alternativeSql: false`
 
 The :yaml:`Collection` type generates a field for
-Inline-Relational-Record-Editing (IRRE), which allows nesting of other field
-types as children. This field type allows building structures like image
-sliders, accordion, tabs and so on.
+:ref:`Inline-Relational-Record-Editing (IRRE) <t3tca:columns-inline>`, which
+allows nesting of other :ref:`field types <field_types>`. This field type allows
+building structures like image sliders, accordions, tabs and so on.
 
-First-level options
-===================
+Collections will automatically create custom tables and use the
+:yaml:`identifier` as table name. It is possible to override this with the
+setting :yaml:`table`. Collections are always hidden in the **List**
+module. Usually Collections only have one type. To realise multiple types it is
+recommended to extract the definition to a separate
+:ref:`Record Type <yaml_reference_record_type_multiple_types>` and use
+:ref:`foreign_table <field_type_collection_foreign_table>` instead.
 
-All options, which can be defined for :ref:`Record Types <yaml_reference_record_type_collections>`
-can be used here as well. **Note** that :ref:`labelField <yaml_reference_record_type_labelField>` is required.
+Settings
+========
+
+.. include:: /Snippets/LabelField.rst
+
+.. confval:: table
+
+   :Required: false
+   :Type: string
+
+   Alternative table name for the Collection. Default is :yaml:`identifier` with
+   prefix if enabled.
+
+   .. code-block:: yaml
+
+       table: tx_vendor_my_custom_table_name
 
 .. confval:: fields
 
@@ -38,9 +57,6 @@ can be used here as well. **Note** that :ref:`labelField <yaml_reference_record_
         - identifier: image
           type: File
 
-Settings
-========
-
 .. confval:: minitems
 
    :Required: false
@@ -59,6 +75,7 @@ Settings
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
+.. _field_type_collection_foreign_table:
 .. confval:: foreign_table
 
    :Required: false
@@ -70,7 +87,7 @@ Settings
    manually define the :sql:`foreign_table_parent_uid`, :sql:`tablenames` and
    :sql:`fieldname` fields.
 
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline>`
+For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline-properties>`
 
 Custom icon
 ===========

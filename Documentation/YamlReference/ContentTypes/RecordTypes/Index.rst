@@ -8,8 +8,8 @@ Record Types
 Folder: `ContentBlocks/RecordTypes`.
 
 Record Types are generic Content Types in TYPO3. Basically everything, which is
-not defined by the TYPO3 Core itself. Adding custom records requires you to
-define a :yaml:`table` name. A minimal example looks like this:
+not a Content Element or Page Type. Adding custom records requires you to define
+a :yaml:`table` name. A minimal example looks like this:
 
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/EditorInterface.yaml
@@ -18,8 +18,7 @@ define a :yaml:`table` name. A minimal example looks like this:
     table: tx_vendor_my_record_type
     labelField: title
     fields:
-      -
-        identifier: title
+      - identifier: title
         type: Text
 
 This example will create a new table `tx_vendor_my_record_type`. Usually Record
@@ -46,9 +45,13 @@ you have to enable :yaml:`ignorePageTypeRestriction`:
     security:
       ignorePageTypeRestriction: true
     fields:
-      -
-        identifier: title
+      - identifier: title
         type: Text
+
+.. _yaml_reference_record_type_multiple_types:
+
+Multi Type Record
+=================
 
 In order to create multiple types for a single Record Type, it is required to
 define a :yaml:`typeField` field and a :yaml:`typeName`. The type field will be
@@ -63,8 +66,7 @@ dropdown. The different types will be also added automatically to the list:
     typeField: type
     typeName: diver
     fields:
-      -
-        identifier: title
+      - identifier: title
         type: Text
 
 .. code-block:: yaml
@@ -75,22 +77,8 @@ dropdown. The different types will be also added automatically to the list:
     typeField: type
     typeName: instructor
     fields:
-      -
-        identifier: title
+      - identifier: title
         type: Text
-
-.. _yaml_reference_record_type_collections:
-
-Collections
-===========
-
-Collections are a :ref:`field type <field_type_collection>`, which you can only
-define in the :yaml:`fields` array. They will create custom tables automatically
-and use the :yaml:`identifier` as table name. Therefore they don't require you
-to define a :yaml:`table`. Collections are always hidden in the **List** module.
-Usually Collections only have one type. To realise multiple types it is
-recommended to extract the definition to a separate Record Type and use
-:yaml:`foreign_table` instead.
 
 Options
 =======
@@ -99,16 +87,16 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: table
 
-   :Required: true (false for Collections)
+   :Required: true
    :Type: string
 
-   The custom table name to be used for the new Record Type. The table name for
-   Collections is determined by the :yaml:`identifier` and thus should not be
-   defined there.
+   The custom table name to be used for the new Record Type.
 
    .. code-block:: yaml
 
        table: tx_vendor_my_custom_table_name
+
+.. include:: /Snippets/LabelField.rst
 
 .. confval:: typeField
 
@@ -119,8 +107,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    automatically generated and prepended as the very first field. The item list
    is filled automatically as well. There is no need to define this field
    manually in your fields list. Useful, if you want to define multiple types
-   for a single table (single table inheritance). Collections don't need this
-   option, as they usually only have one type.
+   for a single table (single table inheritance).
 
    .. code-block:: yaml
 
@@ -138,27 +125,6 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    .. code-block:: yaml
 
        typeName: type1
-
-.. _yaml_reference_record_type_labelField:
-.. confval:: labelField
-
-   :Required: true
-   :Type: string|array
-
-   Defines which field should be used as the title of the record. If not
-   defined, the first valid child field will be used as the label. It is
-   possible to define an array of fields, which will be displayed
-   comma-separated in the backend.
-
-   .. code-block:: yaml
-
-       # a single field for the label
-       labelField: title
-
-       # multiple fields will be displayed comma-separated
-       labelField:
-           - title
-           - text
 
 .. confval:: fallbackLabelFields
 
