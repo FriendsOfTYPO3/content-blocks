@@ -54,8 +54,9 @@ final class TableDefinition
             ->withPaletteDefinitionCollection(PaletteDefinitionCollection::createFromArray($definition['palettes'] ?? [], $table))
             ->withParentReferences(TcaFieldDefinitionCollection::createFromArray($definition['parentReferences'] ?? [], $table));
 
-        if (!empty($definition['elements'])) {
-            $tableDefinition = $tableDefinition->withTypeDefinitionCollection(ContentTypeDefinitionCollection::createFromArray($definition['elements'], $table));
+        if (!empty($definition['typeDefinitions'])) {
+            $typeDefinitionCollection = ContentTypeDefinitionCollection::createFromArray($definition['typeDefinitions'], $table);
+            $tableDefinition = $tableDefinition->withTypeDefinitionCollection($typeDefinitionCollection);
         }
 
         return $tableDefinition;

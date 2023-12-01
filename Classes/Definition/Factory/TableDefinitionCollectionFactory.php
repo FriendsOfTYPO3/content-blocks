@@ -19,9 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
 use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedFieldsResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessingInput;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
@@ -38,9 +35,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -95,7 +90,7 @@ final class TableDefinitionCollectionFactory
         $mergedResult = [];
         foreach ($tableDefinitionList as $table => $definition) {
             $mergedResult[$table] = array_replace_recursive(...array_reverse($definition['tableDefinitions']));
-            $mergedResult[$table]['elements'] = $definition['elements'];
+            $mergedResult[$table]['typeDefinitions'] = $definition['typeDefinitions'];
         }
         return $mergedResult;
     }
@@ -207,7 +202,8 @@ final class TableDefinitionCollectionFactory
         // Collect table definitions and content types and carry it over to the next stack.
         // This will be merged at the very end.
         $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $result->tableDefinition->toArray();
-        $result->tableDefinitionList[$input->table]['elements'][] = $this->createInputArrayForTypeDefinition($result->contentType, $input);
+        $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
+        $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
         return $result->tableDefinitionList;
     }
 
@@ -569,73 +565,6 @@ final class TableDefinitionCollectionFactory
         $prefixType = $this->getPrefixType($input->contentBlock, $field);
         $uniqueIdentifier = UniqueIdentifierCreator::prefixIdentifier($input->contentBlock, $prefixType, $field['identifier']);
         return $uniqueIdentifier;
-    }
-
-    /**
-     * @see ContentTypeDefinition
-     */
-    private function createInputArrayForTypeDefinition(ProcessedContentType $processedContentType, ProcessingInput $input): array
-    {
-        $contentBlock = $processedContentType->contentBlock;
-        $vendor = $contentBlock->getVendor();
-        $package = $contentBlock->getPackage();
-        $contentType = [
-            'identifier' => $contentBlock->getName(),
-            'columns' => $processedContentType->columns,
-            'showItems' => $processedContentType->showItems,
-            'overrideColumns' => $processedContentType->overrideColumns,
-            'vendor' => $vendor,
-            'package' => $package,
-            'typeName' => $processedContentType->typeName,
-            'languagePathTitle' => $processedContentType->languagePathTitle,
-            'languagePathDescription' => $processedContentType->languagePathDescription,
-        ];
-        if ($input->isRootTable()) {
-            $contentTypeIcon = new ContentTypeIcon();
-            $contentTypeIcon->iconPath = $contentBlock->getIcon();
-            $contentTypeIcon->iconProvider = $contentBlock->getIconProvider();
-            $contentType['priority'] = (int)($contentBlock->getYaml()['priority'] ?? 0);
-        } else {
-            $absolutePath = GeneralUtility::getFileAbsFileName($contentBlock->getExtPath());
-            $contentTypeIcon = ContentTypeIconResolver::resolve(
-                $contentBlock->getName(),
-                $absolutePath,
-                $contentBlock->getExtPath(),
-                $input->yaml['identifier'],
-                $input->contentType,
-            );
-        }
-        $contentType['typeIconPath'] = $contentTypeIcon->iconPath;
-        $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
-        $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($processedContentType, $contentTypeIcon);
-        if ($contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $contentType['group'] = $contentBlock->getYaml()['group'] ?? $contentBlock->getContentType()->getDefaultGroup();
-        }
-        return $contentType;
-    }
-
-    /**
-     * We add a part of the md5 hash here in order to mitigate browser caching issues when changing the Content Block
-     * Icon. Otherwise, the icon identifier would always be the same and stored in the local storage.
-     */
-    private function buildTypeIconIdentifier(ProcessedContentType $contentType, ContentTypeIcon $contentTypeIcon): string
-    {
-        $typeIconIdentifier = $contentType->table . '-' . $contentType->typeName;
-        $absolutePath = GeneralUtility::getFileAbsFileName($contentTypeIcon->iconPath);
-        if ($absolutePath !== '') {
-            $contents = @file_get_contents($absolutePath);
-            if ($contents === false) {
-                throw new \RuntimeException(
-                    'Unable to load resources of Content Block "' . $contentType->contentBlock->getName() . '".'
-                    . ' If you have deleted this Content Block, please flush system caches and reload the page.',
-                    1698430544,
-                );
-            }
-            $hash = md5($contents);
-            $hasSubString = substr($hash, 0, 7);
-            $typeIconIdentifier .= '-' . $hasSubString;
-        }
-        return $typeIconIdentifier;
     }
 
     private function assertNoLinebreakOutsideOfPalette(FieldType $fieldType, LoadedContentBlock $contentBlock): void
