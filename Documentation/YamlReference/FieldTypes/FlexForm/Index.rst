@@ -6,7 +6,6 @@ FlexForm
 ========
 
 :php:`type => 'flex' // TCA`
-:yaml:`alternativeSql: false`
 
 The :yaml:`FlexForm` field allows you to group multiple fields into one database
 column. It is mostly used to store configuration options, rather than actual

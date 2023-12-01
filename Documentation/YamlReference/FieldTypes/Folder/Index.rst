@@ -6,7 +6,6 @@ Folder
 ======
 
 :php:`type => 'folder' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Folder` type enables to select one or more folders. Files within
 these folders will be resolved automatically and are available in Fluid.

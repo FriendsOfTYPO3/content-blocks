@@ -6,7 +6,6 @@ Email
 =====
 
 :php:`type => 'email' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Email` type creates an input field, which is validated against an
 email pattern. If the input does not contain a valid email address, a flash

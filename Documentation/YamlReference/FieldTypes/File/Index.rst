@@ -6,7 +6,6 @@ File
 ====
 
 :php:`type => 'file' // TCA`
-:yaml:`alternativeSql: false`
 
 The :yaml:`File` type generates a field for file relations.
 

@@ -6,7 +6,6 @@ Collection
 ==========
 
 :php:`type => 'inline' // TCA`
-:yaml:`alternativeSql: false`
 
 The :yaml:`Collection` type generates a field for
 :ref:`Inline-Relational-Record-Editing (IRRE) <t3tca:columns-inline>`, which

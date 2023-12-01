@@ -6,7 +6,6 @@ Text
 ====
 
 :php:`type => 'input' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Text` type generates a simple input field, possibly with additional
 features applied.

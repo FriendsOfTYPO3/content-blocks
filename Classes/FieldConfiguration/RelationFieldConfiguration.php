@@ -25,7 +25,6 @@ final class RelationFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::RELATION;
-    private ?string $alternativeSql = null;
     private string|int $default = '';
     private string $allowed = '';
     private string $foreign_table = '';
@@ -54,7 +53,6 @@ final class RelationFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
@@ -164,9 +162,6 @@ final class RelationFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         return "`$uniqueColumnName` text";
     }
 

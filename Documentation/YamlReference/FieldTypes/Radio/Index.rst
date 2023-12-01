@@ -6,7 +6,6 @@ Radio
 =====
 
 :php:`type => 'radio' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Radio` type creates a set of radio buttons. The value is typically
 stored as integer value, each radio item has one assigned number, but it can be

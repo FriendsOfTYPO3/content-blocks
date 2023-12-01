@@ -25,7 +25,6 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::FOLDER;
-    private ?string $alternativeSql = null;
     private bool $recursive = false;
     private string $default = '';
     private bool $readOnly = false;
@@ -41,7 +40,6 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->recursive = (bool)($settings['recursive'] ?? $self->recursive);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -93,9 +91,6 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         return "`$uniqueColumnName` text";
     }
 

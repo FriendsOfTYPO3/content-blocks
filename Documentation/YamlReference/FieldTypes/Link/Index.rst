@@ -6,7 +6,6 @@ Link
 ====
 
 :php:`type => 'link' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Link` type creates a field with a link wizard. It is possible to link
 to pages, files or even records (if configured).

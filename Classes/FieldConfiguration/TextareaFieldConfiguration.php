@@ -25,7 +25,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::TEXTAREA;
-    private ?string $alternativeSql = null;
     private string $default = '';
     private bool $readOnly = false;
     private bool $required = false;
@@ -49,7 +48,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->required = (bool)($settings['required'] ?? $self->required);
@@ -136,9 +134,6 @@ final class TextareaFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         return "`$uniqueColumnName` text";
     }
 

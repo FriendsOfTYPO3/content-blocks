@@ -25,7 +25,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::SELECT;
-    private ?string $alternativeSql = null;
     private string|int $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -61,7 +60,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
@@ -181,9 +179,6 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 

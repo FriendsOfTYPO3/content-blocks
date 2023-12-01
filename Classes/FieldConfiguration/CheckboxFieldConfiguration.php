@@ -25,7 +25,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::CHECKBOX;
-    private ?string $alternativeSql = null;
     private int $default = 0;
     private bool $readOnly = false;
     private bool $invertStateDisplay = false;
@@ -39,7 +38,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->default = (int)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
@@ -86,9 +84,6 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         return "`$uniqueColumnName` int(11) UNSIGNED DEFAULT '0' NOT NULL";
     }
 

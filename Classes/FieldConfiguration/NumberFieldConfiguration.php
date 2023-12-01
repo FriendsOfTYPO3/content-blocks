@@ -25,7 +25,6 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::NUMBER;
-    private ?string $alternativeSql = null;
     private int|float $default = 0;
     private bool $readOnly = false;
     private int $size = 0;
@@ -43,7 +42,6 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->format = (string)($settings['format'] ?? $self->format);
         $default = $settings['default'] ?? $self->default;
         $self->default = $self->format === 'decimal' ? (float)$default : (int)$default;
@@ -109,9 +107,6 @@ final class NumberFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';

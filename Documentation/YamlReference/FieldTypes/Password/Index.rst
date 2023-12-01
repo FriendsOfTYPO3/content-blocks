@@ -6,7 +6,6 @@ Password
 ========
 
 :php:`type => 'password' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Password` type generates a password field.
 

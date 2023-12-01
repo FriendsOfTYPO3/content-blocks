@@ -6,7 +6,6 @@ DateTime
 ========
 
 :php:`type => 'datetime' // TCA`
-:yaml:`alternativeSql: false`
 
 The :yaml:`DateTime` type provides a date picker. If not configured otherwise,
 the value is stored as a timestamp.

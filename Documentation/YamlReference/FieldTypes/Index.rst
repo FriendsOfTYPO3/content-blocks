@@ -116,22 +116,6 @@ Field options, which can be defined inside the :yaml:`fields` array.
            identifier: bodytext
            useExistingField: true
 
-.. confval:: alternativeSql
-
-   :Required: false
-   :Type: string (SQL)
-
-   It is possible to override the default SQL definition of a field with this
-   option. Not every field type can be overridden. Have a look at the standard
-   SQL definition of the corresponding field.
-
-   .. code-block:: yaml
-
-       fields:
-           identifier: my_identifier
-           type: Text
-           alternativeSql: tinyint(2) DEFAULT "0" NOT NULL
-
 .. confval:: prefixField
 
    :Required: false

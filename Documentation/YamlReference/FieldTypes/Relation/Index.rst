@@ -6,7 +6,6 @@ Relation
 ========
 
 :php:`type => 'group' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Relation` type can handle relations to other record types. They will
 be available to select from the Record Selector.

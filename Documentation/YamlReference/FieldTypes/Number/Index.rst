@@ -6,7 +6,6 @@ Number
 ======
 
 :php:`type => 'number' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Number` only allows integers or decimals as input values.
 

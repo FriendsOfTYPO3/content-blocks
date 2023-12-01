@@ -6,7 +6,6 @@ Slug
 ====
 
 :php:`type => 'slug' // TCA`
-:yaml:`alternativeSql: false`
 
 The :yaml:`Slug` type generates a slug field, which generates a unique string
 for the record.

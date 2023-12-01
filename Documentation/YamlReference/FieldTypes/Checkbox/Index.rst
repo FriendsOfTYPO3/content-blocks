@@ -6,7 +6,6 @@ Checkbox
 ========
 
 :php:`type => 'check' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Checkbox` type generates one or more checkbox fields.
 

@@ -25,7 +25,6 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::RADIO;
-    private ?string $alternativeSql = null;
     private string|int $default = '';
     private bool $readOnly = false;
     private string $itemsProcFunc = '';
@@ -35,7 +34,6 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
             $self->default = $default;
@@ -69,9 +67,6 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 

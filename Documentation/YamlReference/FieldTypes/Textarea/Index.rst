@@ -6,7 +6,6 @@ Textarea
 ========
 
 :php:`type => 'text' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Textarea` type is for multi line text input. A Rich Text Editor can
 be enabled.

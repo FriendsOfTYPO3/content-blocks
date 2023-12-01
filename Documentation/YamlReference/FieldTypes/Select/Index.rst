@@ -6,7 +6,6 @@ Select
 ======
 
 :php:`type => 'select' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Select` type generates a simple select field.
 

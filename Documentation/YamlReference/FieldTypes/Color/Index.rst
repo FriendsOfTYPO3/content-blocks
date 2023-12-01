@@ -6,7 +6,6 @@ Color
 =====
 
 :php:`type => 'color' // TCA`
-:yaml:`alternativeSql: true`
 
 The :yaml:`Color` type provides a simple color picker.
 

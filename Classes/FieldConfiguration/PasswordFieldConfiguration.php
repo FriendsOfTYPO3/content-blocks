@@ -25,7 +25,6 @@ final class PasswordFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::PASSWORD;
-    private ?string $alternativeSql = null;
     private string $default = '';
     private bool $readOnly = false;
     private bool $required = false;
@@ -41,7 +40,6 @@ final class PasswordFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->alternativeSql = $settings['alternativeSql'] ?? $self->alternativeSql;
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
@@ -98,9 +96,6 @@ final class PasswordFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        if ($this->alternativeSql !== null) {
-            return '`' . $uniqueColumnName . '` ' . $this->alternativeSql;
-        }
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';

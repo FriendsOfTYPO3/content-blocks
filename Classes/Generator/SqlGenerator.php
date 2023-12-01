@@ -32,7 +32,9 @@ class SqlGenerator
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void
     {
-        $event->setSqlData(array_merge($event->getSqlData(), $this->generate()));
+        $contentBlocksSqlData = $this->generate();
+        $mergedSqlData = array_merge($contentBlocksSqlData, $event->getSqlData());
+        $event->setSqlData($mergedSqlData);
     }
 
     public function generate(): array
