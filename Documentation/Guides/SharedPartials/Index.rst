@@ -17,10 +17,8 @@ Make Partials available for every Content Block
    :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
     lib.contentBlock {
-        view {
-            partialRootPaths {
-                100 = EXT:site_package/Resources/Private/Partials/ContentElements/
-            }
+        partialRootPaths {
+            100 = EXT:site_package/Resources/Private/Partials/ContentElements/
         }
     }
 
@@ -31,10 +29,8 @@ Make Partials available for a specific Content Block
    :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
     tt_content.myvendor_mycontentblockname {
-        view {
-            partialRootPaths {
-                100 = EXT:my_sitepackage/Resources/Private/Partials/ContentElements/
-            }
+        partialRootPaths {
+            100 = EXT:my_sitepackage/Resources/Private/Partials/ContentElements/
         }
     }
 
