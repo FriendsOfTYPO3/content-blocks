@@ -1896,8 +1896,8 @@ final class TcaGeneratorTest extends UnitTestCase
      */
     public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
-        $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
-        $GLOBALS['TCA']['tt_content']['columns']['bodytext'] = [
+        $baseTca['tt_content']['ctrl']['type'] = 'CType';
+        $baseTca['tt_content']['columns']['bodytext'] = [
             'label' => 'Core bodytext field',
             'config' => [
                 'type' => 'text',
@@ -1906,20 +1906,21 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
-        $GLOBALS['TCA']['tt_content']['columns']['assets'] = [
+        $baseTca['tt_content']['columns']['assets'] = [
             'label' => 'Core assets field',
             'config' => [
                 'type' => 'file',
             ],
         ];
-        $GLOBALS['TCA']['tt_content']['columns']['pages'] = [
+        $baseTca['tt_content']['columns']['pages'] = [
             'label' => 'Core pages field',
             'config' => [
                 'type' => 'group',
                 'allowed' => 'pages',
             ],
         ];
-        $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
+        $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
+        $GLOBALS['TCA'] = $baseTca;
 
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -1942,7 +1943,7 @@ final class TcaGeneratorTest extends UnitTestCase
             $systemExtensionAvailability,
             $flexFormGenerator,
         );
-        $tca = $tcaGenerator->generate();
+        $tca = $tcaGenerator->generate($baseTca);
 
         self::assertEquals($expected, $tca);
     }
@@ -2020,8 +2021,8 @@ final class TcaGeneratorTest extends UnitTestCase
      */
     public function pageTypesGenerateCorrectTca(array $contentBlocks, bool $seoExtensionLoaded, array $expected): void
     {
-        $GLOBALS['TCA']['pages']['ctrl']['type'] = 'doktype';
-        $GLOBALS['TCA']['pages']['ctrl']['label'] = 'title';
+        $baseTca['pages']['ctrl']['type'] = 'doktype';
+        $baseTca['pages']['ctrl']['label'] = 'title';
 
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -2048,7 +2049,7 @@ final class TcaGeneratorTest extends UnitTestCase
             $flexFormGenerator,
         );
 
-        $tca = $tcaGenerator->generate();
+        $tca = $tcaGenerator->generate($baseTca);
 
         self::assertEquals($expected, $tca);
     }
@@ -2091,7 +2092,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $this->expectExceptionCode(1700157578);
         $this->expectExceptionMessage('Option "labelField" is missing for custom table "my_custom_table" and no field could be automatically determined.');
 
-        $tcaGenerator->generate();
+        $tcaGenerator->generate([]);
     }
 
     public static function checkFlexFormTcaDataProvider(): iterable
@@ -2696,8 +2697,8 @@ final class TcaGeneratorTest extends UnitTestCase
      */
     public function checkFlexFormTca(array $contentBlocks, array $expected): void
     {
-        $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
-        $GLOBALS['TCA']['tt_content']['columns']['pi_flexform'] = [
+        $baseTca['tt_content']['ctrl']['type'] = 'CType';
+        $baseTca['tt_content']['columns']['pi_flexform'] = [
             'label' => 'FlexForm',
             'config' => [
                 'type' => 'flex',
@@ -2707,7 +2708,8 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
-        $GLOBALS['TCA']['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
+        $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
+        $GLOBALS['TCA'] = $baseTca;
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -2730,7 +2732,7 @@ final class TcaGeneratorTest extends UnitTestCase
             $flexFormGenerator,
         );
 
-        $tca = $tcaGenerator->generate();
+        $tca = $tcaGenerator->generate($baseTca);
 
         self::assertEquals($expected, $tca);
     }

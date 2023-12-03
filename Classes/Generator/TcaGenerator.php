@@ -93,7 +93,7 @@ class TcaGenerator
     // @todo this is unused in v12. Replace with BeforeTcaOverridesEvent in v13.
     public function __invoke(AfterTcaCompilationEvent $event): void
     {
-        $event->setTca(array_replace_recursive($event->getTca(), $this->generate()));
+        $event->setTca(array_replace_recursive($event->getTca(), $this->generate($event->getTca())));
 
         // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
         $tcaBackup = $GLOBALS['TCA'];
@@ -106,7 +106,7 @@ class TcaGenerator
     // @todo Remove in v13.
     public function generateTcaOverrides(): array
     {
-        $tca = array_replace_recursive($GLOBALS['TCA'], $this->generate());
+        $tca = array_replace_recursive($GLOBALS['TCA'], $this->generate($GLOBALS['TCA']));
 
         // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
         $tcaBackup = $GLOBALS['TCA'];
@@ -118,21 +118,20 @@ class TcaGenerator
         return $tca;
     }
 
-    public function generate(): array
+    public function generate(array $baseTca): array
     {
         $tca = [];
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition);
+            $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition, $baseTca);
         }
         $tca = $this->tcaPreparation->prepare($tca);
         return $tca;
     }
 
-    protected function generateTableTca(TableDefinition $tableDefinition): array
+    protected function generateTableTca(TableDefinition $tableDefinition, array $baseTca): array
     {
         $tca = [];
-        // @todo Add "basicTca" variable and check this, instead of globals.
-        if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
+        if (!isset($baseTca[$tableDefinition->getTable()])) {
             $tca = $this->generateBaseTableTca($tableDefinition);
         }
         $currentPalettesTca = $tca['palettes'] ?? [];
@@ -147,7 +146,7 @@ class TcaGenerator
                 $fieldConfiguration->setDataStructure($dataStructure);
             }
             if ($tableDefinition->hasTypeField()) {
-                $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column);
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column, $baseTca);
                 // Ensure label exists for the standard column definition. This is used e.g. in the List module.
                 if (!$column->useExistingField()) {
                     $tca['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
@@ -168,11 +167,11 @@ class TcaGenerator
                 }
             }
             if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT && $typeDefinition->hasColumn('bodytext')) {
-                $tca['columns']['bodytext']['config']['search']['andWhere'] ??= $GLOBALS['TCA'][$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
+                $tca['columns']['bodytext']['config']['search']['andWhere'] ??= $baseTca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
                 $tca['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
             }
         }
-        $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition);
+        $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition, $baseTca);
         $tca = $this->cleanTableTca($tca);
         return $tca;
     }
@@ -380,7 +379,7 @@ class TcaGenerator
      * Content Elements, Page Types and Record Types with defined typeField only get minimal (non-shareable) TCA in
      * their columns section. The actual config goes into columnsOverrides for the related type.
      */
-    protected function getColumnTcaForTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
+    protected function getColumnTcaForTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $baseTca): array
     {
         $columnTca = [];
         $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
@@ -394,7 +393,7 @@ class TcaGenerator
                 // Support for existing flexForm fields.
                 if ($optionKey === 'ds') {
                     if ($column->useExistingField()) {
-                        $configuration = $this->processExistingFlexForm($column, $tableDefinition);
+                        $configuration = $this->processExistingFlexForm($column, $tableDefinition, $baseTca);
                         if ($configuration === null) {
                             continue;
                         }
@@ -497,9 +496,9 @@ class TcaGenerator
      *         '*,example_flexfield' => '...'
      *     ]
      */
-    protected function processExistingFlexForm(TcaFieldDefinition $column, TableDefinition $tableDefinition): ?array
+    protected function processExistingFlexForm(TcaFieldDefinition $column, TableDefinition $tableDefinition, array $baseTca): ?array
     {
-        $existingDsPointerField = $GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config']['ds_pointerField'];
+        $existingDsPointerField = $baseTca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config']['ds_pointerField'];
         $existingDsPointerFieldArray = GeneralUtility::trimExplode(',', $existingDsPointerField);
         $dsConfiguration = $column->getTca()['config']['ds'];
         $typeSwitchField = $tableDefinition->getTypeField();
@@ -659,9 +658,9 @@ class TcaGenerator
     /**
      * Generate search fields in order to find content elements in global backend search.
      */
-    public function generateSearchFields(TableDefinition $tableDefinition): string
+    public function generateSearchFields(TableDefinition $tableDefinition, array $baseTca): string
     {
-        $searchFieldsString = $GLOBALS['TCA'][$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
+        $searchFieldsString = $baseTca[$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
 
         foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $field) {
