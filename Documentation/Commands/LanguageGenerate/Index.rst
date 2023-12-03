@@ -5,38 +5,58 @@
 Language Generate command
 =========================
 
-The command :bash:`content-blocks:language:generate` prints out xlf file content
-for the specified Content Block. Already set labels in both the Labels.xlf file
-and in the EditorInterface.yaml are considered. The Labels.xlf file has
-precedence over inline labels in the YAML definition. Optional labels like
-descriptions or labels for existing fields will not be generated if they have
-not been set manually. Custom translations, which don't belong to the automatic
-language keys, will be kept and appended to the end.
+The command :bash:`content-blocks:language:generate` updates the Labels.xlf
+content for the specified Content Block. Already set labels in both the
+Labels.xlf file and in the EditorInterface.yaml are considered. The Labels.xlf
+file has precedence over inline labels in the YAML definition. Optional keys
+like descriptions or labels for existing fields will only be be generated if
+they have been set manually. Custom translations, which don't belong to the
+automatic language keys, will be kept and appended to the end.
 
 Arguments
 =========
 
 .. confval:: content-block
 
-   :Required: true
+   :Required: true (false if :bash:`--extension` provided)
    :Type: string
 
    The Content Block to generate the xlf for.
 
-Print out up-to-date xlf for Content Block example/example. You can copy and
-paste the result from the terminal into your Labels.xlf file.
+Options
+=======
+
+.. confval:: print
+
+   :Shortcut: p
+   :Type: bool
+
+   Print Labels.xlf to terminal instead of writing to file system.
+
+.. confval:: extension
+
+   :Shortcut: e
+   :Type: string
+
+   Write Labels.xlf to all Content Blocks within the given extension.
+
+Write up-to-date Labels.xlf file for Content Block example/example.
 
 .. code-block:: bash
 
    vendor/bin/typo3 content-blocks:language:generate example/example
 
-Alternatively, you can directly override your Labels.xlf file by redirecting the
-output.
+Update all Labels.xlf files within the extension "site_package".
 
 .. code-block:: bash
 
-   vendor/bin/typo3 content-blocks:language:generate example/example > \
-   packages/host_extension/ContentBlocks/ContentElements/example/Source/Language/Labels.xlf
+   vendor/bin/typo3 content-blocks:language:generate example/example --extension="site_package"
+
+Print up-to-date Labels.xlf content for Content Block example/example.
+
+.. code-block:: bash
+
+   vendor/bin/typo3 content-blocks:language:generate example/example --print
 
 Example output:
 
