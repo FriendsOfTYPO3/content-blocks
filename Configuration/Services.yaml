@@ -93,3 +93,10 @@ services:
         command: 'content-blocks:list'
         description: 'List available Content Blocks'
         schedulable: false
+
+  TYPO3\CMS\ContentBlocks\Command\GenerateLanguageFileCommand:
+    tags:
+      - name: 'console.command'
+        command: 'content-blocks:language:generate'
+        description: 'Print xlf content for the given Content Block'
+        schedulable: false

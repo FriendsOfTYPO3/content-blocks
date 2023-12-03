@@ -1,0 +1,92 @@
+name: language/test6
+group: common
+prefixFields: true
+label: Test 6
+description: Test 6 description
+basics:
+  - TYPO3/Appearance
+fields:
+  - identifier: header
+    useExistingField: true
+    label: My Header obsolete
+    description: My Header description
+  - identifier: text
+    type: Text
+    label: My Text obsolete
+    description: My Text description
+  - identifier: my_collection
+    type: Collection
+    label: My Collection obsolete
+    table: my_other_collection_name
+    fields:
+      - identifier: text
+        type: Text
+        label: Text in Collection obsolete
+        description: Text in Collection description
+      - identifier: my_collection
+        type: Collection
+        label: Collection 2 obsolete
+        table: my_other_collection_name_2
+        fields:
+          - identifier: text
+            type: Text
+            label: Text in Collection 2
+  - identifier: my_flexform
+    type: FlexForm
+    label: My FlexForm obsolete
+    fields:
+      - type: Sheet
+        identifier: sheet1
+        label: Sheet 1 obsolete
+        description: Sheet 1 description
+        linkTitle: Sheet link title
+        fields:
+          - identifier: link1
+            type: Link
+            label: FlexForm Link obsolete
+            description: FlexForm Link description
+          - identifier: section1
+            type: Section
+            label: Section 1 obsolete
+            description: Section description
+            container:
+              - identifier: container1
+                label: Container 1 obsolete
+                fields:
+                  - identifier: container_field
+                    label: Container Field Text obsolete
+                    type: Text
+              - identifier: container2
+                label: Container 2
+                fields:
+                  - identifier: container_field2
+                    label: Container Field Textarea obsolete
+                    type: Textarea
+      - type: Sheet
+        identifier: sheet2
+        label: Sheet 2 obsolete
+        fields:
+          - identifier: header2
+            type: Text
+            label: Header 2 obsolete
+          - identifier: textarea2
+            type: Textarea
+            label: Textarea 2 obsolete
+          - identifier: header1
+            type: Text
+            label: Header 1 obsolete
+  - identifier: palette_1
+    type: Palette
+    label: Palette Label obsolete
+    description: Palette description
+    fields:
+      - identifier: palette_field_1
+        type: Text
+        label: Palette Field obsolete
+        description: Palette Field description
+  - identifier: tab_1
+    type: Tab
+    label: Tab label obsolete
+  - identifier: field_after_tab
+    type: Text
+    label: Field after Tab obsolete

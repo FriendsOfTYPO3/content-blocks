@@ -14,3 +14,4 @@ available commands.
 
     Make/Index
     List/Index
+    LanguageGenerate/Index

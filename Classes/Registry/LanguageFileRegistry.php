@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Utility\LocalLangPathUtility;
 use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -39,18 +40,42 @@ class LanguageFileRegistry
             $languagePath = $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
             $absoluteLanguagePath = GeneralUtility::getFileAbsFileName($languagePath);
             if (file_exists($absoluteLanguagePath)) {
-                $this->parsedLanguageFiles[$contentBlock->getName()] = $this->xliffParser->getParsedData($absoluteLanguagePath, 'default');
+                $parsedData = $this->xliffParser->getParsedData($absoluteLanguagePath, 'default');
+                $defaultData = $parsedData['default'];
+                $this->parsedLanguageFiles[$contentBlock->getName()] = $defaultData;
             }
         }
     }
 
     public function isset(string $name, string $key): bool
     {
-        if (str_starts_with($key, 'LLL:EXT:')) {
-            $parts = explode(':', $key);
-            $key = $parts[3];
+        $key = LocalLangPathUtility::extractKeyFromLLLPath($key);
+        return isset($this->parsedLanguageFiles[$name][$key][0]['source']);
+    }
+
+    public function get(string $name, string $key): string
+    {
+        $key = LocalLangPathUtility::extractKeyFromLLLPath($key);
+        if (!$this->isset($name, $key)) {
+            throw new \InvalidArgumentException(
+                'Language key ' . $key . ' does not exist for Content Block "' . $name . '".',
+                1701533837,
+            );
         }
-        return isset($this->parsedLanguageFiles[$name]['default'][$key]);
+        return $this->parsedLanguageFiles[$name][$key][0]['source'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllRegisteredKeys(string $name): array
+    {
+        if (!$this->hasLanguageFile($name)) {
+            return [];
+        }
+        $languageFile = $this->getLanguageFile($name);
+        $allKeys = array_keys($languageFile);
+        return $allKeys;
     }
 
     public function getAllLanguageFiles(): array
@@ -61,5 +86,10 @@ class LanguageFileRegistry
     public function getLanguageFile(string $name): array
     {
         return $this->parsedLanguageFiles[$name];
+    }
+
+    public function hasLanguageFile(string $name): bool
+    {
+        return isset($this->parsedLanguageFiles[$name]);
     }
 }

@@ -34,6 +34,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
+use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
@@ -42,6 +44,8 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
  */
 final class TableDefinitionCollectionFactory
 {
+    public function __construct(protected readonly AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry) {}
+
     /**
      * This property tracks Collection foreign_table parent references.
      * It is needed, because there can be a references to a Content Block,
@@ -114,6 +118,28 @@ final class TableDefinitionCollectionFactory
     private function processFields(ProcessingInput $input): array
     {
         $result = new ProcessedFieldsResult($input);
+        if ($input->isRootTable()) {
+            $languagePathTitle = 'title';
+            $languagePathDescription = 'description';
+        } else {
+            $languagePathTitle = '.label';
+            $languagePathDescription = '.description';
+        }
+        $languagePathTitle = $input->languagePath->getCurrentPath() . $languagePathTitle;
+        $languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
+        if ($input->isRootTable()) {
+            $label = (string)($input->yaml['label'] ?? '');
+            $label = $label !== '' ? $label : $input->contentBlock->getName();
+            $description = $input->yaml['description'] ?? '';
+            $description = $description !== '' ? $description : 'Description for ' . $input->contentType->getHumanReadable() . ' ' . $label;
+            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $label);
+            $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        }
+        $result->contentType->languagePathTitle = $languagePathTitle;
+        $result->contentType->languagePathDescription = $languagePathDescription;
+
         $yamlFields = $input->yaml['fields'] ?? [];
 
         // Automatically add a `type` field for record types.
@@ -138,10 +164,27 @@ final class TableDefinitionCollectionFactory
                 default => $this->handleDefault($input, $result, $rootField)
             };
             foreach ($fields as $field) {
-                $this->assertUniqueFieldIdentifier($field['identifier'], $result, $input->contentBlock);
-                $result->uniqueFieldIdentifiers[] = $field['identifier'];
+                $identifier = $field['identifier'];
+                $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
+                $result->uniqueFieldIdentifiers[] = $identifier;
                 $fieldType = $this->resolveType($field, $input->table, $input);
-                $input->languagePath->addPathSegment($field['identifier']);
+
+                $uniqueIdentifier = $this->chooseIdentifier($input, $field);
+                $this->prefixSortFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+                $this->prefixLabelFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+                $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+
+                $input->languagePath->addPathSegment($identifier);
+                $labelPath = $input->languagePath->getCurrentPath() . '.label';
+                $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
+                $label = (string)($field['label'] ?? '');
+                // Never fall back to identifiers for existing fields. They have their standard translation.
+                $label = ($label !== '' || $this->isExistingField($field)) ? $label : $identifier;
+                $description = $field['description'] ?? '';
+                $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
+                $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
+                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
 
                 if ($fieldType === FieldType::FLEXFORM) {
                     $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
@@ -149,10 +192,6 @@ final class TableDefinitionCollectionFactory
                     $field = $this->processFlexForm($field, $input);
                 }
 
-                $uniqueIdentifier = $this->chooseIdentifier($input, $field);
-                $this->prefixSortFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
-                $this->prefixLabelFieldIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
-                $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $field['identifier'], $uniqueIdentifier);
                 $tcaFieldDefinition = [
                     'parentTable' => $input->contentBlock->getContentType()->getTable(),
                     'uniqueIdentifier' => $uniqueIdentifier,
@@ -252,8 +291,9 @@ final class TableDefinitionCollectionFactory
 
     private function handlePalette(ProcessingInput $input, ProcessedFieldsResult $result, array $rootPalette): array
     {
-        $this->assertUniquePaletteIdentifier($rootPalette['identifier'], $result, $input->contentBlock);
-        $result->uniquePaletteIdentifiers[] = $rootPalette['identifier'];
+        $rootPaletteIdentifier = $rootPalette['identifier'];
+        $this->assertUniquePaletteIdentifier($rootPaletteIdentifier, $result, $input->contentBlock);
+        $result->uniquePaletteIdentifiers[] = $rootPaletteIdentifier;
         // Ignore empty Palettes.
         if (($rootPalette['fields'] ?? []) === []) {
             return [];
@@ -265,17 +305,24 @@ final class TableDefinitionCollectionFactory
             if ($paletteFieldType === FieldType::LINEBREAK) {
                 $paletteItems[] = new LinebreakDefinition();
             } else {
-                $this->assertNoPaletteInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
-                $this->assertNoTabInPalette($paletteFieldType, $paletteField['identifier'], $rootPalette['identifier'], $input->contentBlock);
+                $this->assertNoPaletteInPalette($paletteFieldType, $paletteField['identifier'], $rootPaletteIdentifier, $input->contentBlock);
+                $this->assertNoTabInPalette($paletteFieldType, $paletteField['identifier'], $rootPaletteIdentifier, $input->contentBlock);
                 $fields[] = $paletteField;
                 $paletteItems[] = $this->chooseIdentifier($input, $paletteField);
             }
         }
-        $input->languagePath->addPathSegment('palettes.' . $rootPalette['identifier']);
-        $label = $rootPalette['label'] ?? '';
+
+        $input->languagePath->addPathSegment('palettes.' . $rootPaletteIdentifier);
+        $label = (string)($rootPalette['label'] ?? '');
         $description = $rootPalette['description'] ?? '';
         $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';
         $languagePathDescription = $input->languagePath->getCurrentPath() . '.description';
+        $labelPathSource = new AutomaticLanguageSource($languagePathLabel, $label);
+        $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        $input->languagePath->popSegment();
+
         $paletteIdentifier = $this->chooseIdentifier($input, $rootPalette);
         $palette = [
             'contentBlockName' => $input->contentBlock->getName(),
@@ -288,7 +335,6 @@ final class TableDefinitionCollectionFactory
         ];
         $result->tableDefinition->palettes[$paletteIdentifier] = $palette;
         $result->contentType->showItems[] = PaletteDefinition::createFromArray($palette);
-        $input->languagePath->popSegment();
         return $fields;
     }
 
@@ -297,10 +343,15 @@ final class TableDefinitionCollectionFactory
         $identifier = $field['identifier'];
         $this->assertUniqueTabIdentifier($identifier, $result, $input->contentBlock);
         $result->uniqueTabIdentifiers[] = $identifier;
-        $label = $field['label'] ?? '';
+
         $input->languagePath->addPathSegment('tabs.' . $identifier);
+        $label = (string)($field['label'] ?? '');
+        $label = $label !== '' ? $label : $identifier;
         $languagePathLabel = $input->languagePath->getCurrentPath();
+        $languagePathSource = new AutomaticLanguageSource($languagePathLabel, $label);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
         $input->languagePath->popSegment();
+
         $tabDefinitionArray = [
             'identifier' => $identifier,
             'contentBlockName' => $input->contentBlock->getName(),
@@ -322,23 +373,39 @@ final class TableDefinitionCollectionFactory
         $fields = $field['fields'] ?? [];
         if ($this->flexFormDefinitionHasDefaultSheet($fields)) {
             foreach ($fields as $flexFormField) {
-                $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($input->languagePath, $flexFormField));
+                $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($input, $flexFormField));
             }
             $flexFormDefinition->addSheet($sheetDefinition);
         } else {
             foreach ($fields as $sheet) {
                 $sheetDefinition = new SheetDefinition();
-                $sheetDefinition->setIdentifier($sheet['identifier']);
+                $identifier = $sheet['identifier'];
+                $sheetDefinition->setIdentifier($identifier);
+
                 $input->languagePath->addPathSegment('sheets.' . $sheetDefinition->getIdentifier());
-                $sheetDefinition->setLanguagePathLabel($input->languagePath->getCurrentPath() . '.label');
-                $sheetDefinition->setLanguagePathDescription($input->languagePath->getCurrentPath() . '.description');
-                $sheetDefinition->setLanguagePathLinkTitle($input->languagePath->getCurrentPath() . '.linkTitle');
-                $sheetDefinition->setLabel($sheet['label'] ?? '');
-                $sheetDefinition->setDescription($sheet['description'] ?? '');
-                $sheetDefinition->setLinkTitle($sheet['linkTitle'] ?? '');
+                $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';
+                $descriptionPathLabel = $input->languagePath->getCurrentPath() . '.description';
+                $linkTitlePathLabel = $input->languagePath->getCurrentPath() . '.linkTitle';
+                $sheetDefinition->setLanguagePathLabel($languagePathLabel);
+                $sheetDefinition->setLanguagePathDescription($descriptionPathLabel);
+                $sheetDefinition->setLanguagePathLinkTitle($linkTitlePathLabel);
+                $label = (string)($sheet['label'] ?? '');
+                $label = $label !== '' ? $label : $identifier;
+                $description = $sheet['description'] ?? '';
+                $linkTitle = $sheet['linkTitle'] ?? '';
+                $sheetDefinition->setLabel($label);
+                $sheetDefinition->setDescription($description);
+                $sheetDefinition->setLinkTitle($linkTitle);
+                $languagePathSource = new AutomaticLanguageSource($languagePathLabel, $label);
+                $descriptionPathSource = new AutomaticLanguageSource($descriptionPathLabel, $description);
+                $linkTitlePathSource = new AutomaticLanguageSource($linkTitlePathLabel, $linkTitle);
+                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
+                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $linkTitlePathSource);
                 $input->languagePath->popSegment();
+
                 foreach ($sheet['fields'] ?? [] as $sheetField) {
-                    $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($input->languagePath, $sheetField));
+                    $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($input, $sheetField));
                 }
                 $flexFormDefinition->addSheet($sheetDefinition);
             }
@@ -359,47 +426,72 @@ final class TableDefinitionCollectionFactory
         return true;
     }
 
-    private function resolveFlexFormField(LanguagePath $languagePath, array $flexFormField): TcaFieldDefinition|SectionDefinition
+    private function resolveFlexFormField(ProcessingInput $input, array $flexFormField): TcaFieldDefinition|SectionDefinition
     {
         if (FlexFormSubType::tryFrom($flexFormField['type']) === FlexFormSubType::SECTION) {
-            return $this->processFlexFormSection($flexFormField, $languagePath);
+            return $this->processFlexFormSection($input, $flexFormField);
         }
+        $identifier = $flexFormField['identifier'];
 
-        $languagePath->addPathSegment($flexFormField['identifier']);
+        $input->languagePath->addPathSegment($identifier);
+        $labelPath = $input->languagePath->getCurrentPath() . '.label';
+        $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
+        $label = (string)($flexFormField['label'] ?? '');
+        $label = $label !== '' ? $label : $identifier;
+        $description = $flexFormField['description'] ?? '';
+        $languagePathSource = new AutomaticLanguageSource($labelPath, $label);
+        $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+
         $flexFormFieldArray = [
-            'uniqueIdentifier' => $flexFormField['identifier'],
+            'uniqueIdentifier' => $identifier,
             'config' => $flexFormField,
             'type' => FieldType::from($flexFormField['type']),
-            'labelPath' => $languagePath->getCurrentPath() . '.label',
-            'descriptionPath' => $languagePath->getCurrentPath() . '.description',
+            'labelPath' => $labelPath,
+            'descriptionPath' => $descriptionPath,
         ];
-        $languagePath->popSegment();
+        $input->languagePath->popSegment();
         $flexFormTcaDefinition = TcaFieldDefinition::createFromArray($flexFormFieldArray);
         return $flexFormTcaDefinition;
     }
 
-    private function processFlexFormSection(array $section, LanguagePath $languagePath): SectionDefinition
+    private function processFlexFormSection(ProcessingInput $input, array $section): SectionDefinition
     {
         $sectionDefinition = new SectionDefinition();
-        $sectionDefinition->setIdentifier($section['identifier']);
-        $languagePath->addPathSegment('sections.' . $sectionDefinition->getIdentifier());
-        $sectionTitle = $languagePath->getCurrentPath() . '.title';
+        $sectionIdentifier = $section['identifier'];
+        $sectionDefinition->setIdentifier($sectionIdentifier);
+
+        $input->languagePath->addPathSegment('sections.' . $sectionDefinition->getIdentifier());
+        $sectionTitle = $input->languagePath->getCurrentPath() . '.title';
+        $label = (string)($section['label'] ?? '');
+        $label = $label !== '' ? $label : $sectionIdentifier;
         $sectionDefinition->setLanguagePathLabel($sectionTitle);
-        $sectionDefinition->setLabel($section['label'] ?? '');
+        $sectionDefinition->setLabel($label);
+        $labelPathSource = new AutomaticLanguageSource($sectionTitle, $label);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+
         foreach ($section['container'] as $container) {
+            $containerIdentifier = $container['identifier'];
             $containerDefinition = new ContainerDefinition();
-            $containerDefinition->setIdentifier($container['identifier']);
-            $languagePath->addPathSegment('container.' . $containerDefinition->getIdentifier());
-            $containerTitle = $languagePath->getCurrentPath() . '.title';
+            $containerDefinition->setIdentifier($containerIdentifier);
+
+            $input->languagePath->addPathSegment('container.' . $containerDefinition->getIdentifier());
+            $containerTitle = $input->languagePath->getCurrentPath() . '.title';
+            $label = (string)($container['label'] ?? '');
+            $label = $label !== '' ? $label : $containerIdentifier;
             $containerDefinition->setLanguagePathLabel($containerTitle);
-            $containerDefinition->setLabel($container['label'] ?? '');
+            $containerDefinition->setLabel($label);
+            $labelPathSource = new AutomaticLanguageSource($containerTitle, $label);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+
             foreach ($container['fields'] as $containerField) {
-                $containerDefinition->addField($this->resolveFlexFormField($languagePath, $containerField));
+                $containerDefinition->addField($this->resolveFlexFormField($input, $containerField));
             }
             $sectionDefinition->addContainer($containerDefinition);
-            $languagePath->popSegment();
+            $input->languagePath->popSegment();
         }
-        $languagePath->popSegment();
+        $input->languagePath->popSegment();
         return $sectionDefinition;
     }
 
@@ -487,13 +579,18 @@ final class TableDefinitionCollectionFactory
 
     private function isPrefixEnabledForField(LoadedContentBlock $contentBlock, array $fieldConfiguration): bool
     {
-        if (array_key_exists('useExistingField', $fieldConfiguration)) {
-            return !$fieldConfiguration['useExistingField'];
+        if ($this->isExistingField($fieldConfiguration)) {
+            return false;
         }
         if (array_key_exists('prefixField', $fieldConfiguration)) {
             return (bool)$fieldConfiguration['prefixField'];
         }
         return $contentBlock->prefixFields();
+    }
+
+    private function isExistingField(array $fieldConfiguration): bool
+    {
+        return (bool)($fieldConfiguration['useExistingField'] ?? false);
     }
 
     private function getPrefixType(LoadedContentBlock $contentBlock, array $fieldConfiguration): PrefixType
@@ -506,7 +603,7 @@ final class TableDefinitionCollectionFactory
 
     private function resolveType(array $field, string $table, ProcessingInput $input): FieldType
     {
-        $isExistingField = ($field['useExistingField'] ?? false);
+        $isExistingField = $this->isExistingField($field);
         if ($isExistingField) {
             $this->assertIdentifierExists($field, $input);
             $identifier = $field['identifier'];

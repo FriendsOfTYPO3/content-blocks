@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="" product-name="language/test2">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title">
+				<source>Test 2</source>
+			</trans-unit>
+			<trans-unit id="description" resname="description">
+				<source>Test 2 description</source>
+			</trans-unit>
+			<trans-unit id="header.label" resname="header.label">
+				<source>My Header</source>
+			</trans-unit>
+			<trans-unit id="text.label" resname="text.label">
+				<source>My Text</source>
+			</trans-unit>
+			<trans-unit id="my_collection.label" resname="my_collection.label">
+				<source>My Collection</source>
+			</trans-unit>
+			<trans-unit id="my_collection.text.label" resname="my_collection.text.label">
+				<source>Text in Collection</source>
+			</trans-unit>
+			<trans-unit id="my_collection.my_collection.label" resname="my_collection.my_collection.label">
+				<source>Collection 2</source>
+			</trans-unit>
+			<trans-unit id="my_collection.my_collection.text.label" resname="my_collection.my_collection.text.label">
+				<source>Text in Collection 2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.label" resname="my_flexform.label">
+				<source>My FlexForm</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sheets.sheet1.label" resname="my_flexform.sheets.sheet1.label">
+				<source>Sheet 1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.link1.label" resname="my_flexform.link1.label">
+				<source>FlexForm Link</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.title" resname="my_flexform.sections.section1.title">
+				<source>Section 1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.title" resname="my_flexform.sections.section1.container.container1.title">
+				<source>Container 1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.container_field.label" resname="my_flexform.sections.section1.container.container1.container_field.label">
+				<source>Container Field Text</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container2.title" resname="my_flexform.sections.section1.container.container2.title">
+				<source>Container 2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container2.container_field2.label" resname="my_flexform.sections.section1.container.container2.container_field2.label">
+				<source>Container Field Textarea</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sheets.sheet2.label" resname="my_flexform.sheets.sheet2.label">
+				<source>Sheet 2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.header2.label" resname="my_flexform.header2.label">
+				<source>Header 2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.textarea2.label" resname="my_flexform.textarea2.label">
+				<source>Textarea 2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.header1.label" resname="my_flexform.header1.label">
+				<source>Header 1</source>
+			</trans-unit>
+			<trans-unit id="palettes.palette_1.label" resname="palettes.palette_1.label">
+				<source>Palette Label</source>
+			</trans-unit>
+			<trans-unit id="palette_field_1.label" resname="palette_field_1.label">
+				<source>Palette Field</source>
+			</trans-unit>
+			<trans-unit id="tabs.tab_1" resname="tabs.tab_1">
+				<source>Tab label</source>
+			</trans-unit>
+			<trans-unit id="field_after_tab.label" resname="field_after_tab.label">
+				<source>Field after Tab</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

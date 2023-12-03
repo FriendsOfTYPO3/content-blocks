@@ -1,0 +1,60 @@
+name: language/test7
+group: common
+prefixFields: true
+basics:
+  - TYPO3/Appearance
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: text
+    type: Text
+  - identifier: my_collection
+    type: Collection
+    table: my_other_collection_name
+    fields:
+      - identifier: text
+        type: Text
+      - identifier: my_collection
+        type: Collection
+        table: my_other_collection_name_2
+        fields:
+          - identifier: text
+            type: Text
+  - identifier: my_flexform
+    type: FlexForm
+    fields:
+      - type: Sheet
+        identifier: sheet1
+        linkTitle: Sheet link title
+        fields:
+          - identifier: link1
+            type: Link
+          - identifier: section1
+            type: Section
+            container:
+              - identifier: container1
+                fields:
+                  - identifier: container_field
+                    type: Text
+              - identifier: container2
+                fields:
+                  - identifier: container_field2
+                    type: Textarea
+      - type: Sheet
+        identifier: sheet2
+        fields:
+          - identifier: header2
+            type: Text
+          - identifier: textarea2
+            type: Textarea
+          - identifier: header1
+            type: Text
+  - identifier: palette_1
+    type: Palette
+    fields:
+      - identifier: palette_field_1
+        type: Text
+  - identifier: tab_1
+    type: Tab
+  - identifier: field_after_tab
+    type: Text

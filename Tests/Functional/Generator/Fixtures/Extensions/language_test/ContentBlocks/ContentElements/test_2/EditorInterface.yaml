@@ -1,0 +1,83 @@
+name: language/test2
+group: common
+prefixFields: true
+label: Test 2
+description: Test 2 description
+basics:
+  - TYPO3/Appearance
+fields:
+  - identifier: header
+    useExistingField: true
+    label: My Header
+  - identifier: text
+    type: Text
+    label: My Text
+  - identifier: my_collection
+    type: Collection
+    label: My Collection
+    table: my_other_collection_name
+    fields:
+      - identifier: text
+        type: Text
+        label: Text in Collection
+      - identifier: my_collection
+        type: Collection
+        label: Collection 2
+        table: my_other_collection_name_2
+        fields:
+          - identifier: text
+            type: Text
+            label: Text in Collection 2
+  - identifier: my_flexform
+    type: FlexForm
+    label: My FlexForm
+    fields:
+      - type: Sheet
+        identifier: sheet1
+        label: Sheet 1
+        fields:
+          - identifier: link1
+            type: Link
+            label: FlexForm Link
+          - identifier: section1
+            type: Section
+            label: Section 1
+            container:
+              - identifier: container1
+                label: Container 1
+                fields:
+                  - identifier: container_field
+                    label: Container Field Text
+                    type: Text
+              - identifier: container2
+                label: Container 2
+                fields:
+                  - identifier: container_field2
+                    label: Container Field Textarea
+                    type: Textarea
+      - type: Sheet
+        identifier: sheet2
+        label: Sheet 2
+        fields:
+          - identifier: header2
+            type: Text
+            label: Header 2
+          - identifier: textarea2
+            type: Textarea
+            label: Textarea 2
+          - identifier: header1
+            type: Text
+            label: Header 1
+  - identifier: palette_1
+    type: Palette
+    label: Palette Label
+    fields:
+      - identifier: palette_field_1
+        type: Text
+        label: Palette Field
+  - identifier: tab_1
+    type: Tab
+    label: Tab label
+  - identifier: field_after_tab
+    type: Text
+    label: Field after Tab
