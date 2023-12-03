@@ -118,29 +118,7 @@ final class TableDefinitionCollectionFactory
     private function processFields(ProcessingInput $input): array
     {
         $result = new ProcessedFieldsResult($input);
-        $languagePathTitle = $input->languagePath->getCurrentPath();
-        $languagePathDescription = $input->languagePath->getCurrentPath();
-        $title = (string)($input->yaml['title'] ?? '');
-        $description = (string)($input->yaml['description'] ?? '');
-        if ($input->isRootTable()) {
-            // Ensure there is always a title for a Content Type.
-            $title = $title !== '' ? $title : $input->contentBlock->getName();
-            $result->contentType->title = $title;
-            $result->contentType->description = $description;
-            $languagePathTitle = $languagePathTitle . 'title';
-            $languagePathDescription = $languagePathDescription . 'description';
-            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
-            $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
-            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
-            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
-        } else {
-            $languagePathTitle = $languagePathTitle . '.label';
-            $languagePathDescription = $languagePathDescription . '.description';
-            $result->contentType->title = $title;
-            $result->contentType->description = $description;
-        }
-        $result->contentType->languagePathTitle = $languagePathTitle;
-        $result->contentType->languagePathDescription = $languagePathDescription;
+        $this->initializeContentTypeLabelAndDescription($input, $result);
 
         $yamlFields = $input->yaml['fields'] ?? [];
 
@@ -166,28 +144,17 @@ final class TableDefinitionCollectionFactory
                 default => $this->handleDefault($input, $result, $rootField)
             };
             foreach ($fields as $field) {
-                $identifier = $field['identifier'];
+                $identifier = (string)$field['identifier'];
                 $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
                 $result->uniqueFieldIdentifiers[] = $identifier;
                 $fieldType = $this->resolveType($field, $input->table, $input);
+                $input->languagePath->addPathSegment($identifier);
+                $field = $this->initializeFieldLabelAndDescription($input, $identifier, $field);
 
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
                 $this->prefixSortFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
                 $this->prefixLabelFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
                 $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $identifier, $uniqueIdentifier);
-
-                $input->languagePath->addPathSegment($identifier);
-                $labelPath = $input->languagePath->getCurrentPath() . '.label';
-                $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
-                $title = (string)($field['label'] ?? '');
-                // Never fall back to identifiers for existing fields. They have their standard translation.
-                $title = ($title !== '' || $this->isExistingField($field)) ? $title : $identifier;
-                $field['label'] = $title;
-                $description = $field['description'] ?? '';
-                $labelPathSource = new AutomaticLanguageSource($labelPath, $title);
-                $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
-                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
-                $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
 
                 if ($fieldType === FieldType::FLEXFORM) {
                     $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
@@ -251,6 +218,49 @@ final class TableDefinitionCollectionFactory
         $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
         $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
         return $result->tableDefinitionList;
+    }
+
+    private function initializeContentTypeLabelAndDescription(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
+        $languagePathTitle = $input->languagePath->getCurrentPath();
+        $languagePathDescription = $input->languagePath->getCurrentPath();
+        $title = (string)($input->yaml['title'] ?? '');
+        $description = (string)($input->yaml['description'] ?? '');
+        if ($input->isRootTable()) {
+            // Ensure there is always a title for a Content Type.
+            $title = $title !== '' ? $title : $input->contentBlock->getName();
+            $result->contentType->title = $title;
+            $result->contentType->description = $description;
+            $languagePathTitle = $languagePathTitle . 'title';
+            $languagePathDescription = $languagePathDescription . 'description';
+            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
+            $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        } else {
+            $languagePathTitle = $languagePathTitle . '.label';
+            $languagePathDescription = $languagePathDescription . '.description';
+            $result->contentType->title = $title;
+            $result->contentType->description = $description;
+        }
+        $result->contentType->languagePathTitle = $languagePathTitle;
+        $result->contentType->languagePathDescription = $languagePathDescription;
+    }
+
+    private function initializeFieldLabelAndDescription(ProcessingInput $input, string $identifier, array $field): array
+    {
+        $labelPath = $input->languagePath->getCurrentPath() . '.label';
+        $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
+        $title = (string)($field['label'] ?? '');
+        // Never fall back to identifiers for existing fields. They have their standard translation.
+        $title = ($title !== '' || $this->isExistingField($field)) ? $title : $identifier;
+        $field['label'] = $title;
+        $description = $field['description'] ?? '';
+        $labelPathSource = new AutomaticLanguageSource($labelPath, $title);
+        $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        return $field;
     }
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
