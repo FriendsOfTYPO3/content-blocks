@@ -131,6 +131,7 @@ class TcaGenerator
     protected function generateTableTca(TableDefinition $tableDefinition): array
     {
         $tca = [];
+        // @todo Add "basicTca" variable and check this, instead of globals.
         if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()])) {
             $tca = $this->generateBaseTableTca($tableDefinition);
         }
@@ -147,11 +148,12 @@ class TcaGenerator
             }
             if ($tableDefinition->hasTypeField()) {
                 $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column);
+                // Ensure label exists for the standard column definition. This is used e.g. in the List module.
+                if (!$column->useExistingField()) {
+                    $tca['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
+                }
             } else {
                 $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithoutTypeField($tableDefinition, $column);
-            }
-            if (!isset($GLOBALS['TCA'][$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['label'])) {
-                $tca['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
             }
         }
         foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
@@ -462,8 +464,6 @@ class TcaGenerator
         $labelPath = $overrideColumn->getLabelPath();
         if ($this->languageFileRegistry->isset($typeDefinition->getName(), $labelPath)) {
             $column['label'] = $labelPath;
-        } elseif (($column['label'] ?? '') === '' && !$overrideColumn->useExistingField()) {
-            $column['label'] = $overrideColumn->getIdentifier();
         }
         $descriptionPath = $overrideColumn->getDescriptionPath();
         if ($this->languageFileRegistry->isset($typeDefinition->getName(), $descriptionPath)) {

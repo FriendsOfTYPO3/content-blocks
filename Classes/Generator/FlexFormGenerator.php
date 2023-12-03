@@ -101,21 +101,10 @@ class FlexFormGenerator
         $labelPath = $flexFormTcaDefinition->getLabelPath();
         if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $labelPath)) {
             $flexFormTca['label'] = $labelPath;
-        } else {
-            $tcaLabel = $flexFormTcaDefinition->getTca()['label'] ?? '';
-            if ($tcaLabel !== '') {
-                $flexFormTca['label'] = $tcaLabel;
-            } else {
-                $flexFormTca['label'] = $flexFormTcaDefinition->getIdentifier();
-            }
         }
-
-        $tcaDescription = $flexFormTcaDefinition->getTca()['description'] ?? '';
         $descriptionPath = $flexFormTcaDefinition->getDescriptionPath();
         if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $descriptionPath)) {
             $flexFormTca['description'] = $descriptionPath;
-        } elseif ($tcaDescription !== '') {
-            $flexFormTca['description'] = $tcaDescription;
         }
         return $flexFormTca;
     }

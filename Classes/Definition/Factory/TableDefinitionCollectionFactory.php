@@ -180,6 +180,7 @@ final class TableDefinitionCollectionFactory
                 $label = (string)($field['label'] ?? '');
                 // Never fall back to identifiers for existing fields. They have their standard translation.
                 $label = ($label !== '' || $this->isExistingField($field)) ? $label : $identifier;
+                $field['label'] = $label;
                 $description = $field['description'] ?? '';
                 $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
                 $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
@@ -438,6 +439,7 @@ final class TableDefinitionCollectionFactory
         $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
         $label = (string)($flexFormField['label'] ?? '');
         $label = $label !== '' ? $label : $identifier;
+        $flexFormField['label'] = $label;
         $description = $flexFormField['description'] ?? '';
         $languagePathSource = new AutomaticLanguageSource($labelPath, $label);
         $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
