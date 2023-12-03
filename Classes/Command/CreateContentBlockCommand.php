@@ -240,6 +240,8 @@ class CreateContentBlockCommand extends Command
     private function createContentBlockContentElementConfiguration(string $vendor, string $name, ?string $typeName = ''): array
     {
         $configuration = [
+            'table' => 'tt_content',
+            'typeField' => 'CType',
             'name' => $vendor . '/' . $name,
             'group' => 'common',
             'prefixFields' => true,
@@ -252,6 +254,7 @@ class CreateContentBlockCommand extends Command
             [
                 'identifier' => 'header',
                 'useExistingField' => true,
+                'label' => 'Custom header label',
             ],
         ];
         return $configuration;
@@ -260,6 +263,8 @@ class CreateContentBlockCommand extends Command
     private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $typeName): array
     {
         return [
+            'table' => 'pages',
+            'typeField' => 'doktype',
             'name' => $vendor . '/' . $name,
             'typeName' => $typeName,
             'prefixFields' => true,
@@ -284,6 +289,7 @@ class CreateContentBlockCommand extends Command
             [
                 'identifier' => 'title',
                 'type' => 'Text',
+                'label' => 'Title',
             ],
         ];
         return $configuration;

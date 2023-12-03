@@ -19,8 +19,11 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,145 +35,111 @@ class ContentBlockSkeletonBuilder
 {
     public function __construct(
         protected readonly HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
+        protected readonly LanguageFileGenerator $languageFileGenerator,
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
     ) {}
 
     /**
      * Writes a Content Block to file system.
      */
-    public function create(LoadedContentBlock $contentBlockConfiguration): void
+    public function create(LoadedContentBlock $contentBlock): void
     {
-        $vendor = $contentBlockConfiguration->getVendor();
-        $name = $contentBlockConfiguration->getPackage();
-        $extPath = $contentBlockConfiguration->getExtPath();
+        // Initialise registries with the new Content Block.
+        $this->contentBlockRegistry->register($contentBlock);
+        $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($this->contentBlockRegistry);
+
+        $name = $contentBlock->getPackage();
+        $extPath = $contentBlock->getExtPath();
         $basePath = GeneralUtility::getFileAbsFileName($extPath);
-        $contentType = $contentBlockConfiguration->getContentType();
         if ($basePath === '') {
             throw new \RuntimeException('Path to package "' . $name . '" cannot be empty.', 1674225339);
         }
         $basePath .= '/' . $name;
         if (file_exists($basePath)) {
-            throw new \RuntimeException('A content block with the name "' . $name . '" already exists in target extension.', 1674225340);
+            throw new \RuntimeException(
+                'A Content Block with the folder name "' . $name . '" already exists in extension "' . $contentBlock->getHostExtension() . '".',
+                1674225340
+            );
         }
 
-        // create directory structure
+        // Create public Assets directory.
         $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
         GeneralUtility::mkdir_deep($publicPath);
-        GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
 
-        // create files
+        $this->createEditorInterfaceYaml($contentBlock, $basePath);
+        $this->createLabelsXlf($contentBlock, $basePath);
+
+        $contentType = $contentBlock->getContentType();
+        if ($contentType === ContentType::CONTENT_ELEMENT) {
+            $this->createFrontendHtml($contentBlock, $basePath);
+            $this->createBackendPreviewHtml($contentBlock, $basePath);
+            $this->createExamplePublicAssets($publicPath);
+        }
+        $this->copyDefaultIcon($contentType, $basePath);
+    }
+
+    protected function createEditorInterfaceYaml(LoadedContentBlock $contentBlock, string $basePath): void
+    {
+        $contentType = $contentBlock->getContentType();
+        $yamlContent = $contentBlock->getYaml();
+        if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
+            unset($yamlContent['table']);
+            unset($yamlContent['typeField']);
+        }
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName(),
-            Yaml::dump($contentBlockConfiguration->getYaml(), 10, 2)
+            Yaml::dump($yamlContent, 10, 2)
         );
+    }
 
-        $utc = new \DateTimeZone('UTC');
-        $date = (new \DateTime())->setTimezone($utc)->format('c');
-        $xliffContent = match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $this->getXliffMarkupForContentElement($vendor, $name, $date),
-            ContentType::PAGE_TYPE => $this->getXliffMarkupForPageType($vendor, $name, $date),
-            ContentType::RECORD_TYPE => $this->getXliffMarkupForRecordType($vendor, $name, $date),
-        };
+    protected function createLabelsXlf(LoadedContentBlock $contentBlock, string $basePath): void
+    {
+        GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
+        $xliffContent = $this->languageFileGenerator->generate($contentBlock);
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
             $xliffContent
         );
-        if ($contentType === ContentType::CONTENT_ELEMENT) {
-            file_put_contents(
-                $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
-                $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlockConfiguration)
-            );
-            file_put_contents(
-                $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
-                $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlockConfiguration)
-            );
-            file_put_contents(
-                $publicPath . '/EditorPreview.css',
-                '/* Created by Content Block skeleton builder */'
-            );
-            file_put_contents(
-                $publicPath . '/Frontend.css',
-                '/* Created by Content Block skeleton builder */'
-            );
-            file_put_contents(
-                $publicPath . '/Frontend.js',
-                '/* Created by Content Block skeleton builder */'
-            );
-        }
+    }
+
+    protected function createBackendPreviewHtml(LoadedContentBlock $contentBlock, string $basePath): void
+    {
+        file_put_contents(
+            $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
+            $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlock)
+        );
+    }
+
+    protected function createFrontendHtml(LoadedContentBlock $contentBlock, string $basePath): void
+    {
+        file_put_contents(
+            $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
+            $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlock)
+        );
+    }
+
+    protected function createExamplePublicAssets(string $publicPath): void
+    {
+        file_put_contents(
+            $publicPath . '/EditorPreview.css',
+            '/* Created by Content Block skeleton builder */'
+        );
+        file_put_contents(
+            $publicPath . '/Frontend.css',
+            '/* Created by Content Block skeleton builder */'
+        );
+        file_put_contents(
+            $publicPath . '/Frontend.js',
+            '/* Created by Content Block skeleton builder */'
+        );
+    }
+
+    protected function copyDefaultIcon(ContentType $contentType, string $basePath): void
+    {
         $defaultIcon = ContentTypeIconResolver::getDefaultContentTypeIcon($contentType);
         $absoluteDefaultIconPath = GeneralUtility::getFileAbsFileName($defaultIcon);
         $contentBlockIconPath = $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg';
         copy($absoluteDefaultIconPath, $contentBlockIconPath);
-    }
-
-    protected function getXliffMarkupForContentElement(string $vendor, string $name, string $date): string
-    {
-        $xliffContent = <<<HEREDOC
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
-		<header/>
-		<body>
-			<trans-unit id="title" resname="title">
-				<source>Content Element: $vendor/$name</source>
-			</trans-unit>
-			<trans-unit id="description" resname="description">
-				<source>This is your Content Element description</source>
-			</trans-unit>
-			<trans-unit id="header.label" resname="header.label">
-				<source>Custom header title</source>
-			</trans-unit>
-		</body>
-	</file>
-</xliff>
-
-HEREDOC;
-        return $xliffContent;
-    }
-
-    protected function getXliffMarkupForPageType(string $vendor, string $name, string $date): string
-    {
-        $xliffContent = <<<HEREDOC
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
-		<header/>
-		<body>
-			<trans-unit id="title" resname="title">
-				<source>Page Type: $vendor/$name</source>
-			</trans-unit>
-			<trans-unit id="description" resname="description">
-				<source>This is your Page Type description</source>
-			</trans-unit>
-		</body>
-	</file>
-</xliff>
-
-HEREDOC;
-        return $xliffContent;
-    }
-
-    protected function getXliffMarkupForRecordType(string $vendor, string $name, string $date): string
-    {
-        $xliffContent = <<<HEREDOC
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
-		<header/>
-		<body>
-			<trans-unit id="title" resname="title">
-				<source>Record Type: $vendor/$name</source>
-			</trans-unit>
-			<trans-unit id="description" resname="description">
-				<source>This is your Record Type description</source>
-			</trans-unit>
-			<trans-unit id="title.label" resname="title.label">
-				<source>Custom title</source>
-			</trans-unit>
-		</body>
-	</file>
-</xliff>
-
-HEREDOC;
-        return $xliffContent;
     }
 }
