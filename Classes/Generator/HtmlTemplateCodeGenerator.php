@@ -17,34 +17,34 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
 class HtmlTemplateCodeGenerator
 {
-    public function generateEditorPreviewTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
+    public function generateEditorPreviewTemplate(LoadedContentBlock $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
         $defaultContent[] = '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css"/>';
         $defaultContent[] = '';
-        $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getContentBlockName() . '<br>';
+        $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $defaultContent[] = 'Header: {data.header}';
         $defaultContentString = implode("\n", $defaultContent);
 
         return $defaultContentString;
     }
 
-    public function generateFrontendTemplate(ContentBlockConfiguration $contentBlockConfiguration): string
+    public function generateFrontendTemplate(LoadedContentBlock $contentBlockConfiguration): string
     {
         $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
         $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" file="Frontend.css"/>';
         $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" file="Frontend.js"/>';
         $frontendTemplate[] = '';
-        $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getContentBlockName() . '<br>';
+        $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $frontendTemplate[] = 'Header: {data.header}';
         $frontendTemplateString = implode("\n", $frontendTemplate);
 

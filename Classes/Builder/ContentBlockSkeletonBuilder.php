@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -36,11 +37,12 @@ class ContentBlockSkeletonBuilder
     /**
      * Writes a Content Block to file system.
      */
-    public function create(ContentBlockConfiguration $contentBlockConfiguration): void
+    public function create(LoadedContentBlock $contentBlockConfiguration): void
     {
         $vendor = $contentBlockConfiguration->getVendor();
-        $name = $contentBlockConfiguration->getName();
-        $basePath = $contentBlockConfiguration->getBasePath();
+        $name = $contentBlockConfiguration->getPackage();
+        $extPath = $contentBlockConfiguration->getExtPath();
+        $basePath = GeneralUtility::getFileAbsFileName($extPath);
         $contentType = $contentBlockConfiguration->getContentType();
         if ($basePath === '') {
             throw new \RuntimeException('Path to package "' . $name . '" cannot be empty.', 1674225339);
@@ -58,7 +60,7 @@ class ContentBlockSkeletonBuilder
         // create files
         file_put_contents(
             $basePath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName(),
-            Yaml::dump($contentBlockConfiguration->getYamlConfig(), 10, 2)
+            Yaml::dump($contentBlockConfiguration->getYaml(), 10, 2)
         );
 
         $utc = new \DateTimeZone('UTC');

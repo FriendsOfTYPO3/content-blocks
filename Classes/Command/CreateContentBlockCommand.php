@@ -24,9 +24,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\ContentBlocks\Builder\ContentBlockConfiguration;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockSkeletonBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\PackageResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -170,9 +170,13 @@ class CreateContentBlockCommand extends Command
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
         }
 
-        $contentBlockConfiguration = new ContentBlockConfiguration(
-            yamlConfig: $yamlConfiguration,
-            basePath: $this->getBasePath($availablePackages, $extension, $contentType),
+        $contentBlockConfiguration = new LoadedContentBlock(
+            name: $contentBlockName,
+            yaml: $yamlConfiguration,
+            icon: '',
+            iconProvider: '',
+            hostExtension: $extension,
+            extPath: $this->getExtPath($extension, $contentType),
             contentType: $contentType
         );
 
@@ -223,12 +227,13 @@ class CreateContentBlockCommand extends Command
         return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
     }
 
-    protected function getBasePath(array $availablePackages, string $extension, ContentType $contentType): string
+    protected function getExtPath(string $extension, ContentType $contentType): string
     {
+        $base = 'EXT:' . $extension . '/';
         return match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath(),
-            ContentType::PAGE_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath(),
-            ContentType::RECORD_TYPE => $availablePackages[$extension]->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath()
+            ContentType::CONTENT_ELEMENT => $base . ContentBlockPathUtility::getRelativeContentElementsPath(),
+            ContentType::PAGE_TYPE => $base . ContentBlockPathUtility::getRelativePageTypesPath(),
+            ContentType::RECORD_TYPE => $base . ContentBlockPathUtility::getRelativeRecordTypesPath()
         };
     }
 
