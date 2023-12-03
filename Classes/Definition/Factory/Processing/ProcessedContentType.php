@@ -31,6 +31,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 final class ProcessedContentType
 {
+    public string $title = '';
+    public string $description = '';
     public string $table = '';
     public LoadedContentBlock $contentBlock;
     public array $columns = [];
@@ -47,6 +49,8 @@ final class ProcessedContentType
         $package = $this->contentBlock->getPackage();
         $contentType = [
             'identifier' => $this->contentBlock->getName(),
+            'title' => $this->title,
+            'description' => $this->description,
             'columns' => $this->columns,
             'showItems' => $this->showItems,
             'overrideColumns' => $this->overrideColumns,

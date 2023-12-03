@@ -44,6 +44,19 @@ Options
 
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
+.. confval:: description
+
+   :Required: false
+   :Type: string
+
+   This is the description of the Content Element. If you have a Labels.xlf
+   file, you should define it there with the key :xml:`description`. If both are
+   defined, the translation file has precedence.
+
+   .. code-block:: yaml
+
+       description: "Here comes my description"
+
 .. confval:: group
 
    :Required: false

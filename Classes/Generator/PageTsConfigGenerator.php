@@ -45,11 +45,18 @@ class PageTsConfigGenerator
 
     protected function generate(ContentElementDefinition $contentElementDefinition): string
     {
-        $title = $contentElementDefinition->getLanguagePathTitle();
-        if (!$this->languageFileRegistry->isset($contentElementDefinition->getName(), $title)) {
-            $title = $contentElementDefinition->getName();
+        $languagePathTitle = $contentElementDefinition->getLanguagePathTitle();
+        if ($this->languageFileRegistry->isset($contentElementDefinition->getName(), $languagePathTitle)) {
+            $title = $languagePathTitle;
+        } else {
+            $title = $contentElementDefinition->getTitle();
         }
-        $description = $contentElementDefinition->getLanguagePathDescription();
+        $languagePathDescription = $contentElementDefinition->getLanguagePathDescription();
+        if ($this->languageFileRegistry->isset($contentElementDefinition->getName(), $languagePathDescription)) {
+            $description = $languagePathDescription;
+        } else {
+            $description = $contentElementDefinition->getDescription();
+        }
         return <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getGroup()} {
     elements {

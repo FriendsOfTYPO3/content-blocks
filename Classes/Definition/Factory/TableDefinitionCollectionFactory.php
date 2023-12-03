@@ -128,11 +128,13 @@ final class TableDefinitionCollectionFactory
         $languagePathTitle = $input->languagePath->getCurrentPath() . $languagePathTitle;
         $languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
         if ($input->isRootTable()) {
-            $label = (string)($input->yaml['label'] ?? '');
-            $label = $label !== '' ? $label : $input->contentBlock->getName();
-            $description = $input->yaml['description'] ?? '';
-            $description = $description !== '' ? $description : 'Description for ' . $input->contentType->getHumanReadable() . ' ' . $label;
-            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $label);
+            $title = (string)($input->yaml['title'] ?? '');
+            // Ensure there is always a title for a Content Type.
+            $title = $title !== '' ? $title : $input->contentBlock->getName();
+            $description = (string)($input->yaml['description'] ?? '');
+            $result->contentType->title = $title;
+            $result->contentType->description = $description;
+            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
             $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
@@ -177,12 +179,12 @@ final class TableDefinitionCollectionFactory
                 $input->languagePath->addPathSegment($identifier);
                 $labelPath = $input->languagePath->getCurrentPath() . '.label';
                 $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
-                $label = (string)($field['label'] ?? '');
+                $title = (string)($field['label'] ?? '');
                 // Never fall back to identifiers for existing fields. They have their standard translation.
-                $label = ($label !== '' || $this->isExistingField($field)) ? $label : $identifier;
-                $field['label'] = $label;
+                $title = ($title !== '' || $this->isExistingField($field)) ? $title : $identifier;
+                $field['label'] = $title;
                 $description = $field['description'] ?? '';
-                $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
+                $labelPathSource = new AutomaticLanguageSource($labelPath, $title);
                 $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
                 $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
                 $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);

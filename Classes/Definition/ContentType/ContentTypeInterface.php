@@ -28,6 +28,8 @@ interface ContentTypeInterface
     public function getPackage(): string;
     public function getTypeName(): string|int;
     public function getIdentifier(): string;
+    public function getTitle(): string;
+    public function getDescription(): string;
     public function getPriority(): int;
     public function getTable(): string;
     public function getOverrideColumns(): array;

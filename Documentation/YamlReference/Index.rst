@@ -55,6 +55,20 @@ Common root options
 
        name: my-vendor/my-content-block-name
 
+.. confval:: title
+
+   :Required: false
+   :Type: string
+
+   This is the title of the Content Block. If you have a Labels.xlf file, you
+   should define it there with the key :xml:`title`. If both are defined, the
+   translation file has precedence. If nothing is defined, the title falls back
+   to :yaml:`name`.
+
+   .. code-block:: yaml
+
+       title: "My super duper Content Block"
+
 .. confval:: prefixFields
 
    :Required: false

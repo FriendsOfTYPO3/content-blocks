@@ -1,7 +1,7 @@
 name: language/test2
 group: common
 prefixFields: true
-label: Test 2
+title: Test 2
 description: Test 2 description
 basics:
   - TYPO3/Appearance

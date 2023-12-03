@@ -239,10 +239,14 @@ class CreateContentBlockCommand extends Command
 
     private function createContentBlockContentElementConfiguration(string $vendor, string $name, ?string $typeName = ''): array
     {
+        $fullName = $vendor . '/' . $name;
+        $description = 'Description for ' . ContentType::CONTENT_ELEMENT->getHumanReadable() . ' ' . $fullName;
         $configuration = [
             'table' => 'tt_content',
             'typeField' => 'CType',
-            'name' => $vendor . '/' . $name,
+            'name' => $fullName,
+            'title' => $fullName,
+            'description' => $description,
             'group' => 'common',
             'prefixFields' => true,
             'prefixType' => 'full',
@@ -262,10 +266,12 @@ class CreateContentBlockCommand extends Command
 
     private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $typeName): array
     {
+        $fullName = $vendor . '/' . $name;
         return [
             'table' => 'pages',
             'typeField' => 'doktype',
-            'name' => $vendor . '/' . $name,
+            'name' => $fullName,
+            'title' => $fullName,
             'typeName' => $typeName,
             'prefixFields' => true,
             'prefixType' => 'full',
@@ -274,20 +280,26 @@ class CreateContentBlockCommand extends Command
 
     private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, ?string $typeName = ''): array
     {
+        $fullName = $vendor . '/' . $name;
         $vendorWithoutSeparator = str_replace('-', '', $vendor);
         $nameWithoutSeparator = str_replace('-', '', $name);
+        // "tx_" is prepended per default for better grouping in the New Record view.
+        // Otherwise, this would be listed in "System Records".
+        $table = 'tx_' . $vendorWithoutSeparator . '_' . $nameWithoutSeparator;
+        $labelField = 'title';
         $configuration = [
-            'name' => $vendor . '/' . $name,
-            'table' => 'tx_' . $vendorWithoutSeparator . '_' . $nameWithoutSeparator,
+            'name' => $fullName,
+            'table' => $table,
+            'title' => $fullName,
             'prefixFields' => false,
-            'labelField' => 'title',
+            'labelField' => $labelField,
         ];
         if ($typeName !== '' && $typeName !== null) {
             $configuration['typeName'] = $typeName;
         }
         $configuration['fields'] = [
             [
-                'identifier' => 'title',
+                'identifier' => $labelField,
                 'type' => 'Text',
                 'label' => 'Title',
             ],

@@ -246,9 +246,11 @@ class TcaGenerator
                     // @todo Type select grouping is not possible right now for Record Types.
                     ContentType::RECORD_TYPE => '',
                 };
-                $label = $typeDefinition->getLanguagePathTitle();
-                if (!$this->languageFileRegistry->isset($typeDefinition->getName(), $label)) {
-                    $label = $typeDefinition->getName();
+                $languagePathTitle = $typeDefinition->getLanguagePathTitle();
+                if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePathTitle)) {
+                    $label = $languagePathTitle;
+                } else {
+                    $label = $typeDefinition->getTitle();
                 }
                 ExtensionManagementUtility::addTcaSelectItem(
                     table: $typeDefinition->getTable(),

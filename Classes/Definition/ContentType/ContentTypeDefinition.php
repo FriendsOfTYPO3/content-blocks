@@ -27,6 +27,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 abstract class ContentTypeDefinition
 {
     private string $identifier = '';
+    private string $title = '';
+    private string $description = '';
     private string $table = '';
     private string|int $typeName = '';
     /** @var string[] */
@@ -47,6 +49,16 @@ abstract class ContentTypeDefinition
     public function getIdentifier(): string
     {
         return $this->identifier;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 
     public function getTable(): string
@@ -134,6 +146,20 @@ abstract class ContentTypeDefinition
     {
         $clone = clone $this;
         $clone->identifier = $identifier;
+        return $clone;
+    }
+
+    public function withTitle(string $title): static
+    {
+        $clone = clone $this;
+        $clone->title = $title;
+        return $clone;
+    }
+
+    public function withDescription(string $description): static
+    {
+        $clone = clone $this;
+        $clone->description = $description;
         return $clone;
     }
 

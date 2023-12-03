@@ -6,9 +6,6 @@
 			<trans-unit id="title" resname="title">
 				<source>language/test1</source>
 			</trans-unit>
-			<trans-unit id="description" resname="description">
-				<source>Description for Content Element language/test1</source>
-			</trans-unit>
 			<trans-unit id="text.label" resname="text.label">
 				<source>text</source>
 			</trans-unit>

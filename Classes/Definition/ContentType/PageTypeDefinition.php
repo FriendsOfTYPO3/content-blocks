@@ -28,6 +28,8 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
         return $self
             ->withTable($table)
             ->withIdentifier($array['identifier'])
+            ->withTitle($array['title'])
+            ->withDescription($array['description'])
             ->withTypeName($array['typeName'])
             ->withColumns($array['columns'] ?? [])
             ->withShowItems($array['showItems'] ?? [])
