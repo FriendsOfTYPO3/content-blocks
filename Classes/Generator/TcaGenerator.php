@@ -692,9 +692,11 @@ class TcaGenerator
         $capability = $tableDefinition->getCapability();
         $palettes = [];
         $columns = [];
-        $title = $defaultTypeDefinition->getLanguagePathTitle();
-        if (!$this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $title)) {
-            $title = $defaultTypeDefinition->getTable();
+        $title = $defaultTypeDefinition->getTitle();
+        $title = $title !== '' ? $title : $defaultTypeDefinition->getTable();
+        $languagePathTitle = $defaultTypeDefinition->getLanguagePathTitle();
+        if ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathTitle)) {
+            $title = $languagePathTitle;
         }
         $ctrl = [
             'title' => $title,

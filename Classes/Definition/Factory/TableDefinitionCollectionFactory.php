@@ -118,26 +118,26 @@ final class TableDefinitionCollectionFactory
     private function processFields(ProcessingInput $input): array
     {
         $result = new ProcessedFieldsResult($input);
+        $languagePathTitle = $input->languagePath->getCurrentPath();
+        $languagePathDescription = $input->languagePath->getCurrentPath();
+        $title = (string)($input->yaml['title'] ?? '');
+        $description = (string)($input->yaml['description'] ?? '');
         if ($input->isRootTable()) {
-            $languagePathTitle = 'title';
-            $languagePathDescription = 'description';
-        } else {
-            $languagePathTitle = '.label';
-            $languagePathDescription = '.description';
-        }
-        $languagePathTitle = $input->languagePath->getCurrentPath() . $languagePathTitle;
-        $languagePathDescription = $input->languagePath->getCurrentPath() . $languagePathDescription;
-        if ($input->isRootTable()) {
-            $title = (string)($input->yaml['title'] ?? '');
             // Ensure there is always a title for a Content Type.
             $title = $title !== '' ? $title : $input->contentBlock->getName();
-            $description = (string)($input->yaml['description'] ?? '');
             $result->contentType->title = $title;
             $result->contentType->description = $description;
+            $languagePathTitle = $languagePathTitle . 'title';
+            $languagePathDescription = $languagePathDescription . 'description';
             $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
             $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        } else {
+            $languagePathTitle = $languagePathTitle . '.label';
+            $languagePathDescription = $languagePathDescription . '.description';
+            $result->contentType->title = $title;
+            $result->contentType->description = $description;
         }
         $result->contentType->languagePathTitle = $languagePathTitle;
         $result->contentType->languagePathDescription = $languagePathDescription;
@@ -220,6 +220,7 @@ final class TableDefinitionCollectionFactory
                     $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
                     $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
                     if (!empty($field['fields'])) {
+                        $field['title'] = $field['label'];
                         $result->tableDefinitionList = $this->processFields(
                             new ProcessingInput(
                                 yaml: $field,
