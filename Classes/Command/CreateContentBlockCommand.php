@@ -45,7 +45,7 @@ class CreateContentBlockCommand extends Command
         parent::__construct();
     }
 
-    public function configure(): void
+    protected function configure(): void
     {
         $this->addOption(
             'content-type',
@@ -79,7 +79,7 @@ class CreateContentBlockCommand extends Command
         );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $typeName = $input->getOption('type-name');

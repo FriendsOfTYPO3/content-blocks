@@ -37,7 +37,7 @@ class GenerateLanguageFileCommand extends Command
         parent::__construct();
     }
 
-    public function configure(): void
+    protected function configure(): void
     {
         $this->addArgument(
             'content-block',
@@ -58,7 +58,7 @@ class GenerateLanguageFileCommand extends Command
         );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $contentBlockName = $input->getArgument('content-block');
         $print = (bool)$input->getOption('print');

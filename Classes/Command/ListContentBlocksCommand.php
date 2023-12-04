@@ -34,13 +34,13 @@ class ListContentBlocksCommand extends Command
         parent::__construct();
     }
 
-    public function configure(): void
+    protected function configure(): void
     {
         $orderDescription = 'Order result by one of "vendor", "name", "table", "type-name", "content-type" or "extension".';
         $this->addOption('order', 'o', InputOption::VALUE_OPTIONAL, $orderDescription, 'vendor');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $headers = ['vendor', 'name', 'table', 'type-name', 'content-type', 'extension'];
         $order = $input->getOption('order');
