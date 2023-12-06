@@ -31,14 +31,11 @@ recommend these further readings:
 Definition
 ==========
 
-A Content Block is encapsulated inside a folder and is defined by its
-`EditorInterface.yaml` file. So the minimal viable definition consists of a
-folder with a single YAML file inside. The `Assets` folder can be compared with
-the `Resources/Public` folder and the `Source` folder with `Resources/Private`.
-The `Assets/Icon.svg` is registered automatically for the Content Type icon.
-In addition, Content Elements should have a `Source/Frontend.html` file and may
-have a `Source/EditorPreview.html` file. Backend translations are put inside
-`Source/Language/Labels.xlf`.
+The minimal viable definition consists of a folder with a YAML file named
+**EditorInterface.yaml** inside. Everything else is optional. However, it is
+recommended to provide at least a custom icon inside the **Assets** folder.
+For Content Elements specifically you can define a frontend and backend template
+in the **Source** folder.
 
 .. code-block:: none
    :caption: Directory structure of a Content Block
@@ -54,13 +51,34 @@ have a `Source/EditorPreview.html` file. Backend translations are put inside
 
 *  Learn more about the :ref:`Content Block definition <cb_definition>`
 
+EditorInterface.yaml
+====================
+
+This mandatory file is the basis for the definition. It defines exactly one
+Content Type with its fields and the representation in the editor interface. At
+the very least, the :yaml:`name` must be defined, which is the unique identifier
+for this Content Block. Fields are defined one after another in the
+:yaml:`fields` array. This is also the order, in which they will be displayed.
+
+.. code-block:: yaml
+   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name
+
+    name: vendor/content-block-name
+    fields:
+      - identifier: my_text_field
+        type: Text
+
+*  Refer to the :ref:`YAML reference <yaml_reference>` for a complete overview.
+*  Learn more about :ref:`reusing fields <cb_reuse_existing_fields>`
+*  Learn how to :ref:`extend TCA <cb_extendTca>` of Content Blocks (for advanced users).
+
 Registration
 ============
 
-To create a new Content Block, a folder `ContentBlocks` has to be created
+To create a new Content Block, a folder **ContentBlocks** has to be created
 on the root level inside an existing and loaded extension. Then, depending on
-the Content Type you want to create, you either create a `ContentElements`,
-`PageTypes` or `RecordTypes` folder, in which you finally put your Content
+the Content Type you want to create, you either create a **ContentElements**,
+**PageTypes** or **RecordTypes** folder, in which you finally put your Content
 Block inside. To quickly kickstart a new Content Block, the command
 :bash:`make:content-block` can be used.
 
@@ -85,41 +103,6 @@ Block inside. To quickly kickstart a new Content Block, the command
 
 *  Kickstart a Content Block with the :ref:`make:content-block command <cb_skeleton>`
 *  Learn more about the :ref:`registration process <cb_installation>`
-
-EditorInterface.yaml
-====================
-
-The heart of a Content Block is the `EditorInterface.yaml` file. This YAML file
-defines both the available fields and the structure:
-
-.. code-block:: yaml
-   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name
-
-    name: vendor/content-block-name
-    fields:
-      - identifier: header
-        useExistingField: true
-      - identifier: my_text_field
-        type: Text
-        max: 10
-
-First of all, a :yaml:`name` has to be defined. It must be unique inside your
-installation. It consists, similarly to composer package names, of a vendor and
-a package part separated by a slash. It is used to prefix new field names, new
-tables and record type identifiers.
-
-Inside :yaml:`fields` you define the structure and configuration of the
-necessary fields. The :yaml:`identifier` has to be unique per Content Block.
-
-It is possible to reuse existing fields with the flag :yaml:`useExistingField`.
-This allows e.g. to use the same field `header` or `bodytext` across multiple
-Content Blocks with different configuration. Be aware that system fields
-shouldn't be reused. A list of sane reusable fields can be referenced in the
-documentation. Furthermore, own custom fields can be reused as well.
-
-*  Refer to the :ref:`YAML reference <yaml_reference>` for a complete overview.
-*  Learn more about :ref:`reusing fields <cb_reuse_existing_fields>`
-*  Learn how to :ref:`extend TCA <cb_extendTca>` of Content Blocks (for advanced users).
 
 Fluid templating
 ================

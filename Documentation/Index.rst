@@ -116,7 +116,7 @@ use content types as sub-resources inside extensions.
 
     Introduction/Index
     Installation/Index
-    ContentBlockDefinition/Index
+    Definition/Index
     Registration/Index
     Commands/Index
     YamlReference/Index
