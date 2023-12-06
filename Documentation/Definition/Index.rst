@@ -18,9 +18,14 @@ and templates.
    ├── Source
    │   ├── Language
    │   │   └── Labels.xlf
+   │   ├── Partials
+   │   │   └── Component.html
    │   ├── EditorPreview.html
    │   └── Frontend.html
    └── EditorInterface.yaml
+
+..  contents::
+    :local:
 
 EditorInterface.yaml
 ====================
@@ -66,7 +71,7 @@ directory structure of extensions, this would be the **Resources/Public**
 folder. In composer-mode this folder will be symlinked and published in the
 public **_assets** folder. This is the place where you can put your CSS,
 JavaScript or image files inside. In order to include these in your template,
-you must use custom `Content Block ViewHelpers <asset_view_helpers>`.
+you must use custom :ref:`Content Block ViewHelpers <asset_view_helpers>`.
 
 Icon.svg
 --------
@@ -76,22 +81,49 @@ but it is recommended to replace it with your own, custom icon. You can find
 many official TYPO3 icons `here <https://typo3.github.io/TYPO3.Icons/icons/content.html>`__.
 Allowed file extensions are **svg**, **png** and **gif** (in preferred order).
 
-Source/Language/Labels.xlf
---------------------------
+Source
+======
 
-**You may**
+The **Source** folder contains private resources. If you are familiar with the
+directory structure of extensions, this would be the **Resources/Private**
+folder. There is a limited set of directories and files, which you can place
+here.
 
-*  provide that file
-*  define your labels with the XLF paths in the configuration file
+Language
+--------
 
-Labels for the editing interface, as well as frontend labels, are stored in the
-`Source/Language/Labels.xlf` (translated files will be e.g. `de.Labels.xlf`).
+This is the folder for your translations. In fact, if you only have one
+language, there is no actual need to maintain translations here. However, it is
+best practice to separate labels and configuration.
 
-It is recommended to apply the :ref:`coding guidelines for the XLIFF Format <t3coreapi:xliff>`.
+Labels.xlf
+++++++++++
 
-Labels and descriptions for the backend preview and the editing interface will
-be automatically registered by a convention. See the following examples on how
-this works:
+This XLF file is the **english** basis for your translations. All translations
+for backend labels as well as for frontend labels are defined here. Translations
+to other languages are defined in separate files prefixed with the language code
+e.g. **de.Labels.xlf**.
+
+*  Learn more about the :ref:`XLIFF Format in TYPO3 <t3coreapi:xliff>`
+
+The translation keys follow a **convention** and are registered automatically.
+First of all, **title** and **description** are used in various areas for the
+Content Type. Field labels consist of the :yaml:`identifier` and **label**
+separated by a dot. Same goes for the optional **description**.
+
+:ref:`Collections <field_type_collection>` introduce another nesting level. To
+translate their fields, the identifiers are simply separated by a dot.
+
+:ref:`Palettes <field_type_palette>` and :ref:`Tabs <field_type_tab>` have a
+special convention as well.
+
+Have a look at the example beneath for better understanding.
+
+.. tip::
+
+   You don't have to remember all these rules. The command
+   :ref:`content-block:language:generate <command_language_generate>` creates
+   the Labels.xlf file with all available keys for you.
 
 .. code-block:: xml
 
@@ -100,27 +132,85 @@ this works:
         <file datatype="plaintext" original="Labels.xlf" source-language="en" product-name="example">
             <header/>
             <body>
+                <!-- Title and description of the Content Type -->
                 <trans-unit id="title" resname="title">
-                    <source>This is the backend title</source>
+                    <source>This is the Content Type backend title</source>
                 </trans-unit>
                 <trans-unit id="description" resname="description">
-                    <source>This is the backend description</source>
+                    <source>This is the Content Type backend description</source>
                 </trans-unit>
+                <!-- Field labels and descriptions for the backend -->
                 <trans-unit id="FIELD_IDENTIFIER.label" resname="FIELD_IDENTIFIER.label">
                     <source>This is the backend label for FIELD_IDENTIFIER</source>
                 </trans-unit>
+                <trans-unit id="FIELD_IDENTIFIER.description" resname="FIELD_IDENTIFIER.description">
+                    <source>This is the backend description for FIELD_IDENTIFIER</source>
+                </trans-unit>
+                <!-- Collections add another nesting level -->
                 <trans-unit id="COLLECTION_IDENTIFIER.FIELD_IDENTIFIER.label" resname="COLLECTION_IDENTIFIER.FIELD_IDENTIFIER.label">
                     <source>This is the backend label for FIELD_IDENTIFIER in Collection COLLECTION_IDENTIFIER</source>
+                </trans-unit>
+                <!-- Palette labels and descriptions -->
+                <trans-unit id="palettes.PALETTE_IDENTIFIER.label">
+                    <source>Label for Palette</source>
+                </trans-unit>
+                <trans-unit id="palettes.PALETTE_IDENTIFIER.description">
+                    <source>Description for Palette</source>
+                </trans-unit>
+                <!-- Palettes inside Collections -->
+                <trans-unit id="COLLECTION_IDENTIFIER.palettes.PALETTE_IDENTIFIER.label">
+                    <source>Label for Palette in Collection</source>
+                </trans-unit>
+                <trans-unit id="COLLECTION_IDENTIFIER1.COLLECTION_IDENTIFIER2.palettes.PALETTE_IDENTIFIER.label">
+                    <source>Label for Palette in nested Collection</source>
+                </trans-unit>
+                <!-- Tab labels -->
+                <trans-unit id="tabs.TAB_IDENTIFIER">
+                    <source>Label for Tab</source>
+                </trans-unit>
+                <!-- Tab labels inside Collections -->
+                <trans-unit id="COLLECTION_IDENTIFIER.tabs.TAB_IDENTIFIER">
+                    <source>Label for Tab in Collection</source>
+                </trans-unit>
+                <trans-unit id="COLLECTION_IDENTIFIER1.COLLECTION_IDENTIFIER2.tabs.TAB_IDENTIFIER">
+                    <source>Label for Tab in nested Collection</source>
                 </trans-unit>
             </body>
         </file>
     </xliff>
 
-There are more conventions for special field types like
-:ref:`Palettes <field_type_palette>` and :ref:`Tabs <field_type_tab>`. See the
-respective documentation for more insights.
+EditorPreview.html
+------------------
 
-.. tip::
+This file is only available for :ref:`Content Elements <yaml_reference_content_element>`.
 
-   The xlf content can be automatically generated by the
-   :ref:`content-block:language:generate <command_language_generate>` command.
+The **EditorPreview.html** can be added to customize the backend preview for
+your editors. By default, TYPO3 comes with a standard preview renderer. However,
+it is specialized in rendering the preview of Core Content Elements. This means
+only Core fields like :sql:`header`, :sql:`subheader` or :sql:`bodytext` are
+considered. Therefore, it is advised to provide an own preview for custom
+Content Elements.
+
+Learn more about :ref:`templating <cb_templating>`.
+
+Frontend.html
+-------------
+
+This is the default frontend rendering definition for :ref:`Content Elements <yaml_reference_content_element>`.
+You can access your fields by the variable :html:`{data}`.
+
+Learn more about :ref:`templating <cb_templating>`.
+
+Partials
+========
+
+For larger Content Elements, you can divide your **Frontend.html** template into
+smaller junks by creating separate partials here.
+
+Partials are included as you normally would in any Fluid template.
+
+.. code-block:: html
+
+   <f:render partial="Component.html" arguments="{_all}"/>
+
+*  Learn how to :ref:`share Partials <cb_extension_partials>` between Content Blocks.
