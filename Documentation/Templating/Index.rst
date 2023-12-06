@@ -95,6 +95,8 @@ easily find the element they want to edit.
 The frontend template is located in `Source/Frontend.html` and the backend
 template in `Source/EditorPreview.html`.
 
+.. _asset_view_helpers:
+
 Asset ViewHelpers
 =================
 

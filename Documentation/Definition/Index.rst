@@ -58,18 +58,23 @@ the documentation. Furthermore, own custom fields can be reused as well.
 *  Learn how to :ref:`extend TCA <cb_extendTca>` of Content Blocks (for advanced users).
 *  For more information about the YAML syntax refer to `YAML RFC <https://github.com/yaml/summit.yaml.io/wiki/YAML-RFC-Index>`__
 
-Assets/Icon.(svg|png|gif)
--------------------------
+Assets
+======
 
-This is the icon for the Content Block. There is a fallback to a default icon,
+The **Assets** folder contains public resources. If you are familiar with the
+directory structure of extensions, this would be the **Resources/Public**
+folder. In composer-mode this folder will be symlinked and published in the
+public **_assets** folder. This is the place where you can put your CSS,
+JavaScript or image files inside. In order to include these in your template,
+you must use custom `Content Block ViewHelpers <asset_view_helpers>`.
+
+Icon.svg
+--------
+
+This is the icon for the Content Type. There is a fallback to a default icon,
 but it is recommended to replace it with your own, custom icon. You can find
 many official TYPO3 icons `here <https://typo3.github.io/TYPO3.Icons/icons/content.html>`__.
-
-**You should**
-
-*  provide this file
-*  provide that file in the format svg or png or gif
-*  provide a file with 1:1 dimensions
+Allowed file extensions are **svg**, **png** and **gif** (in preferred order).
 
 Source/Language/Labels.xlf
 --------------------------
