@@ -104,15 +104,19 @@ Common root options
    :Type: integer
    :Default: 0
 
-   The priority can be used to prioritize certain content blocks in the loading
-   order. The default loading order is alphabetically. Higher priorities will be
-   loaded before lower ones. This affects e.g. the order in the "New Content
-   Element Wizard".
+   The priority can be used to prioritize certain Content Blocks in the loading
+   order. Higher priorities will be loaded before lower ones. This affects e.g.
+   the order in the "New Content Element Wizard".
 
    .. code-block:: yaml
 
-       # this content block will be displayed before others
+       # This Content Block will be displayed before others without a priority set.
        priority: 10
+
+   .. note::
+
+      The **default** loading order is **undefined** and depends on the
+      (file-)system and the order, in which extensions are loaded.
 
 .. confval:: fields
 
