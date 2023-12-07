@@ -84,7 +84,7 @@ Have a look at this code example to grasp what's possible:
 Frontend & backend
 ==================
 
-The Content Blocks allow you to provide a separate template for the frontend and
+Content Blocks allows you to provide a separate template for the frontend and
 the backend out of the box. The variables are the same for both templates, and
 while using the asset ViewHelpers, you can also ship JavaScript and CSS as you
 need. The main goal behind this is, that you can provide a better user
@@ -92,8 +92,8 @@ experience for the editors. With this feature, there is the possibility to
 provide nearly the same layout in the frontend and the backend, so the editors
 easily find the element they want to edit.
 
-The frontend template is located in `Source/Frontend.html` and the backend
-template in `Source/EditorPreview.html`.
+The frontend template is located in **Source/Frontend.html** and the backend
+template in **Source/EditorPreview.html**.
 
 .. _asset_view_helpers:
 

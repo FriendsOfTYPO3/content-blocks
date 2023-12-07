@@ -77,7 +77,7 @@ Icon.svg
 --------
 
 This is the icon for the Content Type. There is a fallback to a default icon,
-but it is recommended to replace it with your own, custom icon. You can find
+but it is **recommended** to replace it with your own, custom icon. You can find
 many official TYPO3 icons `here <https://typo3.github.io/TYPO3.Icons/icons/content.html>`__.
 Allowed file extensions are **svg**, **png** and **gif** (in preferred order).
 
