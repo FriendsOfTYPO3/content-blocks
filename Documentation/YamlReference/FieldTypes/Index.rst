@@ -10,32 +10,30 @@ The Content Block field types mirror the available
 reflect the actual usage. For the most part options are identical. There are
 some additional options, which are not available in TCA to ease the usage.
 
-.. toctree::
-    :maxdepth: 1
-    :titlesonly:
+..  rst-class:: horizbuttons-attention-m
 
-    Basic/Index
-    Category/Index
-    Checkbox/Index
-    Collection/Index
-    Color/Index
-    DateTime/Index
-    Email/Index
-    File/Index
-    FlexForm/Index
-    Folder/Index
-    Linebreak/Index
-    Link/Index
-    Number/Index
-    Palette/Index
-    Password/Index
-    Radio/Index
-    Relation/Index
-    Select/Index
-    Slug/Index
-    Tab/Index
-    Text/Index
-    Textarea/Index
+*  :ref:`Basic <field_type_basic>`
+*  :ref:`Category <field_type_category>`
+*  :ref:`Checkbox <field_type_checkbox>`
+*  :ref:`Collection <field_type_collection>`
+*  :ref:`Color <field_type_color>`
+*  :ref:`DateTime <field_type_datetime>`
+*  :ref:`Email <field_type_email>`
+*  :ref:`File <field_type_file>`
+*  :ref:`FlexForm <field_type_flexform>`
+*  :ref:`Folder <field_type_folder>`
+*  :ref:`Linebreak <field_type_linebreak>`
+*  :ref:`Link <field_type_link>`
+*  :ref:`Number <field_type_number>`
+*  :ref:`Palette <field_type_palette>`
+*  :ref:`Password <field_type_password>`
+*  :ref:`Radio <field_type_radio>`
+*  :ref:`Relation <field_type_relation>`
+*  :ref:`Select <field_type_select>`
+*  :ref:`Slug <field_type_slug>`
+*  :ref:`Tab <field_type_tab>`
+*  :ref:`Text <field_type_text>`
+*  :ref:`Textarea <field_type_textarea>`
 
 Common field options
 ====================
@@ -149,3 +147,30 @@ Field options, which can be defined inside the :yaml:`fields` array.
            type: Text
            prefixField: true
            prefixType: vendor
+
+.. toctree::
+    :maxdepth: 1
+    :titlesonly:
+
+    Basic/Index
+    Category/Index
+    Checkbox/Index
+    Collection/Index
+    Color/Index
+    DateTime/Index
+    Email/Index
+    File/Index
+    FlexForm/Index
+    Folder/Index
+    Linebreak/Index
+    Link/Index
+    Number/Index
+    Palette/Index
+    Password/Index
+    Radio/Index
+    Relation/Index
+    Select/Index
+    Slug/Index
+    Tab/Index
+    Text/Index
+    Textarea/Index
