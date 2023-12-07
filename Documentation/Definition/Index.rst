@@ -106,6 +106,9 @@ e.g. **de.Labels.xlf**.
 
 *  Learn more about the :ref:`XLIFF Format in TYPO3 <t3coreapi:xliff>`
 
+Convention
+~~~~~~~~~~
+
 The translation keys follow a **convention** and are registered automatically.
 First of all, **title** and **description** are used in various areas for the
 Content Type. Field labels consist of the :yaml:`identifier` and **label**
