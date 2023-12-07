@@ -7,11 +7,27 @@ Registration
 
 In order to register a new Content Block, a folder **ContentBlocks** has to be
 created on the root level inside a loaded extension. Depending on the Content
-Type you want to create, choose one of these folders:
+Type you want to create, you place the new Content Block into a dedicated
+folder. These are named **ContentElements**, **PageTypes** and **RecordTypes**.
 
-*  `ContentBlocks/ContentElements`
-*  `ContentBlocks/PageTypes`
-*  `ContentBlocks/RecordTypes`
+.. code-block:: none
+   :caption: Content Blocks reside in the `ContentBlocks` folder of an extension
+   :emphasize-lines: 3
+
+   ├── Classes
+   ├── Configuration
+   ├── ContentBlocks
+   │   ├── ContentElements
+   │   │   ├── block1
+   │   │   └── block2
+   │   ├── PageTypes
+   │   │   ├── block3
+   │   │   └── block4
+   │   └── RecordTypes
+   │       ├── block5
+   │       └── block6
+   ├── Resources
+   └── composer.json
 
 The system loads them automatically as soon as it finds any folder inside these
 directories, which has a file with the name **EditorInterface.yaml** inside.
@@ -36,5 +52,5 @@ Administration
 
 .. attention::
 
-   You will need to allow the generated database fields, tables (if using inline
-   relations) and CType in the backend user group permissions.
+   You will need to allow the generated database fields, tables (if using
+   Collections) and CType in the backend user group permissions.
