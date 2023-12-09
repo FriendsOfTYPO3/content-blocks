@@ -123,15 +123,15 @@ class ContentBlocksBuilder
     {
         GeneralUtility::writeFile(
             $publicPath . '/EditorPreview.css',
-            '/* Created by Content Block skeleton builder */'
+            '/* Created by Content Blocks */'
         );
         GeneralUtility::writeFile(
             $publicPath . '/Frontend.css',
-            '/* Created by Content Block skeleton builder */'
+            '/* Created by Content Blocks */'
         );
         GeneralUtility::writeFile(
             $publicPath . '/Frontend.js',
-            '/* Created by Content Block skeleton builder */'
+            '/* Created by Content Blocks */'
         );
     }
 
