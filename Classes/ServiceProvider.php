@@ -134,18 +134,40 @@ class ServiceProvider extends AbstractServiceProvider
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
         }
-
         $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+                    $contentBlock = $contentBlockRegistry->getContentBlock($typeDefinition->getName());
                     $extPath = $contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName());
                     $privatePath = $extPath . '/' . ContentBlockPathUtility::getPrivateFolder();
-                    $template = ContentBlockPathUtility::getFrontendTemplateFileNameWithoutExtension();
-                    $typoScript = <<<HEREDOC
-tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
-tt_content.{$typeDefinition->getTypeName()} {
+                    if ($contentBlock->isPlugin()) {
+                        $typoScript = self::getTemplateForPlugin(
+                            $typeDefinition->getTypeName(),
+                            $contentBlock->getHostExtension()
+                        );
+                    } else {
+                        $typoScript = self::getTemplateForContentElement(
+                            $typeDefinition->getTypeName(),
+                            $privatePath
+                        );
+                    }
+                    $arrayObject->append($typoScript);
+                }
+            }
+        }
+        $cache->set('typoscript', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        return $arrayObject;
+    }
+
+    protected static function getTemplateForContentElement(string $typeName, string $privatePath): string
+    {
+        $table = ContentType::CONTENT_ELEMENT->getTable();
+        $template = ContentBlockPathUtility::getFrontendTemplateFileNameWithoutExtension();
+        return <<<HEREDOC
+$table.$typeName =< lib.contentBlock
+$table.$typeName {
     templateName = {$template}
     templateRootPaths {
         20 = $privatePath/
@@ -158,12 +180,30 @@ tt_content.{$typeDefinition->getTypeName()} {
     }
 }
 HEREDOC;
-                    $arrayObject->append($typoScript);
-                }
-            }
-        }
-        $cache->set('typoscript', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
-        return $arrayObject;
+    }
+
+    protected static function getTemplateForPlugin(string $typeName, string $extensionName): string
+    {
+        $table = ContentType::CONTENT_ELEMENT->getTable();
+        $extensionName = self::convertExtensionName($extensionName);
+        return <<<HEREDOC
+$table.$typeName =< lib.contentBlock
+$table.$typeName {
+    template = TEXT
+    template.value = <f:cObject typoscriptObjectPath="$table.$typeName.20" data="{data._raw}" table="$table" />
+    20 = EXTBASEPLUGIN
+    20 {
+        extensionName = $extensionName
+        pluginName = $typeName
+    }
+}
+HEREDOC;
+    }
+
+    protected static function convertExtensionName(string $extensionName): string
+    {
+        $extensionName = str_replace(' ', '', ucwords(str_replace('_', ' ', $extensionName)));
+        return $extensionName;
     }
 
     public static function getContentBlockUserTsConfig(ContainerInterface $container): \ArrayObject

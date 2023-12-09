@@ -33,6 +33,7 @@ final class LoadedContentBlock
         private readonly string $hostExtension,
         private readonly string $extPath,
         private readonly ContentType $contentType,
+        private readonly bool $isPlugin,
     ) {}
 
     public static function fromArray(array $array): LoadedContentBlock
@@ -48,7 +49,8 @@ final class LoadedContentBlock
             iconProvider: (string)($array['iconProvider'] ?? ''),
             hostExtension: (string)($array['hostExtension'] ?? ''),
             extPath: (string)($array['extPath'] ?? ''),
-            contentType: ContentType::getByTable($table)
+            contentType: ContentType::getByTable($table),
+            isPlugin: (bool)($array['isPlugin'] ?? false),
         );
     }
 
@@ -61,6 +63,7 @@ final class LoadedContentBlock
             'iconProvider' => $this->iconProvider,
             'hostExtension' => $this->hostExtension,
             'extPath' => $this->extPath,
+            'isPlugin' => $this->isPlugin,
         ];
     }
 
@@ -120,5 +123,10 @@ final class LoadedContentBlock
     public function getContentType(): ContentType
     {
         return $this->contentType;
+    }
+
+    public function isPlugin(): bool
+    {
+        return $this->isPlugin;
     }
 }

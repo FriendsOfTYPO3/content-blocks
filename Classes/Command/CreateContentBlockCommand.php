@@ -182,7 +182,8 @@ class CreateContentBlockCommand extends Command
             iconProvider: '',
             hostExtension: $extension,
             extPath: $this->getExtPath($extension, $contentType),
-            contentType: $contentType
+            contentType: $contentType,
+            isPlugin: false,
         );
 
         $this->contentBlockBuilder->create($contentBlockConfiguration);

@@ -104,6 +104,11 @@ class ContentBlockPathUtility
         return self::getSubDirectoryName() . '/' . self::getRecordTypesFolder();
     }
 
+    public static function getRelativePluginPath(): string
+    {
+        return self::getSubDirectoryName() . '/' . self::getPluginsFolder();
+    }
+
     public static function getSubDirectoryName(): string
     {
         return 'ContentBlocks';
@@ -122,6 +127,11 @@ class ContentBlockPathUtility
     public static function getRecordTypesFolder(): string
     {
         return 'RecordTypes';
+    }
+
+    public static function getPluginsFolder(): string
+    {
+        return 'Plugins';
     }
 
     public static function getPublicFolder(): string
