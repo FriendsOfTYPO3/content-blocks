@@ -87,7 +87,7 @@ class ContentBlocksBuilder
             unset($yamlContent['table']);
             unset($yamlContent['typeField']);
         }
-        file_put_contents(
+        GeneralUtility::writeFile(
             $basePath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName(),
             Yaml::dump($yamlContent, 10, 2)
         );
@@ -97,7 +97,7 @@ class ContentBlocksBuilder
     {
         GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
         $xliffContent = $this->languageFileGenerator->generate($contentBlock);
-        file_put_contents(
+        GeneralUtility::writeFile(
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
             $xliffContent
         );
@@ -105,7 +105,7 @@ class ContentBlocksBuilder
 
     protected function createBackendPreviewHtml(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        file_put_contents(
+        GeneralUtility::writeFile(
             $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
             $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlock)
         );
@@ -113,7 +113,7 @@ class ContentBlocksBuilder
 
     protected function createFrontendHtml(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        file_put_contents(
+        GeneralUtility::writeFile(
             $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
             $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlock)
         );
@@ -121,15 +121,15 @@ class ContentBlocksBuilder
 
     protected function createExamplePublicAssets(string $publicPath): void
     {
-        file_put_contents(
+        GeneralUtility::writeFile(
             $publicPath . '/EditorPreview.css',
             '/* Created by Content Block skeleton builder */'
         );
-        file_put_contents(
+        GeneralUtility::writeFile(
             $publicPath . '/Frontend.css',
             '/* Created by Content Block skeleton builder */'
         );
-        file_put_contents(
+        GeneralUtility::writeFile(
             $publicPath . '/Frontend.js',
             '/* Created by Content Block skeleton builder */'
         );
