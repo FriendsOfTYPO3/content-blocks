@@ -82,7 +82,6 @@ services:
       $cache: '@cache.core'
 
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
-    shared: false
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
