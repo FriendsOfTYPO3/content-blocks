@@ -84,6 +84,12 @@ services:
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
     shared: false
     factory:
+      - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
+      - 'create'
+
+  TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry:
+    public: true
+    factory:
       - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
       - 'load'
 

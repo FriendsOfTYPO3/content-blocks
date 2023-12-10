@@ -72,7 +72,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     public static function notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider(): iterable
@@ -128,7 +128,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -171,7 +171,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -220,7 +220,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -280,7 +280,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -346,7 +346,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -390,7 +390,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -440,7 +440,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -482,7 +482,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -530,7 +530,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -582,7 +582,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -640,7 +640,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -679,7 +679,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -714,7 +714,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -759,7 +759,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     /**
@@ -817,7 +817,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     public static function structuralFieldTypesAreNotAllowedInFlexFormDataProvider(): iterable
@@ -930,7 +930,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     public static function sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider(): iterable
@@ -985,7 +985,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     public static function containerHaveAtLeastOneFieldExceptionIsThrownDataProvider(): iterable
@@ -1046,7 +1046,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     public static function containerContainsValidFieldTypeExceptionIsThrownDataProvider(): iterable
@@ -1112,7 +1112,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))->createFromLoadedContentBlocks($contentBlockRegistry);
+        (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))->create();
     }
 
     public static function localCollectionsCanHaveTableOverriddenDataProvider(): iterable
@@ -1158,8 +1158,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
 
         self::assertTrue($tableDefinitionCollection->hasTable($expectedTable));
     }

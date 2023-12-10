@@ -44,7 +44,12 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
  */
 final class TableDefinitionCollectionFactory
 {
-    public function __construct(protected readonly AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry) {}
+    private TableDefinitionCollection $tableDefinitionCollection;
+
+    public function __construct(
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry,
+    ) {}
 
     /**
      * This property tracks Collection foreign_table parent references.
@@ -55,11 +60,19 @@ final class TableDefinitionCollectionFactory
      */
     private array $parentReferences = [];
 
-    public function createFromLoadedContentBlocks(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
+    public function create(): TableDefinitionCollection
+    {
+        if (isset($this->tableDefinitionCollection)) {
+            return $this->tableDefinitionCollection;
+        }
+        return $this->createUncached();
+    }
+
+    public function createUncached(): TableDefinitionCollection
     {
         $tableDefinitionCollection = new TableDefinitionCollection();
         $tableDefinitionList = [];
-        foreach ($contentBlockRegistry->getAll() as $contentBlock) {
+        foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
             $languagePath = new LanguagePath('LLL:' . $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
             $processingInput = new ProcessingInput(
@@ -86,7 +99,8 @@ final class TableDefinitionCollectionFactory
         }
         // Reset state.
         $this->parentReferences = [];
-        return $tableDefinitionCollection;
+        $this->tableDefinitionCollection = $tableDefinitionCollection;
+        return $this->tableDefinitionCollection;
     }
 
     private function mergeProcessingResult(array $tableDefinitionList): array

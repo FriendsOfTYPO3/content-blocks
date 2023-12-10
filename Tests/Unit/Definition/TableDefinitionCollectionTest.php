@@ -62,8 +62,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
         self::assertNotNull($contentElementDefinition);
@@ -95,8 +95,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
 
         self::assertNull($contentElementDefinition);
@@ -150,8 +150,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {

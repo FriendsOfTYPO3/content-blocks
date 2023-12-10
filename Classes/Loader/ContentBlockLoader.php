@@ -22,8 +22,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
@@ -40,42 +38,37 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ContentBlockLoader
 {
-    protected TableDefinitionCollection $tableDefinitionCollection;
+    protected ContentBlockRegistry $contentBlockRegistry;
 
     public function __construct(
         protected readonly PhpFrontend $cache,
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly LanguageFileRegistry $languageFileRegistry,
-        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
     ) {}
 
-    public function load(): TableDefinitionCollection
+    public function load(): ContentBlockRegistry
     {
-        if (isset($this->tableDefinitionCollection)) {
-            return $this->tableDefinitionCollection;
+        if (isset($this->contentBlockRegistry)) {
+            return $this->contentBlockRegistry;
         }
 
         if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+            $contentBlockRegistry = new ContentBlockRegistry();
             foreach ($contentBlocks as $contentBlock) {
-                $this->contentBlockRegistry->register($contentBlock);
+                $contentBlockRegistry->register($contentBlock);
                 $this->languageFileRegistry->register($contentBlock);
             }
-            $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($this->contentBlockRegistry);
-            $this->tableDefinitionCollection = $tableDefinitionCollection;
-            return $this->tableDefinitionCollection;
+            $this->contentBlockRegistry = $contentBlockRegistry;
+            return $this->contentBlockRegistry;
         }
 
         return $this->loadUncached();
     }
 
-    public function loadUncached(): TableDefinitionCollection
+    public function loadUncached(): ContentBlockRegistry
     {
-        $this->contentBlockRegistry->flush();
-
-        // Load content blocks
         $loadedContentBlocks = [];
         foreach ($this->packageManager->getActivePackages() as $package) {
             $extensionKey = $package->getPackageKey();
@@ -95,20 +88,19 @@ class ContentBlockLoader
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
         $sortByPriority = fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
         usort($loadedContentBlocks, $sortByPriority);
+        $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($loadedContentBlocks as $contentBlock) {
-            $this->contentBlockRegistry->register($contentBlock);
+            $contentBlockRegistry->register($contentBlock);
             $this->languageFileRegistry->register($contentBlock);
         }
+        $this->contentBlockRegistry = $contentBlockRegistry;
 
         $this->publishAssets($loadedContentBlocks);
-
-        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($this->contentBlockRegistry);
-        $this->tableDefinitionCollection = $tableDefinitionCollection;
 
         $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
 
-        return $this->tableDefinitionCollection;
+        return $this->contentBlockRegistry;
     }
 
     /**

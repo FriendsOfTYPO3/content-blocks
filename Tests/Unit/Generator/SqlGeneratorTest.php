@@ -17,11 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
-use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -276,11 +274,8 @@ final class SqlGeneratorTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
         $loader = $this->createMock(ContentBlockLoader::class);
-        $loader->method('loadUncached')->willReturn($tableDefinitionCollection);
+        $loader->method('loadUncached')->willReturn($contentBlockRegistry);
         $sqlGenerator = new SqlGenerator($loader);
 
         $result = $sqlGenerator->generate();

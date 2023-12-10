@@ -1928,8 +1928,8 @@ final class TcaGeneratorTest extends UnitTestCase
             $contentBlockRegistry->register($contentBlock);
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $xliffParserMock = $this->createMock(XliffParser::class);
@@ -2030,8 +2030,8 @@ final class TcaGeneratorTest extends UnitTestCase
             $contentBlockRegistry->register($contentBlock);
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         if ($seoExtensionLoaded) {
@@ -2072,8 +2072,8 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $xliffParserMock = $this->createMock(XliffParser::class);
@@ -2716,8 +2716,8 @@ final class TcaGeneratorTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($automaticLanguageKeyRegistry))
-            ->createFromLoadedContentBlocks($contentBlockRegistry);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+            ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $xliffParserMock = $this->createMock(XliffParser::class);

@@ -47,7 +47,7 @@ class ContentBlocksBuilder
     {
         // Initialise registries with the new Content Block.
         $this->contentBlockRegistry->register($contentBlock);
-        $this->tableDefinitionCollectionFactory->createFromLoadedContentBlocks($this->contentBlockRegistry);
+        $this->tableDefinitionCollectionFactory->createUncached();
 
         $name = $contentBlock->getPackage();
         $extPath = $contentBlock->getExtPath();

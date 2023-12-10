@@ -19,12 +19,11 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentBlockRegistry implements SingletonInterface
+final class ContentBlockRegistry
 {
     /**
      * @var LoadedContentBlock[]
@@ -98,11 +97,5 @@ class ContentBlockRegistry implements SingletonInterface
     public function getAll(): array
     {
         return $this->contentBlocks;
-    }
-
-    public function flush(): void
-    {
-        $this->contentBlocks = [];
-        $this->typeNamesByTable = [];
     }
 }

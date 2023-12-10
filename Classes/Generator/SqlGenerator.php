@@ -17,8 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
+use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
 /**
@@ -27,7 +29,7 @@ use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 class SqlGenerator
 {
     public function __construct(
-        protected readonly ContentBlockLoader $loader
+        protected readonly ContentBlockLoader $contentBlockLoader
     ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void
@@ -39,7 +41,9 @@ class SqlGenerator
 
     public function generate(): array
     {
-        $tableDefinitionCollection = $this->loader->loadUncached();
+        $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
+        $tableDefinitionFactory = new TableDefinitionCollectionFactory($contentBlockRegistry, new AutomaticLanguageKeysRegistry());
+        $tableDefinitionCollection = $tableDefinitionFactory->create();
         $sql = [];
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getSqlColumnDefinitionCollection() as $column) {
