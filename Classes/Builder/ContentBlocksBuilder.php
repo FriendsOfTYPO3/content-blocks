@@ -45,10 +45,6 @@ class ContentBlocksBuilder
      */
     public function create(LoadedContentBlock $contentBlock): void
     {
-        // Initialise registries with the new Content Block.
-        $this->contentBlockRegistry->register($contentBlock);
-        $this->tableDefinitionCollectionFactory->createUncached();
-
         $name = $contentBlock->getPackage();
         $extPath = $contentBlock->getExtPath();
         $basePath = GeneralUtility::getFileAbsFileName($extPath);
@@ -62,6 +58,8 @@ class ContentBlocksBuilder
                 1674225340
             );
         }
+
+        $this->initializeRegistries($contentBlock);
 
         // Create public Assets directory.
         $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
@@ -77,6 +75,14 @@ class ContentBlocksBuilder
             $this->createExamplePublicAssets($publicPath);
         }
         $this->copyDefaultIcon($contentType, $basePath);
+    }
+
+    protected function initializeRegistries(LoadedContentBlock $contentBlock): void
+    {
+        $this->contentBlockRegistry->register($contentBlock);
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached();
+        $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
+        $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
     }
 
     protected function createEditorInterfaceYaml(LoadedContentBlock $contentBlock, string $basePath): void

@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -27,6 +28,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
 {
     /** @var TableDefinition[] */
     private array $definitions = [];
+
+    public function __construct(private readonly AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry) {}
 
     /**
      * @return \Iterator<TableDefinition>
@@ -70,5 +73,10 @@ final class TableDefinitionCollection implements \IteratorAggregate
             }
         }
         return null;
+    }
+
+    public function getAutomaticLanguageKeysRegistry(): AutomaticLanguageKeysRegistry
+    {
+        return $this->automaticLanguageKeysRegistry;
     }
 }

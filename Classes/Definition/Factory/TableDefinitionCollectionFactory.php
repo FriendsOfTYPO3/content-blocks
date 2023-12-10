@@ -45,10 +45,10 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 final class TableDefinitionCollectionFactory
 {
     private TableDefinitionCollection $tableDefinitionCollection;
+    private AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry;
 
     public function __construct(
         protected readonly ContentBlockRegistry $contentBlockRegistry,
-        protected readonly AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry,
     ) {}
 
     /**
@@ -70,7 +70,7 @@ final class TableDefinitionCollectionFactory
 
     public function createUncached(): TableDefinitionCollection
     {
-        $tableDefinitionCollection = new TableDefinitionCollection();
+        $this->automaticLanguageKeysRegistry = new AutomaticLanguageKeysRegistry();
         $tableDefinitionList = [];
         foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
@@ -87,6 +87,7 @@ final class TableDefinitionCollectionFactory
             $tableDefinitionList = $this->processFields($processingInput);
         }
         $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
+        $tableDefinitionCollection = new TableDefinitionCollection($this->automaticLanguageKeysRegistry);
         foreach ($mergedTableDefinitionList as $table => $tableDefinition) {
             $newTableDefinition = TableDefinition::createFromTableArray($table, $tableDefinition);
             // Enrich Collections with parent reference information.
@@ -97,10 +98,15 @@ final class TableDefinitionCollectionFactory
             }
             $tableDefinitionCollection->addTable($newTableDefinition);
         }
-        // Reset state.
-        $this->parentReferences = [];
+        $this->resetState();
         $this->tableDefinitionCollection = $tableDefinitionCollection;
         return $this->tableDefinitionCollection;
+    }
+
+    private function resetState(): void
+    {
+        $this->parentReferences = [];
+        unset($this->automaticLanguageKeysRegistry);
     }
 
     private function mergeProcessingResult(array $tableDefinitionList): array

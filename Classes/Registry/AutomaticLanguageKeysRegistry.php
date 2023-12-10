@@ -19,12 +19,11 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\LocalLangPathUtility;
-use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-class AutomaticLanguageKeysRegistry implements SingletonInterface
+class AutomaticLanguageKeysRegistry
 {
     /**
      * @var array<string, AutomaticLanguageSource[]>

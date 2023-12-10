@@ -28,7 +28,7 @@ use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 class LanguageFileGenerator
 {
     public function __construct(
-        protected readonly AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry,
+        protected AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry,
         protected readonly LanguageFileRegistry $languageFileRegistry,
     ) {}
 
@@ -106,5 +106,10 @@ $content
 </xliff>
 HEREDOC;
         return $xliffContent;
+    }
+
+    public function setAutomaticLanguageKeysRegistry(AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry): void
+    {
+        $this->automaticLanguageKeysRegistry = $automaticLanguageKeysRegistry;
     }
 }

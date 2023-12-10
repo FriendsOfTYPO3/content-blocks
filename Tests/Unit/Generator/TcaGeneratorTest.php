@@ -22,7 +22,6 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
@@ -1927,8 +1926,7 @@ final class TcaGeneratorTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
@@ -2029,8 +2027,7 @@ final class TcaGeneratorTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
@@ -2071,8 +2068,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $contentBlock = LoadedContentBlock::fromArray($yaml);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
@@ -2715,8 +2711,7 @@ final class TcaGeneratorTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');

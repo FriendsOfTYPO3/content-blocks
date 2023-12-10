@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -61,8 +60,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
@@ -94,8 +92,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
 
@@ -149,8 +146,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $automaticLanguageKeyRegistry = new AutomaticLanguageKeysRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry, $automaticLanguageKeyRegistry))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
         $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
         $result = [];
