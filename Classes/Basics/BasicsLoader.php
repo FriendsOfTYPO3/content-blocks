@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
 
 /**
@@ -27,11 +28,33 @@ use TYPO3\CMS\Core\Package\PackageManager;
  */
 class BasicsLoader
 {
+    protected BasicsRegistry $basicsRegistry;
+
     public function __construct(
         protected readonly PackageManager $packageManager,
+        protected readonly PhpFrontend $cache,
     ) {}
 
     public function load(): BasicsRegistry
+    {
+        if (isset($this->basicsRegistry)) {
+            return $this->basicsRegistry;
+        }
+        if (is_array($basics = $this->cache->require('content-blocks-basics'))) {
+            $this->basicsRegistry = new BasicsRegistry();
+            foreach ($basics as $basic) {
+                $loadedBasic = LoadedBasic::fromArray($basic);
+                $this->basicsRegistry->register($loadedBasic);
+            }
+            return $this->basicsRegistry;
+        }
+        $this->basicsRegistry = $this->loadUncached();
+        $cache = array_map(fn(LoadedBasic $basic): array => $basic->toArray(), $this->basicsRegistry->getAllBasics());
+        $this->cache->set('content-blocks-basics', 'return ' . var_export($cache, true) . ';');
+        return $this->basicsRegistry;
+    }
+
+    public function loadUncached(): BasicsRegistry
     {
         $basicsRegistry = new BasicsRegistry();
         foreach ($this->packageManager->getActivePackages() as $package) {

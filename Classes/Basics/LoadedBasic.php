@@ -28,10 +28,10 @@ final class LoadedBasic
         private readonly array $fields,
     ) {}
 
-    public static function fromArray(array $array, string $hostExtension): LoadedBasic
+    public static function fromArray(array $array, string $hostExtension = ''): LoadedBasic
     {
         return new self(
-            hostExtension: $hostExtension,
+            hostExtension: (string)($array['hostExtension'] ?? $hostExtension),
             identifier: (string)($array['identifier'] ?? ''),
             fields: (array)($array['fields'] ?? [])
         );
@@ -42,6 +42,7 @@ final class LoadedBasic
         return [
             'identifier' => $this->identifier,
             'fields' => $this->fields,
+            'hostExtension' => $this->hostExtension,
         ];
     }
 

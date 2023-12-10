@@ -40,7 +40,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ContentBlockLoader
 {
-    protected ?TableDefinitionCollection $tableDefinitionCollection = null;
+    protected TableDefinitionCollection $tableDefinitionCollection;
 
     public function __construct(
         protected readonly PhpFrontend $cache,
@@ -53,7 +53,7 @@ class ContentBlockLoader
 
     public function load(): TableDefinitionCollection
     {
-        if ($this->tableDefinitionCollection instanceof TableDefinitionCollection) {
+        if (isset($this->tableDefinitionCollection)) {
             return $this->tableDefinitionCollection;
         }
 
