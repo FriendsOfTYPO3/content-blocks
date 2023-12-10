@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
-use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
@@ -48,7 +47,6 @@ class ContentBlockLoader
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
-        protected readonly BasicsLoader $basicsLoader,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
     ) {}
@@ -76,8 +74,6 @@ class ContentBlockLoader
     public function loadUncached(): TableDefinitionCollection
     {
         $this->contentBlockRegistry->flush();
-        // Load Basics before content block types.
-        $this->basicsLoader->load();
 
         // Load content blocks
         $loadedContentBlocks = [];

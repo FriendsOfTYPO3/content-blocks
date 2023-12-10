@@ -17,12 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Basics;
 
-use TYPO3\CMS\Core\SingletonInterface;
-
 /**
  * @internal Not part of TYPO3's public API.
  */
-class BasicsRegistry implements SingletonInterface
+final class BasicsRegistry
 {
     /**
      * @var LoadedBasic[]
@@ -56,10 +54,5 @@ class BasicsRegistry implements SingletonInterface
     public function getAllBasics(): array
     {
         return $this->basics;
-    }
-
-    public function flush(): void
-    {
-        $this->basics = [];
     }
 }

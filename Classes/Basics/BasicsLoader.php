@@ -28,14 +28,12 @@ use TYPO3\CMS\Core\Package\PackageManager;
 class BasicsLoader
 {
     public function __construct(
-        protected readonly BasicsRegistry $basicsRegistry,
         protected readonly PackageManager $packageManager,
     ) {}
 
-    public function load(): void
+    public function load(): BasicsRegistry
     {
-        // Reset BasicsRegistry before loading.
-        $this->basicsRegistry->flush();
+        $basicsRegistry = new BasicsRegistry();
         foreach ($this->packageManager->getActivePackages() as $package) {
             $pathToBasics = $package->getPackagePath() . ContentBlockPathUtility::getRelativeBasicsPath();
             if (!is_dir($pathToBasics)) {
@@ -49,8 +47,9 @@ class BasicsLoader
                     throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname() . '"' . ': Cannot find an identifier.', 1689095524);
                 }
                 $loadedBasic = LoadedBasic::fromArray($yamlContent, $package->getPackageKey());
-                $this->basicsRegistry->register($loadedBasic);
+                $basicsRegistry->register($loadedBasic);
             }
         }
+        return $basicsRegistry;
     }
 }

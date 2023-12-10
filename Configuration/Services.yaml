@@ -68,6 +68,11 @@ services:
     tags:
       - { name: 'data.processor', identifier: 'content-blocks' }
 
+  TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry:
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Basics\BasicsLoader'
+      - 'load'
+
   TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
     arguments:
       $cache: '@cache.core'
