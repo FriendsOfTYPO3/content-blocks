@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\ContentBlocks\Builder\ContentBlocksBuilder;
+use TYPO3\CMS\ContentBlocks\Builder\ContentBlockBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -38,7 +38,7 @@ use TYPO3\CMS\Core\Package\PackageInterface;
 class CreateContentBlockCommand extends Command
 {
     public function __construct(
-        protected readonly ContentBlocksBuilder $contentBlockBuilder,
+        protected readonly ContentBlockBuilder $contentBlockBuilder,
         protected readonly PackageResolver $packageResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
     ) {

@@ -31,7 +31,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentBlocksBuilder
+class ContentBlockBuilder
 {
     public function __construct(
         protected readonly HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
