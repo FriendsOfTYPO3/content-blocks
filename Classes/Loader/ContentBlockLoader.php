@@ -23,7 +23,6 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
@@ -42,7 +41,6 @@ class ContentBlockLoader
 
     public function __construct(
         protected readonly PhpFrontend $cache,
-        protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
     ) {}
@@ -58,7 +56,6 @@ class ContentBlockLoader
             $contentBlockRegistry = new ContentBlockRegistry();
             foreach ($contentBlocks as $contentBlock) {
                 $contentBlockRegistry->register($contentBlock);
-                $this->languageFileRegistry->register($contentBlock);
             }
             $this->contentBlockRegistry = $contentBlockRegistry;
             return $this->contentBlockRegistry;
@@ -91,7 +88,6 @@ class ContentBlockLoader
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($loadedContentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
-            $this->languageFileRegistry->register($contentBlock);
         }
         $this->contentBlockRegistry = $contentBlockRegistry;
 

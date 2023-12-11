@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ContentBlockRegistry
+class ContentBlockRegistry
 {
     /**
      * @var LoadedContentBlock[]

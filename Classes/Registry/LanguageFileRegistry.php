@@ -18,10 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Utility\LocalLangPathUtility;
-use TYPO3\CMS\Core\Localization\Parser\XliffParser;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -30,21 +27,9 @@ class LanguageFileRegistry
 {
     protected array $parsedLanguageFiles = [];
 
-    public function __construct(
-        protected readonly XliffParser $xliffParser,
-    ) {}
-
-    public function register(LoadedContentBlock $contentBlock): void
+    public function register(LoadedContentBlock $contentBlock, array $defaultData): void
     {
-        if (!array_key_exists($contentBlock->getName(), $this->parsedLanguageFiles)) {
-            $languagePath = $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
-            $absoluteLanguagePath = GeneralUtility::getFileAbsFileName($languagePath);
-            if (file_exists($absoluteLanguagePath)) {
-                $parsedData = $this->xliffParser->getParsedData($absoluteLanguagePath, 'default');
-                $defaultData = $parsedData['default'];
-                $this->parsedLanguageFiles[$contentBlock->getName()] = $defaultData;
-            }
-        }
+        $this->parsedLanguageFiles[$contentBlock->getName()] = $defaultData;
     }
 
     public function isset(string $name, string $key): bool

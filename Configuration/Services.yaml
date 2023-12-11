@@ -97,6 +97,11 @@ services:
       - '@TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection'
       - 'getAutomaticLanguageKeysRegistry'
 
+  TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry:
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryFactory'
+      - 'create'
+
   TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand:
     tags:
       - name: 'console.command'

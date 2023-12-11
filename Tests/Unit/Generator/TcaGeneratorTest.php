@@ -27,7 +27,6 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -1930,8 +1929,7 @@ final class TcaGeneratorTest extends UnitTestCase
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
-        $xliffParserMock = $this->createMock(XliffParser::class);
-        $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
+        $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
@@ -2034,8 +2032,7 @@ final class TcaGeneratorTest extends UnitTestCase
         if ($seoExtensionLoaded) {
             $systemExtensionAvailability->addAvailableExtension('seo');
         }
-        $xliffParserMock = $this->createMock(XliffParser::class);
-        $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
+        $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
@@ -2072,8 +2069,7 @@ final class TcaGeneratorTest extends UnitTestCase
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
-        $xliffParserMock = $this->createMock(XliffParser::class);
-        $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
+        $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
@@ -2715,8 +2711,7 @@ final class TcaGeneratorTest extends UnitTestCase
             ->create();
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
-        $xliffParserMock = $this->createMock(XliffParser::class);
-        $languageFileRegistry = new NoopLanguageFileRegistry($xliffParserMock);
+        $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,

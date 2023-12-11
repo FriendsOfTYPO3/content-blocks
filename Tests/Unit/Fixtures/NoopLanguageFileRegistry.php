@@ -17,16 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures;
 
-use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 
 class NoopLanguageFileRegistry extends LanguageFileRegistry
 {
-    public function register(LoadedContentBlock $contentBlock): void
-    {
-        // Do nothing.
-    }
-
     public function isset(string $name, string $key): bool
     {
         return true;
