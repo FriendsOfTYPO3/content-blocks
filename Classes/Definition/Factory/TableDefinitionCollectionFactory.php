@@ -74,9 +74,7 @@ final class TableDefinitionCollectionFactory
         $tableDefinitionList = [];
         foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
-            $baseExtPath = 'LLL:' . $contentBlock->getExtPath();
-            $languagePathString = $baseExtPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
-            $languagePath = new LanguagePath($languagePathString);
+            $languagePath = $this->buildBaseLanguagePath($contentBlock);
             $processingInput = new ProcessingInput(
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
@@ -752,6 +750,14 @@ final class TableDefinitionCollectionFactory
         $prefixType = $this->getPrefixType($input->contentBlock, $field);
         $uniqueIdentifier = UniqueIdentifierCreator::prefixIdentifier($input->contentBlock, $prefixType, $field['identifier']);
         return $uniqueIdentifier;
+    }
+
+    private function buildBaseLanguagePath(LoadedContentBlock $contentBlock): LanguagePath
+    {
+        $baseExtPath = 'LLL:' . $contentBlock->getExtPath();
+        $languagePathString = $baseExtPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
+        $languagePath = new LanguagePath($languagePathString);
+        return $languagePath;
     }
 
     private function assertNoLinebreakOutsideOfPalette(FieldType $fieldType, LoadedContentBlock $contentBlock): void
