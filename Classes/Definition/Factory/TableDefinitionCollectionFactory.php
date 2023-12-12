@@ -170,23 +170,19 @@ final class TableDefinitionCollectionFactory
     private function processFields(array $fields, ProcessedFieldsResult $result, ProcessingInput $input): void
     {
         foreach ($fields as $field) {
-            $identifier = (string)$field['identifier'];
-            $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
-            $result->uniqueFieldIdentifiers[] = $identifier;
-            $input->languagePath->addPathSegment($identifier);
-            $fieldType = $this->resolveType($field, $input->table, $input);
-            $field = $this->initializeFieldLabelAndDescription($input, $identifier, $field);
-            $uniqueIdentifier = $this->chooseIdentifier($input, $field);
-            $this->prefixTcaConfigFields($input, $result, $identifier, $uniqueIdentifier);
-            if ($fieldType === FieldType::FLEXFORM) {
+            $this->initializeField($field, $result, $input);
+            $input->languagePath->addPathSegment($result->identifier);
+            $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
+            $this->prefixTcaConfigFields($input, $result);
+            if ($result->fieldType === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($field, $input);
             }
-            $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $uniqueIdentifier, $field, $fieldType);
-            if ($fieldType === FieldType::COLLECTION) {
+            $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
+            if ($result->fieldType === FieldType::COLLECTION) {
                 $tcaFieldDefinition = $this->assignRelationConfigToCollectionField(
                     $field,
                     $tcaFieldDefinition,
-                    $uniqueIdentifier
+                    $result->uniqueIdentifier
                 );
                 $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
                 $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
@@ -205,9 +201,18 @@ final class TableDefinitionCollectionFactory
                     );
                 }
             }
-            $this->collectFields($tcaFieldDefinition, $result, $uniqueIdentifier);
+            $this->collectFields($tcaFieldDefinition, $result);
             $input->languagePath->popSegment();
         }
+    }
+
+    private function initializeField(array $field, ProcessedFieldsResult $result, ProcessingInput $input): void
+    {
+        $result->identifier = (string)$field['identifier'];
+        $this->assertUniqueFieldIdentifier($result, $input->contentBlock);
+        $result->uniqueFieldIdentifiers[] = $result->identifier;
+        $result->fieldType = $this->resolveType($field, $input->table, $input);
+        $result->uniqueIdentifier = $this->chooseIdentifier($input, $field);
     }
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
@@ -275,13 +280,13 @@ final class TableDefinitionCollectionFactory
         $result->contentType->languagePathDescription = $languagePathDescription;
     }
 
-    private function initializeFieldLabelAndDescription(ProcessingInput $input, string $identifier, array $field): array
+    private function initializeFieldLabelAndDescription(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
     {
         $labelPath = $this->getFieldLabelPath($input->languagePath);
         $descriptionPath = $this->getFieldDescriptionPath($input->languagePath);
         $title = (string)($field['label'] ?? '');
         // Never fall back to identifiers for existing fields. They have their standard translation.
-        $title = ($title !== '' || $this->isExistingField($field)) ? $title : $identifier;
+        $title = ($title !== '' || $this->isExistingField($field)) ? $title : $result->identifier;
         $field['label'] = $title;
         $description = $field['description'] ?? '';
         $labelPathSource = new AutomaticLanguageSource($labelPath, $title);
@@ -293,15 +298,14 @@ final class TableDefinitionCollectionFactory
 
     private function buildTcaFieldDefinitionArray(
         ProcessingInput $input,
-        string $uniqueIdentifier,
+        ProcessedFieldsResult $result,
         array $field,
-        FieldType $fieldType
     ): array {
         $tcaFieldDefinition = [
             'parentTable' => $input->contentBlock->getContentType()->getTable(),
-            'uniqueIdentifier' => $uniqueIdentifier,
+            'uniqueIdentifier' => $result->uniqueIdentifier,
             'config' => $field,
-            'type' => $fieldType,
+            'type' => $result->fieldType,
             'labelPath' => $this->getFieldLabelPath($input->languagePath),
             'descriptionPath' => $this->getFieldDescriptionPath($input->languagePath),
         ];
@@ -321,12 +325,10 @@ final class TableDefinitionCollectionFactory
     private function prefixTcaConfigFields(
         ProcessingInput $input,
         ProcessedFieldsResult $result,
-        string $identifier,
-        string $uniqueIdentifier
     ): void {
-        $this->prefixSortFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
-        $this->prefixLabelFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
-        $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+        $this->prefixSortFieldIfNecessary($input, $result);
+        $this->prefixLabelFieldIfNecessary($input, $result);
+        $this->prefixFallbackLabelFieldsIfNecessary($input, $result);
     }
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
@@ -455,11 +457,11 @@ final class TableDefinitionCollectionFactory
         return [];
     }
 
-    private function collectFields(array $tcaFieldDefinition, ProcessedFieldsResult $result, string $uniqueIdentifier): void
+    private function collectFields(array $tcaFieldDefinition, ProcessedFieldsResult $result): void
     {
-        $result->tableDefinition->fields[$uniqueIdentifier] = $tcaFieldDefinition;
-        $result->contentType->columns[] = $uniqueIdentifier;
-        if ($uniqueIdentifier !== $result->tableDefinition->typeField) {
+        $result->tableDefinition->fields[$result->uniqueIdentifier] = $tcaFieldDefinition;
+        $result->contentType->columns[] = $result->uniqueIdentifier;
+        if ($result->uniqueIdentifier !== $result->tableDefinition->typeField) {
             $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($tcaFieldDefinition);
         }
     }
@@ -613,8 +615,6 @@ final class TableDefinitionCollectionFactory
     public function prefixSortFieldIfNecessary(
         ProcessingInput $input,
         ProcessedFieldsResult $result,
-        string $identifier,
-        string $uniqueIdentifier,
     ): void {
         $sortField = $input->yaml['sortField'] ?? null;
         if ($sortField === null) {
@@ -623,7 +623,7 @@ final class TableDefinitionCollectionFactory
         $sortFieldArray = [];
         if (is_string($sortField)) {
             $sortFieldArray = [['identifier' => $sortField]];
-            if ($sortField !== $identifier) {
+            if ($sortField !== $result->identifier) {
                 return;
             }
             $result->tableDefinition->raw['sortField'] = [];
@@ -644,8 +644,8 @@ final class TableDefinitionCollectionFactory
                     throw new \InvalidArgumentException('order for sortField.order must be one of "asc" or "desc". "' . $order . '" provided.', 1694014891);
                 }
             }
-            if ($sortFieldIdentifier !== '' && $sortFieldIdentifier === $identifier) {
-                $result->tableDefinition->raw['sortField'][$i]['identifier'] = $uniqueIdentifier;
+            if ($sortFieldIdentifier !== '' && $sortFieldIdentifier === $result->identifier) {
+                $result->tableDefinition->raw['sortField'][$i]['identifier'] = $result->uniqueIdentifier;
                 $result->tableDefinition->raw['sortField'][$i]['order'] = strtoupper($order);
             }
         }
@@ -654,8 +654,6 @@ final class TableDefinitionCollectionFactory
     private function prefixLabelFieldIfNecessary(
         ProcessingInput $input,
         ProcessedFieldsResult $result,
-        string $identifier,
-        string $uniqueIdentifier,
     ): void {
         $labelCapability = LabelCapability::createFromArray($input->yaml);
         if (!$labelCapability->hasLabelField()) {
@@ -664,11 +662,11 @@ final class TableDefinitionCollectionFactory
         $labelFields = $labelCapability->getLabelFieldsAsArray();
         for ($i = 0; $i < count($labelFields); $i++) {
             $currentLabelField = $labelFields[$i];
-            if ($currentLabelField === $identifier) {
+            if ($currentLabelField === $result->identifier) {
                 if (is_string($result->tableDefinition->raw['labelField'])) {
                     $result->tableDefinition->raw['labelField'] = [];
                 }
-                $result->tableDefinition->raw['labelField'][$i] = $uniqueIdentifier;
+                $result->tableDefinition->raw['labelField'][$i] = $result->uniqueIdentifier;
             }
         }
     }
@@ -676,8 +674,6 @@ final class TableDefinitionCollectionFactory
     private function prefixFallbackLabelFieldsIfNecessary(
         ProcessingInput $input,
         ProcessedFieldsResult $result,
-        mixed $identifier,
-        string $uniqueIdentifier
     ): void {
         $labelCapability = LabelCapability::createFromArray($input->yaml);
         if (!$labelCapability->hasFallbackLabelFields()) {
@@ -686,8 +682,8 @@ final class TableDefinitionCollectionFactory
         $fallbackLabelFields = $labelCapability->getFallbackLabelFields();
         for ($i = 0; $i < count($fallbackLabelFields); $i++) {
             $currentLabelField = $fallbackLabelFields[$i];
-            if ($currentLabelField === $identifier) {
-                $result->tableDefinition->raw['fallbackLabelFields'][$i] = $uniqueIdentifier;
+            if ($currentLabelField === $result->identifier) {
+                $result->tableDefinition->raw['fallbackLabelFields'][$i] = $result->uniqueIdentifier;
             }
         }
     }
@@ -762,7 +758,7 @@ final class TableDefinitionCollectionFactory
     {
         if ($fieldType === FieldType::LINEBREAK) {
             throw new \InvalidArgumentException(
-                'Linebreaks are only allowed within Palettes in content block "' . $contentBlock->getName() . '".',
+                'Linebreaks are only allowed within Palettes in Content Block "' . $contentBlock->getName() . '".',
                 1679224392
             );
         }
@@ -772,7 +768,7 @@ final class TableDefinitionCollectionFactory
     {
         if (!isset($field['identifier'])) {
             throw new \InvalidArgumentException(
-                'A field is missing the required "identifier" in content block "' . $input->contentBlock->getName() . '".',
+                'A field is missing the required "identifier" in Content Block "' . $input->contentBlock->getName() . '".',
                 1679226075
             );
         }
@@ -782,7 +778,7 @@ final class TableDefinitionCollectionFactory
     {
         if (!isset($field['type'])) {
             throw new \InvalidArgumentException(
-                'The field "' . ($field['identifier'] ?? '') . '" is missing the required "type" in content block "' . $input->contentBlock->getName() . '".',
+                'The field "' . ($field['identifier'] ?? '') . '" is missing the required "type" in Content Block "' . $input->contentBlock->getName() . '".',
                 1694768937
             );
         }
@@ -792,7 +788,7 @@ final class TableDefinitionCollectionFactory
     {
         if (in_array($identifier, $result->uniquePaletteIdentifiers, true)) {
             throw new \InvalidArgumentException(
-                'The palette identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                'The palette identifier "' . $identifier . '" in Content Block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
                 1679168022
             );
         }
@@ -802,7 +798,7 @@ final class TableDefinitionCollectionFactory
     {
         if ($fieldType === FieldType::PALETTE) {
             throw new \InvalidArgumentException(
-                'Palette "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
+                'Palette "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in Content Block "' . $contentBlock->getName() . '".',
                 1679168602
             );
         }
@@ -812,7 +808,7 @@ final class TableDefinitionCollectionFactory
     {
         if ($fieldType === FieldType::TAB) {
             throw new \InvalidArgumentException(
-                'Tab "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in content block "' . $contentBlock->getName() . '".',
+                'Tab "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier . '" in Content Block "' . $contentBlock->getName() . '".',
                 1679245193
             );
         }
@@ -822,17 +818,17 @@ final class TableDefinitionCollectionFactory
     {
         if (in_array($identifier, $result->uniqueTabIdentifiers, true)) {
             throw new \InvalidArgumentException(
-                'The tab identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                'The tab identifier "' . $identifier . '" in Content Block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
                 1679243686
             );
         }
     }
 
-    private function assertUniqueFieldIdentifier(string $identifier, ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
+    private function assertUniqueFieldIdentifier(ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
     {
-        if (in_array($identifier, $result->uniqueFieldIdentifiers, true)) {
+        if (in_array($result->identifier, $result->uniqueFieldIdentifiers, true)) {
             throw new \InvalidArgumentException(
-                'The identifier "' . $identifier . '" in content block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
+                'The identifier "' . $result->identifier . '" in Content Block "' . $contentBlock->getName() . '" does exist more than once. Please choose unique identifiers.',
                 1677407942
             );
         }
@@ -849,7 +845,7 @@ final class TableDefinitionCollectionFactory
             $isValid = $currentType === $flexFormType;
             if (!$isValid) {
                 throw new \InvalidArgumentException(
-                    'You must not mix Sheets with normal fields inside the FlexForm definition "' . $field['identifier'] . '" in content block "' . $contentBlock->getName() . '".',
+                    'You must not mix Sheets with normal fields inside the FlexForm definition "' . $field['identifier'] . '" in Content Block "' . $contentBlock->getName() . '".',
                     1685217163
                 );
             }

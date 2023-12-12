@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
+use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -31,6 +33,9 @@ final class ProcessedFieldsResult
     public array $uniquePaletteIdentifiers = [];
     /** @var string[] */
     public array $uniqueTabIdentifiers = [];
+    public string $identifier = '';
+    public string $uniqueIdentifier = '';
+    public FieldType $fieldType;
 
     public function __construct(ProcessingInput $input)
     {

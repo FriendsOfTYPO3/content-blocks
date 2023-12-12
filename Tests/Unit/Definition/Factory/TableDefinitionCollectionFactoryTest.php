@@ -64,7 +64,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1677407942);
-        $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -119,7 +119,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1677407942);
-        $this->expectExceptionMessage('The identifier "foo" in content block "t3ce/example" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -161,7 +161,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168602);
-        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
+        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -209,7 +209,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168602);
-        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in content block "foo/bar".');
+        $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -268,7 +268,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168022);
-        $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The palette identifier "palette_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -333,7 +333,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679168022);
-        $this->expectExceptionMessage('The palette identifier "palette_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The palette identifier "palette_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -376,7 +376,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679243686);
-        $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The tab identifier "tab_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -425,7 +425,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679243686);
-        $this->expectExceptionMessage('The tab identifier "tab_1" in content block "foo/bar" does exist more than once. Please choose unique identifiers.');
+        $this->expectExceptionMessage('The tab identifier "tab_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -466,7 +466,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679245193);
-        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
+        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -513,7 +513,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679245193);
-        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in content block "foo/bar".');
+        $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -564,7 +564,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679224392);
-        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -621,7 +621,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679224392);
-        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in content block "foo/bar".');
+        $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -659,7 +659,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679226075);
-        $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
+        $this->expectExceptionMessage('A field is missing the required "identifier" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -693,7 +693,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1694768937);
-        $this->expectExceptionMessage('The field "text1" is missing the required "type" in content block "foo/bar".');
+        $this->expectExceptionMessage('The field "text1" is missing the required "type" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -737,7 +737,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679226075);
-        $this->expectExceptionMessage('A field is missing the required "identifier" in content block "foo/bar".');
+        $this->expectExceptionMessage('A field is missing the required "identifier" in Content Block "foo/bar".');
 
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -793,7 +793,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in content block "foo/bar".');
+        $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in Content Block "foo/bar".');
         $this->expectExceptionCode(1685217163);
 
         $contentBlockRegistry = new ContentBlockRegistry();
