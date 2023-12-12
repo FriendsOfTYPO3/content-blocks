@@ -74,7 +74,9 @@ final class TableDefinitionCollectionFactory
         $tableDefinitionList = [];
         foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
-            $languagePath = new LanguagePath('LLL:' . $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath());
+            $baseExtPath = 'LLL:' . $contentBlock->getExtPath();
+            $languagePathString = $baseExtPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
+            $languagePath = new LanguagePath($languagePathString);
             $processingInput = new ProcessingInput(
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
@@ -86,21 +88,36 @@ final class TableDefinitionCollectionFactory
             );
             $tableDefinitionList = $this->processRootFields($processingInput);
         }
-        $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
         $tableDefinitionCollection = new TableDefinitionCollection($this->automaticLanguageKeysRegistry);
-        foreach ($mergedTableDefinitionList as $table => $tableDefinition) {
-            $newTableDefinition = TableDefinition::createFromTableArray($table, $tableDefinition);
-            // Enrich Collections with parent reference information.
-            if (isset($this->parentReferences[$newTableDefinition->getTable()])) {
-                $references = $this->parentReferences[$newTableDefinition->getTable()];
-                $tcaFieldDefinitionCollection = TcaFieldDefinitionCollection::createFromArray($references, $newTableDefinition->getTable());
-                $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition);
-            }
-            $tableDefinitionCollection->addTable($newTableDefinition);
-        }
+        $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
+        $this->enrichTableDefinitions($mergedTableDefinitionList, $tableDefinitionCollection);
         $this->resetState();
         $this->tableDefinitionCollection = $tableDefinitionCollection;
         return $this->tableDefinitionCollection;
+    }
+
+    private function enrichTableDefinitions(
+        array $mergedTableDefinitionList,
+        TableDefinitionCollection $tableDefinitionCollection
+    ): void {
+        foreach ($mergedTableDefinitionList as $table => $tableDefinition) {
+            $newTableDefinition = TableDefinition::createFromTableArray($table, $tableDefinition);
+            $newTableDefinition = $this->enrichCollectionsWithParentReference($newTableDefinition);
+            $tableDefinitionCollection->addTable($newTableDefinition);
+        }
+    }
+
+    private function enrichCollectionsWithParentReference(TableDefinition $newTableDefinition): TableDefinition
+    {
+        if (isset($this->parentReferences[$newTableDefinition->getTable()])) {
+            $references = $this->parentReferences[$newTableDefinition->getTable()];
+            $tcaFieldDefinitionCollection = TcaFieldDefinitionCollection::createFromArray(
+                $references,
+                $newTableDefinition->getTable()
+            );
+            $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition);
+        }
+        return $newTableDefinition;
     }
 
     private function resetState(): void
