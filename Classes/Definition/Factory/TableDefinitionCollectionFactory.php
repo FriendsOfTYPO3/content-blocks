@@ -159,21 +159,21 @@ final class TableDefinitionCollectionFactory
         $yamlFields = $yaml['fields'] ?? [];
         foreach ($yamlFields as $rootField) {
             $fields = $this->handleRootField($rootField, $input, $result);
-            $this->processFields($fields, $result, $input);
+            $this->processFields($input, $result, $fields);
         }
         $this->collectDefinitions($input, $result);
         return $result->tableDefinitionList;
     }
 
-    private function processFields(array $fields, ProcessedFieldsResult $result, ProcessingInput $input): void
+    private function processFields(ProcessingInput $input, ProcessedFieldsResult $result, array $fields): void
     {
         foreach ($fields as $field) {
-            $this->initializeField($field, $result, $input);
+            $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
             $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
             $this->prefixTcaConfigFields($input, $result);
             if ($result->fieldType === FieldType::FLEXFORM) {
-                $field = $this->processFlexForm($field, $input);
+                $field = $this->processFlexForm($input, $field);
             }
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($result->fieldType === FieldType::COLLECTION) {
@@ -184,7 +184,7 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    private function initializeField(array $field, ProcessedFieldsResult $result, ProcessingInput $input): void
+    private function initializeField(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
     {
         $result->identifier = (string)$field['identifier'];
         $this->assertUniqueFieldIdentifier($result, $input->contentBlock);
@@ -475,7 +475,7 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    private function processFlexForm(array $field, ProcessingInput $input): array
+    private function processFlexForm(ProcessingInput $input, array $field): array
     {
         $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
         $this->validateFlexFormContainsValidFieldTypes($field, $input->contentBlock);
