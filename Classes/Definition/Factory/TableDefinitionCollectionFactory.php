@@ -189,7 +189,7 @@ final class TableDefinitionCollectionFactory
         $result->identifier = (string)$field['identifier'];
         $this->assertUniqueFieldIdentifier($result, $input->contentBlock);
         $result->uniqueFieldIdentifiers[] = $result->identifier;
-        $result->fieldType = $this->resolveType($field, $input->table, $input);
+        $result->fieldType = $this->resolveType($input, $field);
         $result->uniqueIdentifier = $this->chooseIdentifier($input, $field);
     }
 
@@ -328,7 +328,7 @@ final class TableDefinitionCollectionFactory
 
     private function handleRootField(array $rootField, ProcessingInput $input, ProcessedFieldsResult $result): array
     {
-        $rootFieldType = $this->resolveType($rootField, $input->table, $input);
+        $rootFieldType = $this->resolveType($input, $rootField);
         $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
         $fields = match ($rootFieldType) {
             Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
@@ -356,7 +356,7 @@ final class TableDefinitionCollectionFactory
         $fields = [];
         $paletteItems = [];
         foreach ($rootPalette['fields'] as $paletteField) {
-            $paletteFieldType = $this->resolveType($paletteField, $input->table, $input);
+            $paletteFieldType = $this->resolveType($input, $paletteField);
             if ($paletteFieldType === FieldType::LINEBREAK) {
                 $paletteItems[] = new LinebreakDefinition();
             } else {
@@ -710,15 +710,15 @@ final class TableDefinitionCollectionFactory
         return $contentBlock->getPrefixType();
     }
 
-    private function resolveType(array $field, string $table, ProcessingInput $input): FieldType
+    private function resolveType(ProcessingInput $input, array $field): FieldType
     {
         $isExistingField = $this->isExistingField($field);
         if ($isExistingField) {
             $this->assertIdentifierExists($field, $input);
             $identifier = $field['identifier'];
             // Check if the field is defined as a "base" TCA field (NOT defined in TCA/Overrides).
-            if (($GLOBALS['TCA'][$table]['columns'][$identifier] ?? []) !== []) {
-                $fieldType = TypeResolver::resolve($field['identifier'], $table);
+            if (($GLOBALS['TCA'][$input->table]['columns'][$identifier] ?? []) !== []) {
+                $fieldType = TypeResolver::resolve($field['identifier'], $input->table);
                 return $fieldType;
             }
         }
