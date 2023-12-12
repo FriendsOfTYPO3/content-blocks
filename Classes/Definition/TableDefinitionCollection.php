@@ -59,20 +59,26 @@ final class TableDefinitionCollection implements \IteratorAggregate
         return isset($this->definitions[$table]);
     }
 
-    public function getContentElementDefinition(string $CType): ?ContentElementDefinition
+    public function getContentElementDefinition(string $CType): ContentElementDefinition
     {
-        if (!$this->hasTable(ContentType::CONTENT_ELEMENT->getTable())) {
-            return null;
+        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
+        if (!$this->hasTable($contentElementTable)) {
+            throw new \InvalidArgumentException(
+                'No definition for table "' . $contentElementTable . '" exists.',
+                1702413869
+            );
         }
-        foreach ($this->getTable(ContentType::CONTENT_ELEMENT->getTable())->getContentTypeDefinitionCollection() as $typeDefinition) {
-            if (!$typeDefinition instanceof ContentElementDefinition) {
-                continue;
-            }
-            if ($typeDefinition->getTypeName() === $CType) {
-                return $typeDefinition;
-            }
+        $contentElementCollection = $this->getTable($contentElementTable)
+            ->getContentTypeDefinitionCollection();
+        if (!$contentElementCollection->hasType($CType)) {
+            throw new \InvalidArgumentException(
+                'No Content Element for typeName "' . $CType . '" exists.',
+                1702413909
+            );
         }
-        return null;
+        /** @var ContentElementDefinition $contentElementDefinition */
+        $contentElementDefinition = $contentElementCollection->getType($CType);
+        return $contentElementDefinition;
     }
 
     public function getAutomaticLanguageKeysRegistry(): AutomaticLanguageKeysRegistry

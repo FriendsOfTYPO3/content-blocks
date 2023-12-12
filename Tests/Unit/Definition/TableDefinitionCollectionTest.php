@@ -54,8 +54,6 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $GLOBALS['TCA']['tt_content']['ctrl']['type'] = 'CType';
-
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -64,15 +62,28 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ->create();
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
-        self::assertNotNull($contentElementDefinition);
-        self::assertSame('t3ce', $contentElementDefinition->getVendor());
-        self::assertSame('example', $contentElementDefinition->getPackage());
+        self::assertSame('t3ce_example', $contentElementDefinition->getTypeName());
     }
 
     /**
      * @test
      */
-    public function nonExistingContentElementReturnsNull(): void
+    public function nonExistingTableThrowsException(): void
+    {
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
+            ->create();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1702413869);
+
+        $tableDefinitionCollection->getContentElementDefinition('idonotexist');
+    }
+
+    /**
+     * @test
+     */
+    public function nonExistingContentElementThrowsException(): void
     {
         $contentBlocks = [
             [
@@ -94,9 +105,70 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         }
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
             ->create();
-        $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('idonotexist');
 
-        self::assertNull($contentElementDefinition);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1702413909);
+
+        $tableDefinitionCollection->getContentElementDefinition('idonotexist');
+    }
+
+    public static function saveAndCloseIsAddedDataProvider(): iterable
+    {
+        yield 'saveAndClose is set to 1' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'saveAndCloseTest',
+                        'saveAndClose' => '1',
+                    ],
+                ],
+            ],
+            'typeName' => 'saveAndCloseTest',
+            'expected' => true,
+        ];
+
+        yield 'saveAndClose is set to 0' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'saveAndCloseTest',
+                        'saveAndClose' => '0',
+                    ],
+                ],
+            ],
+            'typeName' => 'saveAndCloseTest',
+            'expected' => false,
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider saveAndCloseIsAddedDataProvider
+     */
+    public function saveAndCloseIsAdded(array $contentBlocks, string $typeName, bool $expected): void
+    {
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
+            ->create();
+
+        $contentElement = $tableDefinitionCollection->getContentElementDefinition($typeName);
+
+        self::assertSame($expected, $contentElement->hasSaveAndClose());
     }
 
     /**

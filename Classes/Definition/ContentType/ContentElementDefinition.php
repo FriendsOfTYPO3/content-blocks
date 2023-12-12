@@ -22,7 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    // @todo implement saveAndClose.
     private bool $saveAndClose = false;
     private string $group = '';
 
@@ -41,7 +40,7 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
             ->withPriority($array['priority'] ?? 0)
-            ->withSaveAndClose(!empty($array['saveAndClose']))
+            ->withSaveAndClose($array['saveAndClose'])
             ->withGroup($array['group'])
             ->withTypeIconPath($array['typeIconPath'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? null)

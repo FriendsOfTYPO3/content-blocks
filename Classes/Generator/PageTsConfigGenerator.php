@@ -57,19 +57,24 @@ class PageTsConfigGenerator
         } else {
             $description = $contentElementDefinition->getDescription();
         }
+        $group = $contentElementDefinition->getGroup();
+        $typeName = $contentElementDefinition->getTypeName();
+        $iconIdentifier = $contentElementDefinition->getTypeIconIdentifier();
+        $saveAndClose = $contentElementDefinition->hasSaveAndClose() ? '1' : '0';
         return <<<HEREDOC
-mod.wizards.newContentElement.wizardItems.{$contentElementDefinition->getGroup()} {
+mod.wizards.newContentElement.wizardItems.$group {
     elements {
-        {$contentElementDefinition->getTypeName()} {
-            iconIdentifier = {$contentElementDefinition->getTypeIconIdentifier()}
+        $typeName {
+            iconIdentifier = $iconIdentifier
             title = $title
             description = $description
+            saveAndClose = $saveAndClose
             tt_content_defValues {
-                CType = {$contentElementDefinition->getTypeName()}
+                CType = $typeName
             }
         }
     }
-    show := addToList({$contentElementDefinition->getTypeName()})
+    show := addToList($typeName)
 }
 HEREDOC;
     }

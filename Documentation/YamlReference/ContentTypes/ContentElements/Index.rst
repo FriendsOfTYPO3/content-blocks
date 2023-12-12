@@ -91,3 +91,17 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    .. code-block:: yaml
 
        typeName: my_content_element
+
+.. confval:: saveAndClose
+
+   :Required: false
+   :Type: bool
+   :Default: false
+
+   Can be activated in order to skip the edit view when adding the Content
+   Element via the NewContentElementWizard. This can be useful if you have a
+   Content Element or Plugin without configuration.
+
+   .. code-block:: yaml
+
+       saveAndClose: true

@@ -45,6 +45,7 @@ final class ProcessedContentType
 
     public function toArray(bool $isRootTable, string $identifier): array
     {
+        $yaml = $this->contentBlock->getYaml();
         $vendor = $this->contentBlock->getVendor();
         $package = $this->contentBlock->getPackage();
         $contentType = [
@@ -64,7 +65,7 @@ final class ProcessedContentType
             $contentTypeIcon = new ContentTypeIcon();
             $contentTypeIcon->iconPath = $this->contentBlock->getIcon();
             $contentTypeIcon->iconProvider = $this->contentBlock->getIconProvider();
-            $contentType['priority'] = (int)($this->contentBlock->getYaml()['priority'] ?? 0);
+            $contentType['priority'] = (int)($yaml['priority'] ?? 0);
         } else {
             $absolutePath = GeneralUtility::getFileAbsFileName($this->contentBlock->getExtPath());
             $contentTypeIcon = ContentTypeIconResolver::resolve(
@@ -79,7 +80,8 @@ final class ProcessedContentType
         $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
         $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($contentTypeIcon);
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $contentType['group'] = $this->contentBlock->getYaml()['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
+            $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
+            $contentType['saveAndClose'] = (bool)($yaml['saveAndClose'] ?? false);
         }
         return $contentType;
     }
