@@ -177,31 +177,11 @@ final class TableDefinitionCollectionFactory
             if ($result->fieldType === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($field, $input);
             }
-            $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
+            $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($result->fieldType === FieldType::COLLECTION) {
-                $tcaFieldDefinition = $this->assignRelationConfigToCollectionField(
-                    $field,
-                    $tcaFieldDefinition,
-                    $result->uniqueIdentifier
-                );
-                $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
-                $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
-                if (!empty($field['fields'])) {
-                    $field['title'] = $field['label'];
-                    $result->tableDefinitionList = $this->processRootFields(
-                        new ProcessingInput(
-                            yaml: $field,
-                            contentBlock: $input->contentBlock,
-                            table: $foreignTable,
-                            rootTable: $input->rootTable,
-                            languagePath: $input->languagePath,
-                            contentType: ContentType::RECORD_TYPE,
-                            tableDefinitionList: $result->tableDefinitionList,
-                        )
-                    );
-                }
+                $this->processCollection($input, $result, $field);
             }
-            $this->collectFields($tcaFieldDefinition, $result);
+            $this->collectFields($result);
             $input->languagePath->popSegment();
         }
     }
@@ -234,23 +214,6 @@ final class TableDefinitionCollectionFactory
             $yaml['fields'] = $yamlFields;
         }
         return $yaml;
-    }
-
-    private function assignRelationConfigToCollectionField(array $field, array $tcaFieldDefinition, string $uniqueIdentifier): array
-    {
-        $isExternalCollection = array_key_exists('foreign_table', $field);
-        $tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
-        if ($isExternalCollection) {
-            if ($field['shareAcrossTables'] ?? false) {
-                $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
-            }
-            if ($field['shareAcrossFields'] ?? false) {
-                $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
-            }
-        } else {
-            $tcaFieldDefinition['config']['foreign_table'] = $field['table'] ?? $uniqueIdentifier;
-        }
-        return $tcaFieldDefinition;
     }
 
     private function initializeContentTypeLabelAndDescription(ProcessingInput $input, ProcessedFieldsResult $result): void
@@ -457,12 +420,12 @@ final class TableDefinitionCollectionFactory
         return [];
     }
 
-    private function collectFields(array $tcaFieldDefinition, ProcessedFieldsResult $result): void
+    private function collectFields(ProcessedFieldsResult $result): void
     {
-        $result->tableDefinition->fields[$result->uniqueIdentifier] = $tcaFieldDefinition;
+        $result->tableDefinition->fields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
         $result->contentType->columns[] = $result->uniqueIdentifier;
         if ($result->uniqueIdentifier !== $result->tableDefinition->typeField) {
-            $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($tcaFieldDefinition);
+            $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($result->tcaFieldDefinition);
         }
     }
 
@@ -475,6 +438,43 @@ final class TableDefinitionCollectionFactory
         $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $result->tableDefinition->toArray();
         $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
         $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
+    }
+
+    private function processCollection(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
+    {
+        $this->assignRelationConfigToCollectionField($field, $result);
+        $foreignTable = $result->tcaFieldDefinition['config']['foreign_table'];
+        $this->parentReferences[$foreignTable][] = $result->tcaFieldDefinition;
+        if (!empty($field['fields'])) {
+            $field['title'] = $field['label'];
+            $result->tableDefinitionList = $this->processRootFields(
+                new ProcessingInput(
+                    yaml: $field,
+                    contentBlock: $input->contentBlock,
+                    table: $foreignTable,
+                    rootTable: $input->rootTable,
+                    languagePath: $input->languagePath,
+                    contentType: ContentType::RECORD_TYPE,
+                    tableDefinitionList: $result->tableDefinitionList,
+                )
+            );
+        }
+    }
+
+    private function assignRelationConfigToCollectionField(array $field, ProcessedFieldsResult $result): void
+    {
+        $isExternalCollection = array_key_exists('foreign_table', $field);
+        $result->tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
+        if ($isExternalCollection) {
+            if ($field['shareAcrossTables'] ?? false) {
+                $result->tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
+            }
+            if ($field['shareAcrossFields'] ?? false) {
+                $result->tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $result->uniqueIdentifier;
+            }
+        } else {
+            $result->tcaFieldDefinition['config']['foreign_table'] = $field['table'] ?? $result->uniqueIdentifier;
+        }
     }
 
     private function processFlexForm(array $field, ProcessingInput $input): array

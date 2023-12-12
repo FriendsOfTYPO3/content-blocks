@@ -36,6 +36,7 @@ final class ProcessedFieldsResult
     public string $identifier = '';
     public string $uniqueIdentifier = '';
     public FieldType $fieldType;
+    public array $tcaFieldDefinition;
 
     public function __construct(ProcessingInput $input)
     {
