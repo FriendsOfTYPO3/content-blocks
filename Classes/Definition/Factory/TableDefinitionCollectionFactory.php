@@ -143,13 +143,7 @@ final class TableDefinitionCollectionFactory
         $yaml = $this->prepareYaml($result, $yaml);
         $yamlFields = $yaml['fields'] ?? [];
         foreach ($yamlFields as $rootField) {
-            $rootFieldType = $this->resolveType($rootField, $input->table, $input);
-            $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
-            $fields = match ($rootFieldType) {
-                Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
-                FieldType::TAB => $this->handleTab($input, $result, $rootField),
-                default => $this->handleDefault($input, $result, $rootField)
-            };
+            $fields = $this->handleRootField($rootField, $input, $result);
             foreach ($fields as $field) {
                 $identifier = (string)$field['identifier'];
                 $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
@@ -159,15 +153,10 @@ final class TableDefinitionCollectionFactory
                 $field = $this->initializeFieldLabelAndDescription($input, $identifier, $field);
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
                 $this->prefixTcaConfigFields($input, $result, $identifier, $uniqueIdentifier);
-
                 if ($fieldType === FieldType::FLEXFORM) {
-                    $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
-                    $this->validateFlexFormContainsValidFieldTypes($field, $input->contentBlock);
                     $field = $this->processFlexForm($field, $input);
                 }
-
                 $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $uniqueIdentifier, $field, $fieldType);
-
                 if ($fieldType === FieldType::COLLECTION) {
                     $tcaFieldDefinition = $this->assignRelationConfigToCollectionField($field, $tcaFieldDefinition, $uniqueIdentifier);
                     $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
@@ -187,22 +176,11 @@ final class TableDefinitionCollectionFactory
                         );
                     }
                 }
-
-                $result->tableDefinition->fields[$uniqueIdentifier] = $tcaFieldDefinition;
-                $result->contentType->columns[] = $uniqueIdentifier;
-                if ($uniqueIdentifier !== $result->tableDefinition->typeField) {
-                    $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($tcaFieldDefinition);
-                }
-
+                $this->collectFields($tcaFieldDefinition, $result, $uniqueIdentifier);
                 $input->languagePath->popSegment();
             }
         }
-
-        // Collect table definitions and content types and carry it over to the next stack.
-        // This will be merged at the very end.
-        $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $result->tableDefinition->toArray();
-        $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
-        $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
+        $this->collectDefinitions($input, $result);
         return $result->tableDefinitionList;
     }
 
@@ -359,6 +337,18 @@ final class TableDefinitionCollectionFactory
         return $yamlFields;
     }
 
+    private function handleRootField(array $rootField, ProcessingInput $input, ProcessedFieldsResult $result): array
+    {
+        $rootFieldType = $this->resolveType($rootField, $input->table, $input);
+        $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
+        $fields = match ($rootFieldType) {
+            Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
+            FieldType::TAB => $this->handleTab($input, $result, $rootField),
+            default => $this->handleDefault($input, $result, $rootField)
+        };
+        return $fields;
+    }
+
     private function handleDefault(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
     {
         $result->contentType->showItems[] = $this->chooseIdentifier($input, $field);
@@ -439,8 +429,30 @@ final class TableDefinitionCollectionFactory
         return [];
     }
 
+    private function collectFields(array $tcaFieldDefinition, ProcessedFieldsResult $result, string $uniqueIdentifier): void
+    {
+        $result->tableDefinition->fields[$uniqueIdentifier] = $tcaFieldDefinition;
+        $result->contentType->columns[] = $uniqueIdentifier;
+        if ($uniqueIdentifier !== $result->tableDefinition->typeField) {
+            $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($tcaFieldDefinition);
+        }
+    }
+
+    /**
+     * Collect table definitions and Content Types and carry them over to the next stack.
+     * This factory will merge the table definitions and type definitions at the very end.
+     */
+    private function collectDefinitions(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
+        $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $result->tableDefinition->toArray();
+        $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
+        $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
+    }
+
     private function processFlexForm(array $field, ProcessingInput $input): array
     {
+        $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
+        $this->validateFlexFormContainsValidFieldTypes($field, $input->contentBlock);
         $flexFormDefinition = new FlexFormDefinition();
         $flexFormTypeName = $input->getTypeField() !== null ? $input->getTypeName() : 'default';
         $flexFormDefinition->setTypeName($flexFormTypeName);
