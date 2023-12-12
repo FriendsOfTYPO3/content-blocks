@@ -192,18 +192,7 @@ final class TableDefinitionCollectionFactory
                 ];
 
                 if ($fieldType === FieldType::COLLECTION) {
-                    $isExternalCollection = array_key_exists('foreign_table', $field);
-                    $tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
-                    if ($isExternalCollection) {
-                        if ($field['shareAcrossTables'] ?? false) {
-                            $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
-                        }
-                        if ($field['shareAcrossFields'] ?? false) {
-                            $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
-                        }
-                    } else {
-                        $tcaFieldDefinition['config']['foreign_table'] = $field['table'] ?? $uniqueIdentifier;
-                    }
+                    $tcaFieldDefinition = $this->assignRelationConfigToCollectionField($field, $tcaFieldDefinition, $uniqueIdentifier);
                     $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
                     $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
                     if (!empty($field['fields'])) {
@@ -238,6 +227,23 @@ final class TableDefinitionCollectionFactory
         $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
         $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
         return $result->tableDefinitionList;
+    }
+
+    private function assignRelationConfigToCollectionField(array $field, array $tcaFieldDefinition, string $uniqueIdentifier): array
+    {
+        $isExternalCollection = array_key_exists('foreign_table', $field);
+        $tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
+        if ($isExternalCollection) {
+            if ($field['shareAcrossTables'] ?? false) {
+                $tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';
+            }
+            if ($field['shareAcrossFields'] ?? false) {
+                $tcaFieldDefinition['config']['foreign_match_fields']['fieldname'] = $uniqueIdentifier;
+            }
+        } else {
+            $tcaFieldDefinition['config']['foreign_table'] = $field['table'] ?? $uniqueIdentifier;
+        }
+        return $tcaFieldDefinition;
     }
 
     private function initializeContentTypeLabelAndDescription(ProcessingInput $input, ProcessedFieldsResult $result): void
