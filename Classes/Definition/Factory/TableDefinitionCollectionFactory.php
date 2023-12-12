@@ -84,7 +84,7 @@ final class TableDefinitionCollectionFactory
                 contentType: $contentBlock->getContentType(),
                 tableDefinitionList: $tableDefinitionList,
             );
-            $tableDefinitionList = $this->processFields($processingInput);
+            $tableDefinitionList = $this->processRootFields($processingInput);
         }
         $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
         $tableDefinitionCollection = new TableDefinitionCollection($this->automaticLanguageKeysRegistry);
@@ -135,7 +135,7 @@ final class TableDefinitionCollectionFactory
         return $newTableDefinition;
     }
 
-    private function processFields(ProcessingInput $input): array
+    private function processRootFields(ProcessingInput $input): array
     {
         $result = new ProcessedFieldsResult($input);
         $this->initializeContentTypeLabelAndDescription($input, $result);
@@ -144,44 +144,53 @@ final class TableDefinitionCollectionFactory
         $yamlFields = $yaml['fields'] ?? [];
         foreach ($yamlFields as $rootField) {
             $fields = $this->handleRootField($rootField, $input, $result);
-            foreach ($fields as $field) {
-                $identifier = (string)$field['identifier'];
-                $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
-                $result->uniqueFieldIdentifiers[] = $identifier;
-                $input->languagePath->addPathSegment($identifier);
-                $fieldType = $this->resolveType($field, $input->table, $input);
-                $field = $this->initializeFieldLabelAndDescription($input, $identifier, $field);
-                $uniqueIdentifier = $this->chooseIdentifier($input, $field);
-                $this->prefixTcaConfigFields($input, $result, $identifier, $uniqueIdentifier);
-                if ($fieldType === FieldType::FLEXFORM) {
-                    $field = $this->processFlexForm($field, $input);
-                }
-                $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $uniqueIdentifier, $field, $fieldType);
-                if ($fieldType === FieldType::COLLECTION) {
-                    $tcaFieldDefinition = $this->assignRelationConfigToCollectionField($field, $tcaFieldDefinition, $uniqueIdentifier);
-                    $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
-                    $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
-                    if (!empty($field['fields'])) {
-                        $field['title'] = $field['label'];
-                        $result->tableDefinitionList = $this->processFields(
-                            new ProcessingInput(
-                                yaml: $field,
-                                contentBlock: $input->contentBlock,
-                                table: $foreignTable,
-                                rootTable: $input->rootTable,
-                                languagePath: $input->languagePath,
-                                contentType: ContentType::RECORD_TYPE,
-                                tableDefinitionList: $result->tableDefinitionList,
-                            )
-                        );
-                    }
-                }
-                $this->collectFields($tcaFieldDefinition, $result, $uniqueIdentifier);
-                $input->languagePath->popSegment();
-            }
+            $this->processFields($fields, $result, $input);
         }
         $this->collectDefinitions($input, $result);
         return $result->tableDefinitionList;
+    }
+
+    private function processFields(array $fields, ProcessedFieldsResult $result, ProcessingInput $input): void
+    {
+        foreach ($fields as $field) {
+            $identifier = (string)$field['identifier'];
+            $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
+            $result->uniqueFieldIdentifiers[] = $identifier;
+            $input->languagePath->addPathSegment($identifier);
+            $fieldType = $this->resolveType($field, $input->table, $input);
+            $field = $this->initializeFieldLabelAndDescription($input, $identifier, $field);
+            $uniqueIdentifier = $this->chooseIdentifier($input, $field);
+            $this->prefixTcaConfigFields($input, $result, $identifier, $uniqueIdentifier);
+            if ($fieldType === FieldType::FLEXFORM) {
+                $field = $this->processFlexForm($field, $input);
+            }
+            $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $uniqueIdentifier, $field, $fieldType);
+            if ($fieldType === FieldType::COLLECTION) {
+                $tcaFieldDefinition = $this->assignRelationConfigToCollectionField(
+                    $field,
+                    $tcaFieldDefinition,
+                    $uniqueIdentifier
+                );
+                $foreignTable = $tcaFieldDefinition['config']['foreign_table'];
+                $this->parentReferences[$foreignTable][] = $tcaFieldDefinition;
+                if (!empty($field['fields'])) {
+                    $field['title'] = $field['label'];
+                    $result->tableDefinitionList = $this->processRootFields(
+                        new ProcessingInput(
+                            yaml: $field,
+                            contentBlock: $input->contentBlock,
+                            table: $foreignTable,
+                            rootTable: $input->rootTable,
+                            languagePath: $input->languagePath,
+                            contentType: ContentType::RECORD_TYPE,
+                            tableDefinitionList: $result->tableDefinitionList,
+                        )
+                    );
+                }
+            }
+            $this->collectFields($tcaFieldDefinition, $result, $uniqueIdentifier);
+            $input->languagePath->popSegment();
+        }
     }
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
