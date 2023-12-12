@@ -169,14 +169,7 @@ final class TableDefinitionCollectionFactory
                     $field = $this->processFlexForm($field, $input);
                 }
 
-                $tcaFieldDefinition = [
-                    'parentTable' => $input->contentBlock->getContentType()->getTable(),
-                    'uniqueIdentifier' => $uniqueIdentifier,
-                    'config' => $field,
-                    'type' => $fieldType,
-                    'labelPath' => $input->languagePath->getCurrentPath() . '.label',
-                    'descriptionPath' => $input->languagePath->getCurrentPath() . '.description',
-                ];
+                $tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $uniqueIdentifier, $field, $fieldType);
 
                 if ($fieldType === FieldType::COLLECTION) {
                     $tcaFieldDefinition = $this->assignRelationConfigToCollectionField($field, $tcaFieldDefinition, $uniqueIdentifier);
@@ -283,8 +276,8 @@ final class TableDefinitionCollectionFactory
 
     private function initializeFieldLabelAndDescription(ProcessingInput $input, string $identifier, array $field): array
     {
-        $labelPath = $input->languagePath->getCurrentPath() . '.label';
-        $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
+        $labelPath = $this->getFieldLabelPath($input->languagePath);
+        $descriptionPath = $this->getFieldDescriptionPath($input->languagePath);
         $title = (string)($field['label'] ?? '');
         // Never fall back to identifiers for existing fields. They have their standard translation.
         $title = ($title !== '' || $this->isExistingField($field)) ? $title : $identifier;
@@ -295,6 +288,33 @@ final class TableDefinitionCollectionFactory
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
         return $field;
+    }
+
+    private function buildTcaFieldDefinitionArray(
+        ProcessingInput $input,
+        string $uniqueIdentifier,
+        array $field,
+        FieldType $fieldType
+    ): array {
+        $tcaFieldDefinition = [
+            'parentTable' => $input->contentBlock->getContentType()->getTable(),
+            'uniqueIdentifier' => $uniqueIdentifier,
+            'config' => $field,
+            'type' => $fieldType,
+            'labelPath' => $this->getFieldLabelPath($input->languagePath),
+            'descriptionPath' => $this->getFieldDescriptionPath($input->languagePath),
+        ];
+        return $tcaFieldDefinition;
+    }
+
+    private function getFieldLabelPath(LanguagePath $languagePath): string
+    {
+        return $languagePath->getCurrentPath() . '.label';
+    }
+
+    private function getFieldDescriptionPath(LanguagePath $languagePath): string
+    {
+        return $languagePath->getCurrentPath() . '.description';
     }
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
