@@ -168,14 +168,19 @@ Partials
 
 Partials are a very useful feature of Fluid. You can use them to split up your
 templates into smaller parts. If you want to use a partial in a Content Block,
-you can create a subdirectory `Partials` in the `Source` directory and place
+you can create a subdirectory **Partials** in the **Source** directory and place
 your partials there.
 
-This part is automatically added, but you can also extend or overwrite this
-TypoScript configuration in your sitepackage.
+This part is automatically added, but you can also
+:ref:`extend or overwrite <cb_extension_partials>` this TypoScript configuration
+in your sitepackage.
 
 Remember, that you should ship the :html:`{data}` variable to the partial if you
 want to make use of automatic detection of the current Content Block.
+
+See also:
+
+*  :ref:`Shared partials <cb_extension_partials>`
 
 Layouts
 =======
