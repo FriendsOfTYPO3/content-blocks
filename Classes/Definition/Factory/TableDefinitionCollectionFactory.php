@@ -139,22 +139,9 @@ final class TableDefinitionCollectionFactory
     {
         $result = new ProcessedFieldsResult($input);
         $this->initializeContentTypeLabelAndDescription($input, $result);
-
-        $yamlFields = $input->yaml['fields'] ?? [];
-
-        // Automatically add a `type` field for record types.
-        if (
-            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
-            && $result->tableDefinition->typeField !== null
-        ) {
-            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
-        }
-        if (
-            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
-            && ($input->yaml['internalDescription'] ?? false)
-        ) {
-            $yamlFields = $this->appendInternalDescription($yamlFields);
-        }
+        $yaml = $input->yaml;
+        $yaml = $this->prepareYaml($result, $yaml);
+        $yamlFields = $yaml['fields'] ?? [];
         foreach ($yamlFields as $rootField) {
             $rootFieldType = $this->resolveType($rootField, $input->table, $input);
             $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
@@ -227,6 +214,27 @@ final class TableDefinitionCollectionFactory
         $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
         $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
         return $result->tableDefinitionList;
+    }
+
+    private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
+    {
+        if (
+            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
+            && $result->tableDefinition->hasTypeField()
+        ) {
+            $yamlFields = $yaml['fields'] ?? [];
+            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
+            $yaml['fields'] = $yamlFields;
+        }
+        if (
+            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
+            && ($yaml['internalDescription'] ?? false)
+        ) {
+            $yamlFields = $yaml['fields'] ?? [];
+            $yamlFields = $this->appendInternalDescription($yamlFields);
+            $yaml['fields'] = $yamlFields;
+        }
+        return $yaml;
     }
 
     private function assignRelationConfigToCollectionField(array $field, array $tcaFieldDefinition, string $uniqueIdentifier): array

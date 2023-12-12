@@ -43,4 +43,9 @@ final class ProcessedTableDefinition
         ];
         return $tableDefinition;
     }
+
+    public function hasTypeField(): bool
+    {
+        return $this->typeField !== null;
+    }
 }
