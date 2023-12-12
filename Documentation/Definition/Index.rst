@@ -216,4 +216,6 @@ Partials are included as you normally would in any Fluid template.
 
    <f:render partial="Component.html" arguments="{_all}"/>
 
+See also:
+
 *  Learn how to :ref:`share Partials <cb_extension_partials>` between Content Blocks.

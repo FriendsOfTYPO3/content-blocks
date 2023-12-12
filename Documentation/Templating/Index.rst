@@ -178,6 +178,10 @@ in your sitepackage.
 Remember, that you should ship the :html:`{data}` variable to the partial if you
 want to make use of automatic detection of the current Content Block.
 
+.. code-block:: html
+
+   <f:render partial="Component.html" arguments="{data: data, foo: 'bar'}"/>
+
 See also:
 
 *  :ref:`Shared partials <cb_extension_partials>`
