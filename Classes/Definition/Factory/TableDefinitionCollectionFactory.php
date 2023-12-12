@@ -154,14 +154,11 @@ final class TableDefinitionCollectionFactory
                 $identifier = (string)$field['identifier'];
                 $this->assertUniqueFieldIdentifier($identifier, $result, $input->contentBlock);
                 $result->uniqueFieldIdentifiers[] = $identifier;
-                $fieldType = $this->resolveType($field, $input->table, $input);
                 $input->languagePath->addPathSegment($identifier);
+                $fieldType = $this->resolveType($field, $input->table, $input);
                 $field = $this->initializeFieldLabelAndDescription($input, $identifier, $field);
-
                 $uniqueIdentifier = $this->chooseIdentifier($input, $field);
-                $this->prefixSortFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
-                $this->prefixLabelFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
-                $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+                $this->prefixTcaConfigFields($input, $result, $identifier, $uniqueIdentifier);
 
                 if ($fieldType === FieldType::FLEXFORM) {
                     $this->validateFlexFormHasOnlySheetsOrNoSheet($field, $input->contentBlock);
@@ -315,6 +312,17 @@ final class TableDefinitionCollectionFactory
     private function getFieldDescriptionPath(LanguagePath $languagePath): string
     {
         return $languagePath->getCurrentPath() . '.description';
+    }
+
+    private function prefixTcaConfigFields(
+        ProcessingInput $input,
+        ProcessedFieldsResult $result,
+        string $identifier,
+        string $uniqueIdentifier
+    ): void {
+        $this->prefixSortFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+        $this->prefixLabelFieldIfNecessary($input, $result, $identifier, $uniqueIdentifier);
+        $this->prefixFallbackLabelFieldsIfNecessary($input, $result, $identifier, $uniqueIdentifier);
     }
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
