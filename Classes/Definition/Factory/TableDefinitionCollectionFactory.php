@@ -162,6 +162,7 @@ final class TableDefinitionCollectionFactory
             $this->processFields($input, $result, $fields);
         }
         $this->collectDefinitions($input, $result);
+        $result->resetTemporaryState();
         return $result->tableDefinitionList;
     }
 

@@ -33,8 +33,10 @@ final class ProcessedFieldsResult
     public array $uniquePaletteIdentifiers = [];
     /** @var string[] */
     public array $uniqueTabIdentifiers = [];
-    public string $identifier = '';
-    public string $uniqueIdentifier = '';
+
+    // Below are temporary properties for the scope of a root field.
+    public string $identifier;
+    public string $uniqueIdentifier;
     public FieldType $fieldType;
     public array $tcaFieldDefinition;
 
@@ -49,5 +51,15 @@ final class ProcessedFieldsResult
         $this->tableDefinition->typeField = $input->getTypeField();
         $this->tableDefinition->raw = $input->yaml;
         $this->tableDefinition->contentType = $input->contentType;
+    }
+
+    public function resetTemporaryState(): void
+    {
+        unset(
+            $this->identifier,
+            $this->uniqueIdentifier,
+            $this->fieldType,
+            $this->tcaFieldDefinition,
+        );
     }
 }
