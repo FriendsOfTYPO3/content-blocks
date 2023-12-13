@@ -196,18 +196,14 @@ final class TableDefinitionCollectionFactory
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
     {
-        if (
-            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
-            && $result->tableDefinition->hasTypeField()
-        ) {
+        $isRecordType = $result->tableDefinition->contentType === ContentType::RECORD_TYPE;
+        if ($isRecordType && $result->tableDefinition->hasTypeField()) {
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
             $yaml['fields'] = $yamlFields;
         }
-        if (
-            $result->tableDefinition->contentType === ContentType::RECORD_TYPE
-            && ($yaml['internalDescription'] ?? false)
-        ) {
+        $hasInternalDescription = $yaml['internalDescription'] ?? false;
+        if ($isRecordType && $hasInternalDescription) {
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->appendInternalDescription($yamlFields);
             $yaml['fields'] = $yamlFields;
@@ -284,10 +280,8 @@ final class TableDefinitionCollectionFactory
         return $languagePath->getCurrentPath() . '.description';
     }
 
-    private function prefixTcaConfigFields(
-        ProcessingInput $input,
-        ProcessedFieldsResult $result,
-    ): void {
+    private function prefixTcaConfigFields(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
         $this->prefixSortFieldIfNecessary($input, $result);
         $this->prefixLabelFieldIfNecessary($input, $result);
         $this->prefixFallbackLabelFieldsIfNecessary($input, $result);
@@ -295,7 +289,7 @@ final class TableDefinitionCollectionFactory
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
     {
-        array_unshift($yamlFields, [
+        $typeFieldDefinition = [
             'identifier' => $result->tableDefinition->typeField,
             'type' => FieldType::SELECT->value,
             'renderType' => 'selectSingle',
@@ -303,7 +297,9 @@ final class TableDefinitionCollectionFactory
             'default' => $result->contentType->typeName,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
             'items' => [],
-        ]);
+        ];
+        // Prepend type field.
+        array_unshift($yamlFields, $typeFieldDefinition);
         return $yamlFields;
     }
 
@@ -423,8 +419,10 @@ final class TableDefinitionCollectionFactory
     {
         $result->tableDefinition->fields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
         $result->contentType->columns[] = $result->uniqueIdentifier;
-        if ($result->uniqueIdentifier !== $result->tableDefinition->typeField) {
-            $result->contentType->overrideColumns[] = TcaFieldDefinition::createFromArray($result->tcaFieldDefinition);
+        $isTypeField = $result->uniqueIdentifier === $result->tableDefinition->typeField;
+        if (!$isTypeField) {
+            $overrideColumn = TcaFieldDefinition::createFromArray($result->tcaFieldDefinition);
+            $result->contentType->overrideColumns[] = $overrideColumn;
         }
     }
 
@@ -434,9 +432,13 @@ final class TableDefinitionCollectionFactory
      */
     private function collectDefinitions(ProcessingInput $input, ProcessedFieldsResult $result): void
     {
-        $result->tableDefinitionList[$input->table]['tableDefinitions'][] = $result->tableDefinition->toArray();
-        $typeDefinition = $result->contentType->toArray($input->isRootTable(), $input->yaml['identifier'] ?? '');
-        $result->tableDefinitionList[$input->table]['typeDefinitions'][] = $typeDefinition;
+        $table = $input->table;
+        $tableDefinition = $result->tableDefinition->toArray();
+        $result->tableDefinitionList[$table]['tableDefinitions'][] = $tableDefinition;
+        $isRootTable = $input->isRootTable();
+        $identifier = $input->yaml['identifier'] ?? '';
+        $typeDefinition = $result->contentType->toArray($isRootTable, $identifier);
+        $result->tableDefinitionList[$table]['typeDefinitions'][] = $typeDefinition;
     }
 
     private function processCollection(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
@@ -444,20 +446,21 @@ final class TableDefinitionCollectionFactory
         $this->assignRelationConfigToCollectionField($field, $result);
         $foreignTable = $result->tcaFieldDefinition['config']['foreign_table'];
         $this->parentReferences[$foreignTable][] = $result->tcaFieldDefinition;
-        if (!empty($field['fields'])) {
-            $field['title'] = $field['label'];
-            $result->tableDefinitionList = $this->processRootFields(
-                new ProcessingInput(
-                    yaml: $field,
-                    contentBlock: $input->contentBlock,
-                    table: $foreignTable,
-                    rootTable: $input->rootTable,
-                    languagePath: $input->languagePath,
-                    contentType: ContentType::RECORD_TYPE,
-                    tableDefinitionList: $result->tableDefinitionList,
-                )
-            );
+        $fields = $field['fields'] ?? [];
+        if ($fields === []) {
+            return;
         }
+        $field['title'] = $field['label'];
+        $newInput = new ProcessingInput(
+            yaml: $field,
+            contentBlock: $input->contentBlock,
+            table: $foreignTable,
+            rootTable: $input->rootTable,
+            languagePath: $input->languagePath,
+            contentType: ContentType::RECORD_TYPE,
+            tableDefinitionList: $result->tableDefinitionList,
+        );
+        $result->tableDefinitionList = $this->processRootFields($newInput);
     }
 
     private function assignRelationConfigToCollectionField(array $field, ProcessedFieldsResult $result): void
@@ -611,10 +614,8 @@ final class TableDefinitionCollectionFactory
         return $sectionDefinition;
     }
 
-    public function prefixSortFieldIfNecessary(
-        ProcessingInput $input,
-        ProcessedFieldsResult $result,
-    ): void {
+    private function prefixSortFieldIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
         $sortField = $input->yaml['sortField'] ?? null;
         if ($sortField === null) {
             return;
@@ -640,7 +641,10 @@ final class TableDefinitionCollectionFactory
             if (array_key_exists('order', $sortFieldItem)) {
                 $order = strtolower((string)$sortFieldItem['order']);
                 if (!in_array($order, ['asc', 'desc'], true)) {
-                    throw new \InvalidArgumentException('order for sortField.order must be one of "asc" or "desc". "' . $order . '" provided.', 1694014891);
+                    throw new \InvalidArgumentException(
+                        'order for sortField.order must be one of "asc" or "desc". "' . $order . '" provided.',
+                        1694014891
+                    );
                 }
             }
             if ($sortFieldIdentifier !== '' && $sortFieldIdentifier === $result->identifier) {
@@ -650,10 +654,8 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    private function prefixLabelFieldIfNecessary(
-        ProcessingInput $input,
-        ProcessedFieldsResult $result,
-    ): void {
+    private function prefixLabelFieldIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
         $labelCapability = LabelCapability::createFromArray($input->yaml);
         if (!$labelCapability->hasLabelField()) {
             return;
@@ -670,10 +672,8 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    private function prefixFallbackLabelFieldsIfNecessary(
-        ProcessingInput $input,
-        ProcessedFieldsResult $result,
-    ): void {
+    private function prefixFallbackLabelFieldsIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
         $labelCapability = LabelCapability::createFromArray($input->yaml);
         if (!$labelCapability->hasFallbackLabelFields()) {
             return;
