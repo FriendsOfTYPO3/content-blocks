@@ -66,6 +66,36 @@
 			<trans-unit id="field_after_tab.label" resname="field_after_tab.label">
 				<source>field_after_tab</source>
 			</trans-unit>
+			<trans-unit id="select.label" resname="select.label">
+				<source>select</source>
+			</trans-unit>
+			<trans-unit id="select.items.label" resname="select.items.label">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="select.items.select_1.label" resname="select.items.select_1.label">
+				<source>Select1</source>
+			</trans-unit>
+			<trans-unit id="select.items.select_2.label" resname="select.items.select_2.label">
+				<source>Select2</source>
+			</trans-unit>
+			<trans-unit id="radio.label" resname="radio.label">
+				<source>radio</source>
+			</trans-unit>
+			<trans-unit id="radio.items.0.label" resname="radio.items.0.label">
+				<source>Radio1</source>
+			</trans-unit>
+			<trans-unit id="radio.items.1.label" resname="radio.items.1.label">
+				<source>Radio1</source>
+			</trans-unit>
+			<trans-unit id="check.label" resname="check.label">
+				<source>check</source>
+			</trans-unit>
+			<trans-unit id="check.items.0.label" resname="check.items.0.label">
+				<source>Check1</source>
+			</trans-unit>
+			<trans-unit id="check.items.1.label" resname="check.items.1.label">
+				<source>Check2</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

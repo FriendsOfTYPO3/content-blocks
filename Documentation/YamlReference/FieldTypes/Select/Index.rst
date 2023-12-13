@@ -44,6 +44,25 @@ Settings
         - label: 'The third'
           value: three
 
+   XLF translation keys for items have the following convention:
+
+   .. code-block:: xml
+
+        <body>
+            <trans-unit id="FIELD_IDENTIFIER.items.one.label">
+                <source>Label for item with value one</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.two.label">
+                <source>Label for item with value two</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.VALUE.label">
+                <source>Label for item with value VALUE</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.label">
+                <source>Label for item with empty value</source>
+            </trans-unit>
+        </body>
+
 .. confval:: default
 
    :Required: false

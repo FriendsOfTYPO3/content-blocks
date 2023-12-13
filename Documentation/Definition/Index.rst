@@ -120,6 +120,10 @@ translate their fields, the identifiers are simply separated by a dot.
 :ref:`Palettes <field_type_palette>` and :ref:`Tabs <field_type_tab>` have a
 special convention as well.
 
+It is also possible to translate the :yaml:`items` option of
+:ref:`Select <field_type_select>`, :ref:`Radio <field_type_radio>`
+and :ref:`Checkbox <field_type_checkbox>` fields.
+
 Have a look at the example beneath for better understanding.
 
 .. tip::

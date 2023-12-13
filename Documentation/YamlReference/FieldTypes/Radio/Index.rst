@@ -43,6 +43,27 @@ Settings
         - label: 'Third option'
           value: 2
 
+
+   XLF translation keys for items have the following convention:
+
+   .. code-block:: xml
+
+        <body>
+            <trans-unit id="FIELD_IDENTIFIER.items.1.label">
+                <source>Label for item with value 1</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.2.label">
+                <source>Label for item with value 2</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.VALUE.label">
+                <source>Label for item with value VALUE</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.label">
+                <source>Label for item with empty value</source>
+            </trans-unit>
+        </body>
+
+
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-radio>`.
 
 Example

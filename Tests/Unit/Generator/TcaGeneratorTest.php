@@ -81,6 +81,10 @@ final class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'check',
                                 'type' => 'Checkbox',
+                                'items' => [
+                                    ['label' => 'Check1'],
+                                    ['label' => 'Check2'],
+                                ],
                             ],
                             [
                                 'identifier' => 'color',
@@ -117,6 +121,12 @@ final class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'select',
                                 'type' => 'Select',
+                                'renderType' => 'selectSingle',
+                                'items' => [
+                                    ['label' => 'Default', 'value' => ''],
+                                    ['label' => 'Select1', 'value' => 'select_1'],
+                                    ['label' => 'Select2', 'value' => 'select_2'],
+                                ],
                             ],
                             [
                                 'identifier' => 'link',
@@ -125,6 +135,10 @@ final class TcaGeneratorTest extends UnitTestCase
                             [
                                 'identifier' => 'radio',
                                 'type' => 'Radio',
+                                'items' => [
+                                    ['label' => 'Radio1', 'value' => '1'],
+                                    ['label' => 'Radio2', 'value' => '2'],
+                                ],
                             ],
                             [
                                 'identifier' => 'relation',
@@ -261,7 +275,16 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_check' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:check.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:check.description',
-                                    'config' => [],
+                                    'config' => [
+                                        'items' => [
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:check.items.0.label',
+                                            ],
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:check.items.1.label',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 't3ce_example_color' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:color.label',
@@ -287,7 +310,21 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.description',
                                     'config' => [
-                                        'items' => [],
+                                        'renderType' => 'selectSingle',
+                                        'items' => [
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.items.label',
+                                                'value' => '',
+                                            ],
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.items.select_1.label',
+                                                'value' => 'select_1',
+                                            ],
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.items.select_2.label',
+                                                'value' => 'select_2',
+                                            ],
+                                        ],
                                     ],
                                 ],
                                 't3ce_example_link' => [
@@ -298,7 +335,18 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_radio' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:radio.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:radio.description',
-                                    'config' => [],
+                                    'config' => [
+                                        'items' => [
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:radio.items.1.label',
+                                                'value' => '1',
+                                            ],
+                                            [
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:radio.items.2.label',
+                                                'value' => '2',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 't3ce_example_relation' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:relation.label',

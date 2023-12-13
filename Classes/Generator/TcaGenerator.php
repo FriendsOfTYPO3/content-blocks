@@ -462,13 +462,26 @@ class TcaGenerator
      */
     protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
+        $name = $typeDefinition->getName();
         $labelPath = $overrideColumn->getLabelPath();
-        if ($this->languageFileRegistry->isset($typeDefinition->getName(), $labelPath)) {
+        if ($this->languageFileRegistry->isset($name, $labelPath)) {
             $column['label'] = $labelPath;
         }
         $descriptionPath = $overrideColumn->getDescriptionPath();
-        if ($this->languageFileRegistry->isset($typeDefinition->getName(), $descriptionPath)) {
+        if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $column['description'] = $descriptionPath;
+        }
+        $fieldType = $overrideColumn->getFieldType();
+        if ($fieldType->hasItems()) {
+            $items = $column['config']['items'] ?? [];
+            foreach ($items as $index => $item) {
+                $labelPath = $item['labelPath'];
+                unset($column['config']['items'][$index]['labelPath']);
+                if (!$this->languageFileRegistry->isset($name, $labelPath)) {
+                    continue;
+                }
+                $column['config']['items'][$index]['label'] = $labelPath;
+            }
         }
         return $column;
     }

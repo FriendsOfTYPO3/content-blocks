@@ -40,6 +40,22 @@ Settings
         - label: 'The second'
         - label: 'The third'
 
+   XLF translation keys for items have the following convention:
+
+   .. code-block:: xml
+
+        <body>
+            <trans-unit id="FIELD_IDENTIFIER.items.0.label">
+                <source>Label for first Checkbox item</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.1.label">
+                <source>Label for second Checkbox item</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.n.label">
+                <source>Label for nth Checkbox item</source>
+            </trans-unit>
+        </body>
+
 For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 
 Examples

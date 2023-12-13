@@ -38,6 +38,7 @@ use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -176,6 +177,9 @@ final class TableDefinitionCollectionFactory
             if ($result->fieldType === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
+            if ($result->fieldType->hasItems()) {
+                $field = $this->collectItemLabels($input, $result, $field);
+            }
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($result->fieldType === FieldType::COLLECTION) {
                 $this->processCollection($input, $result, $field);
@@ -251,6 +255,31 @@ final class TableDefinitionCollectionFactory
         $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        return $field;
+    }
+
+    private function collectItemLabels(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    {
+        $items = $field['items'] ?? [];
+        $fieldType = $result->fieldType;
+        foreach ($items as $index => $item) {
+            $selectItem = SelectItem::fromTcaItemArray($item, $fieldType->getTcaType());
+            $label = $selectItem->getLabel();
+            $currentPath = $input->languagePath->getCurrentPath();
+            if ($fieldType === FieldType::CHECKBOX) {
+                $labelPath = $currentPath . '.items.' . $index . '.label';
+            } else {
+                $value = (string)$selectItem->getValue();
+                if ($value === '') {
+                    $labelPath = $currentPath . '.items.label';
+                } else {
+                    $labelPath = $currentPath . '.items.' . $value . '.label';
+                }
+            }
+            $field['items'][$index]['labelPath'] = $labelPath;
+            $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+        }
         return $field;
     }
 

@@ -86,6 +86,11 @@ enum FieldType: string
         return in_array($this, [self::SELECT, self::COLLECTION, self::RELATION]);
     }
 
+    public function hasItems(): bool
+    {
+        return in_array($this, [self::SELECT, self::RADIO, self::CHECKBOX]);
+    }
+
     public static function isValidFlexFormField(FieldType $type): bool
     {
         if (!$type->isRenderable()) {

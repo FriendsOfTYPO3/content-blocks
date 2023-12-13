@@ -57,3 +57,25 @@ fields:
     type: Tab
   - identifier: field_after_tab
     type: Text
+  - identifier: select
+    type: Select
+    renderType: selectSingle
+    items:
+      - label: 'Default'
+        value: ''
+      - label: 'Select1'
+        value: 'select_1'
+      - label: 'Select2'
+        value: 'select_2'
+  - identifier: radio
+    type: Radio
+    items:
+      - label: 'Radio1'
+        value: 0
+      - label: 'Radio1'
+        value: 1
+  - identifier: check
+    type: Checkbox
+    items:
+      - label: 'Check1'
+      - label: 'Check2'
