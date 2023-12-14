@@ -91,6 +91,9 @@ class TranslateViewHelper extends AbstractViewHelper
         return $value;
     }
 
+    /**
+     * @todo Adapt latest changes in Core TranslateViewHelper
+     */
     protected static function getLanguageService(ServerRequestInterface $request = null, string|Locale $languageKey = null): LanguageService
     {
         $languageServiceFactory = GeneralUtility::makeInstance(LanguageServiceFactory::class);
