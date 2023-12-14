@@ -259,8 +259,13 @@ final class TableDefinitionCapability
         if ($this->isEditLockingEnabled()) {
             $access[] = 'editlock';
         }
-        if ($access[count($access) - 1] === '--linebreak--') {
-            array_pop($access);
+        $count = count($access);
+        if ($count > 0) {
+            $lastIndex = $count - 1;
+            $lastItem = $access[$lastIndex];
+            if ($lastItem === '--linebreak--') {
+                array_pop($access);
+            }
         }
         $accessTcaString = implode(',', $access);
         return $accessTcaString;
