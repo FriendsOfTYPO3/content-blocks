@@ -97,11 +97,7 @@ final class ProcessedContentType
         if ($absolutePath !== '') {
             $contents = @file_get_contents($absolutePath);
             if ($contents === false) {
-                throw new \RuntimeException(
-                    'Unable to load resources of Content Block "' . $this->contentBlock->getName() . '".'
-                    . ' If you have deleted this Content Block, please flush system caches and reload the page.',
-                    1698430544,
-                );
+                return '';
             }
             $hash = md5($contents);
             $hasSubString = substr($hash, 0, 7);
