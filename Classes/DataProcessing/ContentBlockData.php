@@ -54,7 +54,7 @@ final class ContentBlockData extends \stdClass
     /**
      * This is a hint for f:debug users.
      */
-    private string $_debug_hint = 'To access data under `_processed` you must omit the key: {data.identifier}';
+    public string $_debug_hint = 'To access data under `_processed` you must omit the key: {data.identifier}';
 
     public function __construct(
         private readonly string $_name = '',
