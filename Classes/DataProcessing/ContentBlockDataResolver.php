@@ -91,7 +91,7 @@ final class ContentBlockDataResolver
         return $processedField;
     }
 
-    private function transformSelectSingleRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): ContentBlockData
+    private function transformSelectSingleRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): array|ContentBlockData
     {
         $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'] ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table'] ?? '';
         if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
