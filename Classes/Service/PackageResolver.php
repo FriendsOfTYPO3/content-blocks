@@ -74,8 +74,14 @@ class PackageResolver
             if (array_key_exists($name, $composerLockMap)) {
                 return $composerLockMap[$name] === 'path';
             }
-            return InstalledVersions::getRootPackage()['name'] === $name;
+            return $name === $this->getRootPackageName();
         };
         return array_filter($packages, $filterPackages);
+    }
+
+    protected function getRootPackageName(): string
+    {
+        $rootPackageName = InstalledVersions::getRootPackage()['name'];
+        return $rootPackageName;
     }
 }
