@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SectionDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\SheetDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -49,7 +50,7 @@ class FlexFormGenerator
             ];
         }
         $dataStructure['sheets'] = $sheets;
-        $flexForm = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4);
+        $flexForm = GeneralUtility::makeInstance(FlexFormTools::class)->flexArray2Xml($dataStructure);
         return $flexForm;
     }
 
