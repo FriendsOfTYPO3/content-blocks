@@ -128,3 +128,27 @@ The full list:
 *  `author_email`
 *  `newUntil`
 *  `lastUpdated`
+
+.. warning::
+
+   It is not possible to override the properties below. The reason is they are
+   used in the SqlSchema generation to provide a proper db type and in
+   RelationHandler to resolve the records. The :yaml:`type` of a field must not
+   be changed in any case.
+
+   * type
+   * relationship
+   * dbType
+   * nullable
+   * MM
+   * MM_opposite_field
+   * MM_hasUidField
+   * MM_oppositeUsage
+   * allowed (type: Relation)
+   * foreign_table
+   * foreign_field
+   * foreign_table_field
+   * foreign_match_fields
+   * ds
+   * ds_pointerField
+   * exclude
