@@ -44,6 +44,17 @@ class PackageResolver
         return $packages;
     }
 
+    public function getComposerProjectVendor(): string
+    {
+        if (!Environment::isComposerMode()) {
+            return '';
+        }
+        $rootPackageName = $this->getRootPackageName();
+        $parts = explode('/', $rootPackageName);
+        $vendor = $parts[0];
+        return $vendor;
+    }
+
     /**
      * @param array<string, PackageInterface> $packages
      * @return array<string, PackageInterface>

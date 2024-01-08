@@ -109,7 +109,12 @@ class CreateContentBlockCommand extends Command
                 return Command::INVALID;
             }
         } else {
-            $contentBlockVendorQuestion = new Question('Enter your vendor name (lowercase, separated by dashes "-")');
+            $default = null;
+            $rootVendor = $this->packageResolver->getComposerProjectVendor();
+            if ($rootVendor !== '') {
+                $default = $rootVendor;
+            }
+            $contentBlockVendorQuestion = new Question('Enter your vendor name (lowercase, separated by dashes "-")', $default);
             $contentBlockVendorQuestion->setValidator($this->validateName(...));
             while (($vendor = $io->askQuestion($contentBlockVendorQuestion)) === false) {
                 $output->writeln('<error>Your vendor name does not match the requirement.</error>');
