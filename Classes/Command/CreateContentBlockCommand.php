@@ -198,8 +198,9 @@ class CreateContentBlockCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function validateName(string $name): string|bool
+    protected function validateName(?string $name): string|bool
     {
+        $name = (string)$name;
         if (ContentBlockNameValidator::isValid($name)) {
             return $name;
         }
