@@ -44,8 +44,10 @@ final class ContentBlockDataResolver
         ?PageLayoutContext $context = null
     ): ContentBlockData {
         $processedContentBlockData = [];
+        $grids = [];
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
+            $fieldType = $tcaFieldDefinition->getFieldType();
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
@@ -54,52 +56,21 @@ final class ContentBlockDataResolver
                 ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
                 : $data[$tcaFieldDefinition->getUniqueIdentifier()];
 
-            if (is_array($processedField) && $tcaFieldDefinition->getFieldType()->isRelation()) {
-                $processedField = $this->processField(
-                    $tcaFieldDefinition->getFieldType(),
-                    $processedField,
-                    $tcaFieldDefinition,
-                    $table,
-                    $depth,
-                    $context
-                );
-                if (isset($processedField['__resolvedGrid'])) {
-                    $processedContentBlockData[$tcaFieldDefinition->getIdentifier() . '_grid'] = $processedField['__resolvedGrid'];
-                    $processedField = $processedField['__resolvedField'];
+            if (is_array($processedField) && $fieldType->isRelation()) {
+                $processedField = match ($fieldType) {
+                    FieldType::COLLECTION => $this->transformCollectionRelation($processedField, $tcaFieldDefinition, $table, $depth, $context),
+                    FieldType::SELECT => $this->transformSelectRelation($processedField, $tcaFieldDefinition, $table, $depth, $context),
+                    FieldType::RELATION => $this->transformRelationRelation($processedField, $tcaFieldDefinition, $table, $depth, $context),
+                    default => $processedField,
+                };
+                if ($context !== null) {
+                    $grids = $this->processGrid($context, $fieldType, $tcaFieldDefinition, $processedField, $grids);
                 }
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
         }
 
-        return $this->buildContentBlockDataObject($data, $processedContentBlockData, $tableDefinition, $contentTypeDefinition);
-    }
-
-    private function processField(FieldType $fieldType, array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth, ?PageLayoutContext $context): array|ContentBlockData
-    {
-        $addGrid = false;
-
-        if ($fieldType === FieldType::COLLECTION) {
-            $processedField = $this->transformCollectionRelation($processedField, $tcaFieldDefinition, $table, $depth, $context);
-            $addGrid = true;
-        }
-        if ($fieldType === FieldType::SELECT) {
-            $processedField = $this->transformSelectRelation($processedField, $tcaFieldDefinition, $table, $depth, $context);
-            $addGrid = true;
-        }
-        if ($fieldType === FieldType::RELATION) {
-            $processedField = $this->transformRelationRelation($processedField, $tcaFieldDefinition, $table, $depth, $context);
-            $addGrid = true;
-        }
-
-        if ($addGrid && $context !== null) {
-            $tableName = $tcaFieldDefinition->getFieldConfiguration()->getTca()['config']['foreign_table'];
-            return [
-                '__resolvedGrid' => $this->gridFactory->build($context, $tcaFieldDefinition->getLabelPath(), (array)$processedField, $tableName),
-                '__resolvedField' => $processedField,
-            ];
-        }
-
-        return $processedField;
+        return $this->buildContentBlockDataObject($data, $processedContentBlockData, $tableDefinition, $contentTypeDefinition, $grids);
     }
 
     private function transformCollectionRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth, ?PageLayoutContext $context): array
@@ -187,11 +158,15 @@ final class ContentBlockDataResolver
         return $contentBlockData;
     }
 
+    /**
+     * @param array<string, RelationGrid> $grids
+     */
     private function buildContentBlockDataObject(
         array $data,
         array $processedContentBlockData,
         TableDefinition $tableDefinition,
         ContentTypeInterface $contentType,
+        array $grids,
     ): ContentBlockData {
         $baseData = [
             'uid' => $data['uid'],
@@ -214,7 +189,7 @@ final class ContentBlockDataResolver
         }
         $baseData = $this->enrichBaseDataWithComputedProperties($baseData, $data);
         $contentBlockDataArray = $baseData + $processedContentBlockData;
-        $contentBlockData = new ContentBlockData($contentType->getName(), $data, $contentBlockDataArray);
+        $contentBlockData = new ContentBlockData($contentType->getName(), $data, $grids, $contentBlockDataArray);
 
         // Add dynamic fields so that Fluid can detect them with `property_exists()`.
         foreach ($baseData as $key => $baseDataItem) {
@@ -240,5 +215,46 @@ final class ContentBlockDataResolver
             }
         }
         return $baseDataWithComputedProperties;
+    }
+
+    /**
+     * @param array<string, RelationGrid> $grids
+     * @return array<string, RelationGrid>
+     */
+    private function processGrid(
+        PageLayoutContext $context,
+        FieldType $fieldType,
+        TcaFieldDefinition $tcaFieldDefinition,
+        ContentBlockData|array $processedField,
+        array $grids
+    ): array {
+        if ($fieldType === FieldType::RELATION) {
+            $tableName = (string)($tcaFieldDefinition->getFieldConfiguration()->getTca()['config']['allowed'] ?? '');
+            // @todo Support for multi-table relation.
+            if (str_contains($tableName, ',')) {
+                $tableName = '';
+            }
+        } else {
+            $tableName = (string)($tcaFieldDefinition->getFieldConfiguration()->getTca()['config']['foreign_table'] ?? '');
+        }
+        if ($tableName === '') {
+            return $grids;
+        }
+        if (!is_array($processedField)) {
+            $processedField = [$processedField];
+        }
+        $grid = $this->gridFactory->build(
+            $context,
+            $tcaFieldDefinition->getLabelPath(),
+            $processedField,
+            $tableName
+        );
+        $itemLabel = $grid->getContext()->getItemLabels()[$tcaFieldDefinition->getUniqueIdentifier()] ?? '';
+
+        $relationGrid = new RelationGrid();
+        $relationGrid->grid = $grid;
+        $relationGrid->label = $itemLabel;
+        $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
+        return $grids;
     }
 }

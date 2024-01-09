@@ -59,6 +59,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
         $view->setPartialRootPaths([
             'EXT:backend/Resources/Private/Partials',
+            'EXT:content_blocks/Resources/Private/Partials',
             $contentBlockPrivatePath . '/Partials',
         ]);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
