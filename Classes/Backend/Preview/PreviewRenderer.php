@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataResolver;
+use TYPO3\CMS\ContentBlocks\DataProcessing\GridFactory;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -56,7 +57,10 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
-        $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
+        $view->setPartialRootPaths([
+            'EXT:backend/Resources/Private/Partials',
+            $contentBlockPrivatePath . '/Partials',
+        ]);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
         $view->setRequest($GLOBALS['TYPO3_REQUEST']);
@@ -65,12 +69,14 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
 
-        $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
+        $contentBlockDataResolver = new ContentBlockDataResolver(new GridFactory(), $this->relationResolver, $this->tableDefinitionCollection);
         $data = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
             $contentElementDefinition,
             $contentElementTableDefinition,
             $record,
-            $contentElementTable
+            $contentElementTable,
+            0,
+            $item->getContext(),
         );
 
         $view->assign('data', $data);

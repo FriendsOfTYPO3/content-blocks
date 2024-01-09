@@ -41,7 +41,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         if ($contentTypeDefinition === null) {
             return $processedData;
         }
-        $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
+        $contentBlockDataResolver = new ContentBlockDataResolver(new GridFactory(), $this->relationResolver, $this->tableDefinitionCollection);
         $processedData['data'] = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
             $tableDefinition,
