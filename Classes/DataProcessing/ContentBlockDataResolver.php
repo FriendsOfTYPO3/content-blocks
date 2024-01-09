@@ -91,7 +91,7 @@ final class ContentBlockDataResolver
             $addGrid = true;
         }
 
-        if ($addGrid && $context) {
+        if ($addGrid && $context !== null) {
             $tableName = $tcaFieldDefinition->getFieldConfiguration()->getTca()['config']['foreign_table'];
             return [
                 '__resolvedGrid' => $this->gridFactory->build($context, $tcaFieldDefinition->getLabelPath(), (array)$processedField, $tableName),
