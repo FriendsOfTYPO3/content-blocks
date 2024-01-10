@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
@@ -34,6 +35,11 @@ final class ContentBlockDataResolver
         private readonly RelationResolver $relationResolver,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
     ) {}
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->relationResolver->setRequest($request);
+    }
 
     public function buildContentBlockDataObjectRecursive(
         ContentTypeInterface $contentTypeDefinition,

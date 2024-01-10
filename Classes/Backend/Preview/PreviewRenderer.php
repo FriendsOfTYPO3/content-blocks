@@ -17,11 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataResolver;
-use TYPO3\CMS\ContentBlocks\DataProcessing\GridFactory;
-use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -37,13 +36,15 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class PreviewRenderer extends StandardContentPreviewRenderer
 {
     public function __construct(
-        protected TableDefinitionCollection $tableDefinitionCollection,
-        protected RelationResolver $relationResolver,
-        protected ContentBlockRegistry $contentBlockRegistry,
+        protected readonly TableDefinitionCollection $tableDefinitionCollection,
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly ContentBlockDataResolver $contentBlockDataResolver,
     ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
+        /** @var ServerRequestInterface $request */
+        $request = $GLOBALS['TYPO3_REQUEST'];
         $record = $item->getRecord();
         $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
         $typeName = $record[$typeField];
@@ -64,20 +65,18 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         ]);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
-        $view->setRequest($GLOBALS['TYPO3_REQUEST']);
+        $view->setRequest($request);
 
-        $this->relationResolver->setRequest($GLOBALS['TYPO3_REQUEST']);
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
 
-        $contentBlockDataResolver = new ContentBlockDataResolver(new GridFactory(), $this->relationResolver, $this->tableDefinitionCollection);
-        $data = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
+        $this->contentBlockDataResolver->setRequest($request);
+        $data = $this->contentBlockDataResolver->buildContentBlockDataObjectRecursive(
             $contentElementDefinition,
             $contentElementTableDefinition,
             $record,
             $contentElementTable,
-            0,
-            $item->getContext(),
+            context: $item->getContext(),
         );
 
         $view->assign('data', $data);

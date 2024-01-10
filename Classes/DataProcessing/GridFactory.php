@@ -24,7 +24,10 @@ use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridRow;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-final class GridFactory
+/**
+ * @internal Not part of TYPO3's public API.
+ */
+class GridFactory
 {
     public function build(PageLayoutContext $context, string $columnName, array $records, string $tableName): Grid
     {

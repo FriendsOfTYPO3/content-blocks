@@ -25,7 +25,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
 {
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly RelationResolver $relationResolver,
+        protected readonly ContentBlockDataResolver $contentBlockDataResolver,
     ) {}
 
     public function process(
@@ -34,15 +34,14 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ): array {
-        $this->relationResolver->setRequest($cObj->getRequest());
         $table = $cObj->getCurrentTable();
         $tableDefinition = $this->tableDefinitionCollection->getTable($table);
         $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $processedData['data']);
         if ($contentTypeDefinition === null) {
             return $processedData;
         }
-        $contentBlockDataResolver = new ContentBlockDataResolver(new GridFactory(), $this->relationResolver, $this->tableDefinitionCollection);
-        $processedData['data'] = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
+        $this->contentBlockDataResolver->setRequest($cObj->getRequest());
+        $processedData['data'] = $this->contentBlockDataResolver->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
             $tableDefinition,
             $processedData['data'],
