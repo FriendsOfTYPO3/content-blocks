@@ -243,17 +243,19 @@ final class ContentBlockDataResolver
         if (!is_array($processedField)) {
             $processedField = [$processedField];
         }
+
+        $gridLabel = $tcaFieldDefinition->getLabelPath();
+
         $grid = $this->gridFactory->build(
             $context,
-            $tcaFieldDefinition->getLabelPath(),
+            $gridLabel,
             $processedField,
             $tableName
         );
-        $itemLabel = $grid->getContext()->getItemLabels()[$tcaFieldDefinition->getUniqueIdentifier()] ?? '';
 
         $relationGrid = new RelationGrid();
         $relationGrid->grid = $grid;
-        $relationGrid->label = $itemLabel;
+        $relationGrid->label = $gridLabel;
         $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
         return $grids;
     }

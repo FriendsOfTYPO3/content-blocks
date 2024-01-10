@@ -2,7 +2,7 @@
     <tr>
         <td class="t3-grid-cell">
             <f:if condition="{data._grids.{identifier}.label}">
-                <div class="t3-page-column-header">{data._grids.{identifier}.label}</div>
+                <div class="t3-page-column-header">{f:translate(id: '{data._grids.{identifier}.label}')}</div>
             </f:if>
             <f:for each="{data._grids.{identifier}.grid.rows}" as="row">
                 <f:for each="{row.columns}" as="column">
