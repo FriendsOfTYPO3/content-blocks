@@ -51,15 +51,10 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
  */
 final class ContentBlockData extends \stdClass
 {
-    /**
-     * This is a hint for f:debug users.
-     */
-    public string $_debug_hint = 'To access data under `_processed` you must omit the key: {data.identifier}';
-
     public function __construct(
         private readonly string $_name = '',
         private readonly array $_raw = [],
-        private readonly array $_processed = [],
+        private readonly array $processed = [],
     ) {}
 
     public function __get(string $name = ''): mixed
@@ -72,8 +67,8 @@ final class ContentBlockData extends \stdClass
             return $this->_raw;
         }
 
-        if (array_key_exists($name, $this->_processed)) {
-            return $this->_processed[$name];
+        if (array_key_exists($name, $this->processed)) {
+            return $this->processed[$name];
         }
 
         return null;
