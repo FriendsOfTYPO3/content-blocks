@@ -35,7 +35,7 @@ abstract class ContentTypeDefinition
     private array $columns = [];
     /** @var array<string|PaletteDefinition|TabDefinition> */
     private array $showItems = [];
-    /** @var array<TcaFieldDefinition> */
+    /** @var TcaFieldDefinition[] */
     private array $overrideColumns = [];
     private string $vendor = '';
     private string $package = '';
@@ -107,6 +107,9 @@ abstract class ContentTypeDefinition
         return $this->vendor . '/' . $this->package;
     }
 
+    /**
+     * @return TcaFieldDefinition[]
+     */
     public function getOverrideColumns(): array
     {
         return $this->overrideColumns;

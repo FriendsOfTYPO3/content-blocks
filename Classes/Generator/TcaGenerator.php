@@ -267,7 +267,7 @@ class TcaGenerator
 
     protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
-        $columnsOverrides = $this->getColumnsOverrides($typeDefinition);
+        $columnsOverrides = $this->getColumnsOverrides($typeDefinition, $tableDefinition);
         $tca = match ($tableDefinition->getContentType()) {
             ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides),
             ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides),
@@ -343,7 +343,7 @@ class TcaGenerator
         return $showItemString;
     }
 
-    protected function getColumnsOverrides(ContentTypeInterface $typeDefinition): array
+    protected function getColumnsOverrides(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
@@ -356,6 +356,7 @@ class TcaGenerator
                 unset($overrideTca['config'][$optionKey]);
                 unset($overrideTca[$optionKey]);
             }
+            $overrideTca = $this->addUseSortableIfEnabled($overrideColumn, $tableDefinition, $overrideTca);
             $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription(
                 $typeDefinition,
                 $overrideColumn,
@@ -363,6 +364,27 @@ class TcaGenerator
             );
         }
         return $columnsOverrides;
+    }
+
+    /**
+     * Automatic `useSortable` if sorting is enabled on foreign table.
+     */
+    protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
+    {
+        if ($overrideColumn->getFieldType() !== FieldType::COLLECTION) {
+            return $overrideTca;
+        }
+        $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
+            ->getField($overrideColumn->getUniqueIdentifier());
+        $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+        $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+        if (
+            $foreignTableDefinition->getCapability()->isSortable()
+            && $foreignTableDefinition->getCapability()->hasSortField() === false
+        ) {
+            $overrideTca['config']['appearance']['useSortable'] ??= true;
+        }
+        return $overrideTca;
     }
 
     /**

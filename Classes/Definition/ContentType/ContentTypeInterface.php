@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -32,6 +34,7 @@ interface ContentTypeInterface
     public function getDescription(): string;
     public function getPriority(): int;
     public function getTable(): string;
+    /** @return TcaFieldDefinition[] */
     public function getOverrideColumns(): array;
     public function getShowItems(): array;
     public function hasColumn(string $column): bool;

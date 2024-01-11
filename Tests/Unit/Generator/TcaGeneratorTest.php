@@ -155,6 +155,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'fallbackLabelFields' => [
                                     'text',
                                 ],
+                                'appearance' => [
+                                    'useSortable' => false,
+                                ],
                                 'fields' => [
                                     [
                                         'identifier' => 'text',
@@ -356,7 +359,11 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_collection' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.description',
-                                    'config' => [],
+                                    'config' => [
+                                        'appearance' => [
+                                            'useSortable' => false,
+                                        ],
+                                    ],
                                 ],
                                 'assets' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:assets.label',
@@ -1731,7 +1738,11 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'collection' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.description',
-                                    'config' => [],
+                                    'config' => [
+                                        'appearance' => [
+                                            'useSortable' => true,
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
