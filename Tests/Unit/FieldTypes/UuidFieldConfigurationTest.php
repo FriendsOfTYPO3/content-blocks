@@ -37,7 +37,7 @@ final class UuidFieldConfigurationTest extends UnitTestCase
                 'exclude' => true,
                 'size' => 30,
                 'version' => 4,
-                'enableCopyToClipboard' => false,
+                'enableCopyToClipboard' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -53,7 +53,6 @@ final class UuidFieldConfigurationTest extends UnitTestCase
                     'type' => 'uuid',
                     'size' => 30,
                     'version' => 4,
-                    'enableCopyToClipboard' => false,
                 ],
             ],
         ];
@@ -68,10 +67,7 @@ final class UuidFieldConfigurationTest extends UnitTestCase
                 'onChange' => '',
                 'exclude' => false,
                 'non_available_field' => 'foo',
-                'max' => 0,
-                'min' => 0,
                 'size' => 0,
-                'version' => 0,
                 'enableCopyToClipboard' => false,
             ],
             'expectedTca' => [

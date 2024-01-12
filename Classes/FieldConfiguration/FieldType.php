@@ -44,7 +44,6 @@ enum FieldType: string
     case PALETTE = 'Palette';
     case LINEBREAK = 'Linebreak';
     case TAB = 'Tab';
-
     case UUID = 'Uuid';
 
     public function getTcaType(): string

@@ -25,16 +25,18 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::UUID;
-    private int $size = 30;
+    private int $size = 0;
     private bool $enableCopyToClipboard = true;
-    private int $version = 0;
+    private ?int $version = null;
 
     public static function createFromArray(array $settings): UuidFieldConfiguration
     {
         $self = new self();
         $self->setCommonProperties($settings);
         $self->size = (int)($settings['size'] ?? $self->size);
-        $self->version = (int)($settings['version'] ?? $self->version);
+        if (array_key_exists('version', $settings)) {
+            $self->version = (int)$settings['version'];
+        }
         $self->enableCopyToClipboard = (bool)($settings['enableCopyToClipboard'] ?? $self->enableCopyToClipboard);
 
         return $self;
@@ -47,7 +49,7 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
-        if ($this->version !== 0) {
+        if ($this->version !== null) {
             $config['version'] = $this->version;
         }
         if (!$this->enableCopyToClipboard) {
