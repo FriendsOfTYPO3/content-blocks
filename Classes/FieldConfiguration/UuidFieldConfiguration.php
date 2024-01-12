@@ -28,7 +28,7 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
     private int $size = 30;
     private int $sizeMinimum = 10;
     private int $sizeMaximum = 50;
-    private bool $enableCopyToClipboard = false;
+    private bool $enableCopyToClipboard = true;
     private int $version = 0;
 
     public static function createFromArray(array $settings): UuidFieldConfiguration
