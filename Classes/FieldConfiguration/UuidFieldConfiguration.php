@@ -35,8 +35,7 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        // clamp the size between 10 and 50 -> See documentation https://docs.typo3.org/m/typo3/reference-tca/main/en-us/ColumnsConfig/Type/Uuid/Properties/Size.html#size
-        $self->size = max($self->sizeMinimum, min($self->sizeMaximum, (int)($settings['size'] ?? $self->size)));
+        $self->size = (int)($settings['size'] ?? $self->size);
         $self->version = (int)($settings['version'] ?? $self->version);
         $self->enableCopyToClipboard = (bool)($settings['enableCopyToClipboard'] ?? $self->enableCopyToClipboard);
 
@@ -50,13 +49,11 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
-        if ($this->version === 4 || $this->version === 5 || $this->version === 7) {
+        if ($this->version !== 0) {
             $config['version'] = $this->version;
-        } else {
-            $config['version'] = 4;
         }
-        if ($this->enableCopyToClipboard) {
-            $config['enableCopyToClipboard'] = true;
+        if (!$this->enableCopyToClipboard) {
+            $config['enableCopyToClipboard'] = false;
         }
 
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
