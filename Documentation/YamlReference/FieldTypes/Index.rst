@@ -34,6 +34,7 @@ some additional options, which are not available in TCA to ease the usage.
 *  :ref:`Tab <field_type_tab>`
 *  :ref:`Text <field_type_text>`
 *  :ref:`Textarea <field_type_textarea>`
+*  :ref:`Uuid <field_type_uuid>`
 
 Common field options
 ====================
@@ -174,3 +175,4 @@ Field options, which can be defined inside the :yaml:`fields` array.
     Tab/Index
     Text/Index
     Textarea/Index
+    Uuid/Index
