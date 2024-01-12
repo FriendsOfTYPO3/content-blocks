@@ -45,6 +45,8 @@ enum FieldType: string
     case LINEBREAK = 'Linebreak';
     case TAB = 'Tab';
 
+    case UUID = 'Uuid';
+
     public function getTcaType(): string
     {
         return match ($this) {
@@ -68,6 +70,7 @@ enum FieldType: string
             self::FLEXFORM => 'flex',
             self::PASSWORD => 'password',
             self::PALETTE, self::LINEBREAK, self::TAB => '',
+            self::UUID => 'uuid',
         };
     }
 
@@ -124,6 +127,7 @@ enum FieldType: string
             self::PALETTE => PaletteFieldConfiguration::createFromArray($config),
             self::LINEBREAK => LinebreakFieldConfiguration::createFromArray($config),
             self::TAB => TabFieldConfiguration::createFromArray($config),
+            self::UUID => UuidFieldConfiguration::createFromArray($config),
         };
     }
 }
