@@ -79,3 +79,6 @@ fields:
     items:
       - label: 'Check1'
       - label: 'Check2'
+  - identifier: uuid
+    type: Uuid
+    enableCopyToClipboard: true
