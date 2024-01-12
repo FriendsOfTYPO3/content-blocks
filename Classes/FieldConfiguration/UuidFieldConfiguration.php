@@ -60,7 +60,7 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        return "";
+        return '';
     }
 
     public function getFieldType(): FieldType
