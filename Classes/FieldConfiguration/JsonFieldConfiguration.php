@@ -25,9 +25,9 @@ final class JsonFieldConfiguration implements FieldConfigurationInterface
     use WithCommonProperties;
 
     private FieldType $fieldType = FieldType::JSON;
-    private string|int $default = '';
-    private int $cols = 30; // Range from 10 to 50, like size????
-    private int $rows = 20;
+    private string $default = '';
+    private int $cols = 0;
+    private int $rows = 0;
     private bool $enableCodeEditor = true;
     private bool $required = false;
     private bool $readOnly = false;
@@ -37,10 +37,7 @@ final class JsonFieldConfiguration implements FieldConfigurationInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $default = $settings['default'] ?? $self->default;
-        if (is_string($default) || is_int($default)) {
-            $self->default = $default;
-        }
+        $self->default = (string)($settings['default'] ?? $self->default);
         $self->required = (bool)($settings['required'] ?? $self->required);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->cols = (int)($settings['cols'] ?? $self->cols);
@@ -64,16 +61,16 @@ final class JsonFieldConfiguration implements FieldConfigurationInterface
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }
-        if($this->cols !== 0) {
+        if ($this->cols !== 0) {
             $config['cols'] = $this->cols;
         }
-        if($this->rows !== 0) {
+        if ($this->rows !== 0) {
             $config['rows'] = $this->rows;
         }
-        if(!$this->enableCodeEditor) {
+        if (!$this->enableCodeEditor) {
             $config['enableCodeEditor'] = false;
         }
-        if($this->placeholder !== '') {
+        if ($this->placeholder !== '') {
             $config['placeholder'] = $this->placeholder;
         }
 
