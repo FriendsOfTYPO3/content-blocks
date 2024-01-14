@@ -683,6 +683,26 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('12', $result['number']);
     }
 
+    /**
+     * @test
+     */
+    public function canResolveJson(): void
+    {
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create();
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_json');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_json' => '{"foo": "bar"}',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame(['foo' => 'bar'], $result);
+    }
+
     protected function setWorkspaceId(int $workspaceId): void
     {
         $GLOBALS['BE_USER']->workspace = $workspaceId;

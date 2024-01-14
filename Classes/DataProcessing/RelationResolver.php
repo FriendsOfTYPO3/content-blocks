@@ -17,12 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use Doctrine\DBAL\Types\Type;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Service\FlexFormService;
@@ -89,6 +91,13 @@ class RelationResolver
 
         if ($fieldType === FieldType::FLEXFORM) {
             return $this->flexFormService->convertFlexFormContentToArray($data);
+        }
+
+        if ($fieldType === FieldType::JSON) {
+            $platform = GeneralUtility::makeInstance(ConnectionPool::class)
+                ->getConnectionForTable($table)
+                ->getDatabasePlatform();
+            return Type::getType('json')->convertToPHPValue($data, $platform);
         }
 
         return $data;

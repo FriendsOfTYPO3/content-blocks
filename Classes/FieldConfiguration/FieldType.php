@@ -38,6 +38,7 @@ enum FieldType: string
     case COLLECTION = 'Collection';
     case FILE = 'File';
     case FOLDER = 'Folder';
+    case JSON = 'Json';
     case RELATION = 'Relation';
     case FLEXFORM = 'FlexForm';
     case PASSWORD = 'Password';
@@ -57,6 +58,7 @@ enum FieldType: string
             self::SLUG => 'slug',
             self::EMAIL => 'email',
             self::FILE => 'file',
+            self::JSON => 'json',
             self::LANGUAGE => 'language',
             self::LINK => 'link',
             self::NUMBER => 'number',
@@ -112,6 +114,7 @@ enum FieldType: string
             self::SLUG => SlugFieldConfiguration::createFromArray($config),
             self::EMAIL => EmailFieldConfiguration::createFromArray($config),
             self::FILE => FileFieldConfiguration::createFromArray($config),
+            self::JSON => JsonFieldConfiguration::createFromArray($config),
             self::LANGUAGE => LanguageFieldConfiguration::createFromArray($config),
             self::LINK => LinkFieldConfiguration::createFromArray($config),
             self::NUMBER => NumberFieldConfiguration::createFromArray($config),
