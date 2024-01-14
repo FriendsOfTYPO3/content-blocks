@@ -104,3 +104,5 @@ fields:
         type: Text
       - identifier: textarea
         type: Textarea
+  - identifier: json
+    type: Json
