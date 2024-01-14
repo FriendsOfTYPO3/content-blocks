@@ -32,8 +32,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  * Examples
  * ========
  *
- * <cb:asset.css identifier="identifier123" file="Frontend.css" />
- * <cb:asset.css identifier="identifier123" file="SubDirectory/style.css" />
+ * <cb:asset.css identifier="identifier123" file="Frontend.css" useNonce="1" />
+ * <cb:asset.css identifier="identifier123" file="SubDirectory/style.css" useNonce="1" />
  */
 final class CssViewHelper extends AbstractTagBasedViewHelper
 {
@@ -97,6 +97,7 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
         $this->registerTagAttribute('sizes', 'string', 'Define the icon size of the resource.');
         $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/css\').');
         $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.');
+        $this->registerArgument('useNonce', 'bool', 'Whether to use the global nonce value', false, false);
         $this->registerArgument(
             'identifier',
             'string',
@@ -135,6 +136,7 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
         }
         $options = [
             'priority' => $this->arguments['priority'],
+            'useNonce' => $this->arguments['useNonce'],
         ];
         $this->assetCollector->addStyleSheet($identifier, $file, $attributes, $options);
         return '';

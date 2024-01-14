@@ -28,7 +28,7 @@ class HtmlTemplateCodeGenerator
     {
         $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
-        $defaultContent[] = '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css"/>';
+        $defaultContent[] = '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css" useNonce="1"/>';
         $defaultContent[] = '';
         $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $defaultContent[] = 'Header: {data.header}';
@@ -41,8 +41,8 @@ class HtmlTemplateCodeGenerator
     {
         $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
-        $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" file="Frontend.css"/>';
-        $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" file="Frontend.js"/>';
+        $frontendTemplate[] = '<cb:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" file="Frontend.css" useNonce="1"/>';
+        $frontendTemplate[] = '<cb:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" file="Frontend.js" useNonce="1"/>';
         $frontendTemplate[] = '';
         $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $frontendTemplate[] = 'Header: {data.header}';
