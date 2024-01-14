@@ -24,9 +24,9 @@ Settings
 
    :Required: false
    :Type: integer
-   :Default: 10
+   :Default: 5
 
-   Amount of rows for the textarea.
+   Amount of rows for the textarea. Min value is 1 and max value is 20.
 
 .. confval:: required
 
@@ -48,9 +48,12 @@ Settings
 
    :Required: false
    :Type: boolean
-   :Default: false
+   :Default: true
 
-   In case :php:`enableCodeEditor` is set to :php:`true`, which is the default and the system extension `t3editor` is installed and active, the JSON value is rendered in the corresponding code editor. Otherwise it is rendered in a standard textarea HTML element.
+   In case :php:`enableCodeEditor` is set to :php:`true`, which is the default
+   and the system extension `t3editor` is installed and active, the JSON value
+   is rendered in the corresponding code editor. Otherwise it is rendered in a
+   standard textarea HTML element.
 
 
 Examples
