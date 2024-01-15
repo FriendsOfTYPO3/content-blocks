@@ -36,6 +36,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
     private int $minitems = 0;
     private int $maxitems = 0;
     private bool $extendedPalette = true;
+    private array $cropVariants = [];
 
     public static function createFromArray(array $settings): FileFieldConfiguration
     {
@@ -55,6 +56,10 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
         $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
         $self->extendedPalette = (bool)($settings['extendedPalette'] ?? $self->extendedPalette);
+        $cropVariants = $settings['cropVariants'] ?? $self->cropVariants;
+        if (is_array($cropVariants) || is_string($cropVariants)) {
+            $self->cropVariants = $cropVariants;
+        }
         return $self;
     }
 
@@ -98,6 +103,14 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
                 ],
             ];
         }
+        // Cropping:
+        if ($this->cropVariants !== []) {
+            $config['overrideChildTca']['columns']['crop']['config']['cropVariants'] = [];
+            foreach($this->cropVariants as $device => $options) {
+                $config['overrideChildTca']['columns']['crop']['config']['cropVariants'][$device] = $options;
+            }
+        }
+
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
