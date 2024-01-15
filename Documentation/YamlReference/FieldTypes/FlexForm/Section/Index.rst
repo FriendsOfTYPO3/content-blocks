@@ -80,10 +80,10 @@ XLF translation keys for Sections and Containers have the following convention:
 .. code-block:: xml
 
     <body>
-        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.label">
+        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.title">
             <source>Label for Section</source>
         </trans-unit>
-        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.label">
+        <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.title">
             <source>Label for Container</source>
         </trans-unit>
         <trans-unit id="FIELD_IDENTIFIER.sections.SECTION_IDENTIFIER.container.CONTAINER_IDENTIFIER.FIELD_IDENTIFIER.label">
