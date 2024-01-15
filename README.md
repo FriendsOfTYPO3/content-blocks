@@ -56,9 +56,13 @@ composer install
 Then run unit or functional tests by executing:
 
 ```
-Build/Scripts/runTests.sh -s unit
-Build/Scripts/runTests.sh -s functional
+Build/Scripts/runTests.sh -p 8.2 -s unit
+Build/Scripts/runTests.sh -p 8.2 -s functional
 ```
+
+### Hint
+
+Be sure to exclude the `.Build` directory from indexing in your IDE (e.g. PhpStorm) before starting the tests.
 
 ## Feedback
 
