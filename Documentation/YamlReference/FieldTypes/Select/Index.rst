@@ -186,4 +186,4 @@ Select tree:
         foreign_table: 'pages'
         foreign_table_where: 'ORDER BY pages.uid'
         treeConfig:
-        parentField: pid
+          parentField: pid
