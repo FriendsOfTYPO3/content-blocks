@@ -107,10 +107,10 @@ in the `Assets` directory.
 .. code-block:: html
 
     <f:comment><!-- Include the Assets/Frontend.css stylesheet --></f:comment>
-    <cb:asset.css identifier="myCssIdentifier" file="Frontend.css" useNonce="1"/>
+    <cb:asset.css identifier="myCssIdentifier" file="Frontend.css"/>
 
     <f:comment><!-- Include the Assets/Frontend.js script --></f:comment>
-    <cb:asset.script identifier="myJavascriptIdentifier" file="Frontend.js" useNonce="1"/>
+    <cb:asset.script identifier="myJavascriptIdentifier" file="Frontend.js"/>
 
 The information of the current Content Block is stored in :html:`{data}`. This
 means if you use an asset ViewHelper in a partial, you have to provide
@@ -120,7 +120,7 @@ means if you use an asset ViewHelper in a partial, you have to provide
 .. code-block:: html
 
     <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
-    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="Frontend.js" useNonce="1"/>
+    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="Frontend.js"/>
 
 
 Resource URI ViewHelper

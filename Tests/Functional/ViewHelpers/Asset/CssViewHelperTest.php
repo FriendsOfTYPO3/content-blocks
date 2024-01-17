@@ -42,7 +42,7 @@ final class CssViewHelperTest extends FunctionalTestCase
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/content-element-b" identifier="test" file="Frontend.css" priority="0" useNonce="1"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/content-element-b" identifier="test" file="Frontend.css" priority="0"/>');
 
         (new TemplateView($context))->render();
 
@@ -57,7 +57,7 @@ final class CssViewHelperTest extends FunctionalTestCase
     public function booleanAttributesAreProperlyConverted(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/content-element-a" identifier="test" file="my.css" disabled="1" priority="0" useNonce="1"/>');
+        $context->getTemplatePaths()->setTemplateSource('<cb:asset.css name="typo3tests/content-element-a" identifier="test" file="my.css" disabled="1" priority="0"/>');
 
         (new TemplateView($context))->render();
 
