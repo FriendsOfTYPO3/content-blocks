@@ -200,16 +200,21 @@ final class TableDefinitionCollectionFactory
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
     {
-        $isRecordType = $result->tableDefinition->contentType === ContentType::RECORD_TYPE;
-        if ($isRecordType && $result->tableDefinition->hasTypeField()) {
+        $contentType = $result->tableDefinition->contentType;
+        if ($contentType === ContentType::RECORD_TYPE && $result->tableDefinition->hasTypeField()) {
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
             $yaml['fields'] = $yamlFields;
         }
         $hasInternalDescription = $yaml['internalDescription'] ?? false;
-        if ($isRecordType && $hasInternalDescription) {
+        if ($contentType === ContentType::RECORD_TYPE && $hasInternalDescription) {
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->appendInternalDescription($yamlFields);
+            $yaml['fields'] = $yamlFields;
+        }
+        if ($contentType === ContentType::PAGE_TYPE) {
+            $yamlFields = $yaml['fields'] ?? [];
+            $yamlFields = $this->prependPagesTitlePalette($yamlFields);
             $yaml['fields'] = $yamlFields;
         }
         return $yaml;
@@ -349,6 +354,40 @@ final class TableDefinitionCollectionFactory
         ];
         $yamlFields[] = $tab;
         $yamlFields[] = $internalDescription;
+        return $yamlFields;
+    }
+
+    private function prependPagesTitlePalette(array $yamlFields): array
+    {
+        $titlePalette = [
+            'identifier' => 'content_blocks_titleonly',
+            'type' => 'Palette',
+            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.title',
+            'prefixField' => false,
+            'fields' => [
+                [
+                    'identifier' => 'title',
+                    'useExistingField' => true,
+                    'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.title_formlabel',
+                ],
+                [
+                    'type' => 'Linebreak',
+                ],
+                [
+                    'identifier' => 'slug',
+                    'useExistingField' => true,
+                ],
+                [
+                    'type' => 'Linebreak',
+                ],
+                [
+                    'identifier' => 'nav_title',
+                    'useExistingField' => true,
+                    'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel',
+                ],
+            ],
+        ];
+        array_unshift($yamlFields, $titlePalette);
         return $yamlFields;
     }
 

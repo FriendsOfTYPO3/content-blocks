@@ -2042,11 +2042,36 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
                         ],
-                        'searchFields' => '',
+                        'searchFields' => 'title,nav_title',
                     ],
                     'types' => [
                         '1700156757' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;titleonly,nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'columnsOverrides' => [
+                                'title' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.description',
+                                    'config' => [],
+                                ],
+                                'slug' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.description',
+                                    'config' => [],
+                                ],
+                                'nav_title' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [],
+                    'palettes' => [
+                        'content_blocks_titleonly' => [
+                            'showitem' => 'title,--linebreak--,slug,--linebreak--,nav_title',
+                            'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:palettes.content_blocks_titleonly.label',
+                            'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:palettes.content_blocks_titleonly.description',
                         ],
                     ],
                 ],
@@ -2074,11 +2099,36 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
                         ],
-                        'searchFields' => '',
+                        'searchFields' => 'title,nav_title',
                     ],
                     'types' => [
                         '1700156757' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;titleonly,nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo,--palette--;;seo,--palette--;;robots,--palette--;;canonical,--palette--;;sitemap,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.socialmedia,--palette--;;opengraph,--palette--;;twittercards,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo,--palette--;;seo,--palette--;;robots,--palette--;;canonical,--palette--;;sitemap,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.socialmedia,--palette--;;opengraph,--palette--;;twittercards,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'columnsOverrides' => [
+                                'title' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.description',
+                                    'config' => [],
+                                ],
+                                'slug' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.description',
+                                    'config' => [],
+                                ],
+                                'nav_title' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [],
+                    'palettes' => [
+                        'content_blocks_titleonly' => [
+                            'showitem' => 'title,--linebreak--,slug,--linebreak--,nav_title',
+                            'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:palettes.content_blocks_titleonly.label',
+                            'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:palettes.content_blocks_titleonly.description',
                         ],
                     ],
                 ],
@@ -2094,6 +2144,24 @@ final class TcaGeneratorTest extends UnitTestCase
     {
         $baseTca['pages']['ctrl']['type'] = 'doktype';
         $baseTca['pages']['ctrl']['label'] = 'title';
+        $baseTca['pages']['columns'] = [
+            'title' => [
+                'config' => [
+                    'type' => 'input',
+                ],
+            ],
+            'slug' => [
+                'config' => [
+                    'type' => 'slug',
+                ],
+            ],
+            'nav_title' => [
+                'config' => [
+                    'type' => 'input',
+                ],
+            ],
+        ];
+        $GLOBALS['TCA'] = $baseTca;
 
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();

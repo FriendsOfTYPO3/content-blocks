@@ -636,8 +636,6 @@ class TcaGenerator
         $general = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
             '--palette--;;standard',
-            '--palette--;;titleonly',
-            'nav_title;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.nav_title_formlabel',
         ];
 
         $metaTab = [
