@@ -93,6 +93,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
         $this->registerTagAttribute('nonce', 'string', 'Define a cryptographic nonce (number used once) used to whitelist inline styles in a style-src Content-Security-Policy.');
         $this->registerTagAttribute('referrerpolicy', 'string', 'Define which referrer is sent when fetching the resource.');
         $this->registerTagAttribute('type', 'string', 'Define the MIME type (usually \'text/javascript\').');
+        $this->registerArgument('useNonce', 'bool', 'Whether to use the global nonce value', false, false);
         $this->registerArgument(
             'identifier',
             'string',
@@ -134,6 +135,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
 
         $options = [
             'priority' => $this->arguments['priority'],
+            'useNonce' => $this->arguments['useNonce'],
         ];
         $this->assetCollector->addJavaScript($identifier, $src, $attributes, $options);
         return '';
