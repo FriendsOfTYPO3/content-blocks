@@ -32,8 +32,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  * Examples
  * ========
  *
- * <cb:asset.css identifier="identifier123" file="Frontend.css" useNonce="1" />
- * <cb:asset.css identifier="identifier123" file="SubDirectory/style.css" useNonce="1" />
+ * <cb:asset.css identifier="identifier123" file="Frontend.css" />
+ * <cb:asset.css identifier="identifier123" file="SubDirectory/style.css" />
  */
 final class CssViewHelper extends AbstractTagBasedViewHelper
 {

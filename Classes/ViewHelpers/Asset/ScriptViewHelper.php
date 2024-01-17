@@ -32,8 +32,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  * Examples
  * ========
  *
- *  <cb:asset.script identifier="identifier123" file="Frontend.js" useNonce="1" />
- *  <cb:asset.script identifier="identifier123" file="SubDirectory/script.js" useNonce="1" />
+ *  <cb:asset.script identifier="identifier123" file="Frontend.js" />
+ *  <cb:asset.script identifier="identifier123" file="SubDirectory/script.js" />
  */
 final class ScriptViewHelper extends AbstractTagBasedViewHelper
 {
