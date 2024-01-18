@@ -62,7 +62,7 @@ Build/Scripts/runTests.sh -s functional
 
 ### Hint
 
-Be sure to exclude the `.Build` directory from indexing in your IDE (e.g. PhpStorm) before starting the tests.
+Be sure to exclude the `.Build/public/typo3temp` directory from indexing in your IDE (e.g. PhpStorm) before starting the tests.
 
 ## Feedback
 
