@@ -60,6 +60,10 @@ Build/Scripts/runTests.sh -s unit
 Build/Scripts/runTests.sh -s functional
 ```
 
+### Hint
+
+Be sure to exclude the `.Build/public/typo3temp` directory from indexing in your IDE (e.g. PhpStorm) before starting the tests.
+
 ## Feedback
 
 You can reach us on the TYPO3 Slack channel `#cig-structuredcontent`. We
