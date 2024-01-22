@@ -105,5 +105,3 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    .. code-block:: yaml
 
        saveAndClose: true
-
-
