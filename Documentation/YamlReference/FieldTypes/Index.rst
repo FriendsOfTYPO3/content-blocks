@@ -150,6 +150,36 @@ Field options, which can be defined inside the :yaml:`fields` array.
            prefixField: true
            prefixType: vendor
 
+.. confval:: displayCond
+
+   :Required: false
+   :Type: string
+   :Default: ''
+
+   Can be used to display the Content Element only under certain conditions.
+   Please have a look at the `official documentation
+   <https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Columns/Properties/DisplayCond.html#displaycond>`__
+   for more information. **Tip**: When using a condition, the option
+   ``onChange`` should be set to ``reload``. **You also need to set the full
+   identifier of the field, including the prefixes.**
+
+   .. code-block:: yaml
+
+       displayCond: 'FIELD:header:=:Headline'
+
+.. confval:: onChange
+
+   :Required: false
+   :Type: string
+   :Default: ''
+
+   Can be used to trigger a reload for the Content Element when this specific
+   sfield is changed. Should be used, if any display conditions are used.
+
+   .. code-block:: yaml
+
+       onChange: reload
+
 .. toctree::
     :maxdepth: 1
     :titlesonly:
