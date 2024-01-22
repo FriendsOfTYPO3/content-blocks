@@ -175,6 +175,7 @@ final class TableDefinitionCollectionFactory
             $input->languagePath->addPathSegment($result->identifier);
             $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
             $this->prefixTcaConfigFields($input, $result);
+            $field = $this->prefixDisplayCondFieldsIfNecessary($input, $result, $field);
             if ($result->fieldType === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
@@ -724,6 +725,54 @@ final class TableDefinitionCollectionFactory
                 $result->tableDefinition->raw['sortField'][$i]['order'] = strtoupper($order);
             }
         }
+    }
+
+    private function prefixDisplayCondFieldsIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    {
+        // TODO:
+        // Since displayConds can reference field names outside of the current $field calculation,
+        // we need to first collect all existing fieldnames within a single table,
+        // then check each displayCond of any fieldname to replace it.
+        // ALTERNATIVE:
+        // Make a regular expression match for FIELD:(xxx): and then specifically access
+        //
+        if (!isset($field['displayCond']) || $field['displayCond'] === [] || $field['displayCond'] === '') {
+            return $field;
+        }
+
+        if ($result->identifier === $result->uniqueIdentifier) {
+            return $field;
+        }
+
+        // Only the "FIELD:" prefix within "displayCond" makes sense
+        // to adjust. In case unprefixed identifiers are used inside
+        // the condition, they are replaced with the final prefixed
+        // identifiers here.
+        $search  = 'FIELD:' . $result->identifier . ':';
+        $replace = 'FIELD:' . $result->uniqueIdentifier . ':';
+
+        if (is_string($field['displayCond'])) {
+            $field['displayCond'] = str_replace(
+                $search,
+                $replace,
+                $field['displayCond']
+            );
+        } elseif (is_array($field['displayCond'])) {
+            foreach($field['displayCond'] as $displayCondOperator => $displayCondOperatorGroup) {
+                if (is_array($displayCondOperatorGroup)) {
+                    foreach($displayCondOperatorGroup as $displayCondOperatorIndex => $displayCondGroup) {
+                        $field['displayCond'][$displayCondOperator][$displayCondOperatorIndex] =
+                            str_replace(
+                                $search,
+                                $replace,
+                                $field['displayCond'][$displayCondOperator][$displayCondOperatorIndex]
+                            );
+                    }
+                }
+            }
+        }
+
+        return $field;
     }
 
     private function prefixLabelFieldIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void
