@@ -105,3 +105,33 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    .. code-block:: yaml
 
        saveAndClose: true
+
+.. confval:: displayCond
+
+   :Required: false
+   :Type: string
+   :Default: ''
+
+   Can be used to display the Content Element only under certain conditions.
+   Please have a look at the `official documentation
+   <https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Columns/Properties/DisplayCond.html#displaycond>`__
+   for more information. **Tip**: When using a condition, the option
+   ``onChange`` should be set to ``reload``.
+
+
+   .. code-block:: yaml
+
+       displayCond: 'FIELD:header:=:Headline'
+
+.. confval:: onChange
+
+   :Required: false
+   :Type: string
+   :Default: ''
+
+   Can be used to trigger a reload for the Content Element when this specific
+   sfield is changed. Should be used, if any display conditions are used.
+
+   .. code-block:: yaml
+
+       onChange: reload
