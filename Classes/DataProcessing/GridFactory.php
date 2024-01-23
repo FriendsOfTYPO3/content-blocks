@@ -29,6 +29,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class GridFactory
 {
+    /**
+     * @param array<ContentBlockData|array> $records
+     */
     public function build(PageLayoutContext $context, string $columnName, array $records, string $tableName): Grid
     {
         $column = GeneralUtility::makeInstance(GridColumn::class, $context, [
@@ -36,11 +39,12 @@ class GridFactory
         ]);
 
         foreach ($records as $record) {
+            $row = $record instanceof ContentBlockData ? $record->_raw : $record;
             $column->addItem(GeneralUtility::makeInstance(
                 GridColumnItem::class,
                 $context,
                 $column,
-                $record->_raw,
+                $row,
                 // $tableName,
             ));
         }
