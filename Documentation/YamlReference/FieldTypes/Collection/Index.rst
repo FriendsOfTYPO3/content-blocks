@@ -83,6 +83,16 @@ Settings
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
+.. confval:: appearance.collapseAll
+
+   :Required: false
+   :Type: bool|null
+   :Default: null
+
+   * Default (null): Last collapsed/expanded state is remembered
+   * true: Show all child records collapsed
+   * false: Show all child records expanded
+
 .. _field_type_collection_foreign_table:
 .. confval:: foreign_table
 
@@ -164,6 +174,8 @@ Advanced / use case
         labelField: title
         maxitems: 5
         minitems: 1
+        appearance:
+          collapseAll: true
         fields:
           - identifier: image
             type: File
