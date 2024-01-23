@@ -123,7 +123,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    :Default: true
 
    If set to false, the prefixing is disabled for this field. This overrules the
-   global option :yaml:`prefixFields`.
+   global option :ref:`prefixFields <yaml_reference_prefixFields>`.
 
    .. code-block:: yaml
 

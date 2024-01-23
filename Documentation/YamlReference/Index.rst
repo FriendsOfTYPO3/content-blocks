@@ -69,6 +69,7 @@ Common root options
 
        title: "My super duper Content Block"
 
+.. _yaml_reference_prefixFields:
 .. confval:: prefixFields
 
    :Required: false
