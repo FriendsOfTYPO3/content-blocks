@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+// use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
@@ -822,6 +823,7 @@ class TcaGenerator
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => $tableDefinition->getParentReferences() !== null,
             'enablecolumns' => $capability->buildRestrictionsTca(),
+//            'previewRenderer' => StandardContentPreviewRenderer::class,
         ];
 
         $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
