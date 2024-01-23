@@ -93,6 +93,15 @@ Settings
    * true: Show all child records collapsed
    * false: Show all child records expanded
 
+.. confval:: appearance.levelLinksPosition
+
+   :Required: false
+   :Type: string
+   :Default: top
+
+   Defines where to show the "New record" link in relation to the child records.
+   Valid keywords are :yaml:`top`, :yaml:`bottom` and :yaml:`both`.
+
 .. _field_type_collection_foreign_table:
 .. confval:: foreign_table
 
@@ -176,6 +185,7 @@ Advanced / use case
         minitems: 1
         appearance:
           collapseAll: true
+          levelLinksPosition: both
         fields:
           - identifier: image
             type: File
