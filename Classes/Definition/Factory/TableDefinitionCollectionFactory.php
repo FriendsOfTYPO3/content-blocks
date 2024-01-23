@@ -758,9 +758,9 @@ final class TableDefinitionCollectionFactory
                 $field['displayCond']
             );
         } elseif (is_array($field['displayCond'])) {
-            foreach($field['displayCond'] as $displayCondOperator => $displayCondOperatorGroup) {
+            foreach ($field['displayCond'] as $displayCondOperator => $displayCondOperatorGroup) {
                 if (is_array($displayCondOperatorGroup)) {
-                    foreach($displayCondOperatorGroup as $displayCondOperatorIndex => $displayCondGroup) {
+                    foreach ($displayCondOperatorGroup as $displayCondOperatorIndex => $displayCondGroup) {
                         $field['displayCond'][$displayCondOperator][$displayCondOperatorIndex] =
                             str_replace(
                                 $search,

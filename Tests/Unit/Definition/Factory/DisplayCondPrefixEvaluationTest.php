@@ -17,10 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition\Factory;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
@@ -33,7 +31,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class DisplayCondPrefixEvaluationTest extends UnitTestCase
 {
-
     public static function createPrefixedSingleDisplayCondDataProvider(): iterable
     {
         yield 'simple displayCond, global full prefix on (string)' => [
@@ -68,7 +65,6 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'displayCond' => 'FIELD:aField:=:aValue',
             'expected' => 'FIELD:aField:=:aValue',
         ];
-
 
         yield 'simple displayCond, single full prefix on (string)' => [
             'contentBlockName' => 'bar/foo',
@@ -125,7 +121,6 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'expected' => 'FIELD:cField:=:aValue',
         ];
 
-
         yield 'simple foreign displayCond, single full prefix on (string)' => [
             'contentBlockName' => 'bar/foo',
             'prefixType' => PrefixType::FULL,
@@ -169,7 +164,6 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'displayCond' => 'aField',
             'expected' => 'aField',
         ];
-
     }
 
     public static function createPrefixedMultipleDisplayCondDataProvider(): iterable
@@ -181,8 +175,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'parsedIdentifier' => 'bar_foo_aField',
             'prefixAllFields' => true,
             'prefixSingleField' => false,
-            'displayCond' => ['OR' => ['FIELD:aField:=:aValue','FIELD:bField:=:aValue']],
-            'expected' => ['OR' => ['FIELD:bar_foo_aField:=:aValue','FIELD:bar_foo_bField:=:aValue']],
+            'displayCond' => ['OR' => ['FIELD:aField:=:aValue', 'FIELD:bField:=:aValue']],
+            'expected' => ['OR' => ['FIELD:bar_foo_aField:=:aValue', 'FIELD:bar_foo_bField:=:aValue']],
             'bFieldUsed' => true,
         ];
 
@@ -193,8 +187,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'parsedIdentifier' => 'bar_aField',
             'prefixAllFields' => true,
             'prefixSingleField' => false,
-            'displayCond' => ['OR' => ['FIELD:aField:=:aValue','FIELD:bField:=:aValue']],
-            'expected' => ['OR' => ['FIELD:bar_aField:=:aValue','FIELD:bar_bField:=:aValue']],
+            'displayCond' => ['OR' => ['FIELD:aField:=:aValue', 'FIELD:bField:=:aValue']],
+            'expected' => ['OR' => ['FIELD:bar_aField:=:aValue', 'FIELD:bar_bField:=:aValue']],
             'bFieldUsed' => true,
         ];
 
@@ -205,10 +199,9 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'parsedIdentifier' => 'aField',
             'prefixAllFields' => false,
             'prefixSingleField' => false,
-            'displayCond' => ['OR' => ['FIELD:aField:=:aValue','FIELD:bField:=:aValue']],
-            'expected' => ['OR' => ['FIELD:aField:=:aValue','FIELD:bField:=:aValue']],
+            'displayCond' => ['OR' => ['FIELD:aField:=:aValue', 'FIELD:bField:=:aValue']],
+            'expected' => ['OR' => ['FIELD:aField:=:aValue', 'FIELD:bField:=:aValue']],
         ];
-
 
         yield 'multiple displayCond, single full prefix on (array)' => [
             'contentBlockName' => 'bar/foo',
@@ -217,8 +210,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'parsedIdentifier' => 'bar_foo_aField',
             'prefixAllFields' => false,
             'prefixSingleField' => true,
-            'displayCond' => ['OR' => ['FIELD:aField:=:aValue','FIELD:bField:=:aValue']],
-            'expected' => ['OR' => ['FIELD:bar_foo_aField:=:aValue','FIELD:bField:=:aValue']],
+            'displayCond' => ['OR' => ['FIELD:aField:=:aValue', 'FIELD:bField:=:aValue']],
+            'expected' => ['OR' => ['FIELD:bar_foo_aField:=:aValue', 'FIELD:bField:=:aValue']],
         ];
 
         yield 'multiple displayCond, single vendor prefix on (array)' => [
@@ -228,8 +221,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'parsedIdentifier' => 'bar_aField',
             'prefixAllFields' => false,
             'prefixSingleField' => true,
-            'displayCond' => ['OR' => ['FIELD:aField:=:aValue','FIELD:bField:=:aValue']],
-            'expected' => ['OR' => ['FIELD:bar_aField:=:aValue','FIELD:bField:=:aValue']],
+            'displayCond' => ['OR' => ['FIELD:aField:=:aValue', 'FIELD:bField:=:aValue']],
+            'expected' => ['OR' => ['FIELD:bar_aField:=:aValue', 'FIELD:bField:=:aValue']],
         ];
     }
 
