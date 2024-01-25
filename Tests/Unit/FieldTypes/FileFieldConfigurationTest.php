@@ -49,6 +49,40 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'readOnly' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
+                'cropVariants' => [
+                    'foo' => [
+                        'allowedAspectRatios' => [
+                            'portrait' => [
+                                'title' => 'Portrait',
+                                'value' => '3 / 4',
+                            ],
+                            'landscape' => [
+                                'title' => 'Landscape',
+                                'value' => '1.333',
+                            ],
+                            'plain integer' => [
+                                'title' => 'Plain Integer',
+                                'value' => 4,
+                            ],
+                            'wrong input 1' => [
+                                'title' => 'wrong input 1',
+                                'value' => 'a',
+                            ],
+                            'wrong input 2' => [
+                                'title' => 'wrong input 2',
+                                'value' => 'a / b',
+                            ],
+                            'wrong input 3' => [
+                                'title' => 'wrong input 3',
+                                'value' => '1 /',
+                            ],
+                            'wrong input 4' => [
+                                'title' => 'wrong input 4',
+                                'value' => '/ 1',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -73,6 +107,48 @@ final class FileFieldConfigurationTest extends UnitTestCase
                     'readOnly' => true,
                     'minitems' => 1,
                     'maxitems' => 1,
+                    'overrideChildTca' => [
+                        'columns' => [
+                            'crop' => [
+                                'config' => [
+                                    'cropVariants' => [
+                                        'foo' => [
+                                            'allowedAspectRatios' => [
+                                                'portrait' => [
+                                                    'title' => 'Portrait',
+                                                    'value' => 0.75,
+                                                ],
+                                                'landscape' => [
+                                                    'title' => 'Landscape',
+                                                    'value' => 1.333,
+                                                ],
+                                                'plain integer' => [
+                                                    'title' => 'Plain Integer',
+                                                    'value' => 4.0,
+                                                ],
+                                                'wrong input 1' => [
+                                                    'title' => 'wrong input 1',
+                                                    'value' => 0.0,
+                                                ],
+                                                'wrong input 2' => [
+                                                    'title' => 'wrong input 2',
+                                                    'value' => 0.0,
+                                                ],
+                                                'wrong input 3' => [
+                                                    'title' => 'wrong input 3',
+                                                    'value' => 1.0,
+                                                ],
+                                                'wrong input 4' => [
+                                                    'title' => 'wrong input 4',
+                                                    'value' => 0.0,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -95,6 +171,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'readOnly' => 0,
                 'minitems' => 0,
                 'maxitems' => 0,
+                'cropVariants' => [],
             ],
             'expectedTca' => [
                 'config' => [

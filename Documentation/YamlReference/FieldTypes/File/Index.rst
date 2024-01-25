@@ -52,6 +52,33 @@ Settings
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
+.. confval:: cropVariants
+
+   :Required: false
+   :Type: array
+   :Default: []
+
+   It is possible to define crop variants for this specific field and Content
+   Block. This documentation only covers the most basic configuration. Refer to
+   the :ref:`TCA documentation <columns-imageManipulation-properties-cropVariants>`
+   for a complete overview of possibilities.
+
+   Example configuration below. The aspect ratios can be defined as a float
+   value or a fraction. Only the simple division operation `a / b` is allowed.
+
+   .. code-block:: yaml
+
+    cropVariants:
+      teaser:
+        title: Teaser
+        allowedAspectRatios:
+          portrait:
+            title: Portrait
+            value: 0.75
+          landscape:
+            title: Landscape
+            value: 4 / 3
+
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-file>`.
 
 Example

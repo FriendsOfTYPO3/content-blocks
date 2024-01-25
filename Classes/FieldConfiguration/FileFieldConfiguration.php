@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Resource\AbstractFile;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -36,6 +37,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
     private int $minitems = 0;
     private int $maxitems = 0;
     private bool $extendedPalette = true;
+    private array $cropVariants = [];
 
     public static function createFromArray(array $settings): FileFieldConfiguration
     {
@@ -55,6 +57,7 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
         $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
         $self->extendedPalette = (bool)($settings['extendedPalette'] ?? $self->extendedPalette);
+        $self->cropVariants = (array)($settings['cropVariants'] ?? $self->cropVariants);
         return $self;
     }
 
@@ -98,8 +101,34 @@ final class FileFieldConfiguration implements FieldConfigurationInterface
                 ],
             ];
         }
+        if ($this->cropVariants !== []) {
+            $config['overrideChildTca']['columns']['crop']['config']['cropVariants'] = $this->processCropVariants();
+        }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
+    }
+
+    protected function processCropVariants(): array
+    {
+        $cropVariants = $this->cropVariants;
+        foreach ($cropVariants as $cropVariantName => $cropVariantConfig) {
+            foreach ($cropVariantConfig['allowedAspectRatios'] ?? [] as $device => $aspectRatioConfig) {
+                $aspectRatio = (string)($aspectRatioConfig['value'] ?? '');
+                if (str_contains($aspectRatio, '/')) {
+                    $parts = GeneralUtility::trimExplode('/', $aspectRatio);
+                    if (count($parts) === 2) {
+                        $dividend = (int)$parts[0];
+                        $divisor = (int)$parts[1];
+                        if ($divisor !== 0) {
+                            $aspectRatio = $dividend / $divisor;
+                        }
+                    }
+                }
+                $floatValue = (float)$aspectRatio;
+                $cropVariants[$cropVariantName]['allowedAspectRatios'][$device]['value'] = $floatValue;
+            }
+        }
+        return $cropVariants;
     }
 
     public function getSql(string $uniqueColumnName): string
