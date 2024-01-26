@@ -1,0 +1,19 @@
+# To be used within ContentElements
+identifier: TYPO3/Header
+fields:
+  -
+    identifier: header_palette
+    type: Palette
+    label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.header
+    fields:
+      -
+        identifier: header
+        useExistingField: true
+      -
+        type: Linebreak
+      -
+        identifier: header_layout
+        useExistingField: true
+      -
+        identifier: header_position
+        useExistingField: true
