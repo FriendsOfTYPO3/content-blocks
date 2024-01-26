@@ -162,6 +162,7 @@ final class TableDefinitionCollectionFactory
             $fields = $this->handleRootField($rootField, $input, $result);
             $this->processFields($input, $result, $fields);
         }
+        $this->prefixDisplayCondFieldsIfNecessary($result);
         $this->collectDefinitions($input, $result);
         $result->resetTemporaryState();
         return $result->tableDefinitionList;
@@ -175,7 +176,6 @@ final class TableDefinitionCollectionFactory
             $input->languagePath->addPathSegment($result->identifier);
             $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
             $this->prefixTcaConfigFields($input, $result);
-            $field = $this->prefixDisplayCondFieldsIfNecessary($input, $result, $field);
             if ($result->fieldType === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
@@ -199,6 +199,7 @@ final class TableDefinitionCollectionFactory
         $result->uniqueFieldIdentifiers[] = $result->identifier;
         $result->fieldType = $this->resolveType($input, $field);
         $result->uniqueIdentifier = $this->chooseIdentifier($input, $field);
+        $result->identifierToUniqueMap[$result->identifier] = $result->uniqueIdentifier;
     }
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
@@ -727,52 +728,48 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    private function prefixDisplayCondFieldsIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    private function prefixDisplayCondFieldsIfNecessary(ProcessedFieldsResult $result): void
     {
-        // TODO:
-        // Since displayConds can reference field names outside of the current $field calculation,
-        // we need to first collect all existing fieldnames within a single table,
-        // then check each displayCond of any fieldname to replace it.
-        // ALTERNATIVE:
-        // Make a regular expression match for FIELD:(xxx): and then specifically access
-        //
-        if (!isset($field['displayCond']) || $field['displayCond'] === [] || $field['displayCond'] === '') {
-            return $field;
+        foreach ($result->tableDefinition->fields as $currentIdentifier => $tcaFieldDefinition) {
+            $field = $tcaFieldDefinition['config'];
+            $displayCond = $field['displayCond'] ?? null;
+            if (!is_string($displayCond) && !is_array($displayCond)) {
+                continue;
+            }
+            if ($displayCond === [] || $displayCond === '') {
+                continue;
+            }
+            $field['displayCond'] = $this->prefixDisplayCondFieldRecursive($displayCond, $tcaFieldDefinition, $result);
+            $tcaFieldDefinition['config'] = $field;
+            $result->tableDefinition->fields[$currentIdentifier] = $tcaFieldDefinition;
         }
+    }
 
-        if ($result->identifier === $result->uniqueIdentifier) {
-            return $field;
-        }
-
-        // Only the "FIELD:" prefix within "displayCond" makes sense
-        // to adjust. In case unprefixed identifiers are used inside
-        // the condition, they are replaced with the final prefixed
-        // identifiers here.
-        $search  = 'FIELD:' . $result->identifier . ':';
-        $replace = 'FIELD:' . $result->uniqueIdentifier . ':';
-
-        if (is_string($field['displayCond'])) {
-            $field['displayCond'] = str_replace(
-                $search,
-                $replace,
-                $field['displayCond']
-            );
-        } elseif (is_array($field['displayCond'])) {
-            foreach ($field['displayCond'] as $displayCondOperator => $displayCondOperatorGroup) {
-                if (is_array($displayCondOperatorGroup)) {
-                    foreach ($displayCondOperatorGroup as $displayCondOperatorIndex => $displayCondGroup) {
-                        $field['displayCond'][$displayCondOperator][$displayCondOperatorIndex] =
-                            str_replace(
-                                $search,
-                                $replace,
-                                $field['displayCond'][$displayCondOperator][$displayCondOperatorIndex]
-                            );
-                    }
-                }
+    private function prefixDisplayCondFieldRecursive(string|array $displayCond, array $field, ProcessedFieldsResult $result): string|array
+    {
+        if (is_string($displayCond)) {
+            $displayCond = $this->prefixDisplayCondRule($displayCond, $result);
+        } else {
+            foreach ($displayCond as $indexOrOperator => $ruleOrGroup) {
+                $displayCond[$indexOrOperator] = $this->prefixDisplayCondFieldRecursive($ruleOrGroup, $field, $result);
             }
         }
+        return $displayCond;
+    }
 
-        return $field;
+    private function prefixDisplayCondRule(string $displayCond, ProcessedFieldsResult $result): string
+    {
+        if (!str_contains($displayCond, ':')) {
+            return $displayCond;
+        }
+        $parts = explode(':', $displayCond);
+        $identifier = $parts[1];
+        if (!in_array($identifier, $result->uniqueFieldIdentifiers, true)) {
+            return $displayCond;
+        }
+        $parts[1] = $result->identifierToUniqueMap[$identifier];
+        $replacedDisplayCond = implode(':', $parts);
+        return $replacedDisplayCond;
     }
 
     private function prefixLabelFieldIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void

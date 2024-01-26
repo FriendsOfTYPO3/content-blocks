@@ -33,6 +33,8 @@ final class ProcessedFieldsResult
     public array $uniquePaletteIdentifiers = [];
     /** @var string[] */
     public array $uniqueTabIdentifiers = [];
+    /** @var array<string, string> */
+    public array $identifierToUniqueMap = [];
 
     // Below are temporary properties for the scope of a root field.
     public string $identifier;

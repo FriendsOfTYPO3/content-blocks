@@ -28,57 +28,6 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function displayCondIsPrefixedForArraySyntax(): void
-    {
-        $baseTca['tt_content'] = [];
-        $GLOBALS['TCA'] = $baseTca;
-
-        $contentBlock = LoadedContentBlock::fromArray([
-            'name' => 'bar/foo',
-            'yaml' => [
-                'table' => 'tt_content',
-                'prefixFields' => true,
-                'prefixType' => PrefixType::FULL->value,
-                'fields' => [
-                    [
-                        'identifier' => 'aField',
-                        'displayCond' => [
-                            'AND' => [
-                                'FIELD:bField:=:aValue'
-                            ]
-                        ],
-                        'type' => 'Text',
-                    ],
-                    [
-                        'identifier' => 'bField',
-                        'type' => 'Text',
-                    ],
-                ],
-            ],
-        ]);
-
-        $expected = [
-            'AND' => [
-                'FIELD:bar_foo_bField:=:aValue'
-            ]
-        ];
-
-        $contentBlockRegistry = new ContentBlockRegistry();
-        $contentBlockRegistry->register($contentBlock);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
-        $tcaFieldDefinition = $tableDefinitionCollection
-            ->getTable('tt_content')
-            ->getTcaFieldDefinitionCollection()
-            ->getField('bar_foo_aField');
-
-        $tca = $tcaFieldDefinition->getTca();
-
-        self::assertEquals($expected, $tca['displayCond']);
-    }
-
-    /**
-     * @test
-     */
     public function displayCondIsPrefixedForStringSyntax(): void
     {
         $baseTca['tt_content'] = [];
@@ -104,7 +53,115 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             ],
         ]);
 
-        $expected = 'FIELD:bar_foo_aField:=:aValue';
+        $expected = 'FIELD:bar_foo_bField:=:aValue';
+
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry->register($contentBlock);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $tcaFieldDefinition = $tableDefinitionCollection
+            ->getTable('tt_content')
+            ->getTcaFieldDefinitionCollection()
+            ->getField('bar_foo_aField');
+
+        $tca = $tcaFieldDefinition->getTca();
+
+        self::assertEquals($expected, $tca['displayCond']);
+    }
+
+    public static function displayCondIsPrefixedForArraySyntaxDataProvider(): iterable
+    {
+        yield 'simple AND condition' => [
+            [
+                'AND' => [
+                    'FIELD:bField:=:aValue',
+                ],
+            ],
+            [
+                'AND' => [
+                    'FIELD:bar_foo_bField:=:aValue',
+                ],
+            ],
+        ];
+
+        yield 'AND condition with 2 values' => [
+            [
+                'AND' => [
+                    'FIELD:bField:=:aValue',
+                    'FIELD:cField:=:aValue',
+                ],
+            ],
+            [
+                'AND' => [
+                    'FIELD:bar_foo_bField:=:aValue',
+                    'FIELD:bar_foo_cField:=:aValue',
+                ],
+            ],
+        ];
+
+        yield 'complex displayCond' => [
+            [
+                'AND' => [
+                    'FIELD:bField:=:aValue',
+                    'OR' => [
+                        'FIELD:cField:=:aValue',
+                        'FIELD:dField:=:aValue',
+                    ],
+                ],
+            ],
+            [
+                'AND' => [
+                    'FIELD:bar_foo_bField:=:aValue',
+                    'OR' => [
+                        'FIELD:bar_foo_cField:=:aValue',
+                        'FIELD:bar_foo_dField:=:aValue',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider displayCondIsPrefixedForArraySyntaxDataProvider
+     */
+    public function displayCondIsPrefixedForArraySyntax(array $displayCond, array $expected): void
+    {
+        $baseTca['tt_content'] = [];
+        $GLOBALS['TCA'] = $baseTca;
+
+        $contentBlock = LoadedContentBlock::fromArray([
+            'name' => 'bar/foo',
+            'yaml' => [
+                'table' => 'tt_content',
+                'prefixFields' => true,
+                'prefixType' => PrefixType::FULL->value,
+                'fields' => [
+                    [
+                        'identifier' => 'aField',
+                        'displayCond' => $displayCond,
+                        'type' => 'Text',
+                    ],
+                    [
+                        'identifier' => 'bField',
+                        'type' => 'Text',
+                    ],
+                    [
+                        'identifier' => 'palette',
+                        'type' => 'Palette',
+                        'fields' => [
+                            [
+                                'identifier' => 'cField',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'dField',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
 
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
