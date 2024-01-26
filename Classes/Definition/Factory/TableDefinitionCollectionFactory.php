@@ -169,6 +169,7 @@ final class TableDefinitionCollectionFactory
 
     private function processFields(ProcessingInput $input, ProcessedFieldsResult $result, array $fields): void
     {
+        $processedFields = [];
         foreach ($fields as $field) {
             $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
@@ -184,9 +185,10 @@ final class TableDefinitionCollectionFactory
             if ($result->fieldType === FieldType::COLLECTION) {
                 $this->processCollection($input, $result, $field);
             }
-            $this->collectFields($result);
+            $processedFields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
             $input->languagePath->popSegment();
         }
+        $this->collectProcessedFields($result, $processedFields);
     }
 
     private function initializeField(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
@@ -483,14 +485,16 @@ final class TableDefinitionCollectionFactory
         return [];
     }
 
-    private function collectFields(ProcessedFieldsResult $result): void
+    private function collectProcessedFields(ProcessedFieldsResult $result, array $processedFields): void
     {
-        $result->tableDefinition->fields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
-        $result->contentType->columns[] = $result->uniqueIdentifier;
-        $isTypeField = $result->uniqueIdentifier === $result->tableDefinition->typeField;
-        if (!$isTypeField) {
-            $overrideColumn = TcaFieldDefinition::createFromArray($result->tcaFieldDefinition);
-            $result->contentType->overrideColumns[] = $overrideColumn;
+        foreach ($processedFields as $uniqueIdentifier => $tcaFieldDefinition) {
+            $result->tableDefinition->fields[$uniqueIdentifier] = $tcaFieldDefinition;
+            $result->contentType->columns[] = $uniqueIdentifier;
+            $isTypeField = $uniqueIdentifier === $result->tableDefinition->typeField;
+            if (!$isTypeField) {
+                $overrideColumn = TcaFieldDefinition::createFromArray($tcaFieldDefinition);
+                $result->contentType->overrideColumns[] = $overrideColumn;
+            }
         }
     }
 
