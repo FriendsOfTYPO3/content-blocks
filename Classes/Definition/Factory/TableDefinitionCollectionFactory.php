@@ -163,6 +163,7 @@ final class TableDefinitionCollectionFactory
             $this->processFields($input, $result, $fields);
         }
         $this->prefixDisplayCondFieldsIfNecessary($result);
+        $this->collectOverrideColumns($result);
         $this->collectDefinitions($input, $result);
         $result->resetTemporaryState();
         return $result->tableDefinitionList;
@@ -170,7 +171,6 @@ final class TableDefinitionCollectionFactory
 
     private function processFields(ProcessingInput $input, ProcessedFieldsResult $result, array $fields): void
     {
-        $processedFields = [];
         foreach ($fields as $field) {
             $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
@@ -186,10 +186,9 @@ final class TableDefinitionCollectionFactory
             if ($result->fieldType === FieldType::COLLECTION) {
                 $this->processCollection($input, $result, $field);
             }
-            $processedFields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
+            $this->collectProcessedField($result);
             $input->languagePath->popSegment();
         }
-        $this->collectProcessedFields($result, $processedFields);
     }
 
     private function initializeField(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
@@ -487,11 +486,15 @@ final class TableDefinitionCollectionFactory
         return [];
     }
 
-    private function collectProcessedFields(ProcessedFieldsResult $result, array $processedFields): void
+    private function collectProcessedField(ProcessedFieldsResult $result): void
     {
-        foreach ($processedFields as $uniqueIdentifier => $tcaFieldDefinition) {
-            $result->tableDefinition->fields[$uniqueIdentifier] = $tcaFieldDefinition;
-            $result->contentType->columns[] = $uniqueIdentifier;
+        $result->tableDefinition->fields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
+        $result->contentType->columns[] = $result->uniqueIdentifier;
+    }
+
+    private function collectOverrideColumns(ProcessedFieldsResult $result): void
+    {
+        foreach ($result->tableDefinition->fields as $uniqueIdentifier => $tcaFieldDefinition) {
             $isTypeField = $uniqueIdentifier === $result->tableDefinition->typeField;
             if (!$isTypeField) {
                 $overrideColumn = TcaFieldDefinition::createFromArray($tcaFieldDefinition);

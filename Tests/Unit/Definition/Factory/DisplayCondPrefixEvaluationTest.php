@@ -30,9 +30,6 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
      */
     public function displayCondIsPrefixedForStringSyntax(): void
     {
-        $baseTca['tt_content'] = [];
-        $GLOBALS['TCA'] = $baseTca;
-
         $contentBlock = LoadedContentBlock::fromArray([
             'name' => 'bar/foo',
             'yaml' => [
@@ -128,9 +125,6 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
      */
     public function displayCondIsPrefixedForArraySyntax(array $displayCond, array $expected): void
     {
-        $baseTca['tt_content'] = [];
-        $GLOBALS['TCA'] = $baseTca;
-
         $contentBlock = LoadedContentBlock::fromArray([
             'name' => 'bar/foo',
             'yaml' => [
