@@ -105,6 +105,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
                     'OR' => [
                         'FIELD:cField:=:aValue',
                         'FIELD:dField:=:aValue',
+                        'BLA:bField',
                     ],
                 ],
             ],
@@ -114,6 +115,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
                     'OR' => [
                         'FIELD:bar_foo_cField:=:aValue',
                         'FIELD:bar_foo_dField:=:aValue',
+                        'BLA:bField',
                     ],
                 ],
             ],

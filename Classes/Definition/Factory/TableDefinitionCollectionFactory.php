@@ -733,10 +733,12 @@ final class TableDefinitionCollectionFactory
         foreach ($result->tableDefinition->fields as $currentIdentifier => $tcaFieldDefinition) {
             $field = $tcaFieldDefinition['config'];
             $displayCond = $field['displayCond'] ?? null;
-            if (!is_string($displayCond) && !is_array($displayCond)) {
+            if ($displayCond === null) {
                 continue;
             }
-            if ($displayCond === [] || $displayCond === '') {
+            $isCorrectType = is_string($displayCond) || is_array($displayCond);
+            $isEmpty = $displayCond === [] || $displayCond === '';
+            if (!$isCorrectType || $isEmpty) {
                 continue;
             }
             $field['displayCond'] = $this->prefixDisplayCondFieldRecursive($displayCond, $tcaFieldDefinition, $result);
@@ -759,7 +761,7 @@ final class TableDefinitionCollectionFactory
 
     private function prefixDisplayCondRule(string $displayCond, ProcessedFieldsResult $result): string
     {
-        if (!str_contains($displayCond, ':')) {
+        if (!str_starts_with($displayCond, 'FIELD:')) {
             return $displayCond;
         }
         $parts = explode(':', $displayCond);
