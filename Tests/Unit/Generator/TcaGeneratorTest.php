@@ -2869,4 +2869,57 @@ final class TcaGeneratorTest extends UnitTestCase
 
         self::assertEquals($expected, $tca);
     }
+
+    /**
+     * @test
+     */
+    public function displayCondIsPrefixedForStringSyntax(): void
+    {
+        $baseTca['tt_content'] = [];
+        $GLOBALS['TCA'] = $baseTca;
+
+        $contentBlock = LoadedContentBlock::fromArray([
+            'name' => 'bar/foo',
+            'yaml' => [
+                'table' => 'tt_content',
+                'prefixFields' => true,
+                'prefixType' => 'full',
+                'fields' => [
+                    [
+                        'identifier' => 'aField',
+                        'displayCond' => 'FIELD:bField:=:aValue',
+                        'type' => 'Text',
+                    ],
+                    [
+                        'identifier' => 'bField',
+                        'type' => 'Text',
+                    ],
+                ],
+            ],
+        ]);
+
+        $expected = 'FIELD:bar_foo_bField:=:aValue';
+
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry->register($contentBlock);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
+            ->create();
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            new NoopEventDispatcher(),
+            $languageFileRegistry,
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+
+        $tca = $tcaGenerator->generate($baseTca);
+        $actual = $tca['tt_content']['types']['1']['columnsOverrides']['bar_foo_aField']['displayCond'];
+
+        self::assertEquals($expected, $actual);
+    }
 }
