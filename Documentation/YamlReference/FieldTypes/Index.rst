@@ -150,6 +150,48 @@ Field options, which can be defined inside the :yaml:`fields` array.
            prefixField: true
            prefixType: vendor
 
+.. confval:: displayCond
+
+   :Required: false
+   :Type: string|array
+   :Default: ''
+
+   Can be used to display the field only under certain conditions.
+   Please have a look at the :ref:`official documentation <t3tca:columns-properties-displaycond>`
+   for more information.
+
+   .. code-block:: yaml
+
+       # Simple, only one rule.
+       displayCond: 'FIELD:identifier:=:value'
+
+   .. code-block:: yaml
+
+       # Multiple rules combined with AND.
+       displayCond:
+         AND:
+           - 'FIELD:identifier:=:value'
+           - 'FIELD:another_identifier:=:1'
+
+   .. tip::
+
+      Fields used in a condition should have the column option :yaml:`onChange`
+      set to :yaml:`reload`.
+
+.. confval:: onChange
+
+   :Required: false
+   :Type: string
+   :Default: ''
+
+   Can be used to trigger a reload of the Content Type when this specific
+   field is changed. Should be used, if a rule of :yaml:`displayCond` is used
+   for this field.
+
+   .. code-block:: yaml
+
+      onChange: reload
+
 .. toctree::
     :maxdepth: 1
     :titlesonly:
