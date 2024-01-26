@@ -153,19 +153,30 @@ Field options, which can be defined inside the :yaml:`fields` array.
 .. confval:: displayCond
 
    :Required: false
-   :Type: string
+   :Type: string|array
    :Default: ''
 
-   Can be used to display the Content Element only under certain conditions.
-   Please have a look at the `official documentation
-   <https://docs.typo3.org/m/typo3/reference-tca/main/en-us/Columns/Properties/DisplayCond.html#displaycond>`__
-   for more information. **Tip**: When using a condition, the option
-   ``onChange`` should be set to ``reload``. **You also need to set the full
-   identifier of the field, including the prefixes.**
+   Can be used to display the field only under certain conditions.
+   Please have a look at the :ref:`official documentation <t3tca:columns-properties-displaycond>`
+   for more information.
 
    .. code-block:: yaml
 
-       displayCond: 'FIELD:header:=:Headline'
+       # Simple, only one rule.
+       displayCond: 'FIELD:identifier:=:value'
+
+   .. code-block:: yaml
+
+       # Multiple rules combined with AND.
+       displayCond:
+         AND:
+           - 'FIELD:identifier:=:value'
+           - 'FIELD:another_identifier:=:1'
+
+   .. tip::
+
+      Fields used in a condition should have the column option :yaml:`onChange`
+      set to :yaml:`reload`.
 
 .. confval:: onChange
 
@@ -173,12 +184,13 @@ Field options, which can be defined inside the :yaml:`fields` array.
    :Type: string
    :Default: ''
 
-   Can be used to trigger a reload for the Content Element when this specific
-   sfield is changed. Should be used, if any display conditions are used.
+   Can be used to trigger a reload of the Content Type when this specific
+   field is changed. Should be used, if a rule of :yaml:`displayCond` is used
+   for this field.
 
    .. code-block:: yaml
 
-       onChange: reload
+      onChange: reload
 
 .. toctree::
     :maxdepth: 1
