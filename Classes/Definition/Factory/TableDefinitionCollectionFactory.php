@@ -165,7 +165,6 @@ final class TableDefinitionCollectionFactory
         $this->prefixDisplayCondFieldsIfNecessary($result);
         $this->collectOverrideColumns($result);
         $this->collectDefinitions($input, $result);
-        $result->resetTemporaryState();
         return $result->tableDefinitionList;
     }
 
@@ -188,6 +187,7 @@ final class TableDefinitionCollectionFactory
             }
             $this->collectProcessedField($result);
             $input->languagePath->popSegment();
+            $result->resetTemporaryState();
         }
     }
 
