@@ -10,18 +10,15 @@ pre-defined set of fields that can be reused and have to be defined only once.
 
 There are **two** different ways of using it.
 
-The first way is to use Basics like layouts for your UI. The Basics are added
-**after** the fields of your Content Block. This is useful if you want to have
-a set of fields that are always available for a Content Block.
+Basics as additional fields
+===========================
 
-List of the standard Basics shipped with Content Blocks:
+The first way of using Basics is to have them added **after** the :yaml:`fields`
+array of your Content Block. This is useful if you want to have a set of fields
+that are always available for your Content Block.
 
-*  :yaml:`TYPO3/Appearance`
-*  :yaml:`TYPO3/Links`
-*  :yaml:`TYPO3/Categories`
-
-This is an example on how to add the classic Fluid Styled Content "Appearance"
-Tab and the additional "Links" palette.
+This is an example on how to add the classic Fluid Styled Content **Appearance**
+Tab and the additional **Links** palette.
 
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
@@ -30,33 +27,41 @@ Tab and the additional "Links" palette.
     basics:
         - TYPO3/Appearance
         - TYPO3/Links
-    fields:
-        # - ...
 
 You can add as many Basics as you need. Note, that all Basics are simply
 concatenated onto each other. Be careful, not to create an invalid state by
 gluing incompatible Basics together.
 
-The second way is to use Basics directly between your custom fields. This can
-be done by using the identifier and the type :yaml:`Basic`.
+Basics as field type
+====================
+
+The second way is to use Basics directly in the :yaml:`fields` array. This can
+be done by using the according Basic :yaml:`identifier` and the type
+:yaml:`Basic`.
 
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
 
     name: example/basics
-    basics:
-        - TYPO3/Appearance
     fields:
-        - identifier: header
-          useExistingField: true
-        - identifier: TYPO3/Links
+        - identifier: TYPO3/Header
           type: Basic
+
+Pre-defined Basics
+==================
+
+List of the standard Basics shipped with Content Blocks.
+
+*  :yaml:`TYPO3/Header`
+*  :yaml:`TYPO3/Appearance`
+*  :yaml:`TYPO3/Links`
+*  :yaml:`TYPO3/Categories`
 
 Define own Basics
 =================
 
 You can define your own Basics by placing one or more YAML files into
-`ContentBlocks/Basics`. The name of the YAML file can be chosen freely.
+**ContentBlocks/Basics**. The name of the YAML file can be chosen freely.
 
 Example on how to create a single Basic:
 
@@ -68,7 +73,7 @@ Example on how to create a single Basic:
       - identifier: a_basic_field
         type: Text
 
-The :yaml:`fields` part is exactly the same as in Content Blocks. Here
+The :yaml:`fields` part is exactly the same as in EditorInterface. Here
 you can define a Tab, a Palette or simply a set of fields.
 
 The most practical way to use Basics is to use pre-defined tabs as the global
