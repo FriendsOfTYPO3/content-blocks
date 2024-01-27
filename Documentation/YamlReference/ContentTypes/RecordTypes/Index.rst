@@ -80,6 +80,8 @@ dropdown. The different types will be also added automatically to the list:
       - identifier: title
         type: Text
 
+.. _yaml_reference_record_type_in_collection:
+
 Use as child table in Collection
 ================================
 

@@ -520,11 +520,12 @@ final class TableDefinitionCollectionFactory
 
     private function processCollection(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
     {
+        $isExternalCollection = array_key_exists('foreign_table', $field);
         $this->assignRelationConfigToCollectionField($field, $result);
         $foreignTable = $result->tcaFieldDefinition['config']['foreign_table'];
         $this->parentReferences[$foreignTable][] = $result->tcaFieldDefinition;
         $fields = $field['fields'] ?? [];
-        if ($fields === []) {
+        if ($isExternalCollection || $fields === []) {
             return;
         }
         $field['title'] = $field['label'];

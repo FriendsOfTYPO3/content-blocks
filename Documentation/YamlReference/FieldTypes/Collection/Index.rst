@@ -109,10 +109,15 @@ Settings
    :Type: string (table)
 
    It is possible to reference another table instead of creating a new one. This
-   table can be defined by another Content Block, but can also be an existing
-   table defined by the Core or another extension. Existing tables need to
-   manually define the :sql:`foreign_table_parent_uid`, :sql:`tablenames` and
-   :sql:`fieldname` fields.
+   table can be defined by another :ref:`Content Block <yaml_reference_record_type_in_collection>`,
+   but can also be an existing table defined by the Core or another extension.
+   Existing tables need to manually define the :sql:`foreign_table_parent_uid`,
+   :sql:`tablenames` and :sql:`fieldname` fields.
+
+   .. note::
+
+      When you use :yaml:`foreign_table` it is not possible to define
+      :yaml:`fields` anymore. They will not be evaluated.
 
 .. confval:: foreign_field
 
