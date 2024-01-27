@@ -14,3 +14,4 @@ functionality.
 
     ExtendContentBlockTCA/Index
     SharedPartials/Index
+    FluidStyledContent/Index

@@ -73,6 +73,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('<p>pid:1</p>', $html);
         self::assertStringContainsString('<p>languageId:0</p>', $html);
         self::assertStringContainsString('<p>typeName:simple_simple</p>', $html);
+        self::assertStringContainsString('<p>CType:simple_simple</p>', $html);
         self::assertStringContainsString('<p>tableName:tt_content</p>', $html);
         self::assertStringContainsString('<p>creationDate:1697810914</p>', $html);
         self::assertStringContainsString('<p>updateDate:1697810925</p>', $html);

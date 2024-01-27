@@ -62,7 +62,7 @@ final class ContentBlockDataResolver
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
         }
 
-        return $this->buildContentBlockDataObject($data, $processedContentBlockData, $contentTypeDefinition);
+        return $this->buildContentBlockDataObject($data, $processedContentBlockData, $tableDefinition, $contentTypeDefinition);
     }
 
     private function transformCollectionRelation(array $processedField, TcaFieldDefinition $tcaFieldDefinition, string $table, int $depth): array
@@ -152,14 +152,19 @@ final class ContentBlockDataResolver
     private function buildContentBlockDataObject(
         array $data,
         array $processedContentBlockData,
+        TableDefinition $tableDefinition,
         ContentTypeInterface $contentType,
     ): ContentBlockData {
         $baseData = [
             'uid' => $data['uid'],
             'pid' => $data['pid'],
-            'typeName' => $contentType->getTypeName(),
             'tableName' => $contentType->getTable(),
+            'typeName' => $contentType->getTypeName(),
         ];
+        // Duplicates typeName, but needed for Fluid Styled Content layout integration.
+        if ($tableDefinition->hasTypeField()) {
+            $baseData[$tableDefinition->getTypeField()] = $contentType->getTypeName();
+        }
         if (array_key_exists('sys_language_uid', $data)) {
             $baseData['languageId'] = $data['sys_language_uid'];
         }
