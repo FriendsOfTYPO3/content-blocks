@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\Utility\LocalLangPathUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class AutomaticLanguageKeysRegistry
+final class AutomaticLanguageKeysRegistry
 {
     /**
      * @var array<string, AutomaticLanguageSource[]>
