@@ -33,6 +33,36 @@ use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
+ * Main bootstrap loader for Content Blocks. This class finds registered
+ * Content Blocks in loaded TYPO3 extensions and adds them to the registry.
+ * Before that, Content Block Basics are already loaded by BasicsLoader and
+ * are applied here for each Content Block. The result is cached in the core
+ * cache with the identifier `content-blocks` and is hydrated for new requests.
+ *
+ * Content Blocks are loaded from these folders inside extensions:
+ *
+ * host_extension
+ * |__ ContentBlocks
+ *     |__ ContentElements
+ *     |   |__ block-a
+ *     |   |   |__ EditorInterface.yaml < name: vendor/block-a
+ *     |   |__ block-b
+ *     |__ PageTypes
+ *     |   |__ block-c
+ *     |__ RecordTypes
+ *         |__ block-d
+ *
+ * These sub-folders may contain any number of Content Blocks. The folder name
+ * of a Content Block is not important, but should, for clarity, be the same as
+ * the Content Block name. They must contain an EditorInterface.yaml file with a
+ * `name` config. Just like for composer names, it must consist of a vendor and
+ * package part separated by a slash. The name parts must be lowercase and can
+ * be separated by dashes.
+ *
+ * @todo Asset publishing of the `Assets` folder happens during the runtime, as
+ * @todo opposed to the publishing of the extensions' Resources/Public folder in
+ * @todo the composer installation phase. This is not optimal.
+ *
  * @internal Not part of TYPO3's public API.
  */
 class ContentBlockLoader
