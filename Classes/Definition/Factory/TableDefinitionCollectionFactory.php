@@ -189,7 +189,7 @@ final class TableDefinitionCollectionFactory
             $fields = $this->handleRootField($rootField, $input, $result);
             $this->processFields($input, $result, $fields);
         }
-        $this->prefixDisplayCondFieldsIfNecessary($result);
+        $this->prefixTcaConfigFields($input, $result);
         $this->collectOverrideColumns($result);
         $this->collectDefinitions($input, $result);
         return $result->tableDefinitionList;
@@ -201,7 +201,6 @@ final class TableDefinitionCollectionFactory
             $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
             $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
-            $this->prefixTcaConfigFields($input, $result);
             if ($result->fieldType === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
@@ -349,6 +348,7 @@ final class TableDefinitionCollectionFactory
         $this->prefixSortFieldIfNecessary($input, $result);
         $this->prefixLabelFieldIfNecessary($input, $result);
         $this->prefixFallbackLabelFieldsIfNecessary($input, $result);
+        $this->prefixDisplayCondFieldsIfNecessary($result);
     }
 
     private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
@@ -728,9 +728,6 @@ final class TableDefinitionCollectionFactory
         $sortFieldArray = [];
         if (is_string($sortField)) {
             $sortFieldArray = [['identifier' => $sortField]];
-            if ($sortField !== $result->identifier) {
-                return;
-            }
             $result->tableDefinition->raw['sortField'] = [];
         }
         if (is_array($sortField)) {
@@ -752,8 +749,8 @@ final class TableDefinitionCollectionFactory
                     );
                 }
             }
-            if ($sortFieldIdentifier !== '' && $sortFieldIdentifier === $result->identifier) {
-                $result->tableDefinition->raw['sortField'][$i]['identifier'] = $result->uniqueIdentifier;
+            if ($sortFieldIdentifier !== '' && in_array($sortFieldIdentifier, $result->uniqueFieldIdentifiers, true)) {
+                $result->tableDefinition->raw['sortField'][$i]['identifier'] = $result->identifierToUniqueMap[$sortFieldIdentifier];
                 $result->tableDefinition->raw['sortField'][$i]['order'] = strtoupper($order);
             }
         }
@@ -814,11 +811,11 @@ final class TableDefinitionCollectionFactory
         $labelFields = $labelCapability->getLabelFieldsAsArray();
         for ($i = 0; $i < count($labelFields); $i++) {
             $currentLabelField = $labelFields[$i];
-            if ($currentLabelField === $result->identifier) {
+            if (in_array($currentLabelField, $result->uniqueFieldIdentifiers, true)) {
                 if (is_string($result->tableDefinition->raw['labelField'])) {
                     $result->tableDefinition->raw['labelField'] = [];
                 }
-                $result->tableDefinition->raw['labelField'][$i] = $result->uniqueIdentifier;
+                $result->tableDefinition->raw['labelField'][$i] = $result->identifierToUniqueMap[$currentLabelField];
             }
         }
     }
@@ -832,8 +829,8 @@ final class TableDefinitionCollectionFactory
         $fallbackLabelFields = $labelCapability->getFallbackLabelFields();
         for ($i = 0; $i < count($fallbackLabelFields); $i++) {
             $currentLabelField = $fallbackLabelFields[$i];
-            if ($currentLabelField === $result->identifier) {
-                $result->tableDefinition->raw['fallbackLabelFields'][$i] = $result->uniqueIdentifier;
+            if (in_array($currentLabelField, $result->uniqueFieldIdentifiers, true)) {
+                $result->tableDefinition->raw['fallbackLabelFields'][$i] = $result->identifierToUniqueMap[$currentLabelField];
             }
         }
     }
