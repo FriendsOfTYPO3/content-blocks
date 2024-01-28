@@ -41,6 +41,33 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 
 /**
+ * This class does the main heavy-lifting of parsing and preparing loaded
+ * Content Blocks and builds the hierarchy of table definitions, TCA
+ * record types (here called Content Types) and other TCA specialties like
+ * Palettes, Tabs or FlexForm. The result `TableDefinitionCollection` contains
+ * the processed immutable state and is used as an interchange format for
+ * multiple generators as read-only access. As such, this class does not have
+ * knowledge about real TCA, only about the YAML definition and how to transform
+ * it into the internal object format.
+ *
+ * List of what this factory does:
+ * - Builds the shared TableDefinitionCollection object for use in generators.
+ * - Validates the YAML-schema and errors out in case of incorrect definition.
+ * - Assigns and tracks unique identifiers for use in database column names.
+ * - Collects automatic language keys, which can be used to generate the
+ *   Labels.xlf file with a command.
+ * - Recursively resolves Collections and creates additional anonymous Record
+ *   Types based on them. Meaning one Content Block can indeed define more than
+ *   one Content Type with the use of Collections.
+ * - Tracks parent references which are used to automatically add `parent_uid`
+ *   fields. This way a Record Type can be an aggregate root or not depending on
+ *   whether it is used in a foreign_table relation or not.
+ * - Replaces identifiers referenced in configuration options with the prefixed
+ *   identifier (e.g. for the labelField).
+ * - Dynamically adds new fields depending on config. For example the type field
+ *   or the description column.
+ * - (YAML-defined) FlexForm parsing / preparation.
+ *
  * @internal Not part of TYPO3's public API.
  */
 final class TableDefinitionCollectionFactory
