@@ -959,6 +959,100 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
 
+        yield 'First general tab can be overridden' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'extPath' => 'EXT:foo/ContentBlocks/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'fields' => [
+                            [
+                                'identifier' => 'tab_1',
+                                'type' => 'Tab',
+                            ],
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'tt_content' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            't3ce_example' => 'tt_content-t3ce_example',
+                        ],
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_example_text',
+                    ],
+                    'types' => [
+                        't3ce_example' => [
+                            'showitem' => '--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,--palette--;;general,t3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                't3ce_example_text' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        't3ce_example_text' => [
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'exclude' => true,
+                            'label' => 'text',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'First general tab overridden, no custom fields' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'extPath' => 'EXT:foo/ContentBlocks/example',
+                    'icon' => '',
+                    'iconProvider' => '',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'fields' => [
+                            [
+                                'identifier' => 'tab_1',
+                                'type' => 'Tab',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'tt_content' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            't3ce_example' => 'tt_content-t3ce_example',
+                        ],
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
+                    ],
+                    'types' => [
+                        't3ce_example' => [
+                            'showitem' => '--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,--palette--;;general,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'previewRenderer' => PreviewRenderer::class,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         yield 'Content Block creating a new custom root table (not tt_content, generic content type)' => [
             'contentBlocks' => [
                 [

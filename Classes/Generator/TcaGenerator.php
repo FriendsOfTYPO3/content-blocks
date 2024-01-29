@@ -332,10 +332,10 @@ class TcaGenerator
 
     protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
-        $showItem = $this->processShowItem($typeDefinition->getShowItems());
+        $typeDefinition->getColumns();
         $typeDefinitionArray = [
             'previewRenderer' => PreviewRenderer::class,
-            'showitem' => $this->getContentElementStandardShowItem($showItem),
+            'showitem' => $this->getContentElementStandardShowItem($typeDefinition),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -646,12 +646,24 @@ class TcaGenerator
         return $labelField->getUniqueIdentifier();
     }
 
-    protected function getContentElementStandardShowItem(string $showItem): string
+    protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
     {
+        $showItemArray = $typeDefinition->getShowItems();
+        $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
+        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        if ($firstItemIsTab) {
+            $tabDefinition = array_shift($showItemArray);
+            $generalTab = $this->processShowItem([$tabDefinition]);
+        }
+        $showItem = $this->processShowItem($showItemArray);
         $parts = [
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+            $generalTab,
             '--palette--;;general',
-            $showItem,
+        ];
+        if ($showItem !== '') {
+            $parts[] = $showItem;
+        }
+        $systemFields = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
             '--palette--;;language',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
@@ -660,8 +672,9 @@ class TcaGenerator
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
             'rowDescription',
         ];
-
-        return implode(',', $parts);
+        $parts = array_merge($parts, $systemFields);
+        $result = implode(',', $parts);
+        return $result;
     }
 
     protected function getRecordTypeStandardShowItem(string $showItem, TableDefinition $tableDefinition): string

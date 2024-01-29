@@ -1,6 +1,8 @@
 name: example/cta
 group: common
 fields:
+  - identifier: tab_1
+    type: Tab
   - identifier: header
     useExistingField: true
   - identifier: bodytext

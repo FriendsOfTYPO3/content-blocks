@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-01-29T13:43:08+00:00" product-name="example/cta">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-01-29T15:36:43+00:00" product-name="example/cta">
 		<header/>
 		<body>
 			<trans-unit id="title" resname="title">
@@ -8,6 +8,9 @@
 			</trans-unit>
 			<trans-unit id="description" resname="description">
 				<source>Add a call to action button with additional information</source>
+			</trans-unit>
+			<trans-unit id="tabs.tab_1" resname="tabs.tab_1">
+				<source>Custom Tab name</source>
 			</trans-unit>
 			<trans-unit id="header.label" resname="header.label">
 				<source>Header</source>
