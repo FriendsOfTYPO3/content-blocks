@@ -1,0 +1,14 @@
+name: example/accordion
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: accordion_item
+    type: Collection
+    labelField: text
+    minitems: 1
+    fields:
+      - identifier: text
+        type: Text
+      - identifier: textarea
+        type: Textarea
+        enableRichtext: true

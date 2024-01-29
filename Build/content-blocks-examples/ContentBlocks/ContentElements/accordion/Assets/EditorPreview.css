@@ -1,0 +1,35 @@
+.cb-accordion .accordion-item {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    border-bottom: 1px solid #111;
+}
+
+.cb-accordion .active, .cb-accordion .accordion-item:hover {
+    background-color: #ccc;
+}
+
+.cb-accordion .accordion-item:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.cb-accordion .active:after {
+    content: "\2212";
+}
+
+.cb-accordion .panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+}

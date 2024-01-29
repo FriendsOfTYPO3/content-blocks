@@ -8,3 +8,4 @@ Build/testing-docker/.env
 Documentation-GENERATED-temp
 config
 .phpunit.result.cache
+packages

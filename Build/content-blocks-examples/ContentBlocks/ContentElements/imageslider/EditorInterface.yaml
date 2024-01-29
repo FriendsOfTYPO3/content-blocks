@@ -1,0 +1,7 @@
+name: example/imageslider
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: assets
+    useExistingField: true
+    allowed: jpg,jpeg,png,svg,gif

@@ -1,0 +1,53 @@
+.cb-cta {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1.5rem 0;
+    margin: 0 1rem 3rem;
+}
+
+.cb-cta .cb-cta-bg {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+}
+
+.cb-cta .overlay {
+    z-index: 1;
+    background-color: rgba(255,255,255,.4);
+    padding: 1.5rem 1rem;
+}
+
+.cb-cta .overlay p {
+    margin-bottom: 2.5rem;
+}
+
+.cb-cta .overlay p.text-center {
+    text-align: center;
+}
+
+.cb-cta .btn-cta {
+    margin-top: 1rem;
+    background-color: #f80;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    border: 2px solid #f80;
+}
+
+.cb-cta .btn-cta:hover {
+    background-color: #fff;
+    color: #f80;
+}

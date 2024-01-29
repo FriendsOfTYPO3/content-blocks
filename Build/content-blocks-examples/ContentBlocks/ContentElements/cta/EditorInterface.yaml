@@ -1,0 +1,25 @@
+name: example/cta
+group: common
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: bodytext
+    useExistingField: true
+    enableRichtext: true
+  - identifier: link
+    type: Link
+    autocomplete: true
+    allowedTypes:
+      - page
+      - url
+      - file
+    max: 150
+    required: true
+  - identifier: link_title
+    type: Text
+    required: true
+  - identifier: background_image
+    type: File
+    maxitems: 1
+    minitems: 1
+    allowed: common-image-types

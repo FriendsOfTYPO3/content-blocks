@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="card-group">
+		<header/>
+		<body>
+			<trans-unit id="title" xml:space="preserve">
+				<source>Card Group</source>
+			</trans-unit>
+			<trans-unit id="description" xml:space="preserve">
+				<source>Add a group with several cards</source>
+			</trans-unit>
+			<trans-unit id="header.label" xml:space="preserve">
+				<source>Header</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.label" xml:space="preserve">
+				<source>Card group items</source>
+			</trans-unit>
+			<trans-unit id="settings.label" xml:space="preserve">
+				<source>Settings</source>
+			</trans-unit>
+			<trans-unit id="settings.alignment.label" xml:space="preserve">
+				<source>Alignment</source>
+			</trans-unit>
+			<trans-unit id="settings.row_items.label" xml:space="preserve">
+				<source>Items per row</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.image.label" xml:space="preserve">
+				<source>Image</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.title.label" xml:space="preserve">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.bodytext.label" xml:space="preserve">
+				<source>Bodytext</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.link.label" xml:space="preserve">
+				<source>Link</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.link_title.label" xml:space="preserve">
+				<source>Link title</source>
+			</trans-unit>
+			<trans-unit id="readmore" xml:space="preserve">
+				<source>Read more</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

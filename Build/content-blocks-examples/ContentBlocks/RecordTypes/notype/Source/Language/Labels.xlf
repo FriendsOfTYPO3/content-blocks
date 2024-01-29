@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="record1">
+		<header/>
+		<body>
+			<trans-unit id="title" xml:space="preserve">
+				<source>No type record</source>
+			</trans-unit>
+			<trans-unit id="description" xml:space="preserve">
+				<source>Record with only one type</source>
+			</trans-unit>
+			<trans-unit id="title.label" xml:space="preserve">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="text.label" xml:space="preserve">
+				<source>Text</source>
+			</trans-unit>
+			<trans-unit id="image.label" xml:space="preserve">
+				<source>Image</source>
+			</trans-unit>
+			<trans-unit id="text3.label" xml:space="preserve">
+				<source>Textarea</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

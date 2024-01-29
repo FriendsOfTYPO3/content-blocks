@@ -15,6 +15,12 @@
 		"issues": "https://forge.typo3.org",
 		"source": "https://github.com/typo3/typo3"
 	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "packages/*"
+		}
+	],
 	"config": {
 		"preferred-install": {
 			"typo3/cms-core": "source",
@@ -82,6 +88,10 @@
 		"typo3/testing-framework": "^8.0"
 	},
 	"scripts": {
+		"pre-update-cmd": [
+			"[ -d \"packages\" ] || mkdir packages",
+			"[ -L \"packages/content-blocks-examples\" ] || ln -s ../Build/content-blocks-examples -t packages"
+		],
 		"pre-autoload-dump": [
 			"[ -d \"config\" ] || cp -a ./Build/config.example ./config"
 		],

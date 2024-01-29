@@ -1,0 +1,36 @@
+{
+	"name": "contentblocks/examples",
+	"type": "typo3-cms-extension",
+	"version": "1.0.0",
+	"description": "TYPO3 CMS Content Blocks examples",
+	"homepage": "https://typo3.org",
+	"license": ["GPL-2.0-or-later"],
+	"authors": [{
+		"name": "TYPO3 Content Types Team",
+		"role": "Developer"
+	}],
+	"support": {
+		"docs": "https://docs.typo3.org/c/typo3/cms-content-blocks/main/en-us/",
+		"issues": "",
+		"source": ""
+	},
+	"config": {
+		"sort-packages": true
+	},
+	"require": {
+		"typo3/cms-content-blocks": "13.0.*@dev"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-main": "13.0.x-dev"
+		},
+		"typo3/cms": {
+			"extension-key": "content_blocks_examples"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"ContentBlocks\\Examples\\": "Classes/"
+		}
+	}
+}

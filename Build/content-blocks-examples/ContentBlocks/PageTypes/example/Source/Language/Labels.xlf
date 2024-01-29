@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
+		<header/>
+		<body>
+			<trans-unit id="title" xml:space="preserve">
+				<source>My custom page type</source>
+			</trans-unit>
+			<trans-unit id="description" xml:space="preserve">
+				<source>This is your page type description</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

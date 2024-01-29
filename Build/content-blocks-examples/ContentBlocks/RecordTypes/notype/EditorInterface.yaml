@@ -1,0 +1,14 @@
+name: hov/notype
+table: tx_hov_domain_model_notype
+security:
+  ignorePageTypeRestriction: true
+fields:
+  - identifier: title
+    type: Text
+  - identifier: text
+    type: Textarea
+  - identifier: image
+    type: File
+    extendedPalette: false
+  - identifier: text3
+    type: Textarea

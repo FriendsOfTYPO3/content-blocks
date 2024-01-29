@@ -1,0 +1,14 @@
+name: example/tabs
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: tabs_item
+    type: Collection
+    labelField: title
+    minitems: 1
+    fields:
+      - identifier: title
+        type: Text
+      - identifier: textarea
+        type: Textarea
+        enableRichtext: true

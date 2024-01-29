@@ -1,0 +1,25 @@
+.cb-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1.5rem 0;
+}
+
+.cb-cta .btn-cta {
+    margin-top: 1rem;
+    background-color: #f80;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    border: 2px solid #f80;
+    pointer-events: none;
+}
+
+.cb-cta .btn-cta:hover {
+    background-color: #fff;
+    color: #f80;
+}
