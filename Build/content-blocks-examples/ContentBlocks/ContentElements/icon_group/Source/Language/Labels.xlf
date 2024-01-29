@@ -1,45 +1,45 @@
 <?xml version="1.0"?>
-<xliff version="1.0">
-	<file datatype="plaintext" original="messages" source-language="en" product-name="icon-group">
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-01-29T13:43:08+00:00" product-name="example/icon-group">
 		<header/>
 		<body>
-			<trans-unit id="title" xml:space="preserve">
+			<trans-unit id="title" resname="title">
 				<source>Icon Group</source>
 			</trans-unit>
-			<trans-unit id="description" xml:space="preserve">
+			<trans-unit id="description" resname="description">
 				<source>Add a group with several icons and text</source>
 			</trans-unit>
-			<trans-unit id="header.label" xml:space="preserve">
+			<trans-unit id="header.label" resname="header.label">
 				<source>Header</source>
 			</trans-unit>
-			<trans-unit id="icon_group_item.label" xml:space="preserve">
-				<source>Icon group items</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.label" xml:space="preserve">
+			<trans-unit id="pi_flexform.label" resname="pi_flexform.label">
 				<source>Settings</source>
 			</trans-unit>
-			<trans-unit id="pi_flexform.alignment.label" xml:space="preserve">
+			<trans-unit id="pi_flexform.alignment.label" resname="pi_flexform.alignment.label">
 				<source>Alignment</source>
 			</trans-unit>
-			<trans-unit id="pi_flexform.row_items.label" xml:space="preserve">
+			<trans-unit id="pi_flexform.row_items.label" resname="pi_flexform.row_items.label">
 				<source>Items per row</source>
 			</trans-unit>
-			<trans-unit id="pi_flexform.icon_position.label" xml:space="preserve">
+			<trans-unit id="pi_flexform.icon_position.label" resname="pi_flexform.icon_position.label">
 				<source>Icon position</source>
 			</trans-unit>
-			<trans-unit id="icon_group_item.icon.label" xml:space="preserve">
-				<source>Icon</source>
+			<trans-unit id="icon_group_item.label" resname="icon_group_item.label">
+				<source>Icon group items</source>
 			</trans-unit>
-			<trans-unit id="icon_group_item.title.label" xml:space="preserve">
+			<trans-unit id="icon_group_item.title.label" resname="icon_group_item.title.label">
 				<source>Title</source>
 			</trans-unit>
-			<trans-unit id="icon_group_item.bodytext.label" xml:space="preserve">
+			<trans-unit id="icon_group_item.icon.label" resname="icon_group_item.icon.label">
+				<source>Icon</source>
+			</trans-unit>
+			<trans-unit id="icon_group_item.bodytext.label" resname="icon_group_item.bodytext.label">
 				<source>Bodytext</source>
 			</trans-unit>
-			<trans-unit id="icon_group_item.link.label" xml:space="preserve">
+			<trans-unit id="icon_group_item.link.label" resname="icon_group_item.link.label">
 				<source>Link</source>
 			</trans-unit>
-			<trans-unit id="icon_group_item.link_title.label" xml:space="preserve">
+			<trans-unit id="icon_group_item.link_title.label" resname="icon_group_item.link_title.label">
 				<source>Link title</source>
 			</trans-unit>
 		</body>

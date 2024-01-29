@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
-<xliff version="1.0">
-	<file datatype="plaintext" original="messages" source-language="en" product-name="accordion">
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-01-29T13:43:08+00:00" product-name="example/accordion">
 		<header/>
 		<body>
-			<trans-unit id="title" xml:space="preserve">
+			<trans-unit id="title" resname="title">
 				<source>Accordion</source>
 			</trans-unit>
-			<trans-unit id="description" xml:space="preserve">
+			<trans-unit id="description" resname="description">
 				<source>Toggle between hiding and showing large amount of content</source>
 			</trans-unit>
-			<trans-unit id="header.label" xml:space="preserve">
+			<trans-unit id="header.label" resname="header.label">
 				<source>Header</source>
 			</trans-unit>
-			<trans-unit id="accordion_item.label" xml:space="preserve">
+			<trans-unit id="accordion_item.label" resname="accordion_item.label">
 				<source>Accordion items</source>
 			</trans-unit>
-			<trans-unit id="accordion_item.text.label" xml:space="preserve">
+			<trans-unit id="accordion_item.text.label" resname="accordion_item.text.label">
 				<source>Title</source>
 			</trans-unit>
-			<trans-unit id="accordion_item.textarea.label" xml:space="preserve">
+			<trans-unit id="accordion_item.textarea.label" resname="accordion_item.textarea.label">
 				<source>Content</source>
 			</trans-unit>
 		</body>

@@ -1,45 +1,45 @@
 <?xml version="1.0"?>
-<xliff version="1.0">
-	<file datatype="plaintext" original="messages" source-language="en" product-name="card-group">
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-01-29T13:43:08+00:00" product-name="example/card-group">
 		<header/>
 		<body>
-			<trans-unit id="title" xml:space="preserve">
+			<trans-unit id="title" resname="title">
 				<source>Card Group</source>
 			</trans-unit>
-			<trans-unit id="description" xml:space="preserve">
+			<trans-unit id="description" resname="description">
 				<source>Add a group with several cards</source>
 			</trans-unit>
-			<trans-unit id="header.label" xml:space="preserve">
+			<trans-unit id="header.label" resname="header.label">
 				<source>Header</source>
 			</trans-unit>
-			<trans-unit id="card_group_item.label" xml:space="preserve">
-				<source>Card group items</source>
-			</trans-unit>
-			<trans-unit id="settings.label" xml:space="preserve">
+			<trans-unit id="settings.label" resname="settings.label">
 				<source>Settings</source>
 			</trans-unit>
-			<trans-unit id="settings.alignment.label" xml:space="preserve">
+			<trans-unit id="settings.alignment.label" resname="settings.alignment.label">
 				<source>Alignment</source>
 			</trans-unit>
-			<trans-unit id="settings.row_items.label" xml:space="preserve">
+			<trans-unit id="settings.row_items.label" resname="settings.row_items.label">
 				<source>Items per row</source>
 			</trans-unit>
-			<trans-unit id="card_group_item.image.label" xml:space="preserve">
+			<trans-unit id="card_group_item.label" resname="card_group_item.label">
+				<source>Card group items</source>
+			</trans-unit>
+			<trans-unit id="card_group_item.image.label" resname="card_group_item.image.label">
 				<source>Image</source>
 			</trans-unit>
-			<trans-unit id="card_group_item.title.label" xml:space="preserve">
+			<trans-unit id="card_group_item.title.label" resname="card_group_item.title.label">
 				<source>Title</source>
 			</trans-unit>
-			<trans-unit id="card_group_item.bodytext.label" xml:space="preserve">
+			<trans-unit id="card_group_item.bodytext.label" resname="card_group_item.bodytext.label">
 				<source>Bodytext</source>
 			</trans-unit>
-			<trans-unit id="card_group_item.link.label" xml:space="preserve">
+			<trans-unit id="card_group_item.link.label" resname="card_group_item.link.label">
 				<source>Link</source>
 			</trans-unit>
-			<trans-unit id="card_group_item.link_title.label" xml:space="preserve">
+			<trans-unit id="card_group_item.link_title.label" resname="card_group_item.link_title.label">
 				<source>Link title</source>
 			</trans-unit>
-			<trans-unit id="readmore" xml:space="preserve">
+			<trans-unit id="readmore" resname="readmore">
 				<source>Read more</source>
 			</trans-unit>
 		</body>

@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
-<xliff version="1.0">
-	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-01-29T13:43:08+00:00" product-name="example/example-page-type">
 		<header/>
 		<body>
-			<trans-unit id="title" xml:space="preserve">
+			<trans-unit id="title" resname="title">
 				<source>My custom page type</source>
 			</trans-unit>
-			<trans-unit id="description" xml:space="preserve">
+			<trans-unit id="description" resname="description">
 				<source>This is your page type description</source>
+			</trans-unit>
+			<trans-unit id="additional_field.label" resname="additional_field.label">
+				<source>Additional field</source>
 			</trans-unit>
 		</body>
 	</file>
