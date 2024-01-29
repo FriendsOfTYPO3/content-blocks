@@ -357,9 +357,8 @@ class TcaGenerator
 
     protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
     {
-        $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
-            'showitem' => $this->getRecordTypeStandardShowItem($showItem, $tableDefinition),
+            'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition, $tableDefinition),
         ];
         if ($tableDefinition->hasTypeField() && $columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -677,10 +676,22 @@ class TcaGenerator
         return $result;
     }
 
-    protected function getRecordTypeStandardShowItem(string $showItem, TableDefinition $tableDefinition): string
+    protected function getRecordTypeStandardShowItem(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): string
     {
         $capability = $tableDefinition->getCapability();
-        $parts[] = $showItem;
+        $showItemArray = $typeDefinition->getShowItems();
+        $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
+        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        if ($firstItemIsTab) {
+            $tabDefinition = array_shift($showItemArray);
+            $generalTab = $this->processShowItem([$tabDefinition]);
+        }
+        $showItem = $this->processShowItem($showItemArray);
+        $parts = [];
+        $parts[] = $generalTab;
+        if ($showItem !== '') {
+            $parts[] = $showItem;
+        }
         if ($capability->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
             $parts[] = '--palette--;;language';
