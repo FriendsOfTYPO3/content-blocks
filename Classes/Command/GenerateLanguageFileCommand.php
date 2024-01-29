@@ -26,6 +26,8 @@ use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Package\Exception\UnknownPackageException;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GenerateLanguageFileCommand extends Command
@@ -33,6 +35,7 @@ class GenerateLanguageFileCommand extends Command
     public function __construct(
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly LanguageFileGenerator $languageFileGenerator,
+        protected readonly PackageManager $packageManager,
     ) {
         parent::__construct();
     }
@@ -81,6 +84,12 @@ class GenerateLanguageFileCommand extends Command
             $this->printLabelsXlf($contentBlockName, $output);
         } else {
             if ($extension !== '') {
+                try {
+                    $this->packageManager->getPackage($extension);
+                } catch (UnknownPackageException) {
+                    $output->writeln('<error>Extension with key "' . $extension . '" does not exist.</error>');
+                    return Command::INVALID;
+                }
                 foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
                     if ($contentBlock->getHostExtension() !== $extension) {
                         continue;
