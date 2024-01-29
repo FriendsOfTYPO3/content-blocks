@@ -345,9 +345,8 @@ class TcaGenerator
 
     protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
-        $showItem = $this->processShowItem($typeDefinition->getShowItems());
         $typeDefinitionArray = [
-            'showitem' => $this->getPageTypeStandardShowItem($showItem),
+            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -709,7 +708,7 @@ class TcaGenerator
         return $showItem;
     }
 
-    protected function getPageTypeStandardShowItem(string $showItem): string
+    protected function getPageTypeStandardShowItem(ContentTypeInterface $typeDefinition): string
     {
         $general = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
@@ -753,6 +752,7 @@ class TcaGenerator
         ];
 
         $parts[] = $general;
+        $showItem = $this->processShowItem($typeDefinition->getShowItems());
         if ($showItem !== '') {
             $parts[] = [$showItem];
         }
