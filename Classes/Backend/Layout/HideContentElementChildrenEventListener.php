@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Layout;
 
 use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
-use TYPO3\CMS\ContentBlocks\Service\TtContentParentField;
+use TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService;
 use TYPO3\CMS\Core\Database\Connection;
 
 /**
@@ -27,14 +27,14 @@ use TYPO3\CMS\Core\Database\Connection;
 final class HideContentElementChildrenEventListener
 {
     public function __construct(
-        private readonly TtContentParentField $ttContentParentField
+        private readonly ContentElementParentFieldService $contentElementParentFieldService
     ) {}
 
     public function __invoke(ModifyDatabaseQueryForContentEvent $event): void
     {
         $queryBuilder = $event->getQueryBuilder();
 
-        foreach ($this->ttContentParentField->getAllFieldNames() as $fieldName) {
+        foreach ($this->contentElementParentFieldService->getAllFieldNames() as $fieldName) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     $fieldName,

@@ -17,34 +17,38 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Service;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 
 /**
  * @internal
  */
-final class TtContentParentField
+final class ContentElementParentFieldService
 {
     public function __construct(
         private readonly TableDefinitionCollection $tableDefinitionCollection
     ) {}
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     public function getAllFieldNames(): array
     {
-        if (!$this->tableDefinitionCollection->hasTable('tt_content')) {
+        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
+        if (!$this->tableDefinitionCollection->hasTable($contentElementTable)) {
             return [];
         }
 
         $fieldNames = [];
-        foreach ($this->tableDefinitionCollection->getTable('tt_content')->getParentReferences() as $parentReference) {
+        $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
+        foreach ($contentElementTableDefinition->getParentReferences() as $parentReference) {
             $fieldConfiguration = $parentReference->getFieldConfiguration()->getTca()['config'] ?? [];
-            if (($fieldConfiguration['foreign_table'] ?? '') === 'tt_content') {
-                $fieldNames[] = $fieldConfiguration['foreign_field'] ?? '';
+            if (($fieldConfiguration['foreign_table'] ?? '') === $contentElementTable) {
+                $foreignField = $fieldConfiguration['foreign_field'];
+                $fieldNames[$foreignField] = $foreignField;
             }
         }
-
-        return array_values(array_unique(array_filter($fieldNames)));
+        $fieldNameList = array_values($fieldNames);
+        return $fieldNameList;
     }
 }

@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\UserFunction;
 
-use TYPO3\CMS\ContentBlocks\Service\TtContentParentField;
+use TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService;
 
 /**
  * @internal
@@ -25,14 +25,14 @@ use TYPO3\CMS\ContentBlocks\Service\TtContentParentField;
 final class ContentWhere
 {
     public function __construct(
-        private readonly TtContentParentField $ttContentParentField
+        private readonly ContentElementParentFieldService $contentElementParentFieldService
     ) {}
 
     public function extend(string $where): string
     {
         $columns = array_map(
             fn(string $fieldName): string => ' AND {#' . $fieldName . '} = 0',
-            $this->ttContentParentField->getAllFieldNames()
+            $this->contentElementParentFieldService->getAllFieldNames()
         );
 
         return $where . implode(' ', $columns);
