@@ -4,7 +4,6 @@ fields:
     useExistingField: true
   - identifier: tabs_item
     type: Collection
-    labelField: title
     minitems: 1
     foreign_table: tt_content
     overrideChildTca:
