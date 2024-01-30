@@ -45,6 +45,44 @@ your root Content Element. For better usability the default CType can be
 overridden with :yaml:`overrideChildTca`. Right now, it is not possible to
 restrict certain CTypes.
 
+Render nested Content Elements in the frontend
+==============================================
+
+There are two ways to render nested Content Elements. The first one is to reuse
+the basic rendering definition of the child element. For this it is needed to
+start a sub-rendering within the Fluid template by triggering the compilation of
+the TypoScript rendering definition for the child element type. Each necessary
+information can be retrieved from the Content Block data object.
+
+.. code-block:: html
+    :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+
+    <f:for each="{data.tabs_item}" as="item" iteration="i">
+        <div class="tab-item">
+            <f:cObject typoscriptObjectPath="{item.tableName}.{item.typeName}" table="{item.tableName}" data="{item._raw}"/>
+        </div>
+    </f:for>
+
+The second method is to define an alternative rendering within your Fluid
+template. This means you can have a default rendering definition for your
+Content Element, when used as a root Content Element and an alternative one if
+used as a child.
+
+.. code-block:: html
+    :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+
+    <f:for each="{data.tabs_item}" as="item" iteration="i">
+        <div class="tab-item">
+            <h2>{item.header}</h2>
+            <f:format.html>{data.bodytext}</f:format.html>
+        </div>
+    </f:for>
+
+.. tip::
+
+   You can also use :ref:`global partials <cb_extension_partials>` for the
+   second method to have less duplication.
+
 When to use nested Content Elements vs. container extensions
 ============================================================
 
