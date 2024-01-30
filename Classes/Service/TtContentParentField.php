@@ -25,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 final class TtContentParentField
 {
     public function __construct(
-        private readonly TableDefinitionCollection $tableDefintionCollection
+        private readonly TableDefinitionCollection $tableDefinitionCollection
     ) {}
 
     /**
@@ -33,12 +33,12 @@ final class TtContentParentField
      */
     public function getAllFieldNames(): array
     {
-        if (!$this->tableDefintionCollection->hasTable('tt_content')) {
+        if (!$this->tableDefinitionCollection->hasTable('tt_content')) {
             return [];
         }
 
         $fieldNames = [];
-        foreach ($this->tableDefintionCollection->getTable('tt_content')->getParentReferences() as $parentReference) {
+        foreach ($this->tableDefinitionCollection->getTable('tt_content')->getParentReferences() as $parentReference) {
             $fieldConfiguration = $parentReference->getFieldConfiguration()->getTca()['config'] ?? [];
             if (($fieldConfiguration['foreign_table'] ?? '') === 'tt_content') {
                 $fieldNames[] = $fieldConfiguration['foreign_field'] ?? '';
