@@ -119,6 +119,7 @@ Settings
       When you use :yaml:`foreign_table` it is not possible to define
       :yaml:`fields` anymore. They will not be evaluated.
 
+.. _field_type_collection_foreign_field:
 .. confval:: foreign_field
 
    :Required: false
