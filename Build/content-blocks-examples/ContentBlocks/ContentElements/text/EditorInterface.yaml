@@ -1,0 +1,10 @@
+name: example/text
+group: common
+prefixFields: true
+prefixType: full
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: bodytext
+    useExistingField: true
+    enableRichtext: true

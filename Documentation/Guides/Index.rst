@@ -11,7 +11,6 @@ functionality.
 ..  toctree::
     :maxdepth: 2
     :titlesonly:
+    :glob:
 
-    ExtendContentBlockTCA/Index
-    SharedPartials/Index
-    FluidStyledContent/Index
+    */Index

@@ -7,6 +7,10 @@ services:
   TYPO3\CMS\ContentBlocks\:
     resource: '../Classes/*'
 
+  TYPO3\CMS\ContentBlocks\UserFunction\:
+    resource: '../Classes/UserFunction/*'
+    public: true
+
 # @todo change to BeforeTcaOverridesEvent for v13
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
@@ -58,6 +62,12 @@ services:
       - name: event.listener
         identifier: 'content-blocks-sql'
         event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
+
+  TYPO3\CMS\ContentBlocks\Backend\Layout\HideContentElementChildrenEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-hide-children'
+        event: TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent
 
   TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
     public: true
