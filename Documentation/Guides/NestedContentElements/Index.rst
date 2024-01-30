@@ -66,7 +66,8 @@ information can be retrieved from the Content Block data object.
 The second method is to define an alternative rendering within your Fluid
 template. This means you can have a default rendering definition for your
 Content Element, when used as a root Content Element and an alternative one if
-used as a child.
+used as a child. This method is a lot more flexible, but requires a little bit
+more work.
 
 .. code-block:: html
     :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
