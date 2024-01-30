@@ -20,9 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Service;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 
-/**
- * @internal
- */
 final class ContentElementParentFieldService
 {
     public function __construct(
