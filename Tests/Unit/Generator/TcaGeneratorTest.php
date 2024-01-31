@@ -242,7 +242,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             't3ce_example' => 'tt_content-t3ce_example',
                             't3ce_testblock' => 'tt_content-t3ce_testblock',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_testblock_text,t3ce_example_text,t3ce_example_textarea,t3ce_example_email',
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_testblock_text,t3ce_example_text,t3ce_example_textarea,t3ce_example_email,t3ce_example_color,t3ce_example_link,t3ce_example_uuid',
                     ],
                     'types' => [
                         't3ce_example' => [
@@ -1828,7 +1828,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,text',
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,text,color',
                     ],
                     'types' => [
                         't3ce_example' => [
@@ -2136,7 +2136,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
                         ],
-                        'searchFields' => 'title,nav_title',
+                        'searchFields' => 'title,slug,nav_title',
                     ],
                     'types' => [
                         '1700156757' => [
@@ -2193,7 +2193,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
                         ],
-                        'searchFields' => 'title,nav_title',
+                        'searchFields' => 'title,slug,nav_title',
                     ],
                     'types' => [
                         '1700156757' => [
@@ -2390,7 +2390,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             't3ce_example' => 'tt_content-t3ce_example',
                             't3ce_testblock' => 'tt_content-t3ce_testblock',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,flex',
                     ],
                     'types' => [
                         't3ce_example' => [
@@ -2816,7 +2816,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,flex',
                     ],
                     'types' => [
                         't3ce_example' => [

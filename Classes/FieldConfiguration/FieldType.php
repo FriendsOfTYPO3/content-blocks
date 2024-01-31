@@ -77,7 +77,21 @@ enum FieldType: string
 
     public function isSearchable(): bool
     {
-        return in_array($this, [self::TEXT, self::TEXTAREA, self::EMAIL], true);
+        return in_array(
+            $this,
+            [
+                self::TEXT,
+                self::TEXTAREA,
+                self::EMAIL,
+                self::COLOR,
+                self::LINK,
+                self::SLUG,
+                self::FLEXFORM,
+                self::JSON,
+                self::UUID,
+            ],
+            true
+        );
     }
 
     public function isRenderable(): bool
