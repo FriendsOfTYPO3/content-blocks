@@ -38,7 +38,7 @@ final class ContentElementParentFieldService
 
         $fieldNames = [];
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
-        foreach ($contentElementTableDefinition->getParentReferences() as $parentReference) {
+        foreach ($contentElementTableDefinition->getParentReferences() ?? [] as $parentReference) {
             $fieldConfiguration = $parentReference->getFieldConfiguration()->getTca()['config'] ?? [];
             if (($fieldConfiguration['foreign_table'] ?? '') === $contentElementTable) {
                 $foreignField = $fieldConfiguration['foreign_field'];
