@@ -123,8 +123,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'Select',
                                 'renderType' => 'selectSingle',
                                 'items' => [
-                                    ['label' => 'Default', 'value' => ''],
-                                    ['label' => 'Select1', 'value' => 'select_1'],
+                                    ['value' => ''],
+                                    ['label' => 1, 'value' => 'select_1'],
                                     ['label' => 'Select2', 'value' => 'select_2'],
                                 ],
                             ],

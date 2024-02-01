@@ -38,7 +38,6 @@ use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 
 /**
  * This class does the main heavy-lifting of parsing and preparing loaded
@@ -297,13 +296,12 @@ final class TableDefinitionCollectionFactory
         $items = $field['items'] ?? [];
         $fieldType = $result->fieldType;
         foreach ($items as $index => $item) {
-            $selectItem = SelectItem::fromTcaItemArray($item, $fieldType->getTcaType());
-            $label = $selectItem->getLabel();
+            $label = (string)($item['label'] ?? '');
             $currentPath = $input->languagePath->getCurrentPath();
             if ($fieldType === FieldType::CHECKBOX) {
                 $labelPath = $currentPath . '.items.' . $index . '.label';
             } else {
-                $value = (string)$selectItem->getValue();
+                $value = (string)($item['value'] ?? '');
                 if ($value === '') {
                     $labelPath = $currentPath . '.items.label';
                 } else {

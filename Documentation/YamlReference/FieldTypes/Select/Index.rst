@@ -28,9 +28,8 @@ Settings
    :Required: yes
    :Type: array
 
-   Contains the elements for the selector box. Each item is an array with the first being
-   the label in the select drop-down (LLL reference possible) and the second
-   being the value transferred to the input field.
+   Contains the elements for the selector box. Each item is an array. An item
+   consists of a :yaml:`label` and a :yaml:`value`.
 
    Example:
 
@@ -43,6 +42,18 @@ Settings
           value: two
         - label: 'The third'
           value: three
+
+   .. tip::
+
+      You can omit the label, if you have the translation already in your
+      Labels.xlf file.
+
+      .. code-block:: yaml
+
+          items:
+            - value: one
+            - value: two
+            - value: three
 
    XLF translation keys for items have the following convention:
 
