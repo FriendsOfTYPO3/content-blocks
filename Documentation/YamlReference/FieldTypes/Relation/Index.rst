@@ -66,7 +66,7 @@ Advanced / use case
       - identifier: page_select
         type: Relation
         allowed: 'pages'
-        maxitems: 1,
+        maxitems: 1
         suggestOptions:
           default:
             additionalSearchFields: 'nav_title, url'
