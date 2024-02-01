@@ -56,6 +56,15 @@ Settings
             </trans-unit>
         </body>
 
+.. confval:: renderType
+
+   :Required: no
+   :Type: string
+
+   *  :yaml:`default`
+   *  :yaml:`checkboxToggle`
+   *  :yaml:`checkboxLabeledToggle`
+
 For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 
 Examples
@@ -99,3 +108,18 @@ Toggle checkbox:
         type: Checkbox
         renderType: checkboxToggle
         default: 1
+
+Labeled toggle checkbox:
+
+.. code-block:: yaml
+
+    name: example/checkbox
+    fields:
+      - identifier: toggle
+        type: Checkbox
+        renderType: checkboxLabeledToggle
+        items:
+          - label: 'Your label'
+            labelChecked: 'Label checked'
+            labelUnchecked: 'Label unchecked'
+            invertStateDisplay: true
