@@ -1064,8 +1064,8 @@ final class TcaGeneratorTest extends UnitTestCase
                         'table' => 'foobar',
                         'fields' => [
                             [
-                                'identifier' => 'text',
-                                'type' => 'Text',
+                                'identifier' => 'number',
+                                'type' => 'Number',
                             ],
                         ],
                     ],
@@ -1075,7 +1075,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'foobar' => [
                     'ctrl' => [
                         'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:title',
-                        'label' => 't3ce_example_text',
+                        'label' => 't3ce_example_number',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
@@ -1097,11 +1097,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'foobar-1',
                         ],
-                        'searchFields' => 't3ce_example_text',
+                        'searchFields' => '',
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1217,12 +1217,12 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'passthrough',
                             ],
                         ],
-                        't3ce_example_text' => [
+                        't3ce_example_number' => [
                             'exclude' => true,
-                            'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.label',
-                            'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.description',
+                            'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:number.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:number.description',
                             'config' => [
-                                'type' => 'input',
+                                'type' => 'number',
                             ],
                         ],
                     ],

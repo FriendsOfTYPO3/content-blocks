@@ -627,18 +627,21 @@ class TcaGenerator
             $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
             $labelField = $tableDefinition->getTcaFieldDefinitionCollection()->getField($labelFieldIdentifier);
         }
-        // If there is no user-defined label field, use first field as label.
-        if (!$labelField?->getFieldType()->isSearchable()) {
+        // If there is no user-defined label field, look for preferred field type first.
+        // Otherwise, use first field as label regardless of the type.
+        if ($labelField === null) {
+            $labelFieldCandidate = null;
+            // These are preferred, as they most often provide a meaningful preview of the record.
+            $preferredLabelTypes = [FieldType::TEXT, FieldType::TEXTAREA, FieldType::EMAIL, FieldType::UUID];
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
-                // Ignore fields for label, which can't be searched properly.
-                if (!$columnFieldDefinition->getFieldType()->isSearchable()) {
-                    continue;
+                if (in_array($columnFieldDefinition->getFieldType(), $preferredLabelTypes, true)) {
+                    $labelField = $columnFieldDefinition;
+                    break;
                 }
-                $labelField = $columnFieldDefinition;
-                break;
+                $labelFieldCandidate ??= $columnFieldDefinition;
             }
+            $labelField ??= $labelFieldCandidate;
         }
-
         if ($labelField === null) {
             throw new \InvalidArgumentException(
                 'Option "labelField" is missing for custom table "' . $tableDefinition->getTable() . '" and no field could be automatically determined.',
