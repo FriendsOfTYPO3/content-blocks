@@ -98,8 +98,9 @@ class TcaGenerator
 {
     /**
      * These fields are required for automatic default SQL schema generation
-     * or have to be otherwise the same for each field. Thus, these fields
-     * can't be overridden through type overrides.
+     * or for relation resolving Core API. Thus, these fields can't be
+     * overridden through type overrides, as merged column config is only
+     * available in FormEngine context.
      *
      * @var string[]|array{type: string, option: string}
      */
@@ -120,6 +121,10 @@ class TcaGenerator
         'foreign_field',
         'foreign_table_field',
         'foreign_match_fields',
+        'foreign_sortby',
+        'foreign_default_sortby',
+        'symmetric_field',
+        'symmetric_sortby',
         'ds',
         'ds_pointerField',
         'exclude',
