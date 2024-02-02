@@ -58,7 +58,7 @@ Settings
 
 .. confval:: renderType
 
-   :Required: no
+   :Required: false
    :Type: string
    :Default: check
 
