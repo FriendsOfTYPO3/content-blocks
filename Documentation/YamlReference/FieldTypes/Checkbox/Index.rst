@@ -60,9 +60,8 @@ Settings
 
    :Required: no
    :Type: string
-   :Default: default
+   :Default: check
 
-   *  :yaml:`default`
    *  :yaml:`checkboxToggle`
    *  :yaml:`checkboxLabeledToggle`
 
