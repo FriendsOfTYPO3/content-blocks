@@ -149,8 +149,9 @@ class RelationResolver
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $allowed = $tcaFieldConfig['config']['allowed'];
+        $fieldValue = $record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '';
         $result = $this->getRelations(
-            uidList: (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? ''),
+            uidList: (string)$fieldValue,
             tableList: $allowed,
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: $this->getUidOfCurrentRecord($record),
