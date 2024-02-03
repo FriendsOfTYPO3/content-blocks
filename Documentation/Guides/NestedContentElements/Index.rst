@@ -55,11 +55,25 @@ the TypoScript rendering definition for the child element type. Each necessary
 information can be retrieved from the Content Block data object.
 
 .. code-block:: html
-    :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
 
     <f:for each="{data.tabs_item}" as="item" iteration="i">
         <div class="tab-item">
             <f:cObject typoscriptObjectPath="{item.tableName}.{item.typeName}" table="{item.tableName}" data="{item._raw}"/>
+        </div>
+    </f:for>
+
+The above snippet does only work for Content Elements defined by Content Blocks.
+If you reference Core Content Elements e.g. from Fluid Styled Content, then the
+snippet looks like this. This will possibly be unified in upcoming Content
+Blocks versions.
+
+.. code-block:: html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+
+    <f:for each="{data.tabs_item}" as="item" iteration="i">
+        <div class="tab-item">
+            <f:cObject typoscriptObjectPath="tt_content.{item.CType}" table="tt_content" data="{item}"/>
         </div>
     </f:for>
 
