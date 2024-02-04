@@ -20,3 +20,8 @@ Title: {data.record.title}
         Title Relation: {record.title}
     </f:for>
 </f:if>
+<f:if condition="{data.content}">
+    <f:for each="{data.content}" as="item">
+        Child typeName: {item.typeName}
+    </f:for>
+</f:if>

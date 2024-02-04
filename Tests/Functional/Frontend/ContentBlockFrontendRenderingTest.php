@@ -198,4 +198,23 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Full prefix: Text full prefix', $html);
         self::assertStringContainsString('Collection Text: lorem foo bar', $html);
     }
+
+    /**
+     * @test
+     */
+    public function nestedContentIsAvailableAsContentBlockDataForCoreElements(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/relation_tt-content.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Child typeName: text', $html);
+        self::assertStringNotContainsString('has no rendering definition!', $html);
+    }
 }
