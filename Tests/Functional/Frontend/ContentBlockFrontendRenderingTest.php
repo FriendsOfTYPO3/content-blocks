@@ -217,4 +217,23 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Child typeName: text', $html);
         self::assertStringNotContainsString('has no rendering definition!', $html);
     }
+
+    /**
+     * @test
+     */
+    public function mixedRelationIsResolvedForEachTable(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/mixed-relation.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Mixed Relation: pages', $html);
+        self::assertStringContainsString('Mixed Relation: tt_content', $html);
+    }
 }
