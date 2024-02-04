@@ -14,3 +14,6 @@ fields:
   - identifier: content
     type: Collection
     foreign_table: tt_content
+  - identifier: relation_mix
+    type: Relation
+    allowed: tt_content,pages

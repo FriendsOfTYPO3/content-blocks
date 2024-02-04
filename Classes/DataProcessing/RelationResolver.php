@@ -149,20 +149,25 @@ class RelationResolver
     {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $allowed = $tcaFieldConfig['config']['allowed'];
-        $fieldValue = $record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '';
+        $fieldValue = (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         $result = $this->getRelations(
-            uidList: (string)$fieldValue,
+            uidList: $fieldValue,
             tableList: $allowed,
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
             uid: $this->getUidOfCurrentRecord($record),
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
-
-        // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
-        if (!str_contains($allowed, ',') && $this->tableDefinitionCollection->hasTable($allowed)) {
-            $tableDefinition = $this->tableDefinitionCollection->getTable($allowed);
-            foreach ($result as $index => $row) {
+        $tableList = null;
+        if (str_contains($allowed, ',')) {
+            $tableList = $this->getTableListFromTableUidPairs($fieldValue);
+        }
+        foreach ($result as $index => $row) {
+            $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
+            // Save the associated table for later use in ContentBlockDataResolver.
+            $result[$index]['_table'] = $currentTable;
+            if ($this->tableDefinitionCollection->hasTable($currentTable)) {
+                $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
                 foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                     $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                     if ($foreignTypeDefinition === null) {
@@ -172,12 +177,11 @@ class RelationResolver
                         tcaFieldDefinition: $childTcaFieldDefinition,
                         typeDefinition: $foreignTypeDefinition,
                         record: $row,
-                        table: $allowed,
+                        table: $currentTable,
                     );
                 }
             }
         }
-
         return $result;
     }
 
@@ -294,5 +298,20 @@ class RelationResolver
             return (int)$record['_ORIG_uid'];
         }
         return (int)$record['uid'];
+    }
+
+    /**
+     * @return array<string>
+     */
+    protected function getTableListFromTableUidPairs(string $tableUidPairs): array
+    {
+        $tableUidList = GeneralUtility::trimExplode(',', $tableUidPairs);
+        $tableList = array_map(function (string $item): string {
+            $parts = explode('_', $item);
+            array_pop($parts);
+            $table = implode('_', $parts);
+            return $table;
+        }, $tableUidList);
+        return $tableList;
     }
 }

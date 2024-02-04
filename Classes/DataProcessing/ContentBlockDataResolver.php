@@ -121,9 +121,10 @@ final class ContentBlockDataResolver
         int $depth
     ): ContentBlockData {
         $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
-        // @todo what to do, if multiple tables are allowed? There is no way to find out, which record belongs to which table.
-        if (str_contains($foreignTable, ',')) {
-            throw new \InvalidArgumentException('Different tables in type Relation are not supported yet.', 1707000538);
+        // The associated table provided kindly by RelationResolver.
+        if (isset($item['_table'])) {
+            $foreignTable = $item['_table'];
+            unset($item['_table']);
         }
         $hasTableDefinition = $this->tableDefinitionCollection->hasTable($foreignTable);
         $collectionTableDefinition = null;

@@ -25,3 +25,8 @@ Title: {data.record.title}
         Child typeName: {item.typeName}
     </f:for>
 </f:if>
+<f:if condition="{data.relation_mix}">
+    <f:for each="{data.relation_mix}" as="relation">
+        Mixed Relation: {relation.tableName}
+    </f:for>
+</f:if>

@@ -1,0 +1,7 @@
+"pages"
+,"uid","pid","title","doktype"
+,2,1,"A simple page",1
+"tt_content"
+,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","simple_simplerelation_relation_mix","CType"
+,1,1,0,0,0,"pages_2,tt_content_2","simple_simplerelation"
+,2,1,0,0,0,"","text"
