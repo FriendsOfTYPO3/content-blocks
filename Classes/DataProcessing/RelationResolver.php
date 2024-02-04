@@ -301,17 +301,18 @@ class RelationResolver
     }
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     protected function getTableListFromTableUidPairs(string $tableUidPairs): array
     {
         $tableUidList = GeneralUtility::trimExplode(',', $tableUidPairs);
-        $tableList = array_map(function (string $item): string {
-            $parts = explode('_', $item);
+        $resultList = [];
+        foreach ($tableUidList as $tableUidPair) {
+            $parts = explode('_', $tableUidPair);
             array_pop($parts);
             $table = implode('_', $parts);
-            return $table;
-        }, $tableUidList);
-        return $tableList;
+            $resultList[] = $table;
+        }
+        return $resultList;
     }
 }
