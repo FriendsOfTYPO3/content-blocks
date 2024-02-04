@@ -158,14 +158,13 @@ class RelationResolver
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
-
         $tableList = null;
         if (str_contains($allowed, ',')) {
             $tableList = $this->getTableListFromTableUidPairs($fieldValue);
         }
-
         foreach ($result as $index => $row) {
             $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
+            // Save the associated table for later use in ContentBlockDataResolver.
             $result[$index]['_table'] = $currentTable;
             if ($this->tableDefinitionCollection->hasTable($currentTable)) {
                 $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
@@ -183,7 +182,6 @@ class RelationResolver
                 }
             }
         }
-
         return $result;
     }
 

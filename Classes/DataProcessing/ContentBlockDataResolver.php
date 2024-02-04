@@ -121,7 +121,8 @@ final class ContentBlockDataResolver
         int $depth
     ): ContentBlockData {
         $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
-        if (str_contains($foreignTable, ',')) {
+        // The associated table provided kindly by RelationResolver.
+        if (isset($item['_table'])) {
             $foreignTable = $item['_table'];
             unset($item['_table']);
         }
