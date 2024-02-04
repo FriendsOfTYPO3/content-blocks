@@ -1,0 +1,4 @@
+"tt_content"
+,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","simple_simplerelation_content","foreign_table_parent_uid","CType","header"
+,1,1,0,0,0,"1","0","simple_simplerelation","Parent header"
+,2,1,0,0,0,"0","1","text","child header"

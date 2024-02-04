@@ -11,3 +11,6 @@ fields:
   - identifier: relation
     type: Relation
     allowed: custom_record
+  - identifier: content
+    type: Collection
+    foreign_table: tt_content
