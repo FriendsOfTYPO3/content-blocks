@@ -42,7 +42,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
             return $processedData;
         }
         $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
-        $processedData['data'] = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
+        $processedData['data'] = $contentBlockDataResolver->resolveData(
             $contentTypeDefinition,
             $tableDefinition,
             $processedData['data'],

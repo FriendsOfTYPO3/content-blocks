@@ -33,10 +33,27 @@ final class ContentBlockDataResolver
         private readonly TableDefinitionCollection $tableDefinitionCollection,
     ) {}
 
-    public function buildContentBlockDataObjectRecursive(
+    public function resolveData(
         ContentTypeInterface $contentTypeDefinition,
         TableDefinition $tableDefinition,
         array $data,
+        string $table,
+    ): ContentBlockData {
+        $resolvedRelation = new ResolvedRelation();
+        $resolvedRelation->raw = $data;
+        $contentBlockData = $this->buildContentBlockDataObjectRecursive(
+            $contentTypeDefinition,
+            $tableDefinition,
+            $resolvedRelation,
+            $table,
+        );
+        return $contentBlockData;
+    }
+
+    private function buildContentBlockDataObjectRecursive(
+        ContentTypeInterface $contentTypeDefinition,
+        TableDefinition $tableDefinition,
+        ResolvedRelation $resolvedRelation,
         string $table,
         $depth = 0
     ): ContentBlockData {
@@ -47,33 +64,40 @@ final class ContentBlockDataResolver
                 continue;
             }
             // RelationResolver already processes the fields recursively. Run it only on root level.
-            $processedField = $depth === 0
-                ? $this->relationResolver->processField($tcaFieldDefinition, $contentTypeDefinition, $data, $table)
-                : $data[$tcaFieldDefinition->getUniqueIdentifier()];
-
-            if (is_array($processedField) && $tcaFieldDefinition->getFieldType()->isRelation()) {
-                $processedField = match ($tcaFieldDefinition->getFieldType()) {
+            if ($depth === 0) {
+                $resolvedField = $this->relationResolver->processField(
+                    $tcaFieldDefinition,
+                    $contentTypeDefinition,
+                    $resolvedRelation->raw,
+                    $table
+                );
+            } else {
+                $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
+            }
+            $transformedRelation = null;
+            if (is_array($resolvedField) && $tcaFieldDefinition->getFieldType()->isRelation()) {
+                $transformedRelation = match ($tcaFieldDefinition->getFieldType()) {
                     FieldType::COLLECTION,
                     FieldType::RELATION => $this->transformMultipleRelation(
-                        $processedField,
+                        $resolvedField,
                         $tcaFieldDefinition,
                         $table,
                         $depth,
                     ),
                     FieldType::SELECT => $this->transformSelectRelation(
-                        $processedField,
+                        $resolvedField,
                         $tcaFieldDefinition,
                         $table,
                         $depth,
                     ),
-                    default => $processedField,
+                    default => $resolvedField,
                 };
             }
-            $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $processedField;
+            $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $transformedRelation ?? $resolvedField;
         }
+        $resolvedRelation->resolved = $processedContentBlockData;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
-            $data,
-            $processedContentBlockData,
+            $resolvedRelation,
             $tableDefinition->getTable(),
             $tableDefinition->getTypeField(),
             $contentTypeDefinition->getTypeName(),
@@ -121,11 +145,15 @@ final class ContentBlockDataResolver
         int $depth
     ): ContentBlockData {
         $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
+        $resolvedRelation = new ResolvedRelation();
         // The associated table provided kindly by RelationResolver.
         if (isset($item['_table'])) {
             $foreignTable = $item['_table'];
             unset($item['_table']);
         }
+        $resolvedRelation->raw = $item['_raw'];
+        unset($item['_raw']);
+        $resolvedRelation->resolved = $item;
         $hasTableDefinition = $this->tableDefinitionCollection->hasTable($foreignTable);
         $collectionTableDefinition = null;
         if ($hasTableDefinition) {
@@ -133,32 +161,34 @@ final class ContentBlockDataResolver
         }
         $typeDefinition = null;
         if ($hasTableDefinition) {
-            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $item);
+            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $resolvedRelation->raw);
         }
         if ($collectionTableDefinition !== null && $typeDefinition !== null) {
-            return $this->buildContentBlockDataObjectRecursive(
+            $contentBlockData = $this->buildContentBlockDataObjectRecursive(
                 $typeDefinition,
                 $collectionTableDefinition,
-                $item,
+                $resolvedRelation,
                 $foreignTable,
                 ++$depth,
             );
+            return $contentBlockData;
         }
-        $contentBlockDataObject = $this->buildFakeContentBlockDataObject($foreignTable, $item);
-        return $contentBlockDataObject;
+        $contentBlockData = $this->buildFakeContentBlockDataObject($foreignTable, $resolvedRelation);
+        return $contentBlockData;
     }
 
     private function buildContentBlockDataObject(
-        array $data,
-        array $processedContentBlockData,
+        ResolvedRelation $resolvedRelation,
         string $table,
         ?string $typeField,
         string|int $typeName,
         string $name = '',
     ): ContentBlockData {
+        $rawData = $resolvedRelation->raw;
+        $resolvedData = $resolvedRelation->resolved;
         $baseData = [
-            'uid' => $data['uid'],
-            'pid' => $data['pid'],
+            'uid' => $rawData['uid'],
+            'pid' => $rawData['pid'],
             'tableName' => $table,
             'typeName' => $typeName,
         ];
@@ -166,24 +196,24 @@ final class ContentBlockDataResolver
         if ($typeField !== null) {
             $baseData[$typeField] = $typeName;
         }
-        if (array_key_exists('sys_language_uid', $data)) {
-            $baseData['languageId'] = $data['sys_language_uid'];
+        if (array_key_exists('sys_language_uid', $rawData)) {
+            $baseData['languageId'] = $rawData['sys_language_uid'];
         }
-        if (array_key_exists('tstamp', $data)) {
-            $baseData['updateDate'] = $data['tstamp'];
+        if (array_key_exists('tstamp', $rawData)) {
+            $baseData['updateDate'] = $rawData['tstamp'];
         }
-        if (array_key_exists('crdate', $data)) {
-            $baseData['creationDate'] = $data['crdate'];
+        if (array_key_exists('crdate', $rawData)) {
+            $baseData['creationDate'] = $rawData['crdate'];
         }
-        $baseData = $this->enrichBaseDataWithComputedProperties($baseData, $data);
-        $contentBlockDataArray = $baseData + $processedContentBlockData;
-        $contentBlockData = new ContentBlockData($name, $data, $contentBlockDataArray);
+        $baseData = $this->enrichBaseDataWithComputedProperties($baseData, $rawData);
+        $contentBlockDataArray = $baseData + $resolvedData;
+        $contentBlockData = new ContentBlockData($name, $rawData, $contentBlockDataArray);
 
         // Add dynamic fields so that Fluid can detect them with `property_exists()`.
         foreach ($baseData as $key => $baseDataItem) {
             $contentBlockData->$key = $baseDataItem;
         }
-        foreach ($processedContentBlockData as $key => $processedContentBlockDataItem) {
+        foreach ($resolvedData as $key => $processedContentBlockDataItem) {
             $contentBlockData->$key = $processedContentBlockDataItem;
         }
         return $contentBlockData;
@@ -209,14 +239,13 @@ final class ContentBlockDataResolver
      * If the record is not defined by Content Blocks, we build a fake
      * Content Block data object for consistent usage.
      */
-    private function buildFakeContentBlockDataObject(string $table, array $record): ContentBlockData
+    private function buildFakeContentBlockDataObject(string $table, ResolvedRelation $resolvedRelation): ContentBlockData
     {
         $typeField = $this->resolveTypeField($table);
-        $typeName = $typeField !== null ? $record[$typeField] : '1';
+        $typeName = $typeField !== null ? $resolvedRelation->raw[$typeField] : '1';
         $fakeName = 'core/' . $typeName;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
-            $record,
-            $record,
+            $resolvedRelation,
             $table,
             $typeField,
             $typeName,

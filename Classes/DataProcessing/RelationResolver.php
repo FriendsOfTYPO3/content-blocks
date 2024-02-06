@@ -120,6 +120,8 @@ class RelationResolver
             if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
                 $tableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
                 foreach ($result as $index => $row) {
+                    // Save raw record for later usage in ContentBlockDataResolver.
+                    $result[$index]['_raw'] = $row;
                     foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                         $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                         if ($foreignTypeDefinition === null) {
@@ -166,6 +168,8 @@ class RelationResolver
             $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
             // Save the associated table for later use in ContentBlockDataResolver.
             $result[$index]['_table'] = $currentTable;
+            // Save raw record for later usage in ContentBlockDataResolver.
+            $result[$index]['_raw'] = $row;
             if ($this->tableDefinitionCollection->hasTable($currentTable)) {
                 $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
                 foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
@@ -221,6 +225,8 @@ class RelationResolver
 
         $tableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
         foreach ($data as $index => $row) {
+            // Save raw record for later usage in ContentBlockDataResolver.
+            $data[$index]['_raw'] = $row;
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                 $childTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                 if ($childTypeDefinition === null) {

@@ -66,7 +66,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
 
         $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
-        $data = $contentBlockDataResolver->buildContentBlockDataObjectRecursive(
+        $data = $contentBlockDataResolver->resolveData(
             $contentElementDefinition,
             $contentElementTableDefinition,
             $record,

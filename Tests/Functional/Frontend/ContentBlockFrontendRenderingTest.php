@@ -118,7 +118,9 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $html = (string)$response->getBody();
 
         self::assertStringContainsString('fieldA1: lorem foo bar A', $html);
+        self::assertStringContainsString('fieldA_raw1: 2', $html);
         self::assertStringContainsString('fieldB1: lorem foo bar B', $html);
+        self::assertStringContainsString('fieldA_raw1: 2', $html);
         self::assertStringContainsString('fieldB2: lorem foo bar B2', $html);
         self::assertStringContainsString('fieldA2: lorem foo bar A2', $html);
     }
