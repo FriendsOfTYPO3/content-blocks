@@ -100,7 +100,7 @@
 				<source>uuid</source>
 			</trans-unit>
 			<trans-unit id="language.label" resname="language.label">
-				<source>Language</source>
+				<source>language</source>
 			</trans-unit>
 		</body>
 	</file>
