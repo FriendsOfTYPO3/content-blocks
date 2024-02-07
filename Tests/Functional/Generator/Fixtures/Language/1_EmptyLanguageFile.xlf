@@ -99,6 +99,9 @@
 			<trans-unit id="uuid.label" resname="uuid.label">
 				<source>uuid</source>
 			</trans-unit>
+			<trans-unit id="language.label" resname="language.label">
+				<source>Language</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
