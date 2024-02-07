@@ -22,23 +22,44 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
  */
 final class LanguageFieldConfiguration implements FieldConfigurationInterface
 {
+    use WithCommonProperties;
+
     private FieldType $fieldType = FieldType::LANGUAGE;
+    private int $default = 0;
+    private bool $readOnly = false;
+    private bool $required = false;
 
     public static function createFromArray(array $settings): FieldConfigurationInterface
     {
-        return new self();
+        $self = new self();
+        $self->setCommonProperties($settings);
+        $self->default = (int)($settings['default'] ?? $self->default);
+        $self->required = (bool)($settings['required'] ?? $self->required);
+        $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        return $self;
     }
 
     public function getTca(): array
     {
+        $tca = $this->toTca();
         $config['type'] = $this->fieldType->getTcaType();
-        $tca['config'] = $config;
+        if ($this->default !== 0) {
+            $config['default'] = $this->default;
+        }
+        if ($this->required) {
+            $config['required'] = true;
+        }
+        if ($this->readOnly) {
+            $config['readOnly'] = true;
+        }
+        $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
 
     public function getSql(string $uniqueColumnName): string
     {
-        return '';
+        // @todo change to return '' for v13 release (generated automatically now).
+        return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
     }
 
     public function getFieldType(): FieldType

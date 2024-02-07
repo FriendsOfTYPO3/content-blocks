@@ -23,6 +23,7 @@ some additional options, which are not available in TCA to ease the usage.
 *  :ref:`FlexForm <field_type_flexform>`
 *  :ref:`Folder <field_type_folder>`
 *  :ref:`Json <field_type_json>`
+*  :ref:`Language <field_type_language>`
 *  :ref:`Linebreak <field_type_linebreak>`
 *  :ref:`Link <field_type_link>`
 *  :ref:`Number <field_type_number>`
@@ -207,6 +208,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
     FlexForm/Index
     Folder/Index
     Json/Index
+    Language/Index
     Linebreak/Index
     Link/Index
     Number/Index

@@ -82,3 +82,5 @@ fields:
   - identifier: uuid
     type: Uuid
     enableCopyToClipboard: true
+  - identifier: language
+    type: Language
