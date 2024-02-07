@@ -32,8 +32,10 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
+                'required' => true,
+                'readOnly' => true,
                 'size' => 30,
-                'default' => 'Default value',
+                'default' => 1,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -44,7 +46,7 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'type' => 'language',
-                    'default' => 'Default value',
+                    'default' => 1,
                     'required' => true,
                     'readOnly' => true,
                 ],
@@ -85,7 +87,7 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '',
+            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
         ];
     }
 
