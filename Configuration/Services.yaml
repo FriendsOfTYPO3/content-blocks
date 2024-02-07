@@ -26,13 +26,6 @@ services:
         identifier: 'content-blocks-page-types'
         event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
 
-  TYPO3\CMS\ContentBlocks\Generator\IconGenerator:
-    public: true
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-icons'
-        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
-
   TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator:
     public: true
     tags:

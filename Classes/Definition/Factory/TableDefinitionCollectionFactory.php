@@ -38,6 +38,7 @@ use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * This class does the main heavy-lifting of parsing and preparing loaded
@@ -69,7 +70,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
  *
  * @internal Not part of TYPO3's public API.
  */
-final class TableDefinitionCollectionFactory
+final class TableDefinitionCollectionFactory implements SingletonInterface
 {
     private TableDefinitionCollection $tableDefinitionCollection;
     private AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry;

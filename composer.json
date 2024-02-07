@@ -54,6 +54,7 @@
 			"web-dir": ".Build/public",
 			"extension-key": "content_blocks",
 			"Package": {
+				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider",
 				"partOfFactoryDefault": false
 			}
 		}
