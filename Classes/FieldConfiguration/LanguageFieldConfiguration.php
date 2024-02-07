@@ -38,7 +38,8 @@ final class LanguageFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        return '';
+        // @todo change to return '' for v13 release (generated automatically now).
+        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
     public function getFieldType(): FieldType
