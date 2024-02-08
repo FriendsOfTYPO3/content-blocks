@@ -19,8 +19,10 @@ namespace TYPO3\CMS\ContentBlocks;
 
 use Psr\Container\ContainerInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator;
+use TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
@@ -48,7 +50,9 @@ class ServiceProvider extends AbstractServiceProvider
             'content-block-icons' => [ static::class, 'getContentBlockIcons' ],
             'content-block-page-types' => [ static::class, 'getContentBlockPageTypes' ],
             'content-block-typoscript' => [ static::class, 'getContentBlockTypoScript' ],
+            'content-block-user-tsconfig' => [ static::class, 'getContentBlockUserTsConfig' ],
             TypoScriptGenerator::class => [ static::class, 'getTypoScriptGenerator' ],
+            UserTsConfigGenerator::class => [ static::class, 'getUserTsConfigGenerator' ],
         ];
     }
 
@@ -67,6 +71,19 @@ class ServiceProvider extends AbstractServiceProvider
         return self::new(
             $container,
             TypoScriptGenerator::class,
+            [
+                $concatenatedTypoScript,
+            ]
+        );
+    }
+
+    public static function getUserTsConfigGenerator(ContainerInterface $container): UserTsConfigGenerator
+    {
+        $arrayObject = $container->get('content-block-user-tsconfig');
+        $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
+        return self::new(
+            $container,
+            UserTsConfigGenerator::class,
             [
                 $concatenatedTypoScript,
             ]
@@ -146,6 +163,31 @@ HEREDOC;
             }
         }
         $cache->set('TypoScript_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        return $arrayObject;
+    }
+
+    public static function getContentBlockUserTsConfig(ContainerInterface $container): \ArrayObject
+    {
+        $arrayObject = new \ArrayObject();
+        $cache = $container->get('cache.core');
+        $typoScriptFromCache = $cache->require('UserTsConfig_ContentBlocks');
+        if ($typoScriptFromCache !== false) {
+            $arrayObject->exchangeArray($typoScriptFromCache);
+            return $arrayObject;
+        }
+
+        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        foreach ($tableDefinitionCollection as $tableDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                if ($typeDefinition instanceof PageTypeDefinition) {
+                    $options = 'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $typeDefinition->getTypeName() . ')';
+                    $arrayObject->append($options);
+                }
+            }
+        }
+
+        $cache->set('UserTsConfig_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 

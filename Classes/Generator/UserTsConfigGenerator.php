@@ -17,8 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -28,22 +26,11 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 class UserTsConfigGenerator
 {
     public function __construct(
-        protected readonly TableDefinitionCollection $tableDefinitionCollection,
+        protected readonly string $typoScript,
     ) {}
 
     public function __invoke(BootCompletedEvent $event): void
     {
-        foreach ($this->tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if ($typeDefinition instanceof PageTypeDefinition) {
-                    ExtensionManagementUtility::addUserTSConfig($this->generatePageTypeTsConfig($typeDefinition));
-                }
-            }
-        }
-    }
-
-    protected function generatePageTypeTsConfig(PageTypeDefinition $pageTypeDefinition): string
-    {
-        return 'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $pageTypeDefinition->getTypeName() . ')';
+        ExtensionManagementUtility::addUserTSConfig($this->typoScript);
     }
 }
