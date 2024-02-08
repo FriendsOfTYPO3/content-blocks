@@ -18,7 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks;
 
 use Psr\Container\ContainerInterface;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
 
@@ -41,6 +43,7 @@ class ServiceProvider extends AbstractServiceProvider
     {
         return [
             'content-block-icons' => [ static::class, 'getContentBlockIcons' ],
+            'content-block-page-types' => [ static::class, 'getContentBlockPageTypes' ],
         ];
     }
 
@@ -48,6 +51,7 @@ class ServiceProvider extends AbstractServiceProvider
     {
         return [
             IconRegistry::class => [ static::class, 'configureIconRegistry' ],
+            PageDoktypeRegistry::class => [static::class, 'configurePageTypes' ],
         ] + parent::getExtensions();
     }
 
@@ -66,6 +70,21 @@ class ServiceProvider extends AbstractServiceProvider
                 ];
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }
+        }
+        return $arrayObject;
+    }
+
+    public static function getContentBlockPageTypes(ContainerInterface $container): \ArrayObject
+    {
+        $arrayObject = new \ArrayObject();
+        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        if (!$tableDefinitionCollection->hasTable(ContentType::PAGE_TYPE->getTable())) {
+            return $arrayObject;
+        }
+        $tableDefinition = $tableDefinitionCollection->getTable(ContentType::PAGE_TYPE->getTable());
+        foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            $arrayObject->append($typeDefinition->getTypeName());
         }
         return $arrayObject;
     }
@@ -93,5 +112,19 @@ class ServiceProvider extends AbstractServiceProvider
             $iconRegistry->registerIcon($icon, $provider, $options);
         }
         return $iconRegistry;
+    }
+
+    public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
+    {
+        $cache = $container->get('cache.core');
+        $pageTypesFromContentBlocks = $cache->require('PageTypes_ContentBlocks');
+        if ($pageTypesFromContentBlocks === false) {
+            $pageTypesFromContentBlocks = $container->get('content-block-page-types')->getArrayCopy();
+            $cache->set('PageTypes_ContentBlocks', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
+        }
+        foreach ($pageTypesFromContentBlocks as $pageType) {
+            $pageDoktypeRegistry->add($pageType, []);
+        }
+        return $pageDoktypeRegistry;
     }
 }
