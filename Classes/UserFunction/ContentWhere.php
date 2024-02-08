@@ -17,22 +17,20 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\UserFunction;
 
-use TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService;
-
 /**
  * @internal
  */
-final class ContentWhere
+class ContentWhere
 {
     public function __construct(
-        private readonly ContentElementParentFieldService $contentElementParentFieldService
+        protected readonly array $parentFieldNames
     ) {}
 
     public function extend(string $where): string
     {
         $columns = array_map(
             fn(string $fieldName): string => ' AND {#' . $fieldName . '} = 0',
-            $this->contentElementParentFieldService->getAllFieldNames()
+            $this->parentFieldNames
         );
 
         return $where . implode(' ', $columns);

@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks;
 
 use Psr\Container\ContainerInterface;
+use TYPO3\CMS\ContentBlocks\Backend\Layout\HideContentElementChildrenEventListener;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
@@ -27,6 +28,7 @@ use TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
@@ -55,9 +57,12 @@ class ServiceProvider extends AbstractServiceProvider
             'content-block-typoscript' => [ static::class, 'getContentBlockTypoScript' ],
             'content-block-user-tsconfig' => [ static::class, 'getContentBlockUserTsConfig' ],
             'content-block-page-tsconfig' => [ static::class, 'getContentBlockPageTsConfig' ],
+            'content-block-parentFieldNames' => [ static::class, 'getContentBlockParentFieldNames' ],
             TypoScriptGenerator::class => [ static::class, 'getTypoScriptGenerator' ],
             UserTsConfigGenerator::class => [ static::class, 'getUserTsConfigGenerator' ],
             PageTsConfigGenerator::class => [ static::class, 'getPageTsConfigGenerator' ],
+            HideContentElementChildrenEventListener::class => [ static::class, 'getHideContentElementChildrenEventListener' ],
+            ContentWhere::class => [ static::class, 'getContentWhere' ],
         ];
     }
 
@@ -104,6 +109,32 @@ class ServiceProvider extends AbstractServiceProvider
             PageTsConfigGenerator::class,
             [
                 $concatenatedTypoScript,
+            ]
+        );
+    }
+
+    public static function getHideContentElementChildrenEventListener(ContainerInterface $container): HideContentElementChildrenEventListener
+    {
+        $arrayObject = $container->get('content-block-parentFieldNames');
+        $parentFieldNames = $arrayObject->getArrayCopy();
+        return self::new(
+            $container,
+            HideContentElementChildrenEventListener::class,
+            [
+                $parentFieldNames,
+            ]
+        );
+    }
+
+    public static function getContentWhere(ContainerInterface $container): ContentWhere
+    {
+        $arrayObject = $container->get('content-block-parentFieldNames');
+        $parentFieldNames = $arrayObject->getArrayCopy();
+        return self::new(
+            $container,
+            ContentWhere::class,
+            [
+                $parentFieldNames,
             ]
         );
     }
@@ -263,6 +294,36 @@ HEREDOC;
         }
 
         $cache->set('PageTsConfig_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        return $arrayObject;
+    }
+
+    public static function getContentBlockParentFieldNames(ContainerInterface $container): \ArrayObject
+    {
+        $arrayObject = new \ArrayObject();
+        $cache = $container->get('cache.core');
+        $typoScriptFromCache = $cache->require('ParentFieldNames_ContentBlocks');
+        if ($typoScriptFromCache !== false) {
+            $arrayObject->exchangeArray($typoScriptFromCache);
+            return $arrayObject;
+        }
+
+        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+
+        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
+        if ($tableDefinitionCollection->hasTable($contentElementTable)) {
+            $fieldNames = [];
+            $contentElementTableDefinition = $tableDefinitionCollection->getTable($contentElementTable);
+            foreach ($contentElementTableDefinition->getParentReferences() ?? [] as $parentReference) {
+                $fieldConfiguration = $parentReference->getFieldConfiguration()->getTca()['config'] ?? [];
+                if (($fieldConfiguration['foreign_table'] ?? '') === $contentElementTable) {
+                    $foreignField = $fieldConfiguration['foreign_field'];
+                    $fieldNames[$foreignField] = $foreignField;
+                }
+            }
+            $arrayObject->exchangeArray(array_values($fieldNames));
+        }
+        $cache->set('ParentFieldNames_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 

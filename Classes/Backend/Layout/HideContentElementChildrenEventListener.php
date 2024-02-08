@@ -18,23 +18,21 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Layout;
 
 use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
-use TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService;
 use TYPO3\CMS\Core\Database\Connection;
 
 /**
  * @internal
  */
-final class HideContentElementChildrenEventListener
+class HideContentElementChildrenEventListener
 {
     public function __construct(
-        private readonly ContentElementParentFieldService $contentElementParentFieldService
+        protected readonly array $parentFieldNames,
     ) {}
 
     public function __invoke(ModifyDatabaseQueryForContentEvent $event): void
     {
         $queryBuilder = $event->getQueryBuilder();
-
-        foreach ($this->contentElementParentFieldService->getAllFieldNames() as $fieldName) {
+        foreach ($this->parentFieldNames as $fieldName) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     $fieldName,
@@ -42,7 +40,6 @@ final class HideContentElementChildrenEventListener
                 )
             );
         }
-
         $event->setQueryBuilder($queryBuilder);
     }
 }

@@ -17,10 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Service;
 
+use Symfony\Component\DependencyInjection\Container;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService;
+use TYPO3\CMS\ContentBlocks\ServiceProvider;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ContentElementParentFieldServiceTest extends UnitTestCase
@@ -94,11 +96,13 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
-        $contentElementParentFieldService = new ContentElementParentFieldService($tableDefinitionCollection);
+        $tableDefinitionFactory = new TableDefinitionCollectionFactory($contentBlockRegistry);
+        $container = new Container();
+        $container->set(TableDefinitionCollectionFactory::class, $tableDefinitionFactory);
+        $container->set('cache.core', new NullFrontend('test'));
+        $result = ServiceProvider::getContentBlockParentFieldNames($container);
 
-        self::assertSame($expected, $contentElementParentFieldService->getAllFieldNames());
+        self::assertSame($expected, $result->getArrayCopy());
     }
 
     /**
@@ -150,10 +154,12 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
-        $contentElementParentFieldService = new ContentElementParentFieldService($tableDefinitionCollection);
+        $tableDefinitionFactory = new TableDefinitionCollectionFactory($contentBlockRegistry);
+        $container = new Container();
+        $container->set(TableDefinitionCollectionFactory::class, $tableDefinitionFactory);
+        $container->set('cache.core', new NullFrontend('test'));
+        $result = ServiceProvider::getContentBlockParentFieldNames($container);
 
-        self::assertSame($expected, $contentElementParentFieldService->getAllFieldNames());
+        self::assertSame($expected, $result->getArrayCopy());
     }
 }
