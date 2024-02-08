@@ -39,7 +39,7 @@ class ContentTypeIconResolver
                 continue;
             }
             $prefixPath = match (Environment::isComposerMode()) {
-                true => Environment::getPublicPath() . '/' . ContentBlockPathUtility::getSymlinkedAssetsPath($name),
+                true => ContentBlockPathUtility::getSymlinkedAssetsPath($name),
                 false => $extPath . '/' . ContentBlockPathUtility::getPublicFolder(),
             };
             $iconNameWithoutFileExtension = $identifier;
