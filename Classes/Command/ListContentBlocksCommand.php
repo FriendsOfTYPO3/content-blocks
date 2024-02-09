@@ -56,7 +56,7 @@ class ListContentBlocksCommand extends Command
             return Command::SUCCESS;
         }
 
-        usort($availableContentBlocks, function (array $a, array $b) use ($order): int {
+        usort($availableContentBlocks, function(array $a, array $b) use ($order): int {
             if ($order === 'content-type') {
                 return $a[$order] <=> $b[$order];
             }

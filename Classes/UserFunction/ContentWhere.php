@@ -29,7 +29,7 @@ class ContentWhere
     public function extend(string $where): string
     {
         $columns = array_map(
-            fn(string $fieldName): string => ' AND {#' . $fieldName . '} = 0',
+            fn (string $fieldName): string => ' AND {#' . $fieldName . '} = 0',
             $this->parentFieldNames
         );
 

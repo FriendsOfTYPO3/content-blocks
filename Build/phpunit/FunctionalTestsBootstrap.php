@@ -16,7 +16,7 @@
  * This file is defined in FunctionalTests.xml and called by phpunit
  * before instantiating the test suites.
  */
-(static function () {
+(static function() {
     $testbase = new \TYPO3\TestingFramework\Core\Testbase();
     $testbase->defineOriginalRootPath();
     $testbase->createDirectory(ORIGINAL_ROOT . 'var/tests');

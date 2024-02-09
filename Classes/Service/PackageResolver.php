@@ -61,7 +61,7 @@ class PackageResolver
      */
     protected function removeFrameworkExtensions(array $packages): array
     {
-        return array_filter($packages, fn(PackageInterface $package): bool => !$package->getPackageMetaData()->isFrameworkType());
+        return array_filter($packages, fn (PackageInterface $package): bool => !$package->getPackageMetaData()->isFrameworkType());
     }
 
     /**
@@ -80,7 +80,7 @@ class PackageResolver
         foreach ($composerLockPackages as $package) {
             $composerLockMap[$package['name']] = $package['dist']['type'] ?? null;
         }
-        $filterPackages = function (PackageInterface $package) use ($composerLockMap): bool {
+        $filterPackages = function(PackageInterface $package) use ($composerLockMap): bool {
             $name = $package->getValueFromComposerManifest('name');
             if (array_key_exists($name, $composerLockMap)) {
                 return $composerLockMap[$name] === 'path';

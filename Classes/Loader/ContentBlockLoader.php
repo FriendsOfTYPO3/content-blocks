@@ -82,7 +82,7 @@ class ContentBlockLoader
         }
 
         if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
-            $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+            $contentBlocks = array_map(fn (array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
             $contentBlockRegistry = new ContentBlockRegistry();
             foreach ($contentBlocks as $contentBlock) {
                 $contentBlockRegistry->register($contentBlock);
@@ -113,7 +113,7 @@ class ContentBlockLoader
             }
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
-        $sortByPriority = fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
+        $sortByPriority = fn (LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
         usort($loadedContentBlocks, $sortByPriority);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($loadedContentBlocks as $contentBlock) {
@@ -123,7 +123,7 @@ class ContentBlockLoader
 
         $this->publishAssets($loadedContentBlocks);
 
-        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
+        $cache = array_map(fn (LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
 
         return $this->contentBlockRegistry;

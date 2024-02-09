@@ -49,7 +49,7 @@ class BasicsLoader
             return $this->basicsRegistry;
         }
         $this->basicsRegistry = $this->loadUncached();
-        $cache = array_map(fn(LoadedBasic $basic): array => $basic->toArray(), $this->basicsRegistry->getAllBasics());
+        $cache = array_map(fn (LoadedBasic $basic): array => $basic->toArray(), $this->basicsRegistry->getAllBasics());
         $this->cache->set('content-blocks-basics', 'return ' . var_export($cache, true) . ';');
         return $this->basicsRegistry;
     }

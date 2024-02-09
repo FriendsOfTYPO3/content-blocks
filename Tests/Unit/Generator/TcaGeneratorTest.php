@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\CompatibilityLayer\TcaPreparation;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
@@ -27,7 +28,6 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TcaGeneratorTest extends UnitTestCase
@@ -2089,7 +2089,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
         $GLOBALS['TCA'] = $baseTca;
 
-        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
@@ -2257,7 +2257,7 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
         $GLOBALS['TCA'] = $baseTca;
 
-        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlocks = array_map(fn (array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);

@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FileFieldConfiguration;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -25,6 +26,11 @@ final class FileFieldConfigurationTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
+        $imageExtensions = 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg';
+        if ((new Typo3Version())->getMajorVersion() >= 13) {
+            $imageExtensions .= ',webp';
+        }
+
         yield 'truthy values' => [
             'config' => [
                 'label' => 'foo',
@@ -96,7 +102,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'type' => 'file',
-                    'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
+                    'allowed' => $imageExtensions,
                     'disallowed' => 'png',
                     'appearance' => [
                         'foo' => 'bar',
@@ -203,7 +209,7 @@ final class FileFieldConfigurationTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'type' => 'file',
-                    'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
+                    'allowed' => $imageExtensions,
                     'disallowed' => ['png'],
                 ],
             ],

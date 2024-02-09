@@ -85,7 +85,7 @@ final class ContentTypeDefinitionCollection implements \IteratorAggregate, \Coun
     private function sort(): array
     {
         $types = $this->definitions;
-        usort($types, fn(ContentTypeInterface $a, ContentTypeInterface $b): int => $b->getPriority() <=> $a->getPriority());
+        usort($types, fn (ContentTypeInterface $a, ContentTypeInterface $b): int => $b->getPriority() <=> $a->getPriority());
         return $types;
     }
 }

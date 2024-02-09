@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\CompatibilityLayer\TcaPreparation;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
@@ -33,7 +34,6 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
-use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 

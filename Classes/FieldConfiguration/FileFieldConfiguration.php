@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 
-use TYPO3\CMS\Core\Preparations\TcaPreparation;
+use TYPO3\CMS\ContentBlocks\CompatibilityLayer\TcaPreparation;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
