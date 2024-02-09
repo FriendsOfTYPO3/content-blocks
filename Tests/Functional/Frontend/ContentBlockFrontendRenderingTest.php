@@ -238,4 +238,24 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Mixed Relation: pages', $html);
         self::assertStringContainsString('Mixed Relation: tt_content', $html);
     }
+
+    /**
+     * @test
+     */
+    public function staticSelectRelationsResolved(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select-static-relation.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Multi Select: one', $html);
+        self::assertStringContainsString('Multi Select: two', $html);
+        self::assertStringContainsString('Single Select: three', $html);
+    }
 }

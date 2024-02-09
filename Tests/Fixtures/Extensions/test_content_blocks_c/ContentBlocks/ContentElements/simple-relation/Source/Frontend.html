@@ -30,3 +30,11 @@ Title: {data.record.title}
         Mixed Relation: {relation.tableName}
     </f:for>
 </f:if>
+<f:if condition="{data.multi_select}">
+    <f:for each="{data.multi_select}" as="item">
+        Multi Select: {item}
+    </f:for>
+</f:if>
+<f:if condition="{data.single_select}">
+    Single Select: {data.single_select}
+</f:if>

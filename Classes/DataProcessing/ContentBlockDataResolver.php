@@ -75,7 +75,11 @@ final class ContentBlockDataResolver
                 $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
             }
             $transformedRelation = null;
-            if (is_array($resolvedField) && $tcaFieldDefinition->getFieldType()->isRelation()) {
+            if (
+                is_array($resolvedField)
+                && $tcaFieldDefinition->getFieldType()->isRelation()
+                && $this->getForeignTable($tcaFieldDefinition, $table) !== ''
+            ) {
                 $transformedRelation = match ($tcaFieldDefinition->getFieldType()) {
                     FieldType::COLLECTION,
                     FieldType::RELATION => $this->transformMultipleRelation(

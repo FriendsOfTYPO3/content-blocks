@@ -17,3 +17,9 @@ fields:
   - identifier: relation_mix
     type: Relation
     allowed: tt_content,pages
+  - identifier: single_select
+    type: Select
+    renderType: selectSingle
+  - identifier: multi_select
+    type: Select
+    renderType: selectMultipleSideBySide
