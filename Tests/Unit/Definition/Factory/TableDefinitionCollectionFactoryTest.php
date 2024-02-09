@@ -17,9 +17,11 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition\Factory;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TableDefinitionCollectionFactoryTest extends UnitTestCase
@@ -70,7 +72,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     public static function notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider(): iterable
@@ -125,7 +129,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -167,7 +173,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -215,7 +223,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -274,7 +284,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -339,7 +351,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -382,7 +396,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -431,7 +447,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -472,7 +490,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -519,7 +539,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -570,7 +592,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -627,7 +651,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -665,7 +691,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -699,7 +727,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -743,7 +773,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     /**
@@ -800,7 +832,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     public static function structuralFieldTypesAreNotAllowedInFlexFormDataProvider(): iterable
@@ -912,7 +946,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     public static function sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider(): iterable
@@ -966,7 +1002,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     public static function containerHaveAtLeastOneFieldExceptionIsThrownDataProvider(): iterable
@@ -1026,7 +1064,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
     }
 
     public static function containerContainsValidFieldTypeExceptionIsThrownDataProvider(): iterable
@@ -1091,7 +1131,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))->createUncached($contentBlockRegistry);
     }
 
     public static function localCollectionsCanHaveTableOverriddenDataProvider(): iterable
@@ -1136,8 +1177,9 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
 
         self::assertTrue($tableDefinitionCollection->hasTable($expectedTable));
     }

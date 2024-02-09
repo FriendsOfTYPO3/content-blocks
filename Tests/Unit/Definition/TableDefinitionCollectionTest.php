@@ -17,9 +17,11 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TableDefinitionCollectionTest extends UnitTestCase
@@ -58,8 +60,9 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
         self::assertSame('t3ce_example', $contentElementDefinition->getTypeName());
@@ -71,8 +74,9 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     public function nonExistingTableThrowsException(): void
     {
         $contentBlockRegistry = new ContentBlockRegistry();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1702413869);
@@ -103,8 +107,9 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1702413909);
@@ -163,8 +168,9 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
 
         $contentElement = $tableDefinitionCollection->getContentElementDefinition($typeName);
 
@@ -218,8 +224,9 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))
-            ->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
         $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {

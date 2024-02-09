@@ -22,7 +22,7 @@ use TYPO3\CMS\ContentBlocks\Backend\Layout\HideContentElementChildrenEventListen
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator;
@@ -142,8 +142,7 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockIcons(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
-        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $iconConfig = [
@@ -161,8 +160,7 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockPageTypes(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
-        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         if (!$tableDefinitionCollection->hasTable(ContentType::PAGE_TYPE->getTable())) {
             return $arrayObject;
         }
@@ -183,9 +181,8 @@ class ServiceProvider extends AbstractServiceProvider
             return $arrayObject;
         }
 
-        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
         $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
@@ -225,8 +222,7 @@ HEREDOC;
             return $arrayObject;
         }
 
-        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
-        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($typeDefinition instanceof PageTypeDefinition) {
@@ -251,8 +247,7 @@ HEREDOC;
         }
 
         $languageFileRegistry = $container->get(LanguageFileRegistry::class);
-        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
-        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($typeDefinition instanceof ContentElementDefinition) {
@@ -307,9 +302,7 @@ HEREDOC;
             return $arrayObject;
         }
 
-        $tableDefinitionCollectionFactory = $container->get(TableDefinitionCollectionFactory::class);
-        $tableDefinitionCollection = $tableDefinitionCollectionFactory->create();
-
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
         if ($tableDefinitionCollection->hasTable($contentElementTable)) {
             $fieldNames = [];

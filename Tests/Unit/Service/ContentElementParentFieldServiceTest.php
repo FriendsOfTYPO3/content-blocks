@@ -18,7 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Service;
 
 use Symfony\Component\DependencyInjection\Container;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\ServiceProvider;
@@ -96,9 +98,11 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionFactory = new TableDefinitionCollectionFactory($contentBlockRegistry);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
         $container = new Container();
-        $container->set(TableDefinitionCollectionFactory::class, $tableDefinitionFactory);
+        $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
         $container->set('cache.core', new NullFrontend('test'));
         $result = ServiceProvider::getContentBlockParentFieldNames($container);
 
@@ -154,9 +158,11 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
-        $tableDefinitionFactory = new TableDefinitionCollectionFactory($contentBlockRegistry);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
         $container = new Container();
-        $container->set(TableDefinitionCollectionFactory::class, $tableDefinitionFactory);
+        $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
         $container->set('cache.core', new NullFrontend('test'));
         $result = ServiceProvider::getContentBlockParentFieldNames($container);
 

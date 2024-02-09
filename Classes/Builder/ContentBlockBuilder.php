@@ -80,7 +80,7 @@ class ContentBlockBuilder
     protected function initializeRegistries(LoadedContentBlock $contentBlock): void
     {
         $this->contentBlockRegistry->register($contentBlock);
-        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached();
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached($this->contentBlockRegistry);
         $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
         $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
     }

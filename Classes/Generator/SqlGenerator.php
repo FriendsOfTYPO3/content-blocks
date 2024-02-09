@@ -28,7 +28,8 @@ use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 class SqlGenerator
 {
     public function __construct(
-        protected readonly ContentBlockLoader $contentBlockLoader
+        protected readonly ContentBlockLoader $contentBlockLoader,
+        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
     ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void
@@ -41,8 +42,7 @@ class SqlGenerator
     public function generate(): array
     {
         $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
-        $tableDefinitionFactory = new TableDefinitionCollectionFactory($contentBlockRegistry);
-        $tableDefinitionCollection = $tableDefinitionFactory->create();
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached($contentBlockRegistry);
         $sql = [];
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getSqlColumnDefinitionCollection() as $column) {

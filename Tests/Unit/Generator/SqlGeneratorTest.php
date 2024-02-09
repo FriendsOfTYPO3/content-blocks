@@ -17,10 +17,13 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class SqlGeneratorTest extends UnitTestCase
@@ -276,7 +279,9 @@ final class SqlGeneratorTest extends UnitTestCase
         }
         $loader = $this->createMock(ContentBlockLoader::class);
         $loader->method('loadUncached')->willReturn($contentBlockRegistry);
-        $sqlGenerator = new SqlGenerator($loader);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollectionFactory = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler));
+        $sqlGenerator = new SqlGenerator($loader, $tableDefinitionCollectionFactory);
 
         $result = $sqlGenerator->generate();
 

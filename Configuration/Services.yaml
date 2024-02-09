@@ -11,6 +11,12 @@ services:
     resource: '../Classes/UserFunction/*'
     public: true
 
+  TYPO3\CMS\ContentBlocks\Definition\Factory\InitializeContentBlockCache:
+    tags:
+      - name: event.listener
+        identifier: 'content-blocks-initialize-cache'
+        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
+
 # @todo change to BeforeTcaOverridesEvent for v13
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
@@ -25,6 +31,7 @@ services:
       - name: event.listener
         identifier: 'content-blocks-typoscript'
         event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
+        after: 'content-blocks-initialize-cache'
 
 #  @todo Use BeforeLoadedPageTsConfigEvent in v13
   TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator:
@@ -41,6 +48,7 @@ services:
       - name: event.listener
         identifier: 'content-blocks-user-tsconfig'
         event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
+        after: 'content-blocks-initialize-cache'
 
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
     public: true
@@ -77,10 +85,22 @@ services:
     arguments:
       $cache: '@cache.core'
 
+  cache.content_blocks:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['content_blocks']
+    lazy: true
+
+  TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory:
+    arguments:
+      $cache: '@cache.content_blocks'
+
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
+    public: true
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
+    arguments: ['@TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry']
 
   TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry:
     public: true

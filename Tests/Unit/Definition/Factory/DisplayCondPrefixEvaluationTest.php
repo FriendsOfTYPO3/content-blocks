@@ -17,10 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition\Factory;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class DisplayCondPrefixEvaluationTest extends UnitTestCase
@@ -54,7 +56,9 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
 
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
         $tcaFieldDefinition = $tableDefinitionCollection
             ->getTable('tt_content')
             ->getTcaFieldDefinitionCollection()
@@ -161,7 +165,9 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
 
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory($contentBlockRegistry))->create();
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry);
         $tcaFieldDefinition = $tableDefinitionCollection
             ->getTable('tt_content')
             ->getTcaFieldDefinitionCollection()
