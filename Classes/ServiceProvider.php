@@ -174,7 +174,7 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockTypoScript(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.core');
+        $cache = $container->get('cache.content_blocks_code');
         $typoScriptFromCache = $cache->require('TypoScript_ContentBlocks');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
@@ -215,7 +215,7 @@ HEREDOC;
     public static function getContentBlockUserTsConfig(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.core');
+        $cache = $container->get('cache.content_blocks_code');
         $typoScriptFromCache = $cache->require('UserTsConfig_ContentBlocks');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
@@ -239,7 +239,7 @@ HEREDOC;
     public static function getContentBlockPageTsConfig(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.core');
+        $cache = $container->get('cache.content_blocks_code');
         $typoScriptFromCache = $cache->require('PageTsConfig_ContentBlocks');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
@@ -295,7 +295,7 @@ HEREDOC;
     public static function getContentBlockParentFieldNames(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.core');
+        $cache = $container->get('cache.content_blocks_code');
         $typoScriptFromCache = $cache->require('ParentFieldNames_ContentBlocks');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
@@ -322,7 +322,7 @@ HEREDOC;
 
     public static function configureIconRegistry(ContainerInterface $container, IconRegistry $iconRegistry): IconRegistry
     {
-        $cache = $container->get('cache.core');
+        $cache = $container->get('cache.content_blocks_code');
 
         $iconsFromPackages = $cache->require('Icons_ContentBlocks');
         if ($iconsFromPackages === false) {
@@ -347,6 +347,7 @@ HEREDOC;
 
     public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
     {
+        // Early core cache is required here, as PageDokTypeRegistry is instantiated inExtensionManagementUtility::loadBaseTca
         $cache = $container->get('cache.core');
         $pageTypesFromContentBlocks = $cache->require('PageTypes_ContentBlocks');
         if ($pageTypesFromContentBlocks === false) {

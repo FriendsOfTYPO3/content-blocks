@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\VarExporter\LazyObjectInterface;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
@@ -67,31 +68,26 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ContentBlockLoader
 {
-    protected ContentBlockRegistry $contentBlockRegistry;
-
     public function __construct(
-        protected readonly PhpFrontend $cache,
+        protected readonly LazyObjectInterface|PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
     ) {}
 
     public function load(): ContentBlockRegistry
     {
-        if (isset($this->contentBlockRegistry)) {
-            return $this->contentBlockRegistry;
+        if (!$this->cache->isLazyObjectInitialized()) {
+            return $this->loadUncached();
         }
-
         if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-            $contentBlockRegistry = new ContentBlockRegistry();
-            foreach ($contentBlocks as $contentBlock) {
-                $contentBlockRegistry->register($contentBlock);
-            }
-            $this->contentBlockRegistry = $contentBlockRegistry;
-            return $this->contentBlockRegistry;
+            $contentBlockRegistry = $this->fillContentBlockRegistry($contentBlocks);
+            return $contentBlockRegistry;
         }
-
-        return $this->loadUncached();
+        $contentBlockRegistry = $this->loadUncached();
+        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $contentBlockRegistry->getAll());
+        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
+        return $contentBlockRegistry;
     }
 
     public function loadUncached(): ContentBlockRegistry
@@ -115,18 +111,23 @@ class ContentBlockLoader
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
         $sortByPriority = fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
         usort($loadedContentBlocks, $sortByPriority);
-        $contentBlockRegistry = new ContentBlockRegistry();
-        foreach ($loadedContentBlocks as $contentBlock) {
-            $contentBlockRegistry->register($contentBlock);
-        }
-        $this->contentBlockRegistry = $contentBlockRegistry;
+        $contentBlockRegistry = $this->fillContentBlockRegistry($loadedContentBlocks);
 
         $this->publishAssets($loadedContentBlocks);
 
-        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $loadedContentBlocks);
-        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
+        return $contentBlockRegistry;
+    }
 
-        return $this->contentBlockRegistry;
+    /**
+     * @param LoadedContentBlock[] $contentBlocks
+     */
+    protected function fillContentBlockRegistry(array $contentBlocks): ContentBlockRegistry
+    {
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register($contentBlock);
+        }
+        return $contentBlockRegistry;
     }
 
     /**
@@ -244,5 +245,10 @@ class ContentBlockLoader
                 $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
             }
         }
+    }
+
+    public function initializeCache(): void
+    {
+        $this->cache->initializeLazyObject();
     }
 }

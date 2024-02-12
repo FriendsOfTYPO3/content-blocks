@@ -15,7 +15,11 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
+namespace TYPO3\CMS\ContentBlocks\Cache;
+
+use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 
 /**
  * The Content Blocks cache is lazy and needs to be initialized
@@ -24,11 +28,15 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 class InitializeContentBlockCache
 {
     public function __construct(
-        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory
+        protected readonly ContentBlockLoader $contentBlockLoader,
+        protected readonly BasicsLoader $basicsLoader,
+        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
     ) {}
 
     public function __invoke(): void
     {
+        $this->contentBlockLoader->initializeCache();
+        $this->basicsLoader->initializeCache();
         $this->tableDefinitionCollectionFactory->initializeCache();
     }
 }

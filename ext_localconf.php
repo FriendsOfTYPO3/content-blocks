@@ -3,6 +3,7 @@
 defined('TYPO3') or die();
 
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -15,8 +16,26 @@ lib.contentBlock {
 }
 ');
 
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_blocks'] = [
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_blocks_yaml'] = [
+    'frontend' => PhpFrontend::class,
+    'backend' => SimpleFileBackend::class,
+    'options' => [
+        'defaultLifetime' => 0,
+    ],
+    'groups' => ['system'],
+];
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_blocks_object'] = [
     'frontend' => VariableFrontend::class,
+    'backend' => SimpleFileBackend::class,
+    'options' => [
+        'defaultLifetime' => 0,
+    ],
+    'groups' => ['system'],
+];
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_blocks_code'] = [
+    'frontend' => PhpFrontend::class,
     'backend' => SimpleFileBackend::class,
     'options' => [
         'defaultLifetime' => 0,

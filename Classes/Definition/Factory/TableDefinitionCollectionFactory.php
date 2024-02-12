@@ -50,9 +50,7 @@ final class TableDefinitionCollectionFactory
 
     public function initializeCache(): void
     {
-        if (!$this->cache->isLazyObjectInitialized()) {
-            $this->cache->initializeLazyObject();
-        }
+        $this->cache->initializeLazyObject();
     }
 
     public function createUncached(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
