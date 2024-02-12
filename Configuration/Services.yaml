@@ -72,19 +72,6 @@ services:
     tags:
       - { name: 'data.processor', identifier: 'content-blocks' }
 
-  TYPO3\CMS\ContentBlocks\Basics\BasicsLoader:
-    arguments:
-      $cache: '@cache.content_blocks_yaml'
-
-  TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry:
-    factory:
-      - '@TYPO3\CMS\ContentBlocks\Basics\BasicsLoader'
-      - 'load'
-
-  TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
-    arguments:
-      $cache: '@cache.content_blocks_yaml'
-
   cache.content_blocks_yaml:
     class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
     factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
@@ -105,6 +92,28 @@ services:
     arguments: ['content_blocks_code']
     public: true
 
+  TYPO3\CMS\ContentBlocks\Basics\BasicsLoader:
+    arguments:
+      $cache: '@cache.content_blocks_yaml'
+
+  TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry:
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Basics\BasicsLoader'
+      - 'load'
+
+  TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
+    arguments:
+      $cache: '@cache.content_blocks_yaml'
+
+  TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry:
+    public: true
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
+      - 'load'
+    # Set to "shared: false" so that lazy cache can be properly warmed up.
+    # todo Better use core caches?
+    shared: false
+
   TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory:
     arguments:
       $cache: '@cache.content_blocks_object'
@@ -118,15 +127,6 @@ services:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
     arguments: ['@TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry']
-
-  TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry:
-    public: true
-    factory:
-      - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
-      - 'load'
-    # Set to "shared: false" so that lazy cache can be properly warmed up.
-    # todo Better use core caches?
-    shared: false
 
   TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry:
     factory:
