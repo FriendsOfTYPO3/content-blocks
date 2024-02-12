@@ -56,7 +56,7 @@ final class ContentBlockDataDecorator
         TableDefinition $tableDefinition,
         ResolvedRelation $resolvedRelation,
         string $table,
-        $depth = 0
+        int $depth = 0
     ): ContentBlockData {
         $processedContentBlockData = [];
         foreach ($contentTypeDefinition->getColumns() as $column) {
@@ -64,31 +64,8 @@ final class ContentBlockDataDecorator
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
-            $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-            $transformedRelation = null;
-            if (
-                is_array($resolvedField)
-                && $tcaFieldDefinition->getFieldType()->isRelation()
-                && $this->getForeignTable($tcaFieldDefinition, $table) !== ''
-            ) {
-                $transformedRelation = match ($tcaFieldDefinition->getFieldType()) {
-                    FieldType::COLLECTION,
-                    FieldType::RELATION => $this->transformMultipleRelation(
-                        $resolvedField,
-                        $tcaFieldDefinition,
-                        $table,
-                        $depth,
-                    ),
-                    FieldType::SELECT => $this->transformSelectRelation(
-                        $resolvedField,
-                        $tcaFieldDefinition,
-                        $table,
-                        $depth,
-                    ),
-                    default => $resolvedField,
-                };
-            }
-            $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $transformedRelation ?? $resolvedField;
+            $resolvedField = $this->handleRelation($resolvedRelation, $tcaFieldDefinition, $table, $depth);
+            $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $resolvedField;
         }
         $resolvedRelation->resolved = $processedContentBlockData;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
@@ -99,6 +76,49 @@ final class ContentBlockDataDecorator
             $contentTypeDefinition->getName(),
         );
         return $contentBlockDataObject;
+    }
+
+    private function handleRelation(
+        ResolvedRelation $resolvedRelation,
+        TcaFieldDefinition $tcaFieldDefinition,
+        string $table,
+        int $depth
+    ): mixed {
+        $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
+        if (!$this->isRelationField($resolvedField, $tcaFieldDefinition, $table)) {
+            return $resolvedField;
+        }
+        $resolvedField = match ($tcaFieldDefinition->getFieldType()) {
+            FieldType::COLLECTION,
+            FieldType::RELATION => $this->transformMultipleRelation(
+                $resolvedField,
+                $tcaFieldDefinition,
+                $table,
+                $depth,
+            ),
+            FieldType::SELECT => $this->transformSelectRelation(
+                $resolvedField,
+                $tcaFieldDefinition,
+                $table,
+                $depth,
+            ),
+            default => $resolvedField,
+        };
+        return $resolvedField;
+    }
+
+    private function isRelationField(mixed $resolvedField, TcaFieldDefinition $tcaFieldDefinition, string $table): bool
+    {
+        if (!is_array($resolvedField)) {
+            return false;
+        }
+        if (!$tcaFieldDefinition->getFieldType()->isRelation()) {
+            return false;
+        }
+        if ($this->getForeignTable($tcaFieldDefinition, $table) === '') {
+            return false;
+        }
+        return true;
     }
 
     /**
