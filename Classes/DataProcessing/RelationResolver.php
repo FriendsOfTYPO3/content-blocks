@@ -154,25 +154,11 @@ class RelationResolver
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
-            if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
-                $tableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
-                foreach ($result as $index => $row) {
-                    // Save raw record for later usage in ContentBlockDataResolver.
-                    $result[$index]['_raw'] = $row;
-                    foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
-                        $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
-                        if ($foreignTypeDefinition === null) {
-                            continue;
-                        }
-                        $result[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
-                            tcaFieldDefinition: $childTcaFieldDefinition,
-                            typeDefinition: $foreignTypeDefinition,
-                            record: $row,
-                            table: $foreignTable,
-                        );
-                    }
-                }
+            // If this table is not defined through TCA, return data as is.
+            if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
+                return $result;
             }
+            $result = $this->processChildRelations($result, $foreignTable);
             if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
                 return $result[0] ?? null;
             }
@@ -211,28 +197,7 @@ class RelationResolver
         if (str_contains($allowed, ',')) {
             $tableList = $this->getTableListFromTableUidPairs($fieldValue);
         }
-        foreach ($result as $index => $row) {
-            $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
-            // Save the associated table for later use in ContentBlockDataResolver.
-            $result[$index]['_table'] = $currentTable;
-            // Save raw record for later usage in ContentBlockDataResolver.
-            $result[$index]['_raw'] = $row;
-            if ($this->tableDefinitionCollection->hasTable($currentTable)) {
-                $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
-                foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
-                    $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
-                    if ($foreignTypeDefinition === null) {
-                        continue;
-                    }
-                    $result[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
-                        tcaFieldDefinition: $childTcaFieldDefinition,
-                        typeDefinition: $foreignTypeDefinition,
-                        record: $row,
-                        table: $currentTable,
-                    );
-                }
-            }
-        }
+        $result = $this->processChildRelations($result, $allowed, $tableList);
         return $result;
     }
 
@@ -264,7 +229,7 @@ class RelationResolver
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $collectionTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
         $uid = (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
-        $data = $this->getRelations(
+        $result = $this->getRelations(
             uidList: $uid,
             tableList: $collectionTable,
             mmTable: $tcaFieldConfig['config']['MM'] ?? '',
@@ -273,26 +238,36 @@ class RelationResolver
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
 
-        // If this table is defined through TCA, return data as is.
+        // If this table is not defined through TCA, return data as is.
         if (!$this->tableDefinitionCollection->hasTable($collectionTable)) {
-            return $data;
+            return $result;
         }
+        $result = $this->processChildRelations($result, $collectionTable);
+        return $result;
+    }
 
-        $tableDefinition = $this->tableDefinitionCollection->getTable($collectionTable);
+    protected function processChildRelations(array $data, string $allowed, ?array $tableList = null): array
+    {
         foreach ($data as $index => $row) {
+            $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
+            // Save the associated table for later use in ContentBlockDataResolver.
+            $data[$index]['_table'] = $currentTable;
             // Save raw record for later usage in ContentBlockDataResolver.
             $data[$index]['_raw'] = $row;
-            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
-                $childTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
-                if ($childTypeDefinition === null) {
-                    continue;
+            if ($this->tableDefinitionCollection->hasTable($currentTable)) {
+                $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
+                foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
+                    $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                    if ($foreignTypeDefinition === null) {
+                        continue;
+                    }
+                    $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
+                        tcaFieldDefinition: $childTcaFieldDefinition,
+                        typeDefinition: $foreignTypeDefinition,
+                        record: $row,
+                        table: $currentTable,
+                    );
                 }
-                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
-                    tcaFieldDefinition: $childTcaFieldDefinition,
-                    typeDefinition: $childTypeDefinition,
-                    record: $row,
-                    table: $collectionTable,
-                );
             }
         }
         return $data;
