@@ -159,12 +159,13 @@ final class ContentBlockDataDecorator
         string $table,
         int $depth
     ): ContentBlockData {
-        $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
         $resolvedRelation = new ResolvedRelation();
         // The associated table provided kindly by RelationResolver.
         if (isset($item['_table'])) {
             $foreignTable = $item['_table'];
             unset($item['_table']);
+        } else {
+            $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
         }
         $resolvedRelation->raw = $item['_raw'];
         unset($item['_raw']);
