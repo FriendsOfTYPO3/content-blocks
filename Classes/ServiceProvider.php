@@ -74,7 +74,7 @@ class ServiceProvider extends AbstractServiceProvider
         return [
             IconRegistry::class => [ static::class, 'configureIconRegistry' ],
             PageDoktypeRegistry::class => [static::class, 'configurePageTypes' ],
-            ListenerProvider::class => [static::class, 'addEventListeners']
+            ListenerProvider::class => [static::class, 'addEventListeners'],
         ] + parent::getExtensions();
     }
 

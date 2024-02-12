@@ -30,6 +30,8 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
  */
 final class TableDefinitionCollectionFactory
 {
+    protected TableDefinitionCollection $tableDefinitionCollection;
+
     public function __construct(
         protected readonly LazyObjectInterface|FrontendInterface $cache,
         protected readonly ContentBlockCompiler $contentBlockCompiler,
@@ -38,11 +40,16 @@ final class TableDefinitionCollectionFactory
     public function create(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
     {
         if (!$this->cache->isLazyObjectInitialized()) {
-            return $this->createUncached($contentBlockRegistry);
+            $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
+                $contentBlockRegistry
+            );
+            return $this->tableDefinitionCollection;
         }
         $tableDefinitionCollection = $this->cache->get('Compiled_ContentBlocks');
         if ($tableDefinitionCollection === false) {
-            $tableDefinitionCollection = $this->createUncached($contentBlockRegistry);
+            $tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
+                $contentBlockRegistry
+            );
             $this->cache->set('Compiled_ContentBlocks', $tableDefinitionCollection);
         }
         return $tableDefinitionCollection;
