@@ -112,6 +112,7 @@ services:
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
     public: true
     # Set to "shared: false" so that lazy cache can be properly warmed up.
+    # todo Better use core caches?
     shared: false
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
@@ -123,6 +124,9 @@ services:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
       - 'load'
+    # Set to "shared: false" so that lazy cache can be properly warmed up.
+    # todo Better use core caches?
+    shared: false
 
   TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry:
     factory:
