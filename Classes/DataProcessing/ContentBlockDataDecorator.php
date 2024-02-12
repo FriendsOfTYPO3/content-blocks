@@ -26,21 +26,22 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ContentBlockDataResolver
+final class ContentBlockDataDecorator
 {
     public function __construct(
-        private readonly RelationResolver $relationResolver,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
     ) {}
 
-    public function resolveData(
+    public function decorate(
         ContentTypeInterface $contentTypeDefinition,
         TableDefinition $tableDefinition,
-        array $data,
+        array $rawData,
+        array $resolvedData,
         string $table,
     ): ContentBlockData {
         $resolvedRelation = new ResolvedRelation();
-        $resolvedRelation->raw = $data;
+        $resolvedRelation->raw = $rawData;
+        $resolvedRelation->resolved = $resolvedData;
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
             $tableDefinition,
@@ -63,17 +64,7 @@ final class ContentBlockDataResolver
             if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
-            // RelationResolver already processes the fields recursively. Run it only on root level.
-            if ($depth === 0) {
-                $resolvedField = $this->relationResolver->processField(
-                    $tcaFieldDefinition,
-                    $contentTypeDefinition,
-                    $resolvedRelation->raw,
-                    $table
-                );
-            } else {
-                $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-            }
+            $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
             $transformedRelation = null;
             if (
                 is_array($resolvedField)

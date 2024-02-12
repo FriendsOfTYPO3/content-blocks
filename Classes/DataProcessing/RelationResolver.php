@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 use Doctrine\DBAL\Types\Type;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
@@ -43,6 +44,28 @@ class RelationResolver
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly FlexFormService $flexFormService,
     ) {}
+
+    public function resolve(
+        ContentTypeInterface $contentTypeDefinition,
+        TableDefinition $tableDefinition,
+        array $data,
+        string $table,
+    ): array {
+        foreach ($contentTypeDefinition->getColumns() as $column) {
+            $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
+            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
+                continue;
+            }
+            $resolvedField = $this->processField(
+                $tcaFieldDefinition,
+                $contentTypeDefinition,
+                $data,
+                $table
+            );
+            $data[$tcaFieldDefinition->getUniqueIdentifier()] = $resolvedField;
+        }
+        return $data;
+    }
 
     public function processField(TcaFieldDefinition $tcaFieldDefinition, ContentTypeInterface $typeDefinition, array $record, string $table): mixed
     {

@@ -26,6 +26,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly RelationResolver $relationResolver,
+        protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
     ) {}
 
     public function process(
@@ -41,14 +42,19 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         if ($contentTypeDefinition === null) {
             return $processedData;
         }
-        $contentBlockDataResolver = new ContentBlockDataResolver($this->relationResolver, $this->tableDefinitionCollection);
-        $processedData['data'] = $contentBlockDataResolver->resolveData(
+        $resolvedData = $this->relationResolver->resolve(
             $contentTypeDefinition,
             $tableDefinition,
             $processedData['data'],
+            $table,
+        );
+        $processedData['data'] = $this->contentBlockDataDecorator->decorate(
+            $contentTypeDefinition,
+            $tableDefinition,
+            $processedData['data'],
+            $resolvedData,
             $table
         );
-
         return $processedData;
     }
 }
