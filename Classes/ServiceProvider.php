@@ -30,7 +30,9 @@ use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Cache\Event\CacheWarmupEvent;
 use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
+use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
 
@@ -58,6 +60,7 @@ class ServiceProvider extends AbstractServiceProvider
             'content-block-user-tsconfig' => [ static::class, 'getContentBlockUserTsConfig' ],
             'content-block-page-tsconfig' => [ static::class, 'getContentBlockPageTsConfig' ],
             'content-block-parentFieldNames' => [ static::class, 'getContentBlockParentFieldNames' ],
+            'content-blocks.warmer' => [ static::class, 'getContentBlocksWarmer' ],
             TypoScriptGenerator::class => [ static::class, 'getTypoScriptGenerator' ],
             UserTsConfigGenerator::class => [ static::class, 'getUserTsConfigGenerator' ],
             PageTsConfigGenerator::class => [ static::class, 'getPageTsConfigGenerator' ],
@@ -71,6 +74,7 @@ class ServiceProvider extends AbstractServiceProvider
         return [
             IconRegistry::class => [ static::class, 'configureIconRegistry' ],
             PageDoktypeRegistry::class => [static::class, 'configurePageTypes' ],
+            ListenerProvider::class => [static::class, 'addEventListeners']
         ] + parent::getExtensions();
     }
 
@@ -320,6 +324,21 @@ HEREDOC;
         return $arrayObject;
     }
 
+    /**
+     * Usually it shouldn't be necessary to explicitly require warmup of Content Block caches here,
+     * as one of the code generators will trigger the generation. This is merely kept as fallback
+     * in case the events vanish for some reason.
+     */
+    public static function getContentBlocksWarmer(ContainerInterface $container): \Closure
+    {
+        return static function (CacheWarmupEvent $event) use ($container) {
+            if ($event->hasGroup('system')) {
+                // Create caches
+                $container->get(TableDefinitionCollection::class);
+            }
+        };
+    }
+
     public static function configureIconRegistry(ContainerInterface $container, IconRegistry $iconRegistry): IconRegistry
     {
         $cache = $container->get('cache.content_blocks_code');
@@ -358,5 +377,12 @@ HEREDOC;
             $pageDoktypeRegistry->add($pageType, []);
         }
         return $pageDoktypeRegistry;
+    }
+
+    public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider
+    {
+        $listenerProvider->addListener(CacheWarmupEvent::class, 'content-blocks.warmer');
+
+        return $listenerProvider;
     }
 }

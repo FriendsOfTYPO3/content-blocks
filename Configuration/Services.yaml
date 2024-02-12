@@ -111,6 +111,8 @@ services:
 
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
     public: true
+    # Set to "shared: false" so that lazy cache can be properly warmed up.
+    shared: false
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
