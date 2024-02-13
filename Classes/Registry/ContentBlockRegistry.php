@@ -23,13 +23,13 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentBlockRegistry
+final class ContentBlockRegistry
 {
     /**
      * @var LoadedContentBlock[]
      */
-    protected array $contentBlocks = [];
-    protected array $typeNamesByTable = [];
+    private array $contentBlocks = [];
+    private array $typeNamesByTable = [];
 
     public function register(LoadedContentBlock $contentBlock): void
     {
@@ -42,35 +42,6 @@ class ContentBlockRegistry
         }
         $this->contentBlocks[$contentBlock->getName()] = $contentBlock;
         $this->registerTypeName($contentBlock);
-    }
-
-    protected function registerTypeName(LoadedContentBlock $contentBlock): void
-    {
-        // If typeName is not set explicitly, then it is inferred from the name, which is unique.
-        $yaml = $contentBlock->getYaml();
-        if (!array_key_exists('typeName', $yaml)) {
-            return;
-        }
-
-        // The typeName has to be unique per table. Get it from the YAML for Record Types.
-        $contentType = $contentBlock->getContentType();
-        $typeName = (string)$yaml['typeName'];
-        $table = $contentType->getTable() ?? $yaml['table'];
-        if (!isset($this->typeNamesByTable[$table][$typeName])) {
-            $this->typeNamesByTable[$table][$typeName] = $typeName;
-            return;
-        }
-
-        // Duplicate typeName detected. Fail hard.
-        $tableInfo = '';
-        if ($contentType === ContentType::RECORD_TYPE) {
-            $tableInfo = ' for table "' . $table . '"';
-        }
-        throw new \InvalidArgumentException(
-            'The ' . $contentType->getHumanReadable() . ' with the typeName "' . $typeName . '"'
-            . $tableInfo . ' exists more than once. Please choose another typeName.',
-            1701351270
-        );
     }
 
     public function hasContentBlock(string $name): bool
@@ -97,5 +68,34 @@ class ContentBlockRegistry
     public function getAll(): array
     {
         return $this->contentBlocks;
+    }
+
+    private function registerTypeName(LoadedContentBlock $contentBlock): void
+    {
+        // If typeName is not set explicitly, then it is inferred from the name, which is unique.
+        $yaml = $contentBlock->getYaml();
+        if (!array_key_exists('typeName', $yaml)) {
+            return;
+        }
+
+        // The typeName has to be unique per table. Get it from the YAML for Record Types.
+        $contentType = $contentBlock->getContentType();
+        $typeName = (string)$yaml['typeName'];
+        $table = $contentType->getTable() ?? $yaml['table'];
+        if (!isset($this->typeNamesByTable[$table][$typeName])) {
+            $this->typeNamesByTable[$table][$typeName] = $typeName;
+            return;
+        }
+
+        // Duplicate typeName detected. Fail hard.
+        $tableInfo = '';
+        if ($contentType === ContentType::RECORD_TYPE) {
+            $tableInfo = ' for table "' . $table . '"';
+        }
+        throw new \InvalidArgumentException(
+            'The ' . $contentType->getHumanReadable() . ' with the typeName "' . $typeName . '"'
+            . $tableInfo . ' exists more than once. Please choose another typeName.',
+            1701351270
+        );
     }
 }
