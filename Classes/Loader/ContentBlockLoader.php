@@ -68,6 +68,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ContentBlockLoader
 {
+    protected ContentBlockRegistry $contentBlockRegistry;
+
     public function __construct(
         protected readonly LazyObjectInterface|PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
@@ -77,17 +79,18 @@ class ContentBlockLoader
     public function load(): ContentBlockRegistry
     {
         if (!$this->cache->isLazyObjectInitialized()) {
-            return $this->loadUncached();
+            $this->contentBlockRegistry = $this->contentBlockRegistry ?? $this->loadUncached();
+            return $this->contentBlockRegistry;
         }
         if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
             $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-            $contentBlockRegistry = $this->fillContentBlockRegistry($contentBlocks);
-            return $contentBlockRegistry;
+            $this->contentBlockRegistry = $this->fillContentBlockRegistry($contentBlocks);
+            return $this->contentBlockRegistry;
         }
-        $contentBlockRegistry = $this->loadUncached();
-        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $contentBlockRegistry->getAll());
+        $this->contentBlockRegistry = $this->contentBlockRegistry ?? $this->loadUncached();
+        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $this->contentBlockRegistry->getAll());
         $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
-        return $contentBlockRegistry;
+        return $this->contentBlockRegistry;
     }
 
     public function loadUncached(): ContentBlockRegistry
