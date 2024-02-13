@@ -28,15 +28,15 @@ use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 class InitializeContentBlockCache
 {
     public function __construct(
-        protected readonly ContentBlockLoader $contentBlockLoader,
         protected readonly BasicsLoader $basicsLoader,
+        protected readonly ContentBlockLoader $contentBlockLoader,
         protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
     ) {}
 
     public function __invoke(): void
     {
-        $this->contentBlockLoader->initializeCache();
         $this->basicsLoader->initializeCache();
+        $this->contentBlockLoader->initializeCache();
         $this->tableDefinitionCollectionFactory->initializeCache();
     }
 }

@@ -29,6 +29,8 @@ use TYPO3\CMS\Core\Package\PackageManager;
  */
 class BasicsLoader
 {
+    protected BasicsRegistry $basicsRegistry;
+
     public function __construct(
         protected readonly PackageManager $packageManager,
         protected readonly LazyObjectInterface|PhpFrontend $cache,
@@ -37,20 +39,21 @@ class BasicsLoader
     public function load(): BasicsRegistry
     {
         if (!$this->cache->isLazyObjectInitialized()) {
-            return $this->loadUncached();
+            $this->basicsRegistry = $this->basicsRegistry ?? $this->loadUncached();
+            return $this->basicsRegistry;
         }
         if (is_array($basics = $this->cache->require('content-blocks-basics'))) {
-            $basicsRegistry = new BasicsRegistry();
+            $this->basicsRegistry = new BasicsRegistry();
             foreach ($basics as $basic) {
                 $loadedBasic = LoadedBasic::fromArray($basic);
-                $basicsRegistry->register($loadedBasic);
+                $this->basicsRegistry->register($loadedBasic);
             }
-            return $basicsRegistry;
+            return $this->basicsRegistry;
         }
-        $basicsRegistry = $this->loadUncached();
-        $cache = array_map(fn(LoadedBasic $basic): array => $basic->toArray(), $basicsRegistry->getAllBasics());
+        $this->basicsRegistry = $this->loadUncached();
+        $cache = array_map(fn(LoadedBasic $basic): array => $basic->toArray(), $this->basicsRegistry->getAllBasics());
         $this->cache->set('content-blocks-basics', 'return ' . var_export($cache, true) . ';');
-        return $basicsRegistry;
+        return $this->basicsRegistry;
     }
 
     public function loadUncached(): BasicsRegistry

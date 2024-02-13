@@ -100,6 +100,9 @@ services:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Basics\BasicsLoader'
       - 'load'
+    # Set to "shared: false" so that lazy cache can be properly warmed up.
+    # todo Better use core caches?
+    shared: false
 
   TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
     arguments:
