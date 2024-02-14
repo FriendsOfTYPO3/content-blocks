@@ -42,7 +42,7 @@ class BasicsLoader
             $this->basicsRegistry = $this->basicsRegistry ?? $this->loadUncached();
             return $this->basicsRegistry;
         }
-        if (is_array($basics = $this->cache->require('content-blocks-basics'))) {
+        if (is_array($basics = $this->getFromCache())) {
             $this->basicsRegistry = new BasicsRegistry();
             foreach ($basics as $basic) {
                 $loadedBasic = LoadedBasic::fromArray($basic);
@@ -51,8 +51,7 @@ class BasicsLoader
             return $this->basicsRegistry;
         }
         $this->basicsRegistry = $this->loadUncached();
-        $cache = array_map(fn(LoadedBasic $basic): array => $basic->toArray(), $this->basicsRegistry->getAllBasics());
-        $this->cache->set('content-blocks-basics', 'return ' . var_export($cache, true) . ';');
+        $this->setCache();
         return $this->basicsRegistry;
     }
 
@@ -81,5 +80,19 @@ class BasicsLoader
     public function initializeCache(): void
     {
         $this->cache->initializeLazyObject();
+        if (isset($this->basicsRegistry) && $this->getFromCache() === false) {
+            $this->setCache();
+        }
+    }
+
+    protected function getFromCache(): false|array
+    {
+        return $this->cache->require('content-blocks-basics');
+    }
+
+    protected function setCache(): void
+    {
+        $cache = array_map(fn(LoadedBasic $basic): array => $basic->toArray(), $this->basicsRegistry->getAllBasics());
+        $this->cache->set('content-blocks-basics', 'return ' . var_export($cache, true) . ';');
     }
 }

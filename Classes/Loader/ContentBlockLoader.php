@@ -88,8 +88,6 @@ class ContentBlockLoader
             return $this->contentBlockRegistry;
         }
         $this->contentBlockRegistry = $this->contentBlockRegistry ?? $this->loadUncached();
-        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $this->contentBlockRegistry->getAll());
-        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
         return $this->contentBlockRegistry;
     }
 
@@ -119,6 +117,14 @@ class ContentBlockLoader
         $this->publishAssets($loadedContentBlocks);
 
         return $contentBlockRegistry;
+    }
+
+    public function initializeCache(): void
+    {
+        $this->cache->initializeLazyObject();
+        if (isset($this->contentBlockRegistry) && $this->getFromCache() === false) {
+            $this->setCache();
+        }
     }
 
     /**
@@ -229,19 +235,17 @@ class ContentBlockLoader
     /**
      * @param LoadedContentBlock[] $loadedContentBlocks
      */
-    public function publishAssets(array $loadedContentBlocks): void
+    protected function publishAssets(array $loadedContentBlocks): void
     {
         if (!Environment::isComposerMode()) {
             return;
         }
-
         $fileSystem = new Filesystem();
         $assetsPath = Environment::getPublicPath() . '/' . ContentBlockPathUtility::getPublicAssetsFolder();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
                 $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
-
             $contentBlockAssetsTargetDirectory = $assetsPath . '/' . md5($loadedContentBlock->getName());
             $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $assetsPath);
             if (!$fileSystem->exists($contentBlockAssetsTargetDirectory)) {
@@ -250,8 +254,14 @@ class ContentBlockLoader
         }
     }
 
-    public function initializeCache(): void
+    protected function getFromCache(): false|array
     {
-        $this->cache->initializeLazyObject();
+        return $this->cache->require('content-blocks');
+    }
+
+    protected function setCache(): void
+    {
+        $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $this->contentBlockRegistry->getAll());
+        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
     }
 }

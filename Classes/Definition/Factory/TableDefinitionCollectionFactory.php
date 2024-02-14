@@ -45,19 +45,23 @@ final class TableDefinitionCollectionFactory
             );
             return $this->tableDefinitionCollection;
         }
-        $tableDefinitionCollection = $this->cache->get('Compiled_ContentBlocks');
+        $tableDefinitionCollection = $this->getFromCache();
         if ($tableDefinitionCollection === false) {
-            $tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
+            $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
                 $contentBlockRegistry
             );
-            $this->cache->set('Compiled_ContentBlocks', $tableDefinitionCollection);
+            $this->setCache();
         }
-        return $tableDefinitionCollection;
+        $this->tableDefinitionCollection = $tableDefinitionCollection;
+        return $this->tableDefinitionCollection;
     }
 
     public function initializeCache(): void
     {
         $this->cache->initializeLazyObject();
+        if (isset($this->tableDefinitionCollection) && $this->getFromCache() === false) {
+            $this->setCache();
+        }
     }
 
     public function createUncached(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
@@ -108,5 +112,15 @@ final class TableDefinitionCollectionFactory
             }
         }
         return $newTableDefinition;
+    }
+
+    private function getFromCache(): false|TableDefinitionCollection
+    {
+        return $this->cache->get('Compiled_ContentBlocks');
+    }
+
+    private function setCache(): void
+    {
+        $this->cache->set('Compiled_ContentBlocks', $this->tableDefinitionCollection);
     }
 }
