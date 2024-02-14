@@ -54,27 +54,27 @@ class ServiceProvider extends AbstractServiceProvider
     public function getFactories(): array
     {
         return [
-            'content-block-icons' => [ static::class, 'getContentBlockIcons' ],
-            'content-block-page-types' => [ static::class, 'getContentBlockPageTypes' ],
-            'content-block-typoscript' => [ static::class, 'getContentBlockTypoScript' ],
-            'content-block-user-tsconfig' => [ static::class, 'getContentBlockUserTsConfig' ],
-            'content-block-page-tsconfig' => [ static::class, 'getContentBlockPageTsConfig' ],
-            'content-block-parentFieldNames' => [ static::class, 'getContentBlockParentFieldNames' ],
-            'content-blocks.warmer' => [ static::class, 'getContentBlocksWarmer' ],
-            TypoScriptGenerator::class => [ static::class, 'getTypoScriptGenerator' ],
-            UserTsConfigGenerator::class => [ static::class, 'getUserTsConfigGenerator' ],
-            PageTsConfigGenerator::class => [ static::class, 'getPageTsConfigGenerator' ],
-            HideContentElementChildrenEventListener::class => [ static::class, 'getHideContentElementChildrenEventListener' ],
-            ContentWhere::class => [ static::class, 'getContentWhere' ],
+            'content-block-icons' => static::getContentBlockIcons(...),
+            'content-block-page-types' => static::getContentBlockPageTypes(...),
+            'content-block-typoscript' => static::getContentBlockTypoScript(...),
+            'content-block-user-tsconfig' => static::getContentBlockUserTsConfig(...),
+            'content-block-page-tsconfig' => static::getContentBlockPageTsConfig(...),
+            'content-block-parentFieldNames' => static::getContentBlockParentFieldNames(...),
+            'content-blocks.warmer' => static::getContentBlocksWarmer(...),
+            TypoScriptGenerator::class => static::getTypoScriptGenerator(...),
+            UserTsConfigGenerator::class => static::getUserTsConfigGenerator(...),
+            PageTsConfigGenerator::class => static::getPageTsConfigGenerator(...),
+            HideContentElementChildrenEventListener::class => static::getHideContentElementChildrenEventListener(...),
+            ContentWhere::class => static::getContentWhere(...),
         ];
     }
 
     public function getExtensions(): array
     {
         return [
-            IconRegistry::class => [ static::class, 'configureIconRegistry' ],
-            PageDoktypeRegistry::class => [static::class, 'configurePageTypes' ],
-            ListenerProvider::class => [static::class, 'addEventListeners'],
+            IconRegistry::class => static::configureIconRegistry(...),
+            PageDoktypeRegistry::class => static::configurePageTypes(...),
+            ListenerProvider::class => static::addEventListeners(...),
         ] + parent::getExtensions();
     }
 
