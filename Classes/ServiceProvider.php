@@ -56,18 +56,18 @@ class ServiceProvider extends AbstractServiceProvider
     public function getFactories(): array
     {
         return [
-            'content-block-icons' => static::getContentBlockIcons(...),
-            'content-block-page-types' => static::getContentBlockPageTypes(...),
-            'content-block-typoscript' => static::getContentBlockTypoScript(...),
-            'content-block-user-tsconfig' => static::getContentBlockUserTsConfig(...),
-            'content-block-page-tsconfig' => static::getContentBlockPageTsConfig(...),
-            'content-block-parentFieldNames' => static::getContentBlockParentFieldNames(...),
+            ContentWhere::class => static::getContentWhere(...),
+            'content-blocks.icons' => static::getContentBlockIcons(...),
+            'content-blocks.page-types' => static::getContentBlockPageTypes(...),
+            'content-blocks.typoscript' => static::getContentBlockTypoScript(...),
+            'content-blocks.user-tsconfig' => static::getContentBlockUserTsConfig(...),
+            'content-blocks.page-tsconfig' => static::getContentBlockPageTsConfig(...),
+            'content-blocks.parent-field-names' => static::getContentBlockParentFieldNames(...),
             'content-blocks.warmer' => static::getContentBlocksWarmer(...),
             'content-blocks.add-typoscript' => static::addTypoScript(...),
             'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
             'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
-            ContentWhere::class => static::getContentWhere(...),
         ];
     }
 
@@ -82,7 +82,7 @@ class ServiceProvider extends AbstractServiceProvider
 
     public static function getContentWhere(ContainerInterface $container): ContentWhere
     {
-        $arrayObject = $container->get('content-block-parentFieldNames');
+        $arrayObject = $container->get('content-blocks.parent-field-names');
         $parentFieldNames = $arrayObject->getArrayCopy();
         return self::new(
             $container,
@@ -129,7 +129,7 @@ class ServiceProvider extends AbstractServiceProvider
     {
         $arrayObject = new \ArrayObject();
         $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('TypoScript_ContentBlocks');
+        $typoScriptFromCache = $cache->require('typoscript');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -162,7 +162,7 @@ HEREDOC;
                 }
             }
         }
-        $cache->set('TypoScript_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('typoscript', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
@@ -170,7 +170,7 @@ HEREDOC;
     {
         $arrayObject = new \ArrayObject();
         $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('UserTsConfig_ContentBlocks');
+        $typoScriptFromCache = $cache->require('user-tsconfig');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -186,7 +186,7 @@ HEREDOC;
             }
         }
 
-        $cache->set('UserTsConfig_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('user-tsconfig', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
@@ -194,7 +194,7 @@ HEREDOC;
     {
         $arrayObject = new \ArrayObject();
         $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('PageTsConfig_ContentBlocks');
+        $typoScriptFromCache = $cache->require('page-tsconfig');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -242,7 +242,7 @@ HEREDOC;
             }
         }
 
-        $cache->set('PageTsConfig_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('page-tsconfig', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
@@ -250,7 +250,7 @@ HEREDOC;
     {
         $arrayObject = new \ArrayObject();
         $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('ParentFieldNames_ContentBlocks');
+        $typoScriptFromCache = $cache->require('parent-field-names');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -270,7 +270,7 @@ HEREDOC;
             }
             $arrayObject->exchangeArray(array_values($fieldNames));
         }
-        $cache->set('ParentFieldNames_ContentBlocks', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('parent-field-names', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
@@ -292,7 +292,7 @@ HEREDOC;
     public static function addTypoScript(ContainerInterface $container): \Closure
     {
         return static function (BootCompletedEvent $event) use ($container) {
-            $arrayObject = $container->get('content-block-typoscript');
+            $arrayObject = $container->get('content-blocks.typoscript');
             $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
             ExtensionManagementUtility::addTypoScriptSetup($concatenatedTypoScript);
         };
@@ -301,7 +301,7 @@ HEREDOC;
     public static function addUserTsConfig(ContainerInterface $container): \Closure
     {
         return static function (BootCompletedEvent $event) use ($container) {
-            $arrayObject = $container->get('content-block-user-tsconfig');
+            $arrayObject = $container->get('content-blocks.user-tsconfig');
             $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
             ExtensionManagementUtility::addUserTSConfig($concatenatedTypoScript);
         };
@@ -310,7 +310,7 @@ HEREDOC;
     public static function addPageTsConfig(ContainerInterface $container): \Closure
     {
         return static function (ModifyLoadedPageTsConfigEvent $event) use ($container) {
-            $arrayObject = $container->get('content-block-page-tsconfig');
+            $arrayObject = $container->get('content-blocks.page-tsconfig');
             $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
             $event->addTsConfig($concatenatedTypoScript);
         };
@@ -319,7 +319,7 @@ HEREDOC;
     public static function hideContentElementChildren(ContainerInterface $container): \Closure
     {
         return static function (ModifyDatabaseQueryForContentEvent $event) use ($container) {
-            $arrayObject = $container->get('content-block-parentFieldNames');
+            $arrayObject = $container->get('content-blocks.parent-field-names');
             $parentFieldNames = $arrayObject->getArrayCopy();
             $queryBuilder = $event->getQueryBuilder();
             foreach ($parentFieldNames as $fieldName) {
@@ -338,10 +338,10 @@ HEREDOC;
     {
         $cache = $container->get('cache.content_blocks_code');
 
-        $iconsFromPackages = $cache->require('Icons_ContentBlocks');
+        $iconsFromPackages = $cache->require('icons');
         if ($iconsFromPackages === false) {
-            $iconsFromPackages = $container->get('content-block-icons')->getArrayCopy();
-            $cache->set('Icons_ContentBlocks', 'return ' . var_export($iconsFromPackages, true) . ';');
+            $iconsFromPackages = $container->get('content-blocks.icons')->getArrayCopy();
+            $cache->set('icons', 'return ' . var_export($iconsFromPackages, true) . ';');
         }
 
         foreach ($iconsFromPackages as $icon => $options) {
@@ -363,10 +363,10 @@ HEREDOC;
     {
         // Early core cache is required here, as PageDokTypeRegistry is instantiated in ExtensionManagementUtility::loadBaseTca
         $cache = $container->get('cache.core');
-        $pageTypesFromContentBlocks = $cache->require('PageTypes_ContentBlocks');
+        $pageTypesFromContentBlocks = $cache->require('page-types');
         if ($pageTypesFromContentBlocks === false) {
-            $pageTypesFromContentBlocks = $container->get('content-block-page-types')->getArrayCopy();
-            $cache->set('PageTypes_ContentBlocks', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
+            $pageTypesFromContentBlocks = $container->get('content-blocks.page-types')->getArrayCopy();
+            $cache->set('page-types', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
         }
         foreach ($pageTypesFromContentBlocks as $pageType) {
             $pageDoktypeRegistry->add($pageType, []);

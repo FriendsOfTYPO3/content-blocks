@@ -116,11 +116,11 @@ final class TableDefinitionCollectionFactory
 
     private function getFromCache(): false|TableDefinitionCollection
     {
-        return $this->cache->get('Compiled_ContentBlocks');
+        return $this->cache->get('TableDefinitionCollection');
     }
 
     private function setCache(): void
     {
-        $this->cache->set('Compiled_ContentBlocks', $this->tableDefinitionCollection);
+        $this->cache->set('TableDefinitionCollection', $this->tableDefinitionCollection);
     }
 }
