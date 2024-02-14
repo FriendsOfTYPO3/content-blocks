@@ -18,23 +18,25 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks;
 
 use Psr\Container\ContainerInterface;
-use TYPO3\CMS\ContentBlocks\Backend\Layout\HideContentElementChildrenEventListener;
+use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
+use TYPO3\CMS\ContentBlocks\Cache\InitializeContentBlockCache;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator;
-use TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator;
-use TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Event\CacheWarmupEvent;
+use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
+use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * @internal
@@ -61,10 +63,10 @@ class ServiceProvider extends AbstractServiceProvider
             'content-block-page-tsconfig' => static::getContentBlockPageTsConfig(...),
             'content-block-parentFieldNames' => static::getContentBlockParentFieldNames(...),
             'content-blocks.warmer' => static::getContentBlocksWarmer(...),
-            TypoScriptGenerator::class => static::getTypoScriptGenerator(...),
-            UserTsConfigGenerator::class => static::getUserTsConfigGenerator(...),
-            PageTsConfigGenerator::class => static::getPageTsConfigGenerator(...),
-            HideContentElementChildrenEventListener::class => static::getHideContentElementChildrenEventListener(...),
+            'content-blocks.add-typoscript' => static::addTypoScript(...),
+            'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
+            'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
+            'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
             ContentWhere::class => static::getContentWhere(...),
         ];
     }
@@ -76,58 +78,6 @@ class ServiceProvider extends AbstractServiceProvider
             PageDoktypeRegistry::class => static::configurePageTypes(...),
             ListenerProvider::class => static::addEventListeners(...),
         ] + parent::getExtensions();
-    }
-
-    public static function getTypoScriptGenerator(ContainerInterface $container): TypoScriptGenerator
-    {
-        $arrayObject = $container->get('content-block-typoscript');
-        $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
-        return self::new(
-            $container,
-            TypoScriptGenerator::class,
-            [
-                $concatenatedTypoScript,
-            ]
-        );
-    }
-
-    public static function getUserTsConfigGenerator(ContainerInterface $container): UserTsConfigGenerator
-    {
-        $arrayObject = $container->get('content-block-user-tsconfig');
-        $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
-        return self::new(
-            $container,
-            UserTsConfigGenerator::class,
-            [
-                $concatenatedTypoScript,
-            ]
-        );
-    }
-
-    public static function getPageTsConfigGenerator(ContainerInterface $container): PageTsConfigGenerator
-    {
-        $arrayObject = $container->get('content-block-page-tsconfig');
-        $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
-        return self::new(
-            $container,
-            PageTsConfigGenerator::class,
-            [
-                $concatenatedTypoScript,
-            ]
-        );
-    }
-
-    public static function getHideContentElementChildrenEventListener(ContainerInterface $container): HideContentElementChildrenEventListener
-    {
-        $arrayObject = $container->get('content-block-parentFieldNames');
-        $parentFieldNames = $arrayObject->getArrayCopy();
-        return self::new(
-            $container,
-            HideContentElementChildrenEventListener::class,
-            [
-                $parentFieldNames,
-            ]
-        );
     }
 
     public static function getContentWhere(ContainerInterface $container): ContentWhere
@@ -339,6 +289,51 @@ HEREDOC;
         };
     }
 
+    public static function addTypoScript(ContainerInterface $container): \Closure
+    {
+        return static function (BootCompletedEvent $event) use ($container) {
+            $arrayObject = $container->get('content-block-typoscript');
+            $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
+            ExtensionManagementUtility::addTypoScriptSetup($concatenatedTypoScript);
+        };
+    }
+
+    public static function addUserTsConfig(ContainerInterface $container): \Closure
+    {
+        return static function (BootCompletedEvent $event) use ($container) {
+            $arrayObject = $container->get('content-block-user-tsconfig');
+            $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
+            ExtensionManagementUtility::addUserTSConfig($concatenatedTypoScript);
+        };
+    }
+
+    public static function addPageTsConfig(ContainerInterface $container): \Closure
+    {
+        return static function (ModifyLoadedPageTsConfigEvent $event) use ($container) {
+            $arrayObject = $container->get('content-block-page-tsconfig');
+            $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
+            $event->addTsConfig($concatenatedTypoScript);
+        };
+    }
+
+    public static function hideContentElementChildren(ContainerInterface $container): \Closure
+    {
+        return static function (ModifyDatabaseQueryForContentEvent $event) use ($container) {
+            $arrayObject = $container->get('content-block-parentFieldNames');
+            $parentFieldNames = $arrayObject->getArrayCopy();
+            $queryBuilder = $event->getQueryBuilder();
+            foreach ($parentFieldNames as $fieldName) {
+                $queryBuilder->andWhere(
+                    $queryBuilder->expr()->eq(
+                        $fieldName,
+                        $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)
+                    )
+                );
+            }
+            $event->setQueryBuilder($queryBuilder);
+        };
+    }
+
     public static function configureIconRegistry(ContainerInterface $container, IconRegistry $iconRegistry): IconRegistry
     {
         $cache = $container->get('cache.content_blocks_code');
@@ -366,7 +361,7 @@ HEREDOC;
 
     public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
     {
-        // Early core cache is required here, as PageDokTypeRegistry is instantiated inExtensionManagementUtility::loadBaseTca
+        // Early core cache is required here, as PageDokTypeRegistry is instantiated in ExtensionManagementUtility::loadBaseTca
         $cache = $container->get('cache.core');
         $pageTypesFromContentBlocks = $cache->require('PageTypes_ContentBlocks');
         if ($pageTypesFromContentBlocks === false) {
@@ -382,7 +377,13 @@ HEREDOC;
     public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider
     {
         $listenerProvider->addListener(CacheWarmupEvent::class, 'content-blocks.warmer');
-
+        $listenerProvider->addListener(BootCompletedEvent::class, InitializeContentBlockCache::class);
+        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-typoscript');
+        // @todo Use BeforeLoadedUserTsConfigEvent in v13
+        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-user-tsconfig');
+        // @todo Use BeforeLoadedPageTsConfigEvent in v13
+        $listenerProvider->addListener(ModifyLoadedPageTsConfigEvent::class, 'content-blocks.add-page-tsconfig');
+        $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         return $listenerProvider;
     }
 }

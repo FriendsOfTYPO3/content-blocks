@@ -12,10 +12,7 @@ services:
     public: true
 
   TYPO3\CMS\ContentBlocks\Cache\InitializeContentBlockCache:
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-initialize-cache'
-        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
+    public: true
 
 # @todo change to BeforeTcaOverridesEvent for v13
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
@@ -25,43 +22,12 @@ services:
 #        identifier: 'content-blocks-tca'
 #        event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
 
-  TYPO3\CMS\ContentBlocks\Generator\TypoScriptGenerator:
-    public: true
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-typoscript'
-        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
-        after: 'content-blocks-initialize-cache'
-
-#  @todo Use BeforeLoadedPageTsConfigEvent in v13
-  TYPO3\CMS\ContentBlocks\Generator\PageTsConfigGenerator:
-    public: true
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-page-tsconfig'
-        event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
-
-#  @todo Use BeforeLoadedUserTsConfigEvent in v13
-  TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator:
-    public: true
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-user-tsconfig'
-        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
-        after: 'content-blocks-initialize-cache'
-
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
     public: true
     tags:
       - name: event.listener
         identifier: 'content-blocks-sql'
         event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
-
-  TYPO3\CMS\ContentBlocks\Backend\Layout\HideContentElementChildrenEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-hide-children'
-        event: TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent
 
   TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
     public: true
