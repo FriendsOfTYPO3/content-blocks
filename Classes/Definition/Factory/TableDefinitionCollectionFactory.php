@@ -18,12 +18,13 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
 use Symfony\Component\VarExporter\LazyObjectInterface;
+use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -33,7 +34,7 @@ final class TableDefinitionCollectionFactory
     protected TableDefinitionCollection $tableDefinitionCollection;
 
     public function __construct(
-        protected readonly LazyObjectInterface|FrontendInterface $cache,
+        protected readonly LazyObjectInterface|PhpFrontend $cache,
         protected readonly ContentBlockCompiler $contentBlockCompiler,
     ) {}
 
@@ -116,11 +117,12 @@ final class TableDefinitionCollectionFactory
 
     private function getFromCache(): false|TableDefinitionCollection
     {
-        return $this->cache->get('TableDefinitionCollection');
+        return $this->cache->require('TableDefinitionCollection');
     }
 
     private function setCache(): void
     {
-        $this->cache->set('TableDefinitionCollection', $this->tableDefinitionCollection);
+        $data = 'return ' . VarExporter::export($this->tableDefinitionCollection) . ';';
+        $this->cache->set('TableDefinitionCollection', $data);
     }
 }

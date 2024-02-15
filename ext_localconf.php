@@ -4,7 +4,6 @@ defined('TYPO3') or die();
 
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 ExtensionManagementUtility::addTypoScriptSetup('
@@ -26,7 +25,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_bl
 ];
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_blocks_object'] = [
-    'frontend' => VariableFrontend::class,
+    'frontend' => PhpFrontend::class,
     'backend' => SimpleFileBackend::class,
     'options' => [
         'defaultLifetime' => 0,
