@@ -43,4 +43,13 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_bl
     'groups' => ['system'],
 ];
 
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['content_blocks_preview'] = [
+    'frontend' => PhpFrontend::class,
+    'backend' => SimpleFileBackend::class,
+    'options' => [
+        'defaultLifetime' => 0,
+    ],
+    'groups' => ['system'],
+];
+
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['cb'][] = 'TYPO3\\CMS\\ContentBlocks\\ViewHelpers';

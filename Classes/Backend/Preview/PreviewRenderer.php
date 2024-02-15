@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
+use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
@@ -25,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -40,20 +42,26 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected RelationResolver $relationResolver,
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
+        protected PhpFrontend $cache,
     ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         $record = $item->getRecord();
         $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
+        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
+        $cacheIdentifier = $contentElementTable . '-' . $record['uid'] . '-' . md5(json_encode($record));
         $typeName = $record[$typeField];
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($typeName);
-        $contentBlockPath = $this->contentBlockRegistry->getContentBlockExtPath($contentElementDefinition->getName());
-        $contentBlockPrivatePath = $contentBlockPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentElementDefinition->getName());
+        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
-        if (!file_exists(GeneralUtility::getFileAbsFileName($contentBlockPath . '/' . ContentBlockPathUtility::getBackendPreviewPath()))) {
-            return parent::renderPageModulePreviewContent($item);
+        $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
+        $editorPreviewAbsPath = GeneralUtility::getFileAbsFileName($editorPreviewExtPath);
+        if (!file_exists($editorPreviewAbsPath)) {
+            $result = parent::renderPageModulePreviewContent($item);
+            return $result;
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
@@ -62,16 +70,23 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
         $view->setRequest($GLOBALS['TYPO3_REQUEST']);
 
-        $this->relationResolver->setRequest($GLOBALS['TYPO3_REQUEST']);
-        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
-
-        $resolvedData = $this->relationResolver->resolve(
-            $contentElementDefinition,
-            $contentElementTableDefinition,
-            $record,
-            $contentElementTable,
-        );
+        if ($this->cache->has($cacheIdentifier)) {
+            $resolvedData = $this->cache->require($cacheIdentifier);
+        } else {
+            $this->relationResolver->setRequest($GLOBALS['TYPO3_REQUEST']);
+            $resolvedData = $this->relationResolver->resolve(
+                $contentElementDefinition,
+                $contentElementTableDefinition,
+                $record,
+                $contentElementTable,
+            );
+            // Avoid flooding cache with useless data.
+            if ($resolvedData !== $record) {
+                $exported = 'return ' . VarExporter::export($resolvedData) . ';';
+                $this->cache->set($cacheIdentifier, $exported);
+            }
+        }
         $data = $this->contentBlockDataDecorator->decorate(
             $contentElementDefinition,
             $contentElementTableDefinition,
@@ -79,9 +94,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $resolvedData,
             $contentElementTable
         );
-
         $view->assign('data', $data);
-
-        return $view->render();
+        $result = $view->render();
+        return $result;
     }
 }

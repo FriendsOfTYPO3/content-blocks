@@ -31,6 +31,8 @@ services:
 
   TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
     public: true
+    arguments:
+      $cache: '@cache.content_blocks_preview'
 
   TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
     autoconfigure: false
@@ -56,6 +58,12 @@ services:
     class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
     factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
     arguments: ['content_blocks_code']
+    public: true
+
+  cache.content_blocks_preview:
+    class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['content_blocks_preview']
     public: true
 
   TYPO3\CMS\ContentBlocks\Basics\BasicsLoader:

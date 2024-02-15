@@ -35,6 +35,7 @@
 		}
 	},
 	"require": {
+		"symfony/var-exporter": "^6.4 || ^7.0",
 		"typo3/cms-backend": "^12.4",
 		"typo3/cms-core": "^12.4",
 		"typo3/cms-fluid": "^12.4",
