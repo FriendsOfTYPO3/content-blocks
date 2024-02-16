@@ -27,6 +27,12 @@ Install Content Blocks in parallel to Mask and follow the steps below.
 Recreation of a Mask Element
 ----------------------------
 
+.. figure:: ./MaskExample.png
+   :class: with-shadow
+   :alt: Example Mask slider element
+
+   Example Mask slider element
+
 First, let's create a new Content Block for the Mask Element you want to
 migrate. For this, run the command :bash:`make:content-block` and create a
 Content Element with a vendor and name of your choice. The name can be the same
