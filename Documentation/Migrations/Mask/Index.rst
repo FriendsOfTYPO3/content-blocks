@@ -108,6 +108,12 @@ That's mostly it. Now you can purge your Mask element in the backend module view
 and everything should work as before. Repeat the migration for every Mask
 Element and you can uninstall the Mask extension in the end and say farewell.
 
+.. note::
+
+    In the backend preview of your element you will see
+    `Element "xxx" is missing in Mask definition.`. This message will vanish as
+    soon as you uninstall the Mask extension.
+
 Limitations
 ===========
 
