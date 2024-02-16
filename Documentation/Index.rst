@@ -123,6 +123,7 @@ use content types as sub-resources inside extensions.
     Templating/Index
     ReuseExistingFields/Index
     Guides/Index
+    Migrations/Index
     KnownProblems/Index
     Appendix/Index
 
