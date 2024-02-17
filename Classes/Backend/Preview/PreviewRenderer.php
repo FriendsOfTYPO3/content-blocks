@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
@@ -47,6 +48,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
+        /** @var ServerRequestInterface $request */
+        $request = $GLOBALS['TYPO3_REQUEST'];
         $record = $item->getRecord();
         $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
@@ -68,13 +71,13 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
-        $view->setRequest($GLOBALS['TYPO3_REQUEST']);
+        $view->setRequest($request);
 
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
         if ($this->cache->has($cacheIdentifier)) {
             $resolvedData = $this->cache->require($cacheIdentifier);
         } else {
-            $this->relationResolver->setRequest($GLOBALS['TYPO3_REQUEST']);
+            $this->relationResolver->setRequest($request);
             $resolvedData = $this->relationResolver->resolve(
                 $contentElementDefinition,
                 $contentElementTableDefinition,
