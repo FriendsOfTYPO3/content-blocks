@@ -68,7 +68,11 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         }
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
-        $view->setPartialRootPaths([$contentBlockPrivatePath . '/Partials']);
+        $view->setPartialRootPaths([
+            'EXT:backend/Resources/Private/Partials/',
+            'EXT:content_blocks/Resources/Private/Partials/',
+            $contentBlockPrivatePath . '/Partials/',
+        ]);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
         $view->setRequest($request);
@@ -95,7 +99,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $contentElementTableDefinition,
             $record,
             $resolvedData,
-            $contentElementTable
+            $contentElementTable,
+            $item->getContext(),
         );
         $view->assign('data', $data);
         $result = $view->render();

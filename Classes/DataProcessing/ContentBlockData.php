@@ -59,6 +59,8 @@ final class ContentBlockData extends \stdClass
     public function __construct(
         private readonly string $_name = '',
         private readonly array $_raw = [],
+        /** @var array<string, RelationGrid> */
+        private readonly array $_grids = [],
         private readonly array $_processed = [],
     ) {}
 
@@ -67,15 +69,15 @@ final class ContentBlockData extends \stdClass
         if ($name === '_name') {
             return $this->_name;
         }
-
         if ($name === '_raw') {
             return $this->_raw;
         }
-
+        if ($name === '_grids') {
+            return $this->_grids;
+        }
         if (array_key_exists($name, $this->_processed)) {
             return $this->_processed[$name];
         }
-
         return null;
     }
 }

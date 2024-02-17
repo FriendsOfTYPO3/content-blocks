@@ -1,0 +1,21 @@
+<f:if condition="{allowEditContent} !== 0">
+    <f:variable name="allowEditContent" value="1"/>
+</f:if>
+<table class="t3-page-columns t3-grid-table">
+    <tr>
+        <td class="t3-grid-cell">
+            <f:if condition="{data._grids.{identifier}.label}">
+                <div class="t3-page-column-header">{f:translate(id: '{data._grids.{identifier}.label}')}</div>
+            </f:if>
+            <f:for each="{data._grids.{identifier}.grid.rows}" as="row">
+                <f:for each="{row.columns}" as="column">
+                    <div data-colpos="{colpos}" data-language-uid="{column.context.siteLanguage.languageId}" class="t3-page-ce-wrapper">
+                        <f:for each="{column.items}" as="item">
+                            <f:render partial="PageLayout/Record" arguments="{item: item, allowEditContent: allowEditContent}" />
+                        </f:for>
+                    </div>
+                </f:for>
+            </f:for>
+        </td>
+    </tr>
+</table>

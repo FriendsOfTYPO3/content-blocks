@@ -84,7 +84,7 @@ used as a child. This method is a lot more flexible, but requires a little bit
 more work.
 
 .. code-block:: html
-    :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
 
     <f:for each="{data.tabs_item}" as="item" iteration="i">
         <div class="tab-item">
@@ -97,6 +97,29 @@ more work.
 
    You can also use :ref:`global partials <cb_extension_partials>` for the
    second method to have less duplication.
+
+Render nested Content Elements in the backend
+=============================================
+
+Similarly to frontend rendering, it's also possible to render nested content in
+the backend. For this Content Blocks provides ready to use Fluid partials which
+are able to render backend previews the same way the Core page layout does it.
+
+.. code-block:: html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/BackendPreview.html
+
+    <f:render partial="PageLayout/Grid" arguments="{data: data, identifier: 'tabs_item'}"/>
+
+The partial is called **PageLayout/Grid** and accepts your current Content Block
+data object as well as the identifier of the Collection field, which you want
+to render.
+
+.. figure:: ./NestedContentPreview.png
+
+   The partial renders the grid layout from the Core.
+
+This preview is limited to control buttons like edit, delete and hide. No
+support for drag and drop or creation of new child elements is given.
 
 When to use nested Content Elements vs. container extensions
 ============================================================
