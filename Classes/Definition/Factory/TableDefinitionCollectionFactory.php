@@ -46,14 +46,14 @@ final class TableDefinitionCollectionFactory
             );
             return $this->tableDefinitionCollection;
         }
-        $tableDefinitionCollection = $this->getFromCache();
-        if ($tableDefinitionCollection === false) {
-            $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
-                $contentBlockRegistry
-            );
-            $this->setCache();
+        if (($tableDefinitionCollection = $this->getFromCache()) !== false) {
+            $this->tableDefinitionCollection = $tableDefinitionCollection;
+            return $this->tableDefinitionCollection;
         }
-        $this->tableDefinitionCollection = $tableDefinitionCollection;
+        $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
+            $contentBlockRegistry
+        );
+        $this->setCache();
         return $this->tableDefinitionCollection;
     }
 

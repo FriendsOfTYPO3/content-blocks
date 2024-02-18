@@ -50,7 +50,7 @@ class BasicsLoader
             }
             return $this->basicsRegistry;
         }
-        $this->basicsRegistry = $this->loadUncached();
+        $this->basicsRegistry = $this->basicsRegistry ?? $this->loadUncached();
         $this->setCache();
         return $this->basicsRegistry;
     }
