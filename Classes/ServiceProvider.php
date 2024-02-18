@@ -37,6 +37,7 @@ use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 /**
  * @internal
@@ -63,10 +64,12 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.user-tsconfig' => static::getContentBlockUserTsConfig(...),
             'content-blocks.page-tsconfig' => static::getContentBlockPageTsConfig(...),
             'content-blocks.parent-field-names' => static::getContentBlockParentFieldNames(...),
+            'content-blocks.controller-actions' => static::getContentBlockControllerActions(...),
             'content-blocks.warmer' => static::getContentBlocksWarmer(...),
             'content-blocks.add-typoscript' => static::addTypoScript(...),
             'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
             'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
+            'content-blocks.add-controller-actions' => static::addControllerActions(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
         ];
     }
@@ -200,12 +203,6 @@ $table.$typeName {
 HEREDOC;
     }
 
-    protected static function convertExtensionName(string $extensionName): string
-    {
-        $extensionName = str_replace(' ', '', ucwords(str_replace('_', ' ', $extensionName)));
-        return $extensionName;
-    }
-
     public static function getContentBlockUserTsConfig(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
@@ -314,6 +311,45 @@ HEREDOC;
         return $arrayObject;
     }
 
+    public static function getContentBlockControllerActions(ContainerInterface $container): \ArrayObject
+    {
+        $arrayObject = new \ArrayObject();
+        $cache = $container->get('cache.content_blocks_code');
+        $controllerActionsFromCache = $cache->require('controller_actions');
+        if ($controllerActionsFromCache !== false) {
+            $arrayObject->exchangeArray($controllerActionsFromCache);
+            return $arrayObject;
+        }
+        $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
+        foreach ($tableDefinitionCollection as $tableDefinition) {
+            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                if ($typeDefinition instanceof ContentElementDefinition) {
+                    $contentBlock = $contentBlockRegistry->getContentBlock($typeDefinition->getName());
+                    if (!$contentBlock->isPlugin()) {
+                        continue;
+                    }
+                    $controllerActions = $typeDefinition->getControllerActions();
+                    $pluginConfiguration = [
+                        'extensionName' => self::convertExtensionName($contentBlock->getHostExtension()),
+                        'pluginName' => $typeDefinition->getTypeName(),
+                    ];
+                    foreach ($controllerActions as $controller => $actions) {
+                        foreach ($actions as $action) {
+                            $pluginConfiguration['controllerActions'][$controller][] = $action['action'];
+                            if ($action['cacheable'] ?? false) {
+                                $pluginConfiguration['nonCacheableControllerActions'][$controller][] = $action['action'];
+                            }
+                        }
+                    }
+                    $arrayObject->append($pluginConfiguration);
+                }
+            }
+        }
+        $cache->set('controller_actions', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        return $arrayObject;
+    }
+
     /**
      * Usually it shouldn't be necessary to explicitly require warmup of Content Block caches here,
      * as one of the code generators will trigger the generation. This is merely kept as fallback
@@ -353,6 +389,25 @@ HEREDOC;
             $arrayObject = $container->get('content-blocks.page-tsconfig');
             $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
             $event->addTsConfig($concatenatedTypoScript);
+        };
+    }
+
+    public static function addControllerActions(ContainerInterface $container): \Closure
+    {
+        return static function (BootCompletedEvent $event) use ($container) {
+            $arrayObject = $container->get('content-blocks.controller-actions');
+            foreach ($arrayObject->getArrayCopy() as $pluginConfiguration) {
+                $extensionName = $pluginConfiguration['extensionName'];
+                $pluginName = $pluginConfiguration['pluginName'];
+                $controllerActions = $pluginConfiguration['controllerActions'] ?? [];
+                $nonCacheableControllerActions = $pluginConfiguration['nonCacheableControllerActions'] ?? [];
+                ExtensionUtility::registerControllerActions(
+                    $extensionName,
+                    $pluginName,
+                    $controllerActions,
+                    $nonCacheableControllerActions,
+                );
+            }
         };
     }
 
@@ -419,11 +474,21 @@ HEREDOC;
         $listenerProvider->addListener(CacheWarmupEvent::class, 'content-blocks.warmer');
         $listenerProvider->addListener(BootCompletedEvent::class, InitializeContentBlockCache::class);
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-typoscript');
+        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-controller-actions');
         // @todo Use BeforeLoadedUserTsConfigEvent in v13
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-user-tsconfig');
         // @todo Use BeforeLoadedPageTsConfigEvent in v13
         $listenerProvider->addListener(ModifyLoadedPageTsConfigEvent::class, 'content-blocks.add-page-tsconfig');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         return $listenerProvider;
+    }
+
+    /**
+     * @todo this snippet is copied from EU::configurePlugin. This should be extracted into an own service.
+     */
+    protected static function convertExtensionName(string $extensionName): string
+    {
+        $extensionName = str_replace(' ', '', ucwords(str_replace('_', ' ', $extensionName)));
+        return $extensionName;
     }
 }

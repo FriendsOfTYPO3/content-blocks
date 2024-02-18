@@ -24,6 +24,10 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
 {
     private bool $saveAndClose = false;
     private string $group = '';
+    /**
+     * @var array<class-string, array{action: string, cacheable?: bool}>
+     */
+    private array $controllerActions = [];
 
     public static function createFromArray(array $array, string $table): ContentElementDefinition
     {
@@ -46,12 +50,18 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withIconProviderClassName($array['iconProvider'] ?? null)
             ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
-            ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
+            ->withLanguagePathDescription($array['languagePathDescription'] ?? null)
+            ->withControllerActions($array['controllerActions'] ?? []);
     }
 
     public function getGroup(): string
     {
         return $this->group;
+    }
+
+    public function getControllerActions(): array
+    {
+        return $this->controllerActions;
     }
 
     public function hasSaveAndClose(): bool
@@ -70,6 +80,13 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     {
         $clone = clone $this;
         $clone->group = $group;
+        return $clone;
+    }
+
+    public function withControllerActions(array $controllerActions): self
+    {
+        $clone = clone $this;
+        $clone->controllerActions = $controllerActions;
         return $clone;
     }
 }
