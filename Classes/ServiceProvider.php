@@ -145,18 +145,18 @@ class ServiceProvider extends AbstractServiceProvider
                     $contentBlock = $contentBlockRegistry->getContentBlock($typeDefinition->getName());
                     $extPath = $contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName());
                     $privatePath = $extPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+                    $typoScript = self::getTemplateForContentElement(
+                        $typeDefinition->getTypeName(),
+                        $privatePath
+                    );
+                    $arrayObject->append($typoScript);
                     if ($contentBlock->isPlugin()) {
-                        $typoScript = self::getTemplateForPlugin(
+                        $extbasePlugin = self::getTemplateForPlugin(
                             $typeDefinition->getTypeName(),
                             $contentBlock->getHostExtension()
                         );
-                    } else {
-                        $typoScript = self::getTemplateForContentElement(
-                            $typeDefinition->getTypeName(),
-                            $privatePath
-                        );
+                        $arrayObject->append($extbasePlugin);
                     }
-                    $arrayObject->append($typoScript);
                 }
             }
         }
@@ -192,8 +192,6 @@ HEREDOC;
         return <<<HEREDOC
 $table.$typeName =< lib.contentBlock
 $table.$typeName {
-    template = TEXT
-    template.value = <f:cObject typoscriptObjectPath="$table.$typeName.20" data="{data._raw}" table="$table" />
     20 = EXTBASEPLUGIN
     20 {
         extensionName = $extensionName
@@ -336,9 +334,13 @@ HEREDOC;
                     ];
                     foreach ($controllerActions as $controller => $actions) {
                         foreach ($actions as $action) {
-                            $pluginConfiguration['controllerActions'][$controller][] = $action['action'];
+                            $actionName = $action['action'] ?? '';
+                            if ($actionName === '') {
+                                continue;
+                            }
+                            $pluginConfiguration['controllerActions'][$controller][] = $actionName;
                             if ($action['cacheable'] ?? false) {
-                                $pluginConfiguration['nonCacheableControllerActions'][$controller][] = $action['action'];
+                                $pluginConfiguration['nonCacheableControllerActions'][$controller][] = $actionName;
                             }
                         }
                     }

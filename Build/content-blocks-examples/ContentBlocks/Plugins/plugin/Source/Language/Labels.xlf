@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="Labels.xlf" source-language="en" date="2024-02-18T15:33:12+00:00" product-name="example/plugin">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title">
+				<source>Example Plugin</source>
+			</trans-unit>
+			<trans-unit id="description" resname="description">
+				<source>Plugin description</source>
+			</trans-unit>
+			<trans-unit id="header.label" resname="header.label">
+				<source>Custom header label</source>
+			</trans-unit>
+			<trans-unit id="pages.label" resname="pages.label">
+				<source>Pages</source>
+			</trans-unit>
+			<trans-unit id="pages.description" resname="pages.description">
+				<source>Define storage pages where record types are stored</source>
+			</trans-unit>
+			<trans-unit id="recursive.label" resname="recursive.label">
+				<source>Recursive</source>
+			</trans-unit>
+			<trans-unit id="recursive.description" resname="recursive.description">
+				<source>Allow recursive lookup for records</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

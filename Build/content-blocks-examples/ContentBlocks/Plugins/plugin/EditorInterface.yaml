@@ -1,0 +1,15 @@
+name: example/plugin
+prefixFields: true
+prefixType: full
+controllerActions:
+  ContentBlocks\Examples\Controller\StandardController:
+    - action: default
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: pages
+    useExistingField: true
+    label: Pages
+  - identifier: recursive
+    useExistingField: true
+    label: Recursive

@@ -86,7 +86,7 @@ final class ProcessedContentType
             } else {
                 if ($this->contentBlock->isPlugin()) {
                     $contentType['group'] = 'plugins';
-                    $contentType['controllerActions'] = $yaml['controllerActions'];
+                    $contentType['controllerActions'] = $yaml['controllerActions'] ?? [];
                 } else {
                     $contentType['group'] = $this->contentBlock->getContentType()->getDefaultGroup();
                 }

@@ -154,7 +154,12 @@ class ContentBlockLoader
         foreach ($finder as $splFileInfo) {
             $absoluteContentBlockPath = $splFileInfo->getPathname();
             $contentBlockFolderName = $splFileInfo->getRelativePathname();
-            $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
+            $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath(
+                $extensionKey,
+                $contentBlockFolderName,
+                $contentType,
+                $isPlugin,
+            );
             $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentType);
             $result[] = $this->loadSingleContentBlock(
                 $editorInterfaceYaml['name'],

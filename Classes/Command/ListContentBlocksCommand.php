@@ -81,12 +81,17 @@ class ListContentBlocksCommand extends Command
             if ($typeName === null) {
                 $typeName = UniqueIdentifierCreator::createContentTypeIdentifier($loadedContentBlock);
             }
+            if ($loadedContentBlock->isPlugin()) {
+                $contentType = 'Plugin';
+            } else {
+                $contentType = $loadedContentBlock->getContentType()->getHumanReadable();
+            }
             $list[] = [
                 'vendor' => $loadedContentBlock->getVendor(),
                 'name' => $loadedContentBlock->getPackage(),
                 'table' => $table,
                 'type-name' => $typeName,
-                'content-type' => $loadedContentBlock->getContentType()->getHumanReadable(),
+                'content-type' => $contentType,
                 'extension' => $loadedContentBlock->getHostExtension(),
             ];
         }

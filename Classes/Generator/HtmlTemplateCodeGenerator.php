@@ -46,6 +46,9 @@ class HtmlTemplateCodeGenerator
         $frontendTemplate[] = '';
         $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $frontendTemplate[] = 'Header: {data.header}';
+        if ($contentBlockConfiguration->isPlugin()) {
+            $frontendTemplate[] = '<f:cObject typoscriptObjectPath="{data.tableName}.{data.typeName}.20" data="{data._raw}" table="{data.tableName}" />';
+        }
         $frontendTemplateString = implode("\n", $frontendTemplate);
 
         return $frontendTemplateString;

@@ -74,7 +74,7 @@ class ContentBlockBuilder
             $this->createBackendPreviewHtml($contentBlock, $basePath);
             $this->createExamplePublicAssets($publicPath);
         }
-        $this->copyDefaultIcon($contentType, $basePath);
+        $this->copyDefaultIcon($contentBlock, $contentType, $basePath);
     }
 
     protected function initializeRegistries(LoadedContentBlock $contentBlock): void
@@ -141,9 +141,9 @@ class ContentBlockBuilder
         );
     }
 
-    protected function copyDefaultIcon(ContentType $contentType, string $basePath): void
+    protected function copyDefaultIcon(LoadedContentBlock $contentBlock, ContentType $contentType, string $basePath): void
     {
-        $defaultIcon = ContentTypeIconResolver::getDefaultContentTypeIcon($contentType);
+        $defaultIcon = ContentTypeIconResolver::getDefaultContentTypeIcon($contentType, $contentBlock->isPlugin());
         $absoluteDefaultIconPath = GeneralUtility::getFileAbsFileName($defaultIcon);
         $contentBlockIconPath = $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg';
         copy($absoluteDefaultIconPath, $contentBlockIconPath);

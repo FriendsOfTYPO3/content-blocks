@@ -83,15 +83,20 @@ class CreateContentBlockCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $typeName = $input->getOption('type-name');
+        $isPlugin = false;
         $availablePackages = $this->packageResolver->getAvailablePackages();
         if ($availablePackages === []) {
-            throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
+            throw new \RuntimeException('No packages were found in which to store the Content Block.', 1678699706);
         }
 
         if ($input->getOption('content-type')) {
             $contentTypeFromInput = $input->getOption('content-type');
         } else {
-            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
+            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the Content Type of your Content Block', $this->getSupportedTypes(), 'content-element'));
+        }
+        if ($contentTypeFromInput === 'plugin') {
+            $isPlugin = true;
+            $contentTypeFromInput = 'content-element';
         }
         $contentType = match ($contentTypeFromInput) {
             'content-element' => ContentType::CONTENT_ELEMENT,
@@ -128,7 +133,7 @@ class CreateContentBlockCommand extends Command
                 return Command::INVALID;
             }
         } else {
-            $contentBlockNameQuestion = new Question('Enter your content block name (lowercase, separated by dashes "-")');
+            $contentBlockNameQuestion = new Question('Enter your Content Block name (lowercase, separated by dashes "-")');
             $contentBlockNameQuestion->setValidator($this->validateName(...));
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
                 $output->writeln('<error>Your content block name does not match the requirement.</error>');
@@ -157,11 +162,15 @@ class CreateContentBlockCommand extends Command
             return Command::INVALID;
         }
 
-        $yamlConfiguration = match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $typeName),
-            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName),
-            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $typeName),
-        };
+        if ($isPlugin) {
+            $yamlConfiguration = $this->createContentBlockPluginConfiguration($vendor, $name, $typeName);
+        } else {
+            $yamlConfiguration = match ($contentType) {
+                ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $typeName),
+                ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName),
+                ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $typeName),
+            };
+        }
 
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
@@ -172,18 +181,19 @@ class CreateContentBlockCommand extends Command
                 );
             }
         } else {
-            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $this->getPackageTitles($availablePackages)));
         }
 
+        $extPath = $this->getExtPath($extension, $contentType, $isPlugin);
         $contentBlockConfiguration = new LoadedContentBlock(
             name: $contentBlockName,
             yaml: $yamlConfiguration,
             icon: '',
             iconProvider: '',
             hostExtension: $extension,
-            extPath: $this->getExtPath($extension, $contentType),
+            extPath: $extPath,
             contentType: $contentType,
-            isPlugin: false,
+            isPlugin: $isPlugin,
         );
 
         $this->contentBlockBuilder->create($contentBlockConfiguration);
@@ -231,12 +241,20 @@ class CreateContentBlockCommand extends Command
      */
     protected function getSupportedTypes(): array
     {
-        return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
+        return [
+            'content-element' => 'Content Element',
+            'page-type' => 'Page Type',
+            'record-type' => 'Record Type',
+            'plugin' => 'Plugin',
+        ];
     }
 
-    protected function getExtPath(string $extension, ContentType $contentType): string
+    protected function getExtPath(string $extension, ContentType $contentType, bool $isPlugin): string
     {
         $base = 'EXT:' . $extension . '/';
+        if ($isPlugin) {
+            return $base . ContentBlockPathUtility::getRelativePluginPath();
+        }
         return match ($contentType) {
             ContentType::CONTENT_ELEMENT => $base . ContentBlockPathUtility::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => $base . ContentBlockPathUtility::getRelativePageTypesPath(),
@@ -266,6 +284,45 @@ class CreateContentBlockCommand extends Command
                 'identifier' => 'header',
                 'useExistingField' => true,
                 'label' => 'Custom header label',
+            ],
+        ];
+        return $configuration;
+    }
+
+    private function createContentBlockPluginConfiguration(string $vendor, string $name, ?string $typeName = ''): array
+    {
+        $fullName = $vendor . '/' . $name;
+        $description = 'Description for Plugin ' . $fullName;
+        $configuration = [
+            'table' => 'tt_content',
+            'typeField' => 'CType',
+            'name' => $fullName,
+            'title' => $fullName,
+            'description' => $description,
+            'prefixFields' => true,
+            'prefixType' => 'full',
+            'controllerActions' => [],
+        ];
+        if ($typeName !== '' && $typeName !== null) {
+            $configuration['typeName'] = $typeName;
+        }
+        $configuration['fields'] = [
+            [
+                'identifier' => 'header',
+                'useExistingField' => true,
+                'label' => 'Custom header label',
+            ],
+            [
+                'identifier' => 'pages',
+                'useExistingField' => true,
+                'label' => 'Pages',
+                'description' => 'Define storage pages where record types are stored',
+            ],
+            [
+                'identifier' => 'recursive',
+                'useExistingField' => true,
+                'label' => 'Recursive',
+                'description' => 'Allow recursive lookup for records',
             ],
         ];
         return $configuration;
