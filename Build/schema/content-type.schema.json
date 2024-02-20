@@ -27,7 +27,7 @@
 			"enum": ["full", "vendor"]
 		},
 		"priority": {
-			"description": "The priority can be used to prioritize certain Content Blocks in the loading order. The higher the value, the higher the priority.",
+			"description": "The priority is used to prioritize certain Content Blocks in the loading order.",
 			"type": "integer",
 			"default": 0
 		},

@@ -16,7 +16,7 @@
 					"type": "string"
 				},
 				"typeName": {
-					"description": "This identifier distinguishes this Content Block from other types in the same table. Also known as record type.",
+					"description": "Identifier to distinguish this Content Block from other types in the same table.",
 					"type": "string"
 				},
 				"labelField": {
