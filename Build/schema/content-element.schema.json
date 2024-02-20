@@ -1,0 +1,35 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/content-element.schema.json",
+	"title": "Content Element",
+	"description": "TYPO3 CMS Content Blocks Content Element",
+	"allOf": [
+		{
+			"$ref": "content-type.schema.json"
+		},
+		{
+			"type": "object",
+			"properties": {
+				"description": {
+					"description": "The description of the Content Block",
+					"type": "string"
+				},
+				"group": {
+					"description": "Group name the Content Block should be displayed in",
+					"type": "string",
+					"default": "common",
+					"examples": ["common", "menu", "special", "forms", "plugins"]
+				},
+				"typeName": {
+					"description": "This identifier distinguishes this Content Block from other types in the same table. Also known as record type.",
+					"type": "string"
+				},
+				"saveAndClose": {
+					"description": "New Content Elements will skip the edit view.",
+					"type": "boolean",
+					"default": false
+				}
+			}
+		}
+	]
+}

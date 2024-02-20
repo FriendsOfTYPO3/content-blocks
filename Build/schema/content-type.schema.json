@@ -1,8 +1,9 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema",
-	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/schema.json",
-	"title": "Content Block",
-	"description": "TYPO3 CMS Content Blocks schema",
+	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/content-type.schema.json",
+	"title": "Content Type",
+	"description": "TYPO3 CMS Content Blocks Content Type",
+	"required": ["name"],
 	"type": "object",
 	"properties": {
 		"name": {
@@ -13,23 +14,6 @@
 		"title": {
 			"description": "The title of the Content Block",
 			"type": "string"
-		},
-		"description": {
-			"description": "The description of the Content Block",
-			"type": "string"
-		},
-		"group": {
-			"description": "Group name the Content Block should be displayed in",
-			"type": "string",
-			"default": "common",
-			"examples": ["common", "menu", "special", "forms", "plugins"]
-		},
-		"table": {
-			"description": "Defines the table name for the database.",
-			"type": "string"
-		},
-		"typeName": {
-			"description": "This identifier distinguishes this Content Block from other types in the same table. Also known as record type."
 		},
 		"prefixFields": {
 			"description": "Field identifiers will be prefixed with the Content Block name.",
@@ -55,15 +39,9 @@
 				"uniqueItems": true
 			}
 		},
-		"saveAndClose": {
-			"description": "New Content Elements will skip the edit view.",
-			"type": "boolean",
-			"default": false
-		},
 		"fields": {
 			"description": "The root fields definition of the Content Block. Define your field types here.",
 			"type": "array"
 		}
-	},
-	"required": ["name"]
+	}
 }

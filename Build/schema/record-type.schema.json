@@ -1,0 +1,41 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/record-type.schema.json",
+	"title": "Record Type",
+	"description": "TYPO3 CMS Content Blocks Record Type",
+	"allOf": [
+		{
+			"$ref": "content-type.schema.json"
+		},
+		{
+			"required": ["table"],
+			"type": "object",
+			"properties": {
+				"table": {
+					"description": "Defines the table name for the database.",
+					"type": "string"
+				},
+				"typeName": {
+					"description": "This identifier distinguishes this Content Block from other types in the same table. Also known as record type.",
+					"type": "string"
+				},
+				"labelField": {
+					"description": "Field identifier which should be used as the title of the record.",
+					"oneOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string",
+								"uniqueItems": true,
+								"minItems": 1
+							}
+						}
+					]
+				}
+			}
+		}
+	]
+}

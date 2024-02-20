@@ -1,0 +1,21 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/page-type.schema.json",
+	"title": "Page Type",
+	"description": "TYPO3 CMS Content Blocks Page Type",
+	"allOf": [
+		{
+			"$ref": "content-type.schema.json"
+		},
+		{
+			"required": ["typeName"],
+			"type": "object",
+			"properties": {
+				"typeName": {
+					"description": "This identifier distinguishes this Content Block from other types in the same table. Also known as record type.",
+					"type": "integer"
+				}
+			}
+		}
+	]
+}
