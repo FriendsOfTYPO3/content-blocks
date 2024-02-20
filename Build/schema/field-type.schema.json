@@ -3,12 +3,57 @@
 	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/field-type.schema.json",
 	"title": "Field Type",
 	"description": "TYPO3 CMS Content Blocks Field Type",
-	"required": ["identifier", "type"],
 	"type": "object",
+	"required": [
+		"type",
+		"identifier"
+	],
 	"properties": {
 		"identifier": {
 			"type": "string",
 			"description": "The identifier for the field."
+		},
+		"label": {
+			"type": "string",
+			"description": "Simple label (Labels.xlf has precedence)"
+		},
+		"description": {
+			"type": "string",
+			"description": "Simple description (Labels.xlf has precedence)"
+		},
+		"useExistingField": {
+			"type": "boolean",
+			"description": "If enabled, an existing field defined by TCA will be extended."
+		},
+		"prefixField": {
+			"type": "boolean",
+			"description": "If disabled, this will escape prefixing (overrules global option prefixFields)"
+		},
+		"prefixType": {
+			"description": "Determines how to prefix the field if prefixField is enabled.",
+			"type": "string",
+			"enum": [
+				"full",
+				"vendor"
+			]
+		},
+		"displayCond": {
+			"description": "Can be used to display the field only under certain conditions.",
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "array"
+				}
+			]
+		},
+		"onChange": {
+			"type": "string",
+			"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
+			"enum": [
+				"reload"
+			]
 		},
 		"type": {
 			"type": "string",
@@ -40,43 +85,82 @@
 				"Textarea",
 				"Uuid"
 			]
-		},
-		"label": {
-			"type": "string",
-			"description": "Simple label (Labels.xlf has precedence)"
-		},
-		"description": {
-			"type": "string",
-			"description": "Simple description (Labels.xlf has precedence)"
-		},
-		"useExistingField": {
-			"type": "boolean",
-			"description": "If enabled, an existing field defined by TCA will be extended."
-		},
-		"prefixField": {
-			"type": "boolean",
-			"description": "If disabled, this will escape prefixing (overrules global option prefixFields)"
-		},
-		"prefixType": {
-			"description": "Determines how to prefix the field if prefixField is enabled.",
-			"type": "string",
-			"enum": ["full", "vendor"]
-		},
-		"displayCond": {
-			"description": "Can be used to display the field only under certain conditions.",
-			"oneOf": [
-				{
-					"type": "string"
-				},
-				{
-					"type": "array"
-				}
-			]
-		},
-		"onChange": {
-			"type": "string",
-			"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
-			"enum": ["reload"]
 		}
-	}
+	},
+	"allOf": [
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Text"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "string",
+						"description": "Default value set if a new record is created."
+					},
+					"max": {
+						"type": "integer",
+						"description": "Maximum number of characters allowed."
+					},
+					"min": {
+						"type": "integer",
+						"description": "Minimum number of characters required."
+					},
+					"placeholder": {
+						"type": "string",
+						"description": "Placeholder text for the field."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field becomes mandatory."
+					},
+					"size": {
+						"type": "integer",
+						"description": "Abstract value for the width of the field."
+					},
+					"valuePicker": {
+						"type": "array",
+						"items": {
+							"type": "array",
+							"items": [
+								{
+									"type": "string",
+									"description": "Label"
+								},
+								{
+									"type": "string",
+									"description": "Value"
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Textarea"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "string",
+						"description": "Default value set if a new record is created."
+					},
+					"enableRichtext": {
+						"type": "boolean",
+						"description": "If set to true, the system renders a Rich Text Editor."
+					}
+				}
+			}
+		}
+	]
 }

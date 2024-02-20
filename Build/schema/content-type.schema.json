@@ -5,6 +5,7 @@
 	"description": "TYPO3 CMS Content Blocks Content Type",
 	"required": ["name"],
 	"type": "object",
+	"additionalProperties": false,
 	"properties": {
 		"name": {
 			"description": "Unique identifier for the Content Block in the format vendor/content-block-name",
