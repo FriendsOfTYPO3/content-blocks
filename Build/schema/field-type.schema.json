@@ -1,0 +1,82 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "https://github.com/nhovratov/content-blocks/tree/main/Build/schema/field-type.schema.json",
+	"title": "Field Type",
+	"description": "TYPO3 CMS Content Blocks Field Type",
+	"required": ["identifier", "type"],
+	"type": "object",
+	"properties": {
+		"identifier": {
+			"type": "string",
+			"description": "The identifier for the field."
+		},
+		"type": {
+			"type": "string",
+			"description": "Type of the field.",
+			"enum": [
+				"Basic",
+				"Category",
+				"Checkbox",
+				"Collection",
+				"Color",
+				"DateTime",
+				"Email",
+				"File",
+				"FlexForm",
+				"Folder",
+				"Json",
+				"Language",
+				"Linebreak",
+				"Link",
+				"Number",
+				"Palette",
+				"Password",
+				"Radio",
+				"Relation",
+				"Select",
+				"Slug",
+				"Tab",
+				"Text",
+				"Textarea",
+				"Uuid"
+			]
+		},
+		"label": {
+			"type": "string",
+			"description": "Simple label (Labels.xlf has precedence)"
+		},
+		"description": {
+			"type": "string",
+			"description": "Simple description (Labels.xlf has precedence)"
+		},
+		"useExistingField": {
+			"type": "boolean",
+			"description": "If enabled, an existing field defined by TCA will be extended."
+		},
+		"prefixField": {
+			"type": "boolean",
+			"description": "If disabled, this will escape prefixing (overrules global option prefixFields)"
+		},
+		"prefixType": {
+			"description": "Determines how to prefix the field if prefixField is enabled.",
+			"type": "string",
+			"enum": ["full", "vendor"]
+		},
+		"displayCond": {
+			"description": "Can be used to display the field only under certain conditions.",
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "array"
+				}
+			]
+		},
+		"onChange": {
+			"type": "string",
+			"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
+			"enum": ["reload"]
+		}
+	}
+}

@@ -17,19 +17,16 @@
 		},
 		"prefixFields": {
 			"description": "Field identifiers will be prefixed with the Content Block name.",
-			"type": "boolean",
-			"default": true
+			"type": "boolean"
 		},
 		"prefixType": {
 			"description": "Determines how to prefix the field if prefixFields is enabled.",
 			"type": "string",
-			"default": "full",
 			"enum": ["full", "vendor"]
 		},
 		"priority": {
 			"description": "The priority is used to prioritize certain Content Blocks in the loading order.",
-			"type": "integer",
-			"default": 0
+			"type": "integer"
 		},
 		"basics": {
 			"type": "array",
@@ -41,7 +38,10 @@
 		},
 		"fields": {
 			"description": "The root fields definition of the Content Block. Define your field types here.",
-			"type": "array"
+			"type": "array",
+			"items": {
+				"$ref": "field-type.schema.json"
+			}
 		}
 	}
 }
