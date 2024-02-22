@@ -99,6 +99,8 @@ Settings
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
+.. include:: /Snippets/AllowedCustomProperties.rst
+
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-select>`.
 
 Example

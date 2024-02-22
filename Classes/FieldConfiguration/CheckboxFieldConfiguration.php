@@ -23,6 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 {
     use WithCommonProperties;
+    use WithCustomProperties;
 
     private FieldType $fieldType = FieldType::CHECKBOX;
     private int $default = 0;
@@ -46,6 +47,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         $self->validation = (array)($settings['validation'] ?? $self->validation);
         $self->items = (array)($settings['items'] ?? $self->items);
         $self->invertStateDisplay = (bool)($settings['invertStateDisplay'] ?? $self->invertStateDisplay);
+        $self->setCustomProperties($settings);
 
         return $self;
     }
@@ -78,6 +80,7 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         if ($this->invertStateDisplay) {
             $config['items'][0]['invertStateDisplay'] = true;
         }
+        $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }

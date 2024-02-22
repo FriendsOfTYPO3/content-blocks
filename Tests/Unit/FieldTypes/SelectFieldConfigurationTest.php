@@ -77,6 +77,9 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'treeConfig' => [
                     'foo' => 'bar',
                 ],
+                'itemsProcConfig' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -129,6 +132,9 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                         'foo' => 'bar',
                     ],
                     'treeConfig' => [
+                        'foo' => 'bar',
+                    ],
+                    'itemsProcConfig' => [
                         'foo' => 'bar',
                     ],
                 ],

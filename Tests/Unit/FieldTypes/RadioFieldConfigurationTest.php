@@ -42,6 +42,9 @@ final class RadioFieldConfigurationTest extends UnitTestCase
                 'items' => [
                     'foo',
                 ],
+                'itemsProcConfig' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -60,6 +63,9 @@ final class RadioFieldConfigurationTest extends UnitTestCase
                     'itemsProcFunc' => 'foo',
                     'items' => [
                         'foo',
+                    ],
+                    'itemsProcConfig' => [
+                        'foo' => 'bar',
                     ],
                 ],
             ],

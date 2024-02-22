@@ -65,6 +65,8 @@ Settings
    *  :yaml:`checkboxToggle`
    *  :yaml:`checkboxLabeledToggle`
 
+.. include:: /Snippets/AllowedCustomProperties.rst
+
 For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 
 Examples

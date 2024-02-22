@@ -63,6 +63,7 @@ Settings
             </trans-unit>
         </body>
 
+.. include:: /Snippets/AllowedCustomProperties.rst
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-radio>`.
 

@@ -49,6 +49,9 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
+                'itemsProcConfig' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -74,6 +77,9 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
                     'items' => [
                         ['Item1'],
                         ['Item2'],
+                    ],
+                    'itemsProcConfig' => [
+                        'foo' => 'bar',
                     ],
                 ],
             ],

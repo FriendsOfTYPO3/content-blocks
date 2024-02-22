@@ -23,6 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 final class RadioFieldConfiguration implements FieldConfigurationInterface
 {
     use WithCommonProperties;
+    use WithCustomProperties;
 
     private FieldType $fieldType = FieldType::RADIO;
     private string|int $default = '';
@@ -41,6 +42,7 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
         $self->items = (array)($settings['items'] ?? $self->items);
+        $self->setCustomProperties($settings);
 
         return $self;
     }
@@ -61,6 +63,7 @@ final class RadioFieldConfiguration implements FieldConfigurationInterface
         if ($this->items !== []) {
             $config['items'] = $this->items;
         }
+        $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }

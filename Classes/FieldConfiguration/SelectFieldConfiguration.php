@@ -23,6 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
 final class SelectFieldConfiguration implements FieldConfigurationInterface
 {
     use WithCommonProperties;
+    use WithCustomProperties;
 
     private FieldType $fieldType = FieldType::SELECT;
     private string|int $default = '';
@@ -89,6 +90,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
         $self->treeConfig = (array)($settings['treeConfig'] ?? $self->treeConfig);
+        $self->setCustomProperties($settings);
 
         return $self;
     }
@@ -173,6 +175,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         if ($this->treeConfig !== []) {
             $config['treeConfig'] = $this->treeConfig;
         }
+        $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }
