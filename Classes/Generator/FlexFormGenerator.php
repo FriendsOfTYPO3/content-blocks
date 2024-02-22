@@ -53,7 +53,6 @@ class FlexFormGenerator
             'parentTagMap' => [
                 'el' => 'field',
             ],
-            'disableTypeAttrib' => 2,
         ];
         $flexForm = GeneralUtility::array2xml($dataStructure, docTag: 'T3FlexForms', spaceInd: 4, options: $options);
         return $flexForm;
