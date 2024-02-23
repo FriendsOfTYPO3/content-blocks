@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition;
 
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
