@@ -4,10 +4,6 @@
 	"title": "Field Type",
 	"description": "TYPO3 CMS Content Blocks Field Type",
 	"type": "object",
-	"required": [
-		"type",
-		"identifier"
-	],
 	"properties": {
 		"identifier": {
 			"type": "string",
@@ -155,9 +151,61 @@
 						"type": "string",
 						"description": "Default value set if a new record is created."
 					},
+					"placeholder": {
+						"type": "string",
+						"description": "Placeholder text for the field."
+					},
+					"rows": {
+						"type": "integer",
+						"description": "Abstract value for the height of the <textarea> field.",
+						"maximum": 20
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
 					"enableRichtext": {
 						"type": "boolean",
 						"description": "If set to true, the system renders a Rich Text Editor."
+					},
+					"richtextConfiguration": {
+						"type": "string",
+						"description": "The YAML configuration source field used for that RTE field"
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Category"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"relationship": {
+						"type": "string",
+						"description": "Depending on the relationship, the category relations are stored in a different way.",
+						"enum": ["oneToOne", "oneToMany", "manyToMany"]
+					},
+					"minitems": {
+						"type": "integer",
+						"description": "Minimum number of items."
+					},
+					"maxitems": {
+						"type": "integer",
+						"description": "Maximum number of items."
+					},
+					"treeConfig": {
+						"type": "object",
+						"properties": {
+							"startingPoints": {
+								"type": "string",
+								"description": "Allows to set one or more roots (category uids), from which the categories should be taken from."
+							}
+						}
 					}
 				}
 			}
