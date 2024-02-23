@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -104,10 +106,8 @@ final class FolderFieldConfigurationTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider getTcaReturnsExpectedTcaDataProvider
-     */
+    #[DataProvider('getTcaReturnsExpectedTcaDataProvider')]
+    #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
         $fieldConfiguration = FolderFieldConfiguration::createFromArray($config);
@@ -123,10 +123,8 @@ final class FolderFieldConfigurationTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider getSqlReturnsExpectedSqlDefinitionDataProvider
-     */
+    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
+    #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
         $inputFieldConfiguration = FolderFieldConfiguration::createFromArray([]);

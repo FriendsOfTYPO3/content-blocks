@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
@@ -2059,10 +2061,8 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider checkTcaFieldTypesDataProvider
-     */
+    #[DataProvider('checkTcaFieldTypesDataProvider')]
+    #[Test]
     public function checkTcaFieldTypes(array $contentBlocks, array $expected): void
     {
         $baseTca['tt_content']['ctrl']['type'] = 'CType';
@@ -2233,10 +2233,8 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider pageTypesGenerateCorrectTcaDataProvider
-     */
+    #[DataProvider('pageTypesGenerateCorrectTcaDataProvider')]
+    #[Test]
     public function pageTypesGenerateCorrectTca(array $contentBlocks, bool $seoExtensionLoaded, array $expected): void
     {
         $baseTca['pages']['ctrl']['type'] = 'doktype';
@@ -2289,9 +2287,7 @@ final class TcaGeneratorTest extends UnitTestCase
         self::assertEquals($expected, $tca);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function missingLabelFieldThrowsException(): void
     {
         $yaml = [
@@ -2925,10 +2921,8 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider checkFlexFormTcaDataProvider
-     */
+    #[DataProvider('checkFlexFormTcaDataProvider')]
+    #[Test]
     public function checkFlexFormTca(array $contentBlocks, array $expected): void
     {
         $baseTca['tt_content']['ctrl']['type'] = 'CType';
@@ -2970,9 +2964,7 @@ final class TcaGeneratorTest extends UnitTestCase
         self::assertEquals($expected, $tca);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function displayCondIsPrefixedForStringSyntax(): void
     {
         $baseTca['tt_content'] = [];

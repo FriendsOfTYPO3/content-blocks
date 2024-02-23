@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Generator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
@@ -267,10 +269,8 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider generateReturnsExpectedSqlStatementsDataProvider
-     * @test
-     */
+    #[DataProvider('generateReturnsExpectedSqlStatementsDataProvider')]
+    #[Test]
     public function generateReturnsExpectedSqlStatements(array $contentBlocks, array $expected): void
     {
         $contentBlockRegistry = new ContentBlockRegistry();

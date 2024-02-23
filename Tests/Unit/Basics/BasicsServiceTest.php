@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Basics;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Basics\LoadedBasic;
@@ -239,10 +241,8 @@ final class BasicsServiceTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider basicsAreAppliedByBasicsTypeDataProvider
-     */
+    #[DataProvider('basicsAreAppliedByBasicsTypeDataProvider')]
+    #[Test]
     public function basicsAreAppliedByBasicsType(array $yaml, LoadedBasic $basic, array $expected): void
     {
         $basicsRegistry = new BasicsRegistry();
@@ -417,10 +417,8 @@ final class BasicsServiceTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider basicsAreAppendedByTopLevelBasicsArrayDataProvider
-     */
+    #[DataProvider('basicsAreAppendedByTopLevelBasicsArrayDataProvider')]
+    #[Test]
     public function basicsAreAppendedByTopLevelBasicsArray(array $yaml, LoadedBasic $basic, array $expected): void
     {
         $basicsRegistry = new BasicsRegistry();
@@ -431,9 +429,7 @@ final class BasicsServiceTest extends UnitTestCase
         self::assertSame($expected, $basicsService->applyBasics($yaml));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function multipleBasicsAreAppendedByTopLevelBasicsArray(): void
     {
         $basic1 = new LoadedBasic(
@@ -509,9 +505,7 @@ final class BasicsServiceTest extends UnitTestCase
         self::assertSame($expected, $basicsService->applyBasics($yaml));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function basicWithSameIdentifierThrowsException(): void
     {
         $basic1 = new LoadedBasic(

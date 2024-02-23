@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\DependencyInjection\Container;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
@@ -29,9 +30,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ContentElementParentFieldServiceTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function uniqueForeignFieldAreCollectedForTtContent(): void
     {
         $contentBlocks = [
@@ -109,9 +108,7 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         self::assertSame($expected, $result->getArrayCopy());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function emptyResultIfNoContentElementDefinition(): void
     {
         $contentBlocks = [

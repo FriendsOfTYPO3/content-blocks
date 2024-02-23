@@ -17,15 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Registry;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ContentBlockRegistryTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function duplicateContentBlockThrowsException(): void
     {
         $loadedContentBlockA = LoadedContentBlock::fromArray([
@@ -50,9 +49,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $contentBlockRegistry->register($loadedContentBlockB);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function duplicateTypeNameForContentElementThrowsException(): void
     {
         $loadedContentBlockA = LoadedContentBlock::fromArray([
@@ -79,9 +76,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $contentBlockRegistry->register($loadedContentBlockB);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function duplicateTypeNameForPageTypeThrowsException(): void
     {
         $loadedContentBlockA = LoadedContentBlock::fromArray([
@@ -108,9 +103,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $contentBlockRegistry->register($loadedContentBlockB);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function duplicateTypeNameForRecordTypeWithSameTableThrowsException(): void
     {
         $loadedContentBlockA = LoadedContentBlock::fromArray([
@@ -137,9 +130,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $contentBlockRegistry->register($loadedContentBlockB);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function duplicateTypeNameForRecordTypeDifferentTableIsAllowed(): void
     {
         $loadedContentBlockA = LoadedContentBlock::fromArray([

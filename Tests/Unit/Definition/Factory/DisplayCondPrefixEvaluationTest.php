@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition\Factory;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
@@ -27,9 +29,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class DisplayCondPrefixEvaluationTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function displayCondIsPrefixedForStringSyntax(): void
     {
         $contentBlock = LoadedContentBlock::fromArray([
@@ -123,10 +123,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider displayCondIsPrefixedForArraySyntaxDataProvider
-     */
+    #[DataProvider('displayCondIsPrefixedForArraySyntaxDataProvider')]
+    #[Test]
     public function displayCondIsPrefixedForArraySyntax(array $displayCond, array $expected): void
     {
         $contentBlock = LoadedContentBlock::fromArray([

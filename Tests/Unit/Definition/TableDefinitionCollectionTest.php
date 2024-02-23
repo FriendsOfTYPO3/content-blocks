@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
@@ -26,9 +28,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TableDefinitionCollectionTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function contentElementDefinitionIsFoundByCType(): void
     {
         $contentBlocks = [
@@ -68,9 +68,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         self::assertSame('t3ce_example', $contentElementDefinition->getTypeName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nonExistingTableThrowsException(): void
     {
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -84,9 +82,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $tableDefinitionCollection->getContentElementDefinition('idonotexist');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nonExistingContentElementThrowsException(): void
     {
         $contentBlocks = [
@@ -158,10 +154,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider saveAndCloseIsAddedDataProvider
-     */
+    #[DataProvider('saveAndCloseIsAddedDataProvider')]
+    #[Test]
     public function saveAndCloseIsAdded(array $contentBlocks, string $typeName, bool $expected): void
     {
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -177,9 +171,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         self::assertSame($expected, $contentElement->hasSaveAndClose());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function contentBlocksCanBeSortedByPriority(): void
     {
         $contentBlocks = [

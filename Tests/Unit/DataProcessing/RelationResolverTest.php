@@ -17,14 +17,13 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\DataProcessing;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class RelationResolverTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function tableListUidPairsConvertedToTableListCorrectly(): void
     {
         $relationResolverMock = $this->createMock(RelationResolver::class);

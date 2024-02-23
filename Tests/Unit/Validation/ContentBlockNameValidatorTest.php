@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Validation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -70,10 +72,8 @@ final class ContentBlockNameValidatorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider isValidDataProvider
-     */
+    #[DataProvider('isValidDataProvider')]
+    #[Test]
     public function isValid(string $string, bool $expected): void
     {
         self::assertSame($expected, ContentBlockNameValidator::isValid($string));

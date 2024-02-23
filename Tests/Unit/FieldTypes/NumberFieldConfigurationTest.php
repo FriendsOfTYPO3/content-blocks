@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -160,10 +162,8 @@ final class NumberFieldConfigurationTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider getTcaReturnsExpectedTcaDataProvider
-     */
+    #[DataProvider('getTcaReturnsExpectedTcaDataProvider')]
+    #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
         $fieldConfiguration = NumberFieldConfiguration::createFromArray($config);
@@ -187,10 +187,8 @@ final class NumberFieldConfigurationTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider getSqlReturnsExpectedSqlDefinitionDataProvider
-     */
+    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
+    #[Test]
     public function getSqlReturnsExpectedSqlDefinition(array $config, string $uniqueColumnName, string $expectedSql): void
     {
         $inputFieldConfiguration = NumberFieldConfiguration::createFromArray($config);

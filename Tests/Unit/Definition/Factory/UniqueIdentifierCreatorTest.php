@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition\Factory;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
@@ -38,10 +40,8 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider contentBlockNameToTypeIdentifierTestDataProvider
-     * @test
-     */
+    #[DataProvider('contentBlockNameToTypeIdentifierTestDataProvider')]
+    #[Test]
     public function contentBlockNameToContentTypeIdentifierTest(string $contentBlockName, string $expected): void
     {
         $contentBlock = LoadedContentBlock::fromArray([
@@ -82,10 +82,8 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider createUniqueColumnNameTestDataProvider
-     * @test
-     */
+    #[DataProvider('createUniqueColumnNameTestDataProvider')]
+    #[Test]
     public function createUniqueFieldIdentifierTest(string $contentBlockName, PrefixType $prefixType, string $identifier, string $expected): void
     {
         $contentBlock = LoadedContentBlock::fromArray([

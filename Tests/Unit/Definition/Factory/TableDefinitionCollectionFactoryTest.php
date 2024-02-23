@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Definition\Factory;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
@@ -58,10 +60,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider notUniqueIdentifiersThrowAnExceptionDataProvider
-     * @test
-     */
+    #[DataProvider('notUniqueIdentifiersThrowAnExceptionDataProvider')]
+    #[Test]
     public function notUniqueIdentifiersThrowAnException(array $contentBlocks): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -115,10 +115,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @dataProvider notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider
-     * @test
-     */
+    #[DataProvider('notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider')]
+    #[Test]
     public function notUniqueIdentifiersWithinCollectionThrowAnException(array $contentBlocks): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -134,9 +132,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function paletteInsidePaletteIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -178,9 +174,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function paletteInsidePaletteInsideCollectionIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -228,9 +222,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function paletteWithSameIdentifierIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -289,9 +281,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function paletteWithSameIdentifierInsideCollectionIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -356,9 +346,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function tabWithSameIdentifierIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -401,9 +389,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function tabWithSameIdentifierInsideCollectionIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -452,9 +438,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function tabInsidePaletteIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -495,9 +479,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function tabInsidePaletteInsideCollectionIsNotAllowed(): void
     {
         $contentBlocks = [
@@ -544,9 +526,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function linebreaksAreOnlyAllowedWithinPalettes(): void
     {
         $contentBlocks = [
@@ -597,9 +577,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function linebreaksAreOnlyAllowedWithinPalettesInsideCollections(): void
     {
         $contentBlocks = [
@@ -656,9 +634,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function identifierIsRequired(): void
     {
         $contentBlocks = [
@@ -696,9 +672,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function typeIsRequired(): void
     {
         $contentBlocks = [
@@ -732,9 +706,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function identifierIsRequiredInsideCollections(): void
     {
         $contentBlocks = [
@@ -778,9 +750,7 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             ->createUncached($contentBlockRegistry);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flexFieldIsNotAllowedToMixNonSheetAndSheet(): void
     {
         $contentBlocks = [
@@ -932,10 +902,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider structuralFieldTypesAreNotAllowedInFlexFormDataProvider
-     */
+    #[DataProvider('structuralFieldTypesAreNotAllowedInFlexFormDataProvider')]
+    #[Test]
     public function structuralFieldTypesAreNotAllowedInFlexForm(array $contentBlocks, string $message): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -988,10 +956,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider
-     */
+    #[DataProvider('sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider')]
+    #[Test]
     public function sectionsHaveAtLeastOneContainerExceptionIsThrown(array $contentBlocks, string $message): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -1050,10 +1016,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider containerHaveAtLeastOneFieldExceptionIsThrownDataProvider
-     */
+    #[DataProvider('containerHaveAtLeastOneFieldExceptionIsThrownDataProvider')]
+    #[Test]
     public function containerHaveAtLeastOneFieldExceptionIsThrown(array $contentBlocks, string $message): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -1117,10 +1081,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider containerContainsValidFieldTypeExceptionIsThrownDataProvider
-     */
+    #[DataProvider('containerContainsValidFieldTypeExceptionIsThrownDataProvider')]
+    #[Test]
     public function containerContainsValidFieldTypeExceptionIsThrown(array $contentBlocks, string $message): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -1167,10 +1129,8 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider localCollectionsCanHaveTableOverriddenDataProvider
-     */
+    #[DataProvider('localCollectionsCanHaveTableOverriddenDataProvider')]
+    #[Test]
     public function localCollectionsCanHaveTableOverridden(array $contentBlocks, string $expectedTable): void
     {
         $contentBlockRegistry = new ContentBlockRegistry();
