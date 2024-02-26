@@ -34,6 +34,103 @@
 							}
 						}
 					]
+				},
+				"fallbackLabelFields": {
+					"description": "Defines which fields should be used as fallback, if labelField is not filled.",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"uniqueItems": true
+					}
+				},
+				"typeField": {
+					"description": "The field identifier to use as the type switch.",
+					"type": "string"
+				},
+				"languageAware": {
+					"description": "If set to false, language related fields are not created.",
+					"type": "boolean"
+				},
+				"workspaceAware": {
+					"description": "Creates workspace related fields.",
+					"type": "boolean"
+				},
+				"editLocking": {
+					"description": "If set to false, the functionality to lock the editing for editors is removed."
+				},
+				"restriction": {
+					"description": "There are several restrictions in TYPO3, which filter records by certain constraints.",
+					"type": "object",
+					"properties": {
+						"disabled": {
+							"description": "Adds a checkbox to hide the record in the frontend.",
+							"type": "boolean"
+						},
+						"startTime": {
+							"description": "Adds a date picker to set the start time when to display the record.",
+							"type": "boolean"
+						},
+						"endTime": {
+							"description": "Adds a date picker to set the end time when to stop displaying the record.",
+							"type": "boolean"
+						},
+						"userGroup": {
+							"description": "Adds a selection to choose user groups, which are allowed to view the record.",
+							"type": "boolean"
+						}
+					}
+				},
+				"softDelete": {
+					"description": "When deleting records in the TYPO3 backend, they are not really deleted in the database.",
+					"type": "boolean"
+				},
+				"trackCreationDate": {
+					"description": "Tracks the timestamp of the creation date.",
+					"type": "boolean"
+				},
+				"trackUpdateDate": {
+					"description": "Tracks the timestamp of the last update.",
+					"type": "boolean"
+				},
+				"trackAncestorReference": {
+					"description": "If set to false, the tracking field for the original record will not be created.",
+					"type": "boolean"
+				},
+				"sortable": {
+					"description": "Tracks the order of records.",
+					"type": "boolean"
+				},
+				"sortField": {
+					"description": "The field identifier to use for sorting records.",
+					"oneOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"identifier": {
+										"type": "string"
+									},
+									"order": {
+										"type": "string",
+										"enum": ["asc", "desc"]
+									}
+								}
+							}
+						}
+					]
+				},
+				"internalDescription": {
+					"description": "If enabled, this adds a new tab Notes with a description field.",
+					"type": "boolean"
+				},
+				"rootLevelType": {
+					"description": "Restricts the place, where the record can be created.",
+					"type": "string",
+					"enum": ["onlyOnPages", "onlyOnRootLevel", "both"]
 				}
 			}
 		}
