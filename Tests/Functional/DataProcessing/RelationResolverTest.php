@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\DataProcessing;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -44,9 +45,7 @@ final class RelationResolverTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks/Tests/Fixtures/TestFolder/' => 'fileadmin/',
     ];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveFileReferences(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/file_reference.csv');
@@ -68,9 +67,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertInstanceOf(FileReference::class, $result[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveFilesFromFolder(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/folder_files.csv');
@@ -92,9 +89,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertInstanceOf(File::class, $result[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveFilesFromFolderRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/folder_files.csv');
@@ -117,9 +112,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertInstanceOf(File::class, $result[1]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCollections(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
@@ -142,9 +135,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('lorem foo bar 2', $result[1]['fieldA']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCollectionsWithAlternativeTableName(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_alternative_table_name.csv');
@@ -167,9 +158,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('lorem foo bar 2', $result[1]['fieldA']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCollectionsExternal(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_external.csv');
@@ -192,9 +181,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Record 2', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCollectionsRecursively(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_recursive.csv');
@@ -220,9 +207,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('lorem foo bar B2', $result[0]['collection_inner'][1]['fieldB']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCollectionsInWorkspaces(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
@@ -251,9 +236,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('lorem foo bar 2 WS', $result[1]['fieldA']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCategoriesManyToMany(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_many_to_many.csv');
@@ -276,9 +259,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Category 2', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCategoriesManyToManyInWorkspaces(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_many_to_many.csv');
@@ -307,9 +288,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Category 2 ws', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCategoriesOneToOne(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_one_to_one.csv');
@@ -331,9 +310,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Category 1', $result[0]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveCategoriesOneToMany(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_one_to_many.csv');
@@ -356,9 +333,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Category 2', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveDbRelation(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
@@ -381,9 +356,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Page 2', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveDbRelationRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_recursive.csv');
@@ -409,9 +382,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Collection 2', $result[1]['record_collection'][0]['text']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveDbRelationsInWorkspaces(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
@@ -440,9 +411,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Page 2 ws', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveMultipleDbRelations(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_multiple.csv');
@@ -467,9 +436,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Content 2', $result[3]['header']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveDbRelationsMM(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_mm.csv');
@@ -492,9 +459,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Page 2', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selectCheckboxCommaListConvertedToArray(): void
     {
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
@@ -513,9 +478,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame(['1', '2', '3'], $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selectSingleBoxCommaListConvertedToArray(): void
     {
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
@@ -534,9 +497,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame(['1', '2', '3'], $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selectMultipleSideBySideCommaListConvertedToArray(): void
     {
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
@@ -555,9 +516,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame(['1', '2', '3'], $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveSelectForeignTableSingle(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
@@ -577,9 +536,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Record 1', $result['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveSelectForeignTableMultiple(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
@@ -601,9 +558,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Record 2', $result[1]['title']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveSelectForeignTableRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_recursive.csv');
@@ -625,9 +580,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Collection 1', $result['record_collection'][0]['text']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveFlexForm(): void
     {
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
@@ -661,9 +614,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('Text in Flex', $result['textarea']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveFlexFormWithSheetsOtherThanDefault(): void
     {
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
@@ -709,9 +660,7 @@ final class RelationResolverTest extends FunctionalTestCase
         self::assertSame('12', $result['number']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canResolveJson(): void
     {
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);

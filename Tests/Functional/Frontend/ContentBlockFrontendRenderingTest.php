@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Frontend;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Tests\Functional\SiteHandling\SiteBasedTestTrait;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -52,9 +53,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function variablesAndAssetsRendered(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/frontend_simple_element.csv');
@@ -83,9 +82,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('<img src="http://localhost/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Icon.svg', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function relationsAreResolvedForCollections(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
@@ -102,9 +99,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('fieldA2: lorem foo bar 2', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function relationsAreResolvedForCollectionsRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_recursive.csv');
@@ -125,9 +120,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('fieldA2: lorem foo bar A2', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function relationsAreResolvedForSelectSingleForeignTable(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/foreign_table_select.csv');
@@ -144,9 +137,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Title: Custom Record 1', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function relationsAreResolvedForSelectMultipleForeignTable(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/foreign_table_select_multiple.csv');
@@ -164,9 +155,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Title: Custom Record 2', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function relationsAreResolvedForTypeRelation(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/relation.csv');
@@ -201,9 +190,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Collection Text: lorem foo bar', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nestedContentIsAvailableAsContentBlockDataForCoreElements(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/relation_tt-content.csv');
@@ -220,9 +207,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringNotContainsString('has no rendering definition!', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function mixedRelationIsResolvedForEachTable(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/mixed-relation.csv');
@@ -239,9 +224,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Mixed Relation: tt_content', $html);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function staticSelectRelationsResolved(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select-static-relation.csv');

@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Generator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -35,10 +37,8 @@ final class IconGeneratorTest extends FunctionalTestCase
         yield ['tt_content-simple_basics-175ef6f'];
     }
 
-    /**
-     * @test
-     * @dataProvider contentBlockIconsAreRegisteredDataProvider
-     */
+    #[DataProvider('contentBlockIconsAreRegisteredDataProvider')]
+    #[Test]
     public function contentBlockIconsAreRegistered(string $identifier): void
     {
         $iconRegistry = $this->get(IconRegistry::class);
@@ -77,10 +77,8 @@ final class IconGeneratorTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider registeredContentBlockIconsHaveCorrectConfigurationDataProvider
-     */
+    #[DataProvider('registeredContentBlockIconsHaveCorrectConfigurationDataProvider')]
+    #[Test]
     public function registeredContentBlockIconsHaveCorrectConfiguration(string $identifier, array $configuration): void
     {
         /** @var IconRegistry $iconRegistry */

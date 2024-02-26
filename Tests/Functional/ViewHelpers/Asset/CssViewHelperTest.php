@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\ViewHelpers\Asset;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -36,9 +37,7 @@ final class CssViewHelperTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sourceStringIsNotHtmlEncodedBeforePassedToAssetCollector(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();
@@ -51,9 +50,7 @@ final class CssViewHelperTest extends FunctionalTestCase
         self::assertSame([], $collectedStyleSheets['test']['attributes']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function booleanAttributesAreProperlyConverted(): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();

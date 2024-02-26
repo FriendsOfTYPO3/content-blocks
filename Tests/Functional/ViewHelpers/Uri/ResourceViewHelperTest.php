@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\ViewHelpers\Uri;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3Fluid\Fluid\Exception;
@@ -35,9 +37,7 @@ final class ResourceViewHelperTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderingFailsWithNoContentBlockName()
     {
         $this->expectException(Exception::class);
@@ -55,10 +55,8 @@ final class ResourceViewHelperTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider renderDataProvider
-     */
+    #[DataProvider('renderDataProvider')]
+    #[Test]
     public function render(string $template, string $expected): void
     {
         $context = $this->get(RenderingContextFactory::class)->create();

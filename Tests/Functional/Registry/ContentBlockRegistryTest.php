@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Registry;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -52,10 +54,8 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider canRetrieveContentBlockPathByNameDataProvider
-     */
+    #[DataProvider('canRetrieveContentBlockPathByNameDataProvider')]
+    #[Test]
     public function canRetrieveContentBlockPathByName(string $name, string $expected): void
     {
         $contentBlocksRegistry = $this->get(ContentBlockRegistry::class);
@@ -65,9 +65,7 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
         self::assertSame($expected, $path);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function unknownNameThrowsException(): void
     {
         $contentBlocksRegistry = $this->get(ContentBlockRegistry::class);

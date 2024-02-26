@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Generator;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class TcaGeneratorTest extends FunctionalTestCase
@@ -30,17 +31,13 @@ final class TcaGeneratorTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function coreLabelsAreNotOverriddenIfMissingInLanguageFile(): void
     {
         self::assertTrue(!isset($GLOBALS['TCA']['tt_content']['types']['simple_simple']['columnsOverrides']['header']['label']));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function coreLabelsAreOverriddenIfTranslationExistsInLanguageFile(): void
     {
         self::assertSame(
@@ -49,9 +46,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function labelCanBeSetStaticallyInYaml(): void
     {
         self::assertSame(
@@ -60,9 +55,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function descriptionCanBeSetStaticallyInYaml(): void
     {
         self::assertSame(
@@ -71,9 +64,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function labelCanBeSetStaticallyInYamlInsideCollection(): void
     {
         self::assertSame(
@@ -82,9 +73,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function descriptionCanBeSetStaticallyInYamlInsideCollection(): void
     {
         self::assertSame(
@@ -93,9 +82,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function labelOfCollectionFieldFallsBackToIdentifierIfNotDefinedInLanguageFile(): void
     {
         self::assertSame(
@@ -104,9 +91,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function paletteLabelCanBeSetStaticallyInYaml(): void
     {
         self::assertSame(
@@ -115,9 +100,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function paletteDescriptionCanBeSetStaticallyInYaml(): void
     {
         self::assertSame(
@@ -126,9 +109,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function tabLabelCanBeSetStaticallyInYaml(): void
     {
         self::assertStringContainsString(
@@ -137,9 +118,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function basicsAreAppendedToTheEndFromTopLevelBasicsArray(): void
     {
         self::assertStringContainsString(
@@ -148,9 +127,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function basicIncludedAsTypeAddedToPalette(): void
     {
         self::assertStringContainsString(
@@ -159,9 +136,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function typeFieldSelectAddedForRecordType(): void
     {
         self::assertSame(
@@ -183,9 +158,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function typeFieldDefaultValueAddedForTheFirstRecord(): void
     {
         self::assertSame(

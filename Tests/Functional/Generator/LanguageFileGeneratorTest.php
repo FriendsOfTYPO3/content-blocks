@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Generator;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -34,9 +35,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithEmptyLanguageFile(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -47,9 +46,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithEmptyLanguageFileWithLabels(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -60,9 +57,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithLanguageFileWithoutLabels(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -73,9 +68,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithLanguageFileWitLabels(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -86,9 +79,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithLanguageFileWitLabelsWithCustomTranslation(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -99,9 +90,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithLanguageFileWitLabelsWithDescriptions(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -112,9 +101,7 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateWithLanguageFileWithoutLabelsWithoutDescriptions(): void
     {
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
