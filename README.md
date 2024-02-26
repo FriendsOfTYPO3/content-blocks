@@ -7,12 +7,12 @@ Blocks provides a new API to create custom Content Types like Content Elements,
 Page Types or generic Record Types. Use it now in your TYPO3 v12 project and
 eventually this will become a system extension in TYPO3 v13.
 
-|                  | URL                                                               |
-|------------------|-------------------------------------------------------------------|
-| **Repository:**  | https://github.com/nhovratov/content-blocks                       |
-| **Read online:** | https://docs.typo3.org/p/contentblocks/content-blocks/main/en-us/ |
-| **TER:**         | https://extensions.typo3.org/extension/content_blocks             |
-| **Examples:**    | https://github.com/TYPO3-Initiatives/content-blocks-examples      |
+|                  | URL                                                                                 |
+|------------------|-------------------------------------------------------------------------------------|
+| **Repository:**  | https://github.com/nhovratov/content-blocks                                         |
+| **Read online:** | https://docs.typo3.org/p/contentblocks/content-blocks/main/en-us/                   |
+| **TER:**         | https://extensions.typo3.org/extension/content_blocks                               |
+| **Examples:**    | https://github.com/nhovratov/content-blocks/tree/main/Build/content-blocks-examples |
 
 ## Roadmap
 
