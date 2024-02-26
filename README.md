@@ -12,6 +12,7 @@ eventually this will become a system extension in TYPO3 v13.
 | **Repository:**  | https://github.com/nhovratov/content-blocks                                         |
 | **Read online:** | https://docs.typo3.org/p/contentblocks/content-blocks/main/en-us/                   |
 | **TER:**         | https://extensions.typo3.org/extension/content_blocks                               |
+| **Packagist:**   | https://packagist.org/packages/contentblocks/content-blocks                         |
 | **Examples:**    | https://github.com/nhovratov/content-blocks/tree/main/Build/content-blocks-examples |
 
 ## Roadmap
