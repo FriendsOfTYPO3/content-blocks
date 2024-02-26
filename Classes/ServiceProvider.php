@@ -67,6 +67,7 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.add-typoscript' => static::addTypoScript(...),
             'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
             'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
+            'content-blocks.add-icons' => static::configureIconRegistry(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
         ];
     }
@@ -74,7 +75,6 @@ class ServiceProvider extends AbstractServiceProvider
     public function getExtensions(): array
     {
         return [
-            IconRegistry::class => static::configureIconRegistry(...),
             PageDoktypeRegistry::class => static::configurePageTypes(...),
             ListenerProvider::class => static::addEventListeners(...),
         ] + parent::getExtensions();
@@ -96,6 +96,12 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockIcons(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
+        $cache = $container->get('cache.content_blocks_code');
+        $iconsFromPackages = $cache->require('icons');
+        if ($iconsFromPackages !== false) {
+            $arrayObject->exchangeArray($iconsFromPackages);
+            return $arrayObject;
+        }
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
@@ -108,6 +114,7 @@ class ServiceProvider extends AbstractServiceProvider
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }
         }
+        $cache->set('icons', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
@@ -334,29 +341,25 @@ HEREDOC;
         };
     }
 
-    public static function configureIconRegistry(ContainerInterface $container, IconRegistry $iconRegistry): IconRegistry
+    public static function configureIconRegistry(ContainerInterface $container): \Closure
     {
-        $cache = $container->get('cache.content_blocks_code');
-
-        $iconsFromPackages = $cache->require('icons');
-        if ($iconsFromPackages === false) {
-            $iconsFromPackages = $container->get('content-blocks.icons')->getArrayCopy();
-            $cache->set('icons', 'return ' . var_export($iconsFromPackages, true) . ';');
-        }
-
-        foreach ($iconsFromPackages as $icon => $options) {
-            $provider = $options['provider'] ?? null;
-            unset($options['provider']);
-            $options ??= [];
-            if ($provider === null && ($options['source'] ?? false)) {
-                $provider = $iconRegistry->detectIconProvider($options['source']);
+        return static function (BootCompletedEvent $event) use ($container) {
+            $iconRegistry = $container->get(IconRegistry::class);
+            $iconsFromPackages = $container->get('content-blocks.icons');
+            foreach ($iconsFromPackages as $icon => $options) {
+                $provider = $options['provider'] ?? null;
+                unset($options['provider']);
+                $options ??= [];
+                if ($provider === null && ($options['source'] ?? false)) {
+                    $provider = $iconRegistry->detectIconProvider($options['source']);
+                }
+                if ($provider === null) {
+                    continue;
+                }
+                $iconRegistry->registerIcon($icon, $provider, $options);
             }
-            if ($provider === null) {
-                continue;
-            }
-            $iconRegistry->registerIcon($icon, $provider, $options);
-        }
-        return $iconRegistry;
+            return $iconRegistry;
+        };
     }
 
     public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
@@ -383,6 +386,7 @@ HEREDOC;
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-user-tsconfig');
         // @todo Use BeforeLoadedPageTsConfigEvent in v13
         $listenerProvider->addListener(ModifyLoadedPageTsConfigEvent::class, 'content-blocks.add-page-tsconfig');
+        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-icons');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         return $listenerProvider;
     }
