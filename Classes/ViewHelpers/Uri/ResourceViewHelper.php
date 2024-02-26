@@ -50,6 +50,7 @@ class ResourceViewHelper extends AbstractViewHelper
         }
         if (Environment::isComposerMode()) {
             $uri = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . '/' . $filePath;
+            $uri = GeneralUtility::getIndpEnv('TYPO3_SITE_PATH') . $uri;
         } else {
             $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
             $extPath = $contentBlockRegistry->getContentBlockExtPath($name) . '/' . ContentBlockPathUtility::getPublicFolder() . '/' . $filePath;
