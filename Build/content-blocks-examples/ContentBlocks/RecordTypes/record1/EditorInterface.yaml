@@ -10,7 +10,7 @@ languageAware: false
 workspaceAware: false
 trackAncestorReference: false
 trackCreationDate: false
-trackUpdatedDate: false
+trackUpdateDate: false
 typeField: type
 typeName: record1
 restriction:
