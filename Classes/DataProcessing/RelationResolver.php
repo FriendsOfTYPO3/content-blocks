@@ -154,6 +154,8 @@ class RelationResolver
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
+            $result = $this->enrichTableAndRawInternal($result, $foreignTable);
+
             // If this table is not defined through TCA, return data as is.
             if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
                 return $result;
@@ -197,6 +199,7 @@ class RelationResolver
         if (str_contains($allowed, ',')) {
             $tableList = $this->getTableListFromTableUidPairs($fieldValue);
         }
+        $result = $this->enrichTableAndRawInternal($result, $allowed, $tableList);
         $result = $this->processChildRelations($result, $allowed, $tableList);
         return $result;
     }
@@ -238,6 +241,8 @@ class RelationResolver
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
 
+        $result = $this->enrichTableAndRawInternal($result, $collectionTable);
+
         // If this table is not defined through TCA, return data as is.
         if (!$this->tableDefinitionCollection->hasTable($collectionTable)) {
             return $result;
@@ -246,7 +251,7 @@ class RelationResolver
         return $result;
     }
 
-    protected function processChildRelations(array $data, string $allowed, ?array $tableList = null): array
+    protected function enrichTableAndRawInternal(array $data, string $allowed, ?array $tableList = null): array
     {
         foreach ($data as $index => $row) {
             $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
@@ -254,6 +259,14 @@ class RelationResolver
             $data[$index]['_table'] = $currentTable;
             // Save raw record for later usage in ContentBlockDataResolver.
             $data[$index]['_raw'] = $row;
+        }
+        return $data;
+    }
+
+    protected function processChildRelations(array $data, string $allowed, ?array $tableList = null): array
+    {
+        foreach ($data as $index => $row) {
+            $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
             if ($this->tableDefinitionCollection->hasTable($currentTable)) {
                 $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
                 foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
