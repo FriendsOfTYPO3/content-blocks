@@ -99,7 +99,7 @@ Labels
 ------
 
 Mask doesn't have a translation feature. Labels can be copied from the backend
-module view, and pasted directly the **Labels.xlf** file.
+module view, and pasted directly into the **Labels.xlf** file.
 
 .. tip::
 
