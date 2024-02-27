@@ -131,6 +131,40 @@
 					"description": "Restricts the place, where the record can be created.",
 					"type": "string",
 					"enum": ["onlyOnPages", "onlyOnRootLevel", "both"]
+				},
+				"security": {
+					"description": "Various restrictions on where the record can be created or accessed.",
+					"type": "object",
+					"properties": {
+						"ignoreWebMountRestriction": {
+							"description": "Allows users to access records that are not in their defined web-mount.",
+							"type": "boolean"
+						},
+						"ignoreRootLevelRestriction": {
+							"description": "Allows non-admin users to access records that are on the root-level",
+							"type": "boolean"
+						},
+						"ignorePageTypeRestriction": {
+							"description": "Allows to use the record on any kind of page type.",
+							"type": "boolean"
+						}
+					}
+				},
+				"readOnly": {
+					"description": "If enabled, the record can not be edited in the TYPO3 backend anymore.",
+					"type": "boolean"
+				},
+				"adminOnly": {
+					"description": "If enabled, only admins can edit the record.",
+					"type": "boolean"
+				},
+				"hideAtCopy": {
+					"description": "If enabled, the record will be disabled, when copied.",
+					"type": "boolean"
+				},
+				"appendLabelAtCopy": {
+					"description": "If set, the labelField will be appended with this string, when copied.",
+					"type": "string"
 				}
 			}
 		}
