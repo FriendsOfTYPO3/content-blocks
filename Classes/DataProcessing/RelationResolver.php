@@ -154,11 +154,11 @@ class RelationResolver
                 currentTable: $parentTable,
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
-            // If this table is not defined through TCA, return data as is.
-            if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
-                return $result;
+            $result = $this->enrichWithTableAndRawRecordInternal($result, $foreignTable);
+            // If this table is defined by Content Blocks, process child relations.
+            if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+                $result = $this->processChildRelations($result);
             }
-            $result = $this->processChildRelations($result, $foreignTable);
             if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
                 return $result[0] ?? null;
             }
@@ -197,7 +197,8 @@ class RelationResolver
         if (str_contains($allowed, ',')) {
             $tableList = $this->getTableListFromTableUidPairs($fieldValue);
         }
-        $result = $this->processChildRelations($result, $allowed, $tableList);
+        $result = $this->enrichWithTableAndRawRecordInternal($result, $allowed, $tableList);
+        $result = $this->processChildRelations($result);
         return $result;
     }
 
@@ -237,37 +238,46 @@ class RelationResolver
             currentTable: $parentTable,
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
-
-        // If this table is not defined through TCA, return data as is.
-        if (!$this->tableDefinitionCollection->hasTable($collectionTable)) {
-            return $result;
+        $result = $this->enrichWithTableAndRawRecordInternal($result, $collectionTable);
+        // If this table is defined by Content Blocks, process child relations.
+        if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
+            $result = $this->processChildRelations($result);
         }
-        $result = $this->processChildRelations($result, $collectionTable);
         return $result;
     }
 
-    protected function processChildRelations(array $data, string $allowed, ?array $tableList = null): array
+    protected function enrichWithTableAndRawRecordInternal(array $data, string $allowed, ?array $tableList = null): array
     {
         foreach ($data as $index => $row) {
             $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
-            // Save the associated table for later use in ContentBlockDataResolver.
+            // Save the associated table for later use in ContentBlockDataDecorator.
             $data[$index]['_table'] = $currentTable;
-            // Save raw record for later usage in ContentBlockDataResolver.
+            // Save raw record for later usage in ContentBlockDataDecorator.
             $data[$index]['_raw'] = $row;
-            if ($this->tableDefinitionCollection->hasTable($currentTable)) {
-                $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
-                foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
-                    $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
-                    if ($foreignTypeDefinition === null) {
-                        continue;
-                    }
-                    $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
-                        tcaFieldDefinition: $childTcaFieldDefinition,
-                        typeDefinition: $foreignTypeDefinition,
-                        record: $row,
-                        table: $currentTable,
-                    );
+        }
+        return $data;
+    }
+
+    protected function processChildRelations(array $data): array
+    {
+        foreach ($data as $index => $row) {
+            $currentTable = $row['_table'];
+            // If this table is not defined by Content Blocks, skip processing.
+            if (!$this->tableDefinitionCollection->hasTable($currentTable)) {
+                continue;
+            }
+            $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
+            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
+                $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                if ($foreignTypeDefinition === null) {
+                    continue;
                 }
+                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
+                    tcaFieldDefinition: $childTcaFieldDefinition,
+                    typeDefinition: $foreignTypeDefinition,
+                    record: $row,
+                    table: $currentTable,
+                );
             }
         }
         return $data;
