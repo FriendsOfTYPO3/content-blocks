@@ -559,6 +559,48 @@ final class RelationResolverTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function canResolveSelectForeignNativeTableSingle(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_native.csv');
+        $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign_native');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_select_foreign_native' => '1',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame('Record 1', $result['title']);
+    }
+
+    #[Test]
+    public function canResolveSelectForeignNativeTableMultiple(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_native.csv');
+        $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign_native_multiple');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_select_foreign_native_multiple' => '1,2',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertCount(2, $result);
+        self::assertSame('Record 1', $result[0]['title']);
+        self::assertSame('Record 2', $result[1]['title']);
+    }
+
+    #[Test]
     public function canResolveSelectForeignTableRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_recursive.csv');

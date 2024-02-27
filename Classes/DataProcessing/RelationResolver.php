@@ -155,11 +155,10 @@ class RelationResolver
                 tcaFieldConf: $tcaFieldConfig['config'] ?? []
             );
             $result = $this->enrichWithTableAndRawRecordInternal($result, $foreignTable);
-            // If this table is not defined by Content Blocks, return data unprocessed.
-            if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
-                return $result;
+            // If this table is defined by Content Blocks, process child relations.
+            if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
+                $result = $this->processChildRelations($result);
             }
-            $result = $this->processChildRelations($result);
             if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
                 return $result[0] ?? null;
             }
@@ -240,11 +239,10 @@ class RelationResolver
             tcaFieldConf: $tcaFieldConfig['config'] ?? []
         );
         $result = $this->enrichWithTableAndRawRecordInternal($result, $collectionTable);
-        // If this table is not defined by Content Blocks, return data unprocessed.
-        if (!$this->tableDefinitionCollection->hasTable($collectionTable)) {
-            return $result;
+        // If this table is defined by Content Blocks, process child relations.
+        if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
+            $result = $this->processChildRelations($result);
         }
-        $result = $this->processChildRelations($result);
         return $result;
     }
 

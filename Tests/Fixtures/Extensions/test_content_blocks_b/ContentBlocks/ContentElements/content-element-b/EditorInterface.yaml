@@ -88,7 +88,6 @@ fields:
             value: '2'
           - label: 'Foo 3'
             value: '3'
-
       - identifier: select_foreign
         type: Select
         renderType: selectSingle
@@ -97,6 +96,14 @@ fields:
         type: Select
         renderType: selectMultipleSideBySide
         foreign_table: test_record
+      - identifier: select_foreign_native
+        type: Select
+        renderType: selectSingle
+        foreign_table: native_record
+      - identifier: select_foreign_native_multiple
+        type: Select
+        renderType: selectMultipleSideBySide
+        foreign_table: native_record
   - identifier: flexfield
     type: FlexForm
     fields:
