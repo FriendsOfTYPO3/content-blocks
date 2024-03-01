@@ -56,7 +56,8 @@
 					"type": "boolean"
 				},
 				"editLocking": {
-					"description": "If set to false, the functionality to lock the editing for editors is removed."
+					"description": "If set to false, the functionality to lock the editing for editors is removed.",
+					"type": "boolean"
 				},
 				"restriction": {
 					"description": "There are several restrictions in TYPO3, which filter records by certain constraints.",
