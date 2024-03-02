@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Capability;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TableDefinitionCapability
+final class TableDefinitionCapability implements SystemFieldPalettesInterface
 {
     private RootLevelCapability $rootLevelCapability;
     private LabelCapability $labelCapability;
@@ -274,5 +274,20 @@ final class TableDefinitionCapability
     public function hasAccessPalette(): bool
     {
         return $this->hasStartTimeRestriction() || $this->hasEndTimeRestriction() || $this->hasUserGroupRestriction() || $this->isEditLockingEnabled();
+    }
+
+    public function buildLanguageShowItemTca(): string
+    {
+        return 'sys_language_uid,l10n_parent';
+    }
+
+    public function buildHiddenShowItemTca(): string
+    {
+        return 'hidden';
+    }
+
+    public function buildInternalDescriptionShowItemTca(): string
+    {
+        return '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,internal_description';
     }
 }

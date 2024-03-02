@@ -56,6 +56,10 @@ class SqlGenerator
                 }
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
             }
+            $hasInternalDescription = $tableDefinition->getCapability()->hasInternalDescription();
+            if ($hasInternalDescription) {
+                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(internal_description text);';
+            }
             $resultSql = $this->handleParentReferences($tableDefinition);
             $sql = array_merge($sql, $resultSql);
         }

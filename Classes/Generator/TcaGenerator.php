@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
+use TYPO3\CMS\ContentBlocks\Definition\Capability\SystemFieldPalettesInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
@@ -243,6 +244,20 @@ class TcaGenerator
         foreach ($tableDefinition->getPaletteDefinitionCollection() as $paletteDefinition) {
             $paletteTca = $this->generatePalettesTcaSingle($paletteDefinition);
             $palettes[$paletteDefinition->getIdentifier()] = $paletteTca;
+        }
+        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
+            $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
+            $systemPalettes = $this->buildSystemPalettes($tcaSchema);
+            $existingPalettes = $GLOBALS['TCA'][$tableDefinition->getTable()]['palettes'] ?? [];
+            if (!isset($existingPalettes['hidden']) && isset($systemPalettes['hidden'])) {
+                $palettes['hidden'] = $systemPalettes['hidden'];
+            }
+            if (!isset($existingPalettes['access']) && isset($systemPalettes['access'])) {
+                $palettes['access'] = $systemPalettes['access'];
+            }
+            if (!isset($existingPalettes['language']) && isset($systemPalettes['language'])) {
+                $palettes['language'] = $systemPalettes['language'];
+            }
         }
         return $palettes;
     }
@@ -701,6 +716,20 @@ class TcaGenerator
         if ($showItem !== '') {
             $parts[] = $showItem;
         }
+        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
+            $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
+            $systemFields = $this->buildSystemFields($tcaSchema);
+        } else {
+            $systemFields = $this->buildSystemFields($capability);
+        }
+        $parts = array_merge($parts, $systemFields);
+        $showItem = implode(',', $parts);
+        return $showItem;
+    }
+
+    protected function buildSystemFields(SystemFieldPalettesInterface $capability): array
+    {
+        $parts = [];
         if ($capability->isLanguageAware()) {
             $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
             $parts[] = '--palette--;;language';
@@ -714,8 +743,10 @@ class TcaGenerator
                 $parts[] = '--palette--;;access';
             }
         }
-        $showItem = implode(',', $parts);
-        return $showItem;
+        if ($capability->hasInternalDescription()) {
+            $parts[] = $capability->buildInternalDescriptionShowItemTca();
+        }
+        return $parts;
     }
 
     protected function getPageTypeStandardShowItem(ContentTypeInterface $typeDefinition): string
@@ -811,7 +842,6 @@ class TcaGenerator
     {
         $defaultTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
         $capability = $tableDefinition->getCapability();
-        $palettes = [];
         $columns = [];
         $title = $defaultTypeDefinition->getTitle();
         $title = $title !== '' ? $title : $defaultTypeDefinition->getTable();
@@ -902,26 +932,6 @@ class TcaGenerator
                 'languageField' => 'sys_language_uid',
             ];
         }
-
-        if ($capability->isLanguageAware()) {
-            $palettes['language'] = [
-                'showitem' => 'sys_language_uid,l10n_parent',
-            ];
-        }
-        if ($capability->hasDisabledRestriction()) {
-            $palettes['hidden'] = [
-                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
-                'showitem' => 'hidden',
-            ];
-        }
-        $access = $capability->buildAccessShowItemTca();
-        if ($access !== '') {
-            $palettes['access'] = [
-                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
-                'showitem' => $access,
-            ];
-        }
-
         if ($capability->isEditLockingEnabled()) {
             $columns['editlock'] = [
                 'exclude' => true,
@@ -1028,6 +1038,17 @@ class TcaGenerator
                 ],
             ];
         }
+        if ($capability->hasInternalDescription()) {
+            $columns['internal_description'] = [
+                'exclude' => true,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
+                'config' => [
+                    'type' => 'text',
+                    'rows' => 5,
+                    'cols' => 30,
+                ],
+            ];
+        }
 
         // This is a child table and can only be created by the parent.
         foreach ($tableDefinition->getParentReferences() ?? [] as $parentReference) {
@@ -1056,7 +1077,7 @@ class TcaGenerator
                 ];
             }
         }
-
+        $palettes = $this->buildSystemPalettes($capability);
         return [
             'ctrl' => $ctrl,
             'palettes' => $palettes,
@@ -1075,5 +1096,32 @@ class TcaGenerator
             }
         }
         return $tca;
+    }
+
+    /**
+     * @return array{language?: array, hidden?: array, access?: array}
+     */
+    protected function buildSystemPalettes(SystemFieldPalettesInterface $capability): array
+    {
+        $palettes = [];
+        if ($capability->isLanguageAware()) {
+            $palettes['language'] = [
+                'showitem' => $capability->buildLanguageShowItemTca(),
+            ];
+        }
+        if ($capability->hasDisabledRestriction()) {
+            $palettes['hidden'] = [
+                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                'showitem' => $capability->buildHiddenShowItemTca(),
+            ];
+        }
+        $access = $capability->buildAccessShowItemTca();
+        if ($access !== '') {
+            $palettes['access'] = [
+                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                'showitem' => $access,
+            ];
+        }
+        return $palettes;
     }
 }

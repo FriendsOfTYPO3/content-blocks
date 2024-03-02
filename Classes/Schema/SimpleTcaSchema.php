@@ -17,6 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema;
 
+use TYPO3\CMS\ContentBlocks\Definition\Capability\SystemFieldPalettesInterface;
+use TYPO3\CMS\ContentBlocks\Schema\Capability\FieldCapability;
+use TYPO3\CMS\ContentBlocks\Schema\Capability\LanguageAwareSchemaCapability;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedFieldException;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldCollection;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
@@ -24,7 +27,7 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class SimpleTcaSchema
+final class SimpleTcaSchema implements SystemFieldPalettesInterface
 {
     public function __construct(
         protected readonly string $name,
@@ -110,5 +113,100 @@ final class SimpleTcaSchema
             return $this->fields[$this->schemaConfiguration['type']];
         }
         return null;
+    }
+
+    public function hasAccessPalette(): bool
+    {
+        return $this->hasCapability('restriction.starttime')
+            || $this->hasCapability('restriction.endtime')
+            || $this->hasCapability('restriction.usergroup')
+            || $this->hasCapability('editlock');
+    }
+
+    public function hasDisabledRestriction(): bool
+    {
+        return $this->hasCapability('restriction.disabled');
+    }
+
+    public function hasInternalDescription(): bool
+    {
+        return $this->hasCapability('internalDescription');
+    }
+
+    public function buildAccessShowItemTca(): string
+    {
+        if (!$this->hasAccessPalette()) {
+            return '';
+        }
+        $access = [];
+        if ($this->hasCapability('restriction.starttime')) {
+            /** @var FieldCapability $startTimeFieldCapability */
+            $startTimeFieldCapability = $this->getCapability('restriction.starttime');
+            $access[] = $startTimeFieldCapability->getFieldName() . ';LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel';
+        }
+        if ($this->hasCapability('restriction.endtime')) {
+            /** @var FieldCapability $endTimeFieldCapability */
+            $endTimeFieldCapability = $this->getCapability('restriction.endtime');
+            $access[] = $endTimeFieldCapability->getFieldName() . ';LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel';
+        }
+        if ($this->hasCapability('restriction.starttime') || $this->hasCapability('restriction.endtime')) {
+            $access[] = '--linebreak--';
+        }
+        if ($this->hasCapability('restriction.usergroup')) {
+            /** @var FieldCapability $userGroupCapability */
+            $userGroupCapability = $this->getCapability('restriction.usergroup');
+            $access[] = $userGroupCapability->getFieldName() . ';LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel';
+            $access[] = '--linebreak--';
+        }
+        if ($this->hasCapability('editlock')) {
+            /** @var FieldCapability $editLockCapability */
+            $editLockCapability = $this->getCapability('editlock');
+            $access[] = $editLockCapability->getFieldName();
+        }
+        $count = count($access);
+        if ($count > 0) {
+            $lastIndex = $count - 1;
+            $lastItem = $access[$lastIndex];
+            if ($lastItem === '--linebreak--') {
+                array_pop($access);
+            }
+        }
+        $accessTcaString = implode(',', $access);
+        return $accessTcaString;
+    }
+
+    public function buildLanguageShowItemTca(): string
+    {
+        if (!$this->isLanguageAware()) {
+            return '';
+        }
+        /** @var LanguageAwareSchemaCapability $languageCapability */
+        $languageCapability = $this->getCapability('language');
+        $languageFieldName = $languageCapability->getLanguageField()->getName();
+        $languageParentFieldName = $languageCapability->getTranslationOriginPointerField()->getName();
+        $showItem = $languageFieldName . ',' . $languageParentFieldName;
+        return $showItem;
+    }
+
+    public function buildHiddenShowItemTca(): string
+    {
+        if (!$this->hasDisabledRestriction()) {
+            return '';
+        }
+        /** @var FieldCapability $disabledFieldCapability */
+        $disabledFieldCapability = $this->getCapability('restriction.disabled');
+        $showItem = $disabledFieldCapability->getFieldName();
+        return $showItem;
+    }
+
+    public function buildInternalDescriptionShowItemTca(): string
+    {
+        if (!$this->hasInternalDescription()) {
+            return '';
+        }
+        /** @var FieldCapability $internalDescriptionFieldCapability */
+        $internalDescriptionFieldCapability = $this->getCapability('internalDescription');
+        $showItem = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,' . $internalDescriptionFieldCapability->getFieldName();
+        return $showItem;
     }
 }

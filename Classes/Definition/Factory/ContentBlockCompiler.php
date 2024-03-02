@@ -186,12 +186,6 @@ final class ContentBlockCompiler
             $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
             $yaml['fields'] = $yamlFields;
         }
-        $hasInternalDescription = $yaml['internalDescription'] ?? false;
-        if ($contentType === ContentType::RECORD_TYPE && $hasInternalDescription) {
-            $yamlFields = $yaml['fields'] ?? [];
-            $yamlFields = $this->appendInternalDescription($yamlFields);
-            $yaml['fields'] = $yamlFields;
-        }
         if ($contentType === ContentType::PAGE_TYPE) {
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->prependPagesTitlePalette($yamlFields);
@@ -314,26 +308,6 @@ final class ContentBlockCompiler
         ];
         // Prepend type field.
         array_unshift($yamlFields, $typeFieldDefinition);
-        return $yamlFields;
-    }
-
-    private function appendInternalDescription(array $yamlFields): array
-    {
-        $tab = [
-            'identifier' => 'internal_description_tab',
-            'type' => 'Tab',
-            'label' => 'LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
-        ];
-        $internalDescription = [
-            'identifier' => 'internal_description',
-            'type' => 'Textarea',
-            'prefixField' => false,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
-            'rows' => 5,
-            'cols' => 30,
-        ];
-        $yamlFields[] = $tab;
-        $yamlFields[] = $internalDescription;
         return $yamlFields;
     }
 
