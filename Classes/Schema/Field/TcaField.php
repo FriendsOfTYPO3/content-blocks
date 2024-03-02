@@ -27,6 +27,7 @@ final class TcaField implements FieldTypeInterface
     public function __construct(
         private readonly FieldType $fieldType,
         private readonly string $name,
+        private readonly array $columnConfig,
     ) {}
 
     public function getType(): FieldType
@@ -37,5 +38,10 @@ final class TcaField implements FieldTypeInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getColumnConfig(): array
+    {
+        return $this->columnConfig;
     }
 }

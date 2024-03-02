@@ -26,4 +26,5 @@ interface FieldTypeInterface
 {
     public function getType(): FieldType;
     public function getName(): string;
+    public function getColumnConfig(): array;
 }

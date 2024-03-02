@@ -23,6 +23,9 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedFieldException;
+use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -32,6 +35,7 @@ final class ContentBlockDataDecorator
     public function __construct(
         private readonly GridFactory $gridFactory,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
+        private readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {}
 
     public function decorate(
@@ -135,7 +139,7 @@ final class ContentBlockDataDecorator
         if (!$tcaFieldDefinition->getFieldType()->isRelation()) {
             return false;
         }
-        if ($this->getForeignTable($tcaFieldDefinition, $table) === '') {
+        if ($this->getRelationTable($tcaFieldDefinition, $table) === '') {
             return false;
         }
         return true;
@@ -207,7 +211,7 @@ final class ContentBlockDataDecorator
             $foreignTable = $item['_table'];
             unset($item['_table']);
         } else {
-            $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
+            $foreignTable = $this->getRelationTable($tcaFieldDefinition, $table);
         }
         $resolvedRelation->raw = $item['_raw'];
         unset($item['_raw']);
@@ -304,13 +308,15 @@ final class ContentBlockDataDecorator
      */
     private function buildFakeContentBlockDataObject(string $table, ResolvedRelation $resolvedRelation): ContentBlockData
     {
-        $typeField = $this->resolveTypeField($table);
-        $typeName = $typeField !== null ? $resolvedRelation->raw[$typeField] : '1';
+        $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
+        $typeField = $tcaSchema->getTypeField();
+        $typeFieldIdentifier = $typeField?->getName();
+        $typeName = $typeField !== null ? $resolvedRelation->raw[$typeField->getName()] : '1';
         $fakeName = 'core/' . $typeName;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
             $resolvedRelation,
             $table,
-            $typeField,
+            $typeFieldIdentifier,
             $typeName,
             $fakeName,
         );
@@ -329,7 +335,7 @@ final class ContentBlockDataDecorator
         string $table,
         array $grids,
     ): array {
-        $foreignTable = $this->getForeignTable($tcaFieldDefinition, $table);
+        $foreignTable = $this->getRelationTable($tcaFieldDefinition, $table);
         if (!is_array($resolvedField)) {
             $resolvedField = [$resolvedField];
         }
@@ -347,28 +353,34 @@ final class ContentBlockDataDecorator
         return $grids;
     }
 
-    private function resolveTypeField(string $table): ?string
+    private function getRelationTable(TcaFieldDefinition $tcaFieldDefinition, string $table): string
     {
-        $typeField = $GLOBALS['TCA'][$table]['ctrl']['type'] ?? null;
-        return $typeField;
-    }
-
-    private function getForeignTable(TcaFieldDefinition $tcaFieldDefinition, string $table): string
-    {
-        $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table']
-            ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['foreign_table']
-            ?? '';
-        if ($foreignTable === '') {
-            $foreignTable = $this->getForeignTableAllowed($tcaFieldDefinition, $table);
+        $tcaConfig = $tcaFieldDefinition->getTca();
+        $relationTable = $tcaConfig['config']['foreign_table'] ?? $tcaConfig['config']['allowed'] ?? null;
+        if ($relationTable !== null) {
+            return $relationTable;
         }
-        return $foreignTable;
+        $relationTable = $this->getRelationTableNative($tcaFieldDefinition, $table);
+        return $relationTable;
     }
 
-    private function getForeignTableAllowed(TcaFieldDefinition $tcaFieldDefinition, string $table): string
+    private function getRelationTableNative(TcaFieldDefinition $tcaFieldDefinition, string $table): string
     {
-        $foreignTable = $tcaFieldDefinition->getTca()['config']['allowed']
-            ?? $GLOBALS['TCA'][$table]['columns'][$tcaFieldDefinition->getUniqueIdentifier()]['config']['allowed']
-            ?? '';
-        return $foreignTable;
+        try {
+            $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
+        } catch (UndefinedSchemaException) {
+            return '';
+        }
+        try {
+            $tcaField = $tcaSchema->getField($tcaFieldDefinition->getUniqueIdentifier());
+        } catch (UndefinedFieldException) {
+            return '';
+        }
+        $tcaConfig = $tcaField->getColumnConfig();
+        $relationTable = $tcaConfig['config']['foreign_table'] ?? $tcaConfig['config']['allowed'] ?? null;
+        if ($relationTable !== null) {
+            return $relationTable;
+        }
+        return '';
     }
 }

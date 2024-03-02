@@ -62,11 +62,11 @@ class SimpleTcaSchemaFactory implements SingletonInterface
             } catch (\InvalidArgumentException) {
                 continue;
             }
-            $allFields[$columnName] = new TcaField($fieldType, $columnName);
+            $allFields[$columnName] = new TcaField($fieldType, $columnName, $columnConfig);
             if (in_array($columnName, $schemaDefinition['ctrl']['enablecolumns'] ?? [], true)) {
                 foreach ($schemaDefinition['ctrl']['enablecolumns'] as $enablecolumnType => $systemFieldName) {
                     if ($systemFieldName === $columnName) {
-                        $systemFields[$enablecolumnType] = new TcaField($fieldType, $columnName);
+                        $systemFields[$enablecolumnType] = new TcaField($fieldType, $columnName, $columnConfig);
                     }
                 }
             }
