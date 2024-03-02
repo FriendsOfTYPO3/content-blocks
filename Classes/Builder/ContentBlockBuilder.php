@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -38,6 +39,7 @@ class ContentBlockBuilder
         protected readonly LanguageFileGenerator $languageFileGenerator,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {}
 
     /**
@@ -80,7 +82,10 @@ class ContentBlockBuilder
     protected function initializeRegistries(LoadedContentBlock $contentBlock): void
     {
         $this->contentBlockRegistry->register($contentBlock);
-        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached($this->contentBlockRegistry);
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
+            $this->contentBlockRegistry,
+            $this->simpleTcaSchemaFactory,
+        );
         $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
         $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
     }

@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
 /**
@@ -38,11 +39,12 @@ final class TableDefinitionCollectionFactory
         protected readonly ContentBlockCompiler $contentBlockCompiler,
     ) {}
 
-    public function create(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
+    public function create(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): TableDefinitionCollection
     {
         if (!$this->cache->isLazyObjectInitialized()) {
             $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
-                $contentBlockRegistry
+                $contentBlockRegistry,
+                $simpleTcaSchemaFactory
             );
             return $this->tableDefinitionCollection;
         }
@@ -51,7 +53,8 @@ final class TableDefinitionCollectionFactory
             return $this->tableDefinitionCollection;
         }
         $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
-            $contentBlockRegistry
+            $contentBlockRegistry,
+            $simpleTcaSchemaFactory
         );
         $this->setCache();
         return $this->tableDefinitionCollection;
@@ -65,9 +68,9 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    public function createUncached(ContentBlockRegistry $contentBlockRegistry): TableDefinitionCollection
+    public function createUncached(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): TableDefinitionCollection
     {
-        $compiledContentBlocks = $this->contentBlockCompiler->compile($contentBlockRegistry);
+        $compiledContentBlocks = $this->contentBlockCompiler->compile($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinitionCollection = $this->enrichTableDefinitions($compiledContentBlocks);
         return $tableDefinitionCollection;
     }

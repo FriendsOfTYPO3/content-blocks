@@ -25,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -273,6 +274,7 @@ final class SqlGeneratorTest extends UnitTestCase
     #[Test]
     public function generateReturnsExpectedSqlStatements(array $contentBlocks, array $expected): void
     {
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -281,7 +283,7 @@ final class SqlGeneratorTest extends UnitTestCase
         $loader->method('loadUncached')->willReturn($contentBlockRegistry);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollectionFactory = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler));
-        $sqlGenerator = new SqlGenerator($loader, $tableDefinitionCollectionFactory);
+        $sqlGenerator = new SqlGenerator($loader, $tableDefinitionCollectionFactory, $simpleTcaSchemaFactory);
 
         $result = $sqlGenerator->generate();
 

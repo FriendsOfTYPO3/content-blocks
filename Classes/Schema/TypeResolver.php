@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
+namespace TYPO3\CMS\ContentBlocks\Schema;
 
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 
@@ -24,13 +24,12 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
  */
 class TypeResolver
 {
-    public static function resolve(string $field, string $table): FieldType
+    public static function resolve(array $configuration): FieldType
     {
-        $tca = $GLOBALS['TCA'][$table]['columns'][$field] ?? [];
-        if ($tca === [] || !isset($tca['config']['type'])) {
-            throw new \InvalidArgumentException('Tried to resolve type of non-existing field "' . $field . '" of table "' . $table . '".', 1680110446);
+        if ($configuration === [] || !isset($configuration['config']['type'])) {
+            throw new \InvalidArgumentException('Tried to resolve type of non-existing field.', 1680110446);
         }
-        $tcaType = $tca['config']['type'];
+        $tcaType = $configuration['config']['type'];
         foreach (FieldType::cases() as $enum) {
             if ($enum->getTcaType() === $tcaType) {
                 return $enum;

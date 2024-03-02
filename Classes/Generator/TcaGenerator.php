@@ -31,6 +31,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Preparations\TcaPreparation;
@@ -142,6 +143,7 @@ class TcaGenerator
 
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
+        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly TcaPreparation $tcaPreparation,

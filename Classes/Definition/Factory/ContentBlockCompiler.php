@@ -34,6 +34,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
 /**
@@ -70,6 +71,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 final class ContentBlockCompiler
 {
     private AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry;
+    private SimpleTcaSchemaFactory $simpleTcaSchemaFactory;
 
     /**
      * This property tracks Collection foreign_table parent references.
@@ -80,8 +82,9 @@ final class ContentBlockCompiler
      */
     private array $parentReferences = [];
 
-    public function compile(ContentBlockRegistry $contentBlockRegistry): CompilationResult
+    public function compile(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): CompilationResult
     {
+        $this->simpleTcaSchemaFactory = $simpleTcaSchemaFactory;
         $this->automaticLanguageKeysRegistry = new AutomaticLanguageKeysRegistry();
         $tableDefinitionList = [];
         foreach ($contentBlockRegistry->getAll() as $contentBlock) {
@@ -112,6 +115,7 @@ final class ContentBlockCompiler
     {
         $this->parentReferences = [];
         unset($this->automaticLanguageKeysRegistry);
+        unset($this->simpleTcaSchemaFactory);
     }
 
     private function mergeProcessingResult(array $tableDefinitionList): array
@@ -811,9 +815,13 @@ final class ContentBlockCompiler
             $this->assertIdentifierExists($field, $input);
             $identifier = $field['identifier'];
             // Check if the field is defined as a "base" TCA field (NOT defined in TCA/Overrides).
-            if (($GLOBALS['TCA'][$input->table]['columns'][$identifier] ?? []) !== []) {
-                $fieldType = TypeResolver::resolve($field['identifier'], $input->table);
-                return $fieldType;
+            if ($this->simpleTcaSchemaFactory->has($input->table)) {
+                $tcaSchema = $this->simpleTcaSchemaFactory->get($input->table);
+                if ($tcaSchema->hasField($identifier)) {
+                    $tcaField = $tcaSchema->getField($identifier);
+                    $fieldType = $tcaField->getType();
+                    return $fieldType;
+                }
             }
         }
         $this->assertTypeExists($field, $input);
