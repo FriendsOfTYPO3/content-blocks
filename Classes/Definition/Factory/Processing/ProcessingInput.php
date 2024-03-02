@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -32,6 +33,7 @@ final class ProcessingInput
     private string|int $typeName;
 
     public function __construct(
+        SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         public array $yaml,
         public LoadedContentBlock $contentBlock,
         public string $table,
@@ -41,10 +43,12 @@ final class ProcessingInput
         public array $tableDefinitionList = [],
     ) {
         $this->isRootTable = $this->table === $this->rootTable;
-        $this->typeField = $yaml['typeField'] ?? $GLOBALS['TCA'][$this->table]['ctrl']['type'] ?? null;
-        $this->typeName = $this->getTypeField() === null
-            ? '1'
-            : $yaml['typeName'] ?? UniqueIdentifierCreator::createContentTypeIdentifier($this->contentBlock);
+        $typeField = $this->yaml['typeField'] ?? null;
+        $this->typeField = $typeField;
+        if (!isset($this->typeField)) {
+            $this->typeField = $this->getTypeFieldNative($simpleTcaSchemaFactory);
+        }
+        $this->typeName = $this->resolveTypeName();
     }
 
     public function isRootTable(): bool
@@ -60,5 +64,27 @@ final class ProcessingInput
     public function getTypeName(): string|int
     {
         return $this->typeName;
+    }
+
+    private function getTypeFieldNative(SimpleTcaSchemaFactory $simpleTcaSchemaFactory): ?string
+    {
+        if (!$simpleTcaSchemaFactory->has($this->table)) {
+            return null;
+        }
+        $tcaSchema = $simpleTcaSchemaFactory->get($this->table);
+        $typeField = $tcaSchema->getTypeField();
+        return $typeField?->getName();
+    }
+
+    private function resolveTypeName(): string|int
+    {
+        if ($this->typeField === null) {
+            return '1';
+        }
+        if (isset($this->yaml['typeName'])) {
+            return $this->yaml['typeName'];
+        }
+        $uniqueTypeName = UniqueIdentifierCreator::createContentTypeIdentifier($this->contentBlock);
+        return $uniqueTypeName;
     }
 }

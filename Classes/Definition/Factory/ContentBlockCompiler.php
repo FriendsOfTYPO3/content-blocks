@@ -91,6 +91,7 @@ final class ContentBlockCompiler
             $table = $contentBlock->getYaml()['table'];
             $languagePath = $this->buildBaseLanguagePath($contentBlock);
             $processingInput = new ProcessingInput(
+                simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
                 table: $table,
@@ -506,6 +507,7 @@ final class ContentBlockCompiler
         }
         $field['title'] = $field['label'];
         $newInput = new ProcessingInput(
+            simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
             yaml: $field,
             contentBlock: $input->contentBlock,
             table: $foreignTable,
