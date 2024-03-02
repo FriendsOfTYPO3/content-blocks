@@ -182,8 +182,9 @@ final class ContentBlockCompiler
     {
         $contentType = $result->tableDefinition->contentType;
         if ($contentType === ContentType::RECORD_TYPE && $result->tableDefinition->hasTypeField()) {
+            $isExistingField = $this->simpleTcaSchemaFactory->has($yaml['table']);
             $yamlFields = $yaml['fields'] ?? [];
-            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
+            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result, $isExistingField);
             $yaml['fields'] = $yamlFields;
         }
         if ($contentType === ContentType::PAGE_TYPE) {
@@ -295,17 +296,24 @@ final class ContentBlockCompiler
         $this->prefixDisplayCondFieldsIfNecessary($result);
     }
 
-    private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
+    private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result, bool $isExistingField): array
     {
-        $typeFieldDefinition = [
-            'identifier' => $result->tableDefinition->typeField,
-            'type' => FieldType::SELECT->value,
-            'renderType' => 'selectSingle',
-            'prefixField' => false,
-            'default' => $result->contentType->typeName,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
-            'items' => [],
-        ];
+        if ($isExistingField) {
+            $typeFieldDefinition = [
+                'identifier' => $result->tableDefinition->typeField,
+                'useExistingField' => true,
+            ];
+        } else {
+            $typeFieldDefinition = [
+                'identifier' => $result->tableDefinition->typeField,
+                'type' => FieldType::SELECT->value,
+                'renderType' => 'selectSingle',
+                'prefixField' => false,
+                'default' => $result->contentType->typeName,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
+                'items' => [],
+            ];
+        }
         // Prepend type field.
         array_unshift($yamlFields, $typeFieldDefinition);
         return $yamlFields;
