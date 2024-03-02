@@ -193,7 +193,8 @@ class TcaGenerator
     protected function generateTableTca(TableDefinition $tableDefinition, array $baseTca): array
     {
         $tca = [];
-        if (!isset($baseTca[$tableDefinition->getTable()])) {
+        $isNewTable = !$this->simpleTcaSchemaFactory->has($tableDefinition->getTable());
+        if ($isNewTable) {
             $tca = $this->generateBaseTableTca($tableDefinition);
         }
         $currentPalettesTca = $tca['palettes'] ?? [];
@@ -222,7 +223,7 @@ class TcaGenerator
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
             }
-            if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
+            if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE && $isNewTable) {
                 $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
                 if ($tableDefinition->hasTypeField()) {
                     $tca['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
@@ -814,13 +815,11 @@ class TcaGenerator
     {
         $searchFieldsString = $baseTca[$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
-
         foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $field) {
             if ($field->getFieldType()->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
                 $searchFields[] = $field->getUniqueIdentifier();
             }
         }
-
         if ($searchFields === []) {
             return '';
         }
@@ -834,7 +833,6 @@ class TcaGenerator
         if ($contentTypeDefinition->hasColumn('bodytext')) {
             $andWhere .= ' OR {#CType}=\'' . $contentTypeDefinition->getTypeName() . '\'';
         }
-
         return $andWhere;
     }
 
