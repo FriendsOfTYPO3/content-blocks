@@ -223,9 +223,12 @@ class TcaGenerator
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
             }
-            if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE && $isNewTable) {
-                $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
-                if ($tableDefinition->hasTypeField()) {
+            if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
+                if ($isNewTable) {
+                    $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
+                }
+                $typeIconColumnExists = $isNewTable && isset($baseTca[$tableDefinition->getTable()]['ctrl']['typeicon_column']);
+                if ($tableDefinition->hasTypeField() && !$typeIconColumnExists) {
                     $tca['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
                 }
             }
