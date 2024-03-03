@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\Definition\Capability\NativeTableCapabilityProxy;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\SystemFieldPalettesInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
@@ -251,7 +252,8 @@ class TcaGenerator
         }
         if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
             $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
-            $systemPalettes = $this->buildSystemPalettes($tcaSchema);
+            $nativeCapability = new NativeTableCapabilityProxy($tcaSchema);
+            $systemPalettes = $this->buildSystemPalettes($nativeCapability);
             $existingPalettes = $GLOBALS['TCA'][$tableDefinition->getTable()]['palettes'] ?? [];
             if (!isset($existingPalettes['hidden']) && isset($systemPalettes['hidden'])) {
                 $palettes['hidden'] = $systemPalettes['hidden'];
@@ -706,7 +708,6 @@ class TcaGenerator
 
     protected function getRecordTypeStandardShowItem(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): string
     {
-        $capability = $tableDefinition->getCapability();
         $showItemArray = $typeDefinition->getShowItems();
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
         $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
@@ -722,10 +723,11 @@ class TcaGenerator
         }
         if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
             $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
-            $systemFields = $this->buildSystemFields($tcaSchema);
+            $capability = new NativeTableCapabilityProxy($tcaSchema);
         } else {
-            $systemFields = $this->buildSystemFields($capability);
+            $capability = $tableDefinition->getCapability();
         }
+        $systemFields = $this->buildSystemFields($capability);
         $parts = array_merge($parts, $systemFields);
         $showItem = implode(',', $parts);
         return $showItem;
