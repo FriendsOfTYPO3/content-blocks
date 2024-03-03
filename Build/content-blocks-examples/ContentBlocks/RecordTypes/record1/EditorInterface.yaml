@@ -8,7 +8,6 @@ fallbackLabelFields:
   - text3
 languageAware: false
 workspaceAware: false
-trackAncestorReference: false
 trackCreationDate: false
 trackUpdateDate: false
 typeField: type

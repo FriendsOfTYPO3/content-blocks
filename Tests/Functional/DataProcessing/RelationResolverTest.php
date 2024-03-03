@@ -232,7 +232,6 @@ final class RelationResolverTest extends FunctionalTestCase
         $dummyRecord = [
             'typo3tests_contentelementb_collection' => 2,
             't3ver_oid' => 1,
-            't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
         ];
@@ -285,7 +284,6 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->setWorkspaceId(1);
         $dummyRecord = [
             't3ver_oid' => 1,
-            't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
             'typo3tests_contentelementb_categories_mm' => 2,
@@ -413,7 +411,6 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->setWorkspaceId(1);
         $dummyRecord = [
             't3ver_oid' => 1,
-            't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
             'typo3tests_contentelementb_pages_relation' => '1,2',

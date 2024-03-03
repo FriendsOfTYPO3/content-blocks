@@ -184,19 +184,6 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
        trackUpdateDate: false
 
-.. confval:: trackAncestorReference
-
-   :Required: false
-   :Type: boolean
-   :Default: true
-
-   If set to :yaml:`false`, the tracking field for the original record will not
-   be created. Namely :sql:`t3_origuid`.
-
-   .. code-block:: yaml
-
-       trackAncestorReference: false
-
 .. confval:: sortable
 
    :Required: false

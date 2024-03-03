@@ -870,7 +870,8 @@ class TcaGenerator
         if ($tableDefinition->getTypeField() !== null) {
             $ctrl['type'] = $tableDefinition->getTypeField();
         }
-        if ($capability->shallTrackAncestorReference()) {
+        // If a table is not localizable, but is used as inline child, then 'origUid' is needed.
+        if (!$capability->isLanguageAware() && !empty($tableDefinition->getParentReferences())) {
             $ctrl['origUid'] = 't3_origuid';
         }
         if ($capability->isEditLockingEnabled()) {

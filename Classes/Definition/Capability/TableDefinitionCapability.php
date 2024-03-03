@@ -35,7 +35,6 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
     private bool $trackCreationDate = true;
     private bool $trackUpdateDate = true;
     private bool $sortable = true;
-    private bool $trackAncestorReference = true;
     private bool $internalDescription = false;
     /** @var list<array{identifier: string, order: string}> */
     private array $sortField = [];
@@ -51,7 +50,6 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
         $capability = new TableDefinitionCapability();
         $capability->languageAware = (bool)($definition['languageAware'] ?? $capability->languageAware);
         $capability->workspaceAware = (bool)($definition['workspaceAware'] ?? $capability->workspaceAware);
-        $capability->trackAncestorReference = (bool)($definition['trackAncestorReference'] ?? $capability->trackAncestorReference);
         $capability->disabledRestriction = (bool)($definition['restriction']['disabled'] ?? $capability->disabledRestriction);
         $capability->startTimeRestriction = (bool)($definition['restriction']['startTime'] ?? $capability->startTimeRestriction);
         $capability->endTimeRestriction = (bool)($definition['restriction']['endTime'] ?? $capability->endTimeRestriction);
@@ -83,11 +81,6 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
     public function isWorkspaceAware(): bool
     {
         return $this->workspaceAware;
-    }
-
-    public function shallTrackAncestorReference(): bool
-    {
-        return $this->trackAncestorReference;
     }
 
     public function hasDisabledRestriction(): bool

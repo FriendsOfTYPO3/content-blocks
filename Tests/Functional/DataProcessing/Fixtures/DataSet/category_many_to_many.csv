@@ -1,9 +1,9 @@
 "sys_category"
-,"uid","pid","title","t3_origuid","t3ver_oid","t3ver_wsid"
-,1,1,"Category 1",0,0,0
-,2,1,"Category 2",0,0,0
-,3,1,"Category 1 ws",1,1,1
-,4,1,"Category 2 ws",2,2,1
+,"uid","pid","title","t3ver_oid","t3ver_wsid"
+,1,1,"Category 1",0,0
+,2,1,"Category 2",0,0
+,3,1,"Category 1 ws",1,1
+,4,1,"Category 2 ws",2,1
 "sys_category_record_mm"
 ,"uid_local","uid_foreign","tablenames","fieldname"
 ,1,1,"tt_content","typo3tests_contentelementb_categories_mm"
@@ -11,6 +11,6 @@
 ,3,2,"tt_content","typo3tests_contentelementb_categories_mm"
 ,4,2,"tt_content","typo3tests_contentelementb_categories_mm"
 "tt_content"
-,"uid","pid","typo3tests_contentelementb_categories_mm","t3_origuid","t3ver_oid","t3ver_wsid"
-,1,1,2,0,0,0
-,2,1,2,1,1,1
+,"uid","pid","typo3tests_contentelementb_categories_mm","t3ver_oid","t3ver_wsid"
+,1,1,2,0,0
+,2,1,2,1,1
