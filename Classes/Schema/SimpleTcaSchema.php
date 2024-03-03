@@ -42,6 +42,7 @@ final class SimpleTcaSchema
     {
         return isset($this->fields[$fieldName]);
     }
+
     public function getField(string $fieldName): FieldTypeInterface
     {
         if (!$this->hasField($fieldName)) {
