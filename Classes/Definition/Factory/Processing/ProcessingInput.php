@@ -40,13 +40,18 @@ final class ProcessingInput
         public string $rootTable,
         public LanguagePath $languagePath,
         public ContentType $contentType,
+        public array $typeFieldPerTable = [],
         public array $tableDefinitionList = [],
     ) {
         $this->isRootTable = $this->table === $this->rootTable;
         $typeField = $this->yaml['typeField'] ?? null;
         $this->typeField = $typeField;
         if (!isset($this->typeField)) {
-            $this->typeField = $this->getTypeFieldNative($simpleTcaSchemaFactory);
+            if (isset($this->typeFieldPerTable[$this->table])) {
+                $this->typeField = $this->typeFieldPerTable[$this->table];
+            } else {
+                $this->typeField = $this->getTypeFieldNative($simpleTcaSchemaFactory);
+            }
         }
         $this->typeName = $this->resolveTypeName();
     }

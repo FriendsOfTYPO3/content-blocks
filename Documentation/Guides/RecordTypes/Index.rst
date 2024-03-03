@@ -79,6 +79,45 @@ automatically to the list:
       - identifier: title
         type: Text
 
+Avoiding redundancy
+-------------------
+
+Whenever you have multiple types for a table, you run into the problem on where
+to define the global capability options like :yaml:`languageAware`,
+:yaml:`workspaceAware` or :yaml:`labelField` to name a few. Normally it's
+recommended to keep this configuration in sync between all Content Blocks. The
+reason behind this is, if you remove one type, the other Content Block still
+works independently. However, this can cause heavy redundancy. Especially if
+you are disabling a lot of options. The solution is to declare one of the types
+as the "default" type. This is done simply by giving it the highest
+:yaml:`priority`. This ensures this Content Block is loaded first and sets the
+configuration for all other types.
+
+.. code-block:: yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/default/EditorInterface.yaml
+
+    name: example/default
+    table: my_record
+    priority: 999
+    typeField: type
+    typeName: default
+    languageAware: false
+    workspaceAware: false
+    labelField: title
+    fields:
+      - identifier: title
+        type: Text
+
+.. code-block:: yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/special/EditorInterface.yaml
+
+    name: example/special
+    table: my_record
+    typeName: special
+    fields:
+      - identifier: title
+        type: Text
+
 .. _yaml_reference_record_type_in_collection:
 
 Use as child table in Collection

@@ -82,6 +82,11 @@ final class ContentBlockCompiler
      */
     private array $parentReferences = [];
 
+    /**
+     * @var array<string, string>
+     */
+    private array $typeFieldPerTable = [];
+
     public function compile(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): CompilationResult
     {
         $this->simpleTcaSchemaFactory = $simpleTcaSchemaFactory;
@@ -98,8 +103,12 @@ final class ContentBlockCompiler
                 rootTable: $table,
                 languagePath: $languagePath,
                 contentType: $contentBlock->getContentType(),
+                typeFieldPerTable: $this->typeFieldPerTable,
                 tableDefinitionList: $tableDefinitionList,
             );
+            if ($processingInput->getTypeField() !== null) {
+                $this->typeFieldPerTable[$table] = $processingInput->getTypeField();
+            }
             $tableDefinitionList = $this->processRootFields($processingInput);
         }
         $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
@@ -115,6 +124,7 @@ final class ContentBlockCompiler
     private function resetState(): void
     {
         $this->parentReferences = [];
+        $this->typeFieldPerTable = [];
         unset($this->automaticLanguageKeysRegistry);
         unset($this->simpleTcaSchemaFactory);
     }
@@ -180,9 +190,10 @@ final class ContentBlockCompiler
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
     {
+        $table = $result->contentType->table;
         $contentType = $result->tableDefinition->contentType;
         if ($contentType === ContentType::RECORD_TYPE && $result->tableDefinition->hasTypeField()) {
-            $isExistingField = $this->simpleTcaSchemaFactory->has($yaml['table']);
+            $isExistingField = $this->simpleTcaSchemaFactory->has($table);
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result, $isExistingField);
             $yaml['fields'] = $yamlFields;

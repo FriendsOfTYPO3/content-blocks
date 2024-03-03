@@ -1551,6 +1551,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
+                        'priority' => 1,
                         'typeField' => 'type',
                         'typeName' => 'example',
                         'prefixFields' => false,
@@ -1569,7 +1570,6 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
-                        'typeField' => 'type',
                         'typeName' => 'example2',
                         'prefixFields' => false,
                         'fields' => [
