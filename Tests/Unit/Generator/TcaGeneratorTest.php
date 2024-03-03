@@ -3021,4 +3021,224 @@ final class TcaGeneratorTest extends UnitTestCase
 
         self::assertEquals($expected, $actual);
     }
+
+    #[Test]
+    public function existingTablesCanBeExtendedWithAdditionalType(): void
+    {
+        $baseTca = [
+            'existing_record' => [
+                'ctrl' => [
+                    'type' => 'record_type',
+                    'descriptionColumn' => 'a_description_column',
+                    'enablecolumns' => [
+                        'disabled' => 'a_hidden_field',
+                        'endtime' => 'a_endtime_field',
+                        'starttime' => 'a_starttime_field',
+                        'fe_group' => 'a_fe_group_field',
+                    ],
+                    'typeicon_classes' => [
+                        'type_1' => 'type_1',
+                    ],
+                ],
+                'types' => [
+                    'type_1' => [
+                        'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                    ],
+                ],
+                'columns' => [
+                    'record_type' => [
+                        'label' => 'Type',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectSingle',
+                            'items' => [
+                                [
+                                    'label' => 'Type 1',
+                                    'value' => 'type_1',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'a_hidden_field' => [
+                        'label' => 'Hidden',
+                        'config' => [
+                            'type' => 'check',
+                        ],
+                    ],
+                    'a_endtime_field' => [
+                        'label' => 'Endtime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_starttime_field' => [
+                        'label' => 'Starttime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_description_column' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'text',
+                        ],
+                    ],
+                    'a_fe_group_field' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectMultipleSideBySide',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $contentBlock = LoadedContentBlock::fromArray([
+            'name' => 'my-vendor/record2',
+            'hostExtension' => 'my_extension',
+            'extPath' => 'EXT:my_extension/ContentBlocks/RecordType/record',
+            'yaml' => [
+                'table' => 'existing_record',
+                'typeName' => 'type_2',
+                'prefixFields' => false,
+                'fields' => [
+                    [
+                        'identifier' => 'a_field',
+                        'type' => 'Text',
+                    ],
+                ],
+            ],
+        ]);
+
+        $expected = [
+            'existing_record' => [
+                'ctrl' => [
+                    'type' => 'record_type',
+                    'descriptionColumn' => 'a_description_column',
+                    'enablecolumns' => [
+                        'disabled' => 'a_hidden_field',
+                        'endtime' => 'a_endtime_field',
+                        'starttime' => 'a_starttime_field',
+                        'fe_group' => 'a_fe_group_field',
+                    ],
+                    'typeicon_classes' => [
+                        'type_1' => 'type_1',
+                        'type_2' => 'existing_record-type_2',
+                    ],
+                    'typeicon_column' => 'record_type',
+                    'searchFields' => 'a_field',
+                ],
+                'types' => [
+                    'type_1' => [
+                        'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                    ],
+                    'type_2' => [
+                        'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,a_description_column',
+                        'columnsOverrides' => [
+                            'a_field' => [
+                                'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.label',
+                                'config' => [],
+                                'description' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.description',
+                            ],
+                        ],
+                    ],
+                ],
+                'columns' => [
+                    'record_type' => [
+                        'label' => 'Type',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectSingle',
+                            'items' => [
+                                [
+                                    'label' => 'Type 1',
+                                    'value' => 'type_1',
+                                ],
+                                [
+                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:title',
+                                    'value' => 'type_2',
+                                    'icon' => 'existing_record-type_2',
+                                    'group' => '',
+                                ],
+                            ],
+                        ],
+                        'exclude' => true,
+                    ],
+                    'a_hidden_field' => [
+                        'label' => 'Hidden',
+                        'config' => [
+                            'type' => 'check',
+                        ],
+                    ],
+                    'a_endtime_field' => [
+                        'label' => 'Endtime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_starttime_field' => [
+                        'label' => 'Starttime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_description_column' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'text',
+                        ],
+                    ],
+                    'a_fe_group_field' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectMultipleSideBySide',
+                        ],
+                    ],
+                    'a_field' => [
+                        'config' => [
+                            'type' => 'input',
+                        ],
+                        'exclude' => true,
+                        'label' => 'a_field',
+                    ],
+                ],
+                'palettes' => [
+                    'hidden' => [
+                        'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                        'showitem' => 'a_hidden_field',
+                    ],
+                    'access' => [
+                        'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                        'showitem' => 'a_starttime_field;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,a_endtime_field;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,a_fe_group_field;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel',
+                    ],
+                ],
+            ],
+        ];
+
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($baseTca);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry->register($contentBlock);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
+            new NoopEventDispatcher(),
+            $languageFileRegistry,
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+
+        $GLOBALS['TCA'] = $baseTca;
+        $tca = $tcaGenerator->generateTcaOverrides();
+
+        self::assertSame($expected, $tca);
+    }
 }
