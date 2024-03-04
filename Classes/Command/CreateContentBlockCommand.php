@@ -85,13 +85,13 @@ class CreateContentBlockCommand extends Command
         $typeName = $input->getOption('type-name');
         $availablePackages = $this->packageResolver->getAvailablePackages();
         if ($availablePackages === []) {
-            throw new \RuntimeException('No packages were found in which to store the content block.', 1678699706);
+            throw new \RuntimeException('No packages were found in which to store the Content Block.', 1678699706);
         }
 
         if ($input->getOption('content-type')) {
             $contentTypeFromInput = $input->getOption('content-type');
         } else {
-            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the content type of your content block', $this->getSupportedTypes(), 'content-element'));
+            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the Content Type of your Content Block', $this->getSupportedTypes(), 'content-element'));
         }
         $contentType = match ($contentTypeFromInput) {
             'content-element' => ContentType::CONTENT_ELEMENT,
@@ -124,14 +124,14 @@ class CreateContentBlockCommand extends Command
         if ($input->getOption('name')) {
             $name = $input->getOption('name');
             if (!ContentBlockNameValidator::isValid($name)) {
-                $output->writeln('<error>Your content block name does not match the requirement.</error>');
+                $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
                 return Command::INVALID;
             }
         } else {
-            $contentBlockNameQuestion = new Question('Enter your content block name (lowercase, separated by dashes "-")');
+            $contentBlockNameQuestion = new Question('Enter your Content Block name (lowercase, separated by dashes "-")');
             $contentBlockNameQuestion->setValidator($this->validateName(...));
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
-                $output->writeln('<error>Your content block name does not match the requirement.</error>');
+                $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
             }
         }
         $name = strtolower($name);
@@ -151,7 +151,7 @@ class CreateContentBlockCommand extends Command
         $contentBlockName = $vendor . '/' . $name;
         if ($this->contentBlockRegistry->hasContentBlock($contentBlockName)) {
             $output->writeln(
-                '<error>A content block with the name "' . $contentBlockName . '" already exists. Please run'
+                '<error>A Content Block with the name "' . $contentBlockName . '" already exists. Please run'
                 . ' the command again and specify a different combination of vendor name and content block name.</error>'
             );
             return Command::INVALID;
@@ -172,7 +172,7 @@ class CreateContentBlockCommand extends Command
                 );
             }
         } else {
-            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the content block should be stored', $this->getPackageTitles($availablePackages)));
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $this->getPackageTitles($availablePackages)));
         }
 
         $contentBlockConfiguration = new LoadedContentBlock(
