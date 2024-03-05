@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\WorkspaceAspect;
 use TYPO3\CMS\Core\Resource\File;
@@ -50,8 +51,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/file_reference.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('image');
@@ -60,7 +62,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'image' => 1,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -72,8 +74,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/folder_files.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_folder');
@@ -82,7 +85,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_folder' => '1:/',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -94,8 +97,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/folder_files.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_folder_recursive');
@@ -104,7 +108,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_folder_recursive' => '1:/',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -117,8 +121,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_collection');
@@ -127,7 +132,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -140,8 +145,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_alternative_table_name.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_collection2');
@@ -150,7 +156,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection2' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -163,8 +169,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_external.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_collection_external');
@@ -173,7 +180,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection_external' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -186,8 +193,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_recursive.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_collection_recursive');
@@ -196,7 +204,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection_recursive' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -213,8 +221,9 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_collection');
@@ -223,12 +232,11 @@ final class RelationResolverTest extends FunctionalTestCase
         $dummyRecord = [
             'typo3tests_contentelementb_collection' => 2,
             't3ver_oid' => 1,
-            't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -241,8 +249,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_many_to_many.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_categories_mm');
@@ -251,7 +260,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -265,8 +274,9 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_many_to_many.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_categories_mm');
@@ -274,13 +284,12 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->setWorkspaceId(1);
         $dummyRecord = [
             't3ver_oid' => 1,
-            't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
             'typo3tests_contentelementb_categories_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -293,8 +302,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_one_to_one.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_categories_11');
@@ -303,7 +313,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_11' => 7,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -315,8 +325,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/category_one_to_many.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_categories_1m');
@@ -325,7 +336,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_1m' => '7,8',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -338,8 +349,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_pages_relation');
@@ -348,7 +360,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_relation' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -361,8 +373,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_recursive.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_record_relation_recursive');
@@ -371,7 +384,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_record_relation_recursive' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame('Record 1', $result[0]['title']);
@@ -388,8 +401,9 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/be_users.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_pages_relation');
@@ -397,13 +411,12 @@ final class RelationResolverTest extends FunctionalTestCase
         $this->setWorkspaceId(1);
         $dummyRecord = [
             't3ver_oid' => 1,
-            't3_origuid' => 1,
             't3ver_wsid' => 1,
             '_ORIG_uid' => 2,
             'typo3tests_contentelementb_pages_relation' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -416,8 +429,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_multiple.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_pages_content_relation');
@@ -426,7 +440,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_content_relation' => 'pages_1,pages_2,tt_content_1,tt_content_2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(4, $result);
@@ -441,8 +455,9 @@ final class RelationResolverTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/db_relation_mm.csv');
 
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_pages_mm');
@@ -451,7 +466,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -462,8 +477,9 @@ final class RelationResolverTest extends FunctionalTestCase
     #[Test]
     public function selectCheckboxCommaListConvertedToArray(): void
     {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_checkbox');
@@ -472,7 +488,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_checkbox' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
@@ -481,8 +497,9 @@ final class RelationResolverTest extends FunctionalTestCase
     #[Test]
     public function selectSingleBoxCommaListConvertedToArray(): void
     {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_single_box');
@@ -491,7 +508,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_single_box' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
@@ -500,8 +517,9 @@ final class RelationResolverTest extends FunctionalTestCase
     #[Test]
     public function selectMultipleSideBySideCommaListConvertedToArray(): void
     {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_multiple');
@@ -510,7 +528,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_multiple' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['1', '2', '3'], $result);
@@ -520,8 +538,9 @@ final class RelationResolverTest extends FunctionalTestCase
     public function canResolveSelectForeignTableSingle(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign');
@@ -530,7 +549,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame('Record 1', $result['title']);
@@ -540,8 +559,9 @@ final class RelationResolverTest extends FunctionalTestCase
     public function canResolveSelectForeignTableMultiple(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign_multiple');
@@ -550,7 +570,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_multiple' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -562,8 +582,9 @@ final class RelationResolverTest extends FunctionalTestCase
     public function canResolveSelectForeignNativeTableSingle(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_native.csv');
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign_native');
@@ -572,7 +593,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_native' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame('Record 1', $result['title']);
@@ -582,8 +603,9 @@ final class RelationResolverTest extends FunctionalTestCase
     public function canResolveSelectForeignNativeTableMultiple(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_native.csv');
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign_native_multiple');
@@ -592,7 +614,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_native_multiple' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
@@ -604,8 +626,9 @@ final class RelationResolverTest extends FunctionalTestCase
     public function canResolveSelectForeignTableRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign_recursive.csv');
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_foreign');
@@ -614,7 +637,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame('Record 1', $result['title']);
@@ -625,8 +648,9 @@ final class RelationResolverTest extends FunctionalTestCase
     #[Test]
     public function canResolveFlexForm(): void
     {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_flexfield');
@@ -649,7 +673,7 @@ final class RelationResolverTest extends FunctionalTestCase
 </T3FlexForms>',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame('Header in Flex', $result['header']);
@@ -659,8 +683,9 @@ final class RelationResolverTest extends FunctionalTestCase
     #[Test]
     public function canResolveFlexFormWithSheetsOtherThanDefault(): void
     {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_flexfield');
@@ -693,7 +718,7 @@ final class RelationResolverTest extends FunctionalTestCase
 </T3FlexForms>',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame('Header in Flex', $result['header']);
@@ -705,8 +730,9 @@ final class RelationResolverTest extends FunctionalTestCase
     #[Test]
     public function canResolveJson(): void
     {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
         $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
-        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $simpleTcaSchemaFactory);
         $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
         $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
         $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_json');
@@ -715,7 +741,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_json' => '{"foo": "bar"}',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertSame(['foo' => 'bar'], $result);

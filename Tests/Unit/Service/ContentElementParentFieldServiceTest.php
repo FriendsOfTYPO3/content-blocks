@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\ServiceProvider;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -93,13 +94,14 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
             'alternative_foreign_field',
         ];
 
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $container = new Container();
         $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
         $container->set('cache.content_blocks_code', new NullFrontend('test'));
@@ -151,13 +153,14 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
 
         $expected = [];
 
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $container = new Container();
         $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
         $container->set('cache.content_blocks_code', new NullFrontend('test'));

@@ -34,6 +34,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 
 /**
@@ -70,6 +71,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 final class ContentBlockCompiler
 {
     private AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry;
+    private SimpleTcaSchemaFactory $simpleTcaSchemaFactory;
 
     /**
      * This property tracks Collection foreign_table parent references.
@@ -80,22 +82,33 @@ final class ContentBlockCompiler
      */
     private array $parentReferences = [];
 
-    public function compile(ContentBlockRegistry $contentBlockRegistry): CompilationResult
+    /**
+     * @var array<string, string>
+     */
+    private array $typeFieldPerTable = [];
+
+    public function compile(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): CompilationResult
     {
+        $this->simpleTcaSchemaFactory = $simpleTcaSchemaFactory;
         $this->automaticLanguageKeysRegistry = new AutomaticLanguageKeysRegistry();
         $tableDefinitionList = [];
         foreach ($contentBlockRegistry->getAll() as $contentBlock) {
             $table = $contentBlock->getYaml()['table'];
             $languagePath = $this->buildBaseLanguagePath($contentBlock);
             $processingInput = new ProcessingInput(
+                simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
                 table: $table,
                 rootTable: $table,
                 languagePath: $languagePath,
                 contentType: $contentBlock->getContentType(),
+                typeFieldPerTable: $this->typeFieldPerTable,
                 tableDefinitionList: $tableDefinitionList,
             );
+            if ($processingInput->getTypeField() !== null) {
+                $this->typeFieldPerTable[$table] = $processingInput->getTypeField();
+            }
             $tableDefinitionList = $this->processRootFields($processingInput);
         }
         $mergedTableDefinitionList = $this->mergeProcessingResult($tableDefinitionList);
@@ -111,7 +124,9 @@ final class ContentBlockCompiler
     private function resetState(): void
     {
         $this->parentReferences = [];
+        $this->typeFieldPerTable = [];
         unset($this->automaticLanguageKeysRegistry);
+        unset($this->simpleTcaSchemaFactory);
     }
 
     private function mergeProcessingResult(array $tableDefinitionList): array
@@ -175,16 +190,12 @@ final class ContentBlockCompiler
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
     {
+        $table = $result->contentType->table;
         $contentType = $result->tableDefinition->contentType;
         if ($contentType === ContentType::RECORD_TYPE && $result->tableDefinition->hasTypeField()) {
+            $isExistingField = $this->simpleTcaSchemaFactory->has($table);
             $yamlFields = $yaml['fields'] ?? [];
-            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result);
-            $yaml['fields'] = $yamlFields;
-        }
-        $hasInternalDescription = $yaml['internalDescription'] ?? false;
-        if ($contentType === ContentType::RECORD_TYPE && $hasInternalDescription) {
-            $yamlFields = $yaml['fields'] ?? [];
-            $yamlFields = $this->appendInternalDescription($yamlFields);
+            $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result, $isExistingField);
             $yaml['fields'] = $yamlFields;
         }
         if ($contentType === ContentType::PAGE_TYPE) {
@@ -296,39 +307,26 @@ final class ContentBlockCompiler
         $this->prefixDisplayCondFieldsIfNecessary($result);
     }
 
-    private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result): array
+    private function prependTypeFieldForRecordType(array $yamlFields, ProcessedFieldsResult $result, bool $isExistingField): array
     {
-        $typeFieldDefinition = [
-            'identifier' => $result->tableDefinition->typeField,
-            'type' => FieldType::SELECT->value,
-            'renderType' => 'selectSingle',
-            'prefixField' => false,
-            'default' => $result->contentType->typeName,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
-            'items' => [],
-        ];
+        if ($isExistingField) {
+            $typeFieldDefinition = [
+                'identifier' => $result->tableDefinition->typeField,
+                'useExistingField' => true,
+            ];
+        } else {
+            $typeFieldDefinition = [
+                'identifier' => $result->tableDefinition->typeField,
+                'type' => FieldType::SELECT->value,
+                'renderType' => 'selectSingle',
+                'prefixField' => false,
+                'default' => $result->contentType->typeName,
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
+                'items' => [],
+            ];
+        }
         // Prepend type field.
         array_unshift($yamlFields, $typeFieldDefinition);
-        return $yamlFields;
-    }
-
-    private function appendInternalDescription(array $yamlFields): array
-    {
-        $tab = [
-            'identifier' => 'internal_description_tab',
-            'type' => 'Tab',
-            'label' => 'LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
-        ];
-        $internalDescription = [
-            'identifier' => 'internal_description',
-            'type' => 'Textarea',
-            'prefixField' => false,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
-            'rows' => 5,
-            'cols' => 30,
-        ];
-        $yamlFields[] = $tab;
-        $yamlFields[] = $internalDescription;
         return $yamlFields;
     }
 
@@ -502,6 +500,7 @@ final class ContentBlockCompiler
         }
         $field['title'] = $field['label'];
         $newInput = new ProcessingInput(
+            simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
             yaml: $field,
             contentBlock: $input->contentBlock,
             table: $foreignTable,
@@ -811,9 +810,13 @@ final class ContentBlockCompiler
             $this->assertIdentifierExists($field, $input);
             $identifier = $field['identifier'];
             // Check if the field is defined as a "base" TCA field (NOT defined in TCA/Overrides).
-            if (($GLOBALS['TCA'][$input->table]['columns'][$identifier] ?? []) !== []) {
-                $fieldType = TypeResolver::resolve($field['identifier'], $input->table);
-                return $fieldType;
+            if ($this->simpleTcaSchemaFactory->has($input->table)) {
+                $tcaSchema = $this->simpleTcaSchemaFactory->get($input->table);
+                if ($tcaSchema->hasField($identifier)) {
+                    $tcaField = $tcaSchema->getField($identifier);
+                    $fieldType = $tcaField->getType();
+                    return $fieldType;
+                }
             }
         }
         $this->assertTypeExists($field, $input);

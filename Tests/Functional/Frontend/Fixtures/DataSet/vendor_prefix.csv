@@ -1,6 +1,6 @@
 "myvendor_my_collection"
-,"uid","pid","text","foreign_table_parent_uid","t3_origuid","t3ver_oid","t3ver_wsid"
-,1,1,"lorem foo bar",1,0,0,0
+,"uid","pid","text","foreign_table_parent_uid","t3ver_oid","t3ver_wsid"
+,1,1,"lorem foo bar",1,0,0
 "tt_content"
-,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","myvendor_my_field","myvendor_simplevendor_my_field_full_prefix","myvendor_my_collection","CType"
-,1,1,0,0,0,"Simple Text","Text full prefix",1,"myvendor_simplevendor"
+,"uid","pid","t3ver_oid","t3ver_wsid","myvendor_my_field","myvendor_simplevendor_my_field_full_prefix","myvendor_my_collection","CType"
+,1,1,0,0,"Simple Text","Text full prefix",1,"myvendor_simplevendor"

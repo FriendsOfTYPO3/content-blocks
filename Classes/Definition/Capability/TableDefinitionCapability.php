@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Capability;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TableDefinitionCapability
+final class TableDefinitionCapability implements SystemFieldPalettesInterface
 {
     private RootLevelCapability $rootLevelCapability;
     private LabelCapability $labelCapability;
@@ -35,7 +35,6 @@ final class TableDefinitionCapability
     private bool $trackCreationDate = true;
     private bool $trackUpdateDate = true;
     private bool $sortable = true;
-    private bool $trackAncestorReference = true;
     private bool $internalDescription = false;
     /** @var list<array{identifier: string, order: string}> */
     private array $sortField = [];
@@ -51,7 +50,6 @@ final class TableDefinitionCapability
         $capability = new TableDefinitionCapability();
         $capability->languageAware = (bool)($definition['languageAware'] ?? $capability->languageAware);
         $capability->workspaceAware = (bool)($definition['workspaceAware'] ?? $capability->workspaceAware);
-        $capability->trackAncestorReference = (bool)($definition['trackAncestorReference'] ?? $capability->trackAncestorReference);
         $capability->disabledRestriction = (bool)($definition['restriction']['disabled'] ?? $capability->disabledRestriction);
         $capability->startTimeRestriction = (bool)($definition['restriction']['startTime'] ?? $capability->startTimeRestriction);
         $capability->endTimeRestriction = (bool)($definition['restriction']['endTime'] ?? $capability->endTimeRestriction);
@@ -83,11 +81,6 @@ final class TableDefinitionCapability
     public function isWorkspaceAware(): bool
     {
         return $this->workspaceAware;
-    }
-
-    public function shallTrackAncestorReference(): bool
-    {
-        return $this->trackAncestorReference;
     }
 
     public function hasDisabledRestriction(): bool
@@ -274,5 +267,20 @@ final class TableDefinitionCapability
     public function hasAccessPalette(): bool
     {
         return $this->hasStartTimeRestriction() || $this->hasEndTimeRestriction() || $this->hasUserGroupRestriction() || $this->isEditLockingEnabled();
+    }
+
+    public function buildLanguageShowItemTca(): string
+    {
+        return 'sys_language_uid,l10n_parent';
+    }
+
+    public function buildHiddenShowItemTca(): string
+    {
+        return 'hidden';
+    }
+
+    public function buildInternalDescriptionShowItemTca(): string
+    {
+        return '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,internal_description';
     }
 }

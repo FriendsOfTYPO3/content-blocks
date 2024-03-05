@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
@@ -584,7 +585,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'delete' => 'deleted',
                         'editlock' => 'editlock',
                         'versioningWS' => true,
-                        'origUid' => 't3_origuid',
                         'hideTable' => true,
                         'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
@@ -786,7 +786,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'delete' => 'deleted',
                         'editlock' => 'editlock',
                         'versioningWS' => true,
-                        'origUid' => 't3_origuid',
                         'hideTable' => true,
                         'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
@@ -1086,7 +1085,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'delete' => 'deleted',
                         'editlock' => 'editlock',
                         'versioningWS' => true,
-                        'origUid' => 't3_origuid',
                         'hideTable' => false,
                         'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
@@ -1309,11 +1307,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'prependAtCopy' => 'banana',
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
-                        'searchFields' => 't3ce_example_text,t3ce_example_text2,internal_description',
+                        'searchFields' => 't3ce_example_text,t3ce_example_text2',
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.internal_description_tab,internal_description,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,internal_description',
                         ],
                     ],
                     'palettes' => [
@@ -1380,8 +1378,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'internal_description' => [
                             'exclude' => true,
-                            'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.label',
-                            'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:internal_description.description',
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
                             'config' => [
                                 'type' => 'text',
                                 'rows' => 5,
@@ -1551,6 +1548,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
+                        'priority' => 1,
                         'typeField' => 'type',
                         'typeName' => 'example',
                         'prefixFields' => false,
@@ -1569,7 +1567,6 @@ final class TcaGeneratorTest extends UnitTestCase
                     'iconProvider' => '',
                     'yaml' => [
                         'table' => 'foobar',
-                        'typeField' => 'type',
                         'typeName' => 'example2',
                         'prefixFields' => false,
                         'fields' => [
@@ -1596,7 +1593,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'delete' => 'deleted',
                         'editlock' => 'editlock',
                         'versioningWS' => true,
-                        'origUid' => 't3_origuid',
                         'hideTable' => false,
                         'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
@@ -1904,7 +1900,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'delete' => 'deleted',
                         'editlock' => 'editlock',
                         'versioningWS' => true,
-                        'origUid' => 't3_origuid',
                         'hideTable' => true,
                         'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
@@ -2089,8 +2084,8 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
-        $GLOBALS['TCA'] = $baseTca;
 
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -2098,13 +2093,14 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
             new NoopEventDispatcher(),
             $languageFileRegistry,
             new TcaPreparation(),
@@ -2256,8 +2252,8 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
-        $GLOBALS['TCA'] = $baseTca;
 
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -2265,7 +2261,7 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         if ($seoExtensionLoaded) {
@@ -2275,6 +2271,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
             new NoopEventDispatcher(),
             $languageFileRegistry,
             new TcaPreparation(),
@@ -2299,18 +2296,20 @@ final class TcaGeneratorTest extends UnitTestCase
                 'table' => 'my_custom_table',
             ],
         ];
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
         $contentBlock = LoadedContentBlock::fromArray($yaml);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
             new NoopEventDispatcher(),
             $languageFileRegistry,
             new TcaPreparation(),
@@ -2937,21 +2936,22 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
-        $GLOBALS['TCA'] = $baseTca;
 
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
             new NoopEventDispatcher(),
             $languageFileRegistry,
             new TcaPreparation(),
@@ -2968,7 +2968,6 @@ final class TcaGeneratorTest extends UnitTestCase
     public function displayCondIsPrefixedForStringSyntax(): void
     {
         $baseTca['tt_content'] = [];
-        $GLOBALS['TCA'] = $baseTca;
 
         $contentBlock = LoadedContentBlock::fromArray([
             'name' => 'bar/foo',
@@ -2992,17 +2991,19 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $expected = 'FIELD:bar_foo_bField:=:aValue';
 
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry);
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
             new NoopEventDispatcher(),
             $languageFileRegistry,
             new TcaPreparation(),
@@ -3014,5 +3015,225 @@ final class TcaGeneratorTest extends UnitTestCase
         $actual = $tca['tt_content']['types']['1']['columnsOverrides']['bar_foo_aField']['displayCond'];
 
         self::assertEquals($expected, $actual);
+    }
+
+    #[Test]
+    public function existingTablesCanBeExtendedWithAdditionalType(): void
+    {
+        $baseTca = [
+            'existing_record' => [
+                'ctrl' => [
+                    'type' => 'record_type',
+                    'descriptionColumn' => 'a_description_column',
+                    'enablecolumns' => [
+                        'disabled' => 'a_hidden_field',
+                        'endtime' => 'a_endtime_field',
+                        'starttime' => 'a_starttime_field',
+                        'fe_group' => 'a_fe_group_field',
+                    ],
+                    'typeicon_classes' => [
+                        'type_1' => 'type_1',
+                    ],
+                ],
+                'types' => [
+                    'type_1' => [
+                        'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                    ],
+                ],
+                'columns' => [
+                    'record_type' => [
+                        'label' => 'Type',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectSingle',
+                            'items' => [
+                                [
+                                    'label' => 'Type 1',
+                                    'value' => 'type_1',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'a_hidden_field' => [
+                        'label' => 'Hidden',
+                        'config' => [
+                            'type' => 'check',
+                        ],
+                    ],
+                    'a_endtime_field' => [
+                        'label' => 'Endtime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_starttime_field' => [
+                        'label' => 'Starttime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_description_column' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'text',
+                        ],
+                    ],
+                    'a_fe_group_field' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectMultipleSideBySide',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $contentBlock = LoadedContentBlock::fromArray([
+            'name' => 'my-vendor/record2',
+            'hostExtension' => 'my_extension',
+            'extPath' => 'EXT:my_extension/ContentBlocks/RecordType/record',
+            'yaml' => [
+                'table' => 'existing_record',
+                'typeName' => 'type_2',
+                'prefixFields' => false,
+                'fields' => [
+                    [
+                        'identifier' => 'a_field',
+                        'type' => 'Text',
+                    ],
+                ],
+            ],
+        ]);
+
+        $expected = [
+            'existing_record' => [
+                'ctrl' => [
+                    'type' => 'record_type',
+                    'descriptionColumn' => 'a_description_column',
+                    'enablecolumns' => [
+                        'disabled' => 'a_hidden_field',
+                        'endtime' => 'a_endtime_field',
+                        'starttime' => 'a_starttime_field',
+                        'fe_group' => 'a_fe_group_field',
+                    ],
+                    'typeicon_classes' => [
+                        'type_1' => 'type_1',
+                        'type_2' => 'existing_record-type_2',
+                    ],
+                    'typeicon_column' => 'record_type',
+                    'searchFields' => 'a_field',
+                ],
+                'types' => [
+                    'type_1' => [
+                        'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                    ],
+                    'type_2' => [
+                        'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,a_description_column',
+                        'columnsOverrides' => [
+                            'a_field' => [
+                                'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.label',
+                                'config' => [],
+                                'description' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.description',
+                            ],
+                        ],
+                    ],
+                ],
+                'columns' => [
+                    'record_type' => [
+                        'label' => 'Type',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectSingle',
+                            'items' => [
+                                [
+                                    'label' => 'Type 1',
+                                    'value' => 'type_1',
+                                ],
+                                [
+                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:title',
+                                    'value' => 'type_2',
+                                    'icon' => 'existing_record-type_2',
+                                    'group' => '',
+                                ],
+                            ],
+                        ],
+                        'exclude' => true,
+                    ],
+                    'a_hidden_field' => [
+                        'label' => 'Hidden',
+                        'config' => [
+                            'type' => 'check',
+                        ],
+                    ],
+                    'a_endtime_field' => [
+                        'label' => 'Endtime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_starttime_field' => [
+                        'label' => 'Starttime',
+                        'config' => [
+                            'type' => 'datetime',
+                        ],
+                    ],
+                    'a_description_column' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'text',
+                        ],
+                    ],
+                    'a_fe_group_field' => [
+                        'label' => 'Notes',
+                        'config' => [
+                            'type' => 'select',
+                            'renderType' => 'selectMultipleSideBySide',
+                        ],
+                    ],
+                    'a_field' => [
+                        'config' => [
+                            'type' => 'input',
+                        ],
+                        'exclude' => true,
+                        'label' => 'a_field',
+                    ],
+                ],
+                'palettes' => [
+                    'hidden' => [
+                        'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                        'showitem' => 'a_hidden_field',
+                    ],
+                    'access' => [
+                        'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                        'showitem' => 'a_starttime_field;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,a_endtime_field;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,a_fe_group_field;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel',
+                    ],
+                ],
+            ],
+        ];
+
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($baseTca);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry->register($contentBlock);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
+            new NoopEventDispatcher(),
+            $languageFileRegistry,
+            new TcaPreparation(),
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+
+        $GLOBALS['TCA'] = $baseTca;
+        $tca = $tcaGenerator->generateTcaOverrides();
+
+        self::assertSame($expected, $tca);
     }
 }

@@ -7,5 +7,5 @@
 ,1,1,"lorem foo bar B",1
 ,2,1,"lorem foo bar B2",1
 "tt_content"
-,"uid","pid","t3_origuid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection_recursive","CType"
-,1,1,0,0,0,2,"typo3tests_contentelementb"
+,"uid","pid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection_recursive","CType"
+,1,1,0,0,2,"typo3tests_contentelementb"

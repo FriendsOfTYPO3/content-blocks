@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
 /**
@@ -30,6 +31,7 @@ class SqlGenerator
     public function __construct(
         protected readonly ContentBlockLoader $contentBlockLoader,
         protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void
@@ -42,7 +44,10 @@ class SqlGenerator
     public function generate(): array
     {
         $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
-        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached($contentBlockRegistry);
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $this->simpleTcaSchemaFactory
+        );
         $sql = [];
         foreach ($tableDefinitionCollection as $tableDefinition) {
             foreach ($tableDefinition->getSqlColumnDefinitionCollection() as $column) {
@@ -50,6 +55,10 @@ class SqlGenerator
                     continue;
                 }
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
+            }
+            $hasInternalDescription = $tableDefinition->getCapability()->hasInternalDescription();
+            if ($hasInternalDescription) {
+                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(internal_description text);';
             }
             $resultSql = $this->handleParentReferences($tableDefinition);
             $sql = array_merge($sql, $resultSql);

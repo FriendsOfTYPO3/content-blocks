@@ -1,35 +1,7 @@
 name: hov/record2
 table: tx_hov_domain_model_record1
 prefixFields: false
-labelField:
-  - title
-fallbackLabelFields:
-  - text
-  - text3
-languageAware: false
-workspaceAware: false
-trackAncestorReference: false
-trackCreationDate: false
-trackUpdateDate: false
-typeField: type
 typeName: record2
-restriction:
-  disabled: true
-  startTime: false
-  endTime: false
-  userGroup: false
-editLocking: false
-softDelete: false
-sortField:
-  - identifier: title
-    order: desc
-  - identifier: text
-    order: desc
-internalDescription: true
-security:
-  ignorePageTypeRestriction: true
-appendLabelAtCopy: banana
-hideAtCopy: true
 priority: 30
 fields:
   - identifier: title
