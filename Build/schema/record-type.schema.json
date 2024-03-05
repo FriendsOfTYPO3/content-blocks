@@ -93,10 +93,6 @@
 					"description": "Tracks the timestamp of the last update.",
 					"type": "boolean"
 				},
-				"trackAncestorReference": {
-					"description": "If set to false, the tracking field for the original record will not be created.",
-					"type": "boolean"
-				},
 				"sortable": {
 					"description": "Tracks the order of records.",
 					"type": "boolean"
