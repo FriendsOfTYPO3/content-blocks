@@ -209,6 +209,58 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Checkbox"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "integer",
+						"description": "The default value corresponds to a bit value."
+					},
+					"renderType": {
+						"type": "string",
+						"enum": ["check", "checkboxToggle", "checkboxLabeledToggle"]
+					},
+					"items": {
+						"type": "array",
+						"description": "Only necessary if more than one checkbox is desired.",
+						"items": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"labelChecked": {
+									"type": "string"
+								},
+								"labelUnchecked": {
+									"type": "string"
+								},
+								"invertStateDisplay": {
+									"type": "boolean"
+								}
+							}
+						}
+					},
+					"allowedCustomProperties": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"itemsProcFunc": {
+						"type": "string",
+						"description": "Define a custom user function to fill items."
+					}
+				}
+			}
 		}
 	]
 }
