@@ -23,7 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\FlexForm;
 final class FlexFormDefinition implements \IteratorAggregate
 {
     private string $contentBlockName = '';
-    private string $typeName = '';
+    private string|int $typeName = '';
 
     /**
      * @return \Iterator<SheetDefinition>
@@ -43,12 +43,12 @@ final class FlexFormDefinition implements \IteratorAggregate
         $this->sheets[] = $sheet;
     }
 
-    public function getTypeName(): string
+    public function getTypeName(): string|int
     {
         return $this->typeName;
     }
 
-    public function setTypeName(string $typeName): void
+    public function setTypeName(string|int $typeName): void
     {
         $this->typeName = $typeName;
     }
