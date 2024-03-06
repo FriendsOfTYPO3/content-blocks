@@ -353,6 +353,13 @@ class RelationResolver
         if (isset($record['_ORIG_uid'])) {
             return (int)$record['_ORIG_uid'];
         }
+        if (isset($record['_LOCALIZED_UID'])) {
+            return (int)$record['_LOCALIZED_UID'];
+        }
+        // @todo remove in v13
+        if (isset($record['_PAGES_OVERLAY_UID'])) {
+            return (int)$record['_PAGES_OVERLAY_UID'];
+        }
         return (int)$record['uid'];
     }
 
