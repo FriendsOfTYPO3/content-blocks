@@ -313,6 +313,9 @@ class CreateContentBlockCommand extends Command
             'title' => $title,
             'prefixFields' => false,
             'labelField' => $labelField,
+            'security' => [
+                'ignorePageTypeRestriction' => true,
+            ],
         ];
         if ($typeName !== '' && $typeName !== null) {
             $configuration['typeName'] = $typeName;
