@@ -128,7 +128,7 @@ class CreateContentBlockCommand extends Command
                 return Command::INVALID;
             }
         } else {
-            $contentBlockNameQuestion = new Question('Enter your Content Block name (lowercase, separated by dashes "-")');
+            $contentBlockNameQuestion = new Question('Enter your ' . $contentType->getHumanReadable() .' name (lowercase, separated by dashes "-")');
             $contentBlockNameQuestion->setValidator($this->validateName(...));
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
                 $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
