@@ -40,6 +40,13 @@ Options
 
    The host extension, where to store your new Content Block.
 
+.. confval:: title
+
+   :Required: false
+   :Type: string
+
+   The human-readable title for your Content Block.
+
 .. confval:: type-name
 
    :Required: false
@@ -62,7 +69,7 @@ Example creating a Content Block skeleton in one line:
 
 .. code-block:: bash
 
-   vendor/bin/typo3 make:content-block --content-type="content-element" --vendor="my-vendor" --name="my-name" --extension="my_sitepackage"
+   vendor/bin/typo3 make:content-block --content-type="content-element" --vendor="my-vendor" --name="my-name" --title="My shiny new Content Element" --extension="my_sitepackage"
 
 Alternatively, the command can guide you through the creation by omitting the
 required options:

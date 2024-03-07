@@ -66,6 +66,12 @@ class CreateContentBlockCommand extends Command
             'Name of Content Block (The name must be lowercase and consist of words separated by dashes "-").'
         );
         $this->addOption(
+            'title',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'Human-readable title of Content Block.'
+        );
+        $this->addOption(
             'type-name',
             '',
             InputOption::VALUE_OPTIONAL,
@@ -157,10 +163,18 @@ class CreateContentBlockCommand extends Command
             return Command::INVALID;
         }
 
+        if ($input->getOption('title')) {
+            $title = $input->getOption('title');
+        } else {
+            $defaultTitle = $vendor . '/' . $name;
+            $question = new Question('Enter human-readable title', $defaultTitle);
+            $title = $io->askQuestion($question);
+        }
+
         $yamlConfiguration = match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $typeName),
-            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $typeName),
-            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $typeName),
+            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $title, $typeName),
+            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $title, $typeName),
+            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $title, $typeName),
         };
 
         if ($input->getOption('extension')) {
@@ -243,7 +257,7 @@ class CreateContentBlockCommand extends Command
         };
     }
 
-    private function createContentBlockContentElementConfiguration(string $vendor, string $name, ?string $typeName = ''): array
+    private function createContentBlockContentElementConfiguration(string $vendor, string $name, string $title, ?string $typeName = ''): array
     {
         $fullName = $vendor . '/' . $name;
         $description = 'Description for ' . ContentType::CONTENT_ELEMENT->getHumanReadable() . ' ' . $fullName;
@@ -251,7 +265,7 @@ class CreateContentBlockCommand extends Command
             'table' => 'tt_content',
             'typeField' => 'CType',
             'name' => $fullName,
-            'title' => $fullName,
+            'title' => $title,
             'description' => $description,
             'group' => 'common',
             'prefixFields' => true,
@@ -270,21 +284,21 @@ class CreateContentBlockCommand extends Command
         return $configuration;
     }
 
-    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, int $typeName): array
+    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, string $title, int $typeName): array
     {
         $fullName = $vendor . '/' . $name;
         return [
             'table' => 'pages',
             'typeField' => 'doktype',
             'name' => $fullName,
-            'title' => $fullName,
+            'title' => $title,
             'typeName' => $typeName,
             'prefixFields' => true,
             'prefixType' => 'full',
         ];
     }
 
-    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, ?string $typeName = ''): array
+    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, string $title, ?string $typeName = ''): array
     {
         $fullName = $vendor . '/' . $name;
         $vendorWithoutSeparator = str_replace('-', '', $vendor);
@@ -296,7 +310,7 @@ class CreateContentBlockCommand extends Command
         $configuration = [
             'name' => $fullName,
             'table' => $table,
-            'title' => $fullName,
+            'title' => $title,
             'prefixFields' => false,
             'labelField' => $labelField,
         ];
