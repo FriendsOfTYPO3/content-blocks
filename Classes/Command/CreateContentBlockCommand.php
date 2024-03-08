@@ -193,6 +193,7 @@ class CreateContentBlockCommand extends Command
             name: $contentBlockName,
             yaml: $yamlConfiguration,
             icon: '',
+            iconHideInMenu: '',
             iconProvider: '',
             hostExtension: $extension,
             extPath: $this->getExtPath($extension, $contentType),

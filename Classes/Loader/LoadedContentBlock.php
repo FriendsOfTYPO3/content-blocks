@@ -29,6 +29,7 @@ final class LoadedContentBlock
         private readonly string $name,
         private readonly array $yaml,
         private readonly string $icon,
+        private readonly string $iconHideInMenu,
         private readonly string $iconProvider,
         private readonly string $hostExtension,
         private readonly string $extPath,
@@ -45,6 +46,7 @@ final class LoadedContentBlock
             name: (string)($array['name'] ?? ''),
             yaml: (array)($array['yaml'] ?? []),
             icon: (string)($array['icon'] ?? ''),
+            iconHideInMenu: (string)($array['iconHideInMenu'] ?? ''),
             iconProvider: (string)($array['iconProvider'] ?? ''),
             hostExtension: (string)($array['hostExtension'] ?? ''),
             extPath: (string)($array['extPath'] ?? ''),
@@ -58,6 +60,7 @@ final class LoadedContentBlock
             'name' => $this->name,
             'yaml' => $this->yaml,
             'icon' => $this->icon,
+            'iconHideInMenu' => $this->iconHideInMenu,
             'iconProvider' => $this->iconProvider,
             'hostExtension' => $this->hostExtension,
             'extPath' => $this->extPath,
@@ -87,6 +90,11 @@ final class LoadedContentBlock
     public function getIcon(): string
     {
         return $this->icon;
+    }
+
+    public function getIconHideInMenu(): string
+    {
+        return $this->iconHideInMenu;
     }
 
     public function getIconProvider(): string

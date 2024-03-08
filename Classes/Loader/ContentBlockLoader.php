@@ -23,6 +23,7 @@ use Symfony\Component\VarExporter\LazyObjectInterface;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -220,11 +221,18 @@ class ContentBlockLoader
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
         $contentBlockIcon = ContentTypeIconResolver::resolve($name, $absolutePath, $extPath, $iconIdentifier, $contentType);
+        $pageIconHideInMenu = new ContentTypeIcon();
+        $pageIconHideInMenu->iconPath = '';
+        if ($contentType === ContentType::PAGE_TYPE) {
+            $iconIdentifierHideInMenu = ContentBlockPathUtility::getIconHideInMenuNameWithoutFileExtension();
+            $pageIconHideInMenu = ContentTypeIconResolver::resolve($name, $absolutePath, $extPath, $iconIdentifierHideInMenu, $contentType);
+        }
 
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
             icon: $contentBlockIcon->iconPath,
+            iconHideInMenu: $pageIconHideInMenu->iconPath,
             iconProvider: $contentBlockIcon->iconProvider,
             hostExtension: $extensionKey,
             extPath: $extPath,

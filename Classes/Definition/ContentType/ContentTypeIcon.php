@@ -23,5 +23,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 final class ContentTypeIcon
 {
     public string $iconPath;
+    public string $iconHideInMenuPath;
     public string $iconProvider;
 }

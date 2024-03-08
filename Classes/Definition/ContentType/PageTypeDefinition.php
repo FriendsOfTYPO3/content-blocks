@@ -22,6 +22,9 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
+    private string $typeIconHideInMenuPath = '';
+    private string $typeIconHideInMenuIdentifier = '';
+
     public static function createFromArray(array $array, string $table): PageTypeDefinition
     {
         $self = new self();
@@ -39,8 +42,34 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withTypeIconPath($array['typeIconPath'] ?? null)
             ->withIconProviderClassName($array['iconProvider'] ?? null)
             ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
+            ->withTypeIconHideInMenuPath($array['typeIconHideInMenuPath'] ?? '')
+            ->withTypeIconHideInMenuIdentifier($array['typeIconHideInMenuIdentifier'] ?? '')
             ->withPriority($array['priority'] ?? 0)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
+    }
+
+    public function withTypeIconHideInMenuPath(string $typeIconHideInMenu): self
+    {
+        $clone = clone $this;
+        $clone->typeIconHideInMenuPath = $typeIconHideInMenu;
+        return $clone;
+    }
+
+    public function withTypeIconHideInMenuIdentifier(string $typeIconHideInIdentifier): self
+    {
+        $clone = clone $this;
+        $clone->typeIconHideInMenuIdentifier = $typeIconHideInIdentifier;
+        return $clone;
+    }
+
+    public function getTypeIconHideInMenuPath(): string
+    {
+        return $this->typeIconHideInMenuPath;
+    }
+
+    public function getTypeIconHideInMenuIdentifier(): string
+    {
+        return $this->typeIconHideInMenuIdentifier;
     }
 }

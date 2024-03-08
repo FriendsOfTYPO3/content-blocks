@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\SystemFieldPalettesInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -223,6 +224,9 @@ class TcaGenerator
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
+                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenuPath() !== '') {
+                    $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getTypeIconHideInMenuIdentifier();
+                }
             }
             if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
                 if ($isNewTable) {

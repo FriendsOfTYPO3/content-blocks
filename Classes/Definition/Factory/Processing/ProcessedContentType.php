@@ -64,6 +64,7 @@ final class ProcessedContentType
         if ($isRootTable) {
             $contentTypeIcon = new ContentTypeIcon();
             $contentTypeIcon->iconPath = $this->contentBlock->getIcon();
+            $contentTypeIcon->iconHideInMenuPath = $this->contentBlock->getIconHideInMenu();
             $contentTypeIcon->iconProvider = $this->contentBlock->getIconProvider();
             $contentType['priority'] = (int)($yaml['priority'] ?? 0);
         } else {
@@ -78,7 +79,14 @@ final class ProcessedContentType
         }
         $contentType['typeIconPath'] = $contentTypeIcon->iconPath;
         $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
-        $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($contentTypeIcon);
+        $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($contentTypeIcon->iconPath);
+        if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
+            $contentType['typeIconHideInMenuPath'] = $contentTypeIcon->iconHideInMenuPath;
+            $contentType['typeIconHideInMenuIdentifier'] = $this->buildTypeIconIdentifier(
+                $contentTypeIcon->iconHideInMenuPath,
+                '-hide-in-menu'
+            );
+        }
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
             $contentType['saveAndClose'] = (bool)($yaml['saveAndClose'] ?? false);
@@ -90,10 +98,10 @@ final class ProcessedContentType
      * We add a part of the md5 hash here in order to mitigate browser caching issues when changing the Content Block
      * Icon. Otherwise, the icon identifier would always be the same and stored in the local storage.
      */
-    private function buildTypeIconIdentifier(ContentTypeIcon $contentTypeIcon): string
+    private function buildTypeIconIdentifier(string $iconPath, string $suffix = ''): string
     {
-        $typeIconIdentifier = $this->table . '-' . $this->typeName;
-        $absolutePath = GeneralUtility::getFileAbsFileName($contentTypeIcon->iconPath);
+        $typeIconIdentifier = $this->table . '-' . $this->typeName . $suffix;
+        $absolutePath = GeneralUtility::getFileAbsFileName($iconPath);
         if ($absolutePath !== '') {
             $contents = @file_get_contents($absolutePath);
             if ($contents === false) {
