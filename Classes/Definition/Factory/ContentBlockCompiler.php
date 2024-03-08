@@ -823,6 +823,7 @@ final class ContentBlockCompiler
         $fieldType = FieldType::tryFrom($field['type']);
         if ($fieldType === null) {
             $validTypesList = array_map(fn(FieldType $fieldType) => $fieldType->value, FieldType::cases());
+            sort($validTypesList);
             $validTypes = implode(', ', $validTypesList);
             throw new \InvalidArgumentException(
                 'The type "' . $field['type'] . '" is not a valid type in Content Block "' . $input->contentBlock->getName() . '". Valid types are: ' . $validTypes . '.',
