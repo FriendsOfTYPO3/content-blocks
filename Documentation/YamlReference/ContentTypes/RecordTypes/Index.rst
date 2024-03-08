@@ -36,6 +36,11 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
    The custom table name to be used for the new Record Type.
 
+   .. warning::
+
+      Avoid using dashes "-" inside your table names. They are not guaranteed to
+      be escaped in the database. We recommend to always use snake case.
+
    .. code-block:: yaml
 
        table: tx_vendor_my_custom_table_name

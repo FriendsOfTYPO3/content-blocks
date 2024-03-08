@@ -53,6 +53,11 @@ Field options, which can be defined inside the :yaml:`fields` array.
    The field's identifier has to be unique within a Content Block. Exception is
    within a collections' field array, as this starts a new scope.
 
+   .. warning::
+
+      Avoid using dashes "-" inside your identifiers. They are not guaranteed to
+      be escaped in the database. We recommend to always use snake case.
+
    .. code-block:: yaml
 
        fields:
