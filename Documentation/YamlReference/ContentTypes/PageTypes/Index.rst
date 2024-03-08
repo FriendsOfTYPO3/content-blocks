@@ -23,6 +23,9 @@ minimal Page Type looks like this:
 This will create a new Page Type entry above the page tree, which you can drag
 and drop as usual. Your custom fields will be added after the `nav_title` field.
 
+Check out this :ref:`comprehensive guide <cb_guides_page_types>` on ways to
+utilize Page Types.
+
 Options
 =======
 
