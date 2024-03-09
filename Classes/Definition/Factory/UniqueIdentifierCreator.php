@@ -24,9 +24,9 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
  */
 class UniqueIdentifierCreator
 {
-    public static function createContentTypeIdentifier(LoadedContentBlock $contentBlock): string
+    public static function createContentTypeIdentifier(string $name): string
     {
-        $contentTypeIdentifier = self::createFullIdentifier($contentBlock);
+        $contentTypeIdentifier = self::createFullIdentifier($name);
         return $contentTypeIdentifier;
     }
 
@@ -40,21 +40,21 @@ class UniqueIdentifierCreator
     protected static function createCombinedIdentifier(LoadedContentBlock $contentBlock, PrefixType $prefixType): string
     {
         $contentTypeIdentifier = match ($prefixType) {
-            PrefixType::FULL => self::createFullIdentifier($contentBlock),
+            PrefixType::FULL => self::createFullIdentifier($contentBlock->getName()),
             PrefixType::VENDOR => self::createVendorIdentifier($contentBlock),
         };
         return $contentTypeIdentifier;
     }
 
-    protected static function createFullIdentifier(LoadedContentBlock $contentBlock): string
+    protected static function createFullIdentifier(string $name): string
     {
-        if (!str_contains($contentBlock->getName(), '/')) {
+        if (!str_contains($name, '/')) {
             throw new \InvalidArgumentException(
-                'Failed to create content type identifier from name "' . $contentBlock->getName() . '". Missing "/".',
+                'Failed to create content type identifier from name "' . $name . '". Missing "/".',
                 1699554680
             );
         }
-        $parts = explode('/', $contentBlock->getName());
+        $parts = explode('/', $name);
         $contentTypeIdentifier = self::removeDashes($parts[0]) . '_' . self::removeDashes($parts[1]);
         return $contentTypeIdentifier;
     }

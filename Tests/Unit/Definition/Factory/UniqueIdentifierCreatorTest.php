@@ -48,7 +48,7 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
             'name' => $contentBlockName,
             'yaml' => ['table' => ContentType::CONTENT_ELEMENT->getTable()],
         ]);
-        self::assertSame($expected, UniqueIdentifierCreator::createContentTypeIdentifier($contentBlock));
+        self::assertSame($expected, UniqueIdentifierCreator::createContentTypeIdentifier($contentBlock->getName()));
     }
 
     public static function createUniqueColumnNameTestDataProvider(): iterable

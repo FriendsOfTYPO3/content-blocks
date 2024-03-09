@@ -26,6 +26,8 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\PackageResolver;
@@ -192,8 +194,8 @@ class CreateContentBlockCommand extends Command
         $contentBlockConfiguration = new LoadedContentBlock(
             name: $contentBlockName,
             yaml: $yamlConfiguration,
-            icon: '',
-            iconProvider: '',
+            icon: new ContentTypeIcon(),
+            iconHideInMenu: new ContentTypeIcon(),
             hostExtension: $extension,
             extPath: $this->getExtPath($extension, $contentType),
             contentType: $contentType
@@ -265,6 +267,7 @@ class CreateContentBlockCommand extends Command
             'table' => 'tt_content',
             'typeField' => 'CType',
             'name' => $fullName,
+            'typeName' => UniqueIdentifierCreator::createContentTypeIdentifier($fullName),
             'title' => $title,
             'description' => $description,
             'group' => 'common',

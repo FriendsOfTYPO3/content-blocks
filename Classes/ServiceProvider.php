@@ -22,6 +22,7 @@ use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
 use TYPO3\CMS\ContentBlocks\Cache\InitializeContentBlockCache;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -104,6 +105,7 @@ class ServiceProvider extends AbstractServiceProvider
         }
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
+            /** @var ContentTypeDefinition $typeDefinition */
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $iconConfig = [
                     $typeDefinition->getTypeIconIdentifier() => [
@@ -111,6 +113,11 @@ class ServiceProvider extends AbstractServiceProvider
                         'provider' => $typeDefinition->getIconProviderClassName(),
                     ],
                 ];
+                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenuPath() !== '') {
+                    $iconConfig[$typeDefinition->getTypeIconHideInMenuIdentifier()] = [
+                        'source' => $typeDefinition->getTypeIconHideInMenuPath(),
+                    ];
+                }
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }
         }

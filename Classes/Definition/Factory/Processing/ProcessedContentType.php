@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
@@ -62,9 +61,7 @@ final class ProcessedContentType
             'languagePathDescription' => $this->languagePathDescription,
         ];
         if ($isRootTable) {
-            $contentTypeIcon = new ContentTypeIcon();
-            $contentTypeIcon->iconPath = $this->contentBlock->getIcon();
-            $contentTypeIcon->iconProvider = $this->contentBlock->getIconProvider();
+            $contentTypeIcon = $this->contentBlock->getIcon();
             $contentType['priority'] = (int)($yaml['priority'] ?? 0);
         } else {
             $absolutePath = GeneralUtility::getFileAbsFileName($this->contentBlock->getExtPath());
@@ -74,35 +71,22 @@ final class ProcessedContentType
                 $this->contentBlock->getExtPath(),
                 $identifier,
                 $this->contentBlock->getContentType(),
+                $this->table,
+                $this->typeName,
             );
         }
         $contentType['typeIconPath'] = $contentTypeIcon->iconPath;
         $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
-        $contentType['typeIconIdentifier'] = $this->buildTypeIconIdentifier($contentTypeIcon);
+        $contentType['typeIconIdentifier'] = $contentTypeIcon->iconIdentifier;
+        if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
+            $contentTypeIconHideInMenu = $this->contentBlock->getIconHideInMenu();
+            $contentType['typeIconHideInMenuPath'] = $contentTypeIconHideInMenu->iconPath;
+            $contentType['typeIconHideInMenuIdentifier'] = $contentTypeIconHideInMenu->iconIdentifier;
+        }
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
             $contentType['saveAndClose'] = (bool)($yaml['saveAndClose'] ?? false);
         }
         return $contentType;
-    }
-
-    /**
-     * We add a part of the md5 hash here in order to mitigate browser caching issues when changing the Content Block
-     * Icon. Otherwise, the icon identifier would always be the same and stored in the local storage.
-     */
-    private function buildTypeIconIdentifier(ContentTypeIcon $contentTypeIcon): string
-    {
-        $typeIconIdentifier = $this->table . '-' . $this->typeName;
-        $absolutePath = GeneralUtility::getFileAbsFileName($contentTypeIcon->iconPath);
-        if ($absolutePath !== '') {
-            $contents = @file_get_contents($absolutePath);
-            if ($contents === false) {
-                return '';
-            }
-            $hash = md5($contents);
-            $hasSubString = substr($hash, 0, 7);
-            $typeIconIdentifier .= '-' . $hasSubString;
-        }
-        return $typeIconIdentifier;
     }
 }

@@ -35,23 +35,29 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [],
                 ],
             ],
             [
                 'name' => 't3ce/example',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 't3ce_example',
                     'fields' => [],
                 ],
             ],
@@ -63,7 +69,10 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
+            new NullFrontend('test'),
+            $contentBlockCompiler
+        ))
             ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
@@ -76,7 +85,10 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
+            new NullFrontend('test'),
+            $contentBlockCompiler
+        ))
             ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -91,12 +103,15 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 't3ce/example',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 't3ce_example',
                     'fields' => [],
                 ],
             ],
@@ -108,7 +123,10 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
+            new NullFrontend('test'),
+            $contentBlockCompiler
+        ))
             ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -123,8 +141,10 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'table' => 'tt_content',
@@ -142,8 +162,10 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'table' => 'tt_content',
@@ -168,7 +190,10 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
+            new NullFrontend('test'),
+            $contentBlockCompiler
+        ))
             ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
 
         $contentElement = $tableDefinitionCollection->getContentElementDefinition($typeName);
@@ -182,35 +207,44 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [],
                 ],
             ],
             [
                 'name' => 't3ce/example',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 't3ce_example',
                     'priority' => 20,
                     'fields' => [],
                 ],
             ],
             [
                 'name' => 'fizz/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/fizz',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'fizz_bar',
                     'priority' => 30,
                     'fields' => [],
                 ],
@@ -223,9 +257,14 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
+            new NullFrontend('test'),
+            $contentBlockCompiler
+        ))
             ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
-        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
+        $typeDefinitionCollection = $tableDefinitionCollection->getTable(
+            'tt_content'
+        )->getContentTypeDefinitionCollection();
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {
             $result[] = $typeDefinition->getName();

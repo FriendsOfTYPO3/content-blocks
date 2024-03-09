@@ -23,6 +23,8 @@ use Symfony\Component\VarExporter\LazyObjectInterface;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -210,22 +212,44 @@ class ContentBlockLoader
         if (!file_exists($absolutePath)) {
             throw new \RuntimeException('Content Block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
         }
-
         // Override table and typeField for Content Elements and Page Types.
         if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
             $yaml['table'] = $contentType->getTable();
             $yaml['typeField'] = $contentType->getTypeField();
         }
-
+        // Create typeName
+        $typeName = $yaml['typeName'] ?? UniqueIdentifierCreator::createContentTypeIdentifier($name);
+        $yaml['typeName'] ??= $typeName;
+        $table = $yaml['table'];
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
-        $contentBlockIcon = ContentTypeIconResolver::resolve($name, $absolutePath, $extPath, $iconIdentifier, $contentType);
-
+        $contentBlockIcon = ContentTypeIconResolver::resolve(
+            $name,
+            $absolutePath,
+            $extPath,
+            $iconIdentifier,
+            $contentType,
+            $table,
+            $typeName
+        );
+        $pageIconHideInMenu = new ContentTypeIcon();
+        if ($contentType === ContentType::PAGE_TYPE) {
+            $iconIdentifierHideInMenu = ContentBlockPathUtility::getIconHideInMenuNameWithoutFileExtension();
+            $pageIconHideInMenu = ContentTypeIconResolver::resolve(
+                $name,
+                $absolutePath,
+                $extPath,
+                $iconIdentifierHideInMenu,
+                $contentType,
+                $table,
+                '-hide-in-menu'
+            );
+        }
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
-            icon: $contentBlockIcon->iconPath,
-            iconProvider: $contentBlockIcon->iconProvider,
+            icon: $contentBlockIcon,
+            iconHideInMenu: $pageIconHideInMenu,
             hostExtension: $extensionKey,
             extPath: $extPath,
             contentType: $contentType,

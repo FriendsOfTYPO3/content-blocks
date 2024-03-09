@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\LanguagePath;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 
@@ -86,10 +85,6 @@ final class ProcessingInput
         if ($this->typeField === null) {
             return '1';
         }
-        if (isset($this->yaml['typeName'])) {
-            return $this->yaml['typeName'];
-        }
-        $uniqueTypeName = UniqueIdentifierCreator::createContentTypeIdentifier($this->contentBlock);
-        return $uniqueTypeName;
+        return $this->yaml['typeName'];
     }
 }
