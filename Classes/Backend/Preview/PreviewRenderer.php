@@ -66,17 +66,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $result = parent::renderPageModulePreviewContent($item);
             return $result;
         }
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
-        $view->setPartialRootPaths([
-            'EXT:backend/Resources/Private/Partials/',
-            'EXT:content_blocks/Resources/Private/Partials/',
-            $contentBlockPrivatePath . '/Partials/',
-        ]);
-        $view->setTemplateRootPaths([$contentBlockPrivatePath]);
-        $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
-        $view->setRequest($request);
-
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
         if ($this->cache->has($cacheIdentifier)) {
             $resolvedData = $this->cache->require($cacheIdentifier);
@@ -102,8 +91,24 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $contentElementTable,
             $item->getContext(),
         );
+        $view = $this->createView($contentBlockPrivatePath, $request);
         $view->assign('data', $data);
         $result = $view->render();
         return $result;
+    }
+
+    protected function createView(string $contentBlockPrivatePath, ServerRequestInterface $request): StandaloneView
+    {
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
+        $view->setPartialRootPaths([
+            'EXT:backend/Resources/Private/Partials/',
+            'EXT:content_blocks/Resources/Private/Partials/',
+            $contentBlockPrivatePath . '/Partials/',
+        ]);
+        $view->setTemplateRootPaths([$contentBlockPrivatePath]);
+        $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
+        $view->setRequest($request);
+        return $view;
     }
 }
