@@ -77,6 +77,9 @@ class ContentBlockBuilder
             $this->createExamplePublicAssets($publicPath);
         }
         $this->copyDefaultIcon($contentType, $basePath);
+        if ($contentType === ContentType::PAGE_TYPE) {
+            $this->copyHideInMenuIcon($basePath);
+        }
     }
 
     protected function initializeRegistries(LoadedContentBlock $contentBlock): void
@@ -152,5 +155,13 @@ class ContentBlockBuilder
         $absoluteDefaultIconPath = GeneralUtility::getFileAbsFileName($defaultIcon);
         $contentBlockIconPath = $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg';
         copy($absoluteDefaultIconPath, $contentBlockIconPath);
+    }
+
+    protected function copyHideInMenuIcon(string $basePath): void
+    {
+        $hideInMenuIcon = 'EXT:content_blocks/Resources/Public/Icons/DefaultPageTypeIconHideInMenu.svg';
+        $absoluteHideInMenuIconPath = GeneralUtility::getFileAbsFileName($hideInMenuIcon);
+        $contentBlockHideInMenuIconPath = $basePath . '/' . ContentBlockPathUtility::getHideInMenuIconPathWithoutFileExtension() . '.svg';
+        copy($absoluteHideInMenuIconPath, $contentBlockHideInMenuIconPath);
     }
 }

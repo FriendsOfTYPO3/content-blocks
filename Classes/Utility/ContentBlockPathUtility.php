@@ -94,6 +94,11 @@ class ContentBlockPathUtility
         return self::getPublicFolder() . '/' . self::getIconNameWithoutFileExtension();
     }
 
+    public static function getHideInMenuIconPathWithoutFileExtension(): string
+    {
+        return self::getPublicFolder() . '/' . self::getIconHideInMenuNameWithoutFileExtension();
+    }
+
     public static function getRelativeContentElementsPath(): string
     {
         return self::getSubDirectoryName() . '/' . self::getContentElementsFolder();
