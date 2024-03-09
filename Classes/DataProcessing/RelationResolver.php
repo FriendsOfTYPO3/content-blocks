@@ -82,7 +82,6 @@ class RelationResolver
     ): mixed {
         $fieldType = $tcaFieldDefinition->getFieldType();
         $recordIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
-
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(
                 'The field "' . $recordIdentifier . '" is missing in the "' . $table
@@ -90,27 +89,21 @@ class RelationResolver
                 1674222293
             );
         }
-
         $data = $record[$recordIdentifier];
-
         if ($fieldType === FieldType::FILE) {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
             return $fileCollector->getFiles();
         }
-
         if ($fieldType === FieldType::COLLECTION) {
             return $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition);
         }
-
         if ($fieldType === FieldType::CATEGORY) {
             return $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-
         if ($fieldType === FieldType::RELATION) {
             return $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-
         if ($fieldType === FieldType::FOLDER) {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $folders = GeneralUtility::trimExplode(',', (string)$data, true);
@@ -119,22 +112,18 @@ class RelationResolver
             $fileCollector->addFilesFromFolders($folders, $folderFieldConfiguration->isRecursive());
             return $fileCollector->getFiles();
         }
-
         if ($fieldType === FieldType::SELECT) {
             return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-
         if ($fieldType === FieldType::FLEXFORM) {
             return $this->flexFormService->convertFlexFormContentToArray($data);
         }
-
         if ($fieldType === FieldType::JSON) {
             $platform = GeneralUtility::makeInstance(ConnectionPool::class)
                 ->getConnectionForTable($table)
                 ->getDatabasePlatform();
             return Type::getType('json')->convertToPHPValue($data, $platform);
         }
-
         return $data;
     }
 
