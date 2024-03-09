@@ -224,7 +224,7 @@ class TcaGenerator
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
-                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenuPath() !== '') {
+                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenuIdentifier() !== '') {
                     $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getTypeIconHideInMenuIdentifier();
                 }
             }
