@@ -93,7 +93,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         );
         $view = $this->createView($contentBlockPrivatePath, $request);
         $view->assign('data', $data);
-        $result = $view->render();
+        $result = (string)$view->render();
         return $result;
     }
 
