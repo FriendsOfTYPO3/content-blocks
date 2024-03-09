@@ -23,7 +23,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 
 class ListContentBlocksCommand extends Command
@@ -77,10 +76,7 @@ class ListContentBlocksCommand extends Command
                 ContentType::CONTENT_ELEMENT, ContentType::PAGE_TYPE => $loadedContentBlock->getContentType()->getTable(),
                 ContentType::RECORD_TYPE => $loadedContentBlock->getYaml()['table'],
             };
-            $typeName = $loadedContentBlock->getYaml()['typeName'] ?? null;
-            if ($typeName === null) {
-                $typeName = UniqueIdentifierCreator::createContentTypeIdentifier($loadedContentBlock);
-            }
+            $typeName = $loadedContentBlock->getYaml()['typeName'];
             $list[] = [
                 'vendor' => $loadedContentBlock->getVendor(),
                 'name' => $loadedContentBlock->getPackage(),

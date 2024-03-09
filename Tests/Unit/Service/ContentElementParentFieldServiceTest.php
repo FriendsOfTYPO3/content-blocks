@@ -37,12 +37,15 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'nested_content',
@@ -54,12 +57,15 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
             ],
             [
                 'name' => 'foo/baz',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/baz',
                 'yaml' => [
                     'table' => 'foobar',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_baz',
                     'fields' => [
                         [
                             'identifier' => 'nested_content',
@@ -71,12 +77,15 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
             ],
             [
                 'name' => 't3ce/example',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 't3ce_example',
                     'fields' => [
                         [
                             'identifier' => 'nested_content2',
@@ -116,12 +125,15 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'foobar',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'nested_content',
@@ -133,12 +145,15 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
             ],
             [
                 'name' => 't3ce/example',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/example',
                 'yaml' => [
                     'table' => 'foobar',
                     'typeField' => 'CType',
+                    'typeName' => 't3ce_example',
                     'fields' => [
                         [
                             'identifier' => 'nested_content2',

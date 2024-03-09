@@ -35,12 +35,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'foo',
@@ -85,12 +88,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'collection',
@@ -141,12 +147,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -184,12 +193,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -233,12 +245,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -293,12 +308,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -359,12 +377,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'tab_1',
@@ -403,12 +424,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -453,12 +477,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -495,12 +522,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -543,12 +573,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'palette_1',
@@ -595,12 +628,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -653,12 +689,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'type' => 'Text',
@@ -692,12 +731,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'text1',
@@ -727,12 +769,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -772,12 +817,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $contentBlocks = [
             [
                 'name' => 'foo/bar',
-                'icon' => '',
-                'iconProvider' => '',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
                 'extPath' => 'EXT:example/ContentBlocks/foo',
                 'yaml' => [
                     'table' => 'tt_content',
                     'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
                     'fields' => [
                         [
                             'identifier' => 'inline',
@@ -830,12 +878,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -864,12 +915,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -943,12 +997,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -998,12 +1055,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -1059,12 +1119,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/foo',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'inline',
@@ -1125,12 +1188,15 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
-                    'icon' => '',
-                    'iconProvider' => '',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
                     'extPath' => 'EXT:example/ContentBlocks/example',
                     'yaml' => [
                         'table' => 'tt_content',
                         'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'my_collection',

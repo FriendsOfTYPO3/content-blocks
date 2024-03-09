@@ -22,7 +22,25 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class ContentTypeIcon
 {
-    public string $iconPath;
-    public string $iconHideInMenuPath;
-    public string $iconProvider;
+    public string $iconPath = '';
+    public string $iconProvider = '';
+    public string $iconIdentifier = '';
+
+    public static function fromArray(array $array): ContentTypeIcon
+    {
+        $self = new self();
+        $self->iconPath = $array['iconPath'] ?? '';
+        $self->iconProvider = $array['iconProvider'] ?? '';
+        $self->iconIdentifier = $array['iconIdentifier'] ?? '';
+        return $self;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'iconPath' => $this->iconPath,
+            'iconProvider' => $this->iconProvider,
+            'iconIdentifier' => $this->iconIdentifier,
+        ];
+    }
 }

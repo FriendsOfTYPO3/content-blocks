@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 
 /**
@@ -28,9 +29,8 @@ final class LoadedContentBlock
     public function __construct(
         private readonly string $name,
         private readonly array $yaml,
-        private readonly string $icon,
-        private readonly string $iconHideInMenu,
-        private readonly string $iconProvider,
+        private readonly ContentTypeIcon $icon,
+        private readonly ContentTypeIcon $iconHideInMenu,
         private readonly string $hostExtension,
         private readonly string $extPath,
         private readonly ContentType $contentType,
@@ -45,9 +45,8 @@ final class LoadedContentBlock
         return new self(
             name: (string)($array['name'] ?? ''),
             yaml: (array)($array['yaml'] ?? []),
-            icon: (string)($array['icon'] ?? ''),
-            iconHideInMenu: (string)($array['iconHideInMenu'] ?? ''),
-            iconProvider: (string)($array['iconProvider'] ?? ''),
+            icon: ContentTypeIcon::fromArray($array['icon'] ?? []),
+            iconHideInMenu: ContentTypeIcon::fromArray($array['iconHideInMenu'] ?? []),
             hostExtension: (string)($array['hostExtension'] ?? ''),
             extPath: (string)($array['extPath'] ?? ''),
             contentType: ContentType::getByTable($table)
@@ -59,9 +58,8 @@ final class LoadedContentBlock
         return [
             'name' => $this->name,
             'yaml' => $this->yaml,
-            'icon' => $this->icon,
-            'iconHideInMenu' => $this->iconHideInMenu,
-            'iconProvider' => $this->iconProvider,
+            'icon' => $this->icon->toArray(),
+            'iconHideInMenu' => $this->iconHideInMenu->toArray(),
             'hostExtension' => $this->hostExtension,
             'extPath' => $this->extPath,
         ];
@@ -87,19 +85,14 @@ final class LoadedContentBlock
         return $this->yaml;
     }
 
-    public function getIcon(): string
+    public function getIcon(): ContentTypeIcon
     {
         return $this->icon;
     }
 
-    public function getIconHideInMenu(): string
+    public function getIconHideInMenu(): ContentTypeIcon
     {
         return $this->iconHideInMenu;
-    }
-
-    public function getIconProvider(): string
-    {
-        return $this->iconProvider;
     }
 
     public function getHostExtension(): string
