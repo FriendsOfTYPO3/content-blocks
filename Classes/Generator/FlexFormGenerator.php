@@ -54,7 +54,7 @@ class FlexFormGenerator
                 'el' => 'field',
             ],
         ];
-        $flexForm = GeneralUtility::array2xml($dataStructure, docTag: 'T3FlexForms', spaceInd: 4, options: $options);
+        $flexForm = GeneralUtility::array2xml($dataStructure, '', 0, 'T3FlexForms', 4, $options);
         return $flexForm;
     }
 

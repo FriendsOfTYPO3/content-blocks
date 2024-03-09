@@ -317,11 +317,11 @@ class TcaGenerator
                 // @todo group could be chosen.
                 if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
                     ExtensionManagementUtility::addTcaSelectItemGroup(
-                        table: $typeDefinition->getTable(),
-                        field: $tableDefinition->getTypeField(),
-                        groupId: 'content_blocks',
-                        groupLabel: 'LLL:EXT:content_blocks/Resources/Private/Language/locallang.xlf:content-blocks',
-                        position: 'after:default',
+                        $typeDefinition->getTable(),
+                        $tableDefinition->getTypeField(),
+                        'content_blocks',
+                        'LLL:EXT:content_blocks/Resources/Private/Language/locallang.xlf:content-blocks',
+                        'after:default',
                     );
                 }
                 $group = match ($tableDefinition->getContentType()) {
@@ -338,9 +338,9 @@ class TcaGenerator
                     $label = $typeDefinition->getTitle();
                 }
                 ExtensionManagementUtility::addTcaSelectItem(
-                    table: $typeDefinition->getTable(),
-                    field: $tableDefinition->getTypeField(),
-                    item: [
+                    $typeDefinition->getTable(),
+                    $tableDefinition->getTypeField(),
+                    [
                         'label' => $label,
                         'value' => $typeDefinition->getTypeName(),
                         'icon' => $typeDefinition->getTypeIcon()->iconIdentifier,

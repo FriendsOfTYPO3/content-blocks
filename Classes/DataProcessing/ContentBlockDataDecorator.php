@@ -54,7 +54,8 @@ final class ContentBlockDataDecorator
             $tableDefinition,
             $resolvedRelation,
             $table,
-            context: $context,
+            0,
+            $context,
         );
         return $contentBlockData;
     }

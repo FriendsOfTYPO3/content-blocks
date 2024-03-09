@@ -149,12 +149,12 @@ class RelationResolver
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
             $foreignTable = $tcaFieldConfig['config']['foreign_table'];
             $result = $this->getRelations(
-                uidList: (string)($record[$uniqueIdentifier] ?? ''),
-                tableList: $foreignTable,
-                mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-                uid: $this->getUidOfCurrentRecord($record),
-                currentTable: $parentTable,
-                tcaFieldConf: $tcaFieldConfig['config'] ?? []
+                (string)($record[$uniqueIdentifier] ?? ''),
+                $foreignTable,
+                $tcaFieldConfig['config']['MM'] ?? '',
+                $this->getUidOfCurrentRecord($record),
+                $parentTable,
+                $tcaFieldConfig['config'] ?? []
             );
             $result = $this->enrichWithTableAndRawRecordInternal($result, $foreignTable);
             // If this table is defined by Content Blocks, process child relations.
@@ -188,12 +188,12 @@ class RelationResolver
         $allowed = $tcaFieldConfig['config']['allowed'];
         $fieldValue = (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         $result = $this->getRelations(
-            uidList: $fieldValue,
-            tableList: $allowed,
-            mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-            uid: $this->getUidOfCurrentRecord($record),
-            currentTable: $parentTable,
-            tcaFieldConf: $tcaFieldConfig['config'] ?? []
+            $fieldValue,
+            $allowed,
+            $tcaFieldConfig['config']['MM'] ?? '',
+            $this->getUidOfCurrentRecord($record),
+            $parentTable,
+            $tcaFieldConfig['config'] ?? []
         );
         $tableList = null;
         if (str_contains($allowed, ',')) {
@@ -213,12 +213,12 @@ class RelationResolver
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         $result = $this->getRelations(
-            uidList: $uidList,
-            tableList: $tcaFieldConfig['config']['foreign_table'] ?? '',
-            mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-            uid: $this->getUidOfCurrentRecord($record),
-            currentTable: $parentTable,
-            tcaFieldConf: $tcaFieldConfig['config'] ?? []
+            $uidList,
+            $tcaFieldConfig['config']['foreign_table'] ?? '',
+            $tcaFieldConfig['config']['MM'] ?? '',
+            $this->getUidOfCurrentRecord($record),
+            $parentTable,
+            $tcaFieldConfig['config'] ?? []
         );
         return $result;
     }
@@ -233,12 +233,12 @@ class RelationResolver
         $collectionTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
         $uid = (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         $result = $this->getRelations(
-            uidList: $uid,
-            tableList: $collectionTable,
-            mmTable: $tcaFieldConfig['config']['MM'] ?? '',
-            uid: $this->getUidOfCurrentRecord($record),
-            currentTable: $parentTable,
-            tcaFieldConf: $tcaFieldConfig['config'] ?? []
+            $uid,
+            $collectionTable,
+            $tcaFieldConfig['config']['MM'] ?? '',
+            $this->getUidOfCurrentRecord($record),
+            $parentTable,
+            $tcaFieldConfig['config'] ?? []
         );
         $result = $this->enrichWithTableAndRawRecordInternal($result, $collectionTable);
         // If this table is defined by Content Blocks, process child relations.
@@ -275,10 +275,10 @@ class RelationResolver
                     continue;
                 }
                 $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
-                    tcaFieldDefinition: $childTcaFieldDefinition,
-                    typeDefinition: $foreignTypeDefinition,
-                    record: $row,
-                    table: $currentTable,
+                    $childTcaFieldDefinition,
+                    $foreignTypeDefinition,
+                    $row,
+                    $currentTable,
                 );
             }
         }
