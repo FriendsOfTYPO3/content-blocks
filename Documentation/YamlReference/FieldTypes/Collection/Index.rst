@@ -32,7 +32,7 @@ or gif files. These should be 64x64px.
 Settings
 ========
 
-.. include:: /Snippets/LabelField.rst
+.. include:: /Snippets/LabelField.rst.txt
 
 .. confval:: table
 

@@ -1,5 +1,3 @@
-.. include:: /Includes.rst.txt
-
 .. confval:: allowedCustomProperties
 
    :Required: false

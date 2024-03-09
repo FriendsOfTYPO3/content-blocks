@@ -36,7 +36,7 @@ Settings
 
    If set, the Json textarea needs to be filled.
 
-.. confval:: readonly
+.. confval:: readOnly
 
    :Required: false
    :Type: boolean

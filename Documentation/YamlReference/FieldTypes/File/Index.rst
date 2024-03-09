@@ -60,7 +60,7 @@ Settings
 
    It is possible to define crop variants for this specific field and Content
    Block. This documentation only covers the most basic configuration. Refer to
-   the :ref:`TCA documentation <columns-imageManipulation-properties-cropVariants>`
+   the :ref:`TCA documentation <t3tca:columns-imageManipulation-properties-cropVariants>`
    for a complete overview of possibilities.
 
    Example configuration below. The aspect ratios can be defined as a float

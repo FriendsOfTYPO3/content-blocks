@@ -78,6 +78,21 @@ Build/Scripts/runTests.sh -s functional
 
 Be sure to exclude the `.Build/public/typo3temp` directory from indexing in your IDE (e.g. PhpStorm) before starting the tests.
 
+## Rendering the documentation
+
+When you update the documentation you can try out rendering it locally
+(Docker required):
+
+```
+make docs
+```
+
+You can test if the syntax and references are ok with
+
+```
+make test-docs
+```
+
 ## Feedback
 
 You can reach us on the TYPO3 Slack channel `#cig-structuredcontent`. We

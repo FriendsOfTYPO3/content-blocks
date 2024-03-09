@@ -44,8 +44,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    :Required: true
    :Type: integer
 
-    The :yaml:`typeName` has to be a numerical value. There are
-    some reserved numbers, which you can't use either: 1, 3, 4, 6, 7, 199, 254, 255.
+   The :yaml:`typeName` has to be a numerical value. There are some reserved
+   numbers, which you can't use either: 1, 3, 4, 6, 7, 199, 254, 255.
 
    .. code-block:: yaml
 
