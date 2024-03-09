@@ -39,9 +39,7 @@ interface ContentTypeInterface
     public function getShowItems(): array;
     public function hasColumn(string $column): bool;
     public function getColumns(): array;
-    public function getTypeIconIdentifier(): ?string;
-    public function getIconProviderClassName(): string;
-    public function getTypeIconPath(): string;
+    public function getTypeIcon(): ContentTypeIcon;
     public function getLanguagePathTitle(): string;
     public function getLanguagePathDescription(): string;
 }

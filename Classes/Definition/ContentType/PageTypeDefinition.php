@@ -22,8 +22,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private string $typeIconHideInMenuPath = '';
-    private string $typeIconHideInMenuIdentifier = '';
+    private ContentTypeIcon $typeIconHideInMenu;
 
     public static function createFromArray(array $array, string $table): PageTypeDefinition
     {
@@ -39,37 +38,22 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
-            ->withTypeIconPath($array['typeIconPath'] ?? null)
-            ->withIconProviderClassName($array['iconProvider'] ?? null)
-            ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
-            ->withTypeIconHideInMenuPath($array['typeIconHideInMenuPath'] ?? '')
-            ->withTypeIconHideInMenuIdentifier($array['typeIconHideInMenuIdentifier'] ?? '')
+            ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
+            ->withTypeIconHideInMenu(ContentTypeIcon::fromArray($array['typeIconHideInMenu'] ?? []))
             ->withPriority($array['priority'] ?? 0)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
     }
 
-    public function withTypeIconHideInMenuPath(string $typeIconHideInMenu): self
+    public function withTypeIconHideInMenu(ContentTypeIcon $typeIconHideInMenu): self
     {
         $clone = clone $this;
-        $clone->typeIconHideInMenuPath = $typeIconHideInMenu;
+        $clone->typeIconHideInMenu = $typeIconHideInMenu;
         return $clone;
     }
 
-    public function withTypeIconHideInMenuIdentifier(string $typeIconHideInIdentifier): self
+    public function getTypeIconHideInMenu(): ContentTypeIcon
     {
-        $clone = clone $this;
-        $clone->typeIconHideInMenuIdentifier = $typeIconHideInIdentifier;
-        return $clone;
-    }
-
-    public function getTypeIconHideInMenuPath(): string
-    {
-        return $this->typeIconHideInMenuPath;
-    }
-
-    public function getTypeIconHideInMenuIdentifier(): string
-    {
-        return $this->typeIconHideInMenuIdentifier;
+        return $this->typeIconHideInMenu;
     }
 }

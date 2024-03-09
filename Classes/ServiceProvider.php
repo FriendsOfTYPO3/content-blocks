@@ -107,15 +107,17 @@ class ServiceProvider extends AbstractServiceProvider
         foreach ($tableDefinitionCollection as $tableDefinition) {
             /** @var ContentTypeDefinition $typeDefinition */
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+                $icon = $typeDefinition->getTypeIcon();
                 $iconConfig = [
-                    $typeDefinition->getTypeIconIdentifier() => [
-                        'source' => $typeDefinition->getTypeIconPath(),
-                        'provider' => $typeDefinition->getIconProviderClassName(),
+                    $icon->iconIdentifier => [
+                        'source' => $icon->iconPath,
+                        'provider' => $icon->iconProvider,
                     ],
                 ];
-                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenuPath() !== '') {
-                    $iconConfig[$typeDefinition->getTypeIconHideInMenuIdentifier()] = [
-                        'source' => $typeDefinition->getTypeIconHideInMenuPath(),
+                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenu()->iconIdentifier !== '') {
+                    $hideInMenuIcon = $typeDefinition->getTypeIconHideInMenu();
+                    $iconConfig[$hideInMenuIcon->iconIdentifier] = [
+                        'source' => $hideInMenuIcon->iconPath,
                     ];
                 }
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
@@ -233,7 +235,7 @@ HEREDOC;
                     }
                     $group = $typeDefinition->getGroup();
                     $typeName = $typeDefinition->getTypeName();
-                    $iconIdentifier = $typeDefinition->getTypeIconIdentifier();
+                    $iconIdentifier = $typeDefinition->getTypeIcon()->iconIdentifier;
                     $saveAndClose = $typeDefinition->hasSaveAndClose() ? '1' : '0';
                     $pageTsConfig = <<<HEREDOC
 mod.wizards.newContentElement.wizardItems.$group {

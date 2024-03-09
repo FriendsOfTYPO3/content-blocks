@@ -42,9 +42,7 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withPriority($array['priority'] ?? 0)
             ->withSaveAndClose($array['saveAndClose'])
             ->withGroup($array['group'])
-            ->withTypeIconPath($array['typeIconPath'] ?? null)
-            ->withIconProviderClassName($array['iconProvider'] ?? null)
-            ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
+            ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
     }

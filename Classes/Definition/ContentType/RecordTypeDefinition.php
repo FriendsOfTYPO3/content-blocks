@@ -36,9 +36,7 @@ final class RecordTypeDefinition extends ContentTypeDefinition implements Conten
             ->withOverrideColumns($array['overrideColumns'] ?? [])
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
-            ->withTypeIconPath($array['typeIconPath'] ?? null)
-            ->withIconProviderClassName($array['iconProvider'] ?? null)
-            ->withTypeIconIdentifier($array['typeIconIdentifier'] ?? null)
+            ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
             ->withPriority($array['priority'] ?? 0)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null);

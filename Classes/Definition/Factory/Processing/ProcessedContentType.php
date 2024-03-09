@@ -75,13 +75,9 @@ final class ProcessedContentType
                 $this->typeName,
             );
         }
-        $contentType['typeIconPath'] = $contentTypeIcon->iconPath;
-        $contentType['iconProvider'] = $contentTypeIcon->iconProvider;
-        $contentType['typeIconIdentifier'] = $contentTypeIcon->iconIdentifier;
+        $contentType['typeIcon'] = $contentTypeIcon->toArray();
         if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
-            $contentTypeIconHideInMenu = $this->contentBlock->getIconHideInMenu();
-            $contentType['typeIconHideInMenuPath'] = $contentTypeIconHideInMenu->iconPath;
-            $contentType['typeIconHideInMenuIdentifier'] = $contentTypeIconHideInMenu->iconIdentifier;
+            $contentType['typeIconHideInMenu'] = $this->contentBlock->getIconHideInMenu()->toArray();
         }
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();

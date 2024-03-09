@@ -223,14 +223,14 @@ class TcaGenerator
         foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
-                $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIconIdentifier();
-                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenuIdentifier() !== '') {
-                    $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getTypeIconHideInMenuIdentifier();
+                $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
+                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenu()->iconIdentifier !== '') {
+                    $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getTypeIconHideInMenu()->iconIdentifier;
                 }
             }
             if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
                 if ($isNewTable) {
-                    $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIconIdentifier();
+                    $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIcon()->iconIdentifier;
                 }
                 $typeIconColumnExists = $isNewTable && isset($baseTca[$tableDefinition->getTable()]['ctrl']['typeicon_column']);
                 if ($tableDefinition->hasTypeField() && !$typeIconColumnExists) {
@@ -343,7 +343,7 @@ class TcaGenerator
                     item: [
                         'label' => $label,
                         'value' => $typeDefinition->getTypeName(),
-                        'icon' => $typeDefinition->getTypeIconIdentifier(),
+                        'icon' => $typeDefinition->getTypeIcon()->iconIdentifier,
                         'group' => $group,
                     ]
                 );

@@ -40,9 +40,7 @@ abstract class ContentTypeDefinition
     private string $vendor = '';
     private string $package = '';
     private int $priority = 0;
-    private string $typeIconPath;
-    private string $iconProviderClassName;
-    private string $typeIconIdentifier;
+    private ContentTypeIcon $typeIcon;
     private string $languagePathTitle;
     private string $languagePathDescription;
 
@@ -120,19 +118,9 @@ abstract class ContentTypeDefinition
         return $this->priority;
     }
 
-    public function getTypeIconPath(): string
+    public function getTypeIcon(): ContentTypeIcon
     {
-        return $this->typeIconPath;
-    }
-
-    public function getIconProviderClassName(): string
-    {
-        return $this->iconProviderClassName;
-    }
-
-    public function getTypeIconIdentifier(): string
-    {
-        return $this->typeIconIdentifier;
+        return $this->typeIcon;
     }
 
     public function getLanguagePathTitle(): string
@@ -231,24 +219,10 @@ abstract class ContentTypeDefinition
         return $clone;
     }
 
-    public function withTypeIconPath(string $typeIconPath): static
+    public function withTypeIcon(ContentTypeIcon $typeIcon): static
     {
         $clone = clone $this;
-        $clone->typeIconPath = $typeIconPath;
-        return $clone;
-    }
-
-    public function withIconProviderClassName(string $iconProvider): static
-    {
-        $clone = clone $this;
-        $clone->iconProviderClassName = $iconProvider;
-        return $clone;
-    }
-
-    public function withTypeIconIdentifier(string $typeIconIdentifier): static
-    {
-        $clone = clone $this;
-        $clone->typeIconIdentifier = $typeIconIdentifier;
+        $clone->typeIcon = $typeIcon;
         return $clone;
     }
 
