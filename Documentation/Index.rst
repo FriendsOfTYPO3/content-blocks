@@ -133,4 +133,3 @@ use content types as sub-resources inside extensions.
     :hidden:
 
     Sitemap
-    genindex

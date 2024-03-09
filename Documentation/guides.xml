@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+        links-are-relative="true">
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               project-home="https://typo3.org/community/teams/typo3-development/initiatives/structured-content/content-blocks"
+               project-contact="https://typo3.org/community/teams/typo3-development/initiatives/structured-content/"
+               project-repository="https://github.com/nhovratov/content-blocks"
+               project-issues="https://github.com/nhovratov/content-blocks/issues"
+               edit-on-github-branch="main"
+               edit-on-github="nhovratov/content-blocks"
+               typo3-core-preferred="stable"
+               interlink-shortcode="contentblocks/content-blocks"
+    />
+    <project title="Content Blocks"
+             release="0.6"
+             copyright="since 2023 by TYPO3 contributors"
+    />
+</guides>

@@ -45,7 +45,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
        table: tx_vendor_my_custom_table_name
 
-.. include:: /Snippets/LabelField.rst
+.. include:: /Snippets/LabelField.rst.txt
 
 .. confval:: typeField
 
