@@ -997,7 +997,7 @@ final class ContentBlockCompiler
                         );
                     }
                     foreach ($container['fields'] as $containerField) {
-                        if ($this->fieldTypeRegistry->has($containerField['type']) || !FieldType::isValidFlexFormField($this->fieldTypeRegistry->get($containerField['type']))) {
+                        if (!$this->fieldTypeRegistry->has($containerField['type']) || !FieldType::isValidFlexFormField($this->fieldTypeRegistry->get($containerField['type']))) {
                             throw new \InvalidArgumentException(
                                 'FlexForm field "' . $field['identifier'] . '" has an invalid field of type "' . $containerField['type'] . '" inside of a "container" item. Please use valid field types in Content Block "' . $contentBlock->getName() . '".',
                                 1686330594
