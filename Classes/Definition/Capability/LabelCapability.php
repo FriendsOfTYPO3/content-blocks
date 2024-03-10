@@ -46,7 +46,10 @@ final class LabelCapability
 
     public function hasLabelField(): bool
     {
-        return $this->labelField !== '';
+        if (is_string($this->labelField)) {
+            return $this->labelField !== '';
+        }
+        return array_key_exists(0, $this->labelField);
     }
 
     public function getPrimaryLabelField(): string
