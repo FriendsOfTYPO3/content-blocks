@@ -27,8 +27,7 @@ class FieldTypeResolver
 {
     public function __construct(
         protected FieldTypeRegistry $fieldTypeRegistry,
-    ) {
-    }
+    ) {}
 
     public function resolve(array $configuration): FieldTypeInterface
     {
