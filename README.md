@@ -1,6 +1,6 @@
 [![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-12.4-ff8700?maxAge=3600&logo=typo3)](https://get.typo3.org/)
 
-# TYPO3 Content Blocks
+# TYPO3 CMS Content Blocks
 
 This is the standalone repository for the TYPO3 Content Blocks project. Content
 Blocks provides a new API to create custom Content Types like Content Elements,
