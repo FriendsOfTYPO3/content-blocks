@@ -19,9 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-/**
- * @internal Not part of TYPO3's public API.
- */
 #[AutoconfigureTag('content_blocks.field_type')]
 interface FieldTypeInterface
 {
