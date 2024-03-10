@@ -15,19 +15,17 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TextFieldConfiguration implements FieldConfigurationInterface
+final class TextareaFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::TEXT;
     private string $default = '';
     private bool $readOnly = false;
-    private int $size = 0;
     private bool $required = false;
     private int $max = 0;
     private int $min = 0;
@@ -35,17 +33,22 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
     private string $mode = '';
     private string $placeholder = '';
     private string $is_in = '';
-    private array $valuePicker = [];
     private array $eval = [];
-    private ?bool $autocomplete = null;
+    private int $rows = 0;
+    private int $cols = 0;
+    private bool $enableTabulator = false;
+    private bool $fixedFont = false;
+    private string $wrap = '';
+    private bool $enableRichtext = false;
+    private string $richtextConfiguration = '';
+    private string $format = '';
 
-    public static function createFromArray(array $settings): TextFieldConfiguration
+    public static function createFromArray(array $settings): TextareaFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
-        $self->size = (int)($settings['size'] ?? $self->size);
         $self->required = (bool)($settings['required'] ?? $self->required);
         $self->max = (int)($settings['max'] ?? $self->max);
         $self->min = (int)($settings['min'] ?? $self->min);
@@ -54,10 +57,14 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
         $self->is_in = (string)($settings['is_in'] ?? $self->is_in);
         $self->eval = (array)($settings['eval'] ?? $self->eval);
-        if (isset($settings['autocomplete'])) {
-            $self->autocomplete = (bool)$settings['autocomplete'];
-        }
-        $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
+        $self->rows = (int)($settings['rows'] ?? $self->rows);
+        $self->cols = (int)($settings['cols'] ?? $self->cols);
+        $self->enableTabulator = (bool)($settings['enableTabulator'] ?? $self->enableTabulator);
+        $self->fixedFont = (bool)($settings['fixedFont'] ?? $self->fixedFont);
+        $self->wrap = (string)($settings['wrap'] ?? $self->wrap);
+        $self->enableRichtext = (bool)($settings['enableRichtext'] ?? $self->enableRichtext);
+        $self->richtextConfiguration = (string)($settings['richtextConfiguration'] ?? $self->richtextConfiguration);
+        $self->format = (string)($settings['format'] ?? $self->format);
 
         return $self;
     }
@@ -65,15 +72,15 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
-        if ($this->size !== 0) {
-            $config['size'] = $this->size;
-        }
+        $config['type'] = self::getTcatype();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
+        }
+        if ($this->required) {
+            $config['required'] = true;
         }
         if ($this->max > 0) {
             $config['max'] = $this->max;
@@ -93,17 +100,32 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
         if ($this->is_in !== '') {
             $config['is_in'] = $this->is_in;
         }
-        if ($this->required) {
-            $config['required'] = true;
-        }
         if ($this->eval !== []) {
             $config['eval'] = implode(',', $this->eval);
         }
-        if (isset($this->autocomplete)) {
-            $config['autocomplete'] = $this->autocomplete;
+        if ($this->rows > 0) {
+            $config['rows'] = $this->rows;
         }
-        if (($this->valuePicker['items'] ?? []) !== []) {
-            $config['valuePicker'] = $this->valuePicker;
+        if ($this->cols > 0) {
+            $config['cols'] = $this->cols;
+        }
+        if ($this->enableTabulator) {
+            $config['enableTabulator'] = true;
+        }
+        if ($this->fixedFont) {
+            $config['fixedFont'] = true;
+        }
+        if ($this->wrap !== '') {
+            $config['wrap'] = $this->wrap;
+        }
+        if ($this->enableRichtext) {
+            $config['enableRichtext'] = true;
+        }
+        if ($this->richtextConfiguration !== '') {
+            $config['richtextConfiguration'] = $this->richtextConfiguration;
+        }
+        if ($this->format !== '') {
+            $config['format'] = $this->format;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
@@ -111,15 +133,36 @@ final class TextFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        $null = ' NOT NULL';
-        if ($this->nullable) {
-            $null = '';
-        }
-        return "`$uniqueColumnName` VARCHAR(255) DEFAULT ''" . $null;
+        return "`$uniqueColumnName` text";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Textarea';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'text';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

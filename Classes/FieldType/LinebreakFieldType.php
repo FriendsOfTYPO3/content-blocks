@@ -15,16 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TabFieldConfiguration implements FieldConfigurationInterface
+final class LinebreakFieldType implements FieldTypeInterface
 {
-    private FieldType $fieldType = FieldType::TAB;
-
-    public static function createFromArray(array $settings): FieldConfigurationInterface
+    public static function createFromArray(array $settings): LinebreakFieldType
     {
         return new self();
     }
@@ -39,8 +37,33 @@ final class TabFieldConfiguration implements FieldConfigurationInterface
         return '';
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Linebreak';
+    }
+
+    public static function getTcaType(): string
+    {
+        return '';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return false;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

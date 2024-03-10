@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class LinkFieldConfiguration implements FieldConfigurationInterface
+final class ColorFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::LINK;
     private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -34,17 +33,15 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
     private string $placeholder = '';
     private array $valuePicker = [];
     private ?bool $autocomplete = null;
-    private array $allowedTypes = [];
-    private array $appearance = [];
 
-    public static function createFromArray(array $settings): LinkFieldConfiguration
+    public static function createFromArray(array $settings): ColorFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
-        $self->required = (bool)($settings['required'] ?? $self->required);
+        $self->required = (bool)(($settings['required'] ?? $self->required));
         $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
         $self->mode = (string)($settings['mode'] ?? $self->mode);
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
@@ -52,8 +49,6 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
             $self->autocomplete = (bool)$settings['autocomplete'];
         }
         $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
-        $self->allowedTypes = (array)($settings['allowedTypes'] ?? $self->allowedTypes);
-        $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
 
         return $self;
     }
@@ -61,7 +56,7 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
@@ -70,9 +65,6 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
-        }
-        if ($this->required) {
-            $config['required'] = true;
         }
         if ($this->nullable) {
             $config['nullable'] = true;
@@ -83,17 +75,14 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
         if ($this->placeholder !== '') {
             $config['placeholder'] = $this->placeholder;
         }
+        if ($this->required) {
+            $config['required'] = true;
+        }
         if (isset($this->autocomplete)) {
             $config['autocomplete'] = $this->autocomplete;
         }
         if (($this->valuePicker['items'] ?? []) !== []) {
             $config['valuePicker'] = $this->valuePicker;
-        }
-        if ($this->allowedTypes !== []) {
-            $config['allowedTypes'] = $this->allowedTypes;
-        }
-        if ($this->appearance !== []) {
-            $config['appearance'] = $this->appearance;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
@@ -105,11 +94,36 @@ final class LinkFieldConfiguration implements FieldConfigurationInterface
         if ($this->nullable) {
             $null = '';
         }
-        return "`$uniqueColumnName` VARCHAR(1024) DEFAULT ''" . $null;
+        return "`$uniqueColumnName` VARCHAR(255) DEFAULT ''" . $null;
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Color';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'color';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

@@ -15,21 +15,20 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class LanguageFieldConfiguration implements FieldConfigurationInterface
+final class LanguageFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::LANGUAGE;
     private int $default = 0;
     private bool $readOnly = false;
     private bool $required = false;
 
-    public static function createFromArray(array $settings): FieldConfigurationInterface
+    public static function createFromArray(array $settings): LanguageFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -42,7 +41,7 @@ final class LanguageFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->default !== 0) {
             $config['default'] = $this->default;
         }
@@ -62,8 +61,33 @@ final class LanguageFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` int(11) DEFAULT '0' NOT NULL";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Language';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'language';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

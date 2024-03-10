@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
@@ -32,6 +33,7 @@ class SqlGenerator
         protected readonly ContentBlockLoader $contentBlockLoader,
         protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected readonly FieldTypeRegistry $fieldTypeRegistry,
     ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void
@@ -46,6 +48,7 @@ class SqlGenerator
         $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
         $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
+            $this->fieldTypeRegistry,
             $this->simpleTcaSchemaFactory
         );
         $sql = [];

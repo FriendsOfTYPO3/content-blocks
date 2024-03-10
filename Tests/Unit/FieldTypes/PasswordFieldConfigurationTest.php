@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\PasswordFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\PasswordFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class PasswordFieldConfigurationTest extends UnitTestCase
@@ -109,7 +109,7 @@ final class PasswordFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = PasswordFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = PasswordFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -126,7 +126,7 @@ final class PasswordFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = PasswordFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = PasswordFieldType::createFromArray([]);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }

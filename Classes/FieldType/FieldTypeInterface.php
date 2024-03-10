@@ -15,15 +15,23 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
+
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-interface FieldConfigurationInterface
+#[AutoconfigureTag('content_blocks.field_type')]
+interface FieldTypeInterface
 {
-    public static function createFromArray(array $settings): FieldConfigurationInterface;
+    public static function createFromArray(array $settings): FieldTypeInterface;
     public function getTca(): array;
     public function getSql(string $uniqueColumnName): string;
-    public function getFieldType(): FieldType;
+    public static function getName(): string;
+    public static function getTcaType(): string;
+    public static function isSearchable(): bool;
+    public static function isRenderable(): bool;
+    public static function isRelation(): bool;
+    public static function hasItems(): bool;
 }

@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\LinkFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\LinkFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class LinkFieldConfigurationTest extends UnitTestCase
@@ -130,7 +130,7 @@ final class LinkFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = LinkFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = LinkFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -147,7 +147,7 @@ final class LinkFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = LinkFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = LinkFieldType::createFromArray([]);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }

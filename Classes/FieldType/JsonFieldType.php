@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class JsonFieldConfiguration implements FieldConfigurationInterface
+final class JsonFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::JSON;
     private string $default = '';
     private int $cols = 0;
     private int $rows = 0;
@@ -33,7 +32,7 @@ final class JsonFieldConfiguration implements FieldConfigurationInterface
     private bool $readOnly = false;
     private string $placeholder = '';
 
-    public static function createFromArray(array $settings): JsonFieldConfiguration
+    public static function createFromArray(array $settings): JsonFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -51,7 +50,7 @@ final class JsonFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -83,8 +82,33 @@ final class JsonFieldConfiguration implements FieldConfigurationInterface
         return '';
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Json';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'json';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

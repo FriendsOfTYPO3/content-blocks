@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\SelectFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\SelectFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class SelectFieldConfigurationTest extends UnitTestCase
@@ -194,7 +194,7 @@ final class SelectFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = SelectFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = SelectFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -211,8 +211,8 @@ final class SelectFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = SelectFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = SelectFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, SelectFieldType::getSql($uniqueColumnName));
     }
 }

@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\JsonFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\JsonFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class JsonFieldConfigurationTest extends UnitTestCase
@@ -92,7 +92,7 @@ final class JsonFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = JsonFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = JsonFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -109,8 +109,8 @@ final class JsonFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = JsonFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = JsonFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, JsonFieldType::getSql($uniqueColumnName));
     }
 }

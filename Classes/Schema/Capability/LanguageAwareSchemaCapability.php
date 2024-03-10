@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema\Capability;
 
-use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
+use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 
 /**
  * Contains all information if a schema is language-aware, meaning
@@ -29,18 +29,18 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
 class LanguageAwareSchemaCapability implements SchemaCapabilityInterface
 {
     public function __construct(
-        protected readonly FieldTypeInterface $languageField,
-        protected readonly FieldTypeInterface $originPointerField,
-        protected readonly ?FieldTypeInterface $translationSourceField,
-        protected readonly ?FieldTypeInterface $diffSourceField
+        protected readonly TcaFieldTypeInterface $languageField,
+        protected readonly TcaFieldTypeInterface $originPointerField,
+        protected readonly ?TcaFieldTypeInterface $translationSourceField,
+        protected readonly ?TcaFieldTypeInterface $diffSourceField
     ) {}
 
-    public function getLanguageField(): FieldTypeInterface
+    public function getLanguageField(): TcaFieldTypeInterface
     {
         return $this->languageField;
     }
 
-    public function getTranslationOriginPointerField(): FieldTypeInterface
+    public function getTranslationOriginPointerField(): TcaFieldTypeInterface
     {
         return $this->originPointerField;
     }
@@ -50,12 +50,12 @@ class LanguageAwareSchemaCapability implements SchemaCapabilityInterface
         return $this->translationSourceField !== null;
     }
 
-    public function getTranslationSourceField(): ?FieldTypeInterface
+    public function getTranslationSourceField(): ?TcaFieldTypeInterface
     {
         return $this->translationSourceField;
     }
 
-    public function getDiffSourceField(): ?FieldTypeInterface
+    public function getDiffSourceField(): ?TcaFieldTypeInterface
     {
         return $this->diffSourceField;
     }

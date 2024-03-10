@@ -17,14 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema\Field;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-interface FieldTypeInterface
+interface TcaFieldTypeInterface
 {
-    public function getType(): FieldType;
+    public function getType(): FieldTypeInterface;
     public function getName(): string;
     public function getColumnConfig(): array;
 }

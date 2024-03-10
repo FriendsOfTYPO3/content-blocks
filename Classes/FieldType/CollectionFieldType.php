@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class CollectionFieldConfiguration implements FieldConfigurationInterface
+final class CollectionFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::COLLECTION;
     private bool $readOnly = false;
     private int $size = 0;
     private bool $localizeReferencesAtParentLocalization = false;
@@ -51,7 +50,7 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
     private string $symmetric_label = '';
     private string $symmetric_sortby = '';
 
-    public static function createFromArray(array $settings): CollectionFieldConfiguration
+    public static function createFromArray(array $settings): CollectionFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -86,7 +85,7 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }
@@ -171,8 +170,33 @@ final class CollectionFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` int(11) UNSIGNED DEFAULT '0' NOT NULL";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Collection';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'inline';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return true;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

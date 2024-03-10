@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\RadioFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\RadioFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class RadioFieldConfigurationTest extends UnitTestCase
@@ -100,7 +100,7 @@ final class RadioFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = RadioFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = RadioFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -117,8 +117,8 @@ final class RadioFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = RadioFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = RadioFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, RadioFieldType::getSql($uniqueColumnName));
     }
 }

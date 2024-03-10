@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\SlugFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\SlugFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class SlugFieldConfigurationTest extends UnitTestCase
@@ -105,7 +105,7 @@ final class SlugFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = SlugFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = SlugFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -122,8 +122,8 @@ final class SlugFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = SlugFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = SlugFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, FieldTypeInterface::getSql($uniqueColumnName));
     }
 }

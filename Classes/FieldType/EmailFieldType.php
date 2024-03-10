@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class EmailFieldConfiguration implements FieldConfigurationInterface
+final class EmailFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::EMAIL;
     private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -36,7 +35,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
     private ?bool $autocomplete = null;
     private array $valuePicker = [];
 
-    public static function createFromArray(array $settings): EmailFieldConfiguration
+    public static function createFromArray(array $settings): EmailFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -58,7 +57,7 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
@@ -103,8 +102,33 @@ final class EmailFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT ''" . $null;
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Email';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'email';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

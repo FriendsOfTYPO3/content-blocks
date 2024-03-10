@@ -22,7 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedFieldException;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
@@ -72,8 +72,7 @@ final class ContentBlockDataDecorator
         $grids = [];
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
-            $fieldType = $tcaFieldDefinition->getFieldType();
-            if (!$fieldType->isRenderable()) {
+            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
                 continue;
             }
             $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
@@ -111,7 +110,9 @@ final class ContentBlockDataDecorator
         ?PageLayoutContext $context = null,
     ): mixed {
         $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-        $resolvedField = match ($tcaFieldDefinition->getFieldType()) {
+        $fieldTypeName = $tcaFieldDefinition->getFieldType()->getName();
+        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
+        $resolvedField = match ($fieldTypeEnum) {
             FieldType::COLLECTION,
             FieldType::RELATION => $this->transformMultipleRelation(
                 $resolvedField,

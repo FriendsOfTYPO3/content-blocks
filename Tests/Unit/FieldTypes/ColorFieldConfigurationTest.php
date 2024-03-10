@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\ColorFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\ColorFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ColorFieldConfigurationTest extends UnitTestCase

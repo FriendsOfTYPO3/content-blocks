@@ -15,17 +15,16 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class SelectFieldConfiguration implements FieldConfigurationInterface
+final class SelectFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
     use WithCustomProperties;
 
-    private FieldType $fieldType = FieldType::SELECT;
     private string|int $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -57,7 +56,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     // Only for renderType="selectTree"
     private array $treeConfig = [];
 
-    public static function createFromArray(array $settings): SelectFieldConfiguration
+    public static function createFromArray(array $settings): SelectFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -98,7 +97,7 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -185,8 +184,33 @@ final class SelectFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Select';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'select';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return true;
+    }
+
+    public static function hasItems(): bool
+    {
+        return true;
     }
 }

@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\TextareaFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\TextareaFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TextareaFieldConfigurationTest extends UnitTestCase
@@ -142,7 +142,7 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = TextareaFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = TextareaFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -159,8 +159,8 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = TextareaFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = TextareaFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, TextareaFieldType::getSql($uniqueColumnName));
     }
 }

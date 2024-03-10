@@ -15,38 +15,32 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class CheckboxFieldConfiguration implements FieldConfigurationInterface
+final class RadioFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
     use WithCustomProperties;
 
-    private FieldType $fieldType = FieldType::CHECKBOX;
-    private int $default = 0;
+    private string|int $default = '';
     private bool $readOnly = false;
-    private bool $invertStateDisplay = false;
     private string $itemsProcFunc = '';
-    private int|string $cols = 0;
-    private string $eval = '';
-    private array $validation = [];
     private array $items = [];
 
-    public static function createFromArray(array $settings): CheckboxFieldConfiguration
+    public static function createFromArray(array $settings): RadioFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->default = (int)($settings['default'] ?? $self->default);
+        $default = $settings['default'] ?? $self->default;
+        if (is_string($default) || is_int($default)) {
+            $self->default = $default;
+        }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
-        $self->cols = $settings['cols'] ?? $self->cols;
-        $self->eval = (string)($settings['eval'] ?? $self->eval);
-        $self->validation = (array)($settings['validation'] ?? $self->validation);
         $self->items = (array)($settings['items'] ?? $self->items);
-        $self->invertStateDisplay = (bool)($settings['invertStateDisplay'] ?? $self->invertStateDisplay);
         $self->setCustomProperties($settings);
 
         return $self;
@@ -55,8 +49,8 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
-        if ($this->default > 0) {
+        $config['type'] = self::getTcatype();
+        if ($this->default !== '') {
             $config['default'] = $this->default;
         }
         if ($this->readOnly) {
@@ -65,20 +59,8 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
         if ($this->itemsProcFunc !== '') {
             $config['itemsProcFunc'] = $this->itemsProcFunc;
         }
-        if ($this->cols !== 0 && $this->cols !== '') {
-            $config['cols'] = $this->cols;
-        }
-        if ($this->eval !== '') {
-            $config['eval'] = $this->eval;
-        }
-        if ($this->validation !== []) {
-            $config['validation'] = $this->validation;
-        }
         if ($this->items !== []) {
             $config['items'] = $this->items;
-        }
-        if ($this->invertStateDisplay) {
-            $config['items'][0]['invertStateDisplay'] = true;
         }
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
@@ -87,11 +69,36 @@ final class CheckboxFieldConfiguration implements FieldConfigurationInterface
 
     public function getSql(string $uniqueColumnName): string
     {
-        return "`$uniqueColumnName` int(11) UNSIGNED DEFAULT '0' NOT NULL";
+        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Radio';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'radio';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return true;
     }
 }

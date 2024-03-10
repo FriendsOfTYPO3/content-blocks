@@ -15,18 +15,17 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class DateTimeFieldConfiguration implements FieldConfigurationInterface
+final class DateTimeFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::DATETIME;
     private string|int $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -39,7 +38,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
     private bool $disableAgeDisplay = false;
     private string $format = '';
 
-    public static function createFromArray(array $settings): DateTimeFieldConfiguration
+    public static function createFromArray(array $settings): DateTimeFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -64,7 +63,7 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->default !== '') {
             $config['default'] = $this->dbType !== '' ? $this->default : $this->convertDateToTimestamp($this->default);
         }
@@ -115,14 +114,39 @@ final class DateTimeFieldConfiguration implements FieldConfigurationInterface
         return '';
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'DateTime';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'datetime';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 
     /**
      * Returns a timestamp as integer. Returns 0 if it could not create a timestamp.
-    */
+     */
     private function convertDateToTimestamp(string|int $date): int
     {
         $isTime = $this->format === 'time';

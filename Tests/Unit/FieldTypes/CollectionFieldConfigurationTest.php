@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\CollectionFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class CollectionFieldConfigurationTest extends UnitTestCase

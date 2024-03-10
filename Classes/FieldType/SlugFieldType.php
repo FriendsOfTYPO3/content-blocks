@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class SlugFieldConfiguration implements FieldConfigurationInterface
+final class SlugFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::SLUG;
     private bool $readOnly = false;
     private int $size = 0;
     private array $appearance = [];
@@ -33,7 +32,7 @@ final class SlugFieldConfiguration implements FieldConfigurationInterface
     private array $generatorOptions = [];
     private bool $prependSlash = false;
 
-    public static function createFromArray(array $settings): FieldConfigurationInterface
+    public static function createFromArray(array $settings): FieldTypeInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -50,7 +49,7 @@ final class SlugFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }
@@ -81,8 +80,33 @@ final class SlugFieldConfiguration implements FieldConfigurationInterface
         return '';
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Slug';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'slug';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

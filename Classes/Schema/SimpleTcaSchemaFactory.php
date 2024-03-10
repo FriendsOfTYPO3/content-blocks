@@ -30,8 +30,10 @@ class SimpleTcaSchemaFactory implements SingletonInterface
     protected array $schemas = [];
     protected array $tca;
 
-    public function __construct(array $tca = null)
-    {
+    public function __construct(
+        protected FieldTypeResolver $typeResolver,
+        array $tca = null
+    ) {
         $this->tca = $tca ?? $GLOBALS['TCA'] ?? [];
         foreach (array_keys($this->tca) as $table) {
             $this->schemas[$table] = $this->build($table);
@@ -58,7 +60,7 @@ class SimpleTcaSchemaFactory implements SingletonInterface
         $schemaDefinition = $this->tca[$schemaName];
         foreach ($schemaDefinition['columns'] ?? [] as $columnName => $columnConfig) {
             try {
-                $fieldType = TypeResolver::resolve($columnConfig);
+                $fieldType = $this->typeResolver->resolve($columnConfig);
             } catch (\InvalidArgumentException) {
                 continue;
             }

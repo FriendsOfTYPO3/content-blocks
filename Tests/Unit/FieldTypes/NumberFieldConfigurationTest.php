@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\NumberFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\NumberFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class NumberFieldConfigurationTest extends UnitTestCase
@@ -166,7 +166,7 @@ final class NumberFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = NumberFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = NumberFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -191,7 +191,7 @@ final class NumberFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(array $config, string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = NumberFieldConfiguration::createFromArray($config);
+        $inputFieldConfiguration = NumberFieldType::createFromArray($config);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }

@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class FolderFieldConfiguration implements FieldConfigurationInterface
+final class FolderFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::FOLDER;
     private bool $recursive = false;
     private string $default = '';
     private bool $readOnly = false;
@@ -36,7 +35,7 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
     private bool $hideMoveIcons = false;
     private array $elementBrowserEntryPoints = [];
 
-    public static function createFromArray(array $settings): FolderFieldConfiguration
+    public static function createFromArray(array $settings): FolderFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -57,7 +56,7 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -94,9 +93,34 @@ final class FolderFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` text";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Folder';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'folder';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 
     public function isRecursive(): bool

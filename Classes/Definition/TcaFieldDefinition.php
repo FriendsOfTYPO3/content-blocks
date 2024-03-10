@@ -18,8 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -32,7 +31,7 @@ final class TcaFieldDefinition
     private string $labelPath = '';
     private string $descriptionPath = '';
     private bool $useExistingField = false;
-    private ?FieldConfigurationInterface $fieldConfiguration = null;
+    private ?FieldTypeInterface $fieldType = null;
 
     public static function createFromArray(array $array): TcaFieldDefinition
     {
@@ -40,7 +39,9 @@ final class TcaFieldDefinition
         if ($uniqueIdentifier === '') {
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty.', 1629277138);
         }
-        if (!($array['type'] ?? null) instanceof FieldType) {
+        /** @var FieldTypeInterface|null $fieldType */
+        $fieldType = $array['type'] ?? null;
+        if ($fieldType === null) {
             throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty.', 1629277139);
         }
 
@@ -52,12 +53,7 @@ final class TcaFieldDefinition
             ->withLabelPath($array['labelPath'] ?? '')
             ->withDescriptionPath($array['descriptionPath'] ?? '')
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
-            ->withFieldConfiguration($array['type']->getFieldConfiguration($array['config']));
-    }
-
-    public function getFieldType(): FieldType
-    {
-        return $this->fieldConfiguration->getFieldType();
+            ->withFieldType($fieldType::createFromArray($array['config']));
     }
 
     public function getUniqueIdentifier(): string
@@ -92,15 +88,15 @@ final class TcaFieldDefinition
 
     public function getTca(): array
     {
-        if ($this->fieldConfiguration instanceof FieldConfigurationInterface) {
-            return $this->fieldConfiguration->getTca();
+        if ($this->fieldType instanceof FieldTypeInterface) {
+            return $this->fieldType->getTca();
         }
         return [];
     }
 
-    public function getFieldConfiguration(): FieldConfigurationInterface
+    public function getFieldType(): FieldTypeInterface
     {
-        return $this->fieldConfiguration;
+        return $this->fieldType;
     }
 
     public function withUniqueIdentifier(string $uniqueIdentifier): TcaFieldDefinition
@@ -138,10 +134,10 @@ final class TcaFieldDefinition
         return $clone;
     }
 
-    public function withFieldConfiguration(FieldConfigurationInterface $fieldConfiguration): TcaFieldDefinition
+    public function withFieldType(FieldTypeInterface $fieldType): TcaFieldDefinition
     {
         $clone = clone $this;
-        $clone->fieldConfiguration = $fieldConfiguration;
+        $clone->fieldType = $fieldType;
         return $clone;
     }
 

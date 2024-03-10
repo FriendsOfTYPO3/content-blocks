@@ -15,24 +15,23 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class FlexFormFieldConfiguration implements FieldConfigurationInterface
+final class FlexFormFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::FLEXFORM;
     /** @var FlexFormDefinition[] */
     private array $flexFormDefinitions = [];
     private string $ds_pointerField = '';
     private array $ds = [];
 
-    public static function createFromArray(array $settings): FlexFormFieldConfiguration
+    public static function createFromArray(array $settings): FlexFormFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -45,7 +44,7 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->ds_pointerField !== '') {
             $config['ds_pointerField'] = $this->ds_pointerField;
         }
@@ -59,9 +58,34 @@ final class FlexFormFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` text";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'FlexForm';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'flex';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return true;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 
     /**

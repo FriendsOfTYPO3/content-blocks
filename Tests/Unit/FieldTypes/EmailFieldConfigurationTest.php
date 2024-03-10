@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\EmailFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\EmailFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class EmailFieldConfigurationTest extends UnitTestCase
@@ -104,7 +104,7 @@ final class EmailFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = EmailFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = EmailFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -121,7 +121,7 @@ final class EmailFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = EmailFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = EmailFieldType::createFromArray([]);
 
         self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
     }

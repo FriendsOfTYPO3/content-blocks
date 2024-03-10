@@ -17,22 +17,28 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-class TypeResolver
+class FieldTypeResolver
 {
-    public static function resolve(array $configuration): FieldType
+    public function __construct(
+        protected FieldTypeRegistry $fieldTypeRegistry,
+    ) {
+    }
+
+    public function resolve(array $configuration): FieldTypeInterface
     {
         if ($configuration === [] || !isset($configuration['config']['type'])) {
             throw new \InvalidArgumentException('Tried to resolve type of non-existing field.', 1680110446);
         }
         $tcaType = $configuration['config']['type'];
-        foreach (FieldType::cases() as $enum) {
-            if ($enum->getTcaType() === $tcaType) {
-                return $enum;
+        foreach ($this->fieldTypeRegistry as $fieldType) {
+            if ($fieldType::getTcaType() === $tcaType) {
+                return $fieldType;
             }
         }
         throw new \InvalidArgumentException('Field type "' . $tcaType . '" is either not implemented or cannot be shared in Content Blocks.', 1680110918);

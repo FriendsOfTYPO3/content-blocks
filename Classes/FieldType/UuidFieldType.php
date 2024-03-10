@@ -15,21 +15,20 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class UuidFieldConfiguration implements FieldConfigurationInterface
+final class UuidFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::UUID;
     private int $size = 0;
     private bool $enableCopyToClipboard = true;
     private ?int $version = null;
 
-    public static function createFromArray(array $settings): UuidFieldConfiguration
+    public static function createFromArray(array $settings): UuidFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -45,7 +44,7 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
@@ -65,8 +64,33 @@ final class UuidFieldConfiguration implements FieldConfigurationInterface
         return '';
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Uuid';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'uuid';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return false;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

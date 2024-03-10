@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\UuidFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\UuidFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class UuidFieldConfigurationTest extends UnitTestCase
@@ -85,7 +85,7 @@ final class UuidFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = UuidFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = UuidFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -102,8 +102,8 @@ final class UuidFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = UuidFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = UuidFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, UuidFieldType::getSql($uniqueColumnName));
     }
 }

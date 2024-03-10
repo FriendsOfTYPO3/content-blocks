@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class FlexFormFieldConfigurationTest extends UnitTestCase
@@ -64,7 +64,7 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FlexFormFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = FlexFormFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -81,8 +81,8 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = FlexFormFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = FlexFormFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, FlexFormFieldType::getSql($uniqueColumnName));
     }
 }

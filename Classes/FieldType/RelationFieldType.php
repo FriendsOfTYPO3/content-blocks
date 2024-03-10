@@ -15,16 +15,15 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\FieldConfiguration;
+namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class RelationFieldConfiguration implements FieldConfigurationInterface
+final class RelationFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private FieldType $fieldType = FieldType::RELATION;
     private string|int $default = '';
     private string $allowed = '';
     private string $foreign_table = '';
@@ -49,7 +48,7 @@ final class RelationFieldConfiguration implements FieldConfigurationInterface
     private array $suggestOptions = [];
     private array $appearance = [];
 
-    public static function createFromArray(array $settings): RelationFieldConfiguration
+    public static function createFromArray(array $settings): RelationFieldType
     {
         $self = new self();
         $self->setCommonProperties($settings);
@@ -86,7 +85,7 @@ final class RelationFieldConfiguration implements FieldConfigurationInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = $this->fieldType->getTcaType();
+        $config['type'] = self::getTcatype();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -165,8 +164,33 @@ final class RelationFieldConfiguration implements FieldConfigurationInterface
         return "`$uniqueColumnName` text";
     }
 
-    public function getFieldType(): FieldType
+    public static function getName(): string
     {
-        return $this->fieldType;
+        return 'Relation';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'group';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
+    public static function isRenderable(): bool
+    {
+        return true;
+    }
+
+    public static function isRelation(): bool
+    {
+        return true;
+    }
+
+    public static function hasItems(): bool
+    {
+        return false;
     }
 }

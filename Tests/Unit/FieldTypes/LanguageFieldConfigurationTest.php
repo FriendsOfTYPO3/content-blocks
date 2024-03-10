@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\LanguageFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\LanguageFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class LanguageFieldConfigurationTest extends UnitTestCase
@@ -78,7 +78,7 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = LanguageFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = LanguageFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -95,8 +95,8 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = LanguageFieldConfiguration::createFromArray([]);
+        $inputFieldConfiguration = LanguageFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, LanguageFieldType::getSql($uniqueColumnName));
     }
 }

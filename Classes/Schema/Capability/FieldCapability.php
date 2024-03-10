@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema\Capability;
 
-use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
+use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -25,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
 final class FieldCapability implements SchemaCapabilityInterface
 {
     public function __construct(
-        protected readonly FieldTypeInterface $field
+        protected readonly TcaFieldTypeInterface $field
     ) {}
 
     public function getFieldName(): string
