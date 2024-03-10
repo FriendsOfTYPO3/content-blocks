@@ -67,9 +67,9 @@ final class RadioFieldType implements FieldTypeInterface
         return $tca;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
-        return "`$uniqueColumnName` VARCHAR(255) DEFAULT '' NOT NULL";
+        return "`$column` VARCHAR(255) DEFAULT '' NOT NULL";
     }
 
     public static function getName(): string

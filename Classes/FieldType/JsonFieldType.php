@@ -77,7 +77,7 @@ final class JsonFieldType implements FieldTypeInterface
         return $tca;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         return '';
     }

@@ -130,10 +130,10 @@ final class FileFieldType implements FieldTypeInterface
         return $cropVariants;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         // @todo change to return '' for v13 release (generated automatically now).
-        return "`$uniqueColumnName` int(11) UNSIGNED DEFAULT '0' NOT NULL";
+        return "`$column` int(11) UNSIGNED DEFAULT '0' NOT NULL";
     }
 
     public static function getName(): string

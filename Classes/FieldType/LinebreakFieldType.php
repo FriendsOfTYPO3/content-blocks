@@ -32,7 +32,7 @@ final class LinebreakFieldType implements FieldTypeInterface
         return [];
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         return '';
     }

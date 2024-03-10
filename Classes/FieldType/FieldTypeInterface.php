@@ -24,7 +24,7 @@ interface FieldTypeInterface
 {
     public static function createFromArray(array $settings): FieldTypeInterface;
     public function getTca(): array;
-    public function getSql(string $uniqueColumnName): string;
+    public function getSql(string $column): string;
     public static function getName(): string;
     public static function getTcaType(): string;
     public static function isSearchable(): bool;

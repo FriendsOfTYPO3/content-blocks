@@ -98,13 +98,13 @@ final class LinkFieldType implements FieldTypeInterface
         return $tca;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';
         }
-        return "`$uniqueColumnName` VARCHAR(1024) DEFAULT ''" . $null;
+        return "`$column` VARCHAR(1024) DEFAULT ''" . $null;
     }
 
     public static function getName(): string

@@ -104,17 +104,17 @@ final class NumberFieldType implements FieldTypeInterface
         return $tca;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';
         }
         if ($this->format === 'decimal') {
-            return "`$uniqueColumnName` decimal(10,2) DEFAULT '0.00'" . $null;
+            return "`$column` decimal(10,2) DEFAULT '0.00'" . $null;
         }
 
-        return "`$uniqueColumnName` int(11) DEFAULT '0'" . $null;
+        return "`$column` int(11) DEFAULT '0'" . $null;
     }
 
     public static function getName(): string

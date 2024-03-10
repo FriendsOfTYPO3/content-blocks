@@ -88,13 +88,13 @@ final class ColorFieldType implements FieldTypeInterface
         return $tca;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         $null = ' NOT NULL';
         if ($this->nullable) {
             $null = '';
         }
-        return "`$uniqueColumnName` VARCHAR(255) DEFAULT ''" . $null;
+        return "`$column` VARCHAR(255) DEFAULT ''" . $null;
     }
 
     public static function getName(): string

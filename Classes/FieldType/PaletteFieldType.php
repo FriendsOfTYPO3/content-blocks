@@ -32,7 +32,7 @@ final class PaletteFieldType implements FieldTypeInterface
         return [];
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
         return '';
     }

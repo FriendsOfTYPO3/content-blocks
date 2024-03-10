@@ -53,9 +53,9 @@ final class FlexFormFieldType implements FieldTypeInterface
         return $tca;
     }
 
-    public function getSql(string $uniqueColumnName): string
+    public function getSql(string $column): string
     {
-        return "`$uniqueColumnName` text";
+        return "`$column` text";
     }
 
     public static function getName(): string
