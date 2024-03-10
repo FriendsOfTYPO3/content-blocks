@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\LanguageFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\SlugFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class LanguageFieldConfigurationTest extends UnitTestCase
+final class SlugFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -30,27 +30,48 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
-                'required' => true,
                 'readOnly' => true,
-                'size' => 30,
-                'default' => 1,
+                'size' => 1,
+                'appearance' => [
+                    'foo' => 'bar',
+                ],
+                'eval' => 'foo',
+                'fallbackCharacter' => 'foo',
+                'generatorOptions' => [
+                    'foo' => 'bar',
+                ],
+                'prependSlash' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'language',
-                    'default' => 1,
-                    'required' => true,
+                    'type' => 'slug',
                     'readOnly' => true,
+                    'size' => 1,
+                    'appearance' => [
+                        'foo' => 'bar',
+                    ],
+                    'eval' => 'foo',
+                    'fallbackCharacter' => 'foo',
+                    'generatorOptions' => [
+                        'foo' => 'bar',
+                    ],
+                    'prependSlash' => true,
                 ],
             ],
         ];
@@ -59,16 +80,22 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'displayCond' => [],
                 'l10n_display' => '',
                 'l10n_mode' => '',
                 'onChange' => '',
                 'exclude' => false,
-                'non_available_field' => '',
-                'default' => '',
+                'readOnly' => false,
+                'size' => 0,
+                'appearance' => [],
+                'eval' => '',
+                'fallbackCharacter' => '',
+                'generatorOptions' => [],
+                'prependSlash' => false,
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'language',
+                    'type' => 'slug',
                 ],
             ],
         ];
@@ -78,7 +105,7 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = LanguageFieldType::createFromArray($config);
+        $fieldConfiguration = SlugFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -87,7 +114,7 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
+            'expectedSql' => '',
         ];
     }
 
@@ -95,8 +122,8 @@ final class LanguageFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = LanguageFieldType::createFromArray([]);
+        $fieldType = SlugFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, LanguageFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\DateTimeFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\DateTimeFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class DateTimeFieldConfigurationTest extends UnitTestCase
+final class DateTimeFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -205,7 +205,7 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = DateTimeFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = DateTimeFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -222,8 +222,8 @@ final class DateTimeFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = DateTimeFieldConfiguration::createFromArray([]);
+        $fieldType = DateTimeFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

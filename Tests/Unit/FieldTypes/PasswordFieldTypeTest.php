@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\NumberFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\PasswordFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class NumberFieldConfigurationTest extends UnitTestCase
+final class PasswordFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -38,7 +38,7 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'non_available_field' => 'foo',
-                'default' => 10,
+                'default' => 'Default value',
                 'placeholder' => 'Placeholder text',
                 'size' => 20,
                 'autocomplete' => 1,
@@ -46,19 +46,8 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 'readOnly' => 1,
                 'nullable' => 1,
                 'mode' => 'useOrOverridePlaceholder',
-                'is_in' => 'abc',
-                'valuePicker' => [
-                    'items' => [
-                        ['One', '1'],
-                        ['Two', '2'],
-                    ],
-                ],
-                'range' => [
-                    'lower' => 10,
-                ],
-                'slider' => [
-                    'step' => 1,
-                ],
+                'hashed' => true,
+                'passwordPolicy' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,27 +60,16 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'number',
+                    'type' => 'password',
                     'size' => 20,
-                    'default' => 10,
+                    'default' => 'Default value',
                     'readOnly' => true,
                     'nullable' => true,
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
                     'required' => true,
                     'autocomplete' => true,
-                    'valuePicker' => [
-                        'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
-                        ],
-                    ],
-                    'range' => [
-                        'lower' => 10,
-                    ],
-                    'slider' => [
-                        'step' => 1,
-                    ],
+                    'passwordPolicy' => 'foo',
                 ],
             ],
         ];
@@ -107,7 +85,6 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 'exclude' => false,
                 'non_available_field' => 'foo',
                 'default' => '',
-                'format' => '',
                 'placeholder' => '',
                 'size' => 0,
                 'autocomplete' => 0,
@@ -115,48 +92,14 @@ final class NumberFieldConfigurationTest extends UnitTestCase
                 'readOnly' => 0,
                 'nullable' => 0,
                 'mode' => '',
-                'is_in' => '',
-                'valuePicker' => [
-                    'items' => [],
-                ],
-                'range' => [],
-                'slider' => [],
+                'hashed' => false,
+                'passwordPolicy' => '',
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'number',
+                    'type' => 'password',
                     'autocomplete' => false,
-                ],
-            ],
-        ];
-
-        yield 'format decimal default value float' => [
-            'config' => [
-                'non_available_field' => 'foo',
-                'default' => 10,
-                'format' => 'decimal',
-            ],
-            'expectedTca' => [
-                'exclude' => true,
-                'config' => [
-                    'type' => 'number',
-                    'default' => 10.0,
-                    'format' => 'decimal',
-                ],
-            ],
-        ];
-
-        yield 'format decimal default value zero not set as default' => [
-            'config' => [
-                'non_available_field' => 'foo',
-                'default' => 0,
-                'format' => 'decimal',
-            ],
-            'expectedTca' => [
-                'exclude' => true,
-                'config' => [
-                    'type' => 'number',
-                    'format' => 'decimal',
+                    'hashed' => false,
                 ],
             ],
         ];
@@ -166,33 +109,25 @@ final class NumberFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = NumberFieldType::createFromArray($config);
+        $fieldConfiguration = PasswordFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'integer column' => [
-            'config' => [],
+        yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
-        ];
-        yield 'decimal column' => [
-            'config' => [
-                'format' => 'decimal',
-            ],
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` decimal(10,2) DEFAULT \'0.00\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
         ];
     }
 
     #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
     #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(array $config, string $uniqueColumnName, string $expectedSql): void
+    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = NumberFieldType::createFromArray($config);
+        $fieldType = PasswordFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

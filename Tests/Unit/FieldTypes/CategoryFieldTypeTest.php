@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\JsonFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\CategoryFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class JsonFieldConfigurationTest extends UnitTestCase
+final class CategoryFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -30,34 +30,44 @@ final class JsonFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'non_available_field' => 'foo',
+                'default' => 1,
+                'readOnly' => 1,
+                'maxitems' => 1,
+                'minitems' => 1,
+                'exclusiveKeys' => 'key',
+                'treeConfig' => [
+                    'foo' => 'bar',
+                ],
+                'relationship' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
-                'exclude' => true,
-                'non_available_field' => 'foo',
-                'default' => 'Default value',
-                'placeholder' => 'Placeholder text',
-                'cols' => 20,
-                'rows' => 20,
-                'required' => 1,
-                'readOnly' => 1,
-                'enableCodeEditor' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
+                'displayCond' => [
+                    'foo' => 'bar',
+                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'json',
-                    'default' => 'Default value',
-                    'required' => true,
+                    'type' => 'category',
+                    'default' => 1,
                     'readOnly' => true,
-                    'cols' => 20,
-                    'rows' => 20,
-                    'placeholder' => 'Placeholder text',
+                    'maxitems' => 1,
+                    'minitems' => 1,
+                    'exclusiveKeys' => 'key',
+                    'treeConfig' => [
+                        'foo' => 'bar',
+                    ],
+                    'relationship' => 'foo',
                 ],
             ],
         ];
@@ -66,23 +76,23 @@ final class JsonFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
+                'exclude' => false,
+                'non_available_field' => 'foo',
+                'default' => '',
+                'readOnly' => 0,
+                'maxitems' => 0,
+                'minitems' => 0,
+                'exclusiveKeys' => '',
+                'treeConfig' => [],
+                'relationship' => '',
+                'displayCond' => [],
                 'l10n_display' => '',
                 'l10n_mode' => '',
                 'onChange' => '',
-                'exclude' => false,
-                'non_available_field' => '',
-                'default' => '',
-                'placeholder' => '',
-                'cols' => 0,
-                'rows' => 0,
-                'required' => 0,
-                'readOnly' => 0,
-                'enableCodeEditor' => false,
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'json',
-                    'enableCodeEditor' => false,
+                    'type' => 'category',
                 ],
             ],
         ];
@@ -92,14 +102,14 @@ final class JsonFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = JsonFieldType::createFromArray($config);
+        $fieldConfiguration = CategoryFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default varchar column' => [
+        yield 'no sql returned' => [
             'uniqueColumnName' => 'cb_example_myText',
             'expectedSql' => '',
         ];
@@ -109,8 +119,8 @@ final class JsonFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = JsonFieldType::createFromArray([]);
+        $fieldType = CategoryFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, JsonFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

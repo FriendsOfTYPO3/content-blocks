@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\CheckboxFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\CheckboxFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class CheckboxFieldConfigurationTest extends UnitTestCase
+final class CheckboxFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -151,7 +151,7 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = CheckboxFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = CheckboxFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -168,8 +168,8 @@ final class CheckboxFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = CheckboxFieldConfiguration::createFromArray([]);
+        $fieldType = CheckboxFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

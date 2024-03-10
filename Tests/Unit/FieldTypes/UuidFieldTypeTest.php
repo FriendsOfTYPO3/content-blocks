@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\UuidFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class FlexFormFieldConfigurationTest extends UnitTestCase
+final class UuidFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -37,9 +37,9 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
-                'non_available_field' => 'foo',
-                'ds_pointerField' => 'foobar',
-                'ds' => ['foo' => 'bar'],
+                'size' => 30,
+                'version' => 4,
+                'enableCopyToClipboard' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -52,9 +52,30 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'foobar',
-                    'ds' => ['foo' => 'bar'],
+                    'type' => 'uuid',
+                    'size' => 30,
+                    'version' => 4,
+                ],
+            ],
+        ];
+
+        yield 'falsy values' => [
+            'config' => [
+                'label' => '',
+                'description' => null,
+                'displayCond' => [],
+                'l10n_display' => '',
+                'l10n_mode' => '',
+                'onChange' => '',
+                'exclude' => false,
+                'non_available_field' => 'foo',
+                'size' => 0,
+                'enableCopyToClipboard' => false,
+            ],
+            'expectedTca' => [
+                'config' => [
+                    'type' => 'uuid',
+                    'enableCopyToClipboard' => false,
                 ],
             ],
         ];
@@ -64,7 +85,7 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FlexFormFieldType::createFromArray($config);
+        $fieldConfiguration = UuidFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -73,7 +94,7 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` text',
+            'expectedSql' => '',
         ];
     }
 
@@ -81,8 +102,8 @@ final class FlexFormFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = FlexFormFieldType::createFromArray([]);
+        $fieldType = UuidFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, FlexFormFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

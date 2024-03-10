@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\SelectFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\RelationFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class SelectFieldConfigurationTest extends UnitTestCase
+final class RelationFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -37,11 +37,25 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
+                'fieldWizard' => [
+                    'foo' => 'bar',
+                ],
+                'fieldControl' => [
+                    'foo' => 'bar',
+                ],
+                'fieldInformation' => [
+                    'foo' => 'bar',
+                ],
                 'non_available_field' => 'foo',
                 'default' => 1,
-                'renderType' => 'selectSingle',
+                'allowed' => 'foo',
+                'foreign_table' => 'foo',
                 'readOnly' => 1,
                 'size' => 1,
+                'maxitems' => 1,
+                'minitems' => 1,
+                'autoSizeMax' => 1,
+                'multiple' => 1,
                 'MM' => 'foo',
                 'MM_opposite_field' => 'foo',
                 'MM_match_fields' => [
@@ -51,35 +65,19 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'MM_table_where' => 'foo',
                 'dontRemapTablesOnCopy' => 'foo',
                 'localizeReferencesAtParentLocalization' => 1,
-                'maxitems' => 1,
-                'minitems' => 1,
-                'foreign_table' => 'foo',
-                'itemsProcFunc' => 'foo',
-                'allowNonIdValues' => 1,
-                'authMode' => 'foo',
-                'disableNoMatchingValueElement' => 1,
-                'exclusiveKeys' => 'key',
-                'fileFolderConfig' => [
+                'hideMoveIcons' => 1,
+                'hideSuggest' => 1,
+                'prepend_tname' => 1,
+                'elementBrowserEntryPoints' => [
                     'foo' => 'bar',
                 ],
-                'foreign_table_prefix' => 'key',
-                'foreign_table_where' => 'key',
-                'itemGroups' => [
+                'filter' => [
                     'foo' => 'bar',
                 ],
-                'items' => [
-                    'foo' => 'bar',
-                ],
-                'sortItems' => [
+                'suggestOptions' => [
                     'foo' => 'bar',
                 ],
                 'appearance' => [
-                    'foo' => 'bar',
-                ],
-                'treeConfig' => [
-                    'foo' => 'bar',
-                ],
-                'itemsProcConfig' => [
                     'foo' => 'bar',
                 ],
             ],
@@ -94,11 +92,25 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'renderType' => 'selectSingle',
-                    'type' => 'select',
+                    'fieldWizard' => [
+                        'foo' => 'bar',
+                    ],
+                    'fieldControl' => [
+                        'foo' => 'bar',
+                    ],
+                    'fieldInformation' => [
+                        'foo' => 'bar',
+                    ],
+                    'type' => 'group',
                     'default' => 1,
+                    'allowed' => 'foo',
+                    'foreign_table' => 'foo',
                     'readOnly' => true,
                     'size' => 1,
+                    'maxitems' => 1,
+                    'minitems' => 1,
+                    'autoSizeMax' => 1,
+                    'multiple' => true,
                     'MM' => 'foo',
                     'MM_opposite_field' => 'foo',
                     'MM_match_fields' => [
@@ -108,35 +120,19 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                     'MM_table_where' => 'foo',
                     'dontRemapTablesOnCopy' => 'foo',
                     'localizeReferencesAtParentLocalization' => true,
-                    'maxitems' => 1,
-                    'minitems' => 1,
-                    'foreign_table' => 'foo',
-                    'itemsProcFunc' => 'foo',
-                    'allowNonIdValues' => true,
-                    'authMode' => 'foo',
-                    'disableNoMatchingValueElement' => true,
-                    'exclusiveKeys' => 'key',
-                    'fileFolderConfig' => [
+                    'hideMoveIcons' => true,
+                    'hideSuggest' => true,
+                    'prepend_tname' => true,
+                    'elementBrowserEntryPoints' => [
                         'foo' => 'bar',
                     ],
-                    'foreign_table_prefix' => 'key',
-                    'foreign_table_where' => 'key',
-                    'itemGroups' => [
+                    'filter' => [
                         'foo' => 'bar',
                     ],
-                    'items' => [
-                        'foo' => 'bar',
-                    ],
-                    'sortItems' => [
+                    'suggestOptions' => [
                         'foo' => 'bar',
                     ],
                     'appearance' => [
-                        'foo' => 'bar',
-                    ],
-                    'treeConfig' => [
-                        'foo' => 'bar',
-                    ],
-                    'itemsProcConfig' => [
                         'foo' => 'bar',
                     ],
                 ],
@@ -152,11 +148,16 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => '',
                 'onChange' => '',
                 'exclude' => false,
-                'non_available_field' => 'foo',
+                'non_available_field' => '',
                 'default' => '',
-                'renderType' => '',
+                'allowed' => '',
+                'foreign_table' => '',
                 'readOnly' => 0,
                 'size' => 0,
+                'maxitems' => 0,
+                'minitems' => 0,
+                'autoSizeMax' => 0,
+                'multiple' => 0,
                 'MM' => '',
                 'MM_opposite_field' => '',
                 'MM_match_fields' => [],
@@ -164,27 +165,21 @@ final class SelectFieldConfigurationTest extends UnitTestCase
                 'MM_table_where' => '',
                 'dontRemapTablesOnCopy' => '',
                 'localizeReferencesAtParentLocalization' => 0,
-                'maxitems' => 0,
-                'minitems' => 0,
-                'foreign_table' => '',
-                'itemsProcFunc' => '',
-                'allowNonIdValues' => 0,
-                'authMode' => '',
-                'disableNoMatchingValueElement' => 0,
-                'exclusiveKeys' => '',
-                'fileFolderConfig' => [],
-                'foreign_table_prefix' => '',
-                'foreign_table_where' => '',
-                'itemGroups' => [],
-                'items' => [],
-                'sortItems' => [],
+                'hideMoveIcons' => 0,
+                'hideSuggest' => 0,
+                'prepend_tname' => 0,
+                'elementBrowserEntryPoints' => [],
+                'foo' => '',
+                'filter' => [],
+                'suggestOptions' => [],
                 'appearance' => [],
-                'treeConfig' => [],
+                'fieldWizard' => [],
+                'fieldControl' => [],
+                'fieldInformation' => [],
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'select',
-                    'items' => [],
+                    'type' => 'group',
                 ],
             ],
         ];
@@ -194,7 +189,7 @@ final class SelectFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = SelectFieldType::createFromArray($config);
+        $fieldConfiguration = RelationFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -203,7 +198,7 @@ final class SelectFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` text',
         ];
     }
 
@@ -211,8 +206,8 @@ final class SelectFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = SelectFieldType::createFromArray([]);
+        $fieldType = RelationFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, SelectFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\TextareaFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\ColorFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class TextareaFieldConfigurationTest extends UnitTestCase
+final class ColorFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -38,27 +38,20 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'non_available_field' => 'foo',
-                'default' => 'Default value',
+                'default' => '#000000',
                 'placeholder' => 'Placeholder text',
-                'max' => 15,
-                'min' => 3,
                 'size' => 20,
-                'rows' => 10,
-                'cols' => 20,
                 'autocomplete' => 1,
                 'required' => 1,
                 'readOnly' => 1,
                 'nullable' => 1,
-                'enableTabulator' => 1,
-                'fixedFont' => 1,
                 'mode' => 'useOrOverridePlaceholder',
-                'is_in' => 'abc',
-                'wrap' => 'off',
-                'eval' => ['trim', 'lower'],
-                'enableRichtext' => 1,
-                'richtextConfiguration' => 'default',
-                'renderType' => 'foo',
-                'format' => 'foo',
+                'valuePicker' => [
+                    'items' => [
+                        ['One', '1'],
+                        ['Two', '2'],
+                    ],
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,26 +64,21 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'renderType' => 'foo',
-                    'type' => 'text',
-                    'default' => 'Default value',
+                    'type' => 'color',
+                    'size' => 20,
+                    'default' => '#000000',
                     'readOnly' => true,
-                    'required' => true,
-                    'max' => 15,
-                    'min' => 3,
                     'nullable' => true,
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
-                    'is_in' => 'abc',
-                    'eval' => 'trim,lower',
-                    'rows' => 10,
-                    'cols' => 20,
-                    'enableTabulator' => true,
-                    'fixedFont' => true,
-                    'wrap' => 'off',
-                    'enableRichtext' => true,
-                    'richtextConfiguration' => 'default',
-                    'format' => 'foo',
+                    'required' => true,
+                    'autocomplete' => true,
+                    'valuePicker' => [
+                        'items' => [
+                            ['One', '1'],
+                            ['Two', '2'],
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -107,32 +95,20 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'default' => '',
                 'placeholder' => '',
-                'max' => 0,
-                'min' => 0,
-                'rows' => 0,
-                'cols' => 0,
                 'size' => 0,
                 'autocomplete' => 0,
                 'required' => 0,
                 'readOnly' => 0,
                 'nullable' => 0,
                 'mode' => '',
-                'is_in' => '',
-                'wrap' => '',
                 'valuePicker' => [
                     'items' => [],
                 ],
-                'eval' => [],
-                'enableTabulator' => 0,
-                'fixedFont' => 0,
-                'enableRichtext' => 0,
-                'richtextConfiguration' => '',
-                'renderType' => '',
-                'format' => '',
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'text',
+                    'type' => 'color',
+                    'autocomplete' => false,
                 ],
             ],
         ];
@@ -142,16 +118,16 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = TextareaFieldType::createFromArray($config);
+        $fieldConfiguration = ColorFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default text column' => [
+        yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` text',
+            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
         ];
     }
 
@@ -159,8 +135,8 @@ final class TextareaFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = TextareaFieldType::createFromArray([]);
+        $fieldType = ColorFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, TextareaFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

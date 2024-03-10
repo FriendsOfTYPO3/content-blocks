@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class CollectionFieldConfigurationTest extends UnitTestCase
+final class CollectionFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -176,7 +176,7 @@ final class CollectionFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = CollectionFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = CollectionFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -193,8 +193,8 @@ final class CollectionFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = CollectionFieldConfiguration::createFromArray([]);
+        $fieldType = CollectionFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

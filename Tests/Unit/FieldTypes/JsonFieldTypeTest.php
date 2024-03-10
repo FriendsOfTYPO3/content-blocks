@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\RadioFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\JsonFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class RadioFieldConfigurationTest extends UnitTestCase
+final class JsonFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -30,45 +30,34 @@ final class RadioFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'displayCond' => [
-                    'foo' => 'bar',
-                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
                 'non_available_field' => 'foo',
-                'default' => 1,
+                'default' => 'Default value',
+                'placeholder' => 'Placeholder text',
+                'cols' => 20,
+                'rows' => 20,
+                'required' => 1,
                 'readOnly' => 1,
-                'itemsProcFunc' => 'foo',
-                'items' => [
-                    'foo',
-                ],
-                'itemsProcConfig' => [
-                    'foo' => 'bar',
-                ],
+                'enableCodeEditor' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'displayCond' => [
-                    'foo' => 'bar',
-                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'radio',
-                    'default' => 1,
+                    'type' => 'json',
+                    'default' => 'Default value',
+                    'required' => true,
                     'readOnly' => true,
-                    'itemsProcFunc' => 'foo',
-                    'items' => [
-                        'foo',
-                    ],
-                    'itemsProcConfig' => [
-                        'foo' => 'bar',
-                    ],
+                    'cols' => 20,
+                    'rows' => 20,
+                    'placeholder' => 'Placeholder text',
                 ],
             ],
         ];
@@ -77,20 +66,23 @@ final class RadioFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'displayCond' => [],
                 'l10n_display' => '',
                 'l10n_mode' => '',
                 'onChange' => '',
                 'exclude' => false,
-                'non_available_field' => 'foo',
+                'non_available_field' => '',
                 'default' => '',
+                'placeholder' => '',
+                'cols' => 0,
+                'rows' => 0,
+                'required' => 0,
                 'readOnly' => 0,
-                'itemsProcFunc' => '',
-                'items' => [],
+                'enableCodeEditor' => false,
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'radio',
+                    'type' => 'json',
+                    'enableCodeEditor' => false,
                 ],
             ],
         ];
@@ -100,7 +92,7 @@ final class RadioFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = RadioFieldType::createFromArray($config);
+        $fieldConfiguration = JsonFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -109,7 +101,7 @@ final class RadioFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
+            'expectedSql' => '',
         ];
     }
 
@@ -117,8 +109,8 @@ final class RadioFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = RadioFieldType::createFromArray([]);
+        $fieldType = JsonFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, RadioFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

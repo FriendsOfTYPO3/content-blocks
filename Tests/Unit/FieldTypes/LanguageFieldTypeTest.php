@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\CategoryFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\LanguageFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class CategoryFieldConfigurationTest extends UnitTestCase
+final class LanguageFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -30,44 +30,27 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'non_available_field' => 'foo',
-                'default' => 1,
-                'readOnly' => 1,
-                'maxitems' => 1,
-                'minitems' => 1,
-                'exclusiveKeys' => 'key',
-                'treeConfig' => [
-                    'foo' => 'bar',
-                ],
-                'relationship' => 'foo',
-                'displayCond' => [
-                    'foo' => 'bar',
-                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
+                'exclude' => true,
+                'required' => true,
+                'readOnly' => true,
+                'size' => 30,
+                'default' => 1,
             ],
             'expectedTca' => [
                 'label' => 'foo',
                 'description' => 'foo',
-                'displayCond' => [
-                    'foo' => 'bar',
-                ],
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'category',
+                    'type' => 'language',
                     'default' => 1,
+                    'required' => true,
                     'readOnly' => true,
-                    'maxitems' => 1,
-                    'minitems' => 1,
-                    'exclusiveKeys' => 'key',
-                    'treeConfig' => [
-                        'foo' => 'bar',
-                    ],
-                    'relationship' => 'foo',
                 ],
             ],
         ];
@@ -76,23 +59,16 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
             'config' => [
                 'label' => '',
                 'description' => null,
-                'exclude' => false,
-                'non_available_field' => 'foo',
-                'default' => '',
-                'readOnly' => 0,
-                'maxitems' => 0,
-                'minitems' => 0,
-                'exclusiveKeys' => '',
-                'treeConfig' => [],
-                'relationship' => '',
-                'displayCond' => [],
                 'l10n_display' => '',
                 'l10n_mode' => '',
                 'onChange' => '',
+                'exclude' => false,
+                'non_available_field' => '',
+                'default' => '',
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'category',
+                    'type' => 'language',
                 ],
             ],
         ];
@@ -102,16 +78,16 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = CategoryFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = LanguageFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'no sql returned' => [
+        yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '',
+            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
         ];
     }
 
@@ -119,8 +95,8 @@ final class CategoryFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = CategoryFieldConfiguration::createFromArray([]);
+        $fieldType = LanguageFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

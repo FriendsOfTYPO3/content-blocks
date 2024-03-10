@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\FolderFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\RadioFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class FolderFieldConfigurationTest extends UnitTestCase
+final class RadioFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -40,13 +40,11 @@ final class FolderFieldConfigurationTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'default' => 1,
                 'readOnly' => 1,
-                'size' => 1,
-                'maxitems' => 1,
-                'minitems' => 1,
-                'autoSizeMax' => 1,
-                'multiple' => 1,
-                'hideMoveIcons' => 1,
-                'elementBrowserEntryPoints' => [
+                'itemsProcFunc' => 'foo',
+                'items' => [
+                    'foo',
+                ],
+                'itemsProcConfig' => [
                     'foo' => 'bar',
                 ],
             ],
@@ -61,16 +59,14 @@ final class FolderFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'folder',
-                    'default' => '1',
+                    'type' => 'radio',
+                    'default' => 1,
                     'readOnly' => true,
-                    'size' => 1,
-                    'maxitems' => 1,
-                    'minitems' => 1,
-                    'autoSizeMax' => 1,
-                    'multiple' => true,
-                    'hideMoveIcons' => true,
-                    'elementBrowserEntryPoints' => [
+                    'itemsProcFunc' => 'foo',
+                    'items' => [
+                        'foo',
+                    ],
+                    'itemsProcConfig' => [
                         'foo' => 'bar',
                     ],
                 ],
@@ -86,21 +82,15 @@ final class FolderFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => '',
                 'onChange' => '',
                 'exclude' => false,
-                'non_available_field' => '',
+                'non_available_field' => 'foo',
                 'default' => '',
                 'readOnly' => 0,
-                'size' => 0,
-                'maxitems' => 0,
-                'minitems' => 0,
-                'autoSizeMax' => 0,
-                'multiple' => 0,
-                'hideMoveIcons' => 0,
-                'elementBrowserEntryPoints' => [],
-                'foo' => '',
+                'itemsProcFunc' => '',
+                'items' => [],
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'folder',
+                    'type' => 'radio',
                 ],
             ],
         ];
@@ -110,7 +100,7 @@ final class FolderFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FolderFieldType::createFromArray($config);
+        $fieldConfiguration = RadioFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -119,7 +109,7 @@ final class FolderFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` text',
+            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
         ];
     }
 
@@ -127,8 +117,8 @@ final class FolderFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = FolderFieldType::createFromArray([]);
+        $fieldType = RadioFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, FolderFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

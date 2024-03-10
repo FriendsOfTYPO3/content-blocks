@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\LinkFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\TextFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class LinkFieldConfigurationTest extends UnitTestCase
+final class TextFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -40,24 +40,22 @@ final class LinkFieldConfigurationTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'default' => 'Default value',
                 'placeholder' => 'Placeholder text',
+                'max' => 15,
+                'min' => 3,
                 'size' => 20,
                 'autocomplete' => 1,
                 'required' => 1,
                 'readOnly' => 1,
                 'nullable' => 1,
                 'mode' => 'useOrOverridePlaceholder',
+                'is_in' => 'abc',
                 'valuePicker' => [
                     'items' => [
                         ['One', '1'],
                         ['Two', '2'],
                     ],
                 ],
-                'allowedTypes' => [
-                    'foo',
-                ],
-                'appearance' => [
-                    'foo',
-                ],
+                'eval' => ['trim', 'lower'],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -70,26 +68,24 @@ final class LinkFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'link',
+                    'type' => 'input',
                     'size' => 20,
                     'default' => 'Default value',
                     'readOnly' => true,
-                    'required' => true,
+                    'max' => 15,
+                    'min' => 3,
                     'nullable' => true,
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
+                    'is_in' => 'abc',
+                    'required' => true,
+                    'eval' => 'trim,lower',
                     'autocomplete' => true,
                     'valuePicker' => [
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
                         ],
-                    ],
-                    'allowedTypes' => [
-                        'foo',
-                    ],
-                    'appearance' => [
-                        'foo',
                     ],
                 ],
             ],
@@ -107,19 +103,23 @@ final class LinkFieldConfigurationTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'default' => '',
                 'placeholder' => '',
+                'max' => 0,
+                'min' => 0,
                 'size' => 0,
                 'autocomplete' => 0,
                 'required' => 0,
                 'readOnly' => 0,
                 'nullable' => 0,
                 'mode' => '',
-                'valuePicker' => [],
-                'allowedTypes' => [],
-                'appearance' => [],
+                'is_in' => '',
+                'valuePicker' => [
+                    'items' => [],
+                ],
+                'eval' => [],
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'link',
+                    'type' => 'input',
                     'autocomplete' => false,
                 ],
             ],
@@ -130,16 +130,16 @@ final class LinkFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = LinkFieldType::createFromArray($config);
+        $fieldConfiguration = TextFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default integer column' => [
+        yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` VARCHAR(1024) DEFAULT \'\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
         ];
     }
 
@@ -147,8 +147,8 @@ final class LinkFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = LinkFieldType::createFromArray([]);
+        $fieldType = TextFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

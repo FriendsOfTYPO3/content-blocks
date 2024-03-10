@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\UuidFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\EmailFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class UuidFieldConfigurationTest extends UnitTestCase
+final class EmailFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -37,9 +37,15 @@ final class UuidFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
-                'size' => 30,
-                'version' => 4,
-                'enableCopyToClipboard' => true,
+                'non_available_field' => 'foo',
+                'default' => 'Default value',
+                'placeholder' => 'Placeholder text',
+                'autocomplete' => 1,
+                'required' => 1,
+                'readOnly' => 1,
+                'nullable' => 1,
+                'mode' => 'useOrOverridePlaceholder',
+                'eval' => ['trim', 'lower'],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -52,9 +58,15 @@ final class UuidFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'uuid',
-                    'size' => 30,
-                    'version' => 4,
+                    'type' => 'email',
+                    'default' => 'Default value',
+                    'readOnly' => true,
+                    'nullable' => true,
+                    'mode' => 'useOrOverridePlaceholder',
+                    'placeholder' => 'Placeholder text',
+                    'required' => true,
+                    'eval' => 'trim,lower',
+                    'autocomplete' => true,
                 ],
             ],
         ];
@@ -69,13 +81,20 @@ final class UuidFieldConfigurationTest extends UnitTestCase
                 'onChange' => '',
                 'exclude' => false,
                 'non_available_field' => 'foo',
+                'default' => '',
+                'placeholder' => '',
                 'size' => 0,
-                'enableCopyToClipboard' => false,
+                'autocomplete' => 0,
+                'required' => 0,
+                'readOnly' => 0,
+                'nullable' => 0,
+                'mode' => '',
+                'eval' => [],
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'uuid',
-                    'enableCopyToClipboard' => false,
+                    'type' => 'email',
+                    'autocomplete' => false,
                 ],
             ],
         ];
@@ -85,7 +104,7 @@ final class UuidFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = UuidFieldType::createFromArray($config);
+        $fieldConfiguration = EmailFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -94,7 +113,7 @@ final class UuidFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '',
+            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
         ];
     }
 
@@ -102,8 +121,8 @@ final class UuidFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = UuidFieldType::createFromArray([]);
+        $fieldType = EmailFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, UuidFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

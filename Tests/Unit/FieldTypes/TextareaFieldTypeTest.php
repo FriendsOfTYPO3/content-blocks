@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\ColorFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\TextareaFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class ColorFieldConfigurationTest extends UnitTestCase
+final class TextareaFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -38,20 +38,27 @@ final class ColorFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'non_available_field' => 'foo',
-                'default' => '#000000',
+                'default' => 'Default value',
                 'placeholder' => 'Placeholder text',
+                'max' => 15,
+                'min' => 3,
                 'size' => 20,
+                'rows' => 10,
+                'cols' => 20,
                 'autocomplete' => 1,
                 'required' => 1,
                 'readOnly' => 1,
                 'nullable' => 1,
+                'enableTabulator' => 1,
+                'fixedFont' => 1,
                 'mode' => 'useOrOverridePlaceholder',
-                'valuePicker' => [
-                    'items' => [
-                        ['One', '1'],
-                        ['Two', '2'],
-                    ],
-                ],
+                'is_in' => 'abc',
+                'wrap' => 'off',
+                'eval' => ['trim', 'lower'],
+                'enableRichtext' => 1,
+                'richtextConfiguration' => 'default',
+                'renderType' => 'foo',
+                'format' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -64,21 +71,26 @@ final class ColorFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'color',
-                    'size' => 20,
-                    'default' => '#000000',
+                    'renderType' => 'foo',
+                    'type' => 'text',
+                    'default' => 'Default value',
                     'readOnly' => true,
+                    'required' => true,
+                    'max' => 15,
+                    'min' => 3,
                     'nullable' => true,
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
-                    'required' => true,
-                    'autocomplete' => true,
-                    'valuePicker' => [
-                        'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
-                        ],
-                    ],
+                    'is_in' => 'abc',
+                    'eval' => 'trim,lower',
+                    'rows' => 10,
+                    'cols' => 20,
+                    'enableTabulator' => true,
+                    'fixedFont' => true,
+                    'wrap' => 'off',
+                    'enableRichtext' => true,
+                    'richtextConfiguration' => 'default',
+                    'format' => 'foo',
                 ],
             ],
         ];
@@ -95,20 +107,32 @@ final class ColorFieldConfigurationTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'default' => '',
                 'placeholder' => '',
+                'max' => 0,
+                'min' => 0,
+                'rows' => 0,
+                'cols' => 0,
                 'size' => 0,
                 'autocomplete' => 0,
                 'required' => 0,
                 'readOnly' => 0,
                 'nullable' => 0,
                 'mode' => '',
+                'is_in' => '',
+                'wrap' => '',
                 'valuePicker' => [
                     'items' => [],
                 ],
+                'eval' => [],
+                'enableTabulator' => 0,
+                'fixedFont' => 0,
+                'enableRichtext' => 0,
+                'richtextConfiguration' => '',
+                'renderType' => '',
+                'format' => '',
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'color',
-                    'autocomplete' => false,
+                    'type' => 'text',
                 ],
             ],
         ];
@@ -118,16 +142,16 @@ final class ColorFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = ColorFieldConfiguration::createFromArray($config);
+        $fieldConfiguration = TextareaFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default varchar column' => [
+        yield 'default text column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` text',
         ];
     }
 
@@ -135,8 +159,8 @@ final class ColorFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = ColorFieldConfiguration::createFromArray([]);
+        $fieldType = TextareaFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

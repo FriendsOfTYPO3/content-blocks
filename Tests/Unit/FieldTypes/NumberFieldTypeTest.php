@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\TextFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\NumberFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class TextFieldConfigurationTest extends UnitTestCase
+final class NumberFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -38,10 +38,8 @@ final class TextFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'non_available_field' => 'foo',
-                'default' => 'Default value',
+                'default' => 10,
                 'placeholder' => 'Placeholder text',
-                'max' => 15,
-                'min' => 3,
                 'size' => 20,
                 'autocomplete' => 1,
                 'required' => 1,
@@ -55,7 +53,12 @@ final class TextFieldConfigurationTest extends UnitTestCase
                         ['Two', '2'],
                     ],
                 ],
-                'eval' => ['trim', 'lower'],
+                'range' => [
+                    'lower' => 10,
+                ],
+                'slider' => [
+                    'step' => 1,
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -68,24 +71,26 @@ final class TextFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'input',
+                    'type' => 'number',
                     'size' => 20,
-                    'default' => 'Default value',
+                    'default' => 10,
                     'readOnly' => true,
-                    'max' => 15,
-                    'min' => 3,
                     'nullable' => true,
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
-                    'is_in' => 'abc',
                     'required' => true,
-                    'eval' => 'trim,lower',
                     'autocomplete' => true,
                     'valuePicker' => [
                         'items' => [
                             ['One', '1'],
                             ['Two', '2'],
                         ],
+                    ],
+                    'range' => [
+                        'lower' => 10,
+                    ],
+                    'slider' => [
+                        'step' => 1,
                     ],
                 ],
             ],
@@ -102,9 +107,8 @@ final class TextFieldConfigurationTest extends UnitTestCase
                 'exclude' => false,
                 'non_available_field' => 'foo',
                 'default' => '',
+                'format' => '',
                 'placeholder' => '',
-                'max' => 0,
-                'min' => 0,
                 'size' => 0,
                 'autocomplete' => 0,
                 'required' => 0,
@@ -115,12 +119,44 @@ final class TextFieldConfigurationTest extends UnitTestCase
                 'valuePicker' => [
                     'items' => [],
                 ],
-                'eval' => [],
+                'range' => [],
+                'slider' => [],
             ],
             'expectedTca' => [
                 'config' => [
-                    'type' => 'input',
+                    'type' => 'number',
                     'autocomplete' => false,
+                ],
+            ],
+        ];
+
+        yield 'format decimal default value float' => [
+            'config' => [
+                'non_available_field' => 'foo',
+                'default' => 10,
+                'format' => 'decimal',
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'number',
+                    'default' => 10.0,
+                    'format' => 'decimal',
+                ],
+            ],
+        ];
+
+        yield 'format decimal default value zero not set as default' => [
+            'config' => [
+                'non_available_field' => 'foo',
+                'default' => 0,
+                'format' => 'decimal',
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'number',
+                    'format' => 'decimal',
                 ],
             ],
         ];
@@ -130,25 +166,33 @@ final class TextFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = TextFieldType::createFromArray($config);
+        $fieldConfiguration = NumberFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
 
     public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
     {
-        yield 'default varchar column' => [
+        yield 'integer column' => [
+            'config' => [],
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
+            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
+        ];
+        yield 'decimal column' => [
+            'config' => [
+                'format' => 'decimal',
+            ],
+            'uniqueColumnName' => 'cb_example_myText',
+            'expectedSql' => '`cb_example_myText` decimal(10,2) DEFAULT \'0.00\' NOT NULL',
         ];
     }
 
     #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
     #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
+    public function getSqlReturnsExpectedSqlDefinition(array $config, string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = TextFieldType::createFromArray([]);
+        $fieldType = NumberFieldType::createFromArray($config);
 
-        self::assertSame($expectedSql, $inputFieldConfiguration->getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

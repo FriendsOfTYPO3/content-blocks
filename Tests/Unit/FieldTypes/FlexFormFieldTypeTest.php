@@ -19,10 +19,10 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\SlugFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class SlugFieldConfigurationTest extends UnitTestCase
+final class FlexFormFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -37,17 +37,9 @@ final class SlugFieldConfigurationTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
-                'readOnly' => true,
-                'size' => 1,
-                'appearance' => [
-                    'foo' => 'bar',
-                ],
-                'eval' => 'foo',
-                'fallbackCharacter' => 'foo',
-                'generatorOptions' => [
-                    'foo' => 'bar',
-                ],
-                'prependSlash' => true,
+                'non_available_field' => 'foo',
+                'ds_pointerField' => 'foobar',
+                'ds' => ['foo' => 'bar'],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -60,42 +52,9 @@ final class SlugFieldConfigurationTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'slug',
-                    'readOnly' => true,
-                    'size' => 1,
-                    'appearance' => [
-                        'foo' => 'bar',
-                    ],
-                    'eval' => 'foo',
-                    'fallbackCharacter' => 'foo',
-                    'generatorOptions' => [
-                        'foo' => 'bar',
-                    ],
-                    'prependSlash' => true,
-                ],
-            ],
-        ];
-
-        yield 'falsy values' => [
-            'config' => [
-                'label' => '',
-                'description' => null,
-                'displayCond' => [],
-                'l10n_display' => '',
-                'l10n_mode' => '',
-                'onChange' => '',
-                'exclude' => false,
-                'readOnly' => false,
-                'size' => 0,
-                'appearance' => [],
-                'eval' => '',
-                'fallbackCharacter' => '',
-                'generatorOptions' => [],
-                'prependSlash' => false,
-            ],
-            'expectedTca' => [
-                'config' => [
-                    'type' => 'slug',
+                    'type' => 'flex',
+                    'ds_pointerField' => 'foobar',
+                    'ds' => ['foo' => 'bar'],
                 ],
             ],
         ];
@@ -105,7 +64,7 @@ final class SlugFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = SlugFieldType::createFromArray($config);
+        $fieldConfiguration = FlexFormFieldType::createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
@@ -114,7 +73,7 @@ final class SlugFieldConfigurationTest extends UnitTestCase
     {
         yield 'default varchar column' => [
             'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '',
+            'expectedSql' => '`cb_example_myText` text',
         ];
     }
 
@@ -122,8 +81,8 @@ final class SlugFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = SlugFieldType::createFromArray([]);
+        $fieldType = FlexFormFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, FieldTypeInterface::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

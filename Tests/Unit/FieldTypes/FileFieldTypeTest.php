@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\FileFieldType;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class FileFieldConfigurationTest extends UnitTestCase
+final class FileFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -233,8 +233,8 @@ final class FileFieldConfigurationTest extends UnitTestCase
     #[Test]
     public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
     {
-        $inputFieldConfiguration = FileFieldType::createFromArray([]);
+        $fieldType = FileFieldType::createFromArray([]);
 
-        self::assertSame($expectedSql, FileFieldType::getSql($uniqueColumnName));
+        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

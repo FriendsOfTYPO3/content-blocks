@@ -23,7 +23,9 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -63,17 +65,20 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
-            new NullFrontend('test'),
-            $contentBlockCompiler
-        ))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
         self::assertSame('t3ce_example', $contentElementDefinition->getTypeName());
@@ -82,14 +87,17 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     #[Test]
     public function nonExistingTableThrowsException(): void
     {
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
-            new NullFrontend('test'),
-            $contentBlockCompiler
-        ))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1702413869);
@@ -117,17 +125,20 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
-            new NullFrontend('test'),
-            $contentBlockCompiler
-        ))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1702413909);
@@ -184,17 +195,20 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     #[Test]
     public function saveAndCloseIsAdded(array $contentBlocks, string $typeName, bool $expected): void
     {
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
-            new NullFrontend('test'),
-            $contentBlockCompiler
-        ))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
 
         $contentElement = $tableDefinitionCollection->getContentElementDefinition($typeName);
 
@@ -251,20 +265,21 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             ],
         ];
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(
-            new NullFrontend('test'),
-            $contentBlockCompiler
-        ))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
-        $typeDefinitionCollection = $tableDefinitionCollection->getTable(
-            'tt_content'
-        )->getContentTypeDefinitionCollection();
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
+        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {
             $result[] = $typeDefinition->getName();
