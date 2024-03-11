@@ -8,7 +8,7 @@ Extending Field Types
 Content Blocks already comes with pre-defined :ref:`Field Types <field_types>`.
 You should utilize them as much as possible. But in case you need special types
 which cannot be covered from the basic ones, it is possible to extend these with
-you own types.
+your own types.
 
 .. tip::
 
