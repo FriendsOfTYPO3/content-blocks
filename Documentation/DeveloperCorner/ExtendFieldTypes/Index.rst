@@ -21,8 +21,8 @@ be the core type :yaml:`Number` with :yaml:`format` set to :yaml:`decimal` as
 default value.
 
 Another use case is having a custom made TCA
-:ref:`renderType <FormEngine-Rendering-NodeFactory>`, which is not covered
-by existing field types. This could be e.g. TCA type
+:ref:`renderType <t3coreapi:FormEngine-Rendering-NodeFactory>`, which is not
+covered by existing field types. This could be e.g. TCA type
 :ref:`user <t3tca:columns-user>` with a custom renderType. This way it is
 possible to use the renderType as a first-class type in Content Blocks.
 
