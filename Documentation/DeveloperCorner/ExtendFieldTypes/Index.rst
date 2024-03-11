@@ -10,13 +10,21 @@ You should utilize them as much as possible. But in case you need special types
 which cannot be covered from the basic ones, it is possible to extend these with
 your own types.
 
-.. tip::
 
-   You can add own field types whenever you have fields with a distinct set of
-   configuration options set. These options can be set as default in your type
-   and you gain a semantic naming for this field. For example type `Money` could
-   be the core type :yaml:`Number` with :yaml:`format` set to :yaml:`decimal` as
-   default value.
+When to add new field types
+===========================
+
+You can add own field types whenever you have fields with a distinct set of
+configuration options set. These options can be set as default in your type
+so you gain a semantic naming for this field. For example type `Money` could
+be the core type :yaml:`Number` with :yaml:`format` set to :yaml:`decimal` as
+default value.
+
+Another use case is having a custom made TCA
+:ref:`renderType <FormEngine-Rendering-NodeFactory>`, which is not covered
+by existing field types. This could be e.g. TCA type
+:ref:`user <t3tca:columns-user>` with a custom renderType. This way it is
+possible to use the renderType as a first-class type in Content Blocks.
 
 Adding a new Field Type
 =======================
@@ -69,12 +77,7 @@ It is recommended to use UpperCamelCase, but it's not required.
 getTcaType
 ----------
 
-The TCA type, the new Content Blocks type is based on. For custom types this is
-usually type :ref:`user <t3tca:columns-user>` with a custom :php:`renderType`.
-
-.. note::
-
-   It is possible to have multiple Content Blocks field types for one TCA type.
+The TCA type, the new Content Blocks type is based on.
 
 isSearchable
 ------------
