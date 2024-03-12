@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\Contentblocks\Backend\Preview;
+namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
