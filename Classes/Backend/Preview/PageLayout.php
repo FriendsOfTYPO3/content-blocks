@@ -54,8 +54,8 @@ class PageLayout
         if ($function !== 1) {
             return;
         }
-
-        $pageRow = BackendUtility::getRecord('pages', (int)($request->getQueryParams()['id'] ?? '0'));
+        $pageUid = (int)($request->getQueryParams()['id'] ?? 0);
+        $pageRow = BackendUtility::getRecord('pages', $pageUid);
         $tableDefinition = $this->tableDefinitionCollection->getTable('pages');
         $contentTypeDefinition = ContentTypeResolver::resolve(
             $tableDefinition,
@@ -64,7 +64,6 @@ class PageLayout
         if ($contentTypeDefinition === null) {
             return;
         }
-
         $view = $this->createView($contentTypeDefinition);
         if ($view === null) {
             return;
@@ -75,22 +74,25 @@ class PageLayout
         $event->addHeaderContent($view->render());
     }
 
-    private function resolveData(ContentTypeInterface $contentTypeDefinition, TableDefinition $tableDefinition, array $pageRow): ContentBlockData
-    {
+    private function resolveData(
+        ContentTypeInterface $contentTypeDefinition,
+        TableDefinition $tableDefinition,
+        array $pageRow
+    ): ContentBlockData {
         $resolvedData = $this->relationResolver->resolve(
             $contentTypeDefinition,
             $tableDefinition,
             $pageRow,
             'pages',
         );
-
-        return $this->contentBlockDataDecorator->decorate(
+        $contentBlockData = $this->contentBlockDataDecorator->decorate(
             $contentTypeDefinition,
             $tableDefinition,
             $pageRow,
             $resolvedData,
             'pages'
         );
+        return $contentBlockData;
     }
 
     private function createView(ContentTypeInterface $contentTypeDefinition): ?StandaloneView
