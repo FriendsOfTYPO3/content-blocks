@@ -476,6 +476,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'foreign_table_field' => 'tablenames',
                                 'foreign_match_fields' => [
                                     'fieldname' => 't3ce_example_file',
+                                    'tablenames' => 'tt_content',
                                 ],
                                 'foreign_label' => 'uid_local',
                                 'foreign_selector' => 'uid_local',
