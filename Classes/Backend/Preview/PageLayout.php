@@ -38,10 +38,10 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class PageLayout
 {
     public function __construct(
-        protected TableDefinitionCollection $tableDefinitionCollection,
-        protected RelationResolver $relationResolver,
-        protected ContentBlockRegistry $contentBlockRegistry,
-        protected ContentBlockDataDecorator $contentBlockDataDecorator,
+        protected readonly TableDefinitionCollection $tableDefinitionCollection,
+        protected readonly RelationResolver $relationResolver,
+        protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
     ) {}
 
     public function __invoke(
@@ -54,24 +54,26 @@ class PageLayout
         if ($function !== 1) {
             return;
         }
+        $tableDefinition = $this->tableDefinitionCollection->getTable('pages');
+        $contentTypeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
+        if ($contentTypeDefinitionCollection === null) {
+            return;
+        }
         $pageUid = (int)($request->getQueryParams()['id'] ?? 0);
         $pageRow = BackendUtility::getRecord('pages', $pageUid);
-        $tableDefinition = $this->tableDefinitionCollection->getTable('pages');
-        $contentTypeDefinition = ContentTypeResolver::resolve(
-            $tableDefinition,
-            $pageRow
-        );
+        $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $pageRow);
         if ($contentTypeDefinition === null) {
             return;
         }
-        $view = $this->createView($contentTypeDefinition);
-        if ($view === null) {
+        if ($this->getEditorPreviewExtPath($contentTypeDefinition) === null) {
             return;
         }
+        $resolvedData = $this->resolveData($contentTypeDefinition, $tableDefinition, $pageRow);
+        $view = $this->createView($contentTypeDefinition);
         $view->setRequest($request);
-        $view->assign('data', $this->resolveData($contentTypeDefinition, $tableDefinition, $pageRow));
-
-        $event->addHeaderContent($view->render());
+        $view->assign('data', $resolvedData);
+        $renderedView = (string)$view->render();
+        $event->addHeaderContent($renderedView);
     }
 
     private function resolveData(
@@ -95,17 +97,9 @@ class PageLayout
         return $contentBlockData;
     }
 
-    private function createView(ContentTypeInterface $contentTypeDefinition): ?StandaloneView
+    private function createView(ContentTypeInterface $contentTypeDefinition): StandaloneView
     {
-        $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
-        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
-
-        $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
-        $editorPreviewAbsPath = GeneralUtility::getFileAbsFileName($editorPreviewExtPath);
-        if (!file_exists($editorPreviewAbsPath)) {
-            return null;
-        }
-
+        $contentBlockPrivatePath = $this->getContentBlockPrivatePath($contentTypeDefinition);
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
         $view->setPartialRootPaths([
@@ -115,7 +109,24 @@ class PageLayout
         ]);
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
-
         return $view;
+    }
+
+    private function getContentBlockPrivatePath(ContentTypeInterface $contentTypeDefinition): string
+    {
+        $contentBlockExtPath = $this->getEditorPreviewExtPath($contentTypeDefinition);
+        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+        return $contentBlockPrivatePath;
+    }
+
+    private function getEditorPreviewExtPath(ContentTypeInterface $contentTypeDefinition): ?string
+    {
+        $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
+        $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
+        $editorPreviewAbsPath = GeneralUtility::getFileAbsFileName($editorPreviewExtPath);
+        if (!file_exists($editorPreviewAbsPath)) {
+            return null;
+        }
+        return $contentBlockExtPath;
     }
 }
