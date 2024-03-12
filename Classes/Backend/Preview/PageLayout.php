@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
+use TYPO3\CMS\Backend\Module\ModuleData;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
@@ -44,8 +45,10 @@ final class PageLayout
         ModifyPageLayoutContentEvent $event
     ): void {
         $request = $event->getRequest();
+        /** @var ModuleData $moduleData */
         $moduleData = $request->getAttribute('moduleData');
-        if (($moduleData->get('function') ?? 0) !== 1) {
+        $function = (int)($moduleData->get('function') ?? 0);
+        if ($function !== 1) {
             return;
         }
 
