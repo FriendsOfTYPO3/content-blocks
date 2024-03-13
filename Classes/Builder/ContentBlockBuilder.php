@@ -79,6 +79,7 @@ class ContentBlockBuilder
         $this->copyDefaultIcon($contentType, $basePath);
         if ($contentType === ContentType::PAGE_TYPE) {
             $this->copyHideInMenuIcon($basePath);
+            $this->createBackendPreviewHtml($contentBlock, $basePath);
         }
     }
 
