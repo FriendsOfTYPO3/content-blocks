@@ -446,6 +446,46 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "File"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"extendedPalette": {
+						"type": "boolean",
+						"description": "If disabled, an additional image or media palette will not be rendered."
+					},
+					"allowed": {
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "array"
+							}
+						],
+						"description": "List of allowed file types.",
+						"examples": ["common-image-types", "common-media-types"]
+					},
+					"minitems": {
+						"type": "integer",
+						"description": "Minimum number of items."
+					},
+					"maxitems": {
+						"type": "integer",
+						"description": "Maximum number of items."
+					},
+					"cropVariants": {
+						"type": "object"
+					}
+				}
+			}
 		}
 	]
 }
