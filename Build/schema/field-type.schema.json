@@ -261,6 +261,91 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Collection"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"fields": {
+						"type": "array",
+						"items": {
+							"$ref": "#/"
+						}
+					},
+					"table": {
+						"description": "Defines the table name for the database.",
+						"type": "string"
+					},
+					"labelField": {
+						"description": "Field identifier which should be used as the title of the record.",
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "array",
+								"items": {
+									"type": "string",
+									"uniqueItems": true,
+									"minItems": 1
+								}
+							}
+						]
+					},
+					"fallbackLabelFields": {
+						"description": "Defines which fields should be used as fallback, if labelField is not filled.",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"uniqueItems": true
+						}
+					},
+					"minitems": {
+						"type": "integer",
+						"description": "Minimum number of items."
+					},
+					"maxitems": {
+						"type": "integer",
+						"description": "Maximum number of items."
+					},
+					"appearance": {
+						"type": "object",
+						"properties": {
+							"collapseAll": {
+								"type": "boolean",
+								"description": "Show all child records collapsed or expanded."
+							},
+							"levelLinksPosition": {
+								"type": "string",
+								"description": "Defines where to show the \"New record\" link",
+								"enum": ["top", "bottom", "both"]
+							}
+						}
+					},
+					"foreign_table": {
+						"type": "string",
+						"description": "It is possible to reference another table instead of creating a new one."
+					},
+					"foreign_field": {
+						"type": "string",
+						"description": "It is possible to override the field name pointing to the parent record."
+					},
+					"shareAcrossTables": {
+						"type": "boolean",
+						"description": "Allows to reference a Record Type across multiple tables"
+					},
+					"shareAcrossFields": {
+						"type": "boolean",
+						"description": "Allows to reference a Record Type across multiple fields"
+					}
+				}
+			}
 		}
 	]
 }
