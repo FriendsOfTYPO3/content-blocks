@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
@@ -26,12 +27,25 @@ class HtmlTemplateCodeGenerator
 {
     public function generateEditorPreviewTemplate(LoadedContentBlock $contentBlockConfiguration): string
     {
-        $package = $contentBlockConfiguration->getName();
-        $vendor = $contentBlockConfiguration->getVendor();
-        $defaultContent[] = '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css"/>';
-        $defaultContent[] = '';
-        $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
-        $defaultContent[] = 'Header: {data.header}';
+        $defaultContent = [];
+
+        if ($contentBlockConfiguration->getContentType() === ContentType::PAGE_TYPE) {
+            $defaultContent[] = '<html xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">';
+            $defaultContent[] = '    Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
+            $defaultContent[] = '    <be:link.editRecord uid="{data.uid}" table="{data.tableName}" fields="title">';
+            $defaultContent[] = '        Title: {data.title}';
+            $defaultContent[] = '    </be:link.editRecord>';
+            $defaultContent[] = '</html>';
+        } else {
+            $package = $contentBlockConfiguration->getName();
+            $vendor = $contentBlockConfiguration->getVendor();
+
+            $defaultContent[] = '<cb:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" file="EditorPreview.css"/>';
+            $defaultContent[] = '';
+            $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
+            $defaultContent[] = 'Header: {data.header}';
+        }
+
         $defaultContentString = implode("\n", $defaultContent);
 
         return $defaultContentString;

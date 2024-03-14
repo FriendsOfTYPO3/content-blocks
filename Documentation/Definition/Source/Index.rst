@@ -13,14 +13,16 @@ here.
 EditorPreview.html
 ==================
 
-This file is only available for :ref:`Content Elements <yaml_reference_content_element>`.
+This file is only available for :ref:`Content Elements <yaml_reference_content_element>`
+and :ref:`Page Types <yaml_reference_page_types>`.
 
 The **EditorPreview.html** can be added to customize the backend preview for
 your editors. By default, TYPO3 comes with a standard preview renderer. However,
 it is specialized in rendering the preview of Core Content Elements. This means
 only Core fields like :sql:`header`, :sql:`subheader` or :sql:`bodytext` are
 considered. Therefore, it is advised to provide an own preview for custom
-Content Elements.
+Content Elements. Previews for Page Types are displayed at the top of the
+content area and beneath the page title.
 
 Learn more about :ref:`templating <cb_templating>`.
 

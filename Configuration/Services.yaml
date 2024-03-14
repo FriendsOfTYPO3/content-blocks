@@ -34,6 +34,14 @@ services:
     arguments:
       $cache: '@cache.content_blocks_preview'
 
+  TYPO3\CMS\ContentBlocks\Backend\Preview\PageLayout:
+    arguments:
+      $cache: '@cache.content_blocks_preview'
+    tags:
+      - name: 'event.listener'
+        identifier: 'content-blocks-page-preview'
+        event: 'TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent'
+
   TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
     autoconfigure: false
     public: true
