@@ -375,6 +375,52 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "DateTime"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "string",
+						"description": "Default value in Y-m-d format."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"dbType": {
+						"type": "string",
+						"description": "Changes the date field to a native MySql DATETIME, DATE or TIME field. ",
+						"enum": ["datetime", "date", "time"]
+					},
+					"range": {
+						"type": "object",
+						"properties": {
+							"lower": {
+								"type": "string"
+							},
+							"upper": {
+								"type": "string"
+							}
+						}
+					},
+					"format": {
+						"type": "string",
+						"description": "How the date should be formatted in the backend view.",
+						"enum": ["datetime", "date", "time", "timesec"]
+					},
+					"disableAgeDisplay": {
+						"type": "boolean",
+						"description": "Disable the display of the age"
+					}
+				}
+			}
 		}
 	]
 }
