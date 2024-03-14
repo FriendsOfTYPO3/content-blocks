@@ -4,6 +4,24 @@
 	"title": "Field Type",
 	"description": "TYPO3 CMS Content Blocks Field Type",
 	"type": "object",
+	"$defs": {
+		"valuePicker": {
+			"type": "array",
+			"items": {
+				"type": "array",
+				"items": [
+					{
+						"type": "string",
+						"description": "Label"
+					},
+					{
+						"type": "string",
+						"description": "Value"
+					}
+				]
+			}
+		}
+	},
 	"properties": {
 		"identifier": {
 			"type": "string",
@@ -119,20 +137,7 @@
 						"description": "Abstract value for the width of the field."
 					},
 					"valuePicker": {
-						"type": "array",
-						"items": {
-							"type": "array",
-							"items": [
-								{
-									"type": "string",
-									"description": "Label"
-								},
-								{
-									"type": "string",
-									"description": "Value"
-								}
-							]
-						}
+						"$ref": "#/$defs/valuePicker"
 					}
 				}
 			}
@@ -343,6 +348,30 @@
 					"shareAcrossFields": {
 						"type": "boolean",
 						"description": "Allows to reference a Record Type across multiple fields"
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Color"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "string",
+						"description": "Default value."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"valuePicker": {
+						"$ref": "#/$defs/valuePicker"
 					}
 				}
 			}
