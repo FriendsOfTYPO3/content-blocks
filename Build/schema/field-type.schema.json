@@ -421,6 +421,31 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Email"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "string",
+						"description": "Default value."
+					},
+					"placeholder": {
+						"type": "string",
+						"description": "Placeholder text for the field."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					}
+				}
+			}
 		}
 	]
 }
