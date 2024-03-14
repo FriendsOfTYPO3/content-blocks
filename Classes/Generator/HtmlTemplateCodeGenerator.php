@@ -32,7 +32,7 @@ class HtmlTemplateCodeGenerator
         if ($contentBlockConfiguration->getContentType() === ContentType::PAGE_TYPE) {
             $defaultContent[] = '<html xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">';
             $defaultContent[] = '    Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
-            $defaultContent[] = '    <be:link.editRecord uid="{data._raw.uid}" table="pages" fields="title">';
+            $defaultContent[] = '    <be:link.editRecord uid="{data.uid}" table="{data.tableName}" fields="title">';
             $defaultContent[] = '        Title: {data.title}';
             $defaultContent[] = '    </be:link.editRecord>';
             $defaultContent[] = '</html>';
