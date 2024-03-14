@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Module\ModuleData;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -29,6 +31,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -42,6 +45,7 @@ class PageLayout
         protected readonly RelationResolver $relationResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
+        protected readonly PhpFrontend $cache,
     ) {}
 
     public function __invoke(
@@ -54,13 +58,14 @@ class PageLayout
         if ($function !== 1) {
             return;
         }
-        $tableDefinition = $this->tableDefinitionCollection->getTable('pages');
+        $pageTypeTable = 'pages';
+        $tableDefinition = $this->tableDefinitionCollection->getTable($pageTypeTable);
         $contentTypeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
         if ($contentTypeDefinitionCollection === null) {
             return;
         }
         $pageUid = (int)($request->getQueryParams()['id'] ?? 0);
-        $pageRow = BackendUtility::getRecord('pages', $pageUid);
+        $pageRow = BackendUtility::getRecord($pageTypeTable, $pageUid);
         $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $pageRow);
         if ($contentTypeDefinition === null) {
             return;
@@ -68,33 +73,12 @@ class PageLayout
         if ($this->getEditorPreviewExtPath($contentTypeDefinition) === null) {
             return;
         }
-        $resolvedData = $this->resolveData($contentTypeDefinition, $tableDefinition, $pageRow);
+        $contentBlockData = $this->getContentBlockData($pageRow, $request, $contentTypeDefinition, $tableDefinition);
         $view = $this->createView($contentTypeDefinition);
         $view->setRequest($request);
-        $view->assign('data', $resolvedData);
+        $view->assign('data', $contentBlockData);
         $renderedView = (string)$view->render();
         $event->addHeaderContent($renderedView);
-    }
-
-    private function resolveData(
-        ContentTypeInterface $contentTypeDefinition,
-        TableDefinition $tableDefinition,
-        array $pageRow
-    ): ContentBlockData {
-        $resolvedData = $this->relationResolver->resolve(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $pageRow,
-            'pages',
-        );
-        $contentBlockData = $this->contentBlockDataDecorator->decorate(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $pageRow,
-            $resolvedData,
-            'pages'
-        );
-        return $contentBlockData;
     }
 
     private function createView(ContentTypeInterface $contentTypeDefinition): StandaloneView
@@ -126,5 +110,39 @@ class PageLayout
             return null;
         }
         return $contentBlockExtPath;
+    }
+
+    public function getContentBlockData(
+        ?array $pageRow,
+        ServerRequestInterface $request,
+        ContentTypeInterface $contentTypeDefinition,
+        TableDefinition $tableDefinition,
+    ): ContentBlockData {
+        $pageTypeTable = 'pages';
+        $cacheIdentifier = $pageTypeTable . '-' . $pageRow['uid'] . '-' . md5(json_encode($pageRow));
+        if ($this->cache->has($cacheIdentifier)) {
+            $resolvedData = $this->cache->require($cacheIdentifier);
+        } else {
+            $this->relationResolver->setRequest($request);
+            $resolvedData = $this->relationResolver->resolve(
+                $contentTypeDefinition,
+                $tableDefinition,
+                $pageRow,
+                $pageTypeTable,
+            );
+            // Avoid flooding cache with redundant data.
+            if ($resolvedData !== $pageRow) {
+                $exported = 'return ' . VarExporter::export($resolvedData) . ';';
+                $this->cache->set($cacheIdentifier, $exported);
+            }
+        }
+        $contentBlockData = $this->contentBlockDataDecorator->decorate(
+            $contentTypeDefinition,
+            $tableDefinition,
+            $pageRow,
+            $resolvedData,
+            $pageTypeTable,
+        );
+        return $contentBlockData;
     }
 }
