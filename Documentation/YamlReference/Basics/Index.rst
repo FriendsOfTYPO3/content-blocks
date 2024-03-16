@@ -7,6 +7,11 @@ Basics (Mixins)
 
 Basics are a concept like partials or mixins. They are used to have a
 pre-defined set of fields that can be reused and have to be defined only once.
+It is important to understand that Basics are a very simple "search & replace"
+kind of mechanic. Once included in your Content Block they act like they were
+defined there directly. This also means that is is normally required to
+re-define the label in every Content Block. Hence it is recommended to reference
+labels with the full **LLL:EXT** path.
 
 There are **two** different ways of using it.
 
@@ -72,8 +77,9 @@ Example on how to create a single Basic:
     fields:
       - identifier: a_basic_field
         type: Text
+        label: LLL:EXT:sitepackage/Resources/Private/Language/locallang.xlf:a_basic_field
 
-The :yaml:`fields` part is exactly the same as in EditorInterface. Here
+The :yaml:`fields` part is exactly the same as in the EditorInterface.yaml. Here
 you can define a Tab, a Palette or simply a set of fields.
 
 The most practical way to use Basics is to use pre-defined tabs as the global
