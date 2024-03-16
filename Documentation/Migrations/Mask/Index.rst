@@ -104,8 +104,8 @@ module view, and pasted directly into the **Labels.xlf** file.
 .. tip::
 
     Use the :ref:`command <command_language_generate>`
-    :bash:`content-blocks:language:generate` to automatically generate the
-    **Labels.xlf** file with automatic keys prefilled.
+    :bash:`content-blocks:language:generate vendor/name` to automatically
+    generate the **Labels.xlf** file with automatic keys prefilled.
 
 Finish
 ------
