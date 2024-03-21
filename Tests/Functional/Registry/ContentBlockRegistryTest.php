@@ -27,7 +27,7 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
     protected bool $initializeDatabase = false;
 
     protected array $coreExtensionsToLoad = [
-//        'content_blocks',
+        //        'content_blocks',
     ];
 
     protected array $testExtensionsToLoad = [

@@ -38,7 +38,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 final class RelationResolverTest extends FunctionalTestCase
 {
     protected array $coreExtensionsToLoad = [
-//        'content_blocks',
+        //        'content_blocks',
         'workspaces',
     ];
 
