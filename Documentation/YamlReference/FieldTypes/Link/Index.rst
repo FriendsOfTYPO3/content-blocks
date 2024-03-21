@@ -72,5 +72,5 @@ Advanced / use case
         required: true
         valuePicker:
           items:
-            - [ 'https://www.typo3.org', 'TYPO3 CMS' ]
-            - [ 'https://www.typo3.com', 'TYPO3 GmbH' ]
+            - [ 'TYPO3 CMS', 'https://www.typo3.org' ]
+            - [ 'TYPO3 GmbH', 'https://www.typo3.com' ]
