@@ -59,6 +59,9 @@ class PageLayout
             return;
         }
         $pageTypeTable = 'pages';
+        if (!$this->tableDefinitionCollection->hasTable($pageTypeTable)) {
+            return;
+        }
         $tableDefinition = $this->tableDefinitionCollection->getTable($pageTypeTable);
         $contentTypeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
         if ($contentTypeDefinitionCollection === null) {
