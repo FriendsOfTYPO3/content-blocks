@@ -153,7 +153,7 @@ class ContentBlockLoader
             $absoluteContentBlockPath = $splFileInfo->getPathname();
             $contentBlockFolderName = $splFileInfo->getRelativePathname();
             $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
-            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentType);
+            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentBlockExtPath, $contentType);
             $result[] = $this->loadSingleContentBlock(
                 $editorInterfaceYaml['name'],
                 $contentType,
@@ -166,9 +166,16 @@ class ContentBlockLoader
         return $result;
     }
 
-    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, mixed $contentType): array
+    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, string $contentBlockExtPath, ContentType $contentType): array
     {
-        $yamlPath = $absoluteContentBlockPath . '/' . ContentBlockPathUtility::getContentBlockDefinitionFileName();
+        $contentBlockDefinitionFileName = ContentBlockPathUtility::getContentBlockDefinitionFileName();
+        $yamlPath = $absoluteContentBlockPath . '/' . $contentBlockDefinitionFileName;
+        if (!file_exists($yamlPath)) {
+            throw new \RuntimeException(
+                'Found Content Block folder in "' . $contentBlockExtPath . '" but ' . $contentBlockDefinitionFileName . ' is missing.',
+                1711039210
+            );
+        }
         $editorInterfaceYaml = Yaml::parseFile($yamlPath);
         if (!is_array($editorInterfaceYaml) || strlen($editorInterfaceYaml['name'] ?? '') < 3 || !str_contains($editorInterfaceYaml['name'], '/')) {
             throw new \RuntimeException(
