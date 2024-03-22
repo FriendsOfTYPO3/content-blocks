@@ -82,13 +82,6 @@ isSearchable
 
 Whether the field contents should be searchable in global search.
 
-hasItems
---------
-
-Should be true if based on TCA type :php:`select`, :php:`radio`,
-or :php:`check`. Enables translation handling for option :php:`items`.
-
-
 Example
 =======
 

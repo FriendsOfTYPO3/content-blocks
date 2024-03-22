@@ -129,11 +129,6 @@ final class DateTimeFieldType implements FieldTypeInterface
         return false;
     }
 
-    public static function hasItems(): bool
-    {
-        return false;
-    }
-
     /**
      * Returns a timestamp as integer. Returns 0 if it could not create a timestamp.
      */

@@ -78,9 +78,4 @@ final class UuidFieldType implements FieldTypeInterface
     {
         return true;
     }
-
-    public static function hasItems(): bool
-    {
-        return false;
-    }
 }

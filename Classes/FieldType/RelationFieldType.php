@@ -178,9 +178,4 @@ final class RelationFieldType implements FieldTypeInterface
     {
         return false;
     }
-
-    public static function hasItems(): bool
-    {
-        return false;
-    }
 }

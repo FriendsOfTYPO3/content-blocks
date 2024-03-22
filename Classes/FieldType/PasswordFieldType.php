@@ -116,9 +116,4 @@ final class PasswordFieldType implements FieldTypeInterface
     {
         return false;
     }
-
-    public static function hasItems(): bool
-    {
-        return false;
-    }
 }

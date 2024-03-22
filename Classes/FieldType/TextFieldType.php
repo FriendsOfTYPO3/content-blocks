@@ -131,9 +131,4 @@ final class TextFieldType implements FieldTypeInterface
     {
         return true;
     }
-
-    public static function hasItems(): bool
-    {
-        return false;
-    }
 }

@@ -184,9 +184,4 @@ final class CollectionFieldType implements FieldTypeInterface
     {
         return false;
     }
-
-    public static function hasItems(): bool
-    {
-        return false;
-    }
 }

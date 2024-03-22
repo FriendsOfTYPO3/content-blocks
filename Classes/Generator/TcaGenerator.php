@@ -582,7 +582,9 @@ class TcaGenerator
             $column['description'] = $descriptionPath;
         }
         $fieldType = $overrideColumn->getFieldType();
-        if ($fieldType::hasItems()) {
+        $itemsFieldTypes = ['select', 'radio', 'check'];
+        $tcaFieldType = $fieldType::getTcaType();
+        if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
             $items = $column['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 $labelPath = $item['labelPath'];
