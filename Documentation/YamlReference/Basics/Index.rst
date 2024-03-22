@@ -9,7 +9,7 @@ Basics are a concept like partials or mixins. They are used to have a
 pre-defined set of fields that can be reused and have to be defined only once.
 It is important to understand that Basics are a very simple "search & replace"
 kind of mechanic. Once included in your Content Block they act like they were
-defined there directly. This also means that is is normally required to
+defined there directly. This also means that it is normally required to
 re-define the label in every Content Block. Hence it is recommended to reference
 labels with the full **LLL:EXT** path.
 
@@ -66,7 +66,8 @@ Define own Basics
 =================
 
 You can define your own Basics by placing one or more YAML files into
-**ContentBlocks/Basics**. The name of the YAML file can be chosen freely.
+**ContentBlocks/Basics**. The name of the YAML file can be chosen freely. It is
+also possible to create sub-folders in order to structure your Basics.
 
 Example on how to create a single Basic:
 
