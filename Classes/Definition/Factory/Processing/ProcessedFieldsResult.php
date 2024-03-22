@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -39,7 +39,7 @@ final class ProcessedFieldsResult
     // Below are temporary properties for the scope of a root field.
     public string $identifier;
     public string $uniqueIdentifier;
-    public FieldType $fieldType;
+    public FieldTypeInterface $fieldType;
     public array $tcaFieldDefinition;
 
     public function __construct(ProcessingInput $input)

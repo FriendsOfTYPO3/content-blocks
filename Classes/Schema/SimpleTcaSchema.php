@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Schema;
 
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedFieldException;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldCollection;
-use TYPO3\CMS\ContentBlocks\Schema\Field\FieldTypeInterface;
+use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -43,7 +43,7 @@ final class SimpleTcaSchema
         return isset($this->fields[$fieldName]);
     }
 
-    public function getField(string $fieldName): FieldTypeInterface
+    public function getField(string $fieldName): TcaFieldTypeInterface
     {
         if (!$this->hasField($fieldName)) {
             throw new UndefinedFieldException('The field "' . $fieldName . '" is not defined for the TCA schema "' . $this->name . '".', 1661615151);
@@ -105,7 +105,7 @@ final class SimpleTcaSchema
         );
     }
 
-    public function getTypeField(): ?FieldTypeInterface
+    public function getTypeField(): ?TcaFieldTypeInterface
     {
         if (isset($this->schemaConfiguration['type']) && isset($this->fields[$this->schemaConfiguration['type']])) {
             return $this->fields[$this->schemaConfiguration['type']];

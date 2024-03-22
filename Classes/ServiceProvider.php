@@ -278,7 +278,7 @@ HEREDOC;
             $fieldNames = [];
             $contentElementTableDefinition = $tableDefinitionCollection->getTable($contentElementTable);
             foreach ($contentElementTableDefinition->getParentReferences() ?? [] as $parentReference) {
-                $fieldConfiguration = $parentReference->getFieldConfiguration()->getTca()['config'] ?? [];
+                $fieldConfiguration = $parentReference->getTca()['config'] ?? [];
                 if (($fieldConfiguration['foreign_table'] ?? '') === $contentElementTable) {
                     $foreignField = $fieldConfiguration['foreign_field'];
                     $fieldNames[$foreignField] = $foreignField;

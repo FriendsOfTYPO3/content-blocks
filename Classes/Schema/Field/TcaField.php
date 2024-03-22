@@ -17,20 +17,20 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema\Field;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TcaField implements FieldTypeInterface
+final class TcaField implements TcaFieldTypeInterface
 {
     public function __construct(
-        private readonly FieldType $fieldType,
+        private readonly FieldTypeInterface $fieldType,
         private readonly string $name,
         private readonly array $columnConfig,
     ) {}
 
-    public function getType(): FieldType
+    public function getType(): FieldTypeInterface
     {
         return $this->fieldType;
     }

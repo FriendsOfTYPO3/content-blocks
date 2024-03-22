@@ -23,8 +23,8 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FolderFieldType;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\RelationHandler;
@@ -60,7 +60,9 @@ class RelationResolver
     ): array {
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
-            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
+            $fieldType = $tcaFieldDefinition->getFieldType();
+            $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
+            if ($fieldTypeEnum->isStructureField()) {
                 continue;
             }
             $resolvedField = $this->processField(
@@ -80,7 +82,8 @@ class RelationResolver
         array $record,
         string $table
     ): mixed {
-        $fieldType = $tcaFieldDefinition->getFieldType();
+        $fieldTypeName = $tcaFieldDefinition->getFieldType()->getName();
+        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
         $recordIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(
@@ -90,35 +93,35 @@ class RelationResolver
             );
         }
         $data = $record[$recordIdentifier];
-        if ($fieldType === FieldType::FILE) {
+        if ($fieldTypeEnum === FieldType::FILE) {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
             return $fileCollector->getFiles();
         }
-        if ($fieldType === FieldType::COLLECTION) {
+        if ($fieldTypeEnum === FieldType::COLLECTION) {
             return $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition);
         }
-        if ($fieldType === FieldType::CATEGORY) {
+        if ($fieldTypeEnum === FieldType::CATEGORY) {
             return $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-        if ($fieldType === FieldType::RELATION) {
+        if ($fieldTypeEnum === FieldType::RELATION) {
             return $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-        if ($fieldType === FieldType::FOLDER) {
+        if ($fieldTypeEnum === FieldType::FOLDER) {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $folders = GeneralUtility::trimExplode(',', (string)$data, true);
-            /** @var FolderFieldConfiguration $folderFieldConfiguration */
-            $folderFieldConfiguration = $tcaFieldDefinition->getFieldConfiguration();
-            $fileCollector->addFilesFromFolders($folders, $folderFieldConfiguration->isRecursive());
+            /** @var FolderFieldType $folderFieldType */
+            $folderFieldType = $tcaFieldDefinition->getFieldType();
+            $fileCollector->addFilesFromFolders($folders, $folderFieldType->isRecursive());
             return $fileCollector->getFiles();
         }
-        if ($fieldType === FieldType::SELECT) {
+        if ($fieldTypeEnum === FieldType::SELECT) {
             return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-        if ($fieldType === FieldType::FLEXFORM) {
+        if ($fieldTypeEnum === FieldType::FLEXFORM) {
             return $this->flexFormService->convertFlexFormContentToArray($data);
         }
-        if ($fieldType === FieldType::JSON) {
+        if ($fieldTypeEnum === FieldType::JSON) {
             $platform = GeneralUtility::makeInstance(ConnectionPool::class)
                 ->getConnectionForTable($table)
                 ->getDatabasePlatform();

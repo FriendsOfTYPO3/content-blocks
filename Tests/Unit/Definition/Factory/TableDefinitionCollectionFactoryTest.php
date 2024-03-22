@@ -23,7 +23,9 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -72,14 +74,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1677407942);
         $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     public static function notUniqueIdentifiersWithinCollectionThrowAnExceptionDataProvider(): iterable
@@ -131,14 +139,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1677407942);
         $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -177,14 +191,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168602);
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -229,14 +249,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168602);
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -292,14 +318,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168022);
         $this->expectExceptionMessage('The palette identifier "palette_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -361,14 +393,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679168022);
         $this->expectExceptionMessage('The palette identifier "palette_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -408,14 +446,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679243686);
         $this->expectExceptionMessage('The tab identifier "tab_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -461,14 +505,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679243686);
         $this->expectExceptionMessage('The tab identifier "tab_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -506,14 +556,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679245193);
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -557,14 +613,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679245193);
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -612,14 +674,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679224392);
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -673,14 +741,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679224392);
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -715,14 +789,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679226075);
         $this->expectExceptionMessage('A field is missing the required "identifier" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -753,14 +833,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1694768937);
         $this->expectExceptionMessage('The field "text1" is missing the required "type" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -801,14 +887,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionCode(1679226075);
         $this->expectExceptionMessage('A field is missing the required "identifier" in Content Block "foo/bar".');
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     #[Test]
@@ -862,14 +954,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage('You must not mix Sheets with normal fields inside the FlexForm definition "flexField" in Content Block "foo/bar".');
         $this->expectExceptionCode(1685217163);
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     public static function structuralFieldTypesAreNotAllowedInFlexFormDataProvider(): iterable
@@ -981,14 +1079,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1685220309);
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     public static function sectionsHaveAtLeastOneContainerExceptionIsThrownDataProvider(): iterable
@@ -1039,14 +1143,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1686330220);
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     public static function containerHaveAtLeastOneFieldExceptionIsThrownDataProvider(): iterable
@@ -1103,14 +1213,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1686331469);
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     public static function containerContainsValidFieldTypeExceptionIsThrownDataProvider(): iterable
@@ -1172,14 +1288,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectExceptionMessage($message);
         $this->expectExceptionCode(1686330594);
 
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
     }
 
     public static function localCollectionsCanHaveTableOverriddenDataProvider(): iterable
@@ -1221,14 +1343,20 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
     #[Test]
     public function localCollectionsCanHaveTableOverridden(array $contentBlocks, string $expectedTable): void
     {
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $simpleTcaSchemaFactory);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
 
         self::assertTrue($tableDefinitionCollection->hasTable($expectedTable));
     }

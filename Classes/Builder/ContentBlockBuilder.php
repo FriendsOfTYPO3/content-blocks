@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
@@ -38,6 +39,7 @@ class ContentBlockBuilder
         protected readonly HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
         protected readonly LanguageFileGenerator $languageFileGenerator,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly FieldTypeRegistry $fieldTypeRegistry,
         protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {}
@@ -88,6 +90,7 @@ class ContentBlockBuilder
         $this->contentBlockRegistry->register($contentBlock);
         $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
             $this->contentBlockRegistry,
+            $this->fieldTypeRegistry,
             $this->simpleTcaSchemaFactory,
         );
         $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
