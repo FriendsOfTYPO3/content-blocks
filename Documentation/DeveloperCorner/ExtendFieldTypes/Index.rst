@@ -87,3 +87,79 @@ hasItems
 
 Should be true if based on TCA type :php:`select`, :php:`radio`,
 or :php:`check`. Enables translation handling for option :php:`items`.
+
+
+Example
+=======
+
+Example for a field type "Money".
+
+.. code-block:: php
+
+    <?php
+
+    declare(strict_types=1);
+
+    namespace VENDOR\MyExtension\FieldType;
+
+    use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
+    use TYPO3\CMS\ContentBlocks\FieldType\WithCommonProperties;
+
+    final class MoneyFieldType implements FieldTypeInterface
+    {
+        use WithCommonProperties;
+
+        private float $default = 0.00;
+        private bool $required = false;
+        private bool $nullable = false;
+
+        public static function createFromArray(array $settings): self
+        {
+            $self = new self();
+            $self->setCommonProperties($settings);
+            $default = $settings['default'] ?? $self->default;
+            $self->default = (float)$default;
+            $self->required = (bool)($settings['required'] ?? $self->required);
+            $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
+            return $self;
+        }
+
+        public function getTca(): array
+        {
+            $tca = $this->toTca();
+            $config['type'] = self::getTcatype();
+            if ($this->default !== 0.0) {
+                $config['default'] = $this->default;
+            }
+            if ($this->required) {
+                $config['required'] = true;
+            }
+            $config['format'] = 'decimal';
+            $tca['config'] = array_replace($tca['config'] ?? [], $config);
+            return $tca;
+        }
+
+        public function getSql(string $column): string
+        {
+            $null = ' NOT NULL';
+            if ($this->nullable) {
+                $null = '';
+            }
+            return "`$column` decimal(10,2) DEFAULT '0.00'" . $null;
+        }
+
+        public static function getName(): string
+        {
+            return 'Money';
+        }
+
+        public static function getTcaType(): string
+        {
+            return 'number';
+        }
+
+        public static function isSearchable(): bool
+        {
+            return false;
+        }
+    }
