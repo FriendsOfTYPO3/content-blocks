@@ -43,7 +43,6 @@ the Core implementations to get a feeling on how to implement them.
         public static function getName(): string;
         public static function getTcaType(): string;
         public static function isSearchable(): bool;
-        public static function isRelation(): bool;
         public static function hasItems(): bool;
     }
 
@@ -65,7 +64,7 @@ getSql
 ------
 
 The SQL definition for your database column. Use :php:`$column` as the
-column name.
+column name. Return empty string to fall back to standard definition.
 
 getName
 -------
@@ -82,12 +81,6 @@ isSearchable
 ------------
 
 Whether the field contents should be searchable in global search.
-
-isRelation
-----------
-
-Should be true if based on TCA type :php:`select`, :php:`group`, or
-:php:`inline`. Enables processing of child relations.
 
 hasItems
 --------

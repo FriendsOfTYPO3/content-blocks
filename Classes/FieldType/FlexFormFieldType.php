@@ -73,11 +73,6 @@ final class FlexFormFieldType implements FieldTypeInterface
         return true;
     }
 
-    public static function isRelation(): bool
-    {
-        return true;
-    }
-
     public static function hasItems(): bool
     {
         return false;

@@ -199,11 +199,6 @@ final class SelectFieldType implements FieldTypeInterface
         return false;
     }
 
-    public static function isRelation(): bool
-    {
-        return true;
-    }
-
     public static function hasItems(): bool
     {
         return true;

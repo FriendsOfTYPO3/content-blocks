@@ -140,7 +140,9 @@ final class ContentBlockDataDecorator
         if (!is_array($resolvedField)) {
             return false;
         }
-        if (!$tcaFieldDefinition->getFieldType()->isRelation()) {
+        $fieldType = $tcaFieldDefinition->getFieldType();
+        $relationTcaTypes = ['inline', 'select', 'group'];
+        if (!in_array($fieldType::getTcaType(), $relationTcaTypes, true)) {
             return false;
         }
         if ($this->getRelationTable($tcaFieldDefinition, $table) === '') {

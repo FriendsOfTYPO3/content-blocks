@@ -151,11 +151,6 @@ final class TextareaFieldType implements FieldTypeInterface
         return true;
     }
 
-    public static function isRelation(): bool
-    {
-        return false;
-    }
-
     public static function hasItems(): bool
     {
         return false;
