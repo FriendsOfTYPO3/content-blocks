@@ -30,6 +30,7 @@ Options
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: table
+   :name: record-type-table
 
    :Required: true
    :Type: string
@@ -45,9 +46,48 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
        table: tx_vendor_my_custom_table_name
 
-.. include:: /Snippets/LabelField.rst.txt
+.. confval:: labelField
+   :name: record-type-labelField
+
+   :Required: true
+   :Type: string|array
+
+   Defines which field should be used as the title of the record. If not
+   defined, the first valid child field will be used as the label. It is
+   possible to define an array of fields, which will be displayed
+   comma-separated in the backend.
+
+   .. code-block:: yaml
+
+       # a single field for the label
+       labelField: title
+
+       # multiple fields will be displayed comma-separated
+       labelField:
+           - title
+           - text
+
+.. confval:: fallbackLabelFields
+   :name: record-type-fallbackLabelFields
+
+   :Required: false
+   :Type: array
+
+   Defines which fields should be used as fallback, if :yaml:`labelField` is not
+   filled. The first filled field which is found will be used. Can only be used
+   if there is only one :yaml:`labelField` field defined.
+
+   .. code-block:: yaml
+
+       # fallback fields will be used, if title from labelField is empty
+       labelField: title
+       fallbackLabelFields:
+           - text1
+           - text2
+
 
 .. confval:: typeField
+   :name: record-type-typeField
 
    :Required: false
    :Type: string
@@ -63,6 +103,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        typeField: type
 
 .. confval:: typeName
+   :name: record-type-typeName
 
    :Required: false
    :Type: string
@@ -76,6 +117,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        typeName: type1
 
 .. confval:: languageAware
+   :name: record-type-languageAware
 
    :Required: false
    :Type: boolean
@@ -90,6 +132,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        languageAware: false
 
 .. confval:: workspaceAware
+   :name: record-type-workspaceAware
 
    :Required: false
    :Type: boolean
@@ -106,6 +149,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        workspaceAware: false
 
 .. confval:: editLocking
+   :name: record-type-editLocking
 
    :Required: false
    :Type: boolean
@@ -120,6 +164,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        editLocking: false
 
 .. confval:: restriction
+   :name: record-type-restriction
 
    :Required: false
    :Type: array
@@ -149,6 +194,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
          userGroup: false
 
 .. confval:: softDelete
+   :name: record-type-softDelete
 
    :Required: false
    :Type: boolean
@@ -164,6 +210,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        softDelete: false
 
 .. confval:: trackCreationDate
+   :name: record-type-trackCreationDate
 
    :Required: false
    :Type: boolean
@@ -177,6 +224,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        trackCreationDate: false
 
 .. confval:: trackUpdateDate
+   :name: record-type-trackUpdateDate
 
    :Required: false
    :Type: boolean
@@ -190,6 +238,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        trackUpdateDate: false
 
 .. confval:: sortable
+   :name: record-type-sortable
 
    :Required: false
    :Type: boolean
@@ -204,6 +253,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        sortable: false
 
 .. confval:: sortField
+   :name: record-type-sortField
 
    :Required: false
    :Type: string|array
@@ -227,6 +277,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
            order: asc
 
 .. confval:: internalDescription
+   :name: record-type-internalDescription
 
    :Required: false
    :Type: boolean
@@ -242,6 +293,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        internalDescription: true
 
 .. confval:: rootLevelType
+   :name: record-type-rootLevelType
 
    :Required: false
    :Type: string
@@ -256,6 +308,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        rootLevelType: 'onlyOnRootLevel'
 
 .. confval:: security
+   :name: record-type-security
 
    :Required: false
    :Type: array
@@ -277,6 +330,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
            ignorePageTypeRestriction: true
 
 .. confval:: readOnly
+   :name: record-type-readOnly
 
    :Required: false
    :Type: boolean
@@ -289,6 +343,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        readOnly: true
 
 .. confval:: adminOnly
+   :name: record-type-adminOnly
 
    :Required: false
    :Type: boolean
@@ -301,6 +356,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        adminOnly: true
 
 .. confval:: hideAtCopy
+   :name: record-type-hideAtCopy
 
    :Required: false
    :Type: boolean
@@ -314,6 +370,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        hideAtCopy: true
 
 .. confval:: appendLabelAtCopy
+   :name: record-type-appendLabelAtCopy
 
    :Required: false
    :Type: string

@@ -15,6 +15,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: email-default
 
    :Required: false
    :Type: string
@@ -23,6 +24,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: placeholder
+   :name: email-placeholder
 
    :Required: false
    :Type: string
@@ -31,6 +33,7 @@ Settings
    Placeholder text for the field.
 
 .. confval:: required
+   :name: email-required
 
    :Required: false
    :Type: boolean

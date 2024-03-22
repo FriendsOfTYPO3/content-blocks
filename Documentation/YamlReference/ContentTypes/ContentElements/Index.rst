@@ -45,6 +45,7 @@ Options
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: description
+   :name: content-element-description
 
    :Required: false
    :Type: string
@@ -58,6 +59,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        description: "Here comes my description"
 
 .. confval:: group
+   :name: content-element-group
 
    :Required: false
    :Type: string
@@ -80,6 +82,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    *  `plugins`
 
 .. confval:: typeName
+   :name: content-element-typeName
 
    :Required: false
    :Type: string
@@ -93,6 +96,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        typeName: my_content_element
 
 .. confval:: saveAndClose
+   :name: content-element-saveAndClose
 
    :Required: false
    :Type: bool

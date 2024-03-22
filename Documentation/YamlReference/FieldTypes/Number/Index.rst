@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: format
+   :name: number-format
 
    :Required: false
    :Type: string
@@ -21,6 +22,7 @@ Settings
    Possible values: `integer` (default) or `decimal`.
 
 .. confval:: default
+   :name: number-default
 
    :Required: false
    :Type: integer
@@ -29,6 +31,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: range
+   :name: number-range
 
    :Required: false
    :Type: array
@@ -50,6 +53,7 @@ Settings
         upper: 999
 
 .. confval:: required
+   :name: number-required
 
    :Required: false
    :Type: boolean
@@ -58,6 +62,7 @@ Settings
    If set, the field becomes mandatory.
 
 .. confval:: slider
+   :name: number-slider
 
    :Required: false
    :Type: array

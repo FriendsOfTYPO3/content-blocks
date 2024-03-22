@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: color-default
 
    :Required: false
    :Type: string
@@ -21,6 +22,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: required
+   :name: color-required
 
    :Required: false
    :Type: boolean
@@ -29,6 +31,7 @@ Settings
    If set, the field will become mandatory.
 
 .. confval:: valuePicker
+   :name: color-valuePicker
 
    :Required: false
    :Type: array

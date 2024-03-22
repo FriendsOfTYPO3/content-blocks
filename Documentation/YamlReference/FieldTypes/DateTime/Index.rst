@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: datetime-default
 
    :Required: false
    :Type: string
@@ -23,6 +24,7 @@ Settings
    For example :yaml:`2023-01-01`.
 
 .. confval:: format
+   :name: datetime-format
 
    :Required: false
    :Type: string
@@ -32,6 +34,7 @@ Settings
    `datetime`, `date` or `time` and `timesec`.
 
 .. confval:: dbType
+   :name: datetime-dbType
 
    :Required: false
    :Type: string
@@ -42,6 +45,7 @@ Settings
    or `time` respectively.
 
 .. confval:: range
+   :name: datetime-range
 
    :Required: false
    :Type: array
@@ -65,6 +69,7 @@ Settings
         upper: '2020-12-31'
 
 .. confval:: disableAgeDisplay
+   :name: datetime-disableAgeDisplay
 
    :Required: false
    :Type: boolean
@@ -73,6 +78,7 @@ Settings
    Disable the display of the age in the backend view.
 
 .. confval:: required
+   :name: datetime-required
 
    :Required: false
    :Type: boolean

@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: cols
+   :name: json-cols
 
    :Required: false
    :Type: integer
@@ -21,6 +22,7 @@ Settings
    Size for the input field. Min value is 10 and max value is 50.
 
 .. confval:: rows
+   :name: json-rows
 
    :Required: false
    :Type: integer
@@ -29,6 +31,7 @@ Settings
    Amount of rows for the textarea. Min value is 1 and max value is 20.
 
 .. confval:: required
+   :name: json-required
 
    :Required: false
    :Type: boolean
@@ -37,6 +40,7 @@ Settings
    If set, the Json textarea needs to be filled.
 
 .. confval:: readOnly
+   :name: json-readOnly
 
    :Required: false
    :Type: boolean
@@ -45,6 +49,7 @@ Settings
    If set, the Json textarea is read only.
 
 .. confval:: enableCodeEditor
+   :name: json-enableCodeEditor
 
    :Required: false
    :Type: boolean

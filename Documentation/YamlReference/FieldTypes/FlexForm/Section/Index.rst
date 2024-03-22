@@ -19,6 +19,7 @@ Settings
 --------
 
 .. confval:: identifier
+   :name: section-identifier
 
    :Required: true
    :Type: string
@@ -26,6 +27,7 @@ Settings
    A unique identifier
 
 .. confval:: label
+   :name: section-label
 
    :Required: false
    :Type: string
@@ -33,6 +35,7 @@ Settings
    Define a label. If not defined, :yaml:`identifier` is used as fallback.
 
 .. confval:: container
+   :name: section-container
 
    :Required: true
    :Type: array

@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: renderType
+   :name: select-renderType
 
    :Required: yes
    :Type: string
@@ -24,6 +25,7 @@ Settings
    *  :yaml:`selectMultipleSideBySide`
 
 .. confval:: items
+   :name: select-items
 
    :Required: yes
    :Type: array
@@ -75,6 +77,7 @@ Settings
         </body>
 
 .. confval:: default
+   :name: select-default
 
    :Required: false
    :Type: string
@@ -82,6 +85,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: maxitems
+   :name: select-maxitems
 
    :Required: false
    :Type: integer
@@ -91,6 +95,7 @@ Settings
    If `maxitems` ist set to greater than 1, multiselect is automatically enabled.
 
 .. confval:: minitems
+   :name: select-minitems
 
    :Required: false
    :Type: integer
@@ -99,7 +104,17 @@ Settings
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
-.. include:: /Snippets/AllowedCustomProperties.rst.txt
+.. confval:: allowedCustomProperties
+   :name: select-allowedCustomProperties
+
+   :Required: false
+   :Type: array
+   :Default: ["itemsProcConfig"]
+
+   Sometimes it is needed to provide custom configuration for the :ref:`itemsProcFunc <t3tca:tca_property_itemsProcFunc>`
+   functionality. These extra properties need to be explicitly allowed via this
+   option. This option receives an array of those strings. By default, the
+   custom option :yaml:`itemsProcConfig` is allowed.
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-select>`.
 

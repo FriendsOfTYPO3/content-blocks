@@ -13,6 +13,7 @@ Options
 =======
 
 .. confval:: content-type
+   :name: make-content-type
 
    :Required: true
    :Type: string
@@ -20,6 +21,7 @@ Options
    :bash:`content-element`, :bash:`page-type` or :bash:`record-type`
 
 .. confval:: vendor
+   :name: make-vendor
 
    :Required: true
    :Type: string
@@ -27,6 +29,7 @@ Options
    Your vendor name. Lowercase, separated by dashes.
 
 .. confval:: name
+   :name: make-name
 
    :Required: true
    :Type: string
@@ -34,6 +37,7 @@ Options
    Your Content Block name (this is not the title). Lowercase, separated by dashes.
 
 .. confval:: extension
+   :name: make-extension
 
    :Required: true
    :Type: string
@@ -41,6 +45,7 @@ Options
    The host extension, where to store your new Content Block.
 
 .. confval:: title
+   :name: make-title
 
    :Required: false
    :Type: string
@@ -48,6 +53,7 @@ Options
    The human-readable title for your Content Block.
 
 .. confval:: type-name
+   :name: make-type-name
 
    :Required: false
    :Type: string|int

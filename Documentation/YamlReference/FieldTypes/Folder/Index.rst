@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: recursive
+   :name: folder-recursive
 
    :Required: false
    :Type: boolean
@@ -22,6 +23,7 @@ Settings
    Files in the selected folder will be resolved recursively.
 
 .. confval:: elementBrowserEntryPoints
+   :name: folder-elementBrowserEntryPoints
 
    :Required: false
    :Type: array
@@ -29,6 +31,7 @@ Settings
    Enables to set an entrypoint, from which to select folders by default.
 
 .. confval:: maxitems
+   :name: folder-maxitems
 
    :Required: false
    :Type: integer
@@ -37,6 +40,7 @@ Settings
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: minitems
+   :name: folder-minitems
 
    :Required: false
    :Type: integer

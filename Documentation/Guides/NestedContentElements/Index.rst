@@ -123,7 +123,7 @@ An example could be a "Tab module" or a "Content Carousel".
 Concept
 =======
 
-The nesting is done via one :ref:`database field <field_type_collection_foreign_field>`
+The nesting is done via one :confval:`database field <collection_foreign_field>`
 holding a reference to the parent Content Element. The :sql:`colPos` column will
 always be `0`, which is also the reason why it would otherwise be rendered by
 TYPO3 even though created within another Content Element.

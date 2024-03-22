@@ -12,6 +12,7 @@ Options
 =======
 
 .. confval:: order
+   :name: list-order
 
    :Required: false
    :Type: string

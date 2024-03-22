@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: text-default
 
    :Required: false
    :Type: string
@@ -21,6 +22,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: max
+   :name: text-max
 
    :Required: false
    :Type: integer
@@ -29,6 +31,7 @@ Settings
    prevents adding more than the given number of characters.
 
 .. confval:: min
+   :name: text-min
 
    :Required: false
    :Type: integer
@@ -39,6 +42,7 @@ Settings
    a non-empty value.
 
 .. confval:: placeholder
+   :name: text-placeholder
 
    :Required: false
    :Type: string
@@ -46,6 +50,7 @@ Settings
    Placeholder text for the field.
 
 .. confval:: required
+   :name: text-required
 
    :Required: false
    :Type: boolean
@@ -54,6 +59,7 @@ Settings
    If set, the field becomes mandatory.
 
 .. confval:: size
+   :name: text-size
 
    :Required: false
    :Type: integer
@@ -61,6 +67,7 @@ Settings
    Abstract value for the width of the `<input>` field.
 
 .. confval:: valuePicker
+   :name: text-valuePicker
 
    :Required: false
    :Type: array

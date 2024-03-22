@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: relationship
+   :name: category-relationship
 
    :Required: false
    :Type: string
@@ -23,6 +24,7 @@ Settings
    `manyToMany` (default).
 
 .. confval:: maxitems
+   :name: category-maxitems
 
    :Required: false
    :Type: integer
@@ -32,6 +34,7 @@ Settings
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: minitems
+   :name: category-minitems
 
    :Required: false
    :Type: integer
@@ -42,6 +45,7 @@ Settings
    The field can be set as required by setting `minitems` to at least 1.
 
 .. confval:: treeConfig.startingPoints
+   :name: category-treeConfig.startingPoints
 
    :Required: false
    :Type: string
