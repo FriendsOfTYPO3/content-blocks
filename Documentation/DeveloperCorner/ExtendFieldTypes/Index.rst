@@ -43,7 +43,6 @@ the Core implementations to get a feeling on how to implement them.
         public static function getName(): string;
         public static function getTcaType(): string;
         public static function isSearchable(): bool;
-        public static function isRenderable(): bool;
         public static function isRelation(): bool;
         public static function hasItems(): bool;
     }
@@ -83,11 +82,6 @@ isSearchable
 ------------
 
 Whether the field contents should be searchable in global search.
-
-isRenderable
-------------
-
-Whether the field should be displayed and processed for the frontend.
 
 isRelation
 ----------

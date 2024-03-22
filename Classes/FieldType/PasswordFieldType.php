@@ -117,11 +117,6 @@ final class PasswordFieldType implements FieldTypeInterface
         return false;
     }
 
-    public static function isRenderable(): bool
-    {
-        return true;
-    }
-
     public static function isRelation(): bool
     {
         return false;

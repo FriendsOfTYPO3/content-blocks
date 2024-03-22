@@ -51,10 +51,17 @@ enum FieldType: string
 
     public static function isValidFlexFormField(FieldTypeInterface $fieldType): bool
     {
-        if (!$fieldType->isRenderable()) {
+        $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
+        if ($fieldTypeEnum->isStructureField()) {
             return false;
         }
-        $fieldTypeEnum = self::tryFrom($fieldType::getName());
         return $fieldTypeEnum !== self::FLEXFORM;
+    }
+
+    public function isStructureField(): bool
+    {
+        $structureFields = [self::PALETTE, self::LINEBREAK, self::TAB];
+        $isStructureField = in_array($this, $structureFields, true);
+        return $isStructureField;
     }
 }

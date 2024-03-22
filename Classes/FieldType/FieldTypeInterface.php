@@ -28,7 +28,6 @@ interface FieldTypeInterface
     public static function getName(): string;
     public static function getTcaType(): string;
     public static function isSearchable(): bool;
-    public static function isRenderable(): bool;
     public static function isRelation(): bool;
     public static function hasItems(): bool;
 }

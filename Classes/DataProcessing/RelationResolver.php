@@ -60,7 +60,9 @@ class RelationResolver
     ): array {
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
-            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
+            $fieldType = $tcaFieldDefinition->getFieldType();
+            $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
+            if ($fieldTypeEnum->isStructureField()) {
                 continue;
             }
             $resolvedField = $this->processField(

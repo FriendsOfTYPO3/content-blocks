@@ -122,11 +122,6 @@ final class LinkFieldType implements FieldTypeInterface
         return true;
     }
 
-    public static function isRenderable(): bool
-    {
-        return true;
-    }
-
     public static function isRelation(): bool
     {
         return false;

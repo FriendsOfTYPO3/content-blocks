@@ -52,11 +52,6 @@ final class TabFieldType implements FieldTypeInterface
         return false;
     }
 
-    public static function isRenderable(): bool
-    {
-        return false;
-    }
-
     public static function isRelation(): bool
     {
         return false;
