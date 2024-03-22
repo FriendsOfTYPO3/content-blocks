@@ -59,7 +59,7 @@ final class FlexFormFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcatype();
+        $config['type'] = self::getTcaType();
         if ($this->ds_pointerField !== '') {
             $config['ds_pointerField'] = $this->ds_pointerField;
         }

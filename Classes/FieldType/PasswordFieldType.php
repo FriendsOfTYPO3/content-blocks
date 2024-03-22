@@ -73,7 +73,7 @@ final class PasswordFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcatype();
+        $config['type'] = self::getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

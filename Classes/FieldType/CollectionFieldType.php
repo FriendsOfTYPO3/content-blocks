@@ -100,7 +100,7 @@ final class CollectionFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcatype();
+        $config['type'] = self::getTcaType();
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }

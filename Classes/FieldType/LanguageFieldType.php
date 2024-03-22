@@ -56,7 +56,7 @@ final class LanguageFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcatype();
+        $config['type'] = self::getTcaType();
         if ($this->default !== 0) {
             $config['default'] = $this->default;
         }

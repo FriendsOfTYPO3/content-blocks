@@ -106,6 +106,21 @@ Example for a field type "Money".
         private bool $required = false;
         private bool $nullable = false;
 
+        public static function getName(): string
+        {
+            return 'Money';
+        }
+
+        public static function getTcaType(): string
+        {
+            return 'number';
+        }
+
+        public static function isSearchable(): bool
+        {
+            return false;
+        }
+
         public static function createFromArray(array $settings): self
         {
             $self = new self();
@@ -120,7 +135,7 @@ Example for a field type "Money".
         public function getTca(): array
         {
             $tca = $this->toTca();
-            $config['type'] = self::getTcatype();
+            $config['type'] = self::getTcaType();
             if ($this->default !== 0.0) {
                 $config['default'] = $this->default;
             }
@@ -139,20 +154,5 @@ Example for a field type "Money".
                 $null = '';
             }
             return "`$column` decimal(10,2) DEFAULT '0.00'" . $null;
-        }
-
-        public static function getName(): string
-        {
-            return 'Money';
-        }
-
-        public static function getTcaType(): string
-        {
-            return 'number';
-        }
-
-        public static function isSearchable(): bool
-        {
-            return false;
         }
     }

@@ -78,7 +78,7 @@ final class FileFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcatype();
+        $config['type'] = self::getTcaType();
         if ($this->allowed !== [] && $this->allowed !== '') {
             $config['allowed'] = TcaPreparation::prepareFileExtensions($this->allowed);
         }
