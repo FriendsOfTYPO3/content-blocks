@@ -64,7 +64,7 @@ class BasicsLoader
                 continue;
             }
             $finder = new Finder();
-            $finder->files()->name('*.yaml')->depth(0)->in($pathToBasics);
+            $finder->files()->name('*.yaml')->in($pathToBasics);
             foreach ($finder as $splFileInfo) {
                 $yamlContent = Yaml::parseFile($splFileInfo->getPathname());
                 if (!is_array($yamlContent) || ($yamlContent['identifier'] ?? '') === '') {
