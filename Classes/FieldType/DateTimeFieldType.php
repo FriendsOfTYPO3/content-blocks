@@ -38,6 +38,21 @@ final class DateTimeFieldType implements FieldTypeInterface
     private bool $disableAgeDisplay = false;
     private string $format = '';
 
+    public static function getName(): string
+    {
+        return 'DateTime';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'datetime';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): DateTimeFieldType
     {
         $self = new self();
@@ -112,21 +127,6 @@ final class DateTimeFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return '';
-    }
-
-    public static function getName(): string
-    {
-        return 'DateTime';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'datetime';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 
     /**

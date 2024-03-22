@@ -28,6 +28,21 @@ final class UuidFieldType implements FieldTypeInterface
     private bool $enableCopyToClipboard = true;
     private ?int $version = null;
 
+    public static function getName(): string
+    {
+        return 'Uuid';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'uuid';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): UuidFieldType
     {
         $self = new self();
@@ -62,20 +77,5 @@ final class UuidFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return '';
-    }
-
-    public static function getName(): string
-    {
-        return 'Uuid';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'uuid';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

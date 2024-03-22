@@ -43,6 +43,21 @@ final class TextareaFieldType implements FieldTypeInterface
     private string $richtextConfiguration = '';
     private string $format = '';
 
+    public static function getName(): string
+    {
+        return 'Textarea';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'text';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): TextareaFieldType
     {
         $self = new self();
@@ -134,20 +149,5 @@ final class TextareaFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` text";
-    }
-
-    public static function getName(): string
-    {
-        return 'Textarea';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'text';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

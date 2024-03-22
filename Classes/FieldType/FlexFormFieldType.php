@@ -31,6 +31,21 @@ final class FlexFormFieldType implements FieldTypeInterface
     private string $ds_pointerField = '';
     private array $ds = [];
 
+    public static function getName(): string
+    {
+        return 'FlexForm';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'flex';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): FlexFormFieldType
     {
         $self = new self();
@@ -56,21 +71,6 @@ final class FlexFormFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` text";
-    }
-
-    public static function getName(): string
-    {
-        return 'FlexForm';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'flex';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 
     /**

@@ -37,6 +37,21 @@ final class NumberFieldType implements FieldTypeInterface
     private array $slider = [];
     private string $format = '';
 
+    public static function getName(): string
+    {
+        return 'Number';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'number';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): NumberFieldType
     {
         $self = new self();
@@ -115,20 +130,5 @@ final class NumberFieldType implements FieldTypeInterface
         }
 
         return "`$column` int(11) DEFAULT '0'" . $null;
-    }
-
-    public static function getName(): string
-    {
-        return 'Number';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'number';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

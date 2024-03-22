@@ -35,6 +35,21 @@ final class PasswordFieldType implements FieldTypeInterface
     private bool $hashed = true;
     private string $passwordPolicy = '';
 
+    public static function getName(): string
+    {
+        return 'Password';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'password';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): PasswordFieldType
     {
         $self = new self();
@@ -100,20 +115,5 @@ final class PasswordFieldType implements FieldTypeInterface
             $null = '';
         }
         return "`$column` VARCHAR(255) DEFAULT ''" . $null;
-    }
-
-    public static function getName(): string
-    {
-        return 'Password';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'password';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

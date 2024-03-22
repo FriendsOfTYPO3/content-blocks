@@ -36,6 +36,21 @@ final class LinkFieldType implements FieldTypeInterface
     private array $allowedTypes = [];
     private array $appearance = [];
 
+    public static function getName(): string
+    {
+        return 'Link';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'link';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): LinkFieldType
     {
         $self = new self();
@@ -105,20 +120,5 @@ final class LinkFieldType implements FieldTypeInterface
             $null = '';
         }
         return "`$column` VARCHAR(1024) DEFAULT ''" . $null;
-    }
-
-    public static function getName(): string
-    {
-        return 'Link';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'link';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

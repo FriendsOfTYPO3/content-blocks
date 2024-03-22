@@ -38,6 +38,21 @@ final class TextFieldType implements FieldTypeInterface
     private array $eval = [];
     private ?bool $autocomplete = null;
 
+    public static function getName(): string
+    {
+        return 'Text';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'input';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): TextFieldType
     {
         $self = new self();
@@ -115,20 +130,5 @@ final class TextFieldType implements FieldTypeInterface
             $null = '';
         }
         return "`$column` VARCHAR(255) DEFAULT ''" . $null;
-    }
-
-    public static function getName(): string
-    {
-        return 'Text';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'input';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

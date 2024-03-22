@@ -56,6 +56,21 @@ final class SelectFieldType implements FieldTypeInterface
     // Only for renderType="selectTree"
     private array $treeConfig = [];
 
+    public static function getName(): string
+    {
+        return 'Select';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'select';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): SelectFieldType
     {
         $self = new self();
@@ -182,20 +197,5 @@ final class SelectFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` VARCHAR(255) DEFAULT '' NOT NULL";
-    }
-
-    public static function getName(): string
-    {
-        return 'Select';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'select';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

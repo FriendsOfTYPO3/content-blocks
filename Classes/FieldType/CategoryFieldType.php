@@ -33,6 +33,21 @@ final class CategoryFieldType implements FieldTypeInterface
     private array $treeConfig = [];
     private string $relationship = '';
 
+    public static function getName(): string
+    {
+        return 'Category';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'category';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): CategoryFieldType
     {
         $self = new self();
@@ -87,20 +102,5 @@ final class CategoryFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return '';
-    }
-
-    public static function getName(): string
-    {
-        return 'Category';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'category';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

@@ -35,6 +35,21 @@ final class FolderFieldType implements FieldTypeInterface
     private bool $hideMoveIcons = false;
     private array $elementBrowserEntryPoints = [];
 
+    public static function getName(): string
+    {
+        return 'Folder';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'folder';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): FolderFieldType
     {
         $self = new self();
@@ -91,21 +106,6 @@ final class FolderFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` text";
-    }
-
-    public static function getName(): string
-    {
-        return 'Folder';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'folder';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 
     public function isRecursive(): bool

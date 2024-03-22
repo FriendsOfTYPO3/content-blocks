@@ -34,6 +34,21 @@ final class CheckboxFieldType implements FieldTypeInterface
     private array $validation = [];
     private array $items = [];
 
+    public static function getName(): string
+    {
+        return 'Checkbox';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'check';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): CheckboxFieldType
     {
         $self = new self();
@@ -87,20 +102,5 @@ final class CheckboxFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` int(11) UNSIGNED DEFAULT '0' NOT NULL";
-    }
-
-    public static function getName(): string
-    {
-        return 'Checkbox';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'check';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

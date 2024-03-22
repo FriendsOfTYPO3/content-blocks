@@ -48,6 +48,21 @@ final class RelationFieldType implements FieldTypeInterface
     private array $suggestOptions = [];
     private array $appearance = [];
 
+    public static function getName(): string
+    {
+        return 'Relation';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'group';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): RelationFieldType
     {
         $self = new self();
@@ -162,20 +177,5 @@ final class RelationFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` text";
-    }
-
-    public static function getName(): string
-    {
-        return 'Relation';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'group';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

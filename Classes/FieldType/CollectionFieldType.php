@@ -50,6 +50,21 @@ final class CollectionFieldType implements FieldTypeInterface
     private string $symmetric_label = '';
     private string $symmetric_sortby = '';
 
+    public static function getName(): string
+    {
+        return 'Collection';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'inline';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): CollectionFieldType
     {
         $self = new self();
@@ -168,20 +183,5 @@ final class CollectionFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` int(11) UNSIGNED DEFAULT '0' NOT NULL";
-    }
-
-    public static function getName(): string
-    {
-        return 'Collection';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'inline';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

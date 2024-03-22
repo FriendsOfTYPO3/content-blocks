@@ -35,6 +35,21 @@ final class EmailFieldType implements FieldTypeInterface
     private ?bool $autocomplete = null;
     private array $valuePicker = [];
 
+    public static function getName(): string
+    {
+        return 'Email';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'email';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): EmailFieldType
     {
         $self = new self();
@@ -100,20 +115,5 @@ final class EmailFieldType implements FieldTypeInterface
             $null = '';
         }
         return "`$column` VARCHAR(255) DEFAULT ''" . $null;
-    }
-
-    public static function getName(): string
-    {
-        return 'Email';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'email';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

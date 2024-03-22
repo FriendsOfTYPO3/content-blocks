@@ -34,6 +34,21 @@ final class ColorFieldType implements FieldTypeInterface
     private array $valuePicker = [];
     private ?bool $autocomplete = null;
 
+    public static function getName(): string
+    {
+        return 'Color';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'color';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): ColorFieldType
     {
         $self = new self();
@@ -95,20 +110,5 @@ final class ColorFieldType implements FieldTypeInterface
             $null = '';
         }
         return "`$column` VARCHAR(255) DEFAULT ''" . $null;
-    }
-
-    public static function getName(): string
-    {
-        return 'Color';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'color';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

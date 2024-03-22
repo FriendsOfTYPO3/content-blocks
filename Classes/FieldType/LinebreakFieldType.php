@@ -22,21 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  */
 final class LinebreakFieldType implements FieldTypeInterface
 {
-    public static function createFromArray(array $settings): LinebreakFieldType
-    {
-        return new self();
-    }
-
-    public function getTca(): array
-    {
-        return [];
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
-    }
-
     public static function getName(): string
     {
         return 'Linebreak';
@@ -50,5 +35,20 @@ final class LinebreakFieldType implements FieldTypeInterface
     public static function isSearchable(): bool
     {
         return false;
+    }
+
+    public static function createFromArray(array $settings): LinebreakFieldType
+    {
+        return new self();
+    }
+
+    public function getTca(): array
+    {
+        return [];
+    }
+
+    public function getSql(string $column): string
+    {
+        return '';
     }
 }

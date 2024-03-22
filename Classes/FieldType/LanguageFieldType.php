@@ -28,6 +28,21 @@ final class LanguageFieldType implements FieldTypeInterface
     private bool $readOnly = false;
     private bool $required = false;
 
+    public static function getName(): string
+    {
+        return 'Language';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'language';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): LanguageFieldType
     {
         $self = new self();
@@ -59,20 +74,5 @@ final class LanguageFieldType implements FieldTypeInterface
     {
         // @todo change to return '' for v13 release (generated automatically now).
         return "`$column` int(11) DEFAULT '0' NOT NULL";
-    }
-
-    public static function getName(): string
-    {
-        return 'Language';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'language';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

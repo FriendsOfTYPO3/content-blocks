@@ -32,6 +32,21 @@ final class JsonFieldType implements FieldTypeInterface
     private bool $readOnly = false;
     private string $placeholder = '';
 
+    public static function getName(): string
+    {
+        return 'Json';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'json';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): JsonFieldType
     {
         $self = new self();
@@ -80,20 +95,5 @@ final class JsonFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return '';
-    }
-
-    public static function getName(): string
-    {
-        return 'Json';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'json';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }

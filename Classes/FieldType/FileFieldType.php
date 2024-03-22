@@ -38,6 +38,21 @@ final class FileFieldType implements FieldTypeInterface
     private bool $extendedPalette = true;
     private array $cropVariants = [];
 
+    public static function getName(): string
+    {
+        return 'File';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'file';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): FileFieldType
     {
         $self = new self();
@@ -134,20 +149,5 @@ final class FileFieldType implements FieldTypeInterface
     {
         // @todo change to return '' for v13 release (generated automatically now).
         return "`$column` int(11) UNSIGNED DEFAULT '0' NOT NULL";
-    }
-
-    public static function getName(): string
-    {
-        return 'File';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'file';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

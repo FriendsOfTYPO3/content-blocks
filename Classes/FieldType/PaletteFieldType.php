@@ -22,21 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  */
 final class PaletteFieldType implements FieldTypeInterface
 {
-    public static function createFromArray(array $settings): PaletteFieldType
-    {
-        return new self();
-    }
-
-    public function getTca(): array
-    {
-        return [];
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
-    }
-
     public static function getName(): string
     {
         return 'Palette';
@@ -50,5 +35,20 @@ final class PaletteFieldType implements FieldTypeInterface
     public static function isSearchable(): bool
     {
         return false;
+    }
+
+    public static function createFromArray(array $settings): PaletteFieldType
+    {
+        return new self();
+    }
+
+    public function getTca(): array
+    {
+        return [];
+    }
+
+    public function getSql(string $column): string
+    {
+        return '';
     }
 }

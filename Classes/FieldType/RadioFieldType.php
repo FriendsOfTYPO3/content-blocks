@@ -30,6 +30,21 @@ final class RadioFieldType implements FieldTypeInterface
     private string $itemsProcFunc = '';
     private array $items = [];
 
+    public static function getName(): string
+    {
+        return 'Radio';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'radio';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return false;
+    }
+
     public static function createFromArray(array $settings): RadioFieldType
     {
         $self = new self();
@@ -70,20 +85,5 @@ final class RadioFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return "`$column` VARCHAR(255) DEFAULT '' NOT NULL";
-    }
-
-    public static function getName(): string
-    {
-        return 'Radio';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'radio';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
     }
 }

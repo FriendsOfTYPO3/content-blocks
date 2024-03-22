@@ -32,6 +32,21 @@ final class SlugFieldType implements FieldTypeInterface
     private array $generatorOptions = [];
     private bool $prependSlash = false;
 
+    public static function getName(): string
+    {
+        return 'Slug';
+    }
+
+    public static function getTcaType(): string
+    {
+        return 'slug';
+    }
+
+    public static function isSearchable(): bool
+    {
+        return true;
+    }
+
     public static function createFromArray(array $settings): FieldTypeInterface
     {
         $self = new self();
@@ -78,20 +93,5 @@ final class SlugFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return '';
-    }
-
-    public static function getName(): string
-    {
-        return 'Slug';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'slug';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
     }
 }
