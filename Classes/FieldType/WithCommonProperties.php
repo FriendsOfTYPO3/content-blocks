@@ -17,9 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
-/**
- * @internal Not part of TYPO3's public API.
- */
 trait WithCommonProperties
 {
     private ?string $label = null;
