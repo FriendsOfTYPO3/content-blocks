@@ -70,7 +70,13 @@ class BasicsService
                     if (is_array($basicsField['fields'] ?? null)) {
                         $basicsField['fields'] = $this->applyBasicsToSubFields($basicsField['fields']);
                     }
-                    $newFields[] = $basicsField;
+
+                    // if there is another basic field within the basic => deep resolve
+                    if(($basicsField['type'] ?? '') === 'Basic' ) {
+                        $newFields = $this->addBasicsToFields($newFields, $basicsField['identifier']);
+                    } else {
+                        $newFields[] = $basicsField;
+                    }
                 }
             } else {
                 $newFields[] = $field;
