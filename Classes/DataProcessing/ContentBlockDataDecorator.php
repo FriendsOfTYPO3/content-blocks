@@ -36,6 +36,7 @@ final class ContentBlockDataDecorator
         private readonly GridFactory $gridFactory,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
         private readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
     ) {}
 
     public function decorate(
@@ -46,6 +47,8 @@ final class ContentBlockDataDecorator
         string $table,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
+        $identifier = $this->getRecordIdentifier($table, $resolvedData);
+        $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
         $resolvedRelation = new ResolvedRelation();
         $resolvedRelation->raw = $rawData;
         $resolvedRelation->resolved = $resolvedData;
@@ -57,6 +60,7 @@ final class ContentBlockDataDecorator
             0,
             $context,
         );
+        $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
         return $contentBlockData;
     }
 
@@ -232,6 +236,12 @@ final class ContentBlockDataDecorator
             $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $resolvedRelation->raw);
         }
         if ($collectionTableDefinition !== null && $typeDefinition !== null) {
+            $identifier = $this->getRecordIdentifier($foreignTable, $resolvedRelation->resolved);
+            if ($this->contentBlockDataDecoratorSession->hasContentBlockData($identifier)) {
+                $contentBlockData = $this->contentBlockDataDecoratorSession->getContentBlockData($identifier);
+                return $contentBlockData;
+            }
+            $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
             $contentBlockData = $this->buildContentBlockDataObjectRecursive(
                 $typeDefinition,
                 $collectionTableDefinition,
@@ -240,6 +250,7 @@ final class ContentBlockDataDecorator
                 ++$depth,
                 $context,
             );
+            $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
             return $contentBlockData;
         }
         $contentBlockData = $this->buildFakeContentBlockDataObject($foreignTable, $resolvedRelation);
@@ -388,5 +399,16 @@ final class ContentBlockDataDecorator
             return $relationTable;
         }
         return '';
+    }
+
+    private function getRecordIdentifier(string $table, array $record): string
+    {
+        // @todo remove _PAGES_OVERLAY_UID in v13.
+        $identifier = $table . '-' . (
+            $record['_PAGES_OVERLAY_UID']
+            ?? $record['_LOCALIZED_UID']
+            ?? $record['uid']
+        );
+        return $identifier;
     }
 }
