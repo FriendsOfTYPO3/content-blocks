@@ -134,7 +134,7 @@ class PageLayout
                 $pageTypeTable,
             );
             // Avoid flooding cache with redundant data.
-            if ($resolvedData !== $pageRow) {
+            if ($resolvedData->resolved !== $pageRow) {
                 $exported = 'return ' . VarExporter::export($resolvedData) . ';';
                 $this->cache->set($cacheIdentifier, $exported);
             }

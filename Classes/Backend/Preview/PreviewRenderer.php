@@ -78,7 +78,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
                 $contentElementTable,
             );
             // Avoid flooding cache with redundant data.
-            if ($resolvedData !== $record) {
+            if ($resolvedData->resolved !== $record) {
                 $exported = 'return ' . VarExporter::export($resolvedData) . ';';
                 $this->cache->set($cacheIdentifier, $exported);
             }
