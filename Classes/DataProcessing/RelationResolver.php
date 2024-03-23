@@ -58,13 +58,13 @@ class RelationResolver
         TableDefinition $tableDefinition,
         array $data,
         string $table,
-    ): array {
+    ): ResolvedRelation {
+        $resolvedRelation = new ResolvedRelation();
+        $resolvedRelation->table = $table;
+        $resolvedRelation->raw = $data;
         // @todo remove _PAGES_OVERLAY_UID in v13.
         $identifier = $table . '-' . ($data['_PAGES_OVERLAY_UID'] ?? $data['_LOCALIZED_UID'] ?? $data['uid']);
-        $sessionRow = $data;
-        $sessionRow['_table'] = $table;
-        $sessionRow['_raw'] = $data;
-        $this->relationResolverSession->addRelation($identifier, $sessionRow);
+        $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
@@ -80,7 +80,8 @@ class RelationResolver
             );
             $data[$tcaFieldDefinition->getUniqueIdentifier()] = $resolvedField;
         }
-        return $data;
+        $resolvedRelation->resolved = $data;
+        return $resolvedRelation;
     }
 
     public function processField(
@@ -147,7 +148,7 @@ class RelationResolver
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
             $foreignTable = $tcaFieldConfig['config']['foreign_table'];
-            $result = $this->getRelations(
+            $resolvedRelations = $this->getRelations(
                 (string)($record[$uniqueIdentifier] ?? ''),
                 $foreignTable,
                 $tcaFieldConfig['config']['MM'] ?? '',
@@ -157,12 +158,12 @@ class RelationResolver
             );
             // If this table is defined by Content Blocks, process child relations.
             if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
-                $result = $this->processChildRelations($result);
+                $resolvedRelations = $this->processChildRelations($resolvedRelations);
             }
             if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
-                return $result[0] ?? null;
+                return $resolvedRelations[0] ?? null;
             }
-            return $result;
+            return $resolvedRelations;
         }
         if (
             in_array(
@@ -240,44 +241,48 @@ class RelationResolver
         return $result;
     }
 
-    protected function processChildRelations(array $data): array
+    /**
+     * @param ResolvedRelation[] $resolvedRelations
+     * @return ResolvedRelation[]
+     */
+    protected function processChildRelations(array $resolvedRelations): array
     {
-        foreach ($data as $index => $row) {
-            $currentTable = $row['_table'];
+        foreach ($resolvedRelations as $index => $resolvedRelation) {
             // If this table is not defined by Content Blocks, skip processing.
-            if (!$this->tableDefinitionCollection->hasTable($currentTable)) {
+            if (!$this->tableDefinitionCollection->hasTable($resolvedRelation->table)) {
                 continue;
             }
-            $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
-            $identifier = $currentTable . '-' . $row['uid'];
+            $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRelation->table);
+            $identifier = $resolvedRelation->table . '-' . $resolvedRelation->raw['uid'];
             if ($this->relationResolverSession->hasRelation($identifier)) {
-                $data[$index] = $this->relationResolverSession->getRelation($identifier);
+                $resolvedRelations[$index] = $this->relationResolverSession->getRelation($identifier);
                 continue;
             }
             // Feed plain row into session. In case this record should be resolved inside itself,
             // which would cause infinite recursion, this plain row will be used instead.
-            $this->relationResolverSession->addRelation($identifier, $row);
+            $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
-                $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $resolvedRelation->raw);
                 if ($foreignTypeDefinition === null) {
                     continue;
                 }
                 $processedField = $this->processField(
                     $childTcaFieldDefinition,
                     $foreignTypeDefinition,
-                    $row,
-                    $currentTable,
+                    $resolvedRelation->raw,
+                    $resolvedRelation->table,
                 );
-                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $processedField;
+                $resolvedRelation->resolved[$childTcaFieldDefinition->getUniqueIdentifier()] = $processedField;
             }
             // Override previously set raw relation with resolved relation.
-            $this->relationResolverSession->addRelation($identifier, $data[$index]);
+            $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
         }
-        return $data;
+        return $resolvedRelations;
     }
 
     /**
      * @param array<string, mixed> $tcaFieldConf
+     * @return ResolvedRelation[]
      */
     protected function getRelations(
         string $uidList,
@@ -310,10 +315,12 @@ class RelationResolver
             }
             $translatedRecord = $pageRepository->getLanguageOverlay($tableName, $record);
             if ($translatedRecord !== null) {
+                $resolvedRelation = new ResolvedRelation();
                 // Save associated table and raw record for later usage.
-                $translatedRecord['_table'] = $tableName;
-                $translatedRecord['_raw'] = $translatedRecord;
-                $records[] = $translatedRecord;
+                $resolvedRelation->table = $tableName;
+                $resolvedRelation->raw = $translatedRecord;
+                $resolvedRelation->resolved = $translatedRecord;
+                $records[] = $resolvedRelation;
             }
         }
         return $records;

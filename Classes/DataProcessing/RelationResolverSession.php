@@ -23,11 +23,11 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 class RelationResolverSession
 {
     /**
-     * @var array<string, array>
+     * @var array<string, ResolvedRelation>
      */
     protected array $resolvedRelations = [];
 
-    public function addRelation(string $identifier, array $relation): void
+    public function addRelation(string $identifier, ResolvedRelation $relation): void
     {
         $this->resolvedRelations[$identifier] = $relation;
     }
@@ -37,7 +37,7 @@ class RelationResolverSession
         return array_key_exists($identifier, $this->resolvedRelations);
     }
 
-    public function getRelation(string $identifier): array
+    public function getRelation(string $identifier): ResolvedRelation
     {
         return $this->resolvedRelations[$identifier];
     }

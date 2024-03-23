@@ -142,9 +142,7 @@ class PageLayout
         $contentBlockData = $this->contentBlockDataDecorator->decorate(
             $contentTypeDefinition,
             $tableDefinition,
-            $pageRow,
             $resolvedData,
-            $pageTypeTable,
         );
         return $contentBlockData;
     }

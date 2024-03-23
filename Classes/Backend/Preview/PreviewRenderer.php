@@ -86,9 +86,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $data = $this->contentBlockDataDecorator->decorate(
             $contentElementDefinition,
             $contentElementTableDefinition,
-            $record,
             $resolvedData,
-            $contentElementTable,
             $item->getContext(),
         );
         $view = $this->createView($contentBlockPrivatePath, $request);

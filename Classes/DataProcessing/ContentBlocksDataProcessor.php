@@ -51,9 +51,7 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         $processedData['data'] = $this->contentBlockDataDecorator->decorate(
             $contentTypeDefinition,
             $tableDefinition,
-            $processedData['data'],
             $resolvedData,
-            $table
         );
         return $processedData;
     }

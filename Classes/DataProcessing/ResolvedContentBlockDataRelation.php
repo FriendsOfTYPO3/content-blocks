@@ -20,9 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ResolvedRelation
+final class ResolvedContentBlockDataRelation
 {
     public array $raw = [];
     public array $resolved = [];
-    public string $table;
 }

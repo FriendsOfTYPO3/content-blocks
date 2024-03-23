@@ -151,8 +151,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('lorem foo bar', $result[0]['fieldA']);
-        self::assertSame('lorem foo bar 2', $result[1]['fieldA']);
+        self::assertSame('lorem foo bar', $result[0]->resolved['fieldA']);
+        self::assertSame('lorem foo bar 2', $result[1]->resolved['fieldA']);
     }
 
     #[Test]
@@ -177,8 +177,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('lorem foo bar', $result[0]['fieldA']);
-        self::assertSame('lorem foo bar 2', $result[1]['fieldA']);
+        self::assertSame('lorem foo bar', $result[0]->resolved['fieldA']);
+        self::assertSame('lorem foo bar 2', $result[1]->resolved['fieldA']);
     }
 
     #[Test]
@@ -203,8 +203,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Record 1', $result[0]['title']);
-        self::assertSame('Record 2', $result[1]['title']);
+        self::assertSame('Record 1', $result[0]->resolved['title']);
+        self::assertSame('Record 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -229,11 +229,11 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('lorem foo bar A', $result[0]['fieldA']);
-        self::assertSame('lorem foo bar A2', $result[1]['fieldA']);
-        self::assertCount(2, $result[0]['collection_inner']);
-        self::assertSame('lorem foo bar B', $result[0]['collection_inner'][0]['fieldB']);
-        self::assertSame('lorem foo bar B2', $result[0]['collection_inner'][1]['fieldB']);
+        self::assertSame('lorem foo bar A', $result[0]->resolved['fieldA']);
+        self::assertSame('lorem foo bar A2', $result[1]->resolved['fieldA']);
+        self::assertCount(2, $result[0]->resolved['collection_inner']);
+        self::assertSame('lorem foo bar B', $result[0]->resolved['collection_inner'][0]->resolved['fieldB']);
+        self::assertSame('lorem foo bar B2', $result[0]->resolved['collection_inner'][1]->resolved['fieldB']);
     }
 
     #[Test]
@@ -263,8 +263,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('lorem foo bar WS', $result[0]['fieldA']);
-        self::assertSame('lorem foo bar 2 WS', $result[1]['fieldA']);
+        self::assertSame('lorem foo bar WS', $result[0]->resolved['fieldA']);
+        self::assertSame('lorem foo bar 2 WS', $result[1]->resolved['fieldA']);
     }
 
     #[Test]
@@ -289,8 +289,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Category 1', $result[0]['title']);
-        self::assertSame('Category 2', $result[1]['title']);
+        self::assertSame('Category 1', $result[0]->resolved['title']);
+        self::assertSame('Category 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -320,8 +320,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Category 1 ws', $result[0]['title']);
-        self::assertSame('Category 2 ws', $result[1]['title']);
+        self::assertSame('Category 1 ws', $result[0]->resolved['title']);
+        self::assertSame('Category 2 ws', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -357,7 +357,7 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
-        self::assertSame('Category 1 translated', $result[0]['title']);
+        self::assertSame('Category 1 translated', $result[0]->resolved['title']);
     }
 
     #[Test]
@@ -382,7 +382,7 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
-        self::assertSame('Category 1', $result[0]['title']);
+        self::assertSame('Category 1', $result[0]->resolved['title']);
     }
 
     #[Test]
@@ -407,8 +407,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Category 1', $result[0]['title']);
-        self::assertSame('Category 2', $result[1]['title']);
+        self::assertSame('Category 1', $result[0]->resolved['title']);
+        self::assertSame('Category 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -433,8 +433,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Page 1', $result[0]['title']);
-        self::assertSame('Page 2', $result[1]['title']);
+        self::assertSame('Page 1', $result[0]->resolved['title']);
+        self::assertSame('Page 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -458,7 +458,7 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
-        self::assertSame(1, $result[0]['uid']);
+        self::assertSame(1, $result[0]->resolved['uid']);
     }
 
     #[Test]
@@ -482,12 +482,12 @@ final class RelationResolverTest extends FunctionalTestCase
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
-        self::assertSame('Record 1', $result[0]['title']);
-        self::assertSame('Record 2', $result[1]['title']);
-        self::assertCount(1, $result[0]['record_collection']);
-        self::assertCount(1, $result[1]['record_collection']);
-        self::assertSame('Collection 1', $result[0]['record_collection'][0]['text']);
-        self::assertSame('Collection 2', $result[1]['record_collection'][0]['text']);
+        self::assertSame('Record 1', $result[0]->resolved['title']);
+        self::assertSame('Record 2', $result[1]->resolved['title']);
+        self::assertCount(1, $result[0]->resolved['record_collection']);
+        self::assertCount(1, $result[1]->resolved['record_collection']);
+        self::assertSame('Collection 1', $result[0]->resolved['record_collection'][0]->resolved['text']);
+        self::assertSame('Collection 2', $result[1]->resolved['record_collection'][0]->resolved['text']);
     }
 
     #[Test]
@@ -517,8 +517,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Page 1 ws', $result[0]['title']);
-        self::assertSame('Page 2 ws', $result[1]['title']);
+        self::assertSame('Page 1 ws', $result[0]->resolved['title']);
+        self::assertSame('Page 2 ws', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -543,10 +543,10 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(4, $result);
-        self::assertSame('Page 1', $result[0]['title']);
-        self::assertSame('Page 2', $result[1]['title']);
-        self::assertSame('Content 1', $result[2]['header']);
-        self::assertSame('Content 2', $result[3]['header']);
+        self::assertSame('Page 1', $result[0]->resolved['title']);
+        self::assertSame('Page 2', $result[1]->resolved['title']);
+        self::assertSame('Content 1', $result[2]->resolved['header']);
+        self::assertSame('Content 2', $result[3]->resolved['header']);
     }
 
     #[Test]
@@ -571,8 +571,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Page 1', $result[0]['title']);
-        self::assertSame('Page 2', $result[1]['title']);
+        self::assertSame('Page 1', $result[0]->resolved['title']);
+        self::assertSame('Page 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -661,7 +661,7 @@ final class RelationResolverTest extends FunctionalTestCase
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
-        self::assertSame('Record 1', $result['title']);
+        self::assertSame('Record 1', $result->resolved['title']);
     }
 
     #[Test]
@@ -685,8 +685,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Record 1', $result[0]['title']);
-        self::assertSame('Record 2', $result[1]['title']);
+        self::assertSame('Record 1', $result[0]->resolved['title']);
+        self::assertSame('Record 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -710,10 +710,10 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Record 1', $result[0]['title']);
-        self::assertSame('Collection 1', $result[0]['record_collection'][0]['text']);
-        self::assertSame('Record 1', $result[1]['title']);
-        self::assertSame('Collection 1', $result[1]['record_collection'][0]['text']);
+        self::assertSame('Record 1', $result[0]->resolved['title']);
+        self::assertSame('Collection 1', $result[0]->resolved['record_collection'][0]->resolved['text']);
+        self::assertSame('Record 1', $result[1]->resolved['title']);
+        self::assertSame('Collection 1', $result[1]->resolved['record_collection'][0]->resolved['text']);
     }
 
     #[Test]
@@ -736,7 +736,7 @@ final class RelationResolverTest extends FunctionalTestCase
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
-        self::assertSame('Record 1', $result['title']);
+        self::assertSame('Record 1', $result->resolved['title']);
     }
 
     #[Test]
@@ -760,8 +760,8 @@ final class RelationResolverTest extends FunctionalTestCase
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(2, $result);
-        self::assertSame('Record 1', $result[0]['title']);
-        self::assertSame('Record 2', $result[1]['title']);
+        self::assertSame('Record 1', $result[0]->resolved['title']);
+        self::assertSame('Record 2', $result[1]->resolved['title']);
     }
 
     #[Test]
@@ -784,9 +784,9 @@ final class RelationResolverTest extends FunctionalTestCase
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
-        self::assertSame('Record 1', $result['title']);
-        self::assertCount(1, $result['record_collection']);
-        self::assertSame('Collection 1', $result['record_collection'][0]['text']);
+        self::assertSame('Record 1', $result->resolved['title']);
+        self::assertCount(1, $result->resolved['record_collection']);
+        self::assertSame('Collection 1', $result->resolved['record_collection'][0]->resolved['text']);
     }
 
     #[Test]
