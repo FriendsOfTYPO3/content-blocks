@@ -45,6 +45,7 @@ class RelationResolver
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected readonly FlexFormService $flexFormService,
+        protected readonly RelationResolverSession $relationResolverSession,
     ) {}
 
     public function setRequest(ServerRequestInterface $serverRequest): void
@@ -58,6 +59,11 @@ class RelationResolver
         array $data,
         string $table,
     ): array {
+        $identifier = $table . '-' . $data['uid'];
+        $sessionRow = $data;
+        $sessionRow['_table'] = $table;
+        $sessionRow['_raw'] = $data;
+        $this->relationResolverSession->addRelation($identifier, $sessionRow);
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
@@ -261,18 +267,29 @@ class RelationResolver
                 continue;
             }
             $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
+            $identifier = $currentTable . '-' . $row['uid'];
+            if ($this->relationResolverSession->hasRelation($identifier)) {
+                $data[$index] = $this->relationResolverSession->getRelation($identifier);
+                continue;
+            }
+            // Feed plain row into session. In case this record should be resolved inside itself,
+            // which would cause infinite recursion, this plain row will be used instead.
+            $this->relationResolverSession->addRelation($identifier, $row);
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
                 $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
                 if ($foreignTypeDefinition === null) {
                     continue;
                 }
-                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
+                $processedField = $this->processField(
                     $childTcaFieldDefinition,
                     $foreignTypeDefinition,
                     $row,
                     $currentTable,
                 );
+                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $processedField;
             }
+            // Override previously set raw relation with resolved relation.
+            $this->relationResolverSession->addRelation($identifier, $data[$index]);
         }
         return $data;
     }

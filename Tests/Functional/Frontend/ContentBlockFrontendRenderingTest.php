@@ -241,4 +241,21 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Multi Select: two', $html);
         self::assertStringContainsString('Single Select: three', $html);
     }
+
+    #[Test]
+    public function circularRelationsResolved(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/circular_relation.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Circular relation uid: 1', $html);
+        self::assertStringContainsString('Circular select uid: 1', $html);
+    }
 }

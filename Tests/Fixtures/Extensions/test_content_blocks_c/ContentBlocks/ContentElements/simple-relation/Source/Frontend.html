@@ -38,3 +38,9 @@ Title: {data.record.title}
 <f:if condition="{data.single_select}">
     Single Select: {data.single_select}
 </f:if>
+<f:if condition="{data.circular_relation}">
+    Circular relation uid: {data.circular_relation.0.circular_relation}
+</f:if>
+<f:if condition="{data.circular_select}">
+    Circular select uid: {data.circular_select.circular_select}
+</f:if>

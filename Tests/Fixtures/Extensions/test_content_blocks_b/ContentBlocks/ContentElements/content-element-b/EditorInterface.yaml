@@ -40,6 +40,9 @@ fields:
   - identifier: pages_relation
     type: Relation
     allowed: pages
+  - identifier: circular_relation
+    type: Relation
+    allowed: tt_content
   - identifier: record_relation_recursive
     type: Relation
     allowed: test_record
