@@ -155,7 +155,6 @@ class RelationResolver
                 $parentTable,
                 $tcaFieldConfig['config'] ?? []
             );
-            $result = $this->enrichWithTableAndRawRecordInternal($result, $foreignTable);
             // If this table is defined by Content Blocks, process child relations.
             if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
                 $result = $this->processChildRelations($result);
@@ -194,11 +193,6 @@ class RelationResolver
             $parentTable,
             $tcaFieldConfig['config'] ?? []
         );
-        $tableList = null;
-        if (str_contains($allowed, ',')) {
-            $tableList = $this->getTableListFromTableUidPairs($fieldValue);
-        }
-        $result = $this->enrichWithTableAndRawRecordInternal($result, $allowed, $tableList);
         $result = $this->processChildRelations($result);
         return $result;
     }
@@ -239,24 +233,11 @@ class RelationResolver
             $parentTable,
             $tcaFieldConfig['config'] ?? []
         );
-        $result = $this->enrichWithTableAndRawRecordInternal($result, $collectionTable);
         // If this table is defined by Content Blocks, process child relations.
         if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
             $result = $this->processChildRelations($result);
         }
         return $result;
-    }
-
-    protected function enrichWithTableAndRawRecordInternal(array $data, string $allowed, ?array $tableList = null): array
-    {
-        foreach ($data as $index => $row) {
-            $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
-            // Save the associated table for later use in ContentBlockDataDecorator.
-            $data[$index]['_table'] = $currentTable;
-            // Save raw record for later usage in ContentBlockDataDecorator.
-            $data[$index]['_raw'] = $row;
-        }
-        return $data;
     }
 
     protected function processChildRelations(array $data): array
@@ -329,6 +310,9 @@ class RelationResolver
             }
             $translatedRecord = $pageRepository->getLanguageOverlay($tableName, $record);
             if ($translatedRecord !== null) {
+                // Save associated table and raw record for later usage.
+                $translatedRecord['_table'] = $tableName;
+                $translatedRecord['_raw'] = $translatedRecord;
                 $records[] = $translatedRecord;
             }
         }
@@ -373,21 +357,5 @@ class RelationResolver
             return (int)$record['_PAGES_OVERLAY_UID'];
         }
         return (int)$record['uid'];
-    }
-
-    /**
-     * @return list<string>
-     */
-    protected function getTableListFromTableUidPairs(string $tableUidPairs): array
-    {
-        $tableUidList = GeneralUtility::trimExplode(',', $tableUidPairs);
-        $resultList = [];
-        foreach ($tableUidList as $tableUidPair) {
-            $parts = explode('_', $tableUidPair);
-            array_pop($parts);
-            $table = implode('_', $parts);
-            $resultList[] = $table;
-        }
-        return $resultList;
     }
 }
