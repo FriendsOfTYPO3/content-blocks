@@ -23,8 +23,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
-use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedFieldException;
-use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 
 /**
@@ -33,10 +31,10 @@ use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 final class ContentBlockDataDecorator
 {
     public function __construct(
-        private readonly GridFactory $gridFactory,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
         private readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
+        private readonly GridProcessor $gridProcessor,
     ) {}
 
     public function decorate(
@@ -54,11 +52,11 @@ final class ContentBlockDataDecorator
             $contentTypeDefinition,
             $tableDefinition,
             $resolvedContentBlockDataRelation,
-            $resolvedRelation->table,
             0,
             $context,
         );
         $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
+        $this->gridProcessor->process();
         return $contentBlockData;
     }
 
@@ -66,7 +64,6 @@ final class ContentBlockDataDecorator
         ContentTypeInterface $contentTypeDefinition,
         TableDefinition $tableDefinition,
         ResolvedContentBlockDataRelation $resolvedRelation,
-        string $table,
         int $depth = 0,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
@@ -88,7 +85,18 @@ final class ContentBlockDataDecorator
                     $context,
                 );
                 if ($context !== null) {
-                    $grids = $this->processGrid($context, $tcaFieldDefinition, $resolvedField, $table, $grids);
+                    $relationGrid = new RelationGrid();
+                    $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
+                    $callback = function () use ($grids, $tcaFieldDefinition, $resolvedField, $context): void {
+                        $relationGrid = $grids[$tcaFieldDefinition->getIdentifier()];
+                        $this->gridProcessor->processGrid(
+                            $relationGrid,
+                            $context,
+                            $tcaFieldDefinition,
+                            $resolvedField
+                        );
+                    };
+                    $this->gridProcessor->addInstruction($callback);
                 }
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $resolvedField;
@@ -217,7 +225,6 @@ final class ContentBlockDataDecorator
                 $typeDefinition,
                 $collectionTableDefinition,
                 $contentBlockRelation,
-                $foreignTable,
                 ++$depth,
                 $context,
             );
@@ -309,67 +316,6 @@ final class ContentBlockDataDecorator
             $fakeName,
         );
         return $contentBlockDataObject;
-    }
-
-    /**
-     * @param ContentBlockData|array<ContentBlockData> $resolvedField
-     * @param array<string, RelationGrid> $grids
-     * @return array<string, RelationGrid>
-     */
-    private function processGrid(
-        PageLayoutContext $context,
-        TcaFieldDefinition $tcaFieldDefinition,
-        ContentBlockData|array $resolvedField,
-        string $table,
-        array $grids,
-    ): array {
-        $foreignTable = $this->getRelationTable($tcaFieldDefinition, $table);
-        if (!is_array($resolvedField)) {
-            $resolvedField = [$resolvedField];
-        }
-        $gridLabel = $tcaFieldDefinition->getLabelPath();
-        $grid = $this->gridFactory->build(
-            $context,
-            $gridLabel,
-            $resolvedField,
-            $foreignTable,
-        );
-        $relationGrid = new RelationGrid();
-        $relationGrid->grid = $grid;
-        $relationGrid->label = $gridLabel;
-        $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
-        return $grids;
-    }
-
-    private function getRelationTable(TcaFieldDefinition $tcaFieldDefinition, string $table): string
-    {
-        $tcaConfig = $tcaFieldDefinition->getTca();
-        $relationTable = $tcaConfig['config']['foreign_table'] ?? $tcaConfig['config']['allowed'] ?? null;
-        if ($relationTable !== null) {
-            return $relationTable;
-        }
-        $relationTable = $this->getRelationTableNative($tcaFieldDefinition, $table);
-        return $relationTable;
-    }
-
-    private function getRelationTableNative(TcaFieldDefinition $tcaFieldDefinition, string $table): string
-    {
-        try {
-            $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
-        } catch (UndefinedSchemaException) {
-            return '';
-        }
-        try {
-            $tcaField = $tcaSchema->getField($tcaFieldDefinition->getUniqueIdentifier());
-        } catch (UndefinedFieldException) {
-            return '';
-        }
-        $tcaConfig = $tcaField->getColumnConfig();
-        $relationTable = $tcaConfig['config']['foreign_table'] ?? $tcaConfig['config']['allowed'] ?? null;
-        if ($relationTable !== null) {
-            return $relationTable;
-        }
-        return '';
     }
 
     private function getRecordIdentifier(string $table, array $record): string
