@@ -80,7 +80,7 @@ final class ContentBlockDataDecorator
                 continue;
             }
             $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-            if ($this->isRelationField($resolvedField, $tcaFieldDefinition, $table)) {
+            if ($this->isRelationField($resolvedField)) {
                 $resolvedField = $this->handleRelation(
                     $resolvedRelation,
                     $tcaFieldDefinition,
@@ -131,7 +131,7 @@ final class ContentBlockDataDecorator
         return $resolvedField;
     }
 
-    private function isRelationField(mixed $resolvedField, TcaFieldDefinition $tcaFieldDefinition, string $table): bool
+    private function isRelationField(mixed $resolvedField): bool
     {
         if ($resolvedField instanceof ResolvedRelation) {
             return true;
@@ -139,15 +139,10 @@ final class ContentBlockDataDecorator
         if (!is_array($resolvedField)) {
             return false;
         }
-        $fieldType = $tcaFieldDefinition->getFieldType();
-        $relationTcaTypes = ['inline', 'select', 'group'];
-        if (!in_array($fieldType::getTcaType(), $relationTcaTypes, true)) {
-            return false;
+        if (($resolvedField[0] ?? null) instanceof ResolvedRelation) {
+            return true;
         }
-        if ($this->getRelationTable($tcaFieldDefinition, $table) === '') {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     /**
