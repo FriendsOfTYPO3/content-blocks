@@ -59,7 +59,8 @@ class RelationResolver
         array $data,
         string $table,
     ): array {
-        $identifier = $table . '-' . $data['uid'];
+        // @todo remove _PAGES_OVERLAY_UID in v13.
+        $identifier = $table . '-' . ($data['_PAGES_OVERLAY_UID'] ?? $data['_LOCALIZED_UID'] ?? $data['uid']);
         $sessionRow = $data;
         $sessionRow['_table'] = $table;
         $sessionRow['_raw'] = $data;
