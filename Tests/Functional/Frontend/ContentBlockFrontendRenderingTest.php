@@ -258,4 +258,22 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Circular relation uid: 1', $html);
         self::assertStringContainsString('Circular select uid: 1', $html);
     }
+
+    #[Test]
+    public function categoryRelationResolved(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/categories.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Category table: sys_category', $html);
+        self::assertStringContainsString('Category 1', $html);
+        self::assertStringContainsString('Category 2', $html);
+    }
 }

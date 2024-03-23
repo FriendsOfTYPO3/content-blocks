@@ -120,16 +120,14 @@ final class ContentBlockDataDecorator
         ?PageLayoutContext $context = null,
     ): mixed {
         $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-        $fieldTypeName = $tcaFieldDefinition->getFieldType()->getName();
-        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
-        $resolvedField = match ($fieldTypeEnum) {
-            FieldType::COLLECTION,
-            FieldType::RELATION => $this->transformMultipleRelation(
+        $fieldType = $tcaFieldDefinition->getFieldType();
+        $resolvedField = match ($fieldType::getTcaType()) {
+            'inline', 'group', 'category' => $this->transformMultipleRelation(
                 $resolvedField,
                 $depth,
                 $context,
             ),
-            FieldType::SELECT => $this->transformSelectRelation(
+            'select' => $this->transformSelectRelation(
                 $resolvedField,
                 $depth,
                 $context,

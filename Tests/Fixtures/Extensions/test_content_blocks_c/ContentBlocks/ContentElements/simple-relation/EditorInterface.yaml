@@ -30,3 +30,5 @@ fields:
     type: Select
     renderType: selectSingle
     foreign_table: tt_content
+  - identifier: categories
+    type: Category

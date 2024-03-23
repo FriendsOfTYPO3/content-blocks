@@ -44,3 +44,9 @@ Title: {data.record.title}
 <f:if condition="{data.circular_select}">
     Circular select uid: {data.circular_select.circular_select.uid}
 </f:if>
+<f:if condition="{data.categories}">
+    <f:for each="{data.categories}" as="category">
+        Category table: {category.tableName}
+        {category.title}
+    </f:for>
+</f:if>
