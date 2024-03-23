@@ -37,6 +37,9 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
     ): array {
         $this->relationResolver->setRequest($cObj->getRequest());
         $table = $cObj->getCurrentTable();
+        if (!$this->tableDefinitionCollection->hasTable($table)) {
+            return $processedData;
+        }
         $tableDefinition = $this->tableDefinitionCollection->getTable($table);
         $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $processedData['data']);
         if ($contentTypeDefinition === null) {
