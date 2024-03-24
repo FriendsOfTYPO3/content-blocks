@@ -29,7 +29,7 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class TableDefinitionCollectionFactoryTest extends UnitTestCase
+final class ContentBlockCompilerTest extends UnitTestCase
 {
     public static function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
     {
