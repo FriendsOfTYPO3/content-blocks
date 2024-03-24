@@ -47,6 +47,7 @@ class PageLayout
         protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
         protected readonly PhpFrontend $cache,
         protected readonly RootPathsSettings $rootPathsSettings,
+        protected readonly ElementInformation $elementInformation,
     ) {}
 
     public function __invoke(ModifyPageLayoutContentEvent $event): void
@@ -80,6 +81,8 @@ class PageLayout
         $view = $this->createView($contentTypeDefinition, $pageUid);
         $view->setRequest($request);
         $view->assign('data', $contentBlockData);
+        $variables = $this->elementInformation->getVariables($pageRow);
+        $view->assignMultiple($variables);
         $renderedView = (string)$view->render();
         $event->addHeaderContent($renderedView);
     }
@@ -100,8 +103,11 @@ class PageLayout
      */
     protected function getContentBlocksPartialRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
-        $partialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/Partials/';
+        $partialRootPaths = [
+            'EXT:content_blocks/Resources/Private/Partials/',
+            ...$this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid),
+            $contentBlockPrivatePath . '/Partials/'
+        ];
         return $partialRootPaths;
     }
 
