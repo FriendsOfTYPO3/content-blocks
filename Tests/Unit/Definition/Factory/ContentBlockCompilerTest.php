@@ -29,7 +29,7 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class TableDefinitionCollectionFactoryTest extends UnitTestCase
+final class ContentBlockCompilerTest extends UnitTestCase
 {
     public static function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
     {
@@ -673,6 +673,64 @@ final class TableDefinitionCollectionFactoryTest extends UnitTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1679224392);
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
+
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
+    }
+
+    #[Test]
+    public function linebreaksCanBeIgnoredIfConfiguredExplicitly(): void
+    {
+        $contentBlocks = [
+            [
+                'name' => 'foo/bar',
+                'icon' => [
+                    'iconPath' => '',
+                    'iconProvider' => '',
+                ],
+                'extPath' => 'EXT:example/ContentBlocks/foo',
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'typeName' => 'foo_bar',
+                    'fields' => [
+                        [
+                            'identifier' => 'palette_1',
+                            'type' => 'Palette',
+                            'fields' => [
+                                [
+                                    'identifier' => 'field1',
+                                    'type' => 'Text',
+                                ],
+                                [
+                                    'type' => 'Linebreak',
+                                ],
+                                [
+                                    'identifier' => 'field2',
+                                    'type' => 'Text',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'Linebreak',
+                            'ignoreIfNotInPalette' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);

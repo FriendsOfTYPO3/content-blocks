@@ -382,6 +382,9 @@ final class ContentBlockCompiler
         $rootFieldType = $this->resolveType($input, $rootField);
         $fieldTypeEnum = FieldType::tryFrom($rootFieldType::getName());
         if ($fieldTypeEnum !== null) {
+            if ($fieldTypeEnum === FieldType::LINEBREAK && ($rootField['ignoreIfNotInPalette'] ?? false)) {
+                return [];
+            }
             $this->assertNoLinebreakOutsideOfPalette($fieldTypeEnum, $input->contentBlock);
         }
         $fields = match ($fieldTypeEnum) {
