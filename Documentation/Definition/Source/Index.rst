@@ -21,10 +21,13 @@ your editors. By default, TYPO3 comes with a standard preview renderer. However,
 it is specialized in rendering the preview of Core Content Elements. This means
 only Core fields like :sql:`header`, :sql:`subheader` or :sql:`bodytext` are
 considered. Therefore, it is advised to provide an own preview for custom
-Content Elements. Previews for Page Types are displayed at the top of the
+Content Elements. Previews for **Page Types** are displayed at the top of the
 content area and beneath the page title.
 
-Learn more about :ref:`templating <cb_templating>`.
+See also:
+
+*  Learn more about :ref:`templating <cb_templating>`.
+*  Learn how to include :ref:`shared partials <editor_preview_partials>`
 
 Frontend.html
 =============

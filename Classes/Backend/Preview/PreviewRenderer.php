@@ -44,6 +44,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected PhpFrontend $cache,
+        protected RootPathsSettings $rootPathsSettings,
     ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
@@ -89,24 +90,49 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $resolvedData,
             $item->getContext(),
         );
-        $view = $this->createView($contentBlockPrivatePath, $request);
+        $view = $this->createView($contentBlockPrivatePath, $request, $item);
         $view->assign('data', $data);
         $result = (string)$view->render();
         return $result;
     }
 
-    protected function createView(string $contentBlockPrivatePath, ServerRequestInterface $request): StandaloneView
-    {
+    protected function createView(
+        string $contentBlockPrivatePath,
+        ServerRequestInterface $request,
+        GridColumnItem $item
+    ): StandaloneView {
+        $pageUid = $item->getContext()->getPageId();
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths([$contentBlockPrivatePath . '/Layouts']);
-        $view->setPartialRootPaths([
-            'EXT:backend/Resources/Private/Partials/',
-            'EXT:content_blocks/Resources/Private/Partials/',
-            $contentBlockPrivatePath . '/Partials/',
-        ]);
+        $view->setLayoutRootPaths($this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid));
+        $view->setPartialRootPaths($this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid));
         $view->setTemplateRootPaths([$contentBlockPrivatePath]);
         $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
         $view->setRequest($request);
         return $view;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function getContentBlocksPartialRootPaths(string $contentBlockPrivatePath, int $pageUid): array
+    {
+        $contentBlockPartialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
+        $partialRootPaths = [
+            'EXT:backend/Resources/Private/Partials/',
+            'EXT:content_blocks/Resources/Private/Partials/',
+            ...$contentBlockPartialRootPaths,
+            $contentBlockPrivatePath . '/Partials/',
+        ];
+        return $partialRootPaths;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
+    {
+        $layoutRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
+        $layoutRootPaths[] = $contentBlockPrivatePath . '/Layouts/';
+        return $layoutRootPaths;
     }
 }
