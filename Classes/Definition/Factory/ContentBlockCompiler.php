@@ -382,8 +382,10 @@ final class ContentBlockCompiler
         $rootFieldType = $this->resolveType($input, $rootField);
         $fieldTypeEnum = FieldType::tryFrom($rootFieldType::getName());
         if ($fieldTypeEnum !== null) {
-            if(!$this->assertNoLinebreakOutsideOfPalette($fieldTypeEnum, $input->contentBlock, $rootField['assertIfNotInPalette'] ?? true))
+            if ($fieldTypeEnum === FieldType::LINEBREAK && ($rootField['ignoreIfNotInPalette'] ?? false)) {
                 return [];
+            }
+            $this->assertNoLinebreakOutsideOfPalette($fieldTypeEnum, $input->contentBlock);
         }
         $fields = match ($fieldTypeEnum) {
             Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
@@ -879,19 +881,14 @@ final class ContentBlockCompiler
         return $languagePath;
     }
 
-    private function assertNoLinebreakOutsideOfPalette(FieldType $fieldType, LoadedContentBlock $contentBlock, bool $assert): bool
+    private function assertNoLinebreakOutsideOfPalette(FieldType $fieldType, LoadedContentBlock $contentBlock): void
     {
         if ($fieldType === FieldType::LINEBREAK) {
-            if($assert)
-                throw new \InvalidArgumentException(
-                    'Linebreaks are only allowed within Palettes in Content Block "' . $contentBlock->getName() . '".',
-                    1679224392
-                );
-            else
-                return false;
+            throw new \InvalidArgumentException(
+                'Linebreaks are only allowed within Palettes in Content Block "' . $contentBlock->getName() . '".',
+                1679224392
+            );
         }
-
-        return true;
     }
 
     private function assertIdentifierExists(array $field, ProcessingInput $input): void
