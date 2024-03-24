@@ -93,3 +93,23 @@ which you always need e.g. various header fields.
     Unlike Content Block names, it is not mandatory to provide a vendor name for
     your Basic identifier. However, it is recommended to avoid using too generic
     names to avoid conflicts.
+
+
+Nested Basics
+=============
+
+It is also possible to nest Basics. So if Basic A refers to Basic B in the
+fields list, then this will be resolved, too. Be careful to not create an
+infinite loop by circular or self-references. This will be detected
+automatically, if a high nesting level is reached.
+
+.. code-block:: yaml
+   :caption: EXT:your_extension/ContentBlocks/Basics/YourBasic.yaml
+
+    identifier: Vendor/YourBasic
+    fields:
+      - identifier: a_basic_field
+        type: Text
+        label: LLL:EXT:sitepackage/Resources/Private/Language/locallang.xlf:a_basic_field
+      - identifier: Vendor/AnotherBasic
+        type: Basic
