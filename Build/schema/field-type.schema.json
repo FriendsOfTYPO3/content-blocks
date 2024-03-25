@@ -493,6 +493,25 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Palette"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"fields": {
+						"type": "array",
+						"items": {
+							"$ref": "#/"
+						}
+					}
+				}
+			}
 		}
 	]
 }
