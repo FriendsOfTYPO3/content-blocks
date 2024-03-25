@@ -20,6 +20,9 @@
 					}
 				]
 			}
+		},
+		"autocomplete": {
+			"type": "boolean"
 		}
 	},
 	"properties": {
@@ -379,6 +382,9 @@
 					},
 					"valuePicker": {
 						"$ref": "#/$defs/valuePicker"
+					},
+					"autocomplete": {
+						"$ref": "#/$defs/autocomplete"
 					}
 				}
 			}
@@ -450,6 +456,9 @@
 					"required": {
 						"type": "boolean",
 						"description": "If set, the field will become mandatory."
+					},
+					"autocomplete": {
+						"$ref": "#/$defs/autocomplete"
 					}
 				}
 			}
