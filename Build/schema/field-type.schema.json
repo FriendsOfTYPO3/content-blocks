@@ -563,6 +563,40 @@
 			"if": {
 				"properties": {
 					"type": {
+						"const": "Slug"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"eval": {
+						"type": "string",
+						"description": "Configuration of field evaluation.",
+						"enum": [
+							"unique",
+							"uniqueInSite",
+							"uniqueInPid"
+						]
+					},
+					"generatorOptions": {
+						"type": "array",
+						"description": "Field names that will be considered during slug construction."
+					},
+					"fallbackCharacter": {
+						"type": "string",
+						"description": "Character that represents the separator of slug sections, that contain the fieldSeparator."
+					},
+					"prependSlash": {
+						"type": "boolean",
+						"description": "Defines whether a slug field should contain a prepending slash."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
 						"const": "Uuid"
 					}
 				}
