@@ -80,9 +80,13 @@ Settings
 
    .. code-block:: yaml
 
-      range:
+      slider:
         step: 1
         width: 100
+
+   .. tip::
+
+      It is advised to also define a range property when using the slider, otherwise the slider will go from 0 to 10000.
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-number>`.
 
@@ -115,9 +119,8 @@ Advanced / use case
           lower: 10
           upper: 999
         slider:
-          range:
-            step: 1
-            width: 100
+          step: 1
+          width: 100
         valuePicker:
           items:
             - [ '100', 100 ]
