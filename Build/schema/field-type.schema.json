@@ -568,6 +568,57 @@
 			"if": {
 				"properties": {
 					"type": {
+						"const": "Number"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"format": {
+						"type": "string",
+						"enum": ["integer", "decimal"],
+						"description": "The format for the number."
+					},
+					"default": {
+						"type": "integer",
+						"description": "Default value set if a new record is created."
+					},
+					"range": {
+						"type": "object",
+						"properties": {
+							"lower": {
+								"type": "integer"
+							},
+							"upper": {
+								"type": "integer"
+							}
+						}
+					},
+					"slider": {
+						"type": "object",
+						"properties": {
+							"step": {
+								"type": "integer"
+							},
+							"width": {
+								"type": "integer"
+							}
+						}
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"valuePicker": {
+						"$ref": "#/$defs/valuePicker"
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
 						"const": "Palette"
 					}
 				}
