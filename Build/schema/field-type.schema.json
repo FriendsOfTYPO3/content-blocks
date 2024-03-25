@@ -563,6 +563,57 @@
 			"if": {
 				"properties": {
 					"type": {
+						"const": "Password"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"hashed": {
+						"type": "boolean",
+						"description": "Whether the password should be hashed with the configured hashing algorithm.",
+						"default": "true"
+					},
+					"passwordPolicy": {
+						"type": "string",
+						"description": "The password policy will ensure, that the new password complies with the configured password policy."
+					},
+					"placeholder": {
+						"type": "string",
+						"description": "Placeholder text for the field."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"size": {
+						"type": "integer",
+						"description": "Abstract value for the width of the <input> field.",
+						"minimum": 10,
+						"maximum": 20
+					},
+					"fieldControl": {
+						"type": "object",
+						"properties": {
+							"passwordGenerator": {
+								"type": "object",
+								"properties": {
+									"renderType": {
+										"enum": [
+											"passwordGenerator"
+										]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
 						"const": "Slug"
 					}
 				}
