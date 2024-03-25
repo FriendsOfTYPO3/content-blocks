@@ -207,8 +207,15 @@
 						"type": "object",
 						"properties": {
 							"startingPoints": {
-								"type": "string",
-								"description": "Allows to set one or more roots (category uids), from which the categories should be taken from."
+								"description": "Allows to set one or more roots (category uids), from which the categories should be taken from.",
+								"oneOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "integer"
+									}
+								]
 							}
 						}
 					}
