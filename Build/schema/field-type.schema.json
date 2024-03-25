@@ -568,6 +568,49 @@
 			"if": {
 				"properties": {
 					"type": {
+						"const": "Link"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "integer",
+						"description": "Default value set if a new record is created."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"allowedTypes": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"page",
+								"url",
+								"file",
+								"folder",
+								"email",
+								"telephone",
+								"record"
+							]
+						}
+					},
+					"valuePicker": {
+						"$ref": "#/$defs/valuePicker"
+					},
+					"autocomplete": {
+						"type": "boolean",
+						"description": "If set, this adds an attribute which allows the browser auto filling the field."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
 						"const": "Number"
 					}
 				}
