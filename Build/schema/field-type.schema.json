@@ -543,6 +543,31 @@
 			"if": {
 				"properties": {
 					"type": {
+						"const": "Language"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "integer",
+						"description": "The default uid of a language."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"readonly": {
+						"type": "boolean",
+						"description": "If set, the field will be readonly."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
 						"const": "Palette"
 					}
 				}
