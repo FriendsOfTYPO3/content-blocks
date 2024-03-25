@@ -20,9 +20,6 @@
 					}
 				]
 			}
-		},
-		"autocomplete": {
-			"type": "boolean"
 		}
 	},
 	"properties": {
@@ -384,7 +381,8 @@
 						"$ref": "#/$defs/valuePicker"
 					},
 					"autocomplete": {
-						"$ref": "#/$defs/autocomplete"
+						"type": "boolean",
+						"description": "If set, this adds an attribute which allows the browser auto filling the field."
 					}
 				}
 			}
@@ -458,7 +456,8 @@
 						"description": "If set, the field will become mandatory."
 					},
 					"autocomplete": {
-						"$ref": "#/$defs/autocomplete"
+						"type": "boolean",
+						"description": "If set, this adds an attribute which allows the browser auto filling the field."
 					}
 				}
 			}
