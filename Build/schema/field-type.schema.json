@@ -507,6 +507,43 @@
 			"if": {
 				"properties": {
 					"type": {
+						"const": "Json"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"cols": {
+						"type": "integer",
+						"description": "Abstract value for the width of the <textarea> field.",
+						"minimum": 10,
+						"maximum": 30
+					},
+					"rows": {
+						"type": "integer",
+						"description": "Abstract value for the height of the <textarea> field.",
+						"minimum": 0,
+						"maximum": 20
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"readonly": {
+						"type": "boolean",
+						"description": "If set, the field will be readonly."
+					},
+					"enableCodeEditor": {
+						"type": "boolean",
+						"description": "If set, code highlighting is available."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
 						"const": "Palette"
 					}
 				}
