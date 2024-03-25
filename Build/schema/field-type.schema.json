@@ -558,6 +558,42 @@
 					}
 				}
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Uuid"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"size": {
+						"type": "integer",
+						"description": "Abstract value for the height of the <textarea> field.",
+						"minimum": 10,
+						"maximum": 20
+					},
+					"version": {
+						"type": "integer",
+						"description": "Version for the uuid.",
+						"default": 4,
+						"enum": [
+							"1",
+							"3",
+							"4",
+							"5",
+							"6",
+							"7"
+						]
+					},
+					"enableCopyToClipboard": {
+						"type": "boolean",
+						"description": "If set to false, the button for copying the uuid into the clipboard will not be rendered."
+					}
+				}
+			}
 		}
 	]
 }
