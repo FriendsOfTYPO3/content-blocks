@@ -24,7 +24,7 @@ final class FieldCollection implements \ArrayAccess, \IteratorAggregate, \Counta
 {
     public function __construct(
         /**
-         * @var array<string, FieldTypeInterface> $fieldDefinitions
+         * @var array<string, TcaFieldTypeInterface> $fieldDefinitions
          */
         protected array $fieldDefinitions = []
     ) {}
@@ -34,7 +34,7 @@ final class FieldCollection implements \ArrayAccess, \IteratorAggregate, \Counta
         return isset($this->fieldDefinitions[$offset]);
     }
 
-    public function offsetGet(mixed $offset): ?FieldTypeInterface
+    public function offsetGet(mixed $offset): ?TcaFieldTypeInterface
     {
         return $this->fieldDefinitions[$offset] ?? null;
     }
@@ -50,7 +50,7 @@ final class FieldCollection implements \ArrayAccess, \IteratorAggregate, \Counta
     }
 
     /**
-     * @return \Traversable|FieldTypeInterface[]
+     * @return \Traversable|TcaFieldTypeInterface[]
      */
     public function getIterator(): \Traversable
     {

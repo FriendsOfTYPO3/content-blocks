@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
@@ -39,11 +40,15 @@ final class TableDefinitionCollectionFactory
         protected readonly ContentBlockCompiler $contentBlockCompiler,
     ) {}
 
-    public function create(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): TableDefinitionCollection
-    {
+    public function create(
+        ContentBlockRegistry $contentBlockRegistry,
+        FieldTypeRegistry $fieldTypeRegistry,
+        SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+    ): TableDefinitionCollection {
         if (!$this->cache->isLazyObjectInitialized()) {
             $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
                 $contentBlockRegistry,
+                $fieldTypeRegistry,
                 $simpleTcaSchemaFactory
             );
             return $this->tableDefinitionCollection;
@@ -54,6 +59,7 @@ final class TableDefinitionCollectionFactory
         }
         $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
             $contentBlockRegistry,
+            $fieldTypeRegistry,
             $simpleTcaSchemaFactory
         );
         $this->setCache();
@@ -68,9 +74,12 @@ final class TableDefinitionCollectionFactory
         }
     }
 
-    public function createUncached(ContentBlockRegistry $contentBlockRegistry, SimpleTcaSchemaFactory $simpleTcaSchemaFactory): TableDefinitionCollection
-    {
-        $compiledContentBlocks = $this->contentBlockCompiler->compile($contentBlockRegistry, $simpleTcaSchemaFactory);
+    public function createUncached(
+        ContentBlockRegistry $contentBlockRegistry,
+        FieldTypeRegistry $fieldTypeRegistry,
+        SimpleTcaSchemaFactory $simpleTcaSchemaFactory
+    ): TableDefinitionCollection {
+        $compiledContentBlocks = $this->contentBlockCompiler->compile($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
         $tableDefinitionCollection = $this->enrichTableDefinitions($compiledContentBlocks);
         return $tableDefinitionCollection;
     }

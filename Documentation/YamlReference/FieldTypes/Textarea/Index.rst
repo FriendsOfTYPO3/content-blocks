@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: textarea-default
 
    :Required: false
    :Type: string
@@ -21,6 +22,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: placeholder
+   :name: textarea-placeholder
 
    :Required: false
    :Type: string
@@ -28,6 +30,7 @@ Settings
    Placeholder text for the field.
 
 .. confval:: rows
+   :name: textarea-rows
 
    :Required: false
    :Type: integer
@@ -36,6 +39,7 @@ Settings
    Abstract value for the height of the `<textarea>` field. Max value is 20.
 
 .. confval:: required
+   :name: textarea-required
 
    :Required: false
    :Type: boolean
@@ -44,6 +48,7 @@ Settings
    If set, the field will become mandatory.
 
 .. confval:: enableRichtext
+   :name: textarea-enableRichtext
 
    :Required: false
    :Type: boolean
@@ -57,6 +62,7 @@ Settings
    a `<textarea>` field.
 
 .. confval:: richtextConfiguration
+   :name: textarea-richtextConfiguration
 
    :Required: false
    :Type: string

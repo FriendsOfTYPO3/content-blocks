@@ -22,9 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
-use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedFieldException;
-use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 
 /**
@@ -33,38 +31,39 @@ use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 final class ContentBlockDataDecorator
 {
     public function __construct(
-        private readonly GridFactory $gridFactory,
         private readonly TableDefinitionCollection $tableDefinitionCollection,
         private readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
+        private readonly GridProcessor $gridProcessor,
     ) {}
 
     public function decorate(
         ContentTypeInterface $contentTypeDefinition,
         TableDefinition $tableDefinition,
-        array $rawData,
-        array $resolvedData,
-        string $table,
+        ResolvedRelation $resolvedRelation,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
-        $resolvedRelation = new ResolvedRelation();
-        $resolvedRelation->raw = $rawData;
-        $resolvedRelation->resolved = $resolvedData;
+        $identifier = $this->getRecordIdentifier($resolvedRelation->table, $resolvedRelation->raw);
+        $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
+        $resolvedContentBlockDataRelation = new ResolvedContentBlockDataRelation();
+        $resolvedContentBlockDataRelation->raw = $resolvedRelation->raw;
+        $resolvedContentBlockDataRelation->resolved = $resolvedRelation->resolved;
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
             $tableDefinition,
-            $resolvedRelation,
-            $table,
+            $resolvedContentBlockDataRelation,
             0,
             $context,
         );
+        $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
+        $this->gridProcessor->process();
         return $contentBlockData;
     }
 
     private function buildContentBlockDataObjectRecursive(
         ContentTypeInterface $contentTypeDefinition,
         TableDefinition $tableDefinition,
-        ResolvedRelation $resolvedRelation,
-        string $table,
+        ResolvedContentBlockDataRelation $resolvedRelation,
         int $depth = 0,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
@@ -73,20 +72,31 @@ final class ContentBlockDataDecorator
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
-            if (!$fieldType->isRenderable()) {
+            $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
+            if ($fieldTypeEnum->isStructureField()) {
                 continue;
             }
             $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-            if ($this->isRelationField($resolvedField, $tcaFieldDefinition, $table)) {
+            if ($this->isRelationField($resolvedField)) {
                 $resolvedField = $this->handleRelation(
                     $resolvedRelation,
                     $tcaFieldDefinition,
-                    $table,
                     $depth,
                     $context,
                 );
                 if ($context !== null) {
-                    $grids = $this->processGrid($context, $tcaFieldDefinition, $resolvedField, $table, $grids);
+                    $relationGrid = new RelationGrid();
+                    $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
+                    $callback = function () use ($grids, $tcaFieldDefinition, $resolvedField, $context): void {
+                        $relationGrid = $grids[$tcaFieldDefinition->getIdentifier()];
+                        $this->gridProcessor->processGrid(
+                            $relationGrid,
+                            $context,
+                            $tcaFieldDefinition,
+                            $resolvedField
+                        );
+                    };
+                    $this->gridProcessor->addInstruction($callback);
                 }
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $resolvedField;
@@ -104,26 +114,21 @@ final class ContentBlockDataDecorator
     }
 
     private function handleRelation(
-        ResolvedRelation $resolvedRelation,
+        ResolvedContentBlockDataRelation $resolvedRelation,
         TcaFieldDefinition $tcaFieldDefinition,
-        string $table,
         int $depth,
         ?PageLayoutContext $context = null,
     ): mixed {
         $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-        $resolvedField = match ($tcaFieldDefinition->getFieldType()) {
-            FieldType::COLLECTION,
-            FieldType::RELATION => $this->transformMultipleRelation(
+        $fieldType = $tcaFieldDefinition->getFieldType();
+        $resolvedField = match ($fieldType::getTcaType()) {
+            'inline', 'group', 'category' => $this->transformMultipleRelation(
                 $resolvedField,
-                $tcaFieldDefinition,
-                $table,
                 $depth,
                 $context,
             ),
-            FieldType::SELECT => $this->transformSelectRelation(
+            'select' => $this->transformSelectRelation(
                 $resolvedField,
-                $tcaFieldDefinition,
-                $table,
                 $depth,
                 $context,
             ),
@@ -132,44 +137,38 @@ final class ContentBlockDataDecorator
         return $resolvedField;
     }
 
-    private function isRelationField(mixed $resolvedField, TcaFieldDefinition $tcaFieldDefinition, string $table): bool
+    private function isRelationField(mixed $resolvedField): bool
     {
+        if ($resolvedField instanceof ResolvedRelation) {
+            return true;
+        }
         if (!is_array($resolvedField)) {
             return false;
         }
-        if (!$tcaFieldDefinition->getFieldType()->isRelation()) {
-            return false;
+        if (($resolvedField[0] ?? null) instanceof ResolvedRelation) {
+            return true;
         }
-        if ($this->getRelationTable($tcaFieldDefinition, $table) === '') {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     /**
+     * @param ResolvedRelation[] $processedField
      * @return array<ContentBlockData>|ContentBlockData
      */
     private function transformSelectRelation(
-        array $processedField,
-        TcaFieldDefinition $tcaFieldDefinition,
-        string $table,
+        array|ResolvedRelation $processedField,
         int $depth,
         ?PageLayoutContext $context = null,
     ): array|ContentBlockData {
-        $renderType = $tcaFieldDefinition->getTca()['config']['renderType'] ?? '';
-        if ($renderType === 'selectSingle') {
+        if ($processedField instanceof ResolvedRelation) {
             $processedField = $this->transformSingleRelation(
                 $processedField,
-                $tcaFieldDefinition,
-                $table,
                 $depth,
                 $context,
             );
         } else {
             $processedField = $this->transformMultipleRelation(
                 $processedField,
-                $tcaFieldDefinition,
-                $table,
                 $depth,
                 $context,
             );
@@ -182,16 +181,12 @@ final class ContentBlockDataDecorator
      */
     private function transformMultipleRelation(
         array $processedField,
-        TcaFieldDefinition $tcaFieldDefinition,
-        string $table,
         int $depth,
         ?PageLayoutContext $context = null,
     ): array {
         foreach ($processedField as $key => $processedFieldItem) {
             $processedField[$key] = $this->transformSingleRelation(
                 $processedFieldItem,
-                $tcaFieldDefinition,
-                $table,
                 $depth,
                 $context,
             );
@@ -200,23 +195,14 @@ final class ContentBlockDataDecorator
     }
 
     private function transformSingleRelation(
-        array $item,
-        TcaFieldDefinition $tcaFieldDefinition,
-        string $table,
+        ResolvedRelation $item,
         int $depth,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
-        $resolvedRelation = new ResolvedRelation();
-        // The associated table provided kindly by RelationResolver.
-        if (isset($item['_table'])) {
-            $foreignTable = $item['_table'];
-            unset($item['_table']);
-        } else {
-            $foreignTable = $this->getRelationTable($tcaFieldDefinition, $table);
-        }
-        $resolvedRelation->raw = $item['_raw'];
-        unset($item['_raw']);
-        $resolvedRelation->resolved = $item;
+        $contentBlockRelation = new ResolvedContentBlockDataRelation();
+        $foreignTable = $item->table;
+        $contentBlockRelation->raw = $item->raw;
+        $contentBlockRelation->resolved = $item->resolved;
         $hasTableDefinition = $this->tableDefinitionCollection->hasTable($foreignTable);
         $collectionTableDefinition = null;
         if ($hasTableDefinition) {
@@ -224,20 +210,26 @@ final class ContentBlockDataDecorator
         }
         $typeDefinition = null;
         if ($hasTableDefinition) {
-            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $resolvedRelation->raw);
+            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $contentBlockRelation->raw);
         }
         if ($collectionTableDefinition !== null && $typeDefinition !== null) {
+            $identifier = $this->getRecordIdentifier($foreignTable, $contentBlockRelation->raw);
+            if ($this->contentBlockDataDecoratorSession->hasContentBlockData($identifier)) {
+                $contentBlockData = $this->contentBlockDataDecoratorSession->getContentBlockData($identifier);
+                return $contentBlockData;
+            }
+            $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
             $contentBlockData = $this->buildContentBlockDataObjectRecursive(
                 $typeDefinition,
                 $collectionTableDefinition,
-                $resolvedRelation,
-                $foreignTable,
+                $contentBlockRelation,
                 ++$depth,
                 $context,
             );
+            $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
             return $contentBlockData;
         }
-        $contentBlockData = $this->buildFakeContentBlockDataObject($foreignTable, $resolvedRelation);
+        $contentBlockData = $this->buildFakeContentBlockDataObject($foreignTable, $contentBlockRelation);
         return $contentBlockData;
     }
 
@@ -245,7 +237,7 @@ final class ContentBlockDataDecorator
      * @param array<RelationGrid> $grids
      */
     private function buildContentBlockDataObject(
-        ResolvedRelation $resolvedRelation,
+        ResolvedContentBlockDataRelation $resolvedRelation,
         string $table,
         ?string $typeField,
         string|int $typeName,
@@ -307,7 +299,7 @@ final class ContentBlockDataDecorator
      * If the record is not defined by Content Blocks, we build a fake
      * Content Block data object for consistent usage.
      */
-    private function buildFakeContentBlockDataObject(string $table, ResolvedRelation $resolvedRelation): ContentBlockData
+    private function buildFakeContentBlockDataObject(string $table, ResolvedContentBlockDataRelation $resolvedRelation): ContentBlockData
     {
         $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
         $typeField = $tcaSchema->getTypeField();
@@ -324,64 +316,14 @@ final class ContentBlockDataDecorator
         return $contentBlockDataObject;
     }
 
-    /**
-     * @param ContentBlockData|array<ContentBlockData> $resolvedField
-     * @param array<string, RelationGrid> $grids
-     * @return array<string, RelationGrid>
-     */
-    private function processGrid(
-        PageLayoutContext $context,
-        TcaFieldDefinition $tcaFieldDefinition,
-        ContentBlockData|array $resolvedField,
-        string $table,
-        array $grids,
-    ): array {
-        $foreignTable = $this->getRelationTable($tcaFieldDefinition, $table);
-        if (!is_array($resolvedField)) {
-            $resolvedField = [$resolvedField];
-        }
-        $gridLabel = $tcaFieldDefinition->getLabelPath();
-        $grid = $this->gridFactory->build(
-            $context,
-            $gridLabel,
-            $resolvedField,
-            $foreignTable,
+    private function getRecordIdentifier(string $table, array $record): string
+    {
+        // @todo remove _PAGES_OVERLAY_UID in v13.
+        $identifier = $table . '-' . (
+            $record['_PAGES_OVERLAY_UID']
+            ?? $record['_LOCALIZED_UID']
+            ?? $record['uid']
         );
-        $relationGrid = new RelationGrid();
-        $relationGrid->grid = $grid;
-        $relationGrid->label = $gridLabel;
-        $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
-        return $grids;
-    }
-
-    private function getRelationTable(TcaFieldDefinition $tcaFieldDefinition, string $table): string
-    {
-        $tcaConfig = $tcaFieldDefinition->getTca();
-        $relationTable = $tcaConfig['config']['foreign_table'] ?? $tcaConfig['config']['allowed'] ?? null;
-        if ($relationTable !== null) {
-            return $relationTable;
-        }
-        $relationTable = $this->getRelationTableNative($tcaFieldDefinition, $table);
-        return $relationTable;
-    }
-
-    private function getRelationTableNative(TcaFieldDefinition $tcaFieldDefinition, string $table): string
-    {
-        try {
-            $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
-        } catch (UndefinedSchemaException) {
-            return '';
-        }
-        try {
-            $tcaField = $tcaSchema->getField($tcaFieldDefinition->getUniqueIdentifier());
-        } catch (UndefinedFieldException) {
-            return '';
-        }
-        $tcaConfig = $tcaField->getColumnConfig();
-        $relationTable = $tcaConfig['config']['foreign_table'] ?? $tcaConfig['config']['allowed'] ?? null;
-        if ($relationTable !== null) {
-            return $relationTable;
-        }
-        return '';
+        return $identifier;
     }
 }

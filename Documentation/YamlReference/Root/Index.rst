@@ -7,6 +7,7 @@ Common root options
 ===================
 
 .. confval:: name
+   :name: root-name
 
    :Required: true
    :Type: string
@@ -22,6 +23,7 @@ Common root options
        name: my-vendor/my-content-block-name
 
 .. confval:: title
+   :name: root-title
 
    :Required: false
    :Type: string
@@ -35,8 +37,8 @@ Common root options
 
        title: "My super duper Content Block"
 
-.. _yaml_reference_prefixFields:
 .. confval:: prefixFields
+   :name: root-prefixFields
 
    :Required: false
    :Type: boolean
@@ -52,6 +54,7 @@ Common root options
        prefixFields: false
 
 .. confval:: prefixType
+   :name: root-prefixType
 
    :Required: false
    :Type: string
@@ -66,6 +69,7 @@ Common root options
        prefixType: vendor
 
 .. confval:: priority
+   :name: root-priority
 
    :Required: false
    :Type: integer
@@ -86,6 +90,7 @@ Common root options
       (file-)system and the order, in which extensions are loaded.
 
 .. confval:: fields
+   :name: root-fields
 
    :Required: false
    :Type: array

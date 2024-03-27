@@ -17,8 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldConfigurationInterface;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -26,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
 final class SqlColumnDefinition
 {
     private string $column = '';
-    private FieldConfigurationInterface $fieldConfiguration;
+    private FieldTypeInterface $fieldType;
 
     public function __construct(array $columnDefinition)
     {
@@ -35,8 +34,9 @@ final class SqlColumnDefinition
         }
 
         $this->column = $columnDefinition['uniqueIdentifier'];
-        $this->fieldConfiguration = FieldType::from($columnDefinition['config']['type'])
-            ->getFieldConfiguration($columnDefinition['config']);
+        /** @var FieldTypeInterface $fieldType */
+        $fieldType = $columnDefinition['type'];
+        $this->fieldType = $fieldType::createFromArray($columnDefinition['config']);
     }
 
     public function getColumn(): string
@@ -46,11 +46,6 @@ final class SqlColumnDefinition
 
     public function getSql(): string
     {
-        return $this->fieldConfiguration->getSql($this->column);
-    }
-
-    public function getFieldType(): FieldType
-    {
-        return $this->fieldConfiguration->getFieldType();
+        return $this->fieldType->getSql($this->column);
     }
 }

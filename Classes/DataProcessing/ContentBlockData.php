@@ -57,11 +57,11 @@ final class ContentBlockData extends \stdClass
     public string $_debug_hint = 'To access data under `_processed` you must omit the key: {data.identifier}';
 
     public function __construct(
-        private readonly string $_name = '',
-        private readonly array $_raw = [],
+        private string $_name = '',
+        private array $_raw = [],
         /** @var array<string, RelationGrid> */
-        private readonly array $_grids = [],
-        private readonly array $_processed = [],
+        private array $_grids = [],
+        private array $_processed = [],
     ) {}
 
     public function __get(string $name = ''): mixed
@@ -79,5 +79,12 @@ final class ContentBlockData extends \stdClass
             return $this->_processed[$name];
         }
         return null;
+    }
+
+    public function override(ContentBlockData $contentBlockData): void
+    {
+        foreach (get_object_vars($contentBlockData) as $var => $value) {
+            $this->$var = $contentBlockData->$var;
+        }
     }
 }

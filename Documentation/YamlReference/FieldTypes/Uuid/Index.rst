@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: size
+   :name: uuid-size
 
    :Required: false
    :Type: integer
@@ -21,6 +22,7 @@ Settings
    Size for the input field. Min value is 10 and max value is 50.
 
 .. confval:: version
+   :name: uuid-version
 
    :Required: false
    :Type: integer
@@ -30,6 +32,7 @@ Settings
 
 
 .. confval:: enableCopyToClipboard
+   :name: uuid-enableCopyToClipboard
 
    :Required: false
    :Type: boolean

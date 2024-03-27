@@ -31,8 +31,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FlexFormFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
@@ -202,13 +202,13 @@ class TcaGenerator
         $currentPalettesTca = $tca['palettes'] ?? [];
         $tca['palettes'] = $currentPalettesTca + $this->generatePalettesTca($tableDefinition);
         foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $column) {
-            $fieldConfiguration = $column->getFieldConfiguration();
-            if ($fieldConfiguration instanceof FlexFormFieldConfiguration) {
+            $fieldType = $column->getFieldType();
+            if ($fieldType instanceof FlexFormFieldType) {
                 $dataStructure = [];
-                foreach ($fieldConfiguration->getFlexFormDefinitions() as $flexFormDefinition) {
+                foreach ($fieldType->getFlexFormDefinitions() as $flexFormDefinition) {
                     $dataStructure[$flexFormDefinition->getTypeName()] = $this->flexFormGenerator->generate($flexFormDefinition);
                 }
-                $fieldConfiguration->setDataStructure($dataStructure);
+                $fieldType->setDataStructure($dataStructure);
             }
             if ($tableDefinition->hasTypeField()) {
                 $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column, $baseTca);
@@ -455,7 +455,9 @@ class TcaGenerator
      */
     protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
     {
-        if ($overrideColumn->getFieldType() !== FieldType::COLLECTION) {
+        $fieldTypeName = $overrideColumn->getFieldType()->getName();
+        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
+        if ($fieldTypeEnum !== FieldType::COLLECTION) {
             return $overrideTca;
         }
         $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
@@ -494,7 +496,7 @@ class TcaGenerator
             if ($optionKey === null) {
                 continue;
             }
-            if (array_key_exists($optionKey, $column->getTca()['config'])) {
+            if (array_key_exists($optionKey, ($column->getTca()['config'] ?? []))) {
                 $configuration = $column->getTca()['config'][$optionKey];
                 // Support for existing flexForm fields.
                 if ($optionKey === 'ds') {
@@ -555,8 +557,10 @@ class TcaGenerator
         if (is_string($option)) {
             return $option;
         }
-        $fieldType = FieldType::from($option['type']);
-        if ($fieldType === $tcaFieldDefinition->getFieldType()) {
+        $fieldTypeName = $tcaFieldDefinition->getFieldType()->getName();
+        $currentFieldType = FieldType::tryFrom($fieldTypeName);
+        $fieldTypeFromOption = FieldType::tryFrom($option['type']);
+        if ($fieldTypeFromOption === $currentFieldType) {
             return $option['option'];
         }
         return null;
@@ -578,7 +582,9 @@ class TcaGenerator
             $column['description'] = $descriptionPath;
         }
         $fieldType = $overrideColumn->getFieldType();
-        if ($fieldType->hasItems()) {
+        $itemsFieldTypes = ['select', 'radio', 'check'];
+        $tcaFieldType = $fieldType::getTcaType();
+        if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
             $items = $column['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 $labelPath = $item['labelPath'];
@@ -661,7 +667,10 @@ class TcaGenerator
             // These are preferred, as they most often provide a meaningful preview of the record.
             $preferredLabelTypes = [FieldType::TEXT, FieldType::TEXTAREA, FieldType::EMAIL, FieldType::UUID];
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
-                if (in_array($columnFieldDefinition->getFieldType(), $preferredLabelTypes, true)) {
+                $fieldType = $columnFieldDefinition->getFieldType();
+                $fieldTypeName = $fieldType::getName();
+                $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
+                if (in_array($fieldTypeEnum, $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
                     break;
                 }

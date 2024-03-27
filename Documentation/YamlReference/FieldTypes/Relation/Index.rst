@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: allowed
+   :name: relation-allowed
 
    :Required: true
    :Type: string (table name, comma-separated)
@@ -24,6 +25,7 @@ Settings
    existing table defined by the Core or another extension.
 
 .. confval:: maxitems
+   :name: relation-maxitems
 
    :Required: false
    :Type: integer
@@ -32,6 +34,7 @@ Settings
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: minitems
+   :name: relation-minitems
 
    :Required: false
    :Type: integer

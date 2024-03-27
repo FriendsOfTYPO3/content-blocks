@@ -23,3 +23,12 @@ fields:
   - identifier: multi_select
     type: Select
     renderType: selectMultipleSideBySide
+  - identifier: circular_relation
+    type: Relation
+    allowed: tt_content
+  - identifier: circular_select
+    type: Select
+    renderType: selectSingle
+    foreign_table: tt_content
+  - identifier: categories
+    type: Category

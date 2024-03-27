@@ -7,6 +7,11 @@ Basics (Mixins)
 
 Basics are a concept like partials or mixins. They are used to have a
 pre-defined set of fields that can be reused and have to be defined only once.
+It is important to understand that Basics are a very simple "search & replace"
+kind of mechanic. Once included in your Content Block they act like they were
+defined there directly. This also means that it is normally required to
+re-define the label in every Content Block. Hence it is recommended to reference
+labels with the full **LLL:EXT** path.
 
 There are **two** different ways of using it.
 
@@ -61,7 +66,8 @@ Define own Basics
 =================
 
 You can define your own Basics by placing one or more YAML files into
-**ContentBlocks/Basics**. The name of the YAML file can be chosen freely.
+**ContentBlocks/Basics**. The name of the YAML file can be chosen freely. It is
+also possible to create sub-folders in order to structure your Basics.
 
 Example on how to create a single Basic:
 
@@ -72,8 +78,9 @@ Example on how to create a single Basic:
     fields:
       - identifier: a_basic_field
         type: Text
+        label: LLL:EXT:sitepackage/Resources/Private/Language/locallang.xlf:a_basic_field
 
-The :yaml:`fields` part is exactly the same as in EditorInterface. Here
+The :yaml:`fields` part is exactly the same as in the EditorInterface.yaml. Here
 you can define a Tab, a Palette or simply a set of fields.
 
 The most practical way to use Basics is to use pre-defined tabs as the global
@@ -86,3 +93,23 @@ which you always need e.g. various header fields.
     Unlike Content Block names, it is not mandatory to provide a vendor name for
     your Basic identifier. However, it is recommended to avoid using too generic
     names to avoid conflicts.
+
+
+Nested Basics
+=============
+
+It is also possible to nest Basics. So if Basic A refers to Basic B in the
+fields list, then this will be resolved, too. Be careful to not create an
+infinite loop by circular or self-references. This will be detected
+automatically, if a high nesting level is reached.
+
+.. code-block:: yaml
+   :caption: EXT:your_extension/ContentBlocks/Basics/YourBasic.yaml
+
+    identifier: Vendor/YourBasic
+    fields:
+      - identifier: a_basic_field
+        type: Text
+        label: LLL:EXT:sitepackage/Resources/Private/Language/locallang.xlf:a_basic_field
+      - identifier: Vendor/AnotherBasic
+        type: Basic

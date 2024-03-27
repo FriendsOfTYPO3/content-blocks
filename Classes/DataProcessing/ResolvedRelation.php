@@ -24,4 +24,5 @@ final class ResolvedRelation
 {
     public array $raw = [];
     public array $resolved = [];
+    public string $table;
 }

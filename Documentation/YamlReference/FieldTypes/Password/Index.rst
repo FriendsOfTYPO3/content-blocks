@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: hashed
+   :name: password-hashed
 
    :Required: false
    :Type: bool
@@ -22,6 +23,7 @@ Settings
    Set this value to :yaml:`false` to disable hashing.
 
 .. confval:: passwordPolicy
+   :name: password-passwordPolicy
 
    :Required: false
    :Type: string
@@ -33,6 +35,7 @@ Settings
    focus is changed to the password field.
 
 .. confval:: placeholder
+   :name: password-placeholder
 
    :Required: false
    :Type: string
@@ -40,6 +43,7 @@ Settings
    Placeholder text for the field.
 
 .. confval:: required
+   :name: password-required
 
    :Required: false
    :Type: boolean
@@ -48,6 +52,7 @@ Settings
    If set, the field becomes mandatory.
 
 .. confval:: size
+   :name: password-size
 
    :Required: false
    :Type: integer

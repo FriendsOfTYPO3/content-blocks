@@ -15,6 +15,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: radio-default
 
    :Required: false
    :Type: string|int
@@ -23,6 +24,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: items
+   :name: radio-items
 
    :Required: true
    :Type: array
@@ -63,7 +65,17 @@ Settings
             </trans-unit>
         </body>
 
-.. include:: /Snippets/AllowedCustomProperties.rst.txt
+.. confval:: allowedCustomProperties
+   :name: radio-allowedCustomProperties
+
+   :Required: false
+   :Type: array
+   :Default: ["itemsProcConfig"]
+
+   Sometimes it is needed to provide custom configuration for the :ref:`itemsProcFunc <t3tca:tca_property_itemsProcFunc>`
+   functionality. These extra properties need to be explicitly allowed via this
+   option. This option receives an array of those strings. By default, the
+   custom option :yaml:`itemsProcConfig` is allowed.
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-radio>`.
 

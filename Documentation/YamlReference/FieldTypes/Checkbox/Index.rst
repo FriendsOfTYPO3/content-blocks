@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: checkbox-default
 
    :Required: false
    :Type: integer (bit value)
@@ -23,6 +24,7 @@ Settings
    checkbox you need to calculate the bit representation.
 
 .. confval:: items
+   :name: checkbox-items
 
    :Required: false
    :Type: array
@@ -57,6 +59,7 @@ Settings
         </body>
 
 .. confval:: renderType
+   :name: checkbox-renderType
 
    :Required: false
    :Type: string
@@ -65,7 +68,18 @@ Settings
    *  :yaml:`checkboxToggle`
    *  :yaml:`checkboxLabeledToggle`
 
-.. include:: /Snippets/AllowedCustomProperties.rst.txt
+.. confval:: allowedCustomProperties
+   :name: checkbox-allowedCustomProperties
+
+   :Required: false
+   :Type: array
+   :Default: ["itemsProcConfig"]
+
+   Sometimes it is needed to provide custom configuration for the :ref:`itemsProcFunc <t3tca:tca_property_itemsProcFunc>`
+   functionality. These extra properties need to be explicitly allowed via this
+   option. This option receives an array of those strings. By default, the
+   custom option :yaml:`itemsProcConfig` is allowed.
+
 
 For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 

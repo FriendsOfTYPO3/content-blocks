@@ -40,6 +40,7 @@ Options
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: typeName
+   :name: page-type-typeName
 
    :Required: true
    :Type: integer

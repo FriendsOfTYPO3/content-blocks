@@ -13,6 +13,7 @@ Settings
 ========
 
 .. confval:: format
+   :name: number-format
 
    :Required: false
    :Type: string
@@ -21,6 +22,7 @@ Settings
    Possible values: `integer` (default) or `decimal`.
 
 .. confval:: default
+   :name: number-default
 
    :Required: false
    :Type: integer
@@ -29,6 +31,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: range
+   :name: number-range
 
    :Required: false
    :Type: array
@@ -50,6 +53,7 @@ Settings
         upper: 999
 
 .. confval:: required
+   :name: number-required
 
    :Required: false
    :Type: boolean
@@ -58,6 +62,7 @@ Settings
    If set, the field becomes mandatory.
 
 .. confval:: slider
+   :name: number-slider
 
    :Required: false
    :Type: array
@@ -75,9 +80,13 @@ Settings
 
    .. code-block:: yaml
 
-      range:
+      slider:
         step: 1
         width: 100
+
+   .. tip::
+
+      It is advised to also define a range property when using the slider, otherwise the slider will go from 0 to 10000.
 
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-number>`.
 
@@ -110,9 +119,8 @@ Advanced / use case
           lower: 10
           upper: 999
         slider:
-          range:
-            step: 1
-            width: 100
+          step: 1
+          width: 100
         valuePicker:
           items:
             - [ '100', 100 ]

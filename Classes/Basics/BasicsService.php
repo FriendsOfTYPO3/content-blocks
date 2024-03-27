@@ -58,20 +58,20 @@ class BasicsService
         return $fields;
     }
 
-    protected function applyBasicsToSubFields(array $fields): array
+    protected function applyBasicsToSubFields(array $fields, int $depth = 0): array
     {
+        if ($depth === 9) {
+            throw new \RuntimeException('Infinite loop in Basics processing detected.', 1711291137);
+        }
         $newFields = [];
         foreach ($fields as $field) {
             if (is_array($field['fields'] ?? null)) {
                 $field['fields'] = $this->applyBasicsToSubFields($field['fields']);
             }
             if (($field['type'] ?? '') === 'Basic') {
-                foreach ($this->basicsRegistry->getBasic($field['identifier'])->getFields() as $basicsField) {
-                    if (is_array($basicsField['fields'] ?? null)) {
-                        $basicsField['fields'] = $this->applyBasicsToSubFields($basicsField['fields']);
-                    }
-                    $newFields[] = $basicsField;
-                }
+                $basic = $this->basicsRegistry->getBasic($field['identifier']);
+                $appliedFields = $this->applyBasicsToSubFields($basic->getFields(), ++$depth);
+                $newFields = array_merge($newFields, $appliedFields);
             } else {
                 $newFields[] = $field;
             }

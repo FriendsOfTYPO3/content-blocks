@@ -125,7 +125,7 @@ Use as child table in Collection
 
 It is possible to create a new Record Type, which is used as a child table
 inside a Collection. This is simply done by defining
-:ref:`foreign_table <field_type_collection_foreign_table>` inside the Collection.
+:confval:`foreign_table <collection-foreign-table>` inside the Collection.
 This concept also works for type :ref:`Select <field_type_select>` (foreign_table)
 and type :ref:`Relation <field_type_relation>` (allowed). The only difference is
 that you reference existing records instead of creating new ones.

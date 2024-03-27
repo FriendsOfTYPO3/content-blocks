@@ -17,6 +17,7 @@ Arguments
 =========
 
 .. confval:: content-block
+   :name: language-generate-content-block
 
    :Required: true (false if :bash:`--extension` provided)
    :Type: string
@@ -27,6 +28,7 @@ Options
 =======
 
 .. confval:: print
+   :name: language-generate-print
 
    :Shortcut: p
    :Type: bool
@@ -34,6 +36,7 @@ Options
    Print Labels.xlf to terminal instead of writing to file system.
 
 .. confval:: extension
+   :name: language-generate-extension
 
    :Shortcut: e
    :Type: string

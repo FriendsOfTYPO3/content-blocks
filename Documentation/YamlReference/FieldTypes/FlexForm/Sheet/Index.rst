@@ -20,6 +20,7 @@ Settings
 --------
 
 .. confval:: identifier
+   :name: sheet-identifier
 
    :Required: true
    :Type: string
@@ -27,6 +28,7 @@ Settings
    A unique identifier
 
 .. confval:: label
+   :name: sheet-label
 
    :Required: false
    :Type: string
@@ -34,6 +36,7 @@ Settings
    Define a label. If not defined, :yaml:`identifier` is used as fallback.
 
 .. confval:: description
+   :name: sheet-description
 
    :Required: false
    :Type: string
@@ -41,6 +44,7 @@ Settings
    Define a description.
 
 .. confval:: linkTitle
+   :name: sheet-linkTitle
 
    :Required: false
    :Type: string

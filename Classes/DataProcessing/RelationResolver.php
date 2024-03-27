@@ -23,8 +23,8 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FieldType;
-use TYPO3\CMS\ContentBlocks\FieldConfiguration\FolderFieldConfiguration;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FolderFieldType;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\RelationHandler;
@@ -45,6 +45,7 @@ class RelationResolver
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected readonly FlexFormService $flexFormService,
+        protected readonly RelationResolverSession $relationResolverSession,
     ) {}
 
     public function setRequest(ServerRequestInterface $serverRequest): void
@@ -57,10 +58,18 @@ class RelationResolver
         TableDefinition $tableDefinition,
         array $data,
         string $table,
-    ): array {
+    ): ResolvedRelation {
+        $resolvedRelation = new ResolvedRelation();
+        $resolvedRelation->table = $table;
+        $resolvedRelation->raw = $data;
+        // @todo remove _PAGES_OVERLAY_UID in v13.
+        $identifier = $table . '-' . ($data['_PAGES_OVERLAY_UID'] ?? $data['_LOCALIZED_UID'] ?? $data['uid']);
+        $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
-            if (!$tcaFieldDefinition->getFieldType()->isRenderable()) {
+            $fieldType = $tcaFieldDefinition->getFieldType();
+            $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
+            if ($fieldTypeEnum->isStructureField()) {
                 continue;
             }
             $resolvedField = $this->processField(
@@ -71,7 +80,8 @@ class RelationResolver
             );
             $data[$tcaFieldDefinition->getUniqueIdentifier()] = $resolvedField;
         }
-        return $data;
+        $resolvedRelation->resolved = $data;
+        return $resolvedRelation;
     }
 
     public function processField(
@@ -81,6 +91,7 @@ class RelationResolver
         string $table
     ): mixed {
         $fieldType = $tcaFieldDefinition->getFieldType();
+        $tcaType = $fieldType::getTcaType();
         $recordIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
         if (!array_key_exists($recordIdentifier, $record)) {
             throw new \RuntimeException(
@@ -90,35 +101,35 @@ class RelationResolver
             );
         }
         $data = $record[$recordIdentifier];
-        if ($fieldType === FieldType::FILE) {
+        if ($tcaType === 'file') {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
             return $fileCollector->getFiles();
         }
-        if ($fieldType === FieldType::COLLECTION) {
+        if ($tcaType === 'inline') {
             return $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition);
         }
-        if ($fieldType === FieldType::CATEGORY) {
+        if ($tcaType === 'category') {
             return $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-        if ($fieldType === FieldType::RELATION) {
+        if ($tcaType === 'group') {
             return $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-        if ($fieldType === FieldType::FOLDER) {
+        if ($tcaType === 'folder') {
             $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
             $folders = GeneralUtility::trimExplode(',', (string)$data, true);
-            /** @var FolderFieldConfiguration $folderFieldConfiguration */
-            $folderFieldConfiguration = $tcaFieldDefinition->getFieldConfiguration();
-            $fileCollector->addFilesFromFolders($folders, $folderFieldConfiguration->isRecursive());
+            /** @var FolderFieldType $folderFieldType */
+            $folderFieldType = $tcaFieldDefinition->getFieldType();
+            $fileCollector->addFilesFromFolders($folders, $folderFieldType->isRecursive());
             return $fileCollector->getFiles();
         }
-        if ($fieldType === FieldType::SELECT) {
+        if ($tcaType === 'select') {
             return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
-        if ($fieldType === FieldType::FLEXFORM) {
+        if ($tcaType === 'flex') {
             return $this->flexFormService->convertFlexFormContentToArray($data);
         }
-        if ($fieldType === FieldType::JSON) {
+        if ($tcaType === 'json') {
             $platform = GeneralUtility::makeInstance(ConnectionPool::class)
                 ->getConnectionForTable($table)
                 ->getDatabasePlatform();
@@ -137,7 +148,7 @@ class RelationResolver
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
         if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
             $foreignTable = $tcaFieldConfig['config']['foreign_table'];
-            $result = $this->getRelations(
+            $resolvedRelations = $this->getRelations(
                 (string)($record[$uniqueIdentifier] ?? ''),
                 $foreignTable,
                 $tcaFieldConfig['config']['MM'] ?? '',
@@ -145,15 +156,14 @@ class RelationResolver
                 $parentTable,
                 $tcaFieldConfig['config'] ?? []
             );
-            $result = $this->enrichWithTableAndRawRecordInternal($result, $foreignTable);
             // If this table is defined by Content Blocks, process child relations.
             if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
-                $result = $this->processChildRelations($result);
+                $resolvedRelations = $this->processChildRelations($resolvedRelations);
             }
             if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
-                return $result[0] ?? null;
+                return $resolvedRelations[0] ?? null;
             }
-            return $result;
+            return $resolvedRelations;
         }
         if (
             in_array(
@@ -184,11 +194,6 @@ class RelationResolver
             $parentTable,
             $tcaFieldConfig['config'] ?? []
         );
-        $tableList = null;
-        if (str_contains($allowed, ',')) {
-            $tableList = $this->getTableListFromTableUidPairs($fieldValue);
-        }
-        $result = $this->enrichWithTableAndRawRecordInternal($result, $allowed, $tableList);
         $result = $this->processChildRelations($result);
         return $result;
     }
@@ -229,7 +234,6 @@ class RelationResolver
             $parentTable,
             $tcaFieldConfig['config'] ?? []
         );
-        $result = $this->enrichWithTableAndRawRecordInternal($result, $collectionTable);
         // If this table is defined by Content Blocks, process child relations.
         if ($this->tableDefinitionCollection->hasTable($collectionTable)) {
             $result = $this->processChildRelations($result);
@@ -237,45 +241,48 @@ class RelationResolver
         return $result;
     }
 
-    protected function enrichWithTableAndRawRecordInternal(array $data, string $allowed, ?array $tableList = null): array
+    /**
+     * @param ResolvedRelation[] $resolvedRelations
+     * @return ResolvedRelation[]
+     */
+    protected function processChildRelations(array $resolvedRelations): array
     {
-        foreach ($data as $index => $row) {
-            $currentTable = $tableList !== null ? $tableList[$index] : $allowed;
-            // Save the associated table for later use in ContentBlockDataDecorator.
-            $data[$index]['_table'] = $currentTable;
-            // Save raw record for later usage in ContentBlockDataDecorator.
-            $data[$index]['_raw'] = $row;
-        }
-        return $data;
-    }
-
-    protected function processChildRelations(array $data): array
-    {
-        foreach ($data as $index => $row) {
-            $currentTable = $row['_table'];
+        foreach ($resolvedRelations as $index => $resolvedRelation) {
             // If this table is not defined by Content Blocks, skip processing.
-            if (!$this->tableDefinitionCollection->hasTable($currentTable)) {
+            if (!$this->tableDefinitionCollection->hasTable($resolvedRelation->table)) {
                 continue;
             }
-            $tableDefinition = $this->tableDefinitionCollection->getTable($currentTable);
+            $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRelation->table);
+            $identifier = $resolvedRelation->table . '-' . $resolvedRelation->raw['uid'];
+            if ($this->relationResolverSession->hasRelation($identifier)) {
+                $resolvedRelations[$index] = $this->relationResolverSession->getRelation($identifier);
+                continue;
+            }
+            // Feed plain row into session. In case this record should be resolved inside itself,
+            // which would cause infinite recursion, this plain row will be used instead.
+            $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $childTcaFieldDefinition) {
-                $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $row);
+                $foreignTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $resolvedRelation->raw);
                 if ($foreignTypeDefinition === null) {
                     continue;
                 }
-                $data[$index][$childTcaFieldDefinition->getUniqueIdentifier()] = $this->processField(
+                $processedField = $this->processField(
                     $childTcaFieldDefinition,
                     $foreignTypeDefinition,
-                    $row,
-                    $currentTable,
+                    $resolvedRelation->raw,
+                    $resolvedRelation->table,
                 );
+                $resolvedRelation->resolved[$childTcaFieldDefinition->getUniqueIdentifier()] = $processedField;
             }
+            // Override previously set raw relation with resolved relation.
+            $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
         }
-        return $data;
+        return $resolvedRelations;
     }
 
     /**
      * @param array<string, mixed> $tcaFieldConf
+     * @return ResolvedRelation[]
      */
     protected function getRelations(
         string $uidList,
@@ -308,7 +315,12 @@ class RelationResolver
             }
             $translatedRecord = $pageRepository->getLanguageOverlay($tableName, $record);
             if ($translatedRecord !== null) {
-                $records[] = $translatedRecord;
+                $resolvedRelation = new ResolvedRelation();
+                // Save associated table and raw record for later usage.
+                $resolvedRelation->table = $tableName;
+                $resolvedRelation->raw = $translatedRecord;
+                $resolvedRelation->resolved = $translatedRecord;
+                $records[] = $resolvedRelation;
             }
         }
         return $records;
@@ -352,21 +364,5 @@ class RelationResolver
             return (int)$record['_PAGES_OVERLAY_UID'];
         }
         return (int)$record['uid'];
-    }
-
-    /**
-     * @return list<string>
-     */
-    protected function getTableListFromTableUidPairs(string $tableUidPairs): array
-    {
-        $tableUidList = GeneralUtility::trimExplode(',', $tableUidPairs);
-        $resultList = [];
-        foreach ($tableUidList as $tableUidPair) {
-            $parts = explode('_', $tableUidPair);
-            array_pop($parts);
-            $table = implode('_', $parts);
-            $resultList[] = $table;
-        }
-        return $resultList;
     }
 }

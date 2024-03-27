@@ -38,3 +38,15 @@ Title: {data.record.title}
 <f:if condition="{data.single_select}">
     Single Select: {data.single_select}
 </f:if>
+<f:if condition="{data.circular_relation}">
+    Circular relation uid: {data.circular_relation.0.circular_relation.0.uid}
+</f:if>
+<f:if condition="{data.circular_select}">
+    Circular select uid: {data.circular_select.circular_select.uid}
+</f:if>
+<f:if condition="{data.categories}">
+    <f:for each="{data.categories}" as="category">
+        Category table: {category.tableName}
+        {category.title}
+    </f:for>
+</f:if>

@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: eval
+   :name: slug-eval
 
    :Required: false
    :Type: string
@@ -21,6 +22,7 @@ Settings
    :yaml:`unique`, :yaml:`uniqueInSite` or :yaml:`uniqueInPid`.
 
 .. confval:: generatorOptions
+   :name: slug-generatorOptions
 
    :Required: false
    :Type: array

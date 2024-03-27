@@ -18,7 +18,7 @@ setting :yaml:`table`. Collections are always hidden in the **List**
 module. Usually Collections only have one type. To realise multiple types it is
 recommended to extract the definition to a separate
 :ref:`Record Type <yaml_reference_record_type_multiple_types>` and use
-:ref:`foreign_table <field_type_collection_foreign_table>` instead.
+:confval:`foreign_table <collection-foreign-table>` instead.
 
 Custom icon
 ===========
@@ -32,9 +32,48 @@ or gif files. These should be 64x64px.
 Settings
 ========
 
-.. include:: /Snippets/LabelField.rst.txt
+.. confval:: labelField
+   :name: collection-labelField
+
+   :Required: true
+   :Type: string|array
+
+   Defines which field should be used as the title of the record. If not
+   defined, the first valid child field will be used as the label. It is
+   possible to define an array of fields, which will be displayed
+   comma-separated in the backend.
+
+   .. code-block:: yaml
+
+       # a single field for the label
+       labelField: title
+
+       # multiple fields will be displayed comma-separated
+       labelField:
+           - title
+           - text
+
+.. confval:: fallbackLabelFields
+   :name: collection-fallbackLabelFields
+
+   :Required: false
+   :Type: array
+
+   Defines which fields should be used as fallback, if :yaml:`labelField` is not
+   filled. The first filled field which is found will be used. Can only be used
+   if there is only one :yaml:`labelField` field defined.
+
+   .. code-block:: yaml
+
+       # fallback fields will be used, if title from labelField is empty
+       labelField: title
+       fallbackLabelFields:
+           - text1
+           - text2
+
 
 .. confval:: table
+   :name: collection-table
 
    :Required: false
    :Type: string
@@ -47,6 +86,7 @@ Settings
        table: tx_vendor_my_custom_table_name
 
 .. confval:: fields
+   :name: collection-fields
 
    :Required: true
    :Type: array
@@ -66,6 +106,7 @@ Settings
           type: File
 
 .. confval:: minitems
+   :name: collection-minitems
 
    :Required: false
    :Type: integer
@@ -75,6 +116,7 @@ Settings
    prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: maxitems
+   :name: collection-maxitems
 
    :Required: false
    :Type: integer
@@ -84,6 +126,7 @@ Settings
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: appearance.collapseAll
+   :name: collection-appearance.collapseAll
 
    :Required: false
    :Type: bool|null
@@ -94,6 +137,7 @@ Settings
    * false: Show all child records expanded
 
 .. confval:: appearance.levelLinksPosition
+   :name: collection-appearance.levelLinksPosition
 
    :Required: false
    :Type: string
@@ -102,8 +146,8 @@ Settings
    Defines where to show the "New record" link in relation to the child records.
    Valid keywords are :yaml:`top`, :yaml:`bottom` and :yaml:`both`.
 
-.. _field_type_collection_foreign_table:
 .. confval:: foreign_table
+   :name: collection-foreign-table
 
    :Required: false
    :Type: string (table)
@@ -117,8 +161,8 @@ Settings
       When you use :yaml:`foreign_table` it is not possible to define
       :yaml:`fields` anymore. They will not be evaluated.
 
-.. _field_type_collection_foreign_field:
 .. confval:: foreign_field
+   :name: collection-foreign_field
 
    :Required: false
    :Type: string (field)
@@ -128,13 +172,15 @@ Settings
    the TCA option :ref:`foreign_field <t3tca:columns-inline-properties-foreign-field>`.
 
 .. confval:: shareAcrossTables
+   :name: collection-shareAcrossTables
 
    :Required: false
    :Type: boolean
    :Default: false
 
    Allows to reference a Record Type across multiple **tables**, if
-   :ref:`foreign_table <field_type_collection_foreign_table>` is used.
+   :confval:`foreign_table <collection-foreign-table>`
+   is used.
 
    Make sure to add this to **every** Collection, which shares the table.
 
@@ -143,13 +189,15 @@ Settings
    The field name can be overridden by defining :yaml:`foreign_table_field` explicitly.
 
 .. confval:: shareAcrossFields
+   :name: collection-shareAcrossFields
 
    :Required: false
    :Type: boolean
    :Default: false
 
    Allows to reference a Record Type across multiple **fields**, if
-   :ref:`foreign_table <field_type_collection_foreign_table>` is used.
+   :confval:`foreign_table <collection-foreign-table>`
+   is used.
 
    Make sure to add this to **every** Collection, which shares the table.
 

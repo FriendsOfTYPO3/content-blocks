@@ -14,6 +14,7 @@ Settings
 ========
 
 .. confval:: default
+   :name: link-default
 
    :Required: false
    :Type: string
@@ -22,6 +23,7 @@ Settings
    Default value set if a new record is created.
 
 .. confval:: required
+   :name: link-required
 
    :Required: false
    :Type: boolean
@@ -30,6 +32,7 @@ Settings
    If set, the field becomes mandatory.
 
 .. confval:: allowedTypes
+   :name: link-allowedTypes
 
    :Required: false
    :Type: array
@@ -72,5 +75,5 @@ Advanced / use case
         required: true
         valuePicker:
           items:
-            - [ 'https://www.typo3.org', 'TYPO3 CMS' ]
-            - [ 'https://www.typo3.com', 'TYPO3 GmbH' ]
+            - [ 'TYPO3 CMS', 'https://www.typo3.org' ]
+            - [ 'TYPO3 GmbH', 'https://www.typo3.com' ]

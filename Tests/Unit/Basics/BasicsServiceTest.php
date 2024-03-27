@@ -41,20 +41,22 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'SimpleBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'SimpleBasic',
                     [
-                        'identifier' => 'foo',
-                        'type' => 'Text',
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
                     ],
-                    [
-                        'identifier' => 'bar',
-                        'type' => 'Textarea',
-                    ],
-                ],
-            ),
+                ),
+            ],
             'expected' => [
                 'fields' => [
                     [
@@ -86,26 +88,28 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'PaletteBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'PaletteBasic',
                     [
-                        'identifier' => 'a_palette',
-                        'type' => 'Palette',
-                        'fields' => [
-                            [
-                                'identifier' => 'foo',
-                                'type' => 'Text',
-                            ],
-                            [
-                                'identifier' => 'bar',
-                                'type' => 'Textarea',
+                        [
+                            'identifier' => 'a_palette',
+                            'type' => 'Palette',
+                            'fields' => [
+                                [
+                                    'identifier' => 'foo',
+                                    'type' => 'Text',
+                                ],
+                                [
+                                    'identifier' => 'bar',
+                                    'type' => 'Textarea',
+                                ],
                             ],
                         ],
                     ],
-                ],
-            ),
+                ),
+            ],
             'expected' => [
                 'fields' => [
                     [
@@ -143,10 +147,32 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'TabBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'TabBasic',
+                    [
+                        [
+                            'identifier' => 'a_tab',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
+                    ],
+                ),
+            ],
+            'expected' => [
+                'fields' => [
+                    [
+                        'identifier' => 'standard',
+                        'type' => 'link',
+                    ],
                     [
                         'identifier' => 'a_tab',
                         'type' => 'Tab',
@@ -160,7 +186,52 @@ final class BasicsServiceTest extends UnitTestCase
                         'type' => 'Textarea',
                     ],
                 ],
-            ),
+            ],
+        ];
+
+        yield 'Nested Basics' => [
+            'yaml' => [
+                'fields' => [
+                    [
+                        'identifier' => 'standard',
+                        'type' => 'link',
+                    ],
+                    [
+                        'identifier' => 'TabBasic',
+                        'type' => 'Basic',
+                    ],
+                ],
+            ],
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'TabBasic',
+                    [
+                        [
+                            'identifier' => 'a_tab',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'FieldBasic',
+                            'type' => 'Basic',
+                        ],
+                    ],
+                ),
+                new LoadedBasic(
+                    'bar',
+                    'FieldBasic',
+                    [
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
+                    ],
+                ),
+            ],
             'expected' => [
                 'fields' => [
                     [
@@ -202,20 +273,22 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'SimpleBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'SimpleBasic',
                     [
-                        'identifier' => 'foo',
-                        'type' => 'Text',
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
                     ],
-                    [
-                        'identifier' => 'bar',
-                        'type' => 'Textarea',
-                    ],
-                ],
-            ),
+                ),
+            ],
             'expected' => [
                 'fields' => [
                     [
@@ -243,10 +316,12 @@ final class BasicsServiceTest extends UnitTestCase
 
     #[DataProvider('basicsAreAppliedByBasicsTypeDataProvider')]
     #[Test]
-    public function basicsAreAppliedByBasicsType(array $yaml, LoadedBasic $basic, array $expected): void
+    public function basicsAreAppliedByBasicsType(array $yaml, array $basics, array $expected): void
     {
         $basicsRegistry = new BasicsRegistry();
-        $basicsRegistry->register($basic);
+        foreach ($basics as $basic) {
+            $basicsRegistry->register($basic);
+        }
 
         $basicsService = new BasicsService($basicsRegistry);
 
@@ -267,20 +342,22 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'SimpleBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'SimpleBasic',
                     [
-                        'identifier' => 'foo',
-                        'type' => 'Text',
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
                     ],
-                    [
-                        'identifier' => 'bar',
-                        'type' => 'Textarea',
-                    ],
-                ],
-            ),
+                ),
+            ],
             'expected' => [
                 'basics' => [
                     'SimpleBasic',
@@ -314,26 +391,28 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'PaletteBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'PaletteBasic',
                     [
-                        'identifier' => 'a_palette',
-                        'type' => 'Palette',
-                        'fields' => [
-                            [
-                                'identifier' => 'foo',
-                                'type' => 'Text',
-                            ],
-                            [
-                                'identifier' => 'bar',
-                                'type' => 'Textarea',
+                        [
+                            'identifier' => 'a_palette',
+                            'type' => 'Palette',
+                            'fields' => [
+                                [
+                                    'identifier' => 'foo',
+                                    'type' => 'Text',
+                                ],
+                                [
+                                    'identifier' => 'bar',
+                                    'type' => 'Textarea',
+                                ],
                             ],
                         ],
                     ],
-                ],
-            ),
+                ),
+            ],
             'expected' => [
                 'basics' => [
                     'PaletteBasic',
@@ -373,10 +452,35 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => new LoadedBasic(
-                'foo',
-                'TabBasic',
-                [
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'TabBasic',
+                    [
+                        [
+                            'identifier' => 'a_tab',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
+                    ],
+                ),
+            ],
+            'expected' => [
+                'basics' => [
+                    'TabBasic',
+                ],
+                'fields' => [
+                    [
+                        'identifier' => 'standard',
+                        'type' => 'link',
+                    ],
                     [
                         'identifier' => 'a_tab',
                         'type' => 'Tab',
@@ -390,10 +494,119 @@ final class BasicsServiceTest extends UnitTestCase
                         'type' => 'Textarea',
                     ],
                 ],
-            ),
+            ],
+        ];
+
+        yield 'Nested basics' => [
+            'yaml' => [
+                'basics' => [
+                    'TabBasic',
+                ],
+                'fields' => [
+                    [
+                        'identifier' => 'standard',
+                        'type' => 'link',
+                    ],
+                ],
+            ],
+            'basic' => [
+                new LoadedBasic(
+                    'foo',
+                    'TabBasic',
+                    [
+                        [
+                            'identifier' => 'a_tab',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'FieldBasic',
+                            'type' => 'Basic',
+                        ],
+                    ],
+                ),
+                new LoadedBasic(
+                    'bar',
+                    'FieldBasic',
+                    [
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
+                    ],
+                ),
+            ],
             'expected' => [
                 'basics' => [
                     'TabBasic',
+                ],
+                'fields' => [
+                    [
+                        'identifier' => 'standard',
+                        'type' => 'link',
+                    ],
+                    [
+                        'identifier' => 'a_tab',
+                        'type' => 'Tab',
+                    ],
+                    [
+                        'identifier' => 'foo',
+                        'type' => 'Text',
+                    ],
+                    [
+                        'identifier' => 'bar',
+                        'type' => 'Textarea',
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'multiple basics are appended by top level basics array' => [
+            'yaml' => [
+                'basics' => [
+                    'Basic1',
+                    'Basic2',
+                ],
+                'fields' => [
+                    [
+                        'identifier' => 'standard',
+                        'type' => 'link',
+                    ],
+                ],
+            ],
+            'basics' => [
+                new LoadedBasic(
+                    'foo',
+                    'Basic1',
+                    [
+                        [
+                            'identifier' => 'a_tab',
+                            'type' => 'Tab',
+                        ],
+                        [
+                            'identifier' => 'foo',
+                            'type' => 'Text',
+                        ],
+                    ]
+                ),
+                new LoadedBasic(
+                    'foo',
+                    'Basic2',
+                    [
+                        [
+                            'identifier' => 'bar',
+                            'type' => 'Textarea',
+                        ],
+                    ]
+                ),
+            ],
+            'expected' => [
+                'basics' => [
+                    'Basic1',
+                    'Basic2',
                 ],
                 'fields' => [
                     [
@@ -419,88 +632,14 @@ final class BasicsServiceTest extends UnitTestCase
 
     #[DataProvider('basicsAreAppendedByTopLevelBasicsArrayDataProvider')]
     #[Test]
-    public function basicsAreAppendedByTopLevelBasicsArray(array $yaml, LoadedBasic $basic, array $expected): void
+    public function basicsAreAppendedByTopLevelBasicsArray(array $yaml, array $basics, array $expected): void
     {
         $basicsRegistry = new BasicsRegistry();
-        $basicsRegistry->register($basic);
+        foreach ($basics as $basic) {
+            $basicsRegistry->register($basic);
+        }
 
         $basicsService = new BasicsService($basicsRegistry);
-
-        self::assertSame($expected, $basicsService->applyBasics($yaml));
-    }
-
-    #[Test]
-    public function multipleBasicsAreAppendedByTopLevelBasicsArray(): void
-    {
-        $basic1 = new LoadedBasic(
-            'foo',
-            'Basic1',
-            [
-                [
-                    'identifier' => 'a_tab',
-                    'type' => 'Tab',
-                ],
-                [
-                    'identifier' => 'foo',
-                    'type' => 'Text',
-                ],
-            ]
-        );
-
-        $basic2 = new LoadedBasic(
-            'foo',
-            'Basic2',
-            [
-                [
-                    'identifier' => 'bar',
-                    'type' => 'Textarea',
-                ],
-            ]
-        );
-
-        $basicsRegistry = new BasicsRegistry();
-        $basicsRegistry->register($basic1);
-        $basicsRegistry->register($basic2);
-
-        $basicsService = new BasicsService($basicsRegistry);
-
-        $yaml = [
-            'basics' => [
-                'Basic1',
-                'Basic2',
-            ],
-            'fields' => [
-                [
-                    'identifier' => 'standard',
-                    'type' => 'link',
-                ],
-            ],
-        ];
-
-        $expected = [
-            'basics' => [
-                'Basic1',
-                'Basic2',
-            ],
-            'fields' => [
-                [
-                    'identifier' => 'standard',
-                    'type' => 'link',
-                ],
-                [
-                    'identifier' => 'a_tab',
-                    'type' => 'Tab',
-                ],
-                [
-                    'identifier' => 'foo',
-                    'type' => 'Text',
-                ],
-                [
-                    'identifier' => 'bar',
-                    'type' => 'Textarea',
-                ],
-            ],
-        ];
 
         self::assertSame($expected, $basicsService->applyBasics($yaml));
     }
@@ -541,5 +680,47 @@ final class BasicsServiceTest extends UnitTestCase
 
         $basicsRegistry->register($basic1);
         $basicsRegistry->register($basic2);
+    }
+
+    #[Test]
+    public function nestedBasicsInfiniteLoopDetected(): void
+    {
+        $basic1 = new LoadedBasic(
+            'foo',
+            'Basic1',
+            [
+                [
+                    'identifier' => 'Basic2',
+                    'type' => 'Basic',
+                ],
+            ]
+        );
+
+        $basic2 = new LoadedBasic(
+            'foo',
+            'Basic2',
+            [
+                [
+                    'identifier' => 'Basic1',
+                    'type' => 'Basic',
+                ],
+            ]
+        );
+
+        $yaml = [
+            'basics' => [
+                'Basic1',
+            ],
+        ];
+
+        $basicsRegistry = new BasicsRegistry();
+        $basicsRegistry->register($basic1);
+        $basicsRegistry->register($basic2);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionCode(1711291137);
+
+        $basicsService = new BasicsService($basicsRegistry);
+        $basicsService->applyBasics($yaml);
     }
 }
