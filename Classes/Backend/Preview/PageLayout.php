@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\VarExporter\Exception\NotInstantiableTypeException;
 use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Module\ModuleData;
@@ -153,8 +154,15 @@ class PageLayout
             );
             // Avoid flooding cache with redundant data.
             if ($resolvedData->resolved !== $pageRow) {
-                $exported = 'return ' . VarExporter::export($resolvedData) . ';';
-                $this->cache->set($cacheIdentifier, $exported);
+                try {
+                    $exported = 'return ' . VarExporter::export($resolvedData) . ';';
+                    $this->cache->set($cacheIdentifier, $exported);
+                } catch (NotInstantiableTypeException) {
+                    // @todo objects of class TYPO3\CMS\Core\Resource\File can't be exported
+                    // @todo due to attached storage, which itself has EventDispatcher attached
+                    // @todo which eventually leads to illegal Closures for EventListeners.
+                    // @todo Right now, this happens for relations of type "folder".
+                }
             }
         }
         $contentBlockData = $this->contentBlockDataDecorator->decorate(
