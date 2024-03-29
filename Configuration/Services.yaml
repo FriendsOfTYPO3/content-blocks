@@ -134,6 +134,7 @@ services:
         schedulable: false
       - name: 'console.command'
         command: 'make:content-block'
+        schedulable: false
 
   TYPO3\CMS\ContentBlocks\Command\ListContentBlocksCommand:
     tags:
