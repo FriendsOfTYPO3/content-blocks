@@ -44,6 +44,10 @@ is `content_blocks`.
 Refer to the [Documentation](https://docs.typo3.org/c/contentblocks/content-blocks/main/en-us)
 on how to use the Content Blocks API.
 
+## JSON Schema
+
+Enable validation and auto-completion with [JSON schema](https://github.com/nhovratov/content-blocks-json-schema)
+
 ## Developing
 
 There is a ddev setup ready to use. Ensure [ddev](https://github.com/ddev/ddev)
