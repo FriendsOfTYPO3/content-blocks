@@ -24,6 +24,24 @@ considered. Therefore, it is advised to provide an own preview for custom
 Content Elements. Previews for **Page Types** are displayed at the top of the
 content area and beneath the page title.
 
+.. note::
+
+   In backend context, all hidden relations like Collections or file references
+   are displayed by default. Thus, the integrator should style those hidden
+   elements accordingly or simply not render them.
+
+   .. code-block:: html
+
+      <!-- Hidden relations like Collections -->
+      <f:for each="{data.relations}" as="item">
+          <f:if condition="{item._raw.hidden}"><!-- Style or hide --></f:if>
+      </f:for>
+
+      <!-- Hidden file references -->
+      <f:for each="{data.images}" as="file">
+          <f:if condition="{file.properties.hidden}"><!-- Style or hide --></f:if>
+      </f:for>
+
 See also:
 
 *  Learn more about :ref:`templating <cb_templating>`.
