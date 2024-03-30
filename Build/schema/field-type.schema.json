@@ -207,8 +207,15 @@
 						"type": "object",
 						"properties": {
 							"startingPoints": {
-								"type": "string",
-								"description": "Allows to set one or more roots (category uids), from which the categories should be taken from."
+								"description": "Allows to set one or more roots (category uids), from which the categories should be taken from.",
+								"oneOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "integer"
+									}
+								]
 							}
 						}
 					}
@@ -372,6 +379,10 @@
 					},
 					"valuePicker": {
 						"$ref": "#/$defs/valuePicker"
+					},
+					"autocomplete": {
+						"type": "boolean",
+						"description": "If set, this adds an attribute which allows the browser auto filling the field."
 					}
 				}
 			}
@@ -443,6 +454,10 @@
 					"required": {
 						"type": "boolean",
 						"description": "If set, the field will become mandatory."
+					},
+					"autocomplete": {
+						"type": "boolean",
+						"description": "If set, this adds an attribute which allows the browser auto filling the field."
 					}
 				}
 			}
@@ -483,6 +498,302 @@
 					},
 					"cropVariants": {
 						"type": "object"
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Json"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"cols": {
+						"type": "integer",
+						"description": "Abstract value for the width of the <textarea> field.",
+						"minimum": 10,
+						"maximum": 30
+					},
+					"rows": {
+						"type": "integer",
+						"description": "Abstract value for the height of the <textarea> field.",
+						"minimum": 0,
+						"maximum": 20
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"readonly": {
+						"type": "boolean",
+						"description": "If set, the field will be readonly."
+					},
+					"enableCodeEditor": {
+						"type": "boolean",
+						"description": "If set, code highlighting is available."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Language"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "integer",
+						"description": "The default uid of a language."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"readonly": {
+						"type": "boolean",
+						"description": "If set, the field will be readonly."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Link"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"default": {
+						"type": "integer",
+						"description": "Default value set if a new record is created."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"allowedTypes": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"page",
+								"url",
+								"file",
+								"folder",
+								"email",
+								"telephone",
+								"record"
+							]
+						}
+					},
+					"valuePicker": {
+						"$ref": "#/$defs/valuePicker"
+					},
+					"autocomplete": {
+						"type": "boolean",
+						"description": "If set, this adds an attribute which allows the browser auto filling the field."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Number"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"format": {
+						"type": "string",
+						"enum": ["integer", "decimal"],
+						"description": "The format for the number."
+					},
+					"default": {
+						"type": "integer",
+						"description": "Default value set if a new record is created."
+					},
+					"range": {
+						"type": "object",
+						"properties": {
+							"lower": {
+								"type": "integer"
+							},
+							"upper": {
+								"type": "integer"
+							}
+						}
+					},
+					"slider": {
+						"type": "object",
+						"properties": {
+							"step": {
+								"type": "integer"
+							},
+							"width": {
+								"type": "integer"
+							}
+						}
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"valuePicker": {
+						"$ref": "#/$defs/valuePicker"
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Palette"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"fields": {
+						"type": "array",
+						"items": {
+							"$ref": "#/"
+						}
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Password"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"hashed": {
+						"type": "boolean",
+						"description": "Whether the password should be hashed with the configured hashing algorithm.",
+						"default": "true"
+					},
+					"passwordPolicy": {
+						"type": "string",
+						"description": "The password policy will ensure, that the new password complies with the configured password policy."
+					},
+					"placeholder": {
+						"type": "string",
+						"description": "Placeholder text for the field."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field will become mandatory."
+					},
+					"size": {
+						"type": "integer",
+						"description": "Abstract value for the width of the <input> field.",
+						"minimum": 10,
+						"maximum": 20
+					},
+					"fieldControl": {
+						"type": "object",
+						"properties": {
+							"passwordGenerator": {
+								"type": "object",
+								"properties": {
+									"renderType": {
+										"enum": [
+											"passwordGenerator"
+										]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Slug"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"eval": {
+						"type": "string",
+						"description": "Configuration of field evaluation.",
+						"enum": [
+							"unique",
+							"uniqueInSite",
+							"uniqueInPid"
+						]
+					},
+					"generatorOptions": {
+						"type": "array",
+						"description": "Field names that will be considered during slug construction."
+					},
+					"fallbackCharacter": {
+						"type": "string",
+						"description": "Character that represents the separator of slug sections, that contain the fieldSeparator."
+					},
+					"prependSlash": {
+						"type": "boolean",
+						"description": "Defines whether a slug field should contain a prepending slash."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Uuid"
+					}
+				}
+			},
+			"then": {
+				"properties": {
+					"size": {
+						"type": "integer",
+						"description": "Abstract value for the height of the <textarea> field.",
+						"minimum": 10,
+						"maximum": 20
+					},
+					"version": {
+						"type": "integer",
+						"description": "Version for the uuid.",
+						"default": 4,
+						"enum": [
+							"1",
+							"3",
+							"4",
+							"5",
+							"6",
+							"7"
+						]
+					},
+					"enableCopyToClipboard": {
+						"type": "boolean",
+						"description": "If set to false, the button for copying the uuid into the clipboard will not be rendered."
 					}
 				}
 			}
