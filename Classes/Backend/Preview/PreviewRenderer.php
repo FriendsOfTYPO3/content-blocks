@@ -83,7 +83,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             if ($resolvedData->resolved !== $record) {
                 try {
                     $exported = 'return ' . VarExporter::export($resolvedData) . ';';
-                    $this->cache->set($cacheIdentifier, $exported);
+                    $this->cache->set($cacheIdentifier, $exported, ['content_blocks_preview'], 0);
                 } catch (NotInstantiableTypeException) {
                     // @todo objects of class TYPO3\CMS\Core\Resource\File can't be exported
                     // @todo due to attached storage, which itself has EventDispatcher attached
