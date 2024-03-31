@@ -70,7 +70,7 @@ in TypoScript. Normally, these are only Content Elements.
    This is the same as triggering the rendering with :html:`f:cObject` view
    helper:
 
-   .. code-block::
+   .. code-block:: html
 
       <f:cObject typoscriptObjectPath="tt_content.example_text" table="tt_content" data="{data}"/>
 
