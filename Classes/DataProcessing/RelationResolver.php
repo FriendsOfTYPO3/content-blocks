@@ -102,9 +102,7 @@ class RelationResolver
         }
         $data = $record[$recordIdentifier];
         if ($tcaType === 'file') {
-            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
-            $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
-            return $fileCollector->getFiles();
+            return $this->processFileReference($table, $recordIdentifier, $record);
         }
         if ($tcaType === 'inline') {
             return $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition);
@@ -116,12 +114,7 @@ class RelationResolver
             return $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record);
         }
         if ($tcaType === 'folder') {
-            $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
-            $folders = GeneralUtility::trimExplode(',', (string)$data, true);
-            /** @var FolderFieldType $folderFieldType */
-            $folderFieldType = $tcaFieldDefinition->getFieldType();
-            $fileCollector->addFilesFromFolders($folders, $folderFieldType->isRecursive());
-            return $fileCollector->getFiles();
+            return $this->processFolder($data, $tcaFieldDefinition);
         }
         if ($tcaType === 'select') {
             return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
@@ -130,10 +123,7 @@ class RelationResolver
             return $this->flexFormService->convertFlexFormContentToArray($data);
         }
         if ($tcaType === 'json') {
-            $platform = GeneralUtility::makeInstance(ConnectionPool::class)
-                ->getConnectionForTable($table)
-                ->getDatabasePlatform();
-            return Type::getType('json')->convertToPHPValue($data, $platform);
+            return $this->processJson($table, $data);
         }
         return $data;
     }
@@ -239,6 +229,35 @@ class RelationResolver
             $result = $this->processChildRelations($result);
         }
         return $result;
+    }
+
+    protected function processFileReference(string $table, string $recordIdentifier, array $record): array
+    {
+        $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
+        $fileCollector->addFilesFromRelation($table, $recordIdentifier, $record);
+        $files = $fileCollector->getFiles();
+        return $files;
+    }
+
+    protected function processFolder(string|int|null $data, TcaFieldDefinition $tcaFieldDefinition): array
+    {
+        $fileCollector = GeneralUtility::makeInstance(FileCollector::class);
+        $folders = GeneralUtility::trimExplode(',', (string)$data, true);
+        /** @var FolderFieldType $folderFieldType */
+        $folderFieldType = $tcaFieldDefinition->getFieldType();
+        $fileCollector->addFilesFromFolders($folders, $folderFieldType->isRecursive());
+        $files = $fileCollector->getFiles();
+        return $files;
+    }
+
+    protected function processJson(string $table, string|null $data): array|bool|null
+    {
+        $platform = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable($table)
+            ->getDatabasePlatform();
+        $jsonType = Type::getType('json');
+        $phpArray = $jsonType->convertToPHPValue($data, $platform);
+        return $phpArray;
     }
 
     /**
