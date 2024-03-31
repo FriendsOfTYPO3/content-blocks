@@ -101,30 +101,17 @@ class RelationResolver
             );
         }
         $data = $record[$recordIdentifier];
-        if ($tcaType === 'file') {
-            return $this->processFileReference($table, $recordIdentifier, $record);
-        }
-        if ($tcaType === 'inline') {
-            return $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition);
-        }
-        if ($tcaType === 'category') {
-            return $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record);
-        }
-        if ($tcaType === 'group') {
-            return $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record);
-        }
-        if ($tcaType === 'folder') {
-            return $this->processFolder($data, $tcaFieldDefinition);
-        }
-        if ($tcaType === 'select') {
-            return $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record);
-        }
-        if ($tcaType === 'flex') {
-            return $this->flexFormService->convertFlexFormContentToArray($data);
-        }
-        if ($tcaType === 'json') {
-            return $this->processJson($table, $data);
-        }
+        $data = match ($tcaType) {
+            'file' => $this->processFileReference($table, $recordIdentifier, $record),
+            'inline' => $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition),
+            'category' => $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record),
+            'group' => $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record),
+            'folder' => $this->processFolder($data, $tcaFieldDefinition),
+            'select' => $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record),
+            'flex' => $this->flexFormService->convertFlexFormContentToArray($data),
+            'json' => $this->processJson($table, $data),
+            default => $data,
+        };
         return $data;
     }
 
