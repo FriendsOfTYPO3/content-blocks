@@ -39,7 +39,7 @@ use TYPO3\CMS\Frontend\Resource\FileCollector;
  */
 class RelationResolver
 {
-    protected ?ServerRequestInterface $serverRequest = null;
+    protected ?ServerRequestInterface $request = null;
 
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
@@ -50,7 +50,7 @@ class RelationResolver
 
     public function setRequest(ServerRequestInterface $serverRequest): void
     {
-        $this->serverRequest = $serverRequest;
+        $this->request = $serverRequest;
     }
 
     public function resolve(
@@ -352,7 +352,7 @@ class RelationResolver
 
     protected function getPageRepository(): PageRepository
     {
-        $frontendController = $this->serverRequest?->getAttribute('frontend.controller');
+        $frontendController = $this->request?->getAttribute('frontend.controller');
         if (
             $frontendController instanceof TypoScriptFrontendController
             && $frontendController->sys_page instanceof PageRepository
