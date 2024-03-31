@@ -173,6 +173,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Title Relation: Custom Record 2', $html);
     }
 
+    #[Test]
     public function vendorPrefixedFieldsCanBeAccessedByNormalIdentifier(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/vendor_prefix.csv');
