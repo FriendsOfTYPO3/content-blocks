@@ -123,10 +123,12 @@ class RelationResolver
     ): mixed {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
         $uniqueIdentifier = $tcaFieldDefinition->getUniqueIdentifier();
-        if (($tcaFieldConfig['config']['foreign_table'] ?? '') !== '') {
-            $foreignTable = $tcaFieldConfig['config']['foreign_table'];
+        $renderType = $tcaFieldConfig['config']['renderType'] ?? '';
+        $foreignTable = $tcaFieldConfig['config']['foreign_table'] ?? '';
+        $rawValue = $record[$uniqueIdentifier] ?? '';
+        if ($foreignTable !== '') {
             $resolvedRelations = $this->getRelations(
-                (string)($record[$uniqueIdentifier] ?? ''),
+                (string)$rawValue,
                 $foreignTable,
                 $tcaFieldConfig['config']['MM'] ?? '',
                 $this->getUidOfCurrentRecord($record),
@@ -137,21 +139,22 @@ class RelationResolver
             if ($this->tableDefinitionCollection->hasTable($foreignTable)) {
                 $resolvedRelations = $this->processChildRelations($resolvedRelations);
             }
-            if (($tcaFieldConfig['config']['renderType'] ?? '') === 'selectSingle') {
+            // For convenience selectSingle is returned as single value, even though
+            // renderType should normally only be relevant in FormEngine context.
+            if ($renderType === 'selectSingle') {
                 return $resolvedRelations[0] ?? null;
             }
             return $resolvedRelations;
         }
-        if (
-            in_array(
-                $tcaFieldConfig['config']['renderType'] ?? '',
-                ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'],
-                true
-            )
-        ) {
-            return ($record[$uniqueIdentifier] ?? '') !== '' ? explode(',', $record[$uniqueIdentifier]) : [];
+        $multiValueRenderTypes = ['selectCheckBox', 'selectSingleBox', 'selectMultipleSideBySide'];
+        if (in_array($renderType, $multiValueRenderTypes, true)) {
+            if ($rawValue === '') {
+                return [];
+            }
+            $valueAsList = explode(',', $rawValue);
+            return $valueAsList;
         }
-        return $record[$uniqueIdentifier] ?? '';
+        return $rawValue;
     }
 
     protected function processRelation(

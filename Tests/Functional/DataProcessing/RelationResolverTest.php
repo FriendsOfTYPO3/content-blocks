@@ -642,6 +642,50 @@ final class RelationResolverTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function selectMultipleSideBySideWithOneValueConvertedToArray(): void
+    {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
+        $fieldTypeRegistry = $this->get(FieldTypeRegistry::class);
+        $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_multiple');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_select_multiple' => '1',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame(['1'], $result);
+    }
+
+    #[Test]
+    public function selectMultipleSideBySideWithEmptyOneValueConvertedToArray(): void
+    {
+        $simpleTcaSchemaFactory = $this->get(SimpleTcaSchemaFactory::class);
+        $fieldTypeRegistry = $this->get(FieldTypeRegistry::class);
+        $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
+        $tableDefinitionCollection = $this->get(TableDefinitionCollectionFactory::class)->create($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $tableDefinition = $tableDefinitionCollection->getTable('tt_content');
+        $elementDefinition = $tableDefinition->getContentTypeDefinitionCollection()->getType('typo3tests_contentelementb');
+        $fieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField('typo3tests_contentelementb_select_multiple');
+        $dummyRecord = [
+            'uid' => 1,
+            'typo3tests_contentelementb_select_multiple' => '',
+        ];
+
+        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+
+        $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
+
+        self::assertSame([], $result);
+    }
+
+    #[Test]
     public function canResolveSelectForeignTableSingle(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/select_foreign.csv');
