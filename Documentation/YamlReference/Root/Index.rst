@@ -44,9 +44,10 @@ Common root options
    :Type: boolean
    :Default: true
 
-   By default, all fields are prefixed with the name of the content block to
-   prevent collisions. In order to better reuse fields between content blocks,
-   it can be useful to deactivate this option. Read more about
+   The default behavior is to convert the both :yaml:`name` parts into a prefix.
+   All dashes are removed in this process and the parts are combined with an
+   underscore to prevent collisions. In order to better reuse fields between
+   Content Blocks, it can be useful to deactivate this option. Read more about
    :ref:`reusing fields here <cb_reuse_existing_fields>`.
 
    .. code-block:: yaml
@@ -60,13 +61,28 @@ Common root options
    :Type: string
    :Default: full
 
-   Determines how to prefix the field if :yaml:`prefixFields` is enabled. Can
-   be either :yaml:`full` (default) or :yaml:`vendor`.
+   Determines how to prefix the field if :yaml:`prefixFields` is enabled. Can be
+   either :yaml:`full` (default) or :yaml:`vendor`. The latter removes the
+   second part of :yaml:`name` from the prefix.
 
    .. code-block:: yaml
 
        prefixFields: true
        prefixType: vendor
+
+.. confval:: vendorPrefix
+   :name: root-vendorPrefix
+
+   :Required: false
+   :Type: string
+
+   If set, this prefix will be used instead of the vendor part of :yaml:`name`.
+   This is especially useful if you want to adhere to the best practice of
+   prefixing fields with **tx_extension**.
+
+   .. code-block:: yaml
+
+       vendorPrefix: tx_sitepackage
 
 .. confval:: priority
    :name: root-priority

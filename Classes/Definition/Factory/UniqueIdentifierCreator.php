@@ -39,14 +39,15 @@ class UniqueIdentifierCreator
 
     protected static function createCombinedIdentifier(LoadedContentBlock $contentBlock, PrefixType $prefixType): string
     {
+        $vendorPrefix = self::createVendorIdentifier($contentBlock);
         $contentTypeIdentifier = match ($prefixType) {
-            PrefixType::FULL => self::createFullIdentifier($contentBlock->getName()),
-            PrefixType::VENDOR => self::createVendorIdentifier($contentBlock),
+            PrefixType::FULL => self::createFullIdentifier($contentBlock->getName(), $vendorPrefix),
+            PrefixType::VENDOR => $vendorPrefix,
         };
         return $contentTypeIdentifier;
     }
 
-    protected static function createFullIdentifier(string $name): string
+    protected static function createFullIdentifier(string $name, ?string $vendorPrefix = null): string
     {
         if (!str_contains($name, '/')) {
             throw new \InvalidArgumentException(
@@ -55,13 +56,15 @@ class UniqueIdentifierCreator
             );
         }
         $parts = explode('/', $name);
-        $contentTypeIdentifier = self::removeDashes($parts[0]) . '_' . self::removeDashes($parts[1]);
+        $vendorPrefix = $vendorPrefix ?? self::removeDashes($parts[0]);
+        $contentTypeIdentifier = $vendorPrefix . '_' . self::removeDashes($parts[1]);
         return $contentTypeIdentifier;
     }
 
     protected static function createVendorIdentifier(LoadedContentBlock $contentBlock): string
     {
-        $contentTypeIdentifier = self::removeDashes($contentBlock->getVendor());
+        $vendorPrefix = $contentBlock->getYaml()['vendorPrefix'] ?? $contentBlock->getVendor();
+        $contentTypeIdentifier = self::removeDashes($vendorPrefix);
         return $contentTypeIdentifier;
     }
 

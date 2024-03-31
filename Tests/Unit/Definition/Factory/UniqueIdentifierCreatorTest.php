@@ -56,6 +56,7 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
         yield 'simple name' => [
             'contentBlockName' => 'bar/foo',
             'prefixType' => PrefixType::FULL,
+            'vendorPrefix' => null,
             'identifier' => 'aField',
             'expected' => 'bar_foo_aField',
         ];
@@ -63,13 +64,31 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
         yield 'name with dashes' => [
             'contentBlockName' => 'bar-foo/foo-bar',
             'prefixType' => PrefixType::FULL,
+            'vendorPrefix' => null,
             'identifier' => 'aField',
             'expected' => 'barfoo_foobar_aField',
+        ];
+
+        yield 'name with dashes and vendorPrefix' => [
+            'contentBlockName' => 'bar-foo/foo-bar',
+            'prefixType' => PrefixType::FULL,
+            'vendorPrefix' => 'tx_contentblocks',
+            'identifier' => 'aField',
+            'expected' => 'tx_contentblocks_foobar_aField',
+        ];
+
+        yield 'name with dashes and vendorPrefix with dashes' => [
+            'contentBlockName' => 'bar-foo/foo-bar',
+            'prefixType' => PrefixType::FULL,
+            'vendorPrefix' => 'tx-contentblocks',
+            'identifier' => 'aField',
+            'expected' => 'txcontentblocks_foobar_aField',
         ];
 
         yield 'simple name vendor' => [
             'contentBlockName' => 'bar/foo',
             'prefixType' => PrefixType::VENDOR,
+            'vendorPrefix' => null,
             'identifier' => 'aField',
             'expected' => 'bar_aField',
         ];
@@ -77,19 +96,45 @@ final class UniqueIdentifierCreatorTest extends UnitTestCase
         yield 'name with dashes vendor' => [
             'contentBlockName' => 'bar-foo/foo-bar',
             'prefixType' => PrefixType::VENDOR,
+            'vendorPrefix' => null,
             'identifier' => 'aField',
             'expected' => 'barfoo_aField',
+        ];
+
+        yield 'name with fixed vendor prefix' => [
+            'contentBlockName' => 'bar-foo/foo-bar',
+            'prefixType' => PrefixType::VENDOR,
+            'vendorPrefix' => 'alternative_vendor',
+            'identifier' => 'aField',
+            'expected' => 'alternative_vendor_aField',
+        ];
+
+        yield 'name with fixed vendor prefix and dashes' => [
+            'contentBlockName' => 'bar-foo/foo-bar',
+            'prefixType' => PrefixType::VENDOR,
+            'vendorPrefix' => 'alternative-vendor',
+            'identifier' => 'aField',
+            'expected' => 'alternativevendor_aField',
         ];
     }
 
     #[DataProvider('createUniqueColumnNameTestDataProvider')]
     #[Test]
-    public function createUniqueFieldIdentifierTest(string $contentBlockName, PrefixType $prefixType, string $identifier, string $expected): void
-    {
+    public function createUniqueFieldIdentifierTest(
+        string $contentBlockName,
+        PrefixType $prefixType,
+        ?string $vendorPrefix,
+        string $identifier,
+        string $expected
+    ): void {
         $contentBlock = LoadedContentBlock::fromArray([
             'name' => $contentBlockName,
-            'yaml' => ['table' => ContentType::CONTENT_ELEMENT->getTable()],
+            'yaml' => [
+                'table' => ContentType::CONTENT_ELEMENT->getTable(),
+                'vendorPrefix' => $vendorPrefix,
+            ],
         ]);
-        self::assertSame($expected, UniqueIdentifierCreator::prefixIdentifier($contentBlock, $prefixType, $identifier));
+        $result = UniqueIdentifierCreator::prefixIdentifier($contentBlock, $prefixType, $identifier);
+        self::assertSame($expected, $result);
     }
 }
