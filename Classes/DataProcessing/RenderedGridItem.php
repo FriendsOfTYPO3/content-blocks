@@ -22,6 +22,6 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
  */
 class RenderedGridItem
 {
-    public string $content;
-    public ContentBlockData $data;
+    public ?string $content = null;
+    public ?ContentBlockData $data = null;
 }

@@ -24,6 +24,9 @@ Title: {data.record.title}
     <f:for each="{data.content}" as="item">
         Child typeName: {item.typeName}
     </f:for>
+    <f:for each="{data._grids.content}" as="child">
+        <f:format.raw>{child.content}</f:format.raw>
+    </f:for>
 </f:if>
 <f:if condition="{data.relation_mix}">
     <f:for each="{data.relation_mix}" as="relation">
@@ -40,6 +43,9 @@ Title: {data.record.title}
 </f:if>
 <f:if condition="{data.circular_relation}">
     Circular relation uid: {data.circular_relation.0.circular_relation.0.uid}
+</f:if>
+<f:if condition="{data._grids.circular_relation.0.data}">
+    Circular relation from _grids uid: {data._grids.circular_relation.0.data.uid}
 </f:if>
 <f:if condition="{data.circular_select}">
     Circular select uid: {data.circular_select.circular_select.uid}

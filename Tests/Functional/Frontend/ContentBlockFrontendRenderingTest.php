@@ -205,6 +205,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $html = (string)$response->getBody();
 
         self::assertStringContainsString('Child typeName: text', $html);
+        self::assertStringContainsString('child header', $html);
         self::assertStringNotContainsString('has no rendering definition!', $html);
     }
 
@@ -257,6 +258,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $html = (string)$response->getBody();
 
         self::assertStringContainsString('Circular relation uid: 1', $html);
+        self::assertStringContainsString('Circular relation from _grids uid: 1', $html);
         self::assertStringContainsString('Circular select uid: 1', $html);
     }
 
