@@ -100,19 +100,19 @@ class RelationResolver
                 1674222293
             );
         }
-        $data = $record[$recordIdentifier];
-        $data = match ($tcaType) {
+        $rawValue = $record[$recordIdentifier];
+        $processedValue = match ($tcaType) {
             'file' => $this->processFileReference($table, $recordIdentifier, $record),
             'inline' => $this->processCollection($table, $record, $tcaFieldDefinition, $typeDefinition),
             'category' => $this->processCategory($tcaFieldDefinition, $typeDefinition, $table, $record),
             'group' => $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record),
-            'folder' => $this->processFolder($data, $tcaFieldDefinition),
+            'folder' => $this->processFolder($rawValue, $tcaFieldDefinition),
             'select' => $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record),
-            'flex' => $this->flexFormService->convertFlexFormContentToArray($data),
-            'json' => $this->processJson($table, $data),
-            default => $data,
+            'flex' => $this->flexFormService->convertFlexFormContentToArray($rawValue),
+            'json' => $this->processJson($table, $rawValue),
+            default => $rawValue,
         };
-        return $data;
+        return $processedValue;
     }
 
     protected function processSelect(
