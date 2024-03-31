@@ -38,10 +38,9 @@ class GridProcessor
 
     public function process(): void
     {
-        foreach ($this->processingInstructions as $instruction) {
+        while ($instruction = array_shift($this->processingInstructions)) {
             $instruction();
         }
-        $this->processingInstructions = [];
     }
 
     /**

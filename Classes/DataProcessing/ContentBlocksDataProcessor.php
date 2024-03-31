@@ -35,7 +35,9 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ): array {
-        $this->relationResolver->setRequest($cObj->getRequest());
+        $request = $cObj->getRequest();
+        $this->relationResolver->setRequest($request);
+        $this->contentBlockDataDecorator->setRequest($request);
         $table = $cObj->getCurrentTable();
         if (!$this->tableDefinitionCollection->hasTable($table)) {
             return $processedData;

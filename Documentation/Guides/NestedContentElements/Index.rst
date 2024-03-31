@@ -49,19 +49,30 @@ Render nested Content Elements in the frontend
 ==============================================
 
 There are two ways to render nested Content Elements. The first one is to reuse
-the basic rendering definition of the child element. For this it is needed to
-start a sub-rendering within the Fluid template by triggering the compilation of
-the TypoScript rendering definition for the child element type. Each necessary
-information can be retrieved from the Content Block data object.
+the basic rendering definition of the child element. This is already
+pre-rendered in the Fluid variable `{data._grids.identifier}`. This variable
+contains all relations which might have a frontend rendering definition defined
+in TypoScript. Normally, these are only Content Elements.
 
 .. code-block:: html
    :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
 
-    <f:for each="{data.tabs_item}" as="item" iteration="i">
-        <div class="tab-item">
-            <f:cObject typoscriptObjectPath="{item.tableName}.{item.typeName}" table="{item.tableName}" data="{item._raw}"/>
+    <f:for each="{data._grids.tabs_item}" as="item" iteration="i">
+        <f:comment><!-- {item.data} contains the Content Block data object. --></f:comment>
+        <div class="tab-item" data-uid="{item.data.uid}">
+            <f:comment><!-- {item.content} contains the rendered html. --></f:comment>
+            <f:format.raw>{item.content}</f:format.raw>
         </div>
     </f:for>
+
+.. note::
+
+   This is the same as triggering the rendering with :html:`f:cObject` view
+   helper:
+
+   .. code-block::
+
+      <f:cObject typoscriptObjectPath="tt_content.example_text" table="tt_content" data="{data}"/>
 
 The second method is to define an alternative rendering within your Fluid
 template. This means you can have a default rendering definition for your
@@ -73,7 +84,7 @@ more work.
    :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
 
     <f:for each="{data.tabs_item}" as="item" iteration="i">
-        <div class="tab-item">
+        <div class="tab-item" data-uid="{item.uid}">
             <h2>{item.header}</h2>
             <f:format.html>{data.bodytext}</f:format.html>
         </div>

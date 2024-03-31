@@ -59,7 +59,7 @@ final class ContentBlockData extends \stdClass
     public function __construct(
         private string $_name = '',
         private array $_raw = [],
-        /** @var array<string, RelationGrid> */
+        /** @var array<string, RelationGrid>|array<string, RenderedGridItem[]> */
         private array $_grids = [],
         private array $_processed = [],
     ) {}

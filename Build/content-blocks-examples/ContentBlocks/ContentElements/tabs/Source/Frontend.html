@@ -15,10 +15,10 @@
             </button>
         </f:for>
     </div>
-    <f:for each="{data.tabs_item}" as="item" iteration="i">
+    <f:for each="{data._grids.tabs_item}" as="item" iteration="i">
         <f:variable name="style">style="display:{f:if(condition: i.isFirst, then: 'block', else: 'none')};"</f:variable>
-        <div id="tab-{data.uid}-{item.uid}" class="tab-content" {style -> f:format.raw()}>
-            <f:cObject typoscriptObjectPath="{item.tableName}.{item.typeName}" table="{item.tableName}" data="{item._raw}"/>
+        <div id="tab-{data.uid}-{grid.uid}" class="tab-content" {style -> f:format.raw()}>
+            <f:format.raw>{item.content}</f:format.raw>
         </div>
     </f:for>
 </div>

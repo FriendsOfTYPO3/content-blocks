@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
@@ -30,12 +31,21 @@ use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
  */
 final class ContentBlockDataDecorator
 {
+    protected ?ServerRequestInterface $request = null;
+
     public function __construct(
         private readonly TableDefinitionCollection $tableDefinitionCollection,
         private readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
         private readonly GridProcessor $gridProcessor,
+        private readonly ContentObjectProcessor $contentObjectProcessor,
     ) {}
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+        $this->contentObjectProcessor->setRequest($request);
+    }
 
     public function decorate(
         ContentTypeInterface $contentTypeDefinition,
@@ -57,6 +67,7 @@ final class ContentBlockDataDecorator
         );
         $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
         $this->gridProcessor->process();
+        $this->contentObjectProcessor->process();
         return $contentBlockData;
     }
 
@@ -84,6 +95,23 @@ final class ContentBlockDataDecorator
                     $depth,
                     $context,
                 );
+                if ($context === null && $this->request !== null) {
+                    $renderedGridItemDataObjects = $resolvedField;
+                    if (!is_array($renderedGridItemDataObjects)) {
+                        $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
+                    }
+                    foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
+                        $renderedGridItem = new RenderedGridItem();
+                        $grids[$tcaFieldDefinition->getIdentifier()][] = $renderedGridItem;
+                        $callback = function () use ($contentBlockDataObject, $renderedGridItem): void {
+                            $this->contentObjectProcessor->processContentObject(
+                                $contentBlockDataObject,
+                                $renderedGridItem
+                            );
+                        };
+                        $this->contentObjectProcessor->addInstruction($callback);
+                    }
+                }
                 if ($context !== null) {
                     $relationGrid = new RelationGrid();
                     $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
