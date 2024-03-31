@@ -182,7 +182,9 @@ class RelationResolver
         array $record
     ): array {
         $tcaFieldConfig = $this->getMergedTcaFieldConfig($parentTable, $tcaFieldDefinition, $typeDefinition);
-        $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany' ? '' : (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
+        $uidList = $tcaFieldConfig['config']['relationship'] === 'manyToMany'
+            ? ''
+            : (string)($record[$tcaFieldDefinition->getUniqueIdentifier()] ?? '');
         $result = $this->getRelations(
             $uidList,
             $tcaFieldConfig['config']['foreign_table'] ?? '',
