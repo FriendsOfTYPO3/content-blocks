@@ -141,7 +141,12 @@ final class ContentBlockCompiler
     {
         $mergedResult = [];
         foreach ($tableDefinitionList as $table => $definition) {
-            $mergedResult[$table] = array_replace_recursive(...array_reverse($definition['tableDefinitions']));
+            // We are reversing the table definition list here, so that higher priority
+            // Content Block definitions override lower ones. This is especially
+            // important for the default value of type fields (record type selector).
+            $reversedTableDefinitions = array_reverse($definition['tableDefinitions']);
+            $combinedTableDefinitions = array_replace_recursive(...$reversedTableDefinitions);
+            $mergedResult[$table] = $combinedTableDefinitions;
             $mergedResult[$table]['typeDefinitions'] = $definition['typeDefinitions'];
         }
         return $mergedResult;
