@@ -95,37 +95,7 @@ final class ContentBlockDataDecorator
                     $depth,
                     $context,
                 );
-                if ($context === null && $this->request !== null) {
-                    $renderedGridItemDataObjects = $resolvedField;
-                    if (!is_array($renderedGridItemDataObjects)) {
-                        $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
-                    }
-                    foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
-                        $renderedGridItem = new RenderedGridItem();
-                        $grids[$tcaFieldDefinition->getIdentifier()][] = $renderedGridItem;
-                        $callback = function () use ($contentBlockDataObject, $renderedGridItem): void {
-                            $this->contentObjectProcessor->processContentObject(
-                                $contentBlockDataObject,
-                                $renderedGridItem
-                            );
-                        };
-                        $this->contentObjectProcessor->addInstruction($callback);
-                    }
-                }
-                if ($context !== null) {
-                    $relationGrid = new RelationGrid();
-                    $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
-                    $callback = function () use ($grids, $tcaFieldDefinition, $resolvedField, $context): void {
-                        $relationGrid = $grids[$tcaFieldDefinition->getIdentifier()];
-                        $this->gridProcessor->processGrid(
-                            $relationGrid,
-                            $context,
-                            $tcaFieldDefinition,
-                            $resolvedField
-                        );
-                    };
-                    $this->gridProcessor->addInstruction($callback);
-                }
+                $grids = $this->handleGrids($grids, $context, $resolvedField, $tcaFieldDefinition);
             }
             $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $resolvedField;
         }
@@ -139,6 +109,50 @@ final class ContentBlockDataDecorator
             $grids,
         );
         return $contentBlockDataObject;
+    }
+
+    /**
+     * @param array<string, RelationGrid>|array<string, RenderedGridItem[]> $grids
+     * @return array<string, RelationGrid>|array<string, RenderedGridItem[]>
+     */
+    private function handleGrids(
+        array $grids,
+        ?PageLayoutContext $context,
+        mixed $resolvedField,
+        TcaFieldDefinition $tcaFieldDefinition
+    ): array {
+        if ($context === null && $this->request !== null) {
+            $renderedGridItemDataObjects = $resolvedField;
+            if (!is_array($renderedGridItemDataObjects)) {
+                $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
+            }
+            foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
+                $renderedGridItem = new RenderedGridItem();
+                $grids[$tcaFieldDefinition->getIdentifier()][] = $renderedGridItem;
+                $callback = function () use ($contentBlockDataObject, $renderedGridItem): void {
+                    $this->contentObjectProcessor->processContentObject(
+                        $contentBlockDataObject,
+                        $renderedGridItem
+                    );
+                };
+                $this->contentObjectProcessor->addInstruction($callback);
+            }
+        }
+        if ($context !== null) {
+            $relationGrid = new RelationGrid();
+            $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
+            $callback = function () use ($grids, $tcaFieldDefinition, $resolvedField, $context): void {
+                $relationGrid = $grids[$tcaFieldDefinition->getIdentifier()];
+                $this->gridProcessor->processGrid(
+                    $relationGrid,
+                    $context,
+                    $tcaFieldDefinition,
+                    $resolvedField
+                );
+            };
+            $this->gridProcessor->addInstruction($callback);
+        }
+        return $grids;
     }
 
     private function handleRelation(
@@ -262,7 +276,7 @@ final class ContentBlockDataDecorator
     }
 
     /**
-     * @param array<RelationGrid> $grids
+     * @param array<string, RelationGrid>|array<string, RenderedGridItem[]> $grids
      */
     private function buildContentBlockDataObject(
         ResolvedContentBlockDataRelation $resolvedRelation,
