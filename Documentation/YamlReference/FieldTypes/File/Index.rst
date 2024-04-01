@@ -50,7 +50,7 @@ Settings
 
    :Required: false
    :Type: integer
-   :Default: 0
+   :Default: "0"
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.

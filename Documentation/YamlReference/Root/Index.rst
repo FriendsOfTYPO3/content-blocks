@@ -89,7 +89,7 @@ Common root options
 
    :Required: false
    :Type: integer
-   :Default: 0
+   :Default: "0"
 
    The priority can be used to prioritize certain Content Blocks in the loading
    order. Higher priorities will be loaded before lower ones. This affects e.g.

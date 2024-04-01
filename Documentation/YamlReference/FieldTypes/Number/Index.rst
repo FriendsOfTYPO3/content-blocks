@@ -26,7 +26,7 @@ Settings
 
    :Required: false
    :Type: integer
-   :Default: 0
+   :Default: "0"
 
    Default value set if a new record is created.
 

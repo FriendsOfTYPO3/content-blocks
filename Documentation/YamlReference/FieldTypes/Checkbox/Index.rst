@@ -17,7 +17,7 @@ Settings
 
    :Required: false
    :Type: integer (bit value)
-   :Default: 0
+   :Default: "0"
 
    The default value corresponds to a bit value. If you only have one checkbox
    having 1 or 0 will work to turn it on or off by default. For more than one

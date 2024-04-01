@@ -28,7 +28,7 @@ Settings
 
    :Required: false
    :Type: integer
-   :Default: 0
+   :Default: "0"
 
    Maximum number of items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
@@ -38,7 +38,7 @@ Settings
 
    :Required: false
    :Type: integer
-   :Default: 0
+   :Default: "0"
 
    Minimum number of items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
