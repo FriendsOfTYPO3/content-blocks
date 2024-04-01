@@ -8,13 +8,12 @@ Introduction
    Defining "Content Elements" in TYPO3 is hard and the learning curve is steep.
 
 A **Content Block** is a simplified, **component-based** approach of defining
-**Content Types** in TYPO3. This includes **Content Elements**, **Page Types**
-and generic **Record Types**. A **YAML** file serves as a basis for **field**
-definitions. Content Blocks acts hereby as a **generator** for more complicated
-low-level code and makes **smart assumptions** based on **best practice**. This
-significantly reduces **redundancies** and **boilerplate** code and enables
-users to concentrate on their actual work rather than fiddling with the almighty
-Core API.
+Content Types in TYPO3. This includes Content Elements, Page Types and generic
+Record Types. A YAML file serves as a basis for field definitions.
+Content Blocks acts hereby as a generator for more complicated low-level code
+and makes smart assumptions based on best practice. This significantly reduces
+redundancies and boilerplate code and enables users to concentrate on their
+actual work rather than fiddling with the almighty Core API.
 
 .. note::
 
