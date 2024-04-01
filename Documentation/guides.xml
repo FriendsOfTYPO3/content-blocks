@@ -13,7 +13,7 @@
                interlink-shortcode="contentblocks/content-blocks"
     />
     <project title="Content Blocks"
-             release="0.6"
+             release="0.7"
              copyright="since 2023 by TYPO3 contributors"
     />
 </guides>
