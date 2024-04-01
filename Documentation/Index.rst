@@ -145,7 +145,6 @@ use content types as sub-resources inside extensions.
     Commands/Index
     YamlReference/Index
     Templating/Index
-    ReuseExistingFields/Index
     Guides/Index
     DeveloperCorner/Index
     Migrations/Index
