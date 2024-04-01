@@ -26,7 +26,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
@@ -62,10 +61,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * package part separated by a slash. The name parts must be lowercase and can
  * be separated by dashes.
  *
- * @todo Asset publishing of the `Assets` folder happens during the runtime, as
- * @todo opposed to the publishing of the extensions' Resources/Public folder in
- * @todo the composer installation phase. This is not optimal.
- *
  * @internal Not part of TYPO3's public API.
  */
 class ContentBlockLoader
@@ -76,6 +71,7 @@ class ContentBlockLoader
         protected readonly LazyObjectInterface|PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
+        protected readonly IconProcessor $iconProcessor,
     ) {}
 
     public function load(): ContentBlockRegistry
@@ -117,6 +113,7 @@ class ContentBlockLoader
         $contentBlockRegistry = $this->fillContentBlockRegistry($loadedContentBlocks);
 
         $this->publishAssets($loadedContentBlocks);
+        $this->iconProcessor->process();
 
         return $contentBlockRegistry;
     }
@@ -230,7 +227,9 @@ class ContentBlockLoader
         $table = $yaml['table'];
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
-        $contentBlockIcon = ContentTypeIconResolver::resolve(
+        $contentBlockIcon = new ContentTypeIcon();
+        $this->iconProcessor->addInstruction(
+            $contentBlockIcon,
             $name,
             $absolutePath,
             $extPath,
@@ -242,13 +241,15 @@ class ContentBlockLoader
         $pageIconHideInMenu = new ContentTypeIcon();
         if ($contentType === ContentType::PAGE_TYPE) {
             $iconIdentifierHideInMenu = ContentBlockPathUtility::getIconHideInMenuNameWithoutFileExtension();
-            $pageIconHideInMenu = ContentTypeIconResolver::resolve(
+            $this->iconProcessor->addInstruction(
+                $pageIconHideInMenu,
                 $name,
                 $absolutePath,
                 $extPath,
                 $iconIdentifierHideInMenu,
                 $contentType,
                 $table,
+                $typeName,
                 '-hide-in-menu'
             );
         }

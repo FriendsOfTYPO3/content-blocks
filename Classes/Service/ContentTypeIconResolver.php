@@ -57,13 +57,23 @@ class ContentTypeIconResolver
             $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
             $contentTypeIcon->iconPath = $icon;
             $contentTypeIcon->iconProvider = $iconProviderClass;
-            $contentTypeIcon->iconIdentifier = self::buildTypeIconIdentifier($table, $typeName, $contentTypeIcon->iconPath, $suffix);
+            $contentTypeIcon->iconIdentifier = self::buildTypeIconIdentifier(
+                $table,
+                $typeName,
+                $contentTypeIcon->iconPath,
+                $suffix
+            );
             return $contentTypeIcon;
         }
         $contentTypeIcon = new ContentTypeIcon();
         $contentTypeIcon->iconPath = self::getDefaultContentTypeIcon($contentType);
         $contentTypeIcon->iconProvider = SvgIconProvider::class;
-        $contentTypeIcon->iconIdentifier = self::buildTypeIconIdentifier($table, $typeName, $contentTypeIcon->iconPath, $suffix);
+        $contentTypeIcon->iconIdentifier = self::buildTypeIconIdentifier(
+            $table,
+            $typeName,
+            $contentTypeIcon->iconPath,
+            $suffix
+        );
         return $contentTypeIcon;
     }
 
@@ -81,14 +91,21 @@ class ContentTypeIconResolver
      * We add a part of the md5 hash here in order to mitigate browser caching issues when changing the Content Block
      * Icon. Otherwise, the icon identifier would always be the same and stored in the local storage.
      */
-    protected static function buildTypeIconIdentifier(string $table, int|string $typeName, string $iconPath, string $suffix = ''): string
-    {
+    protected static function buildTypeIconIdentifier(
+        string $table,
+        int|string $typeName,
+        string $iconPath,
+        string $suffix = ''
+    ): string {
         $typeIconIdentifier = $table . '-' . $typeName . $suffix;
         $absolutePath = GeneralUtility::getFileAbsFileName($iconPath);
         if ($absolutePath !== '') {
             $contents = @file_get_contents($absolutePath);
             if ($contents === false) {
-                return '';
+                throw new \RuntimeException(
+                    'Icon in path ' . $iconPath . ' is not available.',
+                    1711970286
+                );
             }
             $hash = md5($contents);
             $hasSubString = substr($hash, 0, 7);
