@@ -38,39 +38,37 @@ migrate. For this, run the command :bash:`make:content-block` and create a
 Content Element with a vendor and name of your choice. The name can be the same
 as the Mask name, but doesn't have to.
 
-Next, you need to override the :yaml:`typeName` and define the prefix behavior.
-Mask prefixes all its fields with `tx_mask` so we set a fixed vendor prefix.
-In this example our Mask element has the name `slider`, so :yaml:`typeName` must
-be set to `mask_slider`. This is the CType, which Mask generates in the
-background. If you don't set this option, Content Blocks would create a unique
-identifier from vendor and name, which you don't want in this case.
+Next, you need to override the :yaml:`typeName` and disable prefixing. In this
+example our Mask element has the name `slider`, so :yaml:`typeName` must be set
+to `mask_slider`. This is the CType, which Mask generates in the background. If
+you don't set this option, Content Blocks would create a unique identifier from
+vendor and name, which you don't want in this case. We disable prefixing, so we
+can adopt the existing Mask fields.
 
 .. code-block:: yaml
    :caption: EXT:site_package/ContentBlocks/ContentElements/slider/EditorInterface.yaml
 
     name: tx-mask/slider
     typeName: mask_slider
-    prefixType: vendor
-    vendorPrefix: tx_mask
+    prefixFields: false
 
 Our Mask element has a repeating slides field. This is a Collection in terms of
-Content Blocks. To adopt this field, we have to set the identifier. The prefix
-`tx_mask` is already applied from our global settings. Also,
-:yaml:`foreign_field` has to be set explicitly to :yaml:`parentid`, as this is
-the column name, which Mask uses for its parent reference field.
+Content Blocks. To adopt this field, we have to set the identifier prefixed with
+`tx_mask`. Also, :yaml:`foreign_field` has to be set explicitly to
+:yaml:`parentid`, as this is the column name, which Mask uses for its parent
+reference field.
 
 All other fields can be re-defined in Content Blocks as usual. Don't forget
-to prefix all fields **within Collections** with `tx_mask`. The global prefixing
-settings are not applied in the scope of Collections.
+to prefix **all** fields with `tx_mask`, even inside Collections.
 
 .. code-block:: yaml
    :caption: EXT:site_package/ContentBlocks/ContentElements/slider/EditorInterface.yaml
 
     name: tx-mask/slider
-    prefixType: vendor
-    vendorPrefix: tx_mask
+    typeName: mask_slider
+    prefixFields: false
     fields:
-      - identifier: slides
+      - identifier: tx_mask_slides
         type: Collection
         foreign_field: parentid
         fields:
@@ -159,10 +157,9 @@ to add some more config.
 
     name: tx-mask/nested-content
     typeName: mask_nested_content
-    prefixType: vendor
-    vendorPrefix: tx_mask
+    prefixFields: false
     fields:
-      - identifier: content
+      - identifier: tx_mask_content
         type: Collection
         foreign_table: tt_content
         foreign_field: tx_mask_content_parent_uid
@@ -178,10 +175,9 @@ child field. However, you can set a default value.
 
     name: tx-mask/nested-content
     typeName: mask_nested_content
-    prefixType: vendor
-    vendorPrefix: tx_mask
+    prefixFields: false
     fields:
-      - identifier: content
+      - identifier: tx_mask_content
         type: Collection
         foreign_table: tt_content
         foreign_field: tx_mask_content_parent_uid
