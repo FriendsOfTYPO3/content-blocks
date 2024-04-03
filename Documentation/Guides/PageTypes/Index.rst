@@ -22,17 +22,37 @@ and drop as usual. Your custom fields will be added after the `nav_title` field.
 SEO fields will be automatically added, if you have the SEO system extension
 installed.
 
+When to use Page Types
+======================
+
+Page Types are best suited for cases where you have a set of pages with common
+properties like a teaser text, image or date. The best example is a news article
+page. These most often have required fields which are always displayed at a
+fixed position, like an author at the bottom of the page. These fields should
+be included as page properties rather than specifically defined Content
+Elements. The article itself however, should be composed of various Content
+Elements. This approach also opens up the possibility to use your Page Types in
+plugins. See the `blog extension <https://extensions.typo3.org/extension/blog>`__
+which utilises this concept.
+
 Use as Frontend template
 ========================
 
-Unlike for Content Elements, there is no default rendering definition for Page
-Types. Thus, you can't simply define a Frontend.html file. In order to make use
-of custom tailored Page Types, you need to connect them with your TypoScript
-:typoscript:`PAGE` object. We take the example Blog type from above and add a
-:typoscript:`CASE` cObject with the :typoscript:`key` set to
-:typoscript:`doktype`. This allows us to render a different frontend template
-depending on the Page Type. This setup expects a Blog.html file inside the
-Resources/Private/Templates folder in your extension.
+Historically, the backend layout / page layout is used as the switch for
+frontend templates and is still considered best practice. This means you have
+to define an additional page layout for each new Page Type and assign it.
+
+An alternative, more modern approach is to map the frontend template to the
+Page Type directly. This makes it possible to have different backend layouts
+per Page Type, but still render the same template. This can heavily reduce the
+amount of frontend templates which need to be created for each slight layout
+variation.
+
+In order to make use of this technique, you need to add a :typoscript:`CASE`
+cObject with the :typoscript:`key` set to :typoscript:`doktype`. This allows us
+to render a different frontend template depending on the Page Type. This setup
+expects a Blog.html file inside the Resources/Private/Templates folder in your
+extension.
 
 .. code-block:: typoscript
 
@@ -61,18 +81,35 @@ Resources/Private/Templates folder in your extension.
 
 .. hint::
 
-   Many resources in the wild suggest to render page templates depending on the
-   selected backend layout. The reason could be that defining new Page Types is
-   a more difficult task than defining a new backend layout. However, linking
-   a backend layout to the frontend template is a conceptual mistake. As the
-   name **backend** layout suggests, this is merely a representation in the
-   backend and should not be abused as the frontend representation.
+   At the time of writing there is no Core solution to have a page layout as
+   default value for a specific Page Type. This has to be done via DataHandler
+   hooks. Have a look at `this extension <https://github.com/b13/doktypemapper>`__
+   for this.
+
+Backend preview
+===============
+
+Just like for Content Elements, you can define an **EditorPreview.html** file
+to create a preview of your Page Type. This can be used to preview custom
+properties and to link directly to them. To make them prettier it is advised to
+utilise CSS bootstrap classes like `card`.
+
+.. code-block:: html
+
+    <div class="card card-size-medium">
+        <div class="card-body">
+            <be:link.editRecord uid="{data.uid}" table="{data.tableName}" fields="author">
+                Author: {data.author}
+            </be:link.editRecord>
+        </div>
+    </div>
 
 Processing of page data
 =======================
 
 In order to have resolved relations also for Page Types, you need to add the
-ContentBlocksDataProcessor to your data processor list.
+:php:`ContentBlocksDataProcessor` to your data processor list. Right now, this
+does not resolve relations for the native, standard Page Type.
 
 .. code-block:: typoscript
 
