@@ -31,10 +31,19 @@ class HtmlTemplateCodeGenerator
 
         if ($contentBlockConfiguration->getContentType() === ContentType::PAGE_TYPE) {
             $defaultContent[] = '<html xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">';
-            $defaultContent[] = '    Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
-            $defaultContent[] = '    <be:link.editRecord uid="{data.uid}" table="{data.tableName}" fields="title">';
-            $defaultContent[] = '        Title: {data.title}';
-            $defaultContent[] = '    </be:link.editRecord>';
+            $defaultContent[] = '    <div class="card card-size-medium">';
+            $defaultContent[] = '        <div class="card-body">';
+            $defaultContent[] = '            <dl class="row">';
+            $defaultContent[] = '                <dt class="col-sm-3">Title:</dt>';
+            $defaultContent[] = '                <dd class="col-sm-9">';
+            $defaultContent[] = '                   {data.title}';
+            $defaultContent[] = '                </dd>';
+            $defaultContent[] = '            </dl>';
+            $defaultContent[] = '            <be:link.editRecord class="btn btn-default" uid="{data.uid}" table="{data.tableName}" fields="title">';
+            $defaultContent[] = '               Edit page properties';
+            $defaultContent[] = '            </be:link.editRecord>';
+            $defaultContent[] = '        </div>';
+            $defaultContent[] = '    </div>';
             $defaultContent[] = '</html>';
         } else {
             $package = $contentBlockConfiguration->getName();
