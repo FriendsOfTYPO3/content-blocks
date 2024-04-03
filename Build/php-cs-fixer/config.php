@@ -1,5 +1,9 @@
 <?php
 
 $config = \TYPO3\CodingStandards\CsFixerConfig::create();
-$config->getFinder()->exclude(['var'])->in(__DIR__ . '/../../');
+$config->setFinder(
+    (new PhpCsFixer\Finder())
+        ->ignoreVCSIgnored(true)
+        ->in(realpath(__DIR__ . '/../../'))
+);
 return $config;

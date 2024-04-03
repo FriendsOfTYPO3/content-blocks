@@ -1,4 +1,3 @@
-version: '2.3'
 services:
   chrome:
     image: ${DOCKER_SELENIUM_IMAGE}
@@ -38,12 +37,12 @@ services:
     command: >
       /bin/sh -c "
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           php -S web:8000 -t ${ROOT_DIR}
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           php -S web:8000 -t ${ROOT_DIR}
         fi
       "
@@ -106,12 +105,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -160,12 +159,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -217,12 +216,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -263,12 +262,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -310,12 +309,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml --env=mysql --xml reports.xml --html reports.html
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml --env=mysql --xml reports.xml --html reports.html
         fi
       "
@@ -357,12 +356,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=mysql --xml reports.xml --html reports.html
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=mysql --xml reports.xml --html reports.html
         fi
       "
@@ -404,12 +403,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=postgresql --xml reports.xml --html reports.html
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=postgresql --xml reports.xml --html reports.html
         fi
       "
@@ -438,12 +437,12 @@ services:
         fi
         mkdir -p .Build/public/typo3temp/var/tests/
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=sqlite --xml reports.xml --html reports.html
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           bin/codecept run Install -d -c typo3/sysext/core/Tests/codeception.yml ${EXTRA_TEST_OPTIONS} --env=sqlite --xml reports.xml --html reports.html
         fi
       "
@@ -495,7 +494,7 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v ${CGLCHECK_DRY_RUN} \
+        php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v ${CGLCHECK_DRY_RUN} \\
           --config=Build/php-cs-fixer/config.php --using-cache=no
       "
 
@@ -510,7 +509,7 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v ${CGLCHECK_DRY_RUN} --path-mode intersection \
+        php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v ${CGLCHECK_DRY_RUN} --path-mode intersection \\
           --config=Build/php-cs-fixer/header-comment.php --using-cache=no ./
       "
 
@@ -871,9 +870,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -903,9 +902,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -958,9 +957,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -990,9 +989,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -1045,9 +1044,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -1077,9 +1076,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -1122,9 +1121,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -1152,9 +1151,9 @@ services:
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           $${COMMAND};
         fi
       "
@@ -1254,7 +1253,7 @@ services:
           set -x
         fi
         mkdir -p .cache
-        XDEBUG_MODE=\"off\" \
+        XDEBUG_MODE=\"off\" \\
         .Build/bin/phpstan analyse -c Build/phpstan/${PHPSTAN_CONFIG_FILE} --no-progress --no-interaction --memory-limit 4G ${TEST_FILE}
       "
 
@@ -1270,7 +1269,7 @@ services:
           set -x
         fi
         mkdir -p .cache
-        XDEBUG_MODE=\"off\" \
+        XDEBUG_MODE=\"off\" \\
         bin/phpstan analyse -c Build/phpstan/${PHPSTAN_CONFIG_FILE} --no-progress --no-interaction --memory-limit 4G --generate-baseline=Build/phpstan/phpstan-baseline.neon
       "
 
@@ -1289,12 +1288,12 @@ services:
         fi
         php -v | grep '^PHP'
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           .Build/bin/phpunit -c Build/phpunit/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           .Build/bin/phpunit -c Build/phpunit/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "
@@ -1314,12 +1313,12 @@ services:
         fi
         php -v | grep '^PHP'
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           .Build/bin/phpunit -c Build/phpunit/UnitTestsDeprecated.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           .Build/bin/phpunit -c Build/phpunit/UnitTestsDeprecated.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "
@@ -1358,12 +1357,12 @@ services:
         fi
         php -v | grep '^PHP'
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           .Build/bin/phpunit -c Build/phpunit/UnitTests.xml --order-by=random ${EXTRA_TEST_OPTIONS} ${PHPUNIT_RANDOM} ${TEST_FILE};
         else
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \\
           .Build/bin/phpunit -c Build/phpunit/UnitTests.xml --order-by=random ${EXTRA_TEST_OPTIONS} ${PHPUNIT_RANDOM} ${TEST_FILE};
         fi
       "
