@@ -5,22 +5,17 @@
 Page Types
 ==========
 
-Page Types are a special Content Type in TYPO3. A minimal Page Type looks like
-this:
+This is a guide. For YAML reference refer to
+:ref:`this page <yaml_reference_page_types>`.
 
-.. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/PageType/blog/EditorInterface.yaml
-
-    name: example/blog
-    typeName: 1701284006
-    fields:
-      - identifier: additional_field
-        type: Text
-
-This will create a new Page Type entry above the page tree, which you can drag
-and drop as usual. Your custom fields will be added after the `nav_title` field.
-SEO fields will be automatically added, if you have the SEO system extension
-installed.
+Page Types (also known as doktypes) do exist since the beginning of time.
+However, it was always hard to create custom ones and there were no extensions
+to help with creating them as they exist for Content Elements. Due to this
+circumstances you might not be familiar with the concept of custom Page Types.
+Basically, you can create a variation which is different from the standard page
+type and add special properties to it. These can be used in templates or even
+custom plugins. This opens up many possibilities and can enhance user experience
+in the backend.
 
 When to use Page Types
 ======================
@@ -103,6 +98,14 @@ utilise CSS bootstrap classes like `card`.
             </be:link.editRecord>
         </div>
     </div>
+
+Icons for states
+================
+
+Page Types can have special states like disabled or hidden in menu. Depending
+on this state, the icon changes or is overlayed with another icon. As for now,
+only the "hide in menu" state can be supplied with a custom icon. Put an icon
+with the name **IconHideInMenu.svg** inside your Assets folder to use it.
 
 Processing of page data
 =======================
