@@ -543,6 +543,7 @@ final class ContentBlockCompiler
         if ($isExternalCollection || $fields === []) {
             return;
         }
+        // The Collection's title equals the field label.
         $field['title'] = $field['label'];
         // Anonymous Collections can't have a type field.
         $field['typeField'] = null;
