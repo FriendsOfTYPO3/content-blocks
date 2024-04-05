@@ -69,8 +69,8 @@ class ContentBlockBuilder
         $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
         GeneralUtility::mkdir_deep($publicPath);
 
-        $this->createEditorInterfaceYaml($contentBlock, $basePath);
         $this->createLabelsXlf($contentBlock, $basePath);
+        $this->createEditorInterfaceYaml($contentBlock, $basePath);
 
         $contentType = $contentBlock->getContentType();
         if ($contentType === ContentType::CONTENT_ELEMENT) {
@@ -101,6 +101,8 @@ class ContentBlockBuilder
     {
         $contentType = $contentBlock->getContentType();
         $yamlContent = $contentBlock->getYaml();
+        unset($yamlContent['title']);
+        unset($yamlContent['description']);
         if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
             unset($yamlContent['table']);
             unset($yamlContent['typeField']);

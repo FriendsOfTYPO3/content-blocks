@@ -172,6 +172,7 @@ class CreateContentBlockCommand extends Command
             $question = new Question('Enter human-readable title', $defaultTitle);
             $title = $io->askQuestion($question);
         }
+        $title = htmlspecialchars($title);
 
         $yamlConfiguration = match ($contentType) {
             ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $title, $typeName),
@@ -281,7 +282,6 @@ class CreateContentBlockCommand extends Command
             [
                 'identifier' => 'header',
                 'useExistingField' => true,
-                'label' => 'Custom header label',
             ],
         ];
         return $configuration;
