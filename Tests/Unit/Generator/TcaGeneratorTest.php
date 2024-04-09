@@ -32,7 +32,6 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
-use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -2106,7 +2105,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             $simpleTcaSchemaFactory,
-            new NoopEventDispatcher(),
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -2290,7 +2288,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             $simpleTcaSchemaFactory,
-            new NoopEventDispatcher(),
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -2331,7 +2328,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             $simpleTcaSchemaFactory,
-            new NoopEventDispatcher(),
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -2998,7 +2994,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             $simpleTcaSchemaFactory,
-            new NoopEventDispatcher(),
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -3051,7 +3046,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             $simpleTcaSchemaFactory,
-            new NoopEventDispatcher(),
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -3275,7 +3269,6 @@ final class TcaGeneratorTest extends UnitTestCase
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
             $simpleTcaSchemaFactory,
-            new NoopEventDispatcher(),
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,

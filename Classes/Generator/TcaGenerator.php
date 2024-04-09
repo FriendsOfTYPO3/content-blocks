@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\NativeTableCapabilityProxy;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
@@ -146,7 +145,6 @@ class TcaGenerator
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
-        protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly SystemExtensionAvailability $systemExtensionAvailability,
         protected readonly FlexFormGenerator $flexFormGenerator,
