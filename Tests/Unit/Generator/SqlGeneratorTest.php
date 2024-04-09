@@ -36,7 +36,7 @@ final class SqlGeneratorTest extends UnitTestCase
     public static function generateReturnsExpectedSqlStatementsDataProvider(): iterable
     {
         yield 'simple fields in tt_content table' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
@@ -63,7 +63,7 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
 
         yield 'simple fields in custom foobar table' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
@@ -88,7 +88,7 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
 
         yield 'simple fields in custom foobar table with parent reference' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/parent',
                     'yaml' => [
@@ -132,7 +132,7 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
 
         yield 'simple fields in custom foobar table with typeField defined' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
@@ -160,7 +160,7 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
 
         yield 'nullable option removes NOT NULL statement' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
@@ -188,7 +188,7 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
 
         yield 'inline field on root level' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
                     'yaml' => [
@@ -223,7 +223,7 @@ final class SqlGeneratorTest extends UnitTestCase
         ];
 
         yield 'inline field on second level' => [
-            'array' => [
+            'contentBlocks' => [
                 [
                     'name' => 'foo/bar',
                     'yaml' => [

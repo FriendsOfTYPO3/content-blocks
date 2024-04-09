@@ -41,7 +41,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'SimpleBasic',
@@ -88,7 +88,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'PaletteBasic',
@@ -147,7 +147,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'TabBasic',
@@ -202,7 +202,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'TabBasic',
@@ -273,7 +273,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'SimpleBasic',
@@ -342,7 +342,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'SimpleBasic',
@@ -391,7 +391,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'PaletteBasic',
@@ -452,7 +452,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'TabBasic',
@@ -509,7 +509,7 @@ final class BasicsServiceTest extends UnitTestCase
                     ],
                 ],
             ],
-            'basic' => [
+            'basics' => [
                 new LoadedBasic(
                     'foo',
                     'TabBasic',
