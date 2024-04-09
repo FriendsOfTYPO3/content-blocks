@@ -21,7 +21,7 @@ eventually this will become a system extension in TYPO3 v13.
 |---------------------------------------------------------------------------------------|---------------|
 | [Content Blocks v0.6](https://github.com/nhovratov/content-blocks/releases/tag/0.6.0) | 26.02         |
 | [Content Blocks v0.7](https://github.com/nhovratov/content-blocks/releases/tag/0.7.0) | 01.04         |
-| Core patch                                                                            | 01.04 - 23.04 |
+| [Core patch](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721)                   | 01.04 - 23.04 |
 | TYPO3 v13.1                                                                           | 23.04         |
 | Review period                                                                         | 23.04 - 14.06 |
 | Patch merged latest                                                                   | 01.07         |
