@@ -98,7 +98,7 @@ final class FileFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'type' => 'file',
-                    'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
+                    'allowed' => 'common-image-types',
                     'disallowed' => 'png',
                     'appearance' => [
                         'foo' => 'bar',
@@ -191,22 +191,6 @@ final class FileFieldTypeTest extends UnitTestCase
                             ],
                         ],
                     ],
-                ],
-            ],
-        ];
-
-        yield 'allowed and disallowed accept arrays' => [
-            'config' => [
-                'non_available_field' => 'foo',
-                'allowed' => ['common-image-types'],
-                'disallowed' => ['png'],
-            ],
-            'expectedTca' => [
-                'exclude' => true,
-                'config' => [
-                    'type' => 'file',
-                    'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai,svg',
-                    'disallowed' => ['png'],
                 ],
             ],
         ];

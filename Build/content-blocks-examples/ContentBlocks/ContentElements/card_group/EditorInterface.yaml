@@ -34,6 +34,7 @@ fields:
     fields:
       - identifier: image
         type: File
+        allowed: common-image-types
       - identifier: title
         type: Text
       - identifier: bodytext

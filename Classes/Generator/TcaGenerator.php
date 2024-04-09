@@ -37,7 +37,6 @@ use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
-use TYPO3\CMS\Core\Preparations\TcaPreparation;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -149,7 +148,6 @@ class TcaGenerator
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected readonly EventDispatcherInterface $eventDispatcher,
         protected readonly LanguageFileRegistry $languageFileRegistry,
-        protected readonly TcaPreparation $tcaPreparation,
         protected readonly SystemExtensionAvailability $systemExtensionAvailability,
         protected readonly FlexFormGenerator $flexFormGenerator,
     ) {}
@@ -188,7 +186,6 @@ class TcaGenerator
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
             $tca[$tableDefinition->getTable()] = $this->generateTableTca($tableDefinition, $baseTca);
         }
-        $tca = $this->tcaPreparation->prepare($tca);
         return $tca;
     }
 
