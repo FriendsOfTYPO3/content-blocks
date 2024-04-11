@@ -48,6 +48,9 @@ final class FileFieldTypeTest extends UnitTestCase
                 'behaviour' => [
                     'foo' => 'bar',
                 ],
+                'overrideChildTca' => [
+                    'foo' => 'bar',
+                ],
                 'readOnly' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
@@ -110,6 +113,7 @@ final class FileFieldTypeTest extends UnitTestCase
                     'minitems' => 1,
                     'maxitems' => 1,
                     'overrideChildTca' => [
+                        'foo' => 'bar',
                         'columns' => [
                             'crop' => [
                                 'config' => [
@@ -174,6 +178,7 @@ final class FileFieldTypeTest extends UnitTestCase
                 'minitems' => 0,
                 'maxitems' => 0,
                 'cropVariants' => [],
+                'overrideChildTca' => [],
             ],
             'expectedTca' => [
                 'config' => [
