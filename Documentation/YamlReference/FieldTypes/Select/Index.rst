@@ -27,7 +27,7 @@ Settings
 .. confval:: items
    :name: select-items
 
-   :Required: yes
+   :Required: false
    :Type: array
 
    Contains the elements for the selector box. Each item is an array. An item
