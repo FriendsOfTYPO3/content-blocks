@@ -52,10 +52,10 @@ Settings
 
    An array which defines an integer range within which the value must be. Keys:
 
-   lower (string in format `H:i Y-m-d`)
+   lower (string in format `Y-m-d H:i:s`)
       Defines the min date.
 
-   upper (string in format `H:i Y-m-d`)
+   upper (string in format `Y-m-d H:i:s`)
       Defines the max date.
 
    It is allowed to specify only one of both of them.
