@@ -118,7 +118,10 @@ final class TableDefinitionCollectionFactory
         $newTableDefinition = $newTableDefinition->withParentReferences($references);
         // If root Content Type is a Content Element, allow the external table to be put in standard pages.
         foreach ($references as $reference) {
-            if ($reference->getParentContentType() === ContentType::CONTENT_ELEMENT) {
+            if (
+                $reference->getParentContentType() === ContentType::CONTENT_ELEMENT
+                || $reference->getParentContentType() === ContentType::PAGE_TYPE
+            ) {
                 $capability = $newTableDefinition->getCapability();
                 $capability = $capability->withIgnorePageTypeRestriction(true);
                 $newTableDefinition = $newTableDefinition->withCapability($capability);
