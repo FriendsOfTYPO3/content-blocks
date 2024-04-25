@@ -359,7 +359,6 @@ class TcaGenerator
 
     protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
-        $typeDefinition->getColumns();
         $typeDefinitionArray = [
             'previewRenderer' => PreviewRenderer::class,
             'showitem' => $this->getContentElementStandardShowItem($typeDefinition),
