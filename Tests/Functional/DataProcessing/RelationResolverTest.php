@@ -70,7 +70,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'image' => 1,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -95,7 +95,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_folder' => '1:/',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -120,7 +120,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_folder_recursive' => '1:/',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -146,7 +146,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -172,7 +172,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection2' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -198,7 +198,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection_external' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -224,7 +224,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_collection_recursive' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -258,7 +258,7 @@ final class RelationResolverTest extends FunctionalTestCase
             '_ORIG_uid' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -284,7 +284,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -315,7 +315,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -352,7 +352,7 @@ final class RelationResolverTest extends FunctionalTestCase
             '_LOCALIZED_UID' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -377,7 +377,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_11' => 7,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -402,7 +402,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_categories_1m' => '7,8',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -428,7 +428,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_relation' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -454,7 +454,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_circular_relation' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
         self::assertCount(1, $result);
@@ -478,7 +478,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_record_relation_recursive' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -512,7 +512,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_relation' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -538,7 +538,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_content_relation' => 'pages_1,pages_2,tt_content_1,tt_content_2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -566,7 +566,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_pages_mm' => 2,
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -590,7 +590,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_checkbox' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -612,7 +612,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_single_box' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -634,7 +634,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_multiple' => '1,2,3',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -656,7 +656,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_multiple' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -678,7 +678,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_multiple' => '',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -701,7 +701,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -724,7 +724,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_multiple' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -749,7 +749,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_multiple' => '1,1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -776,7 +776,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_native' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -799,7 +799,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign_native_multiple' => '1,2',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -824,7 +824,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_select_foreign' => '1',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -862,7 +862,7 @@ final class RelationResolverTest extends FunctionalTestCase
 </T3FlexForms>',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -909,7 +909,7 @@ final class RelationResolverTest extends FunctionalTestCase
 </T3FlexForms>',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 
@@ -934,7 +934,7 @@ final class RelationResolverTest extends FunctionalTestCase
             'typo3tests_contentelementb_json' => '{"foo": "bar"}',
         ];
 
-        $relationResolver = new RelationResolver($tableDefinitionCollection, $simpleTcaSchemaFactory, new FlexFormService(), new RelationResolverSession());
+        $relationResolver = new RelationResolver($tableDefinitionCollection, new FlexFormService(), new RelationResolverSession());
 
         $result = $relationResolver->processField($fieldDefinition, $elementDefinition, $dummyRecord, 'tt_content');
 

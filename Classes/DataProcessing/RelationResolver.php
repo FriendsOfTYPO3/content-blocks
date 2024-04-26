@@ -25,7 +25,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FolderFieldType;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\RelationHandler;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -43,7 +42,6 @@ class RelationResolver
 
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected readonly FlexFormService $flexFormService,
         protected readonly RelationResolverSession $relationResolverSession,
     ) {}
@@ -307,7 +305,7 @@ class RelationResolver
         $relationHandler = GeneralUtility::makeInstance(RelationHandler::class);
         $relationHandler->start($uidList, $tableList, $mmTable, $uid, $currentTable, $tcaFieldConf);
         foreach (array_keys($relationHandler->tableArray) as $table) {
-            if ($this->simpleTcaSchemaFactory->has($table)) {
+            if (isset($GLOBALS['TCA'][$table])) {
                 $autoHiddenSelection = -1;
                 $ignoreWorkspaceFilter = ['pid' => true];
                 $additionalWhere = $pageRepository->enableFields($table, $autoHiddenSelection, $ignoreWorkspaceFilter);
