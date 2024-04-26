@@ -27,9 +27,11 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Event\CacheWarmupEvent;
+use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
 use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
@@ -70,6 +72,7 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
             'content-blocks.add-icons' => static::configureIconRegistry(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
+            'content-blocks.simple-tca-schema' => static::simpleTcaSchema(...),
         ];
     }
 
@@ -92,6 +95,14 @@ class ServiceProvider extends AbstractServiceProvider
                 $parentFieldNames,
             ]
         );
+    }
+
+    public static function simpleTcaSchema(ContainerInterface $container): \Closure
+    {
+        return static function (AfterTcaCompilationEvent $event) use ($container) {
+            $simpleTcaSchemaFactory = $container->get(SimpleTcaSchemaFactory::class);
+            $simpleTcaSchemaFactory->initialize($event->getTca());
+        };
     }
 
     public static function getContentBlockIcons(ContainerInterface $container): \ArrayObject
@@ -397,6 +408,7 @@ HEREDOC;
         $listenerProvider->addListener(ModifyLoadedPageTsConfigEvent::class, 'content-blocks.add-page-tsconfig');
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-icons');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
+        $listenerProvider->addListener(AfterTcaCompilationEvent::class, 'content-blocks.simple-tca-schema');
         return $listenerProvider;
     }
 }
