@@ -57,6 +57,15 @@
 			<trans-unit id="my_flexform.header1.label" resname="my_flexform.header1.label">
 				<source>header1</source>
 			</trans-unit>
+			<trans-unit id="my_flexform2.label" resname="my_flexform2.label">
+				<source>my_flexform2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.header.label" resname="my_flexform2.header.label">
+				<source>header</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.textarea.label" resname="my_flexform2.textarea.label">
+				<source>textarea</source>
+			</trans-unit>
 			<trans-unit id="palette_field_1.label" resname="palette_field_1.label">
 				<source>palette_field_1</source>
 			</trans-unit>

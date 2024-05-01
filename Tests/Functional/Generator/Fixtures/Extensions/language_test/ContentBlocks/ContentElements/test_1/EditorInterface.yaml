@@ -48,6 +48,13 @@ fields:
             type: Textarea
           - identifier: header1
             type: Text
+  - identifier: my_flexform2
+    type: FlexForm
+    fields:
+      - identifier: header
+        type: Text
+      - identifier: textarea
+        type: Textarea
   - identifier: palette_1
     type: Palette
     fields:
