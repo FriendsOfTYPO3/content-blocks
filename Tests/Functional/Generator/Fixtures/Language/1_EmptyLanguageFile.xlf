@@ -39,6 +39,36 @@
 			<trans-unit id="my_flexform.sections.section1.container.container1.container_field.label" resname="my_flexform.sections.section1.container.container1.container_field.label">
 				<source>container_field</source>
 			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.select.label" resname="my_flexform.sections.section1.container.container1.select.label">
+				<source>select</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.select.items.label" resname="my_flexform.sections.section1.container.container1.select.items.label">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.select.items.select_1.label" resname="my_flexform.sections.section1.container.container1.select.items.select_1.label">
+				<source>Select1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.select.items.select_2.label" resname="my_flexform.sections.section1.container.container1.select.items.select_2.label">
+				<source>Select2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.radio.label" resname="my_flexform.sections.section1.container.container1.radio.label">
+				<source>radio</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.radio.items.0.label" resname="my_flexform.sections.section1.container.container1.radio.items.0.label">
+				<source>Radio1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.radio.items.1.label" resname="my_flexform.sections.section1.container.container1.radio.items.1.label">
+				<source>Radio1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.check.label" resname="my_flexform.sections.section1.container.container1.check.label">
+				<source>check</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.check.items.0.label" resname="my_flexform.sections.section1.container.container1.check.items.0.label">
+				<source>Check1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform.sections.section1.container.container1.check.items.1.label" resname="my_flexform.sections.section1.container.container1.check.items.1.label">
+				<source>Check2</source>
+			</trans-unit>
 			<trans-unit id="my_flexform.sections.section1.container.container2.title" resname="my_flexform.sections.section1.container.container2.title">
 				<source>container2</source>
 			</trans-unit>
@@ -65,6 +95,36 @@
 			</trans-unit>
 			<trans-unit id="my_flexform2.textarea.label" resname="my_flexform2.textarea.label">
 				<source>textarea</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.select.label" resname="my_flexform2.select.label">
+				<source>select</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.select.items.label" resname="my_flexform2.select.items.label">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.select.items.select_1.label" resname="my_flexform2.select.items.select_1.label">
+				<source>Select1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.select.items.select_2.label" resname="my_flexform2.select.items.select_2.label">
+				<source>Select2</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.radio.label" resname="my_flexform2.radio.label">
+				<source>radio</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.radio.items.0.label" resname="my_flexform2.radio.items.0.label">
+				<source>Radio1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.radio.items.1.label" resname="my_flexform2.radio.items.1.label">
+				<source>Radio1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.check.label" resname="my_flexform2.check.label">
+				<source>check</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.check.items.0.label" resname="my_flexform2.check.items.0.label">
+				<source>Check1</source>
+			</trans-unit>
+			<trans-unit id="my_flexform2.check.items.1.label" resname="my_flexform2.check.items.1.label">
+				<source>Check2</source>
 			</trans-unit>
 			<trans-unit id="palette_field_1.label" resname="palette_field_1.label">
 				<source>palette_field_1</source>

@@ -9,24 +9,17 @@ fields:
         type: Select
         renderType: selectSingle
         items:
-          - label: 'Left'
-            value: 'left'
-          - label: 'Center'
-            value: 'center'
-          - label: 'Right'
-            value: 'right'
+          - value: 'left'
+          - value: 'center'
+          - value: 'right'
       - identifier: row_items
         type: Select
         renderType: selectSingle
         items:
-          - label: '1'
-            value: '1'
-          - label: '2'
-            value: '2'
-          - label: '3'
-            value: '3'
-          - label: '4'
-            value: '4'
+          - value: '1'
+          - value: '2'
+          - value: '3'
+          - value: '4'
   - identifier: card_group_item
     type: Collection
     labelField: title

@@ -2958,6 +2958,132 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
+
+        yield 'FlexForm automatic labels for items work' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'extPath' => 'EXT:foo/ContentBlocks/example',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                        'iconIdentifier' => 'tt_content-t3ce_example',
+                    ],
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 't3ce_example',
+                        'fields' => [
+                            [
+                                'identifier' => 'flex',
+                                'type' => 'FlexForm',
+                                'prefixField' => false,
+                                'fields' => [
+                                    [
+                                        'identifier' => 'select',
+                                        'type' => 'Select',
+                                        'renderType' => 'selectSingle',
+                                        'items' => [
+                                            [
+                                                'value' => '',
+                                            ],
+                                            [
+                                                'value' => '1',
+                                            ],
+                                            [
+                                                'value' => '2',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'tt_content' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            't3ce_example' => 'tt_content-t3ce_example',
+                        ],
+                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,flex',
+                    ],
+                    'types' => [
+                        't3ce_example' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'flex' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.description',
+                                    'config' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds_pointerField' => 'CType',
+                                'ds' => [
+                                    'default' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
+                                    't3ce_example' => '<T3FlexForms>
+    <sheets type="array">
+        <sDEF type="array">
+            <ROOT type="array">
+                <type>array</type>
+                <el type="array">
+                    <field index="select" type="array">
+                        <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.select.label</label>
+                        <config type="array">
+                            <renderType>selectSingle</renderType>
+                            <type>select</type>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <value></value>
+                                    <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.select.items.label</label>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <value>1</value>
+                                    <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.select.items.1.label</label>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <value>2</value>
+                                    <label>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.select.items.2.label</label>
+                                </numIndex>
+                            </items>
+                        </config>
+                        <description>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.select.description</description>
+                    </field>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3FlexForms>',
+                                ],
+                            ],
+                            'exclude' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     #[DataProvider('checkFlexFormTcaDataProvider')]

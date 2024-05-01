@@ -99,17 +99,32 @@ class FlexFormGenerator
 
     protected function processTcaField(TcaFieldDefinition $flexFormTcaDefinition, FlexFormDefinition $flexFormDefinition): array
     {
+        $name = $flexFormDefinition->getContentBlockName();
         $flexFormTca = $flexFormTcaDefinition->getTca();
         // FlexForm child fields can't be excluded.
         unset($flexFormTca['exclude']);
 
         $labelPath = $flexFormTcaDefinition->getLabelPath();
-        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $labelPath)) {
+        if ($this->languageFileRegistry->isset($name, $labelPath)) {
             $flexFormTca['label'] = $labelPath;
         }
         $descriptionPath = $flexFormTcaDefinition->getDescriptionPath();
-        if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $descriptionPath)) {
+        if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $flexFormTca['description'] = $descriptionPath;
+        }
+        $fieldType = $flexFormTcaDefinition->getFieldType();
+        $itemsFieldTypes = ['select', 'radio', 'check'];
+        $tcaFieldType = $fieldType::getTcaType();
+        if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
+            $items = $flexFormTca['config']['items'] ?? [];
+            foreach ($items as $index => $item) {
+                $labelPath = $item['labelPath'];
+                unset($flexFormTca['config']['items'][$index]['labelPath']);
+                if (!$this->languageFileRegistry->isset($name, $labelPath)) {
+                    continue;
+                }
+                $flexFormTca['config']['items'][$index]['label'] = $labelPath;
+            }
         }
         return $flexFormTca;
     }

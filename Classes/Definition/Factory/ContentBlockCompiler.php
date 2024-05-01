@@ -183,7 +183,7 @@ final class ContentBlockCompiler
             $itemsFieldTypes = ['select', 'radio', 'check'];
             $tcaFieldType = $result->fieldType::getTcaType();
             if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
-                $field = $this->collectItemLabels($input, $result, $field);
+                $field = $this->collectItemLabels($input, $result->fieldType, $field);
             }
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($fieldTypeEnum === FieldType::COLLECTION) {
@@ -271,10 +271,10 @@ final class ContentBlockCompiler
         return $field;
     }
 
-    private function collectItemLabels(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    private function collectItemLabels(ProcessingInput $input, FieldTypeInterface $fieldType, array $field): array
     {
         $items = $field['items'] ?? [];
-        $fieldTypeName = $result->fieldType::getName();
+        $fieldTypeName = $fieldType::getName();
         $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
         foreach ($items as $index => $item) {
             $label = (string)($item['label'] ?? '');
@@ -661,7 +661,8 @@ final class ContentBlockCompiler
         $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
-
+        $fieldType = $this->resolveType($input, $flexFormField);
+        $flexFormField = $this->collectItemLabels($input, $fieldType, $flexFormField);
         $flexFormFieldArray = [
             'uniqueIdentifier' => $identifier,
             'config' => $flexFormField,
