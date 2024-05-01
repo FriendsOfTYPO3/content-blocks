@@ -83,7 +83,7 @@ class LanguageFileGenerator
     protected function generateTransUnitFromSource(AutomaticLanguageSource $automaticLanguageSource): string
     {
         $key = $automaticLanguageSource->key;
-        $value = $automaticLanguageSource->value;
+        $value = htmlspecialchars($automaticLanguageSource->value);
         $sourceContent = <<<HEREDOC
 			<trans-unit id="$key" resname="$key">
 				<source>$value</source>
