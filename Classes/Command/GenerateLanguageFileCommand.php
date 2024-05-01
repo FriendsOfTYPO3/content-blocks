@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
+use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -33,9 +34,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class GenerateLanguageFileCommand extends Command
 {
     public function __construct(
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly LanguageFileGenerator $languageFileGenerator,
         protected readonly PackageManager $packageManager,
+        protected readonly ContentBlockLoader $contentBlockLoader,
     ) {
         parent::__construct();
     }
@@ -63,6 +64,7 @@ class GenerateLanguageFileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
         $contentBlockName = $input->getArgument('content-block');
         $print = (bool)$input->getOption('print');
         $extension = (string)$input->getOption('extension');
@@ -81,7 +83,7 @@ class GenerateLanguageFileCommand extends Command
         }
 
         if ($print) {
-            $this->printLabelsXlf($contentBlockName, $output);
+            $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $output);
         } else {
             if ($extension !== '') {
                 try {
@@ -90,14 +92,14 @@ class GenerateLanguageFileCommand extends Command
                     $output->writeln('<error>Extension with key "' . $extension . '" does not exist.</error>');
                     return Command::INVALID;
                 }
-                foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
+                foreach ($contentBlockRegistry->getAll() as $contentBlock) {
                     if ($contentBlock->getHostExtension() !== $extension) {
                         continue;
                     }
                     $this->writeLabelsXlf($contentBlock);
                 }
             } else {
-                $contentBlock = $this->contentBlockRegistry->getContentBlock($contentBlockName);
+                $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
                 $this->writeLabelsXlf($contentBlock);
             }
         }
@@ -114,9 +116,9 @@ class GenerateLanguageFileCommand extends Command
         GeneralUtility::writeFile($labelsXlfPath, $result);
     }
 
-    protected function printLabelsXlf(string $contentBlockName, OutputInterface $output): void
+    protected function printLabelsXlf(ContentBlockRegistry $contentBlockRegistry, string $contentBlockName, OutputInterface $output): void
     {
-        $contentBlock = $this->contentBlockRegistry->getContentBlock($contentBlockName);
+        $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
         $result = $this->languageFileGenerator->generate($contentBlock);
         $output->writeln($result, OutputInterface::OUTPUT_RAW);
     }
