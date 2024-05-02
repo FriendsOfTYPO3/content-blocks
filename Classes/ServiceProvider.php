@@ -17,7 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Psr\Container\ContainerInterface;
+use TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent;
 use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
 use TYPO3\CMS\ContentBlocks\Cache\InitializeContentBlockCache;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
@@ -32,6 +34,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Cache\Event\CacheWarmupEvent;
 use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
 use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
@@ -70,6 +73,7 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
             'content-blocks.add-icons' => static::configureIconRegistry(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
+            'content-blocks.record-summary-for-localization' => static::recordSummaryForLocalization(...),
         ];
     }
 
@@ -350,6 +354,48 @@ HEREDOC;
         };
     }
 
+    /**
+     * This removes all nested Content Element children from the translation wizard.
+     */
+    public static function recordSummaryForLocalization(ContainerInterface $container): \Closure
+    {
+        return static function (AfterRecordSummaryForLocalizationEvent $event) use ($container) {
+            $recordsPerColumn = $event->getRecords();
+            $arrayObject = $container->get('content-blocks.parent-field-names');
+            $parentFieldNames = $arrayObject->getArrayCopy();
+            $allUids = [];
+            foreach ($recordsPerColumn as $records) {
+                foreach ($records as $record) {
+                    $allUids[] = (int)$record['uid'];
+                }
+            }
+            $queryBuilder = $container->get(ConnectionPool::class)->getQueryBuilderForTable('tt_content');
+            $queryBuilder
+                ->select('uid')
+                ->from('tt_content')
+                ->where(
+                    $queryBuilder->expr()->in('uid', $queryBuilder->createNamedParameter($allUids, ArrayParameterType::INTEGER)),
+                );
+            foreach ($parentFieldNames as $parentFieldName) {
+                $queryBuilder->andWhere($queryBuilder->expr()->eq($parentFieldName, $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)));
+            }
+            $rootUids = $queryBuilder->executeQuery()->fetchFirstColumn();
+            // Map uids to integer values.
+            $rootUids = array_map(fn(int|string $uid): int => (int)$uid, $rootUids);
+            foreach ($recordsPerColumn as $column => $records) {
+                foreach ($records as $key => $record) {
+                    $uid = (int)$record['uid'];
+                    if (!in_array($uid, $rootUids, true)) {
+                        unset($recordsPerColumn[$column][$key]);
+                    }
+                }
+                // Ensure this is a list. Apparently this is important for the wizard to work correctly.
+                $recordsPerColumn[$column] = array_values($recordsPerColumn[$column]);
+            }
+            $event->setRecords($recordsPerColumn);
+        };
+    }
+
     public static function configureIconRegistry(ContainerInterface $container): \Closure
     {
         return static function (BootCompletedEvent $event) use ($container) {
@@ -397,6 +443,7 @@ HEREDOC;
         $listenerProvider->addListener(ModifyLoadedPageTsConfigEvent::class, 'content-blocks.add-page-tsconfig');
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-icons');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
+        $listenerProvider->addListener(AfterRecordSummaryForLocalizationEvent::class, 'content-blocks.record-summary-for-localization');
         return $listenerProvider;
     }
 }
