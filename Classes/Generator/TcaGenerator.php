@@ -593,8 +593,11 @@ class TcaGenerator
     }
 
     /**
-     * To be compatible with existing flexForm fields, the type field has to be present inside `ds_pointerField`.
+     * To be compatible with existing FlexForm fields, the type field has to be present inside `ds_pointerField`.
      * If this is not the case, the flexForm field cannot be reused.
+     *
+     * An exception is a FlexForm field which only defines `default`. In such a case the whole configuration is
+     * reused. It's not possible to add a custom set of fields.
      *
      * Furthermore, this method handles the adjustment for multiple pointer fields. The most prominent example would be
      * `pi_flexform`, which points to `list_type` and `CType`. Content Blocks only uses CType by default for Content
@@ -617,7 +620,11 @@ class TcaGenerator
      */
     protected function processExistingFlexForm(TcaFieldDefinition $column, TableDefinition $tableDefinition, array $baseTca): ?array
     {
-        $existingDsPointerField = $baseTca[$tableDefinition->getTable()]['columns'][$column->getUniqueIdentifier()]['config']['ds_pointerField'];
+        $baseTcaColumns = $baseTca[$tableDefinition->getTable()]['columns'];
+        $existingDsPointerField = $baseTcaColumns[$column->getUniqueIdentifier()]['config']['ds_pointerField'] ?? null;
+        if ($existingDsPointerField === null) {
+            return null;
+        }
         $existingDsPointerFieldArray = GeneralUtility::trimExplode(',', $existingDsPointerField);
         $dsConfiguration = $column->getTca()['config']['ds'];
         $typeSwitchField = $tableDefinition->getTypeField();
