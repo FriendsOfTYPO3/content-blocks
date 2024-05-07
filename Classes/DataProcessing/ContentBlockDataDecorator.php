@@ -84,7 +84,7 @@ final class ContentBlockDataDecorator
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
             $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
-            if ($fieldTypeEnum->isStructureField()) {
+            if ($fieldTypeEnum?->isStructureField()) {
                 continue;
             }
             $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];

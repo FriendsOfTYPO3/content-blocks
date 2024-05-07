@@ -52,7 +52,7 @@ enum FieldType: string
     public static function isValidFlexFormField(FieldTypeInterface $fieldType): bool
     {
         $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
-        if ($fieldTypeEnum->isStructureField()) {
+        if ($fieldTypeEnum?->isStructureField()) {
             return false;
         }
         return $fieldTypeEnum !== self::FLEXFORM;
