@@ -778,7 +778,9 @@ class TcaGenerator
 
         $metaTab = [
             '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata',
+            '--palette--;;abstract',
             '--palette--;;metatags',
+            '--palette--;;editorial',
         ];
 
         $systemTabs = [
