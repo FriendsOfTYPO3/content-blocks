@@ -210,7 +210,11 @@ final class ContentBlockCompiler
         $table = $result->contentType->table;
         $contentType = $result->tableDefinition->contentType;
         if ($contentType === ContentType::RECORD_TYPE && $result->tableDefinition->hasTypeField()) {
-            $isExistingField = $this->simpleTcaSchemaFactory->has($table);
+            $isExistingField = false;
+            if ($this->simpleTcaSchemaFactory->has($table)) {
+                $tableSchema = $this->simpleTcaSchemaFactory->get($table);
+                $isExistingField = $tableSchema->hasField($result->tableDefinition->typeField);
+            }
             $yamlFields = $yaml['fields'] ?? [];
             $yamlFields = $this->prependTypeFieldForRecordType($yamlFields, $result, $isExistingField);
             $yaml['fields'] = $yamlFields;
