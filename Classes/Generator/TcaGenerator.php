@@ -255,14 +255,13 @@ class TcaGenerator
             $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
             $nativeCapability = new NativeTableCapabilityProxy($tcaSchema);
             $systemPalettes = $this->buildSystemPalettes($nativeCapability);
-            $existingPalettes = $GLOBALS['TCA'][$tableDefinition->getTable()]['palettes'] ?? [];
-            if (!isset($existingPalettes['hidden']) && isset($systemPalettes['hidden'])) {
+            if (isset($systemPalettes['hidden'])) {
                 $palettes['hidden'] = $systemPalettes['hidden'];
             }
-            if (!isset($existingPalettes['access']) && isset($systemPalettes['access'])) {
+            if (isset($systemPalettes['access'])) {
                 $palettes['access'] = $systemPalettes['access'];
             }
-            if (!isset($existingPalettes['language']) && isset($systemPalettes['language'])) {
+            if (isset($systemPalettes['language'])) {
                 $palettes['language'] = $systemPalettes['language'];
             }
         }
