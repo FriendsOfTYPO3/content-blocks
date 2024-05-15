@@ -224,12 +224,14 @@ class TcaGenerator
                 }
             }
             if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {
-                if ($isNewTable) {
+                if ($isNewTable || !isset($baseTca[$tableDefinition->getTable()]['ctrl']['typeicon_classes']['default'])) {
                     $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIcon()->iconIdentifier;
                 }
-                $typeIconColumnExists = $isNewTable && isset($baseTca[$tableDefinition->getTable()]['ctrl']['typeicon_column']);
-                if ($tableDefinition->hasTypeField() && !$typeIconColumnExists) {
-                    $tca['ctrl']['typeicon_column'] = $tableDefinition->getTypeField();
+                if ($tableDefinition->hasTypeField()) {
+                    // Ensure "type" is always set when a type field exists. This could be missing when an existing
+                    // record is extended with a new record type.
+                    $tca['ctrl']['type'] ??= $tableDefinition->getTypeField();
+                    $tca['ctrl']['typeicon_column'] ??= $tableDefinition->getTypeField();
                 }
             }
             if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT && $typeDefinition->hasColumn('bodytext')) {
