@@ -458,6 +458,9 @@ class TcaGenerator
         $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
             ->getField($overrideColumn->getUniqueIdentifier());
         $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
+        if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
+            return $overrideTca;
+        }
         $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
         if (
             $foreignTableDefinition->getCapability()->isSortable()
