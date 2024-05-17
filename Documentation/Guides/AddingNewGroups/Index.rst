@@ -29,7 +29,7 @@ In v12 you have to add a group with page TSconfig.
     mod.wizards.newContentElement.wizardItems {
         my_group {
             header = LLL:EXT:my_package/Resources/Private/Language/Backend.xlf:content_group.my_group
-            before: common
+            before = common
         }
     }
 
