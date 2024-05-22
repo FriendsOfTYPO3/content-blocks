@@ -56,7 +56,7 @@ Content Type. Using YAML over PHP includes a wider range of people, which is
 able to modify Content Blocks without the need of a developer.
 
 .. code-block:: yaml
-   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name
+   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name/EditorInterface.yaml
 
     name: vendor/content-block-name
     fields:
