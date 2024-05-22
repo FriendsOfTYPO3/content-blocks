@@ -52,10 +52,19 @@ be done by using the according Basic :yaml:`identifier` and the type
         - identifier: TYPO3/Header
           type: Basic
 
+.. note::
+
+   It's not possible to override Basics once they are included as a field type,
+   because they can contain multiple fields, palettes or tabs. If a use case
+   arises, where you need a new "base field", then you probably want to create
+   a new :ref:`custom field type <extending-field-types>`. This requires PHP
+   code, however.
+
 Pre-defined Basics
 ==================
 
-List of the standard Basics shipped with Content Blocks.
+List of the standard Basics shipped with Content Blocks. Feel free to copy them
+into your own project and adjust them as you need.
 
 *  :yaml:`TYPO3/Header`
 *  :yaml:`TYPO3/Appearance`
