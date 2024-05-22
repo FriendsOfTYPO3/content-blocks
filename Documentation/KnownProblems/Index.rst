@@ -36,3 +36,18 @@ Else, here are some tips to save table row size:
 * Otherwise consider creating an own extension with custom tables if your Content Blocks are getting too complex.
 
 Read `this mariadb troubleshooting guide <https://mariadb.com/kb/en/troubleshooting-row-size-too-large-errors-with-innodb/>`__ for in depth explanation and more tips.
+
+Field labels displayed as identifier
+====================================
+
+In some areas in the TYPO3 backend fields created by Content Blocks are
+displayed with their identifier instead of the localized label. E.g. in the
+backend user permissions view or the list view / export view. The reason is that
+you can't define fields centrally in Content Blocks. Multiple Content Blocks can
+reuse the same field and define alternative labels. If you really need proper
+labels in these areas, we recommend to use TCA overrides in order to define a
+default label.
+
+.. code-block:: php
+
+    $GLOBALS['TCA']['tt_content']['columns']['my_prefix_my_identifier']['label'] = 'LLL:EXT:my_extension/path/to/locallang.xlf';
