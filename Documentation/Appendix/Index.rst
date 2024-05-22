@@ -14,5 +14,4 @@ beyond the basic documentation.
 
     CoreContentTypes/Index
     TcaTypeMapping/Index
-    ParseFunc/Index
     History/Index
