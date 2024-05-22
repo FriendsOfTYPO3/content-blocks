@@ -67,6 +67,7 @@ definition the TypoScript from above won't work, as it will be loaded too late
 in the TypoScript parsing process.
 
 .. code-block:: php
+   :caption: EXT:site_package/ext_localconf.php
 
     // Define TypoScript as content rendering template.
     // This is normally set in Fluid Styled Content.

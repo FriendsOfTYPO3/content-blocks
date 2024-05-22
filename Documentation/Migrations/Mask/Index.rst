@@ -131,10 +131,8 @@ Page templates fields
 ---------------------
 
 Mask has this quirky feature of assigning additional page fields based on TYPO3
-backend layouts. Historically, frontend page templates are bound to backend
-layouts. This is a conceptual mistake, which still persists. Anyway, there is
-no such feature in Content Blocks. Use custom page types instead and migrate
-pages with special backend layouts to the new doktype.
+backend layouts. There is no such feature in Content Blocks. Use custom page
+types instead and migrate pages with special backend layouts to the new doktype.
 
 Nested Content
 --------------
