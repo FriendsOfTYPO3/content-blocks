@@ -180,11 +180,7 @@ final class ContentBlockCompiler
             if ($fieldTypeEnum === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
-            $itemsFieldTypes = ['select', 'radio', 'check'];
-            $tcaFieldType = $result->fieldType::getTcaType();
-            if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
-                $field = $this->collectItemLabels($input, $result->fieldType, $field);
-            }
+            $field = $this->collectItemLabels($input, $result->fieldType, $field);
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($fieldTypeEnum === FieldType::COLLECTION) {
                 $this->processCollection($input, $result, $field);
@@ -277,13 +273,16 @@ final class ContentBlockCompiler
 
     private function collectItemLabels(ProcessingInput $input, FieldTypeInterface $fieldType, array $field): array
     {
+        $itemsFieldTypes = ['select', 'radio', 'check'];
+        $tcaFieldType = $fieldType::getTcaType();
+        if (!in_array($tcaFieldType, $itemsFieldTypes, true)) {
+            return $field;
+        }
         $items = $field['items'] ?? [];
-        $fieldTypeName = $fieldType::getName();
-        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
         foreach ($items as $index => $item) {
             $label = (string)($item['label'] ?? '');
             $currentPath = $input->languagePath->getCurrentPath();
-            if ($fieldTypeEnum === FieldType::CHECKBOX) {
+            if ($tcaFieldType === 'check') {
                 $labelPath = $currentPath . '.items.' . $index . '.label';
             } else {
                 $value = (string)($item['value'] ?? '');
