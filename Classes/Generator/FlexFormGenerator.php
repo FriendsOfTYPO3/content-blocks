@@ -152,12 +152,10 @@ class FlexFormGenerator
     {
         if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $definition->getLanguagePathLabel())) {
             $label = $definition->getLanguagePathLabel();
+        } elseif ($definition->hasLabel()) {
+            $label = $definition->getLabel();
         } else {
-            if ($definition->hasLabel()) {
-                $label = $definition->getLabel();
-            } else {
-                $label = $definition->getIdentifier();
-            }
+            $label = $definition->getIdentifier();
         }
         return $label;
     }
