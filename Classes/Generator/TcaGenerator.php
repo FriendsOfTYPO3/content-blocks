@@ -406,12 +406,10 @@ class TcaGenerator
                 $languagePathLabel = $inputItem->getLanguagePathLabel();
                 if ($this->languageFileRegistry->isset($inputItem->getContentBlockName(), $languagePathLabel)) {
                     $tab .= $languagePathLabel;
+                } elseif ($inputItem->hasLabel()) {
+                    $tab .= $inputItem->getLabel();
                 } else {
-                    if ($inputItem->hasLabel()) {
-                        $tab .= $inputItem->getLabel();
-                    } else {
-                        $tab .= $inputItem->getIdentifier();
-                    }
+                    $tab .= $inputItem->getIdentifier();
                 }
                 $showItem[] = $tab;
             } else {
