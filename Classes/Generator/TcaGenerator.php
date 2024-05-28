@@ -585,7 +585,10 @@ class TcaGenerator
         if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
             $items = $column['config']['items'] ?? [];
             foreach ($items as $index => $item) {
-                $labelPath = (string)($item['labelPath'] ?? '');
+                if (!isset($item['labelPath'])) {
+                    continue;
+                }
+                $labelPath = $item['labelPath'];
                 unset($column['config']['items'][$index]['labelPath']);
                 if (!$this->languageFileRegistry->isset($name, $labelPath)) {
                     continue;
