@@ -118,6 +118,9 @@ class FlexFormGenerator
         if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
             $items = $flexFormTca['config']['items'] ?? [];
             foreach ($items as $index => $item) {
+                if (!isset($item['labelPath'])) {
+                    continue;
+                }
                 $labelPath = $item['labelPath'];
                 unset($flexFormTca['config']['items'][$index]['labelPath']);
                 if (!$this->languageFileRegistry->isset($name, $labelPath)) {
