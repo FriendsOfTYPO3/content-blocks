@@ -76,10 +76,10 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('<p>tableName:tt_content</p>', $html);
         self::assertStringContainsString('<p>creationDate:1697810914</p>', $html);
         self::assertStringContainsString('<p>updateDate:1697810925</p>', $html);
-        self::assertStringContainsString('<link href="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.css', $html);
-        self::assertStringContainsString('<script src="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Frontend.js', $html);
-        self::assertStringContainsString('<img src="/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Icon.svg', $html);
-        self::assertStringContainsString('<img src="http://localhost/typo3conf/ext/test_content_blocks_c/ContentBlocks/ContentElements/simple/Assets/Icon.svg', $html);
+        self::assertStringContainsString('<link href="/typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/Frontend.css', $html);
+        self::assertStringContainsString('<script src="/typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/Frontend.js', $html);
+        self::assertStringContainsString('<img src="/typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/Icon.svg', $html);
+        self::assertStringContainsString('<img src="http://localhost/typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/Icon.svg', $html);
     }
 
     #[Test]

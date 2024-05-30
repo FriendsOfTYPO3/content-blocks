@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Utility;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -144,14 +145,22 @@ class ContentBlockPathUtility
         return 'Source';
     }
 
-    public static function getPublicAssetsFolder(): string
+    public static function getPublicHostExtPath(string $hostExtension): string
     {
-        return '_assets';
+        return 'EXT:' . $hostExtension . '/Resources/Public/ContentBlocks';
     }
 
-    public static function getSymlinkedAssetsPath(string $name): string
+    public static function getPublicAssetsFolder(string $hostExtension): string
     {
-        return self::getPublicAssetsFolder() . '/' . md5($name);
+        $assetsPath = GeneralUtility::getFileAbsFileName(self::getPublicHostExtPath($hostExtension));
+        return $assetsPath;
+    }
+
+    public static function getSymlinkedAssetsPath(string $hostExtension, string $package): string
+    {
+        $assetsPath = self::getPublicAssetsFolder($hostExtension);
+        $assetsPath .= '/' . $package;
+        return $assetsPath;
     }
 
     public static function getBasicsFolder(): string

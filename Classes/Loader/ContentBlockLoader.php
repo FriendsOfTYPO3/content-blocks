@@ -30,7 +30,6 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -232,7 +231,7 @@ class ContentBlockLoader
             $contentBlockIcon,
             $name,
             $absolutePath,
-            $extPath,
+            $extensionKey,
             $iconIdentifier,
             $contentType,
             $table,
@@ -245,7 +244,7 @@ class ContentBlockLoader
                 $pageIconHideInMenu,
                 $name,
                 $absolutePath,
-                $extPath,
+                $extensionKey,
                 $iconIdentifierHideInMenu,
                 $contentType,
                 $table,
@@ -269,21 +268,32 @@ class ContentBlockLoader
      */
     protected function publishAssets(array $loadedContentBlocks): void
     {
-        if (!Environment::isComposerMode()) {
-            return;
-        }
         $fileSystem = new Filesystem();
-        $assetsPath = Environment::getPublicPath() . '/' . ContentBlockPathUtility::getPublicAssetsFolder();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
+            $absoluteAssetsPath = ContentBlockPathUtility::getPublicAssetsFolder($loadedContentBlock->getHostExtension());
             $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
                 $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
-            $contentBlockAssetsTargetDirectory = $assetsPath . '/' . md5($loadedContentBlock->getName());
-            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $assetsPath);
-            if (!$fileSystem->exists($contentBlockAssetsTargetDirectory)) {
-                $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
+
+            if (!$fileSystem->exists($absolutContentBlockPublicPath)) {
+                continue;
             }
+
+            $contentBlockAssetsTargetDirectory = ContentBlockPathUtility::getSymlinkedAssetsPath(
+                $loadedContentBlock->getHostExtension(),
+                $loadedContentBlock->getPackage(),
+            );
+
+            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $absoluteAssetsPath);
+            $this->linkOrCopy($relativePath, $contentBlockAssetsTargetDirectory);
         }
+    }
+
+    protected function linkOrCopy(string $source, string $target): void
+    {
+        $fileSystem = new Filesystem();
+        $fileSystem->symlink($source, $target);
+        // @todo Junction
     }
 
     protected function getFromCache(): false|array

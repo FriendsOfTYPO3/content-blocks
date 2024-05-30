@@ -9,3 +9,4 @@ Documentation-GENERATED-temp
 config
 .phpunit.result.cache
 packages
+/Tests/Fixtures/Extensions/*/Resources/Public/ContentBlocks
