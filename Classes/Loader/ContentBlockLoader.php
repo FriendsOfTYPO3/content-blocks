@@ -288,17 +288,12 @@ class ContentBlockLoader
                 $hostExtension,
                 $loadedContentBlock->getName(),
             );
-            $this->linkOrCopy($relativePath, $contentBlockAssetsTargetDirectory);
-        }
-    }
 
-    protected function linkOrCopy(string $source, string $target): void
-    {
-        $fileSystem = new Filesystem();
-        try {
-            $fileSystem->symlink($source, $target);
-        } catch (IOException) {
-            $fileSystem->mirror($source, $target);
+            try {
+                $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
+            } catch (IOException) {
+                $fileSystem->mirror($absoluteContentBlockPublicPath, $contentBlockAssetsTargetDirectory);
+            }
         }
     }
 
