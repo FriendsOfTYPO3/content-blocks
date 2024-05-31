@@ -133,7 +133,7 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
 
         $href = ContentBlockPathUtility::getPublicHostExtPath(
             $contentBlock->getHostExtension(),
-        ) . '/' . $contentBlock->getPackage() . '/' . $file;
+        ) . '/' . $contentBlock->getName() . '/' . $file;
 
         $options = [
             'priority' => $this->arguments['priority'],

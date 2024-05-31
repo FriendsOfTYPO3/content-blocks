@@ -156,10 +156,10 @@ class ContentBlockPathUtility
         return $assetsPath;
     }
 
-    public static function getSymlinkedAssetsPath(string $hostExtension, string $package): string
+    public static function getSymlinkedAssetsPath(string $hostExtension, string $name): string
     {
         $assetsPath = self::getPublicAssetsFolder($hostExtension);
-        $assetsPath .= '/' . $package;
+        $assetsPath .= '/' . $name;
         return $assetsPath;
     }
 

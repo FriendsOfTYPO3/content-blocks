@@ -271,7 +271,6 @@ class ContentBlockLoader
     {
         $fileSystem = new Filesystem();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
-            $absoluteAssetsPath = ContentBlockPathUtility::getPublicAssetsFolder($loadedContentBlock->getHostExtension());
             $absoluteContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
                 $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
@@ -280,12 +279,21 @@ class ContentBlockLoader
                 continue;
             }
 
+            // we need the parent directory to create a relative path
+            $contentBlockAssetsTargetDirectoryBase = ContentBlockPathUtility::getPublicAssetsFolder(
+                $loadedContentBlock->getHostExtension()
+            ) . '/' . $loadedContentBlock->getVendor();
+
             $contentBlockAssetsTargetDirectory = ContentBlockPathUtility::getSymlinkedAssetsPath(
                 $loadedContentBlock->getHostExtension(),
-                $loadedContentBlock->getPackage(),
+                $loadedContentBlock->getName(),
             );
 
-            $relativePath = $fileSystem->makePathRelative($absoluteContentBlockPublicPath, $absoluteAssetsPath);
+            $relativePath = $fileSystem->makePathRelative(
+                $absoluteContentBlockPublicPath,
+                $contentBlockAssetsTargetDirectoryBase
+            );
+
             $this->linkOrCopy($relativePath, $contentBlockAssetsTargetDirectory);
         }
     }

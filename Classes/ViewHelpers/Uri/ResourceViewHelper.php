@@ -53,7 +53,7 @@ class ResourceViewHelper extends AbstractViewHelper
 
         $absolutePath = ContentBlockPathUtility::getSymlinkedAssetsPath(
             $contentBlock->getHostExtension(),
-            $contentBlock->getPackage()
+            $contentBlock->getName()
         ) . '/' . $filePath;
 
         $uri = PathUtility::getAbsoluteWebPath($absolutePath);

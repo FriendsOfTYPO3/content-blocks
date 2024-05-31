@@ -131,7 +131,7 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
 
         $src = ContentBlockPathUtility::getPublicHostExtPath(
             $contentBlock->getHostExtension(),
-        ) . '/' . $contentBlock->getPackage() . '/' . $file;
+        ) . '/' . $contentBlock->getName() . '/' . $file;
 
         $options = [
             'priority' => $this->arguments['priority'],

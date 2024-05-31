@@ -46,7 +46,7 @@ final class ScriptViewHelperTest extends FunctionalTestCase
         (new TemplateView($context))->render();
 
         $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
-        self::assertSame('EXT:test_content_blocks_b/Resources/Public/ContentBlocks/content-element-b/Frontend.js', $collectedJavaScripts['test']['source']);
+        self::assertSame('EXT:test_content_blocks_b/Resources/Public/ContentBlocks/typo3tests/content-element-b/Frontend.js', $collectedJavaScripts['test']['source']);
         self::assertSame([], $collectedJavaScripts['test']['attributes']);
     }
 
@@ -59,7 +59,7 @@ final class ScriptViewHelperTest extends FunctionalTestCase
         (new TemplateView($context))->render();
 
         $collectedJavaScripts = $this->get(AssetCollector::class)->getJavaScripts();
-        self::assertSame('EXT:test_content_blocks_a/Resources/Public/ContentBlocks/content-element-a/my.js', $collectedJavaScripts['test']['source']);
+        self::assertSame('EXT:test_content_blocks_a/Resources/Public/ContentBlocks/typo3tests/content-element-a/my.js', $collectedJavaScripts['test']['source']);
         self::assertSame(['async' => 'async', 'defer' => 'defer', 'nomodule' => 'nomodule'], $collectedJavaScripts['test']['attributes']);
     }
 }

@@ -47,7 +47,7 @@ class ContentTypeIconResolver
                 continue;
             }
             $package = explode('/', $name)[1];
-            $prefixPath = ContentBlockPathUtility::getPublicHostExtPath($extension) . '/' . $package;
+            $prefixPath = ContentBlockPathUtility::getPublicHostExtPath($extension) . '/' . $name;
             $iconNameWithoutFileExtension = $identifier;
             $contentTypeIcon = new ContentTypeIcon();
             $icon = $prefixPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
