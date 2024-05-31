@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\VarExporter\LazyObjectInterface;
@@ -292,8 +293,11 @@ class ContentBlockLoader
     protected function linkOrCopy(string $source, string $target): void
     {
         $fileSystem = new Filesystem();
-        $fileSystem->symlink($source, $target);
-        // @todo Junction
+        try {
+            $fileSystem->symlink($source, $target);
+        } catch (IOException) {
+            $fileSystem->mirror($source, $target);
+        }
     }
 
     protected function getFromCache(): false|array
