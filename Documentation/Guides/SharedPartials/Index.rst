@@ -6,7 +6,7 @@ Shared Partials
 ===============
 
 Sometimes you want to reuse Partials from your extension in your Content Block
-template. This is done by extending the :typoscript:`partialRootPaths` of the
+template. This is done by :ref:`extending <cb_extendTyposcript>` the :typoscript:`partialRootPaths` of the
 default Content Block :ref:`FLUIDTEMPLATE <t3tsref:cobj-fluidtemplate>`
 definition.
 
