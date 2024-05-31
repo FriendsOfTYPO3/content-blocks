@@ -30,7 +30,7 @@ Let's have a look at the contents of this TypoScript object:
    The contents of lib.contentBlock
 
 As you can see :typoscript:`lib.contentBlock` is a :typoscript:`FLUIDTEMPLATE`
-TypoScript content object. This means you can override it with your own
+TypoScript content object. This means you can :ref:`override <cb_extendTyposcript>` it with your own
 layout and partial root paths.
 
 .. code-block:: typoscript
