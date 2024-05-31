@@ -51,7 +51,7 @@ final class ResourceViewHelperTest extends FunctionalTestCase
     {
         yield 'render returns URI' => [
             '<cb:uri.resource path="Extension.svg" name="typo3tests/content-element-b" />',
-            'typo3conf/ext/test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/Assets/Extension.svg',
+            'typo3conf/ext/test_content_blocks_b/Resources/Public/ContentBlocks/typo3tests/content-element-b/Extension.svg',
         ];
     }
 

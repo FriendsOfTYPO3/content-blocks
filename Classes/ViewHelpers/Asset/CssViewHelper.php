@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\ViewHelpers\Asset;
 
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
@@ -129,16 +128,14 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
             $attributes['name'],
             $attributes['file'],
         );
-        if (Environment::isComposerMode()) {
-            $file = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . '/' . $file;
-        } else {
-            $file = $this->contentBlockRegistry->getContentBlockExtPath($name) . '/' . ContentBlockPathUtility::getPublicFolder() . '/' . $file;
-        }
+        $contentBlock = $this->contentBlockRegistry->getContentBlock($name);
+        $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($contentBlock->getHostExtension(), $name);
+        $href = $extPath . '/' . $file;
         $options = [
             'priority' => $this->arguments['priority'],
             'useNonce' => $this->arguments['useNonce'],
         ];
-        $this->assetCollector->addStyleSheet($identifier, $file, $attributes, $options);
+        $this->assetCollector->addStyleSheet($identifier, $href, $attributes, $options);
         return '';
     }
 }

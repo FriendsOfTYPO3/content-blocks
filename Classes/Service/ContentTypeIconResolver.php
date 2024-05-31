@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Service;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -33,7 +32,7 @@ class ContentTypeIconResolver
     public static function resolve(
         string $name,
         string $absolutePath,
-        string $extPath,
+        string $extension,
         string $identifier,
         ContentType $contentType,
         string $table,
@@ -47,13 +46,10 @@ class ContentTypeIconResolver
             if (!file_exists($checkIconPath)) {
                 continue;
             }
-            $prefixPath = match (Environment::isComposerMode()) {
-                true => ContentBlockPathUtility::getSymlinkedAssetsPath($name),
-                false => $extPath . '/' . ContentBlockPathUtility::getPublicFolder(),
-            };
+            $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($extension, $name);
             $iconNameWithoutFileExtension = $identifier;
             $contentTypeIcon = new ContentTypeIcon();
-            $icon = $prefixPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
+            $icon = $extPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
             $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
             $contentTypeIcon->iconPath = $icon;
             $contentTypeIcon->iconProvider = $iconProviderClass;

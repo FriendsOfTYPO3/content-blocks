@@ -68,7 +68,7 @@ final class ProcessedContentType
             $contentTypeIcon = ContentTypeIconResolver::resolve(
                 $this->contentBlock->getName(),
                 $absolutePath,
-                $this->contentBlock->getExtPath(),
+                $this->contentBlock->getHostExtension(),
                 $identifier,
                 $this->contentBlock->getContentType(),
                 $this->table,

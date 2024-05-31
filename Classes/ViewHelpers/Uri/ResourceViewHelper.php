@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\ViewHelpers\Uri;
 
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -48,15 +47,14 @@ class ResourceViewHelper extends AbstractViewHelper
         if ($name === '') {
             throw new Exception(__CLASS__ . ' seemingly called outside Content Blocks context.', 1701198923);
         }
-        if (Environment::isComposerMode()) {
-            $uri = ContentBlockPathUtility::getSymlinkedAssetsPath($name) . '/' . $filePath;
-            $uri = GeneralUtility::getIndpEnv('TYPO3_SITE_PATH') . $uri;
-        } else {
-            $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-            $extPath = $contentBlockRegistry->getContentBlockExtPath($name) . '/' . ContentBlockPathUtility::getPublicFolder() . '/' . $filePath;
-            $absoluteFilePath = GeneralUtility::getFileAbsFileName($extPath);
-            $uri = PathUtility::getAbsoluteWebPath($absoluteFilePath);
-        }
+        $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
+        $contentBlock = $contentBlockRegistry->getContentBlock($name);
+        $absoluteAssetPath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockPath(
+            $contentBlock->getHostExtension(),
+            $contentBlock->getName()
+        );
+        $absoluteFilePath = $absoluteAssetPath . '/' . $filePath;
+        $uri = PathUtility::getAbsoluteWebPath($absoluteFilePath);
         if ($arguments['absolute']) {
             $uri = GeneralUtility::locationHeaderUrl($uri);
         }

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\VarExporter\LazyObjectInterface;
@@ -30,7 +31,6 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -232,7 +232,7 @@ class ContentBlockLoader
             $contentBlockIcon,
             $name,
             $absolutePath,
-            $extPath,
+            $extensionKey,
             $iconIdentifier,
             $contentType,
             $table,
@@ -245,7 +245,7 @@ class ContentBlockLoader
                 $pageIconHideInMenu,
                 $name,
                 $absolutePath,
-                $extPath,
+                $extensionKey,
                 $iconIdentifierHideInMenu,
                 $contentType,
                 $table,
@@ -269,19 +269,29 @@ class ContentBlockLoader
      */
     protected function publishAssets(array $loadedContentBlocks): void
     {
-        if (!Environment::isComposerMode()) {
-            return;
-        }
         $fileSystem = new Filesystem();
-        $assetsPath = Environment::getPublicPath() . '/' . ContentBlockPathUtility::getPublicAssetsFolder();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
-            $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
+            $hostExtension = $loadedContentBlock->getHostExtension();
+            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder();
+            $contentBlockAbsolutePublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
+            // If the Content Block does not have an Assets folder, nothing to publish here.
+            if (!file_exists($contentBlockAbsolutePublicPath)) {
+                continue;
+            }
+            $hostAbsolutePublicContentBlockBasePath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockBasePath($hostExtension);
+            $hostAbsolutePublicContentBlockBasePathWithVendor = $hostAbsolutePublicContentBlockBasePath . '/' . $loadedContentBlock->getVendor();
+            $contentBlockRelativePublicPath = $fileSystem->makePathRelative(
+                $contentBlockAbsolutePublicPath,
+                $hostAbsolutePublicContentBlockBasePathWithVendor
             );
-            $contentBlockAssetsTargetDirectory = $assetsPath . '/' . md5($loadedContentBlock->getName());
-            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $assetsPath);
-            if (!$fileSystem->exists($contentBlockAssetsTargetDirectory)) {
-                $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
+            $hostAbsolutePublicContentBlockPath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockPath(
+                $hostExtension,
+                $loadedContentBlock->getName(),
+            );
+            try {
+                $fileSystem->symlink($contentBlockRelativePublicPath, $hostAbsolutePublicContentBlockPath);
+            } catch (IOException) {
+                $fileSystem->mirror($contentBlockAbsolutePublicPath, $hostAbsolutePublicContentBlockPath);
             }
         }
     }
