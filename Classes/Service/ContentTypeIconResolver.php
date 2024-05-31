@@ -46,10 +46,10 @@ class ContentTypeIconResolver
             if (!file_exists($checkIconPath)) {
                 continue;
             }
-            $prefixPath = ContentBlockPathUtility::getPublicHostExtPath($extension) . '/' . $name;
+            $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($extension, $name);
             $iconNameWithoutFileExtension = $identifier;
             $contentTypeIcon = new ContentTypeIcon();
-            $icon = $prefixPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
+            $icon = $extPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
             $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
             $contentTypeIcon->iconPath = $icon;
             $contentTypeIcon->iconProvider = $iconProviderClass;

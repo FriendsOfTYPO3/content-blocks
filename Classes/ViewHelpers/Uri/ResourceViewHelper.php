@@ -49,7 +49,7 @@ class ResourceViewHelper extends AbstractViewHelper
         }
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
         $contentBlock = $contentBlockRegistry->getContentBlock($name);
-        $absoluteAssetPath = ContentBlockPathUtility::getSymlinkedAssetsPath(
+        $absoluteAssetPath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockPath(
             $contentBlock->getHostExtension(),
             $contentBlock->getName()
         );

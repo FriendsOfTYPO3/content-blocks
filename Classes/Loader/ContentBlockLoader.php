@@ -273,25 +273,25 @@ class ContentBlockLoader
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $hostExtension = $loadedContentBlock->getHostExtension();
             $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder();
-            $absoluteContentBlockPublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
+            $contentBlockAbsolutePublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
             // If the Content Block does not have an Assets folder, nothing to publish here.
-            if (!file_exists($absoluteContentBlockPublicPath)) {
+            if (!file_exists($contentBlockAbsolutePublicPath)) {
                 continue;
             }
-            $absoluteExtensionAssetsPath = ContentBlockPathUtility::getPublicAssetsFolder($hostExtension);
-            $contentBlockAssetsTargetDirectoryBase = $absoluteExtensionAssetsPath . '/' . $loadedContentBlock->getVendor();
-            $relativePath = $fileSystem->makePathRelative(
-                $absoluteContentBlockPublicPath,
-                $contentBlockAssetsTargetDirectoryBase
+            $hostAbsolutePublicContentBlockBasePath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockBasePath($hostExtension);
+            $hostAbsolutePublicContentBlockBasePathWithVendor = $hostAbsolutePublicContentBlockBasePath . '/' . $loadedContentBlock->getVendor();
+            $contentBlockRelativePublicPath = $fileSystem->makePathRelative(
+                $contentBlockAbsolutePublicPath,
+                $hostAbsolutePublicContentBlockBasePathWithVendor
             );
-            $contentBlockAssetsTargetDirectory = ContentBlockPathUtility::getSymlinkedAssetsPath(
+            $hostAbsolutePublicContentBlockPath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockPath(
                 $hostExtension,
                 $loadedContentBlock->getName(),
             );
             try {
-                $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
+                $fileSystem->symlink($contentBlockRelativePublicPath, $hostAbsolutePublicContentBlockPath);
             } catch (IOException) {
-                $fileSystem->mirror($absoluteContentBlockPublicPath, $contentBlockAssetsTargetDirectory);
+                $fileSystem->mirror($contentBlockAbsolutePublicPath, $hostAbsolutePublicContentBlockPath);
             }
         }
     }

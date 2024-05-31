@@ -145,20 +145,27 @@ class ContentBlockPathUtility
         return 'Source';
     }
 
-    public static function getPublicHostExtPath(string $hostExtension): string
+    public static function getHostExtPublicContentBlockBasePath(string $hostExtension): string
     {
         return 'EXT:' . $hostExtension . '/Resources/Public/ContentBlocks';
     }
 
-    public static function getPublicAssetsFolder(string $hostExtension): string
+    public static function getHostExtPublicContentBlockPath(string $hostExtension, string $name): string
     {
-        $assetsPath = GeneralUtility::getFileAbsFileName(self::getPublicHostExtPath($hostExtension));
+        $extPathBase = self::getHostExtPublicContentBlockBasePath($hostExtension);
+        return $extPathBase . '/' . $name;
+    }
+
+    public static function getHostAbsolutePublicContentBlockBasePath(string $hostExtension): string
+    {
+        $extPath = self::getHostExtPublicContentBlockBasePath($hostExtension);
+        $assetsPath = GeneralUtility::getFileAbsFileName($extPath);
         return $assetsPath;
     }
 
-    public static function getSymlinkedAssetsPath(string $hostExtension, string $name): string
+    public static function getHostAbsolutePublicContentBlockPath(string $hostExtension, string $name): string
     {
-        $assetsPath = self::getPublicAssetsFolder($hostExtension);
+        $assetsPath = self::getHostAbsolutePublicContentBlockBasePath($hostExtension);
         $assetsPath .= '/' . $name;
         return $assetsPath;
     }

@@ -127,8 +127,8 @@ final class ScriptViewHelper extends AbstractTagBasedViewHelper
             $attributes['file']
         );
         $contentBlock = $this->contentBlockRegistry->getContentBlock($name);
-        $extPath = ContentBlockPathUtility::getPublicHostExtPath($contentBlock->getHostExtension());
-        $src = $extPath . '/' . $contentBlock->getName() . '/' . $file;
+        $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($contentBlock->getHostExtension(), $name);
+        $src = $extPath . '/' . $file;
         $options = [
             'priority' => $this->arguments['priority'],
             'useNonce' => $this->arguments['useNonce'],

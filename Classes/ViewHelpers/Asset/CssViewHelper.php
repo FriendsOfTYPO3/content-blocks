@@ -129,8 +129,8 @@ final class CssViewHelper extends AbstractTagBasedViewHelper
             $attributes['file'],
         );
         $contentBlock = $this->contentBlockRegistry->getContentBlock($name);
-        $extPath = ContentBlockPathUtility::getPublicHostExtPath($contentBlock->getHostExtension());
-        $href = $extPath . '/' . $contentBlock->getName() . '/' . $file;
+        $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($contentBlock->getHostExtension(), $name);
+        $href = $extPath . '/' . $file;
         $options = [
             'priority' => $this->arguments['priority'],
             'useNonce' => $this->arguments['useNonce'],
