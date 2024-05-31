@@ -271,11 +271,11 @@ class ContentBlockLoader
         $fileSystem = new Filesystem();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $absoluteAssetsPath = ContentBlockPathUtility::getPublicAssetsFolder($loadedContentBlock->getHostExtension());
-            $absolutContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
+            $absoluteContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
                 $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
             );
 
-            if (!$fileSystem->exists($absolutContentBlockPublicPath)) {
+            if (!$fileSystem->exists($absoluteContentBlockPublicPath)) {
                 continue;
             }
 
@@ -284,7 +284,7 @@ class ContentBlockLoader
                 $loadedContentBlock->getPackage(),
             );
 
-            $relativePath = $fileSystem->makePathRelative($absolutContentBlockPublicPath, $absoluteAssetsPath);
+            $relativePath = $fileSystem->makePathRelative($absoluteContentBlockPublicPath, $absoluteAssetsPath);
             $this->linkOrCopy($relativePath, $contentBlockAssetsTargetDirectory);
         }
     }
