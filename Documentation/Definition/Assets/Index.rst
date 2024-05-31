@@ -12,9 +12,9 @@ inside. In order to include these in your template, you must use custom
 :ref:`Content Block ViewHelpers <asset_view_helpers>`.
 
 This folder will be symlinked or copied to
-**Resources/Public/ContentBlocks/<Content Type package name>** of the host
-extension. This is to keep the modular style of a Content Type but still
-leverage the TYPO3 asset publishing mechanism.
+**Resources/Public/ContentBlocks/<vendor>/<name>** of the host extension. This
+is to keep the modular style of a Content Type but still leverage the TYPO3
+asset publishing mechanism.
 
 When using a version control system, that path should be ignored by adding this
 line to the host extension's :file:`.gitignore` file:

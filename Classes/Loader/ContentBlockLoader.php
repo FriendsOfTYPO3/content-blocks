@@ -274,7 +274,7 @@ class ContentBlockLoader
             $hostExtension = $loadedContentBlock->getHostExtension();
             $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder();
             $absoluteContentBlockPublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
-            // If the Content Block does not have an assets folder, nothing to publish here.
+            // If the Content Block does not have an Assets folder, nothing to publish here.
             if (!file_exists($absoluteContentBlockPublicPath)) {
                 continue;
             }
@@ -288,7 +288,6 @@ class ContentBlockLoader
                 $hostExtension,
                 $loadedContentBlock->getName(),
             );
-
             try {
                 $fileSystem->symlink($relativePath, $contentBlockAssetsTargetDirectory);
             } catch (IOException) {
