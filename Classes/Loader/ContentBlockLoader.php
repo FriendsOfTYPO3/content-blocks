@@ -271,29 +271,23 @@ class ContentBlockLoader
     {
         $fileSystem = new Filesystem();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
-            $absoluteContentBlockPublicPath = GeneralUtility::getFileAbsFileName(
-                $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder()
-            );
-
-            if (!$fileSystem->exists($absoluteContentBlockPublicPath)) {
+            $hostExtension = $loadedContentBlock->getHostExtension();
+            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder();
+            $absoluteContentBlockPublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
+            // If the Content Block does not have an assets folder, nothing to publish here.
+            if (!file_exists($absoluteContentBlockPublicPath)) {
                 continue;
             }
-
-            // we need the parent directory to create a relative path
-            $contentBlockAssetsTargetDirectoryBase = ContentBlockPathUtility::getPublicAssetsFolder(
-                $loadedContentBlock->getHostExtension()
-            ) . '/' . $loadedContentBlock->getVendor();
-
-            $contentBlockAssetsTargetDirectory = ContentBlockPathUtility::getSymlinkedAssetsPath(
-                $loadedContentBlock->getHostExtension(),
-                $loadedContentBlock->getName(),
-            );
-
+            $absoluteExtensionAssetsPath = ContentBlockPathUtility::getPublicAssetsFolder($hostExtension);
+            $contentBlockAssetsTargetDirectoryBase = $absoluteExtensionAssetsPath . '/' . $loadedContentBlock->getVendor();
             $relativePath = $fileSystem->makePathRelative(
                 $absoluteContentBlockPublicPath,
                 $contentBlockAssetsTargetDirectoryBase
             );
-
+            $contentBlockAssetsTargetDirectory = ContentBlockPathUtility::getSymlinkedAssetsPath(
+                $hostExtension,
+                $loadedContentBlock->getName(),
+            );
             $this->linkOrCopy($relativePath, $contentBlockAssetsTargetDirectory);
         }
     }

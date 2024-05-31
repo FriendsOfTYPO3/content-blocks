@@ -46,7 +46,6 @@ class ContentTypeIconResolver
             if (!file_exists($checkIconPath)) {
                 continue;
             }
-            $package = explode('/', $name)[1];
             $prefixPath = ContentBlockPathUtility::getPublicHostExtPath($extension) . '/' . $name;
             $iconNameWithoutFileExtension = $identifier;
             $contentTypeIcon = new ContentTypeIcon();

@@ -47,17 +47,14 @@ class ResourceViewHelper extends AbstractViewHelper
         if ($name === '') {
             throw new Exception(__CLASS__ . ' seemingly called outside Content Blocks context.', 1701198923);
         }
-
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
         $contentBlock = $contentBlockRegistry->getContentBlock($name);
-
-        $absolutePath = ContentBlockPathUtility::getSymlinkedAssetsPath(
+        $absoluteAssetPath = ContentBlockPathUtility::getSymlinkedAssetsPath(
             $contentBlock->getHostExtension(),
             $contentBlock->getName()
-        ) . '/' . $filePath;
-
-        $uri = PathUtility::getAbsoluteWebPath($absolutePath);
-
+        );
+        $absoluteFilePath = $absoluteAssetPath . '/' . $filePath;
+        $uri = PathUtility::getAbsoluteWebPath($absoluteFilePath);
         if ($arguments['absolute']) {
             $uri = GeneralUtility::locationHeaderUrl($uri);
         }
