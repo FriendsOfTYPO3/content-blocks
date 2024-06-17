@@ -18,6 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Basics;
 
 /**
+ * Data object for a loaded `Basic`. Has information about the host extension,
+ * the identifier and the defined fields array.
+ *
  * @internal Not part of TYPO3's public API.
  */
 final class LoadedBasic

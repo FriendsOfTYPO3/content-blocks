@@ -22,10 +22,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class TcaGeneratorTest extends FunctionalTestCase
 {
-    protected array $coreExtensionsToLoad = [
-        //        'content_blocks',
-    ];
-
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
@@ -145,13 +141,15 @@ final class TcaGeneratorTest extends FunctionalTestCase
                     'label' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:title',
                     'value' => 'record1',
                     'icon' => 'custom_record-record1-cc2849f',
-                    'group' => '',
+                    'group' => null,
+                    'description' => 'LLL:EXT:test_content_blocks_c/ContentBlocks/RecordTypes/record1/Source/Language/Labels.xlf:description',
                 ],
                 [
                     'label' => 'content-blocks/record2',
                     'value' => 'record2',
                     'icon' => 'custom_record-record2-cc2849f',
-                    'group' => '',
+                    'group' => null,
+                    'description' => '',
                 ],
             ],
             $GLOBALS['TCA']['custom_record']['columns']['type']['config']['items'],

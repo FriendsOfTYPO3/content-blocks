@@ -32,6 +32,7 @@ use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -53,6 +54,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'table' => 'tt_content',
                         'typeField' => 'CType',
                         'typeName' => 't3ce_example',
+                        'saveAndClose' => true,
                         'fields' => [
                             [
                                 'identifier' => 'bodytext',
@@ -261,6 +263,9 @@ final class TcaGeneratorTest extends UnitTestCase
                         't3ce_example' => [
                             'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;general,bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,assets,pages,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_relation,t3ce_example_password,t3ce_example_uuid,t3ce_example_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription',
                             'previewRenderer' => PreviewRenderer::class,
+                            'creationOptions' => [
+                                'saveAndClose' => true,
+                            ],
                             'columnsOverrides' => [
                                 'bodytext' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:bodytext.label',
@@ -2089,7 +2094,8 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver, $baseTca);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -2269,7 +2275,8 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver, $baseTca);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -3105,7 +3112,8 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver, $baseTca);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -3159,7 +3167,8 @@ final class TcaGeneratorTest extends UnitTestCase
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver, $baseTca);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -3323,7 +3332,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:title',
                                         'value' => 'type_2',
                                         'icon' => 'existing_record-type_2',
-                                        'group' => '',
+                                        'group' => null,
+                                        'description' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:description',
                                     ],
                                 ],
                             ],
@@ -3531,7 +3541,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:title',
                                         'value' => 'type_2',
                                         'icon' => 'existing_record-type_2',
-                                        'group' => '',
+                                        'group' => null,
+                                        'description' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:description',
                                     ],
                                 ],
                             ],
@@ -3565,7 +3576,8 @@ final class TcaGeneratorTest extends UnitTestCase
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver, $baseTca);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
         $contentBlockRegistry->register($contentBlock);
@@ -3583,8 +3595,9 @@ final class TcaGeneratorTest extends UnitTestCase
             $flexFormGenerator,
         );
 
-        $GLOBALS['TCA'] = $baseTca;
-        $tca = $tcaGenerator->generateTcaOverrides();
+        $beforeTcaOverridesEvent = new BeforeTcaOverridesEvent($baseTca);
+        $tcaGenerator($beforeTcaOverridesEvent);
+        $tca = $beforeTcaOverridesEvent->getTca();
 
         self::assertSame($expected, $tca);
     }

@@ -84,24 +84,22 @@ class GenerateLanguageFileCommand extends Command
 
         if ($print) {
             $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $output);
-        } else {
-            if ($extension !== '') {
-                try {
-                    $this->packageManager->getPackage($extension);
-                } catch (UnknownPackageException) {
-                    $output->writeln('<error>Extension with key "' . $extension . '" does not exist.</error>');
-                    return Command::INVALID;
+        } elseif ($extension !== '') {
+            try {
+                $this->packageManager->getPackage($extension);
+            } catch (UnknownPackageException) {
+                $output->writeln('<error>Extension with key "' . $extension . '" does not exist.</error>');
+                return Command::INVALID;
+            }
+            foreach ($contentBlockRegistry->getAll() as $contentBlock) {
+                if ($contentBlock->getHostExtension() !== $extension) {
+                    continue;
                 }
-                foreach ($contentBlockRegistry->getAll() as $contentBlock) {
-                    if ($contentBlock->getHostExtension() !== $extension) {
-                        continue;
-                    }
-                    $this->writeLabelsXlf($contentBlock);
-                }
-            } else {
-                $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
                 $this->writeLabelsXlf($contentBlock);
             }
+        } else {
+            $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
+            $this->writeLabelsXlf($contentBlock);
         }
         return Command::SUCCESS;
     }

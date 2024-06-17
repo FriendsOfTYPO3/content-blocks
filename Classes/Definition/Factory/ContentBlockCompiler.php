@@ -180,7 +180,11 @@ final class ContentBlockCompiler
             if ($fieldTypeEnum === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
-            $field = $this->collectItemLabels($input, $result->fieldType, $field);
+            $itemsFieldTypes = ['select', 'radio', 'check'];
+            $tcaFieldType = $result->fieldType::getTcaType();
+            if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
+                $field = $this->collectItemLabels($input, $result->fieldType, $field);
+            }
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($fieldTypeEnum === FieldType::COLLECTION) {
                 $this->processCollection($input, $result, $field);

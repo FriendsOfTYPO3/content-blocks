@@ -26,10 +26,6 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
-    protected array $coreExtensionsToLoad = [
-        //        'content_blocks',
-    ];
-
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/content_blocks/Tests/Functional/Generator/Fixtures/Extensions/language_test',
         'typo3conf/ext/content_blocks',

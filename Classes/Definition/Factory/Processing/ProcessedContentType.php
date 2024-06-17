@@ -79,8 +79,8 @@ final class ProcessedContentType
         if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
             $contentType['typeIconHideInMenu'] = $this->contentBlock->getIconHideInMenu()->toArray();
         }
+        $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
-            $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
             $contentType['saveAndClose'] = (bool)($yaml['saveAndClose'] ?? false);
         }
         return $contentType;

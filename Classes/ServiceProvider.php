@@ -21,17 +21,16 @@ use Doctrine\DBAL\ArrayParameterType;
 use Psr\Container\ContainerInterface;
 use TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent;
 use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
-use TYPO3\CMS\ContentBlocks\Cache\InitializeContentBlockCache;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Cache\Event\CacheWarmupEvent;
+use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -40,7 +39,7 @@ use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
-use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
+use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\BeforeLoadedUserTsConfigEvent;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -67,21 +66,20 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.page-types' => static::getContentBlockPageTypes(...),
             'content-blocks.typoscript' => static::getContentBlockTypoScript(...),
             'content-blocks.user-tsconfig' => static::getContentBlockUserTsConfig(...),
-            'content-blocks.page-tsconfig' => static::getContentBlockPageTsConfig(...),
             'content-blocks.parent-field-names' => static::getContentBlockParentFieldNames(...),
-            'content-blocks.warmer' => static::getContentBlocksWarmer(...),
             'content-blocks.add-typoscript' => static::addTypoScript(...),
             'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
-            'content-blocks.add-page-tsconfig' => static::addPageTsConfig(...),
-            'content-blocks.add-icons' => static::configureIconRegistry(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
             'content-blocks.record-summary-for-localization' => static::recordSummaryForLocalization(...),
+            'content-blocks.base-simple-tca-schema' => static::baseSimpleTcaSchema(...),
+            'content-blocks.tca' => static::tca(...),
         ];
     }
 
     public function getExtensions(): array
     {
         return [
+            IconRegistry::class => static::configureIconRegistry(...),
             PageDoktypeRegistry::class => static::configurePageTypes(...),
             ListenerProvider::class => static::addEventListeners(...),
         ] + parent::getExtensions();
@@ -103,12 +101,6 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockIcons(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.content_blocks_code');
-        $iconsFromPackages = $cache->require('icons');
-        if ($iconsFromPackages !== false) {
-            $arrayObject->exchangeArray($iconsFromPackages);
-            return $arrayObject;
-        }
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             /** @var ContentTypeDefinition $typeDefinition */
@@ -129,7 +121,6 @@ class ServiceProvider extends AbstractServiceProvider
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }
         }
-        $cache->set('icons', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
@@ -150,8 +141,8 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockTypoScript(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('typoscript');
+        $cache = $container->get('cache.core');
+        $typoScriptFromCache = $cache->require('ContentBlocks_Typoscript');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -184,15 +175,15 @@ HEREDOC;
                 }
             }
         }
-        $cache->set('typoscript', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('ContentBlocks_Typoscript', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
     public static function getContentBlockUserTsConfig(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('user-tsconfig');
+        $cache = $container->get('cache.core');
+        $typoScriptFromCache = $cache->require('ContentBlocks_UserTsConfig');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -208,71 +199,15 @@ HEREDOC;
             }
         }
 
-        $cache->set('user-tsconfig', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
-        return $arrayObject;
-    }
-
-    public static function getContentBlockPageTsConfig(ContainerInterface $container): \ArrayObject
-    {
-        $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('page-tsconfig');
-        if ($typoScriptFromCache !== false) {
-            $arrayObject->exchangeArray($typoScriptFromCache);
-            return $arrayObject;
-        }
-
-        $languageFileRegistry = $container->get(LanguageFileRegistry::class);
-        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
-        foreach ($tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if ($typeDefinition instanceof ContentElementDefinition) {
-                    $languagePathTitle = $typeDefinition->getLanguagePathTitle();
-                    if ($languageFileRegistry->isset($typeDefinition->getName(), $languagePathTitle)) {
-                        $title = $languagePathTitle;
-                    } else {
-                        $title = $typeDefinition->getTitle();
-                    }
-                    $languagePathDescription = $typeDefinition->getLanguagePathDescription();
-                    if ($languageFileRegistry->isset($typeDefinition->getName(), $languagePathDescription)) {
-                        $description = $languagePathDescription;
-                    } else {
-                        $description = $typeDefinition->getDescription();
-                    }
-                    $group = $typeDefinition->getGroup();
-                    $typeName = $typeDefinition->getTypeName();
-                    $iconIdentifier = $typeDefinition->getTypeIcon()->iconIdentifier;
-                    $saveAndClose = $typeDefinition->hasSaveAndClose() ? '1' : '0';
-                    $pageTsConfig = <<<HEREDOC
-mod.wizards.newContentElement.wizardItems.$group {
-    elements {
-        $typeName {
-            iconIdentifier = $iconIdentifier
-            title = $title
-            description = $description
-            saveAndClose = $saveAndClose
-            tt_content_defValues {
-                CType = $typeName
-            }
-        }
-    }
-    show := addToList($typeName)
-}
-HEREDOC;
-                    $arrayObject->append($pageTsConfig);
-                }
-            }
-        }
-
-        $cache->set('page-tsconfig', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('ContentBlocks_UserTsConfig', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
     public static function getContentBlockParentFieldNames(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.content_blocks_code');
-        $typoScriptFromCache = $cache->require('parent-field-names');
+        $cache = $container->get('cache.core');
+        $typoScriptFromCache = $cache->require('ContentBlocks_ParentFieldNames');
         if ($typoScriptFromCache !== false) {
             $arrayObject->exchangeArray($typoScriptFromCache);
             return $arrayObject;
@@ -292,23 +227,8 @@ HEREDOC;
             }
             $arrayObject->exchangeArray(array_values($fieldNames));
         }
-        $cache->set('parent-field-names', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
+        $cache->set('ContentBlocks_ParentFieldNames', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
-    }
-
-    /**
-     * Usually it shouldn't be necessary to explicitly require warmup of Content Block caches here,
-     * as one of the code generators will trigger the generation. This is merely kept as fallback
-     * in case the events vanish for some reason.
-     */
-    public static function getContentBlocksWarmer(ContainerInterface $container): \Closure
-    {
-        return static function (CacheWarmupEvent $event) use ($container) {
-            if ($event->hasGroup('system')) {
-                // Create caches
-                $container->get(TableDefinitionCollection::class);
-            }
-        };
     }
 
     public static function addTypoScript(ContainerInterface $container): \Closure
@@ -322,19 +242,26 @@ HEREDOC;
 
     public static function addUserTsConfig(ContainerInterface $container): \Closure
     {
-        return static function (BootCompletedEvent $event) use ($container) {
+        return static function (BeforeLoadedUserTsConfigEvent $event) use ($container) {
             $arrayObject = $container->get('content-blocks.user-tsconfig');
             $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
-            ExtensionManagementUtility::addUserTSConfig($concatenatedTypoScript);
+            $event->addTsConfig($concatenatedTypoScript);
         };
     }
 
-    public static function addPageTsConfig(ContainerInterface $container): \Closure
+    public static function baseSimpleTcaSchema(ContainerInterface $container): \Closure
     {
-        return static function (ModifyLoadedPageTsConfigEvent $event) use ($container) {
-            $arrayObject = $container->get('content-blocks.page-tsconfig');
-            $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
-            $event->addTsConfig($concatenatedTypoScript);
+        return static function (BeforeTcaOverridesEvent $event) use ($container) {
+            $simpleTcaSchemaFactory = $container->get(SimpleTcaSchemaFactory::class);
+            $simpleTcaSchemaFactory->initialize($event->getTca());
+        };
+    }
+
+    public static function tca(ContainerInterface $container): \Closure
+    {
+        return static function (BeforeTcaOverridesEvent $event) use ($container) {
+            $tcaGenerator = $container->get(TcaGenerator::class);
+            $tcaGenerator($event);
         };
     }
 
@@ -402,35 +329,32 @@ HEREDOC;
         };
     }
 
-    public static function configureIconRegistry(ContainerInterface $container): \Closure
+    public static function configureIconRegistry(ContainerInterface $container, IconRegistry $iconRegistry): IconRegistry
     {
-        return static function (BootCompletedEvent $event) use ($container) {
-            $iconRegistry = $container->get(IconRegistry::class);
-            $iconsFromPackages = $container->get('content-blocks.icons');
-            foreach ($iconsFromPackages as $icon => $options) {
-                $provider = $options['provider'] ?? null;
-                unset($options['provider']);
-                $options ??= [];
-                if ($provider === null && ($options['source'] ?? false)) {
-                    $provider = $iconRegistry->detectIconProvider($options['source']);
-                }
-                if ($provider === null) {
-                    continue;
-                }
-                $iconRegistry->registerIcon($icon, $provider, $options);
+        $iconsFromPackages = $container->get('content-blocks.icons');
+        foreach ($iconsFromPackages as $icon => $options) {
+            $provider = $options['provider'] ?? null;
+            unset($options['provider']);
+            $options ??= [];
+            if ($provider === null && ($options['source'] ?? false)) {
+                $provider = $iconRegistry->detectIconProvider($options['source']);
             }
-            return $iconRegistry;
-        };
+            if ($provider === null) {
+                continue;
+            }
+            $iconRegistry->registerIcon($icon, $provider, $options);
+        }
+        return $iconRegistry;
     }
 
     public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
     {
         // Early core cache is required here, as PageDokTypeRegistry is instantiated in ExtensionManagementUtility::loadBaseTca
         $cache = $container->get('cache.core');
-        $pageTypesFromContentBlocks = $cache->require('page-types');
+        $pageTypesFromContentBlocks = $cache->require('ContentBlocks_PageTypes');
         if ($pageTypesFromContentBlocks === false) {
             $pageTypesFromContentBlocks = $container->get('content-blocks.page-types')->getArrayCopy();
-            $cache->set('page-types', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
+            $cache->set('ContentBlocks_PageTypes', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
         }
         foreach ($pageTypesFromContentBlocks as $pageType) {
             $pageDoktypeRegistry->add($pageType, []);
@@ -440,16 +364,12 @@ HEREDOC;
 
     public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider
     {
-        $listenerProvider->addListener(CacheWarmupEvent::class, 'content-blocks.warmer');
-        $listenerProvider->addListener(BootCompletedEvent::class, InitializeContentBlockCache::class);
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-typoscript');
-        // @todo Use BeforeLoadedUserTsConfigEvent in v13
-        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-user-tsconfig');
-        // @todo Use BeforeLoadedPageTsConfigEvent in v13
-        $listenerProvider->addListener(ModifyLoadedPageTsConfigEvent::class, 'content-blocks.add-page-tsconfig');
-        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-icons');
+        $listenerProvider->addListener(BeforeLoadedUserTsConfigEvent::class, 'content-blocks.add-user-tsconfig');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         $listenerProvider->addListener(AfterRecordSummaryForLocalizationEvent::class, 'content-blocks.record-summary-for-localization');
+        $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.base-simple-tca-schema');
+        $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.tca');
         return $listenerProvider;
     }
 }

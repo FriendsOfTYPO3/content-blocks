@@ -146,21 +146,4 @@ final class TextareaFieldTypeTest extends UnitTestCase
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
-
-    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
-    {
-        yield 'default text column' => [
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` text',
-        ];
-    }
-
-    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
-    #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
-    {
-        $fieldType = TextareaFieldType::createFromArray([]);
-
-        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
-    }
 }

@@ -39,6 +39,7 @@ final class RecordTypeDefinition extends ContentTypeDefinition implements Conten
             ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
             ->withPriority($array['priority'] ?? 0)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
-            ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
+            ->withLanguagePathDescription($array['languagePathDescription'] ?? null)
+            ->withGroup($array['group'] ?? null);
     }
 }

@@ -170,29 +170,4 @@ final class NumberFieldTypeTest extends UnitTestCase
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
-
-    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
-    {
-        yield 'integer column' => [
-            'config' => [],
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
-        ];
-        yield 'decimal column' => [
-            'config' => [
-                'format' => 'decimal',
-            ],
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` decimal(10,2) DEFAULT \'0.00\' NOT NULL',
-        ];
-    }
-
-    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
-    #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(array $config, string $uniqueColumnName, string $expectedSql): void
-    {
-        $fieldType = NumberFieldType::createFromArray($config);
-
-        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
-    }
 }

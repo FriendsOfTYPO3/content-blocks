@@ -28,10 +28,6 @@ final class ResourceViewHelperTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
-    protected array $coreExtensionsToLoad = [
-        //        'content_blocks',
-    ];
-
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks',

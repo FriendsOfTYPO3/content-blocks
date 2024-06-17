@@ -60,8 +60,7 @@ class RelationResolver
         $resolvedRelation = new ResolvedRelation();
         $resolvedRelation->table = $table;
         $resolvedRelation->raw = $data;
-        // @todo remove _PAGES_OVERLAY_UID in v13.
-        $identifier = $table . '-' . ($data['_PAGES_OVERLAY_UID'] ?? $data['_LOCALIZED_UID'] ?? $data['uid']);
+        $identifier = $table . '-' . ($data['_LOCALIZED_UID'] ?? $data['uid']);
         $this->relationResolverSession->addRelation($identifier, $resolvedRelation);
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
@@ -106,7 +105,7 @@ class RelationResolver
             'group' => $this->processRelation($tcaFieldDefinition, $typeDefinition, $table, $record),
             'folder' => $this->processFolder($rawValue, $tcaFieldDefinition),
             'select' => $this->processSelect($tcaFieldDefinition, $typeDefinition, $table, $record),
-            'flex' => $this->flexFormService->convertFlexFormContentToArray($rawValue),
+            'flex' => $this->flexFormService->convertFlexFormContentToArray((string)$rawValue),
             'json' => $this->processJson($table, $rawValue),
             default => $rawValue,
         };
@@ -306,10 +305,9 @@ class RelationResolver
         $relationHandler->start($uidList, $tableList, $mmTable, $uid, $currentTable, $tcaFieldConf);
         foreach (array_keys($relationHandler->tableArray) as $table) {
             if (isset($GLOBALS['TCA'][$table])) {
-                $autoHiddenSelection = -1;
                 $ignoreWorkspaceFilter = ['pid' => true];
-                $additionalWhere = $pageRepository->enableFields($table, $autoHiddenSelection, $ignoreWorkspaceFilter);
-                $relationHandler->additionalWhere[$table] = $additionalWhere;
+                $constraints = $pageRepository->getDefaultConstraints($table, $ignoreWorkspaceFilter);
+                $relationHandler->additionalWhere[$table] = implode(' AND ', $constraints);
             }
         }
         $relationHandler->getFromDB();
@@ -367,10 +365,6 @@ class RelationResolver
         }
         if (isset($record['_LOCALIZED_UID'])) {
             return (int)$record['_LOCALIZED_UID'];
-        }
-        // @todo remove in v13
-        if (isset($record['_PAGES_OVERLAY_UID'])) {
-            return (int)$record['_PAGES_OVERLAY_UID'];
         }
         return (int)$record['uid'];
     }

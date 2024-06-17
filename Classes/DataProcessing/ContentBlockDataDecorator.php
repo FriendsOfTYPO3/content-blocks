@@ -360,12 +360,7 @@ final class ContentBlockDataDecorator
 
     private function getRecordIdentifier(string $table, array $record): string
     {
-        // @todo remove _PAGES_OVERLAY_UID in v13.
-        $identifier = $table . '-' . (
-            $record['_PAGES_OVERLAY_UID']
-            ?? $record['_LOCALIZED_UID']
-            ?? $record['uid']
-        );
+        $identifier = $table . '-' . ($record['_LOCALIZED_UID'] ?? $record['uid']);
         return $identifier;
     }
 }

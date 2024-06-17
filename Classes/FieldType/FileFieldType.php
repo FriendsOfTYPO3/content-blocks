@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
-use TYPO3\CMS\Core\Resource\AbstractFile;
+use TYPO3\CMS\Core\Resource\FileType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -106,9 +106,9 @@ final class FileFieldType implements FieldTypeInterface
         }
         if (!$this->extendedPalette) {
             $basicPalette = '--palette--;;basicoverlayPalette,--palette--;;filePalette';
-            $config['overrideChildTca']['types'][AbstractFile::FILETYPE_IMAGE]['showitem'] = $basicPalette;
-            $config['overrideChildTca']['types'][AbstractFile::FILETYPE_AUDIO]['showitem'] = $basicPalette;
-            $config['overrideChildTca']['types'][AbstractFile::FILETYPE_VIDEO]['showitem'] = $basicPalette;
+            $config['overrideChildTca']['types'][FileType::IMAGE->value]['showitem'] = $basicPalette;
+            $config['overrideChildTca']['types'][FileType::AUDIO->value]['showitem'] = $basicPalette;
+            $config['overrideChildTca']['types'][FileType::VIDEO->value]['showitem'] = $basicPalette;
         }
         if ($this->cropVariants !== []) {
             $config['overrideChildTca']['columns']['crop']['config']['cropVariants'] = $this->processCropVariants();
@@ -142,7 +142,6 @@ final class FileFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        // @todo change to return '' for v13 release (generated automatically now).
-        return "`$column` int(11) UNSIGNED DEFAULT '0' NOT NULL";
+        return '';
     }
 }

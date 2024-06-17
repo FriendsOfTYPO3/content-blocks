@@ -72,7 +72,6 @@ final class LanguageFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        // @todo change to return '' for v13 release (generated automatically now).
-        return "`$column` int(11) DEFAULT '0' NOT NULL";
+        return '';
     }
 }

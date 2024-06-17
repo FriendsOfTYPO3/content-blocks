@@ -43,6 +43,7 @@ abstract class ContentTypeDefinition
     private ContentTypeIcon $typeIcon;
     private string $languagePathTitle;
     private string $languagePathDescription;
+    private ?string $group = null;
 
     public function getIdentifier(): string
     {
@@ -131,6 +132,11 @@ abstract class ContentTypeDefinition
     public function getLanguagePathDescription(): string
     {
         return $this->languagePathDescription;
+    }
+
+    public function getGroup(): ?string
+    {
+        return $this->group;
     }
 
     public function withIdentifier(string $identifier): static
@@ -237,6 +243,13 @@ abstract class ContentTypeDefinition
     {
         $clone = clone $this;
         $clone->languagePathDescription = $languagePathDescription;
+        return $clone;
+    }
+
+    public function withGroup(?string $group): static
+    {
+        $clone = clone $this;
+        $clone->group = $group;
         return $clone;
     }
 }

@@ -18,6 +18,10 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Basics;
 
 /**
+ * Registry class for loaded Basics filled by BasicsLoader. Used in BasicsService
+ * to check if requested Basics in EditorInterface.yaml files are available.
+ * Can be used to retrieve all Basics.
+ *
  * @internal Not part of TYPO3's public API.
  */
 final class BasicsRegistry

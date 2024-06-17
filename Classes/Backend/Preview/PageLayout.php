@@ -18,8 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\VarExporter\Exception\NotInstantiableTypeException;
-use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Module\ModuleData;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -32,7 +30,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -46,7 +43,6 @@ class PageLayout
         protected readonly RelationResolver $relationResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
-        protected readonly PhpFrontend $cache,
         protected readonly RootPathsSettings $rootPathsSettings,
     ) {}
 
@@ -141,30 +137,13 @@ class PageLayout
         TableDefinition $tableDefinition,
     ): ContentBlockData {
         $pageTypeTable = 'pages';
-        $cacheIdentifier = $pageTypeTable . '-' . $pageRow['uid'] . '-' . md5(json_encode($pageRow));
-        if ($this->cache->has($cacheIdentifier)) {
-            $resolvedData = $this->cache->require($cacheIdentifier);
-        } else {
-            $this->relationResolver->setRequest($request);
-            $resolvedData = $this->relationResolver->resolve(
-                $contentTypeDefinition,
-                $tableDefinition,
-                $pageRow,
-                $pageTypeTable,
-            );
-            // Avoid flooding cache with redundant data.
-            if ($resolvedData->resolved !== $pageRow) {
-                try {
-                    $exported = 'return ' . VarExporter::export($resolvedData) . ';';
-                    $this->cache->set($cacheIdentifier, $exported, ['content_blocks_preview'], 0);
-                } catch (NotInstantiableTypeException) {
-                    // @todo objects of class TYPO3\CMS\Core\Resource\File can't be exported
-                    // @todo due to attached storage, which itself has EventDispatcher attached
-                    // @todo which eventually leads to illegal Closures for EventListeners.
-                    // @todo Right now, this happens for relations of type "folder".
-                }
-            }
-        }
+        $this->relationResolver->setRequest($request);
+        $resolvedData = $this->relationResolver->resolve(
+            $contentTypeDefinition,
+            $tableDefinition,
+            $pageRow,
+            $pageTypeTable,
+        );
         $contentBlockData = $this->contentBlockDataDecorator->decorate(
             $contentTypeDefinition,
             $tableDefinition,

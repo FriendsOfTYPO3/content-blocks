@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
-use Symfony\Component\VarExporter\LazyObjectInterface;
 use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
@@ -36,7 +35,7 @@ final class TableDefinitionCollectionFactory
     protected TableDefinitionCollection $tableDefinitionCollection;
 
     public function __construct(
-        protected readonly LazyObjectInterface|PhpFrontend $cache,
+        protected readonly PhpFrontend $cache,
         protected readonly ContentBlockCompiler $contentBlockCompiler,
     ) {}
 
@@ -45,33 +44,20 @@ final class TableDefinitionCollectionFactory
         FieldTypeRegistry $fieldTypeRegistry,
         SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ): TableDefinitionCollection {
-        if (!$this->cache->isLazyObjectInitialized()) {
-            $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
-                $contentBlockRegistry,
-                $fieldTypeRegistry,
-                $simpleTcaSchemaFactory
-            );
+        if (isset($this->tableDefinitionCollection)) {
             return $this->tableDefinitionCollection;
         }
         if (($tableDefinitionCollection = $this->getFromCache()) !== false) {
             $this->tableDefinitionCollection = $tableDefinitionCollection;
             return $this->tableDefinitionCollection;
         }
-        $this->tableDefinitionCollection = $this->tableDefinitionCollection ?? $this->createUncached(
+        $this->tableDefinitionCollection = $this->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
             $simpleTcaSchemaFactory
         );
         $this->setCache();
         return $this->tableDefinitionCollection;
-    }
-
-    public function initializeCache(): void
-    {
-        $this->cache->initializeLazyObject();
-        if (isset($this->tableDefinitionCollection) && $this->getFromCache() === false) {
-            $this->setCache();
-        }
     }
 
     public function createUncached(
@@ -132,12 +118,12 @@ final class TableDefinitionCollectionFactory
 
     private function getFromCache(): false|TableDefinitionCollection
     {
-        return $this->cache->require('TableDefinitionCollection');
+        return $this->cache->require('ContentBlocks_Compiled');
     }
 
     private function setCache(): void
     {
         $data = 'return ' . VarExporter::export($this->tableDefinitionCollection) . ';';
-        $this->cache->set('TableDefinitionCollection', $data);
+        $this->cache->set('ContentBlocks_Compiled', $data);
     }
 }

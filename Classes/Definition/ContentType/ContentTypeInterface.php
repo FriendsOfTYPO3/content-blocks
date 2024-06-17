@@ -42,4 +42,5 @@ interface ContentTypeInterface
     public function getTypeIcon(): ContentTypeIcon;
     public function getLanguagePathTitle(): string;
     public function getLanguagePathDescription(): string;
+    public function getGroup(): ?string;
 }

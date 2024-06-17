@@ -115,10 +115,6 @@ final class LinkFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        $null = ' NOT NULL';
-        if ($this->nullable) {
-            $null = '';
-        }
-        return "`$column` VARCHAR(1024) DEFAULT ''" . $null;
+        return '';
     }
 }

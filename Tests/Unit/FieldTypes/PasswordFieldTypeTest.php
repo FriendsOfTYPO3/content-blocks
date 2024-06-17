@@ -113,21 +113,4 @@ final class PasswordFieldTypeTest extends UnitTestCase
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
-
-    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
-    {
-        yield 'default varchar column' => [
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` VARCHAR(255) DEFAULT \'\' NOT NULL',
-        ];
-    }
-
-    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
-    #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
-    {
-        $fieldType = PasswordFieldType::createFromArray([]);
-
-        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
-    }
 }

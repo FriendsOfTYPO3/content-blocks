@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\VarExporter\LazyObjectInterface;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
@@ -68,7 +67,7 @@ class ContentBlockLoader
     protected ContentBlockRegistry $contentBlockRegistry;
 
     public function __construct(
-        protected readonly LazyObjectInterface|PhpFrontend $cache,
+        protected readonly PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,
         protected readonly IconProcessor $iconProcessor,
@@ -76,8 +75,7 @@ class ContentBlockLoader
 
     public function load(): ContentBlockRegistry
     {
-        if (!$this->cache->isLazyObjectInitialized()) {
-            $this->contentBlockRegistry = $this->contentBlockRegistry ?? $this->loadUncached();
+        if (isset($this->contentBlockRegistry)) {
             return $this->contentBlockRegistry;
         }
         if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
@@ -85,7 +83,8 @@ class ContentBlockLoader
             $this->contentBlockRegistry = $this->fillContentBlockRegistry($contentBlocks);
             return $this->contentBlockRegistry;
         }
-        $this->contentBlockRegistry = $this->contentBlockRegistry ?? $this->loadUncached();
+        $this->contentBlockRegistry = $this->loadUncached();
+        $this->setCache();
         return $this->contentBlockRegistry;
     }
 
@@ -116,14 +115,6 @@ class ContentBlockLoader
         $this->iconProcessor->process();
 
         return $contentBlockRegistry;
-    }
-
-    public function initializeCache(): void
-    {
-        $this->cache->initializeLazyObject();
-        if (isset($this->contentBlockRegistry) && $this->getFromCache() === false) {
-            $this->setCache();
-        }
     }
 
     /**
@@ -298,12 +289,12 @@ class ContentBlockLoader
 
     protected function getFromCache(): false|array
     {
-        return $this->cache->require('content-blocks');
+        return $this->cache->require('ContentBlocks_Raw');
     }
 
     protected function setCache(): void
     {
         $cache = array_map(fn(LoadedContentBlock $contentBlock): array => $contentBlock->toArray(), $this->contentBlockRegistry->getAll());
-        $this->cache->set('content-blocks', 'return ' . var_export($cache, true) . ';');
+        $this->cache->set('ContentBlocks_Raw', 'return ' . var_export($cache, true) . ';');
     }
 }

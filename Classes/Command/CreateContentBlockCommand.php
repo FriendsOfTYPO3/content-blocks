@@ -270,7 +270,7 @@ class CreateContentBlockCommand extends Command
             'typeName' => UniqueIdentifierCreator::createContentTypeIdentifier($fullName),
             'title' => $title,
             'description' => $description,
-            'group' => 'common',
+            'group' => 'default',
             'prefixFields' => true,
             'prefixType' => 'full',
         ];
