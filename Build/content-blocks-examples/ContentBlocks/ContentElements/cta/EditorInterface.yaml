@@ -1,5 +1,4 @@
 name: example/cta
-group: common
 fields:
   - identifier: tab_1
     type: Tab
