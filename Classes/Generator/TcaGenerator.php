@@ -251,7 +251,9 @@ class TcaGenerator
             $paletteTca = $this->generatePalettesTcaSingle($paletteDefinition);
             $palettes[$paletteDefinition->getIdentifier()] = $paletteTca;
         }
-        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
+        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())
+            && $tableDefinition->getTable() !== 'pages'
+        ) {
             $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
             $nativeCapability = new NativeTableCapabilityProxy($tcaSchema);
             $systemPalettes = $this->buildSystemPalettes($nativeCapability);
