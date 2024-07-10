@@ -36,10 +36,10 @@
 	},
 	"require": {
 		"symfony/var-exporter": "^7.0",
-		"typo3/cms-backend": "^13.1",
-		"typo3/cms-core": "^13.1",
-		"typo3/cms-fluid": "^13.1",
-		"typo3/cms-frontend": "^13.1"
+		"typo3/cms-backend": "^13.2",
+		"typo3/cms-core": "^13.2",
+		"typo3/cms-fluid": "^13.2",
+		"typo3/cms-frontend": "^13.2"
 	},
 	"replace": {
 		"typo3/cms-content-blocks": "*"
@@ -78,16 +78,16 @@
 		"friendsoftypo3/phpstan-typo3": "^0.9.0",
 		"phpstan/phpstan": "^1.10.22",
 		"phpstan/phpstan-phpunit": "^1.3.13",
-		"typo3/cms-extbase": "^13.1",
-		"typo3/cms-extensionmanager": "^13.1",
-		"typo3/cms-filelist": "^13.1",
-		"typo3/cms-install": "^13.1",
-		"typo3/cms-lowlevel": "^13.1",
-		"typo3/cms-rte-ckeditor": "^13.1",
-		"typo3/cms-tstemplate": "^13.1",
-		"typo3/cms-workspaces": "^13.1",
+		"typo3/cms-extbase": "^13.2",
+		"typo3/cms-extensionmanager": "^13.2",
+		"typo3/cms-filelist": "^13.2",
+		"typo3/cms-install": "^13.2",
+		"typo3/cms-lowlevel": "^13.2",
+		"typo3/cms-rte-ckeditor": "^13.2",
+		"typo3/cms-tstemplate": "^13.2",
+		"typo3/cms-workspaces": "^13.2",
 		"typo3/coding-standards": "^0.8",
-		"typo3/testing-framework": "dev-main"
+		"typo3/testing-framework": "^8"
 	},
 	"scripts": {
 		"pre-update-cmd": [
