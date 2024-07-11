@@ -41,22 +41,12 @@
 		"typo3/cms-fluid": "^13.2",
 		"typo3/cms-frontend": "^13.2"
 	},
-	"replace": {
-		"typo3/cms-content-blocks": "*"
-	},
-	"conflict": {
-		"typo3/cms": "*"
-	},
 	"extra": {
-		"branch-alias": {
-			"dev-main": "13.0.x-dev"
-		},
 		"typo3/cms": {
 			"web-dir": ".Build/public",
 			"extension-key": "content_blocks",
 			"Package": {
-				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider",
-				"partOfFactoryDefault": false
+				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider"
 			}
 		}
 	},

@@ -55,7 +55,7 @@ class ServiceProvider extends AbstractServiceProvider
 
     protected static function getPackageName(): string
     {
-        return 'typo3/cms-content-blocks';
+        return 'contentblocks/content-blocks';
     }
 
     public function getFactories(): array

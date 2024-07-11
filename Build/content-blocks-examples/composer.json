@@ -10,7 +10,6 @@
 		"role": "Developer"
 	}],
 	"support": {
-		"docs": "https://docs.typo3.org/c/typo3/cms-content-blocks/main/en-us/",
 		"issues": "",
 		"source": ""
 	},
@@ -18,12 +17,9 @@
 		"sort-packages": true
 	},
 	"require": {
-		"typo3/cms-content-blocks": "13.0.*@dev"
+		"contentblocks/content-blocks": "*"
 	},
 	"extra": {
-		"branch-alias": {
-			"dev-main": "13.0.x-dev"
-		},
 		"typo3/cms": {
 			"extension-key": "content_blocks_examples"
 		}
