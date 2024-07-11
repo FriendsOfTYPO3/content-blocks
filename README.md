@@ -24,9 +24,9 @@ eventually this will become a system extension in TYPO3 v13.
 | [Core patch](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721)                   | 01.04 - 23.04 |
 | [TYPO3 v13.1](https://typo3.org/article/typo3-v131-the-surfers-starterkit)            | 23.04         |
 | [Review period](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721/19)             | 23.04 - 14.06 |
-| Patch merged latest                                                                   | 01.07         |
-| TYPO3 v13.2                                                                           | 02.07         |
-| Content Blocks v1.0 (backport for TYPO3 v12)                                          | tbd           |
+| [TYPO3 v13.2](https://typo3.org/article/typo3-v132-ready-set-ride)                    | 02.07         |
+| Content Blocks compatibility v13                                                      | asap          |
+| Content Blocks Core integration planned                                               | 17.09         |
 
 ## Installation
 
