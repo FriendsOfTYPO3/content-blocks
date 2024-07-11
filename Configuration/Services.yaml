@@ -11,19 +11,8 @@ services:
     resource: '../Classes/UserFunction/*'
     public: true
 
-  TYPO3\CMS\ContentBlocks\Cache\InitializeContentBlockCache:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\DataHandler\ClearBackendPreviewCaches:
-    public: true
-
-# @todo change to BeforeTcaOverridesEvent for v13
   TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
     public: true
-#    tags:
-#      - name: event.listener
-#        identifier: 'content-blocks-tca'
-#        event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
 
   TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
     public: true
@@ -34,12 +23,8 @@ services:
 
   TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
     public: true
-    arguments:
-      $cache: '@cache.content_blocks_preview'
 
   TYPO3\CMS\ContentBlocks\Backend\Preview\PageLayout:
-    arguments:
-      $cache: '@cache.content_blocks_preview'
     tags:
       - name: 'event.listener'
         identifier: 'content-blocks-page-preview'
@@ -51,73 +36,38 @@ services:
     tags:
       - { name: 'data.processor', identifier: 'content-blocks' }
 
-  cache.content_blocks_yaml:
-    class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments: ['content_blocks_yaml']
-    lazy: true
-    public: true
-
-  cache.content_blocks_object:
-    class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments: ['content_blocks_object']
-    lazy: true
-    public: true
-
-  cache.content_blocks_code:
-    class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments: ['content_blocks_code']
-    public: true
-
-  cache.content_blocks_preview:
-    class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments: ['content_blocks_preview']
-    public: true
-
   TYPO3\CMS\ContentBlocks\Basics\BasicsLoader:
     arguments:
-      $cache: '@cache.content_blocks_yaml'
+      $cache: '@cache.core'
 
   TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Basics\BasicsLoader'
       - 'load'
-    # Set to "shared: false" so that lazy cache can be properly warmed up.
-    # todo Better use core caches?
-    shared: false
 
   TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
     arguments:
-      $cache: '@cache.content_blocks_yaml'
+      $cache: '@cache.core'
 
   TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry:
     public: true
     factory:
       - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
       - 'load'
-    # Set to "shared: false" so that lazy cache can be properly warmed up.
-    # todo Better use core caches?
-    shared: false
 
   TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory:
     arguments:
-      $cache: '@cache.content_blocks_object'
+      $cache: '@cache.core'
 
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
     public: true
-    # Set to "shared: false" so that lazy cache can be properly warmed up.
-    # todo Better use core caches?
-    shared: false
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
     arguments:
-     - '@TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry'
-     - '@TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry'
-     - '@TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory'
+      - '@TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry'
+      - '@TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry'
+      - '@TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory'
 
   TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry:
     factory:

@@ -117,7 +117,7 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
             ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
         $container = new Container();
         $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
-        $container->set('cache.content_blocks_code', new NullFrontend('test'));
+        $container->set('cache.core', new NullFrontend('test'));
         $result = ServiceProvider::getContentBlockParentFieldNames($container);
 
         self::assertSame($expected, $result->getArrayCopy());
@@ -184,7 +184,7 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
             ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
         $container = new Container();
         $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
-        $container->set('cache.content_blocks_code', new NullFrontend('test'));
+        $container->set('cache.core', new NullFrontend('test'));
         $result = ServiceProvider::getContentBlockParentFieldNames($container);
 
         self::assertSame($expected, $result->getArrayCopy());

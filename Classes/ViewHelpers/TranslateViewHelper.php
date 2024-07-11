@@ -80,20 +80,22 @@ class TranslateViewHelper extends AbstractViewHelper
         if ($renderingContext instanceof RenderingContext) {
             $request = $renderingContext->getRequest();
         }
-        $value = self::getLanguageService($request, $arguments['languageKey'])->sL($languagePath);
-        if (empty($value)) {
-            // In case $value is empty (LLL: could not be resolved) fall back to the default.
-            $value = $default;
-        }
-        if (!empty($translateArguments)) {
-            $value = vsprintf($value, $translateArguments);
+        $languageService = self::getLanguageService($request, $arguments['languageKey']);
+        $value = $languageService->sL($languagePath);
+        if ($value === '') {
+            $value = self::handleDefaultValue($default, $translateArguments);
         }
         return $value;
     }
 
-    /**
-     * @todo Adapt latest changes in Core TranslateViewHelper
-     */
+    protected static function handleDefaultValue(string $default, ?array $translateArguments): string
+    {
+        if (!empty($translateArguments)) {
+            return vsprintf($default, $translateArguments);
+        }
+        return $default;
+    }
+
     protected static function getLanguageService(ServerRequestInterface $request = null, string|Locale $languageKey = null): LanguageService
     {
         $languageServiceFactory = GeneralUtility::makeInstance(LanguageServiceFactory::class);

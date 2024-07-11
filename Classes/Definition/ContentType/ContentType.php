@@ -65,8 +65,8 @@ enum ContentType
     public function getDefaultGroup(): ?string
     {
         return match ($this) {
-            self::CONTENT_ELEMENT => 'common',
-            self::PAGE_TYPE, self::RECORD_TYPE => null,
+            self::CONTENT_ELEMENT, self::PAGE_TYPE => 'default',
+            self::RECORD_TYPE => null,
         };
     }
 }

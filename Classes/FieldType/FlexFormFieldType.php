@@ -70,7 +70,7 @@ final class FlexFormFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        return "`$column` text";
+        return '';
     }
 
     /**

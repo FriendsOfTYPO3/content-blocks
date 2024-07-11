@@ -182,6 +182,6 @@ final class CollectionFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        return "`$column` int(11) UNSIGNED DEFAULT '0' NOT NULL";
+        return '';
     }
 }

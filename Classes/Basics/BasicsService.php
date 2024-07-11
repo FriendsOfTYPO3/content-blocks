@@ -18,6 +18,12 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Basics;
 
 /**
+ * Contains main logic for Basic replacement. Basics are simply added/replaced
+ * in the EditorInterface.yaml fields array. Basics are used either globally
+ * in the `basics` array (appended at the end of fields) or locally as the
+ * field Type `Basic` (in place replacement). Nesting of Basics is allowed for
+ * a maximum nesting level of 8.
+ *
  * @internal Not part of TYPO3's public API.
  */
 class BasicsService
@@ -41,11 +47,11 @@ class BasicsService
 
     /**
      * Checks whether a basic is registered and append its fields after the given array.
-     * If the basic is not registered, the given array is returned.
+     * If the Basic is not registered, the given array is returned.
      *
-     * @param array $fields fields from a content block
-     * @param string $identifier identifier of the basic
-     * @return array fields with the basic's fields added or just the fields from the content block
+     * @param array $fields fields from a Content Block
+     * @param string $identifier identifier of the Basic
+     * @return array fields with the basic's fields added or just the fields from the Content Block
      */
     protected function addBasicsToFields(array $fields, string $identifier): array
     {

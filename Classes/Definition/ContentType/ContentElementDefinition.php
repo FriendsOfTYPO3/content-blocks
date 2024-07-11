@@ -23,7 +23,6 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
     private bool $saveAndClose = false;
-    private string $group = '';
 
     public static function createFromArray(array $array, string $table): ContentElementDefinition
     {
@@ -47,11 +46,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
     }
 
-    public function getGroup(): string
-    {
-        return $this->group;
-    }
-
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
@@ -61,13 +55,6 @@ final class ContentElementDefinition extends ContentTypeDefinition implements Co
     {
         $clone = clone $this;
         $clone->saveAndClose = $saveAndClose;
-        return $clone;
-    }
-
-    public function withGroup(string $group): self
-    {
-        $clone = clone $this;
-        $clone->group = $group;
         return $clone;
     }
 }

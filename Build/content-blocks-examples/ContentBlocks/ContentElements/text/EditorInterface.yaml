@@ -1,5 +1,4 @@
 name: example/text
-group: common
 prefixFields: true
 prefixType: full
 fields:

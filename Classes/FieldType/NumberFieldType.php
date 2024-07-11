@@ -121,14 +121,6 @@ final class NumberFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        $null = ' NOT NULL';
-        if ($this->nullable) {
-            $null = '';
-        }
-        if ($this->format === 'decimal') {
-            return "`$column` decimal(10,2) DEFAULT '0.00'" . $null;
-        }
-
-        return "`$column` int(11) DEFAULT '0'" . $null;
+        return '';
     }
 }

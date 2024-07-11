@@ -176,6 +176,6 @@ final class RelationFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        return "`$column` text";
+        return '';
     }
 }

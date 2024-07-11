@@ -18,8 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\VarExporter\Exception\NotInstantiableTypeException;
-use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
@@ -28,7 +26,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -44,7 +41,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected RelationResolver $relationResolver,
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
-        protected PhpFrontend $cache,
         protected RootPathsSettings $rootPathsSettings,
     ) {}
 
@@ -55,7 +51,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $record = $item->getRecord();
         $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
-        $cacheIdentifier = $contentElementTable . '-' . $record['uid'] . '-' . md5(json_encode($record));
         $typeName = $record[$typeField];
         $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($typeName);
         $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentElementDefinition->getName());
@@ -69,29 +64,13 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             return $result;
         }
         $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
-        if ($this->cache->has($cacheIdentifier)) {
-            $resolvedData = $this->cache->require($cacheIdentifier);
-        } else {
-            $this->relationResolver->setRequest($request);
-            $resolvedData = $this->relationResolver->resolve(
-                $contentElementDefinition,
-                $contentElementTableDefinition,
-                $record,
-                $contentElementTable,
-            );
-            // Avoid flooding cache with redundant data.
-            if ($resolvedData->resolved !== $record) {
-                try {
-                    $exported = 'return ' . VarExporter::export($resolvedData) . ';';
-                    $this->cache->set($cacheIdentifier, $exported, ['content_blocks_preview'], 0);
-                } catch (NotInstantiableTypeException) {
-                    // @todo objects of class TYPO3\CMS\Core\Resource\File can't be exported
-                    // @todo due to attached storage, which itself has EventDispatcher attached
-                    // @todo which eventually leads to illegal Closures for EventListeners.
-                    // @todo Right now, this happens for relations of type "folder".
-                }
-            }
-        }
+        $this->relationResolver->setRequest($request);
+        $resolvedData = $this->relationResolver->resolve(
+            $contentElementDefinition,
+            $contentElementTableDefinition,
+            $record,
+            $contentElementTable,
+        );
         $data = $this->contentBlockDataDecorator->decorate(
             $contentElementDefinition,
             $contentElementTableDefinition,

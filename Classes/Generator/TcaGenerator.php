@@ -21,9 +21,11 @@ use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\NativeTableCapabilityProxy;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\SystemFieldPalettesInterface;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\RecordTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -35,7 +37,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
-use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
+use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -150,32 +152,18 @@ class TcaGenerator
         protected readonly FlexFormGenerator $flexFormGenerator,
     ) {}
 
-    // @todo this is unused in v12. Replace with BeforeTcaOverridesEvent in v13.
-    public function __invoke(AfterTcaCompilationEvent $event): void
+    public function __invoke(BeforeTcaOverridesEvent $event): void
     {
         $event->setTca(array_replace_recursive($event->getTca(), $this->generate($event->getTca())));
 
         // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
-        $tcaBackup = $GLOBALS['TCA'];
+        $tcaBackup = $GLOBALS['TCA'] ?? null;
         $GLOBALS['TCA'] = $event->getTca();
         $this->fillTypeFieldSelectItems();
         $event->setTca($GLOBALS['TCA']);
-        $GLOBALS['TCA'] = $tcaBackup;
-    }
-
-    // @todo Remove in v13.
-    public function generateTcaOverrides(): array
-    {
-        $tca = array_replace_recursive($GLOBALS['TCA'], $this->generate($GLOBALS['TCA']));
-
-        // Store backup of current TCA, as the helper methods in `fillTypeFieldSelectItems` operate on the global array.
-        $tcaBackup = $GLOBALS['TCA'];
-        $GLOBALS['TCA'] = $tca;
-        $this->fillTypeFieldSelectItems();
-        $tca = $GLOBALS['TCA'];
-        $GLOBALS['TCA'] = $tcaBackup;
-
-        return $tca;
+        if ($tcaBackup !== null) {
+            $GLOBALS['TCA'] = $tcaBackup;
+        }
     }
 
     public function generate(array $baseTca): array
@@ -310,30 +298,17 @@ class TcaGenerator
                 continue;
             }
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                // @todo Right now we hard-code a new group for the type select of content elements.
-                // @todo The default destination should be made configurable, so e.g. the standard
-                // @todo group could be chosen.
-                if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
-                    ExtensionManagementUtility::addTcaSelectItemGroup(
-                        $typeDefinition->getTable(),
-                        $tableDefinition->getTypeField(),
-                        'content_blocks',
-                        'LLL:EXT:content_blocks/Resources/Private/Language/locallang.xlf:content-blocks',
-                        'after:default',
-                    );
-                }
-                $group = match ($tableDefinition->getContentType()) {
-                    ContentType::CONTENT_ELEMENT => 'content_blocks',
-                    // @todo hard-coded "default" group for pages. Make target group configurable.
-                    ContentType::PAGE_TYPE => 'default',
-                    // @todo Type select grouping is not possible right now for Record Types.
-                    ContentType::RECORD_TYPE => '',
-                };
                 $languagePathTitle = $typeDefinition->getLanguagePathTitle();
                 if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePathTitle)) {
                     $label = $languagePathTitle;
                 } else {
                     $label = $typeDefinition->getTitle();
+                }
+                $languagePathDescription = $typeDefinition->getLanguagePathDescription();
+                if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePathDescription)) {
+                    $description = $languagePathDescription;
+                } else {
+                    $description = $typeDefinition->getDescription();
                 }
                 ExtensionManagementUtility::addTcaSelectItem(
                     $typeDefinition->getTable(),
@@ -342,7 +317,8 @@ class TcaGenerator
                         'label' => $label,
                         'value' => $typeDefinition->getTypeName(),
                         'icon' => $typeDefinition->getTypeIcon()->iconIdentifier,
-                        'group' => $group,
+                        'group' => $typeDefinition->getGroup(),
+                        'description' => $description,
                     ]
                 );
             }
@@ -352,27 +328,34 @@ class TcaGenerator
     protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
         $columnsOverrides = $this->getColumnsOverrides($typeDefinition, $tableDefinition);
-        $tca = match ($tableDefinition->getContentType()) {
-            ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides),
-            ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides),
-            ContentType::RECORD_TYPE => $this->processRecordType($typeDefinition, $columnsOverrides, $tableDefinition),
+        $tca = match ($typeDefinition::class) {
+            ContentElementDefinition::class => $this->processContentElement($typeDefinition, $columnsOverrides),
+            PageTypeDefinition::class => $this->processPageType($typeDefinition, $columnsOverrides),
+            RecordTypeDefinition::class => $this->processRecordType($typeDefinition, $columnsOverrides, $tableDefinition),
+            default => throw new \InvalidArgumentException(
+                'Unsupported type definition: ' . $typeDefinition::class,
+                1714050376
+            ),
         };
         return $tca;
     }
 
-    protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
+    protected function processContentElement(ContentElementDefinition $typeDefinition, array $columnsOverrides): array
     {
         $typeDefinitionArray = [
             'previewRenderer' => PreviewRenderer::class,
             'showitem' => $this->getContentElementStandardShowItem($typeDefinition),
         ];
+        if ($typeDefinition->hasSaveAndClose()) {
+            $typeDefinitionArray['creationOptions']['saveAndClose'] = true;
+        }
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
         }
         return $typeDefinitionArray;
     }
 
-    protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
+    protected function processPageType(PageTypeDefinition $typeDefinition, array $columnsOverrides): array
     {
         $typeDefinitionArray = [
             'showitem' => $this->getPageTypeStandardShowItem($typeDefinition),
@@ -383,7 +366,7 @@ class TcaGenerator
         return $typeDefinitionArray;
     }
 
-    protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
+    protected function processRecordType(RecordTypeDefinition $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
     {
         $typeDefinitionArray = [
             'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition, $tableDefinition),

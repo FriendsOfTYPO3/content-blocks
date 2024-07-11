@@ -35,28 +35,18 @@
 		}
 	},
 	"require": {
-		"symfony/var-exporter": "^6.4 || ^7.0",
-		"typo3/cms-backend": "^12.4.15",
-		"typo3/cms-core": "^12.4.15",
-		"typo3/cms-fluid": "^12.4.15",
-		"typo3/cms-frontend": "^12.4.15"
-	},
-	"replace": {
-		"typo3/cms-content-blocks": "*"
-	},
-	"conflict": {
-		"typo3/cms": "*"
+		"symfony/var-exporter": "^7.0",
+		"typo3/cms-backend": "^13.2",
+		"typo3/cms-core": "^13.2",
+		"typo3/cms-fluid": "^13.2",
+		"typo3/cms-frontend": "^13.2"
 	},
 	"extra": {
-		"branch-alias": {
-			"dev-main": "13.0.x-dev"
-		},
 		"typo3/cms": {
 			"web-dir": ".Build/public",
 			"extension-key": "content_blocks",
 			"Package": {
-				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider",
-				"partOfFactoryDefault": false
+				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider"
 			}
 		}
 	},
@@ -78,16 +68,16 @@
 		"friendsoftypo3/phpstan-typo3": "^0.9.0",
 		"phpstan/phpstan": "^1.10.22",
 		"phpstan/phpstan-phpunit": "^1.3.13",
-		"typo3/cms-extbase": "^12.4.15",
-		"typo3/cms-extensionmanager": "^12.4.15",
-		"typo3/cms-filelist": "^12.4.15",
-		"typo3/cms-install": "^12.4.15",
-		"typo3/cms-lowlevel": "^12.4.15",
-		"typo3/cms-rte-ckeditor": "^12.4.15",
-		"typo3/cms-tstemplate": "^12.4.15",
-		"typo3/cms-workspaces": "^12.4.15",
-		"typo3/coding-standards": "^0.7",
-		"typo3/testing-framework": "^8.0"
+		"typo3/cms-extbase": "^13.2",
+		"typo3/cms-extensionmanager": "^13.2",
+		"typo3/cms-filelist": "^13.2",
+		"typo3/cms-install": "^13.2",
+		"typo3/cms-lowlevel": "^13.2",
+		"typo3/cms-rte-ckeditor": "^13.2",
+		"typo3/cms-tstemplate": "^13.2",
+		"typo3/cms-workspaces": "^13.2",
+		"typo3/coding-standards": "^0.8",
+		"typo3/testing-framework": "^8"
 	},
 	"scripts": {
 		"pre-update-cmd": [

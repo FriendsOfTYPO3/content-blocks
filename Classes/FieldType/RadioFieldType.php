@@ -84,6 +84,6 @@ final class RadioFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        return "`$column` VARCHAR(255) DEFAULT '' NOT NULL";
+        return '';
     }
 }

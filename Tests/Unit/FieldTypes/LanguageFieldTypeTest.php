@@ -82,21 +82,4 @@ final class LanguageFieldTypeTest extends UnitTestCase
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }
-
-    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
-    {
-        yield 'default varchar column' => [
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '`cb_example_myText` int(11) DEFAULT \'0\' NOT NULL',
-        ];
-    }
-
-    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
-    #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
-    {
-        $fieldType = LanguageFieldType::createFromArray([]);
-
-        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
-    }
 }

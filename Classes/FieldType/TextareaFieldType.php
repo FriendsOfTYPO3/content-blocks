@@ -148,6 +148,6 @@ final class TextareaFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        return "`$column` text";
+        return '';
     }
 }

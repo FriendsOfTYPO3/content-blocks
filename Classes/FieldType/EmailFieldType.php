@@ -109,11 +109,6 @@ final class EmailFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        // @todo change to return '' for v13 release (generated automatically now).
-        $null = ' NOT NULL';
-        if ($this->nullable) {
-            $null = '';
-        }
-        return "`$column` VARCHAR(255) DEFAULT ''" . $null;
+        return '';
     }
 }

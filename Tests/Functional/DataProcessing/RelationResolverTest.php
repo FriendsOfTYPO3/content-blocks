@@ -40,7 +40,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 final class RelationResolverTest extends FunctionalTestCase
 {
     protected array $coreExtensionsToLoad = [
-        //        'content_blocks',
         'workspaces',
     ];
 
@@ -340,7 +339,7 @@ final class RelationResolverTest extends FunctionalTestCase
 
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', new LanguageAspect(1, 1, LanguageAspect::OVERLAYS_OFF));
-        $frontendTypoScript = new FrontendTypoScript(new RootNode(), []);
+        $frontendTypoScript = new FrontendTypoScript(new RootNode(), [], [], []);
         $frontendTypoScript->setSetupArray([]);
         $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest())
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE)

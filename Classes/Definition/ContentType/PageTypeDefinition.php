@@ -42,7 +42,8 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withTypeIconHideInMenu(ContentTypeIcon::fromArray($array['typeIconHideInMenu'] ?? []))
             ->withPriority($array['priority'] ?? 0)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
-            ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
+            ->withLanguagePathDescription($array['languagePathDescription'] ?? null)
+            ->withGroup($array['group']);
     }
 
     public function withTypeIconHideInMenu(ContentTypeIcon $typeIconHideInMenu): self

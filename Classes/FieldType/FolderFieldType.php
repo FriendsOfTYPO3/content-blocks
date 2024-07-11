@@ -105,7 +105,7 @@ final class FolderFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        return "`$column` text";
+        return '';
     }
 
     public function isRecursive(): bool

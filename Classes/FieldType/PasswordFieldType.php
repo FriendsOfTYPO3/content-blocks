@@ -110,10 +110,6 @@ final class PasswordFieldType implements FieldTypeInterface
 
     public function getSql(string $column): string
     {
-        $null = ' NOT NULL';
-        if ($this->nullable) {
-            $null = '';
-        }
-        return "`$column` VARCHAR(255) DEFAULT ''" . $null;
+        return '';
     }
 }

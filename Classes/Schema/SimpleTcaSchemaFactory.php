@@ -32,9 +32,13 @@ class SimpleTcaSchemaFactory implements SingletonInterface
 
     public function __construct(
         protected FieldTypeResolver $typeResolver,
-        array $tca = null
     ) {
-        $this->tca = $tca ?? $GLOBALS['TCA'] ?? [];
+        $this->initialize($GLOBALS['TCA'] ?? []);
+    }
+
+    public function initialize(array $tca): void
+    {
+        $this->tca = $tca;
         foreach (array_keys($this->tca) as $table) {
             $this->schemas[$table] = $this->build($table);
         }
