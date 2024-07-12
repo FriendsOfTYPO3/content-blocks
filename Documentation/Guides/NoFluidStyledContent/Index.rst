@@ -18,6 +18,8 @@ fsc.
 lib.parseFunc_RTE
 =================
 
+This part is not needed anymore since TYPO3 13.2: https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/13.2/Important-103485-ProvideLibparseFuncViaExtfrontend.html#important-103485-provide-lib-parsefunc-via-ext-frontend
+
 In order to process links inside RTE fields, one needs to define a so called
 :ref:`parseFunc <t3tsref:parsefunc>` TypoScript snippet. This snippet is shipped
 in the Core, when you use the `fluid_styled_content` system extension. If you
