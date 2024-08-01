@@ -100,17 +100,17 @@ template in **Source/EditorPreview.html**.
 Asset ViewHelpers
 =================
 
-Content Blocks provides new asset ViewHelpers to access assets from within the
-current Content Block in the template. These ViewHelpers look for the given file
-in the `Assets` directory.
+Content Blocks provides a new AssetPathViewHelper to access assets from within
+the current Content Block in the template. These ViewHelpers look for the given
+file in the `Assets` directory.
 
 .. code-block:: html
 
     <f:comment><!-- Include the Assets/Frontend.css stylesheet --></f:comment>
-    <cb:asset.css identifier="myCssIdentifier" file="Frontend.css"/>
+    <f:asset.css identifier="myCssIdentifier" file="{cb:assetPath()}/Frontend.css"/>
 
     <f:comment><!-- Include the Assets/Frontend.js script --></f:comment>
-    <cb:asset.script identifier="myJavascriptIdentifier" file="Frontend.js"/>
+    <f:asset.script identifier="myJavascriptIdentifier" file="{cb:assetPath()}/Frontend.js"/>
 
 The information of the current Content Block is stored in :html:`{data}`. This
 means if you use an asset ViewHelper in a partial, you have to provide
@@ -120,31 +120,7 @@ means if you use an asset ViewHelper in a partial, you have to provide
 .. code-block:: html
 
     <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
-    <cb:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="Frontend.js"/>
-
-
-Resource URI ViewHelper
-=======================
-
-The ViewHelper can be used to generate a URI relative to the Assets folder.
-
-.. code-block:: html
-
-    <img src="{cb:uri.resource(path: 'Icon.svg')}" alt="">
-
-To generate an absolute URI, activate the :html:`absolute` parameter.
-
-.. code-block:: html
-
-    <img src="{cb:uri.resource(path: 'Icon.svg', absolute: '1')}" alt="">
-
-As described above in the asset ViewHelper, the :html:`{data}` variable is
-required to resolve the Content Block automatically. You can also set
-:html:`name` by hand:
-
-.. code-block:: html
-
-    <img src="{cb:uri.resource(path: 'Icon.svg', name: 'vendor/name')}" alt="">
+    <f:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="{cb:assetPath()}/Frontend.js"/>
 
 Translation ViewHelper
 ======================

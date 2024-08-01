@@ -4,8 +4,8 @@
     data-namespace-typo3-fluid="true"
 >
 
-<cb:asset.css identifier="cbAccordionCssFrontend" file="Frontend.css"/>
-<cb:asset.script identifier="cbAccordionJsFrontend" file="Frontend.js"/>
+<f:asset.css identifier="cbAccordionCssFrontend" href="{cb:assetPath()}/Frontend.css"/>
+<f:asset.script identifier="cbAccordionJsFrontend" src="{cb:assetPath()}/Frontend.js"/>
 
 <div class="cb-accordion">
     <f:for each="{data.accordion_item}" as="item">
