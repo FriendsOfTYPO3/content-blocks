@@ -253,7 +253,7 @@ HEREDOC;
     {
         return static function (BeforeTcaOverridesEvent $event) use ($container) {
             $tcaSchemaFactory = $container->get(TcaSchemaFactory::class);
-            $tcaSchemaFactory->rebuild($event->getTca());
+            $tcaSchemaFactory->load($event->getTca());
         };
     }
 
