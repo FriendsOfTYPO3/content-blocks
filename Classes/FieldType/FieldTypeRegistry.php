@@ -26,14 +26,22 @@ class FieldTypeRegistry implements \IteratorAggregate
      */
     protected array $fieldTypesArray;
 
+    /**
+     * @var FieldTypeInterface[]
+     */
+    protected array $nativeFieldTypesArray;
+
     public function __construct(
         /**
          * @var \IteratorAggregate<FieldTypeInterface>
          */
         #[TaggedIterator('content_blocks.field_type', defaultIndexMethod: 'getName')]
         protected \IteratorAggregate $fieldTypes,
+        #[TaggedIterator('content_blocks.field_type', defaultIndexMethod: 'getTcaType')]
+        protected \IteratorAggregate $nativeFieldTypes,
     ) {
         $this->fieldTypesArray = iterator_to_array($this->fieldTypes);
+        $this->nativeFieldTypesArray = iterator_to_array($this->nativeFieldTypes);
     }
 
     public function has(string $fieldTypeName): bool
@@ -43,13 +51,17 @@ class FieldTypeRegistry implements \IteratorAggregate
 
     public function get(string $fieldTypeName): FieldTypeInterface
     {
-        if (!array_key_exists($fieldTypeName, $this->fieldTypesArray)) {
+
+        if (
+            !array_key_exists($fieldTypeName, $this->fieldTypesArray)
+            && !array_key_exists($fieldTypeName, $this->nativeFieldTypesArray)
+        ) {
             throw new \InvalidArgumentException(
                 'Field type with name "' . $fieldTypeName . '" does not exist',
                 1710083790
             );
         }
-        return $this->fieldTypesArray[$fieldTypeName];
+        return $this->fieldTypesArray[$fieldTypeName] ?? $this->nativeFieldTypesArray[$fieldTypeName];
     }
 
     /**

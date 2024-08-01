@@ -24,8 +24,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -42,7 +42,7 @@ final class TableDefinitionCollectionFactory
     public function create(
         ContentBlockRegistry $contentBlockRegistry,
         FieldTypeRegistry $fieldTypeRegistry,
-        SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        TcaSchemaFactory $tcaSchemaFactory,
     ): TableDefinitionCollection {
         if (isset($this->tableDefinitionCollection)) {
             return $this->tableDefinitionCollection;
@@ -54,7 +54,7 @@ final class TableDefinitionCollectionFactory
         $this->tableDefinitionCollection = $this->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
         $this->setCache();
         return $this->tableDefinitionCollection;
@@ -63,9 +63,9 @@ final class TableDefinitionCollectionFactory
     public function createUncached(
         ContentBlockRegistry $contentBlockRegistry,
         FieldTypeRegistry $fieldTypeRegistry,
-        SimpleTcaSchemaFactory $simpleTcaSchemaFactory
+        TcaSchemaFactory $tcaSchemaFactory
     ): TableDefinitionCollection {
-        $compiledContentBlocks = $this->contentBlockCompiler->compile($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $compiledContentBlocks = $this->contentBlockCompiler->compile($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $tableDefinitionCollection = $this->enrichTableDefinitions($compiledContentBlocks);
         return $tableDefinitionCollection;
     }

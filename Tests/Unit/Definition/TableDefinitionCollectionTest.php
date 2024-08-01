@@ -23,10 +23,12 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Schema\FieldTypeFactory;
+use TYPO3\CMS\Core\Schema\RelationMapBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TableDefinitionCollectionTest extends UnitTestCase
@@ -66,8 +68,14 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -77,7 +85,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
         $contentElementDefinition = $tableDefinitionCollection->getContentElementDefinition('t3ce_example');
 
@@ -88,15 +96,21 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     public function nonExistingTableThrowsException(): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
 
         $this->expectException(\InvalidArgumentException::class);
@@ -126,8 +140,14 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -137,7 +157,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
 
         $this->expectException(\InvalidArgumentException::class);
@@ -196,8 +216,14 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     public function saveAndCloseIsAdded(array $contentBlocks, string $typeName, bool $expected): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -207,7 +233,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
 
         $contentElement = $tableDefinitionCollection->getContentElementDefinition($typeName);
@@ -266,8 +292,14 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -277,7 +309,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
         $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
         $result = [];

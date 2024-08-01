@@ -17,9 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Capability;
 
-use TYPO3\CMS\ContentBlocks\Schema\Capability\FieldCapability;
-use TYPO3\CMS\ContentBlocks\Schema\Capability\LanguageAwareSchemaCapability;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchema;
+use TYPO3\CMS\Core\Schema\Capability\TcaSchemaCapability;
+use TYPO3\CMS\Core\Schema\TcaSchema;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -27,25 +26,25 @@ use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchema;
 final class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
 {
     public function __construct(
-        private readonly SimpleTcaSchema $tcaSchema
+        private readonly TcaSchema $tcaSchema
     ) {}
 
     public function hasAccessPalette(): bool
     {
-        return $this->tcaSchema->hasCapability('restriction.starttime')
-            || $this->tcaSchema->hasCapability('restriction.endtime')
-            || $this->tcaSchema->hasCapability('restriction.usergroup')
-            || $this->tcaSchema->hasCapability('editlock');
+        return $this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionStartTime)
+            || $this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionEndTime)
+            || $this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionUserGroup)
+            || $this->tcaSchema->hasCapability(TcaSchemaCapability::EditLock);
     }
 
     public function hasDisabledRestriction(): bool
     {
-        return $this->tcaSchema->hasCapability('restriction.disabled');
+        return $this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionDisabledField);
     }
 
     public function hasInternalDescription(): bool
     {
-        return $this->tcaSchema->hasCapability('internalDescription');
+        return $this->tcaSchema->hasCapability(TcaSchemaCapability::InternalDescription);
     }
 
     public function isLanguageAware(): bool
@@ -59,28 +58,24 @@ final class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
             return '';
         }
         $access = [];
-        if ($this->tcaSchema->hasCapability('restriction.starttime')) {
-            /** @var FieldCapability $startTimeFieldCapability */
-            $startTimeFieldCapability = $this->tcaSchema->getCapability('restriction.starttime');
+        if ($this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionStartTime)) {
+            $startTimeFieldCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::RestrictionStartTime);
             $access[] = $startTimeFieldCapability->getFieldName() . ';LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel';
         }
-        if ($this->tcaSchema->hasCapability('restriction.endtime')) {
-            /** @var FieldCapability $endTimeFieldCapability */
-            $endTimeFieldCapability = $this->tcaSchema->getCapability('restriction.endtime');
+        if ($this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionEndTime)) {
+            $endTimeFieldCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::RestrictionEndTime);
             $access[] = $endTimeFieldCapability->getFieldName() . ';LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel';
         }
-        if ($this->tcaSchema->hasCapability('restriction.starttime') || $this->tcaSchema->hasCapability('restriction.endtime')) {
+        if ($this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionStartTime) || $this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionEndTime)) {
             $access[] = '--linebreak--';
         }
-        if ($this->tcaSchema->hasCapability('restriction.usergroup')) {
-            /** @var FieldCapability $userGroupCapability */
-            $userGroupCapability = $this->tcaSchema->getCapability('restriction.usergroup');
+        if ($this->tcaSchema->hasCapability(TcaSchemaCapability::RestrictionUserGroup)) {
+            $userGroupCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::RestrictionUserGroup);
             $access[] = $userGroupCapability->getFieldName() . ';LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel';
             $access[] = '--linebreak--';
         }
-        if ($this->tcaSchema->hasCapability('editlock')) {
-            /** @var FieldCapability $editLockCapability */
-            $editLockCapability = $this->tcaSchema->getCapability('editlock');
+        if ($this->tcaSchema->hasCapability(TcaSchemaCapability::EditLock)) {
+            $editLockCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::EditLock);
             $access[] = $editLockCapability->getFieldName();
         }
         $count = count($access);
@@ -100,8 +95,7 @@ final class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
         if (!$this->tcaSchema->isLanguageAware()) {
             return '';
         }
-        /** @var LanguageAwareSchemaCapability $languageCapability */
-        $languageCapability = $this->tcaSchema->getCapability('language');
+        $languageCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::Language);
         $languageFieldName = $languageCapability->getLanguageField()->getName();
         $languageParentFieldName = $languageCapability->getTranslationOriginPointerField()->getName();
         $showItem = $languageFieldName . ',' . $languageParentFieldName;
@@ -113,8 +107,7 @@ final class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
         if (!$this->hasDisabledRestriction()) {
             return '';
         }
-        /** @var FieldCapability $disabledFieldCapability */
-        $disabledFieldCapability = $this->tcaSchema->getCapability('restriction.disabled');
+        $disabledFieldCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::RestrictionDisabledField);
         $showItem = $disabledFieldCapability->getFieldName();
         return $showItem;
     }
@@ -124,8 +117,7 @@ final class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
         if (!$this->hasInternalDescription()) {
             return '';
         }
-        /** @var FieldCapability $internalDescriptionFieldCapability */
-        $internalDescriptionFieldCapability = $this->tcaSchema->getCapability('internalDescription');
+        $internalDescriptionFieldCapability = $this->tcaSchema->getCapability(TcaSchemaCapability::InternalDescription);
         $showItem = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,' . $internalDescriptionFieldCapability->getFieldName();
         return $showItem;
     }

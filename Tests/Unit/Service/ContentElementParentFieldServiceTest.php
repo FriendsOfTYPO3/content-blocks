@@ -24,11 +24,13 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\ServiceProvider;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Schema\FieldTypeFactory;
+use TYPO3\CMS\Core\Schema\RelationMapBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ContentElementParentFieldServiceTest extends UnitTestCase
@@ -106,15 +108,21 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $container = new Container();
         $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
         $container->set('cache.core', new NullFrontend('test'));
@@ -173,15 +181,21 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         $expected = [];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $container = new Container();
         $container->set(TableDefinitionCollection::class, $tableDefinitionCollection);
         $container->set('cache.core', new NullFrontend('test'));

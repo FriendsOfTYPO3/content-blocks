@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\LanguagePath;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -32,7 +32,7 @@ final class ProcessingInput
     private string|int $typeName;
 
     public function __construct(
-        SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        TcaSchemaFactory $tcaSchemaFactory,
         public array $yaml,
         public LoadedContentBlock $contentBlock,
         public string $table,
@@ -49,7 +49,7 @@ final class ProcessingInput
             if (isset($this->typeFieldPerTable[$this->table])) {
                 $this->typeField = $this->typeFieldPerTable[$this->table];
             } else {
-                $this->typeField = $this->getTypeFieldNative($simpleTcaSchemaFactory);
+                $this->typeField = $this->getTypeFieldNative($tcaSchemaFactory);
             }
         }
         $this->typeName = $this->resolveTypeName();
@@ -70,13 +70,13 @@ final class ProcessingInput
         return $this->typeName;
     }
 
-    private function getTypeFieldNative(SimpleTcaSchemaFactory $simpleTcaSchemaFactory): ?string
+    private function getTypeFieldNative(TcaSchemaFactory $tcaSchemaFactory): ?string
     {
-        if (!$simpleTcaSchemaFactory->has($this->table)) {
+        if (!$tcaSchemaFactory->has($this->table)) {
             return null;
         }
-        $tcaSchema = $simpleTcaSchemaFactory->get($this->table);
-        $typeField = $tcaSchema->getTypeField();
+        $tcaSchema = $tcaSchemaFactory->get($this->table);
+        $typeField = $tcaSchema->getSubSchemaDivisorField();
         return $typeField?->getName();
     }
 

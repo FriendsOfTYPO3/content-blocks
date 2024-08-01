@@ -27,7 +27,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
@@ -39,6 +38,7 @@ use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\BeforeLoadedUserTsConfigEvent;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -71,7 +71,7 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
             'content-blocks.record-summary-for-localization' => static::recordSummaryForLocalization(...),
-            'content-blocks.base-simple-tca-schema' => static::baseSimpleTcaSchema(...),
+            'content-blocks.base-tca-schema' => static::baseTcaSchema(...),
             'content-blocks.tca' => static::tca(...),
         ];
     }
@@ -249,11 +249,11 @@ HEREDOC;
         };
     }
 
-    public static function baseSimpleTcaSchema(ContainerInterface $container): \Closure
+    public static function baseTcaSchema(ContainerInterface $container): \Closure
     {
         return static function (BeforeTcaOverridesEvent $event) use ($container) {
-            $simpleTcaSchemaFactory = $container->get(SimpleTcaSchemaFactory::class);
-            $simpleTcaSchemaFactory->initialize($event->getTca());
+            $tcaSchemaFactory = $container->get(TcaSchemaFactory::class);
+            $tcaSchemaFactory->rebuild($event->getTca());
         };
     }
 
@@ -368,7 +368,7 @@ HEREDOC;
         $listenerProvider->addListener(BeforeLoadedUserTsConfigEvent::class, 'content-blocks.add-user-tsconfig');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         $listenerProvider->addListener(AfterRecordSummaryForLocalizationEvent::class, 'content-blocks.record-summary-for-localization');
-        $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.base-simple-tca-schema');
+        $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.base-tca-schema');
         $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.tca');
         return $listenerProvider;
     }

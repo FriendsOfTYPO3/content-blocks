@@ -25,10 +25,12 @@ use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Schema\FieldTypeFactory;
+use TYPO3\CMS\Core\Schema\RelationMapBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class SqlGeneratorTest extends UnitTestCase
@@ -271,8 +273,14 @@ final class SqlGeneratorTest extends UnitTestCase
     public function generateReturnsExpectedSqlStatements(array $contentBlocks, array $expected): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -281,7 +289,7 @@ final class SqlGeneratorTest extends UnitTestCase
         $loader->method('loadUncached')->willReturn($contentBlockRegistry);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollectionFactory = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler));
-        $sqlGenerator = new SqlGenerator($loader, $tableDefinitionCollectionFactory, $simpleTcaSchemaFactory, $fieldTypeRegistry);
+        $sqlGenerator = new SqlGenerator($loader, $tableDefinitionCollectionFactory, $tcaSchemaFactory, $fieldTypeRegistry);
 
         $result = $sqlGenerator->generate();
 

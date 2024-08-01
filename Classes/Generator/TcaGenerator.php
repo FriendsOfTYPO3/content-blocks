@@ -35,9 +35,9 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -146,7 +146,7 @@ class TcaGenerator
 
     public function __construct(
         protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected readonly TcaSchemaFactory $tcaSchemaFactory,
         protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly SystemExtensionAvailability $systemExtensionAvailability,
         protected readonly FlexFormGenerator $flexFormGenerator,
@@ -178,7 +178,7 @@ class TcaGenerator
     protected function generateTableTca(TableDefinition $tableDefinition, array $baseTca): array
     {
         $tca = [];
-        $isNewTable = !$this->simpleTcaSchemaFactory->has($tableDefinition->getTable());
+        $isNewTable = !$this->tcaSchemaFactory->has($tableDefinition->getTable());
         if ($isNewTable) {
             $tca = $this->generateBaseTableTca($tableDefinition);
         }
@@ -239,10 +239,10 @@ class TcaGenerator
             $paletteTca = $this->generatePalettesTcaSingle($paletteDefinition);
             $palettes[$paletteDefinition->getIdentifier()] = $paletteTca;
         }
-        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())
+        if ($this->tcaSchemaFactory->has($tableDefinition->getTable())
             && $tableDefinition->getTable() !== 'pages'
         ) {
-            $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
+            $tcaSchema = $this->tcaSchemaFactory->get($tableDefinition->getTable());
             $nativeCapability = new NativeTableCapabilityProxy($tcaSchema);
             $systemPalettes = $this->buildSystemPalettes($nativeCapability);
             if (isset($systemPalettes['hidden'])) {
@@ -725,8 +725,8 @@ class TcaGenerator
         if ($showItem !== '') {
             $parts[] = $showItem;
         }
-        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
-            $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
+        if ($this->tcaSchemaFactory->has($tableDefinition->getTable())) {
+            $tcaSchema = $this->tcaSchemaFactory->get($tableDefinition->getTable());
             $capability = new NativeTableCapabilityProxy($tcaSchema);
         } else {
             $capability = $tableDefinition->getCapability();

@@ -23,10 +23,12 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Schema\FieldTypeFactory;
+use TYPO3\CMS\Core\Schema\RelationMapBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ContentBlockCompilerTest extends UnitTestCase
@@ -75,8 +77,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -86,7 +94,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -140,8 +148,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -151,7 +165,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -192,8 +206,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -203,7 +223,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -250,8 +270,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('Palette "palette_inside_palette" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -261,7 +287,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -319,8 +345,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The palette identifier "palette_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -330,7 +362,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -394,8 +426,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The palette identifier "palette_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -405,7 +443,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -447,8 +485,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The tab identifier "tab_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -458,7 +502,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -506,8 +550,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The tab identifier "tab_1" in Content Block "foo/bar" does exist more than once. Please choose unique identifiers.');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -517,7 +567,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -557,8 +607,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -568,7 +624,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -614,8 +670,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('Tab "tab_1" is not allowed inside palette "palette_1" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -625,7 +687,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -675,8 +737,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -686,7 +754,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -733,8 +801,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -744,7 +818,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -800,8 +874,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('Linebreaks are only allowed within Palettes in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -811,7 +891,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -848,8 +928,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('A field is missing the required "identifier" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -859,7 +945,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -892,8 +978,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('The field "text1" is missing the required "type" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -903,7 +995,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -946,8 +1038,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionMessage('A field is missing the required "identifier" in Content Block "foo/bar".');
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -957,7 +1055,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -1013,8 +1111,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionCode(1685217163);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1024,7 +1128,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -1138,8 +1242,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionCode(1685220309);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1149,7 +1259,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -1202,8 +1312,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionCode(1686330220);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1213,7 +1329,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -1272,8 +1388,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionCode(1686331469);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1283,7 +1405,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -1347,8 +1469,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectExceptionCode(1686330594);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1358,7 +1486,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
     }
 
@@ -1402,8 +1530,14 @@ final class ContentBlockCompilerTest extends UnitTestCase
     public function localCollectionsCanHaveTableOverridden(array $contentBlocks, string $expectedTable): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1413,7 +1547,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
 
         self::assertTrue($tableDefinitionCollection->hasTable($expectedTable));

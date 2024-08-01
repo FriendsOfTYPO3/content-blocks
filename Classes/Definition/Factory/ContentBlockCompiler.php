@@ -36,8 +36,8 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 
 /**
  * This class does the main heavy-lifting of parsing and preparing loaded
@@ -73,7 +73,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 final class ContentBlockCompiler
 {
     private AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry;
-    private SimpleTcaSchemaFactory $simpleTcaSchemaFactory;
+    private TcaSchemaFactory $tcaSchemaFactory;
     private FieldTypeRegistry $fieldTypeRegistry;
 
     /**
@@ -93,9 +93,9 @@ final class ContentBlockCompiler
     public function compile(
         ContentBlockRegistry $contentBlockRegistry,
         FieldTypeRegistry $fieldTypeRegistry,
-        SimpleTcaSchemaFactory $simpleTcaSchemaFactory
+        TcaSchemaFactory $tcaSchemaFactory
     ): CompilationResult {
-        $this->simpleTcaSchemaFactory = $simpleTcaSchemaFactory;
+        $this->tcaSchemaFactory = $tcaSchemaFactory;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->automaticLanguageKeysRegistry = new AutomaticLanguageKeysRegistry();
         $tableDefinitionList = [];
@@ -103,7 +103,7 @@ final class ContentBlockCompiler
             $table = $contentBlock->getYaml()['table'];
             $languagePath = $this->buildBaseLanguagePath($contentBlock);
             $processingInput = new ProcessingInput(
-                simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
+                tcaSchemaFactory: $this->tcaSchemaFactory,
                 yaml: $contentBlock->getYaml(),
                 contentBlock: $contentBlock,
                 table: $table,
@@ -133,7 +133,7 @@ final class ContentBlockCompiler
         $this->parentReferences = [];
         $this->typeFieldPerTable = [];
         unset($this->automaticLanguageKeysRegistry);
-        unset($this->simpleTcaSchemaFactory);
+        unset($this->tcaSchemaFactory);
         unset($this->fieldTypeRegistry);
     }
 
@@ -211,8 +211,8 @@ final class ContentBlockCompiler
         $contentType = $result->tableDefinition->contentType;
         if ($contentType === ContentType::RECORD_TYPE && $result->tableDefinition->hasTypeField()) {
             $isExistingField = false;
-            if ($this->simpleTcaSchemaFactory->has($table)) {
-                $tableSchema = $this->simpleTcaSchemaFactory->get($table);
+            if ($this->tcaSchemaFactory->has($table)) {
+                $tableSchema = $this->tcaSchemaFactory->get($table);
                 $isExistingField = $tableSchema->hasField($result->tableDefinition->typeField);
             }
             $yamlFields = $yaml['fields'] ?? [];
@@ -555,7 +555,7 @@ final class ContentBlockCompiler
         // Anonymous Collections can't have a type field.
         $field['typeField'] = null;
         $newInput = new ProcessingInput(
-            simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
+            tcaSchemaFactory: $this->tcaSchemaFactory,
             yaml: $field,
             contentBlock: $input->contentBlock,
             table: $foreignTable,
@@ -876,11 +876,11 @@ final class ContentBlockCompiler
             $this->assertIdentifierExists($field, $input);
             $identifier = $field['identifier'];
             // Check if the field is defined as a "base" TCA field (NOT defined in TCA/Overrides).
-            if ($this->simpleTcaSchemaFactory->has($input->table)) {
-                $tcaSchema = $this->simpleTcaSchemaFactory->get($input->table);
+            if ($this->tcaSchemaFactory->has($input->table)) {
+                $tcaSchema = $this->tcaSchemaFactory->get($input->table);
                 if ($tcaSchema->hasField($identifier)) {
-                    $fieldType = $tcaSchema->getField($identifier);
-                    return $fieldType->getType();
+                    $fieldType = $tcaSchema->getField($identifier)->getType();
+                    return $this->fieldTypeRegistry->get($fieldType);
                 }
             }
         }

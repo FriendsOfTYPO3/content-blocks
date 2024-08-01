@@ -26,14 +26,16 @@ use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\NoopLanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\TestSystemExtensionAvailability;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Schema\FieldTypeFactory;
+use TYPO3\CMS\Core\Schema\RelationMapBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class TcaGeneratorTest extends UnitTestCase
@@ -2093,9 +2095,15 @@ final class TcaGeneratorTest extends UnitTestCase
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
-        $simpleTcaSchemaFactory->initialize($baseTca);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
+        $tcaSchemaFactory->load($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -2103,14 +2111,14 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
-            $simpleTcaSchemaFactory,
+            $tcaSchemaFactory,
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -2274,9 +2282,15 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
-        $simpleTcaSchemaFactory->initialize($baseTca);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
+        $tcaSchemaFactory->load($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -2284,7 +2298,7 @@ final class TcaGeneratorTest extends UnitTestCase
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         if ($seoExtensionLoaded) {
@@ -2294,7 +2308,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
-            $simpleTcaSchemaFactory,
+            $tcaSchemaFactory,
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -2320,21 +2334,27 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlock = LoadedContentBlock::fromArray($yaml);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
-            $simpleTcaSchemaFactory,
+            $tcaSchemaFactory,
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -3111,23 +3131,29 @@ final class TcaGeneratorTest extends UnitTestCase
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
-        $simpleTcaSchemaFactory->initialize($baseTca);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
+        $tcaSchemaFactory->load($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
-            $simpleTcaSchemaFactory,
+            $tcaSchemaFactory,
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -3166,21 +3192,27 @@ final class TcaGeneratorTest extends UnitTestCase
         $expected = 'FIELD:bar_foo_bField:=:aValue';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
-        $simpleTcaSchemaFactory->initialize($baseTca);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
+        $tcaSchemaFactory->load($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $systemExtensionAvailability->addAvailableExtension('workspaces');
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
-            $simpleTcaSchemaFactory,
+            $tcaSchemaFactory,
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,
@@ -3575,21 +3607,27 @@ final class TcaGeneratorTest extends UnitTestCase
     public function existingTablesCanBeExtendedWithAdditionalType(array $baseTca, array $contentBlockArray, array $expected): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
-        $simpleTcaSchemaFactory->initialize($baseTca);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
+        $tcaSchemaFactory->load($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler))
-            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $tcaSchemaFactory);
         $systemExtensionAvailability = new TestSystemExtensionAvailability();
         $languageFileRegistry = new NoopLanguageFileRegistry();
         $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
         $tcaGenerator = new TcaGenerator(
             $tableDefinitionCollection,
-            $simpleTcaSchemaFactory,
+            $tcaSchemaFactory,
             $languageFileRegistry,
             $systemExtensionAvailability,
             $flexFormGenerator,

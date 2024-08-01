@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -35,7 +35,7 @@ final class ContentBlockDataDecorator
 
     public function __construct(
         private readonly TableDefinitionCollection $tableDefinitionCollection,
-        private readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        private readonly TcaSchemaFactory $tcaSchemaFactory,
         private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
         private readonly GridProcessor $gridProcessor,
         private readonly ContentObjectProcessor $contentObjectProcessor,
@@ -343,8 +343,8 @@ final class ContentBlockDataDecorator
      */
     private function buildFakeContentBlockDataObject(string $table, ResolvedContentBlockDataRelation $resolvedRelation): ContentBlockData
     {
-        $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
-        $typeField = $tcaSchema->getTypeField();
+        $tcaSchema = $this->tcaSchemaFactory->get($table);
+        $typeField = $tcaSchema->getSubSchemaDivisorField();
         $typeFieldIdentifier = $typeField?->getName();
         $typeName = $typeField !== null ? $resolvedRelation->raw[$typeField->getName()] : '1';
         $fakeName = 'core/' . $typeName;

@@ -76,10 +76,13 @@ class FieldTypeRegistryTestFactory
             new UuidFieldType(),
         ];
         $keyedFieldTypes = [];
+        $nativeKeyedFieldTypes = [];
         foreach ($fieldTypes as $fieldType) {
             $keyedFieldTypes[$fieldType::getName()] = $fieldType;
+            $nativeKeyedFieldTypes[$fieldType::getTcaType()] = $fieldType;
         }
         $fieldTypesIterator = new \ArrayObject($keyedFieldTypes);
-        return new FieldTypeRegistry($fieldTypesIterator);
+        $nativeFieldTypesIterator = new \ArrayObject($nativeKeyedFieldTypes);
+        return new FieldTypeRegistry($fieldTypesIterator, $nativeFieldTypesIterator);
     }
 }

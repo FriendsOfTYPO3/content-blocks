@@ -24,10 +24,12 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Schema\FieldTypeFactory;
+use TYPO3\CMS\Core\Schema\RelationMapBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class DisplayCondPrefixEvaluationTest extends UnitTestCase
@@ -58,8 +60,14 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         $expected = 'FIELD:bar_foo_bField:=:aValue';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -67,7 +75,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
         $tcaFieldDefinition = $tableDefinitionCollection
             ->getTable('tt_content')
@@ -172,8 +180,14 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         ]);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $cacheMock = $this->createMock(PhpFrontend::class);
+        $cacheMock->method('has')->with(self::isType('string'))->willReturn(false);
+        $tcaSchemaFactory = new TcaSchemaFactory(
+            new RelationMapBuilder(),
+            new FieldTypeFactory(),
+            '',
+            $cacheMock
+        );
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -181,7 +195,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
-            $simpleTcaSchemaFactory
+            $tcaSchemaFactory
         );
         $tcaFieldDefinition = $tableDefinitionCollection
             ->getTable('tt_content')
