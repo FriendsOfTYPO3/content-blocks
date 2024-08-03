@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Tests\Functional\ViewHelpers\Uri;
+namespace TYPO3\CMS\ContentBlocks\Tests\Functional\ViewHelpers;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,7 +24,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3Fluid\Fluid\Exception;
 use TYPO3Fluid\Fluid\View\TemplateView;
 
-final class ResourceViewHelperTest extends FunctionalTestCase
+final class AssetPathViewHelperTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
@@ -39,15 +39,15 @@ final class ResourceViewHelperTest extends FunctionalTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionCode(1701198923);
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getTemplatePaths()->setTemplateSource('<cb:uri.resource path="Extension.svg" />');
+        $context->getTemplatePaths()->setTemplateSource('{cb:assetPath()}');
         (new TemplateView($context))->render();
     }
 
     public static function renderDataProvider(): \Generator
     {
         yield 'render returns URI' => [
-            '<cb:uri.resource path="Extension.svg" name="typo3tests/content-element-b" />',
-            'typo3conf/ext/test_content_blocks_b/Resources/Public/ContentBlocks/typo3tests/content-element-b/Extension.svg',
+            '{cb:assetPath(name: "typo3tests/content-element-b")}/Extension.svg',
+            'EXT:test_content_blocks_b/Resources/Public/ContentBlocks/typo3tests/content-element-b/Extension.svg',
         ];
     }
 
