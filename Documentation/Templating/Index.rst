@@ -14,32 +14,13 @@ Accessing variables
 
 Inside your `Frontend.html` or `EditorPreview.html` file you can access the
 properties of your Content Element as usual by the :html:`{data}` variable.
-This variable, however, is special. It has real superpowers. Let's have a look
-at the debug output of it:
+This variable, however, is special. It has real superpowers!
 
-.. code-block:: text
-
-    TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData [prototype] [object]
-       _raw => [private] array(85 items)
-       _processed => [private] array(8 items)
-          uid => 24 (integer)
-          pid => 1 (integer)
-          languageId => 0 (integer)
-          typeName => 'example_element1' (16 chars)
-          updateDate => 1694625077 (integer)
-          creationDate => 1694602137 (integer)
-          header => 'Foo' (3 chars)
-
-As you can see, in contrast to the usual array, we are dealing with an object
-here. This allows us to magically access our own custom properties very easily.
-The object consists of two properties `_raw` and `_processed`. As the names
-suggest, the one is raw and unprocessed and the other one has magic applied from
-Content Blocks. Normally you would access the processed properties. This is done
-by simply accessing the desired property like :html:`{data.header}`. Note, that
-we are omitting `_processed` here. This is important to remember, as this would
-access a custom field named `_processed`. On the other hand, the raw properties
-have to be accessed by :html:`{data._raw.some_field}`. But most of the time you
-shouldn't need them.
+In contrast to the usual array, we are dealing with an object here. This allows
+us to magically access our own custom properties very easily. Normally you would
+access the processed properties. This is done by simply accessing the desired
+property like :html:`{data.header}`. The raw properties have to be accessed by
+:html:`{data._raw.some_field}`. But most of the time you shouldn't need them.
 
 All fields with relations are resolved automatically to an array. This includes
 `Collection`, `Select`, `Relation`, `File`, `Folder`, `Category` and `FlexForm`
@@ -50,8 +31,10 @@ Have a look at this code example to grasp what's possible:
 
 .. code-block:: html
 
-    <!-- Normal access to custom properties -->
-    {data.my_field}
+    <!-- Any property, which is available in the Record (like normal) -->
+    {data.title}
+    {data.uid}
+    {data.pid}
 
     <!-- Normal access to custom relational properties -->
     <f:for each="{data.collection1}" as="item">{item.title}</f:for>
@@ -63,23 +46,60 @@ Have a look at this code example to grasp what's possible:
         </f:for>
     </f:for>
 
-    <!-- There are some special accessors, which are always available: -->
-    {data.uid}
-    {data.pid}
-    {data.typeName} <!-- This is the CType for Content Elements -->
+    <!-- Language related properties -->
+    {data.languageId}
+    {data.languageInfo.translationParent}
+    {data.languageInfo.translationSource}
 
-    <!-- These special accessors are available, if the corresponding features are turned on (Always true for Content Elements) -->
-    {data.languageId} <!-- YAML: languageAware: true -->
-    {data.creationDate} <!-- YAML: trackCreationDate: true -->
-    {data.updateDate} <!-- YAML: trackUpdateDate: true -->
+    <!-- The overlaid uid -->
+    {data.overlaidUid}
 
-    <!-- These special accessors are available depending on the context -->
-    {data.localizedUid}
-    {data.originalUid}
-    {data.originalPid}
+    <!-- Types are a combination of the table name and the Content Type name. -->
+    <!-- Example for table "tt_content" and CType "textpic": -->
+
+    <!-- "tt_content" (this is basically the table name) -->
+    {data.mainType}
+
+    <!-- "textpic" (this is the CType) -->
+    {data.recordType}
+
+    <!-- "tt_content.textpic" (Combination of mainType and record type, separated by a dot) -->
+    {data.fullType}
+
+    <!-- System related properties -->
+    {data.systemProperties.isDeleted}
+    {data.systemProperties.isDisabled}
+    {data.systemProperties.isLockedForEditing}
+    {data.systemProperties.createdAt}
+    {data.systemProperties.lastUpdatedAt}
+    {data.systemProperties.publishAt}
+    {data.systemProperties.publishUntil}
+    {data.systemProperties.userGroupRestriction}
+    {data.systemProperties.sorting}
+    {data.systemProperties.description}
+
+    <!-- Computed properties depending on the request context -->
+    {data.computedProperties.versionedUid}
+    {data.computedProperties.localizedUid}
+    {data.computedProperties.requestedOverlayLanguageId}
+    {data.computedProperties.translationSource} <!-- Only for pages, contains the Page model -->
+
+    <!-- Workspace related properties -->
+    {data.versionInfo.workspaceId}
+    {data.versionInfo.liveId}
+    {data.versionInfo.state.name}
+    {data.versionInfo.state.value}
+    {data.versionInfo.stageId}
 
     <!-- To access the raw (unprocessed) database record use `_raw` -->
     {data._raw.some_field}
+
+See also: https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/13.2/Feature-103783-RecordTransformationDataProcessor.html#usage-in-fluid-templates
+
+.. note::
+
+   Note that we are omitting `_processed` when accessing properties, even
+   though you might think this would be correct due to the debug output.
 
 Frontend & backend
 ==================
