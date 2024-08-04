@@ -46,14 +46,13 @@ jobs:
       - name: PHP CS Fixer Header
         run: Build/Scripts/runTests.sh -p 8.2 -s cglHeader -n
 
-  unit_tests_12:
+  unit_tests:
     name: Unit Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         php: [ '8.2', '8.3' ]
-        TYPO3: [ '13.1' ]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -74,19 +73,18 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer require typo3/cms-core:^${{ matrix.TYPO3 }} --prefer-dist --prefer-stable --no-progress
+        run: composer update --prefer-dist --prefer-stable --no-progress
 
       - name: Unit
         run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
 
-  functional_tests_12:
-    name: Functional Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
+  functional_tests:
+    name: Functional Tests TYPO3 ${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         php: [ '8.2', '8.3' ]
-        TYPO3: [ '13.1' ]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -107,7 +105,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer require typo3/cms-core:^${{ matrix.TYPO3 }} --prefer-stable --no-progress
+        run: composer update --prefer-stable --no-progress
 
       - name: Functional
         run: Build/Scripts/runTests.sh -s functional -d sqlite -p ${{ matrix.php }}
