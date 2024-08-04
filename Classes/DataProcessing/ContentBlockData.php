@@ -17,6 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use TYPO3\CMS\Core\Domain\RawRecord;
+use TYPO3\CMS\Core\Domain\Record;
+use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
+use TYPO3\CMS\Core\Domain\Record\LanguageInfo;
+use TYPO3\CMS\Core\Domain\Record\SystemProperties;
+use TYPO3\CMS\Core\Domain\Record\VersionInfo;
+use TYPO3\CMS\Core\Domain\RecordInterface;
+
 /**
  * This class represents the `data` object inside the Fluid template for Content Blocks.
  *
@@ -44,47 +52,142 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
  * - {data.originalUid}
  * - {data.originalPid}
  *
- * To access the raw database record use:
- * - {data._raw.some_field}
- *
  * @internal This is not public TYPO3 PHP API. Only to be used inside of Fluid templates by accessing as variable.
  */
-final class ContentBlockData extends \stdClass
+final class ContentBlockData implements \ArrayAccess, RecordInterface
 {
-    /**
-     * This is a hint for f:debug users.
-     */
-    public string $_debug_hint = 'To access data under `_processed` you must omit the key: {data.identifier}';
-
     public function __construct(
-        private string $_name = '',
-        private array $_raw = [],
+        protected ?Record $_record = null,
+        protected string $_name = '',
         /** @var array<string, RelationGrid>|array<string, RenderedGridItem[]> */
-        private array $_grids = [],
-        private array $_processed = [],
+        protected array $_grids = [],
+        protected array $_processed = [],
     ) {}
 
-    public function __get(string $name = ''): mixed
+    public function getUid(): int
     {
-        if ($name === '_name') {
+        return $this->_record->getUid();
+    }
+
+    public function getPid(): int
+    {
+        return $this->_record->getPid();
+    }
+
+    public function getFullType(): string
+    {
+        return $this->_record->getFullType();
+    }
+
+    public function getRecordType(): ?string
+    {
+        return $this->_record->getRecordType();
+    }
+
+    public function getMainType(): string
+    {
+        return $this->_record->getMainType();
+    }
+
+    public function toArray(bool $includeSpecialProperties = false): array
+    {
+        return $this->_record->toArray($includeSpecialProperties);
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        if ($offset === '_name') {
+            return true;
+        }
+        if ($offset === '_raw') {
+            return true;
+        }
+        if ($offset === '_grids') {
+            return true;
+        }
+        if (array_key_exists($offset, $this->_processed)) {
+            return true;
+        }
+        return $this->_record->offsetExists($offset);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        if ($offset === '_name') {
             return $this->_name;
         }
-        if ($name === '_raw') {
-            return $this->_raw;
+        if ($offset === '_raw') {
+            return $this->toArray(true);
         }
-        if ($name === '_grids') {
+        if ($offset === '_grids') {
             return $this->_grids;
         }
-        if (array_key_exists($name, $this->_processed)) {
-            return $this->_processed[$name];
+        if (array_key_exists($offset, $this->_processed)) {
+            return $this->_processed[$offset];
         }
-        return null;
+        return $this->_record->offsetGet($offset);
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->_processed[$offset] = $value;
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->_processed[$offset]);
+    }
+
+    public function getVersionInfo(): ?VersionInfo
+    {
+        return $this->_record->getVersionInfo();
+    }
+
+    public function getLanguageInfo(): ?LanguageInfo
+    {
+        return $this->_record->getLanguageInfo();
+    }
+
+    public function getLanguageId(): ?int
+    {
+        return $this->_record->getLanguageId();
+    }
+
+    public function getSystemProperties(): ?SystemProperties
+    {
+        return $this->_record->getSystemProperties();
+    }
+
+    public function getComputedProperties(): ComputedProperties
+    {
+        return $this->_record->getComputedProperties();
+    }
+
+    public function getRawRecord(): RawRecord
+    {
+        return $this->_record->getRawRecord();
+    }
+
+    public function getOverlaidUid(): int
+    {
+        return $this->_record->getOverlaidUid();
+    }
+
+    public function get_Name(): string
+    {
+        return $this->_name;
+    }
+
+    public function get_Grids(): array
+    {
+        return $this->_grids;
     }
 
     public function override(ContentBlockData $contentBlockData): void
     {
-        foreach (get_object_vars($contentBlockData) as $var => $value) {
-            $this->$var = $contentBlockData->$var;
-        }
+        $this->_record = $contentBlockData->_record;
+        $this->_name = $contentBlockData->_name;
+        $this->_grids = $contentBlockData->_grids;
+        $this->_processed = $contentBlockData->_processed;
     }
 }

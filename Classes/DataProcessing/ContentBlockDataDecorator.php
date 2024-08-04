@@ -24,7 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
-use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
+use TYPO3\CMS\Core\Domain\RecordFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -35,10 +35,10 @@ final class ContentBlockDataDecorator
 
     public function __construct(
         private readonly TableDefinitionCollection $tableDefinitionCollection,
-        private readonly TcaSchemaFactory $tcaSchemaFactory,
         private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
         private readonly GridProcessor $gridProcessor,
         private readonly ContentObjectProcessor $contentObjectProcessor,
+        private readonly RecordFactory $recordFactory,
     ) {}
 
     public function setRequest(ServerRequestInterface $request): void
@@ -55,8 +55,9 @@ final class ContentBlockDataDecorator
     ): ContentBlockData {
         $identifier = $this->getRecordIdentifier($resolvedRelation->table, $resolvedRelation->raw);
         $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
+        $record = $this->recordFactory->createFromDatabaseRow($resolvedRelation->table, $resolvedRelation->raw);
         $resolvedContentBlockDataRelation = new ResolvedContentBlockDataRelation();
-        $resolvedContentBlockDataRelation->raw = $resolvedRelation->raw;
+        $resolvedContentBlockDataRelation->record = $record;
         $resolvedContentBlockDataRelation->resolved = $resolvedRelation->resolved;
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
@@ -102,9 +103,6 @@ final class ContentBlockDataDecorator
         $resolvedRelation->resolved = $processedContentBlockData;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
             $resolvedRelation,
-            $tableDefinition->getTable(),
-            $tableDefinition->getTypeField(),
-            $contentTypeDefinition->getTypeName(),
             $contentTypeDefinition->getName(),
             $grids,
         );
@@ -243,7 +241,8 @@ final class ContentBlockDataDecorator
     ): ContentBlockData {
         $contentBlockRelation = new ResolvedContentBlockDataRelation();
         $foreignTable = $item->table;
-        $contentBlockRelation->raw = $item->raw;
+        $record = $this->recordFactory->createFromDatabaseRow($item->table, $item->raw);
+        $contentBlockRelation->record = $record;
         $contentBlockRelation->resolved = $item->resolved;
         $hasTableDefinition = $this->tableDefinitionCollection->hasTable($foreignTable);
         $collectionTableDefinition = null;
@@ -252,10 +251,10 @@ final class ContentBlockDataDecorator
         }
         $typeDefinition = null;
         if ($hasTableDefinition) {
-            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $contentBlockRelation->raw);
+            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $contentBlockRelation->record->toArray());
         }
         if ($collectionTableDefinition !== null && $typeDefinition !== null) {
-            $identifier = $this->getRecordIdentifier($foreignTable, $contentBlockRelation->raw);
+            $identifier = $this->getRecordIdentifier($foreignTable, $contentBlockRelation->record->toArray());
             if ($this->contentBlockDataDecoratorSession->hasContentBlockData($identifier)) {
                 $contentBlockData = $this->contentBlockDataDecoratorSession->getContentBlockData($identifier);
                 return $contentBlockData;
@@ -271,7 +270,7 @@ final class ContentBlockDataDecorator
             $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
             return $contentBlockData;
         }
-        $contentBlockData = $this->buildFakeContentBlockDataObject($foreignTable, $contentBlockRelation);
+        $contentBlockData = $this->buildFakeContentBlockDataObject($contentBlockRelation);
         return $contentBlockData;
     }
 
@@ -280,79 +279,24 @@ final class ContentBlockDataDecorator
      */
     private function buildContentBlockDataObject(
         ResolvedContentBlockDataRelation $resolvedRelation,
-        string $table,
-        ?string $typeField,
-        string|int $typeName,
         string $name = '',
         array $grids = [],
     ): ContentBlockData {
-        $rawData = $resolvedRelation->raw;
         $resolvedData = $resolvedRelation->resolved;
-        $baseData = [
-            'uid' => $rawData['uid'],
-            'pid' => $rawData['pid'],
-            'tableName' => $table,
-            'typeName' => $typeName,
-        ];
-        // Duplicates typeName, but needed for Fluid Styled Content layout integration.
-        if ($typeField !== null) {
-            $baseData[$typeField] = $typeName;
-        }
-        if (array_key_exists('sys_language_uid', $rawData)) {
-            $baseData['languageId'] = $rawData['sys_language_uid'];
-        }
-        if (array_key_exists('tstamp', $rawData)) {
-            $baseData['updateDate'] = $rawData['tstamp'];
-        }
-        if (array_key_exists('crdate', $rawData)) {
-            $baseData['creationDate'] = $rawData['crdate'];
-        }
-        $baseData = $this->enrichBaseDataWithComputedProperties($baseData, $rawData);
-        $contentBlockDataArray = $baseData + $resolvedData;
-        $contentBlockData = new ContentBlockData($name, $rawData, $grids, $contentBlockDataArray);
-
-        // Add dynamic fields so that Fluid can detect them with `property_exists()`.
-        foreach ($baseData as $key => $baseDataItem) {
-            $contentBlockData->$key = $baseDataItem;
-        }
-        foreach ($resolvedData as $key => $processedContentBlockDataItem) {
-            $contentBlockData->$key = $processedContentBlockDataItem;
-        }
+        $contentBlockData = new ContentBlockData($resolvedRelation->record, $name, $grids, $resolvedData);
         return $contentBlockData;
-    }
-
-    private function enrichBaseDataWithComputedProperties(array $baseData, array $data): array
-    {
-        $computedProperties = [
-            'localizedUid' => '_LOCALIZED_UID',
-            'originalUid' => '_ORIG_uid',
-            'originalPid' => '_ORIG_pid',
-        ];
-        $baseDataWithComputedProperties = $baseData;
-        foreach ($computedProperties as $key => $computedProperty) {
-            if (array_key_exists($computedProperty, $data)) {
-                $baseDataWithComputedProperties[$key] = $data[$computedProperty];
-            }
-        }
-        return $baseDataWithComputedProperties;
     }
 
     /**
      * If the record is not defined by Content Blocks, we build a fake
      * Content Block data object for consistent usage.
      */
-    private function buildFakeContentBlockDataObject(string $table, ResolvedContentBlockDataRelation $resolvedRelation): ContentBlockData
+    private function buildFakeContentBlockDataObject(ResolvedContentBlockDataRelation $resolvedRelation): ContentBlockData
     {
-        $tcaSchema = $this->tcaSchemaFactory->get($table);
-        $typeField = $tcaSchema->getSubSchemaDivisorField();
-        $typeFieldIdentifier = $typeField?->getName();
-        $typeName = $typeField !== null ? $resolvedRelation->raw[$typeField->getName()] : '1';
+        $typeName = $resolvedRelation->record->getRecordType() !== null ? $resolvedRelation->record->getRecordType() : '1';
         $fakeName = 'core/' . $typeName;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
             $resolvedRelation,
-            $table,
-            $typeFieldIdentifier,
-            $typeName,
             $fakeName,
         );
         return $contentBlockDataObject;

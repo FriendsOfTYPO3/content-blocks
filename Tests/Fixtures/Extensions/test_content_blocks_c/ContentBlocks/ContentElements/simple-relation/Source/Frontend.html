@@ -5,24 +5,24 @@
 >
 
 <f:if condition="{data.record}">
-TypeName: {data.record.typeName}
+TypeName: {data.record.recordType}
 Title: {data.record.title}
 </f:if>
 <f:if condition="{data.record_multiple}">
     <f:for each="{data.record_multiple}" as="record">
-        TypeName: {record.typeName}
+        TypeName: {record.recordType}
         Title: {record.title}
     </f:for>
 </f:if>
 <f:if condition="{data.relation}">
     <f:for each="{data.relation}" as="record">
-        TypeName: {record.typeName}
+        TypeName: {record.recordType}
         Title Relation: {record.title}
     </f:for>
 </f:if>
 <f:if condition="{data.content}">
     <f:for each="{data.content}" as="item">
-        Child typeName: {item.typeName}
+        Child typeName: {item.recordType}
     </f:for>
     <f:for each="{data._grids.content}" as="child">
         <f:format.raw>{child.content}</f:format.raw>
@@ -30,7 +30,7 @@ Title: {data.record.title}
 </f:if>
 <f:if condition="{data.relation_mix}">
     <f:for each="{data.relation_mix}" as="relation">
-        Mixed Relation: {relation.tableName}
+        Mixed Relation: {relation.mainType}
     </f:for>
 </f:if>
 <f:if condition="{data.multi_select}">
@@ -52,7 +52,7 @@ Title: {data.record.title}
 </f:if>
 <f:if condition="{data.categories}">
     <f:for each="{data.categories}" as="category">
-        Category table: {category.tableName}
+        Category table: {category.mainType}
         {category.title}
     </f:for>
 </f:if>

@@ -12,11 +12,11 @@
 <p>uid:{data.uid}</p>
 <p>pid:{data.pid}</p>
 <p>languageId:{data.languageId}</p>
-<p>typeName:{data.typeName}</p>
+<p>typeName:{data.recordType}</p>
 <p>CType:{data.CType}</p>
-<p>tableName:{data.tableName}</p>
-<p>creationDate:{data.creationDate}</p>
-<p>updateDate:{data.updateDate}</p>
+<p>tableName:{data.mainType}</p>
+<p>creationDate:{data.systemProperties.createdAt.timestamp}</p>
+<p>updateDate:{data.systemProperties.lastUpdatedAt.timestamp}</p>
 <span><cb:translate key="title"/></span>
 <img src="{f:uri.resource(path: '{cb:assetPath()}/Icon.svg')}" alt="">
 <img src="{f:uri.resource(path: '{cb:assetPath()}/Icon.svg', absolute: '1')}" alt="">

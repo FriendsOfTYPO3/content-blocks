@@ -62,9 +62,9 @@ class ContentObjectProcessor
         $this->session->addRenderedGrid($contentBlockData, new RenderedGridItem());
         $frontendTypoScript = $this->request->getAttribute('frontend.typoscript');
         $setup = $frontendTypoScript->getSetupArray();
-        $table = $contentBlockData->tableName;
-        $this->contentObjectRenderer->start($contentBlockData->_raw, $table);
-        $typeName = $contentBlockData->typeName;
+        $table = $contentBlockData->getMainType();
+        $this->contentObjectRenderer->start($contentBlockData->toArray(), $table);
+        $typeName = $contentBlockData->getRecordType();
         $typoScriptObjectPath = $table . '.' . $typeName;
         $pathSegments = GeneralUtility::trimExplode('.', $typoScriptObjectPath);
         $lastSegment = (string)array_pop($pathSegments);

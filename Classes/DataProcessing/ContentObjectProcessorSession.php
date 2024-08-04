@@ -55,7 +55,7 @@ class ContentObjectProcessorSession
 
     private function createIdentifier(ContentBlockData $contentBlockData): string
     {
-        $identifier = $contentBlockData->tableName . $contentBlockData->uid;
+        $identifier = $contentBlockData->getMainType() . $contentBlockData->getUid();
         return $identifier;
     }
 }

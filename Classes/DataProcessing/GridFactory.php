@@ -41,8 +41,8 @@ class GridFactory
                 GridColumnItem::class,
                 $context,
                 $column,
-                $record->_raw,
-                $record->tableName,
+                $record->toArray(),
+                $record->getMainType(),
             );
             $column->addItem($gridColumnItem);
         }
