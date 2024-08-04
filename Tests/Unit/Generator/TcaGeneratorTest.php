@@ -2908,7 +2908,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     <field index="section1" type="array">
                         <title>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.title</title>
                         <type>array</type>
-                        <section type="integer">1</section>
+                        <section>1</section>
                         <el type="array">
                             <field index="container1" type="array">
                                 <title>LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.sections.section1.container.container1.title</title>

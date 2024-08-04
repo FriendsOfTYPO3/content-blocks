@@ -77,7 +77,7 @@ class FlexFormGenerator
         $result = [
             'title' => $sectionTitle,
             'type' => 'array',
-            'section' => 1,
+            'section' => '1',
         ];
         $processedContainers = [];
         foreach ($sectionDefinition as $container) {
