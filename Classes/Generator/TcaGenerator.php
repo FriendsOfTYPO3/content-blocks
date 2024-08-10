@@ -207,8 +207,13 @@ class TcaGenerator
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
-                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenu()->iconIdentifier !== '') {
-                    $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getTypeIconHideInMenu()->iconIdentifier;
+                if ($typeDefinition instanceof PageTypeDefinition) {
+                    if ($typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier !== '') {
+                        $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier;
+                    }
+                    if ($typeDefinition->getPageIconSet()->iconRoot->iconIdentifier !== '') {
+                        $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-root'] = $typeDefinition->getPageIconSet()->iconRoot->iconIdentifier;
+                    }
                 }
             }
             if ($tableDefinition->getContentType() === ContentType::RECORD_TYPE) {

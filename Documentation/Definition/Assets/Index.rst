@@ -35,3 +35,9 @@ IconHideInMenu.svg
 
 This is a special icon for Page Types for the "hide in menu" state. The same
 logic applies as for the standard Icon.svg.
+
+IconRoot.svg
+============
+
+This is a special icon for Page Types for the "is_siteroot" state. The same
+logic applies as for the standard Icon.svg.

@@ -22,6 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
@@ -221,7 +222,7 @@ class ContentBlockLoader
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
         $contentBlockIcon = new ContentTypeIcon();
-        $baseInstruction = new ContentTypeIconResolverInput(
+        $baseIconInput = new ContentTypeIconResolverInput(
             name: $name,
             absolutePath: $absolutePath,
             extension: $extensionKey,
@@ -230,27 +231,49 @@ class ContentBlockLoader
             table: $table,
             typeName: $typeName
         );
-        $this->iconProcessor->addInstruction($contentBlockIcon, $baseInstruction);
-        $pageIconHideInMenu = new ContentTypeIcon();
+        $this->iconProcessor->addInstruction($contentBlockIcon, $baseIconInput);
+        $pageIconSet = null;
         if ($contentType === ContentType::PAGE_TYPE) {
-            $iconIdentifierHideInMenu = ContentBlockPathUtility::getIconHideInMenuNameWithoutFileExtension();
-            $pageIconHideInMenuInput = clone $baseInstruction;
-            $pageIconHideInMenuInput->identifier = $iconIdentifierHideInMenu;
-            $pageIconHideInMenuInput->suffix = '-hide-in-menu';
-            $this->iconProcessor->addInstruction(
-                $pageIconHideInMenu,
-                $pageIconHideInMenuInput
-            );
+            $pageIconSet = $this->constructPageIconSet($baseIconInput);
         }
         return new LoadedContentBlock(
             name: $name,
             yaml: $yaml,
             icon: $contentBlockIcon,
-            iconHideInMenu: $pageIconHideInMenu,
             hostExtension: $extensionKey,
             extPath: $extPath,
             contentType: $contentType,
+            pageIconSet: $pageIconSet,
         );
+    }
+
+    protected function constructPageIconSet(ContentTypeIconResolverInput $baseIconInput): ?PageIconSet
+    {
+        $pageIconHideInMenuFileName = ContentBlockPathUtility::getIconHideInMenuNameWithoutFileExtension();
+        $pageIconHideInMenu = $this->createPageIcon($baseIconInput, $pageIconHideInMenuFileName, '-hide-in-menu');
+
+        $pageIconRootFileName = ContentBlockPathUtility::getIconRootNameWithoutFileExtension();
+        $pageIconRoot = $this->createPageIcon($baseIconInput, $pageIconRootFileName, '-root');
+
+        $pageIconSet = new PageIconSet(
+            $pageIconHideInMenu,
+            $pageIconRoot,
+        );
+        return $pageIconSet;
+    }
+
+    protected function createPageIcon(
+        ContentTypeIconResolverInput $baseIconInput,
+        string $fileName,
+        string $suffix,
+    ): ContentTypeIcon {
+        $pageIcon = new ContentTypeIcon();
+        $iconIdentifier = $fileName;
+        $pageIconInput = clone $baseIconInput;
+        $pageIconInput->identifier = $iconIdentifier;
+        $pageIconInput->suffix = $suffix;
+        $this->iconProcessor->addInstruction($pageIcon, $pageIconInput);
+        return $pageIcon;
     }
 
     /**

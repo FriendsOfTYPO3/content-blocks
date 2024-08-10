@@ -79,7 +79,8 @@ final class ProcessedContentType
         }
         $contentType['typeIcon'] = $contentTypeIcon->toArray();
         if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
-            $contentType['typeIconHideInMenu'] = $this->contentBlock->getIconHideInMenu()->toArray();
+            $contentType['typeIconHideInMenu'] = $this->contentBlock->getPageIconSet()->iconHideInMenu->toArray();
+            $contentType['typeIconRoot'] = $this->contentBlock->getPageIconSet()->iconRoot->toArray();
         }
         $contentType['group'] = $yaml['group'] ?? $this->contentBlock->getContentType()->getDefaultGroup();
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {

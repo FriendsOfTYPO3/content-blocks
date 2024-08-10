@@ -22,11 +22,14 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
  */
 final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
 {
-    private ContentTypeIcon $typeIconHideInMenu;
+    private PageIconSet $pageIconSet;
 
     public static function createFromArray(array $array, string $table): PageTypeDefinition
     {
         $self = new self();
+        $iconHideInMenu = ContentTypeIcon::fromArray($array['typeIconHideInMenu'] ?? []);
+        $iconRoot = ContentTypeIcon::fromArray($array['typeIconRoot'] ?? []);
+        $pageIconSet = new PageIconSet($iconHideInMenu, $iconRoot);
         return $self
             ->withTable($table)
             ->withIdentifier($array['identifier'])
@@ -39,22 +42,22 @@ final class PageTypeDefinition extends ContentTypeDefinition implements ContentT
             ->withVendor($array['vendor'] ?? '')
             ->withPackage($array['package'] ?? '')
             ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
-            ->withTypeIconHideInMenu(ContentTypeIcon::fromArray($array['typeIconHideInMenu'] ?? []))
+            ->withPageIconSet($pageIconSet)
             ->withPriority($array['priority'] ?? 0)
             ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
             ->withLanguagePathDescription($array['languagePathDescription'] ?? null)
             ->withGroup($array['group']);
     }
 
-    public function withTypeIconHideInMenu(ContentTypeIcon $typeIconHideInMenu): self
+    public function withPageIconSet(PageIconSet $pageIconSet): self
     {
         $clone = clone $this;
-        $clone->typeIconHideInMenu = $typeIconHideInMenu;
+        $clone->pageIconSet = $pageIconSet;
         return $clone;
     }
 
-    public function getTypeIconHideInMenu(): ContentTypeIcon
+    public function getPageIconSet(): PageIconSet
     {
-        return $this->typeIconHideInMenu;
+        return $this->pageIconSet;
     }
 }

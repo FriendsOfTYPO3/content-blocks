@@ -112,11 +112,19 @@ class ServiceProvider extends AbstractServiceProvider
                         'provider' => $icon->iconProvider,
                     ],
                 ];
-                if ($typeDefinition instanceof PageTypeDefinition && $typeDefinition->getTypeIconHideInMenu()->iconIdentifier !== '') {
-                    $hideInMenuIcon = $typeDefinition->getTypeIconHideInMenu();
-                    $iconConfig[$hideInMenuIcon->iconIdentifier] = [
-                        'source' => $hideInMenuIcon->iconPath,
-                    ];
+                if ($typeDefinition instanceof PageTypeDefinition) {
+                    if ($typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier !== '') {
+                        $hideInMenuIcon = $typeDefinition->getPageIconSet()->iconHideInMenu;
+                        $iconConfig[$hideInMenuIcon->iconIdentifier] = [
+                            'source' => $hideInMenuIcon->iconPath,
+                        ];
+                    }
+                    if ($typeDefinition->getPageIconSet()->iconRoot->iconIdentifier !== '') {
+                        $rootIcon = $typeDefinition->getPageIconSet()->iconRoot;
+                        $iconConfig[$rootIcon->iconIdentifier] = [
+                            'source' => $rootIcon->iconPath,
+                        ];
+                    }
                 }
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }

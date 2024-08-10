@@ -90,6 +90,11 @@ class ContentBlockPathUtility
         return 'IconHideInMenu';
     }
 
+    public static function getIconRootNameWithoutFileExtension(): string
+    {
+        return 'IconRoot';
+    }
+
     public static function getIconPathWithoutFileExtension(): string
     {
         return self::getPublicFolder() . '/' . self::getIconNameWithoutFileExtension();

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
@@ -30,10 +31,10 @@ final class LoadedContentBlock
         private readonly string $name,
         private readonly array $yaml,
         private readonly ContentTypeIcon $icon,
-        private readonly ContentTypeIcon $iconHideInMenu,
         private readonly string $hostExtension,
         private readonly string $extPath,
         private readonly ContentType $contentType,
+        private readonly ?PageIconSet $pageIconSet = null,
     ) {}
 
     public static function fromArray(array $array): LoadedContentBlock
@@ -42,14 +43,21 @@ final class LoadedContentBlock
         if ($table === '') {
             throw new \InvalidArgumentException('Failed to load Content Block: Missing "table".', 1689198195);
         }
+        $contentType = ContentType::getByTable($table);
+        $pageIconSet = null;
+        if ($contentType === ContentType::PAGE_TYPE) {
+            $IconHideInMenu = ContentTypeIcon::fromArray($array['iconHideInMenu'] ?? []);
+            $iconRoot = ContentTypeIcon::fromArray($array['iconRoot'] ?? []);
+            $pageIconSet = new PageIconSet($IconHideInMenu, $iconRoot);
+        }
         return new self(
             name: (string)($array['name'] ?? ''),
             yaml: (array)($array['yaml'] ?? []),
             icon: ContentTypeIcon::fromArray($array['icon'] ?? []),
-            iconHideInMenu: ContentTypeIcon::fromArray($array['iconHideInMenu'] ?? []),
             hostExtension: (string)($array['hostExtension'] ?? ''),
             extPath: (string)($array['extPath'] ?? ''),
-            contentType: ContentType::getByTable($table)
+            contentType: ContentType::getByTable($table),
+            pageIconSet: $pageIconSet
         );
     }
 
@@ -59,7 +67,8 @@ final class LoadedContentBlock
             'name' => $this->name,
             'yaml' => $this->yaml,
             'icon' => $this->icon->toArray(),
-            'iconHideInMenu' => $this->iconHideInMenu->toArray(),
+            'iconHideInMenu' => $this->pageIconSet?->iconHideInMenu->toArray(),
+            'iconRoot' => $this->pageIconSet?->iconRoot->toArray(),
             'hostExtension' => $this->hostExtension,
             'extPath' => $this->extPath,
         ];
@@ -90,9 +99,9 @@ final class LoadedContentBlock
         return $this->icon;
     }
 
-    public function getIconHideInMenu(): ContentTypeIcon
+    public function getPageIconSet(): ?PageIconSet
     {
-        return $this->iconHideInMenu;
+        return $this->pageIconSet;
     }
 
     public function getHostExtension(): string
