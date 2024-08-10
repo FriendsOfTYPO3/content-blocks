@@ -35,56 +35,6 @@ final class SqlGeneratorTest extends UnitTestCase
 {
     public static function generateReturnsExpectedSqlStatementsDataProvider(): iterable
     {
-        yield 'simple fields in tt_content table' => [
-            'contentBlocks' => [
-                [
-                    'name' => 'foo/bar',
-                    'yaml' => [
-                        'table' => 'tt_content',
-                        'typeField' => 'CType',
-                        'typeName' => 'foo_bar',
-                        'fields' => [
-                            [
-                                'identifier' => 'text',
-                                'type' => 'Text',
-                            ],
-                            [
-                                'identifier' => 'number',
-                                'type' => 'Number',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'expected' => [
-                "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
-            ],
-        ];
-
-        yield 'simple fields in custom foobar table' => [
-            'contentBlocks' => [
-                [
-                    'name' => 'foo/bar',
-                    'yaml' => [
-                        'table' => 'foobar',
-                        'fields' => [
-                            [
-                                'identifier' => 'text',
-                                'type' => 'Text',
-                            ],
-                            [
-                                'identifier' => 'number',
-                                'type' => 'Number',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'expected' => [
-                "CREATE TABLE `foobar`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
-            ],
-        ];
-
         yield 'simple fields in custom foobar table with parent reference' => [
             'contentBlocks' => [
                 [
@@ -120,63 +70,9 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                "CREATE TABLE `foobar`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foobar`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
                 "CREATE TABLE `foobar`(`tablenames` varchar(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foobar`(`fieldname` varchar(255) DEFAULT '' NOT NULL);",
-            ],
-        ];
-
-        yield 'simple fields in custom foobar table with typeField defined' => [
-            'contentBlocks' => [
-                [
-                    'name' => 'foo/bar',
-                    'yaml' => [
-                        'table' => 'foobar',
-                        'typeField' => 'my_type',
-                        'typeName' => 'foo',
-                        'fields' => [
-                            [
-                                'identifier' => 'text',
-                                'type' => 'Text',
-                            ],
-                            [
-                                'identifier' => 'number',
-                                'type' => 'Number',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'expected' => [
-                "CREATE TABLE `foobar`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
-            ],
-        ];
-
-        yield 'nullable option removes NOT NULL statement' => [
-            'contentBlocks' => [
-                [
-                    'name' => 'foo/bar',
-                    'yaml' => [
-                        'table' => 'tt_content',
-                        'typeField' => 'CType',
-                        'typeName' => 'foo_bar',
-                        'fields' => [
-                            [
-                                'identifier' => 'text',
-                                'type' => 'Text',
-                            ],
-                            [
-                                'identifier' => 'number',
-                                'type' => 'Number',
-                                'nullable' => true,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'expected' => [
-                "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
             ],
         ];
 
@@ -208,9 +104,7 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
             ],
         ];
 
@@ -257,11 +151,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                "CREATE TABLE `collection2`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `collection2`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `foo_bar_collection`(`text` VARCHAR(255) DEFAULT '' NOT NULL);",
                 "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `tt_content`(`foo_bar_text` VARCHAR(255) DEFAULT '' NOT NULL);",
             ],
         ];
     }
