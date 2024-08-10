@@ -21,7 +21,8 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
-use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
+use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolver;
+use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -65,15 +66,16 @@ final class ProcessedContentType
             $contentType['priority'] = (int)($yaml['priority'] ?? 0);
         } else {
             $absolutePath = GeneralUtility::getFileAbsFileName($this->contentBlock->getExtPath());
-            $contentTypeIcon = ContentTypeIconResolver::resolve(
-                $this->contentBlock->getName(),
-                $absolutePath,
-                $this->contentBlock->getHostExtension(),
-                $identifier,
-                $this->contentBlock->getContentType(),
-                $this->table,
-                $this->typeName,
+            $input = new ContentTypeIconResolverInput(
+                name: $this->contentBlock->getName(),
+                absolutePath: $absolutePath,
+                extension: $this->contentBlock->getHostExtension(),
+                identifier: $identifier,
+                contentType: $this->contentBlock->getContentType(),
+                table: $this->table,
+                typeName: $this->typeName,
             );
+            $contentTypeIcon = ContentTypeIconResolver::resolve($input);
         }
         $contentType['typeIcon'] = $contentTypeIcon->toArray();
         if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {

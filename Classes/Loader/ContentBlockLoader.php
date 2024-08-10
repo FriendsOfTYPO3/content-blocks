@@ -26,6 +26,8 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
+use TYPO3\CMS\ContentBlocks\Service\Icon\IconProcessor;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
@@ -219,29 +221,25 @@ class ContentBlockLoader
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
         $contentBlockIcon = new ContentTypeIcon();
-        $this->iconProcessor->addInstruction(
-            $contentBlockIcon,
-            $name,
-            $absolutePath,
-            $extensionKey,
-            $iconIdentifier,
-            $contentType,
-            $table,
-            $typeName
+        $baseInstruction = new ContentTypeIconResolverInput(
+            name: $name,
+            absolutePath: $absolutePath,
+            extension: $extensionKey,
+            identifier: $iconIdentifier,
+            contentType: $contentType,
+            table: $table,
+            typeName: $typeName
         );
+        $this->iconProcessor->addInstruction($contentBlockIcon, $baseInstruction);
         $pageIconHideInMenu = new ContentTypeIcon();
         if ($contentType === ContentType::PAGE_TYPE) {
             $iconIdentifierHideInMenu = ContentBlockPathUtility::getIconHideInMenuNameWithoutFileExtension();
+            $pageIconHideInMenuInput = clone $baseInstruction;
+            $pageIconHideInMenuInput->identifier = $iconIdentifierHideInMenu;
+            $pageIconHideInMenuInput->suffix = '-hide-in-menu';
             $this->iconProcessor->addInstruction(
                 $pageIconHideInMenu,
-                $name,
-                $absolutePath,
-                $extensionKey,
-                $iconIdentifierHideInMenu,
-                $contentType,
-                $table,
-                $typeName,
-                '-hide-in-menu'
+                $pageIconHideInMenuInput
             );
         }
         return new LoadedContentBlock(

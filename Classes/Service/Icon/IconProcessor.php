@@ -15,11 +15,9 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Loader;
+namespace TYPO3\CMS\ContentBlocks\Service\Icon;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
-use TYPO3\CMS\ContentBlocks\Service\ContentTypeIconResolver;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -36,38 +34,10 @@ class IconProcessor
         }
     }
 
-    public function addInstruction(
-        ContentTypeIcon $contentTypeIcon,
-        string $name,
-        string $absolutePath,
-        string $extension,
-        string $identifier,
-        ContentType $contentType,
-        string $table,
-        int|string $typeName,
-        string $suffix = '',
-    ): void {
-        $instruction = function () use (
-            $contentTypeIcon,
-            $name,
-            $absolutePath,
-            $extension,
-            $identifier,
-            $contentType,
-            $table,
-            $typeName,
-            $suffix,
-        ) {
-            $resultIcon = ContentTypeIconResolver::resolve(
-                $name,
-                $absolutePath,
-                $extension,
-                $identifier,
-                $contentType,
-                $table,
-                $typeName,
-                $suffix,
-            );
+    public function addInstruction(ContentTypeIcon $contentTypeIcon, ContentTypeIconResolverInput $input): void
+    {
+        $instruction = function () use ($contentTypeIcon, $input) {
+            $resultIcon = ContentTypeIconResolver::resolve($input);
             $contentTypeIcon->iconIdentifier = $resultIcon->iconIdentifier;
             $contentTypeIcon->iconPath = $resultIcon->iconPath;
             $contentTypeIcon->iconProvider = $resultIcon->iconProvider;

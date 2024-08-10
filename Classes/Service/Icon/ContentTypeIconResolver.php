@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Service;
+namespace TYPO3\CMS\ContentBlocks\Service\Icon;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
@@ -29,46 +29,38 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ContentTypeIconResolver
 {
-    public static function resolve(
-        string $name,
-        string $absolutePath,
-        string $extension,
-        string $identifier,
-        ContentType $contentType,
-        string $table,
-        int|string $typeName,
-        string $suffix = '',
-    ): ContentTypeIcon {
+    public static function resolve(ContentTypeIconResolverInput $input): ContentTypeIcon
+    {
         foreach (['svg', 'png', 'gif'] as $fileExtension) {
-            $iconPathWithoutFileExtension = ContentBlockPathUtility::getPublicFolder() . '/' . $identifier;
+            $iconPathWithoutFileExtension = ContentBlockPathUtility::getPublicFolder() . '/' . $input->identifier;
             $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
-            $checkIconPath = $absolutePath . '/' . $relativeIconPath;
+            $checkIconPath = $input->absolutePath . '/' . $relativeIconPath;
             if (!file_exists($checkIconPath)) {
                 continue;
             }
-            $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($extension, $name);
-            $iconNameWithoutFileExtension = $identifier;
+            $extPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath($input->extension, $input->name);
+            $iconNameWithoutFileExtension = $input->identifier;
             $contentTypeIcon = new ContentTypeIcon();
             $icon = $extPath . '/' . $iconNameWithoutFileExtension . '.' . $fileExtension;
             $iconProviderClass = $fileExtension === 'svg' ? SvgIconProvider::class : BitmapIconProvider::class;
             $contentTypeIcon->iconPath = $icon;
             $contentTypeIcon->iconProvider = $iconProviderClass;
             $contentTypeIcon->iconIdentifier = self::buildTypeIconIdentifier(
-                $table,
-                $typeName,
+                $input->table,
+                $input->typeName,
                 $contentTypeIcon->iconPath,
-                $suffix
+                $input->suffix
             );
             return $contentTypeIcon;
         }
         $contentTypeIcon = new ContentTypeIcon();
-        $contentTypeIcon->iconPath = self::getDefaultContentTypeIcon($contentType);
+        $contentTypeIcon->iconPath = self::getDefaultContentTypeIcon($input->contentType);
         $contentTypeIcon->iconProvider = SvgIconProvider::class;
         $contentTypeIcon->iconIdentifier = self::buildTypeIconIdentifier(
-            $table,
-            $typeName,
+            $input->table,
+            $input->typeName,
             $contentTypeIcon->iconPath,
-            $suffix
+            $input->suffix
         );
         return $contentTypeIcon;
     }
