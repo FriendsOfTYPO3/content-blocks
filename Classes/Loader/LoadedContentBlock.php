@@ -46,9 +46,9 @@ final class LoadedContentBlock
         $contentType = ContentType::getByTable($table);
         $pageIconSet = null;
         if ($contentType === ContentType::PAGE_TYPE) {
-            $IconHideInMenu = ContentTypeIcon::fromArray($array['iconHideInMenu'] ?? []);
+            $iconHideInMenu = ContentTypeIcon::fromArray($array['iconHideInMenu'] ?? []);
             $iconRoot = ContentTypeIcon::fromArray($array['iconRoot'] ?? []);
-            $pageIconSet = new PageIconSet($IconHideInMenu, $iconRoot);
+            $pageIconSet = new PageIconSet($iconHideInMenu, $iconRoot);
         }
         return new self(
             name: (string)($array['name'] ?? ''),
