@@ -2150,7 +2150,6 @@ final class TcaGeneratorTest extends UnitTestCase
                     'ctrl' => [
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
-                            '1700156757-hideinmenu' => 'pages-1700156757-hide-in-menu',
                         ],
                         'searchFields' => 'title,slug,nav_title',
                     ],

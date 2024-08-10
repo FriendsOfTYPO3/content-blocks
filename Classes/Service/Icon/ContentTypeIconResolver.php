@@ -29,7 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ContentTypeIconResolver
 {
-    public static function resolve(ContentTypeIconResolverInput $input): ContentTypeIcon
+    public static function resolve(ContentTypeIconResolverInput $input): ?ContentTypeIcon
     {
         $allowedFileExtension = ['svg', 'png', 'gif'];
         foreach ($allowedFileExtension as $fileExtension) {
@@ -53,6 +53,9 @@ class ContentTypeIconResolver
                 $input->suffix
             );
             return $contentTypeIcon;
+        }
+        if ($input->withFallback === false) {
+            return null;
         }
         $contentTypeIcon = new ContentTypeIcon();
         $contentTypeIcon->iconPath = self::getDefaultContentTypeIcon($input->contentType);

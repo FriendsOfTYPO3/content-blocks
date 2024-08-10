@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 
 /**

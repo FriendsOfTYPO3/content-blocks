@@ -25,6 +25,5 @@ final class PageIconSet
     public function __construct(
         public readonly ContentTypeIcon $iconHideInMenu,
         public readonly ContentTypeIcon $iconRoot,
-    ) {
-    }
+    ) {}
 }

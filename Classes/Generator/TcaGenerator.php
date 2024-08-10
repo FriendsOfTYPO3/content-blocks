@@ -208,10 +208,10 @@ class TcaGenerator
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
                 if ($typeDefinition instanceof PageTypeDefinition) {
-                    if ($typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier !== '') {
+                    if ($typeDefinition->getPageIconSet()->iconHideInMenu->initialized) {
                         $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier;
                     }
-                    if ($typeDefinition->getPageIconSet()->iconRoot->iconIdentifier !== '') {
+                    if ($typeDefinition->getPageIconSet()->iconRoot->initialized) {
                         $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-root'] = $typeDefinition->getPageIconSet()->iconRoot->iconIdentifier;
                     }
                 }

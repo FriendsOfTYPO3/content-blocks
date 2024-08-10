@@ -25,6 +25,7 @@ final class ContentTypeIcon
     public string $iconPath = '';
     public string $iconProvider = '';
     public string $iconIdentifier = '';
+    public bool $initialized = false;
 
     public static function fromArray(array $array): ContentTypeIcon
     {
@@ -32,6 +33,9 @@ final class ContentTypeIcon
         $self->iconPath = $array['iconPath'] ?? '';
         $self->iconProvider = $array['iconProvider'] ?? '';
         $self->iconIdentifier = $array['iconIdentifier'] ?? '';
+        if ($self->iconPath !== '' && $self->iconIdentifier !== '') {
+            $self->initialized = true;
+        }
         return $self;
     }
 

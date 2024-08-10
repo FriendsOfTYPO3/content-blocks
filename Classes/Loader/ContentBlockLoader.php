@@ -22,9 +22,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
@@ -272,6 +272,7 @@ class ContentBlockLoader
         $pageIconInput = clone $baseIconInput;
         $pageIconInput->identifier = $iconIdentifier;
         $pageIconInput->suffix = $suffix;
+        $pageIconInput->withFallback = false;
         $this->iconProcessor->addInstruction($pageIcon, $pageIconInput);
         return $pageIcon;
     }

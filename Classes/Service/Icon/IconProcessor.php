@@ -38,9 +38,13 @@ class IconProcessor
     {
         $instruction = function () use ($contentTypeIcon, $input) {
             $resultIcon = ContentTypeIconResolver::resolve($input);
+            if ($resultIcon === null) {
+                return;
+            }
             $contentTypeIcon->iconIdentifier = $resultIcon->iconIdentifier;
             $contentTypeIcon->iconPath = $resultIcon->iconPath;
             $contentTypeIcon->iconProvider = $resultIcon->iconProvider;
+            $contentTypeIcon->initialized = true;
         };
         $this->instructions[] = $instruction;
     }

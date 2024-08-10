@@ -33,5 +33,6 @@ final class ContentTypeIconResolverInput
         public string $table,
         public int|string $typeName,
         public string $suffix = '',
+        public bool $withFallback = true,
     ) {}
 }
