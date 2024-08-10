@@ -31,7 +31,8 @@ class ContentTypeIconResolver
 {
     public static function resolve(ContentTypeIconResolverInput $input): ContentTypeIcon
     {
-        foreach (['svg', 'png', 'gif'] as $fileExtension) {
+        $allowedFileExtension = ['svg', 'png', 'gif'];
+        foreach ($allowedFileExtension as $fileExtension) {
             $iconPathWithoutFileExtension = ContentBlockPathUtility::getPublicFolder() . '/' . $input->identifier;
             $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
             $checkIconPath = $input->absolutePath . '/' . $relativeIconPath;
