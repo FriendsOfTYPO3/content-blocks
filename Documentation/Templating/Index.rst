@@ -121,16 +121,15 @@ Asset ViewHelpers
 =================
 
 Content Blocks provides a new AssetPathViewHelper to access assets from within
-the current Content Block in the template. These ViewHelpers look for the given
-file in the `Assets` directory.
+the current Content Block in the template.
 
 .. code-block:: html
 
     <f:comment><!-- Include the Assets/Frontend.css stylesheet --></f:comment>
-    <f:asset.css identifier="myCssIdentifier" file="{cb:assetPath()}/Frontend.css"/>
+    <f:asset.css identifier="myCssIdentifier" href="{cb:assetPath()}/Frontend.css"/>
 
     <f:comment><!-- Include the Assets/Frontend.js script --></f:comment>
-    <f:asset.script identifier="myJavascriptIdentifier" file="{cb:assetPath()}/Frontend.js"/>
+    <f:asset.script identifier="myJavascriptIdentifier" src="{cb:assetPath()}/Frontend.js"/>
 
 The information of the current Content Block is stored in :html:`{data}`. This
 means if you use an asset ViewHelper in a partial, you have to provide
@@ -140,7 +139,7 @@ means if you use an asset ViewHelper in a partial, you have to provide
 .. code-block:: html
 
     <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
-    <f:asset.script identifier="myJavascriptIdentifier" name="vendor/name" file="{cb:assetPath()}/Frontend.js"/>
+    <f:asset.script identifier="myJavascriptIdentifier" href="{cb:assetPath(name: 'vendor/name')}/Frontend.js"/>
 
 Translation ViewHelper
 ======================
