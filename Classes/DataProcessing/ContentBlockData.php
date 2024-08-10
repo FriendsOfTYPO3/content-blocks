@@ -86,9 +86,9 @@ final class ContentBlockData implements \ArrayAccess, RecordInterface
         return $this->_record->getMainType();
     }
 
-    public function toArray(bool $includeSpecialProperties = false): array
+    public function toArray(): array
     {
-        return $this->_record->toArray($includeSpecialProperties);
+        return $this->_record->getRawRecord()->toArray();
     }
 
     public function offsetExists(mixed $offset): bool
@@ -114,7 +114,7 @@ final class ContentBlockData implements \ArrayAccess, RecordInterface
             return $this->_name;
         }
         if ($offset === '_raw') {
-            return $this->toArray(true);
+            return $this->toArray();
         }
         if ($offset === '_grids') {
             return $this->_grids;

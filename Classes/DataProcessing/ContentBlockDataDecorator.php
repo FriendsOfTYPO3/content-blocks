@@ -251,7 +251,7 @@ final class ContentBlockDataDecorator
         }
         $typeDefinition = null;
         if ($hasTableDefinition) {
-            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $contentBlockRelation->record->toArray());
+            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $contentBlockRelation->record->getRawRecord()->toArray());
         }
         if ($collectionTableDefinition !== null && $typeDefinition !== null) {
             $identifier = $this->getRecordIdentifier($foreignTable, $contentBlockRelation->record->toArray());
