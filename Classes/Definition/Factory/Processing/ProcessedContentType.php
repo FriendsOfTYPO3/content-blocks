@@ -78,7 +78,7 @@ final class ProcessedContentType
             $contentTypeIcon = ContentTypeIconResolver::resolve($input);
         }
         $contentType['typeIcon'] = $contentTypeIcon->toArray();
-        if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
+        if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE && $this->contentBlock->getPageIconSet() !== null) {
             $contentType['typeIconHideInMenu'] = $this->contentBlock->getPageIconSet()->iconHideInMenu->toArray();
             $contentType['typeIconRoot'] = $this->contentBlock->getPageIconSet()->iconRoot->toArray();
         }
