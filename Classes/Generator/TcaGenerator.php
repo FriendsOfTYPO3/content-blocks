@@ -866,6 +866,7 @@ class TcaGenerator
             'label' => $this->resolveLabelField($tableDefinition),
             'hideTable' => $tableDefinition->getParentReferences() !== null,
             'enablecolumns' => $capability->buildRestrictionsTca(),
+            'previewRenderer' => PreviewRenderer::class,
         ];
 
         $labelCapability = $tableDefinition->getCapability()->getLabelCapability();

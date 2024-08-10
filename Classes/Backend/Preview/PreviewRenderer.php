@@ -22,7 +22,6 @@ use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
 use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -49,11 +48,16 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         /** @var ServerRequestInterface $request */
         $request = $GLOBALS['TYPO3_REQUEST'];
         $record = $item->getRecord();
-        $typeField = ContentType::CONTENT_ELEMENT->getTypeField();
-        $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
-        $typeName = $record[$typeField];
-        $contentElementDefinition = $this->tableDefinitionCollection->getContentElementDefinition($typeName);
-        $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentElementDefinition->getName());
+        $recordType = $item->getRecordType();
+        $table = $item->getTable();
+        $tableDefinition = $this->tableDefinitionCollection->getTable($table);
+        $contentTypeCollection = $tableDefinition->getContentTypeDefinitionCollection();
+        if ($contentTypeCollection->hasType($recordType)) {
+            $contentTypeDefinition = $contentTypeCollection->getType($recordType);
+        } else {
+            $contentTypeDefinition = $contentTypeCollection->getFirst();
+        }
+        $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
         $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
@@ -63,17 +67,16 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $result = parent::renderPageModulePreviewContent($item);
             return $result;
         }
-        $contentElementTableDefinition = $this->tableDefinitionCollection->getTable($contentElementTable);
         $this->relationResolver->setRequest($request);
         $resolvedData = $this->relationResolver->resolve(
-            $contentElementDefinition,
-            $contentElementTableDefinition,
+            $contentTypeDefinition,
+            $tableDefinition,
             $record,
-            $contentElementTable,
+            $table,
         );
         $data = $this->contentBlockDataDecorator->decorate(
-            $contentElementDefinition,
-            $contentElementTableDefinition,
+            $contentTypeDefinition,
+            $tableDefinition,
             $resolvedData,
             $item->getContext(),
         );

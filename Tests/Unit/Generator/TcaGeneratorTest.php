@@ -595,6 +595,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
+                        'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
@@ -796,6 +797,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
+                        'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
@@ -1091,6 +1093,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'foobar-1',
                         ],
                         'searchFields' => '',
+                        'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
@@ -1302,6 +1305,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
                         'searchFields' => 't3ce_example_text,t3ce_example_text2',
+                        'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
@@ -1454,6 +1458,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'foobar-1',
                         ],
                         'searchFields' => 't3ce_example_text,t3ce_example_text2',
+                        'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
@@ -1615,6 +1620,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'foobar-example',
                         ],
                         'searchFields' => 'text,text2',
+                        'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         'example' => [
@@ -1922,6 +1928,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'default' => 'collection-1',
                         ],
                         'searchFields' => 'text',
+                        'previewRenderer' => PreviewRenderer::class,
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
