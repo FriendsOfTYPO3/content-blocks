@@ -39,20 +39,17 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
  * There are some special accessors, which are always available:
  * - {data.uid}
  * - {data.pid}
- * - {data.typeName}
+ * - {data.recordType}
  *
  * These special accessors are available, if the corresponding features are turned on
  * (Always true for Content Elements):
  *  - {data.languageId} (YAML: languageAware: true)
- *  - {data.creationDate} (YAML: trackCreationDate: true)
- *  - {data.updateDate} (YAML: trackUpdateDate: true)
+ *  - {data.systemProperties.createdAt} (YAML: trackCreationDate: true)
+ *  - {data.systemProperties.lastUpdatedAt} (YAML: trackUpdateDate: true)
  *
  * These special accessors are available depending on the context:
- * - {data.localizedUid}
- * - {data.originalUid}
- * - {data.originalPid}
- *
- * @internal This is not public TYPO3 PHP API. Only to be used inside of Fluid templates by accessing as variable.
+ * - {data.computedProperties.localizedUid}
+ * - {data.computedProperties.versionedUid}
  */
 final class ContentBlockData implements \ArrayAccess, RecordInterface
 {
