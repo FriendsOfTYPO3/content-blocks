@@ -67,9 +67,9 @@ Have a look at this code example to grasp what's possible:
     {data.fullType}
 
     <!-- System related properties -->
-    {data.systemProperties.isDeleted}
-    {data.systemProperties.isDisabled}
-    {data.systemProperties.isLockedForEditing}
+    {data.systemProperties.deleted}
+    {data.systemProperties.disabled}
+    {data.systemProperties.lockedForEditing}
     {data.systemProperties.createdAt}
     {data.systemProperties.lastUpdatedAt}
     {data.systemProperties.publishAt}

@@ -34,7 +34,7 @@ content area and beneath the page title.
 
       <!-- Hidden relations like Collections -->
       <f:for each="{data.relations}" as="item">
-          <f:if condition="{item._raw.hidden}"><!-- Style or hide --></f:if>
+          <f:if condition="{item.systemProperties.disabled}"><!-- Style or hide --></f:if>
       </f:for>
 
       <!-- Hidden file references -->
