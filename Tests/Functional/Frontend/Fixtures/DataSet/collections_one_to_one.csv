@@ -1,10 +1,8 @@
-"typo3tests_contentelementb_collection"
+"typo3tests_contentelementb_collection_one_to_one"
 ,"uid","pid","fieldA","foreign_table_parent_uid","t3ver_oid","t3ver_wsid"
 ,1,1,"lorem foo bar",1,0,0
 ,2,1,"lorem foo bar 2",1,0,0
-,3,1,"lorem foo bar WS",1,1,1
-,4,1,"lorem foo bar 2 WS",1,2,1
 "tt_content"
-,"uid","pid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection","CType"
+,"uid","pid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection_one_to_one","CType"
 ,1,1,0,0,2,"typo3tests_contentelementb"
 ,2,1,1,1,2,"typo3tests_contentelementb"

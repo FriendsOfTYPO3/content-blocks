@@ -47,6 +47,7 @@ final class RelationFieldType implements FieldTypeInterface
     private array $filter = [];
     private array $suggestOptions = [];
     private array $appearance = [];
+    private string $relationship = '';
 
     public static function getName(): string
     {
@@ -93,6 +94,7 @@ final class RelationFieldType implements FieldTypeInterface
         $self->filter = (array)($settings['filter'] ?? $self->filter);
         $self->suggestOptions = (array)($settings['suggestOptions'] ?? $self->suggestOptions);
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
+        $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
 
         return $self;
     }
@@ -169,6 +171,9 @@ final class RelationFieldType implements FieldTypeInterface
         }
         if ($this->appearance !== []) {
             $config['appearance'] = $this->appearance;
+        }
+        if ($this->relationship !== '') {
+            $config['relationship'] = $this->relationship;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

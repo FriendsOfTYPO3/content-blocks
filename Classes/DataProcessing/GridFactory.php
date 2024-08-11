@@ -32,7 +32,7 @@ class GridFactory
     /**
      * @param array<ContentBlockData> $records
      */
-    public function build(PageLayoutContext $context, string $columnName, array $records): Grid
+    public function build(PageLayoutContext $context, string $columnName, iterable $records): Grid
     {
         $definition = ['name' => $columnName];
         $column = GeneralUtility::makeInstance(GridColumn::class, $context, $definition);

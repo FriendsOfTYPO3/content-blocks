@@ -37,6 +37,7 @@ final class FileFieldType implements FieldTypeInterface
     private array $overrideChildTca = [];
     private bool $extendedPalette = true;
     private array $cropVariants = [];
+    private string $relationship = '';
 
     public static function getName(): string
     {
@@ -73,6 +74,7 @@ final class FileFieldType implements FieldTypeInterface
         $self->overrideChildTca = (array)($settings['overrideChildTca'] ?? $self->overrideChildTca);
         $self->extendedPalette = (bool)($settings['extendedPalette'] ?? $self->extendedPalette);
         $self->cropVariants = (array)($settings['cropVariants'] ?? $self->cropVariants);
+        $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
         return $self;
     }
 
@@ -112,6 +114,9 @@ final class FileFieldType implements FieldTypeInterface
         }
         if ($this->cropVariants !== []) {
             $config['overrideChildTca']['columns']['crop']['config']['cropVariants'] = $this->processCropVariants();
+        }
+        if ($this->relationship !== '') {
+            $config['relationship'] = $this->relationship;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

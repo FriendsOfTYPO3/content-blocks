@@ -1,8 +1,0 @@
-"pages"
-,"uid","pid","title"
-,1,1,"Page 1"
-,2,1,"Page 2"
-"block_pages_mm"
-,"uid_local","uid_foreign","sorting"
-,1,1,1
-,1,2,1

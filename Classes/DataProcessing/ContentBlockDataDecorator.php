@@ -24,7 +24,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
-use TYPO3\CMS\Core\Domain\RecordFactory;
+use TYPO3\CMS\Core\Collection\LazyRecordCollection;
+use TYPO3\CMS\Core\Domain\Record;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -38,7 +39,7 @@ final class ContentBlockDataDecorator
         private readonly ContentBlockDataDecoratorSession $contentBlockDataDecoratorSession,
         private readonly GridProcessor $gridProcessor,
         private readonly ContentObjectProcessor $contentObjectProcessor,
-        private readonly RecordFactory $recordFactory,
+        private readonly ContentTypeResolver $contentTypeResolver,
     ) {}
 
     public function setRequest(ServerRequestInterface $request): void
@@ -47,18 +48,15 @@ final class ContentBlockDataDecorator
         $this->contentObjectProcessor->setRequest($request);
     }
 
-    public function decorate(
-        ContentTypeInterface $contentTypeDefinition,
-        TableDefinition $tableDefinition,
-        ResolvedRelation $resolvedRelation,
-        ?PageLayoutContext $context = null,
-    ): ContentBlockData {
-        $identifier = $this->getRecordIdentifier($resolvedRelation->table, $resolvedRelation->raw);
+    public function decorate(Record $resolvedRecord, ?PageLayoutContext $context = null): ContentBlockData
+    {
+        $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRecord->getMainType());
+        $contentTypeDefinition = $this->contentTypeResolver->resolve($resolvedRecord);
+        $identifier = $this->getRecordIdentifier($resolvedRecord);
         $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
-        $record = $this->recordFactory->createFromDatabaseRow($resolvedRelation->table, $resolvedRelation->raw);
         $resolvedContentBlockDataRelation = new ResolvedContentBlockDataRelation();
-        $resolvedContentBlockDataRelation->record = $record;
-        $resolvedContentBlockDataRelation->resolved = $resolvedRelation->resolved;
+        $resolvedContentBlockDataRelation->record = $resolvedRecord;
+        $resolvedContentBlockDataRelation->resolved = $resolvedRecord->toArray();
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
             $tableDefinition,
@@ -88,11 +86,10 @@ final class ContentBlockDataDecorator
             if ($fieldTypeEnum?->isStructureField()) {
                 continue;
             }
-            $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
+            $resolvedField = $resolvedRelation->record[$tcaFieldDefinition->getUniqueIdentifier()];
             if ($this->isRelationField($resolvedField)) {
                 $resolvedField = $this->handleRelation(
-                    $resolvedRelation,
-                    $tcaFieldDefinition,
+                    $resolvedField,
                     $depth,
                     $context,
                 );
@@ -121,7 +118,7 @@ final class ContentBlockDataDecorator
     ): array {
         if ($context === null && $this->request !== null) {
             $renderedGridItemDataObjects = $resolvedField;
-            if (!is_array($renderedGridItemDataObjects)) {
+            if (!is_iterable($renderedGridItemDataObjects)) {
                 $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
             }
             foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
@@ -154,53 +151,43 @@ final class ContentBlockDataDecorator
     }
 
     private function handleRelation(
-        ResolvedContentBlockDataRelation $resolvedRelation,
-        TcaFieldDefinition $tcaFieldDefinition,
+        Record|LazyRecordCollection $resolvedField,
         int $depth,
         ?PageLayoutContext $context = null,
-    ): mixed {
-        $resolvedField = $resolvedRelation->resolved[$tcaFieldDefinition->getUniqueIdentifier()];
-        $fieldType = $tcaFieldDefinition->getFieldType();
-        $resolvedField = match ($fieldType::getTcaType()) {
-            'inline', 'group', 'category' => $this->transformMultipleRelation(
+    ): ContentBlockData|LazyRecordCollection {
+        if ($resolvedField instanceof LazyRecordCollection) {
+            $resolvedField = $this->transformMultipleRelation(
                 $resolvedField,
                 $depth,
                 $context,
-            ),
-            'select' => $this->transformSelectRelation(
-                $resolvedField,
-                $depth,
-                $context,
-            ),
-            default => $resolvedField,
-        };
+            );
+            return $resolvedField;
+        }
+        $resolvedField = $this->transformSelectRelation(
+            $resolvedField,
+            $depth,
+            $context,
+        );
         return $resolvedField;
     }
 
     private function isRelationField(mixed $resolvedField): bool
     {
-        if ($resolvedField instanceof ResolvedRelation) {
+        if ($resolvedField instanceof Record) {
             return true;
         }
-        if (!is_array($resolvedField)) {
-            return false;
-        }
-        if (($resolvedField[0] ?? null) instanceof ResolvedRelation) {
+        if ($resolvedField instanceof LazyRecordCollection) {
             return true;
         }
         return false;
     }
 
-    /**
-     * @param ResolvedRelation[] $processedField
-     * @return array<ContentBlockData>|ContentBlockData
-     */
     private function transformSelectRelation(
-        array|ResolvedRelation $processedField,
+        LazyRecordCollection|Record $processedField,
         int $depth,
         ?PageLayoutContext $context = null,
-    ): array|ContentBlockData {
-        if ($processedField instanceof ResolvedRelation) {
+    ): LazyRecordCollection|ContentBlockData {
+        if ($processedField instanceof Record) {
             $processedField = $this->transformSingleRelation(
                 $processedField,
                 $depth,
@@ -217,13 +204,13 @@ final class ContentBlockDataDecorator
     }
 
     /**
-     * @return array<ContentBlockData>
+     * @return LazyRecordCollection<ContentBlockData>
      */
     private function transformMultipleRelation(
-        array $processedField,
+        LazyRecordCollection $processedField,
         int $depth,
         ?PageLayoutContext $context = null,
-    ): array {
+    ): LazyRecordCollection {
         foreach ($processedField as $key => $processedFieldItem) {
             $processedField[$key] = $this->transformSingleRelation(
                 $processedFieldItem,
@@ -235,15 +222,14 @@ final class ContentBlockDataDecorator
     }
 
     private function transformSingleRelation(
-        ResolvedRelation $item,
+        Record $item,
         int $depth,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
         $contentBlockRelation = new ResolvedContentBlockDataRelation();
-        $foreignTable = $item->table;
-        $record = $this->recordFactory->createFromDatabaseRow($item->table, $item->raw);
-        $contentBlockRelation->record = $record;
-        $contentBlockRelation->resolved = $item->resolved;
+        $foreignTable = $item->getMainType();
+        $contentBlockRelation->record = $item;
+        $contentBlockRelation->resolved = $item->toArray();
         $hasTableDefinition = $this->tableDefinitionCollection->hasTable($foreignTable);
         $collectionTableDefinition = null;
         if ($hasTableDefinition) {
@@ -251,10 +237,10 @@ final class ContentBlockDataDecorator
         }
         $typeDefinition = null;
         if ($hasTableDefinition) {
-            $typeDefinition = ContentTypeResolver::resolve($collectionTableDefinition, $contentBlockRelation->record->getRawRecord()->toArray());
+            $typeDefinition = $this->contentTypeResolver->resolve($contentBlockRelation->record);
         }
         if ($collectionTableDefinition !== null && $typeDefinition !== null) {
-            $identifier = $this->getRecordIdentifier($foreignTable, $contentBlockRelation->record->toArray());
+            $identifier = $this->getRecordIdentifier($contentBlockRelation->record);
             if ($this->contentBlockDataDecoratorSession->hasContentBlockData($identifier)) {
                 $contentBlockData = $this->contentBlockDataDecoratorSession->getContentBlockData($identifier);
                 return $contentBlockData;
@@ -302,9 +288,9 @@ final class ContentBlockDataDecorator
         return $contentBlockDataObject;
     }
 
-    private function getRecordIdentifier(string $table, array $record): string
+    private function getRecordIdentifier(Record $record): string
     {
-        $identifier = $table . '-' . ($record['_LOCALIZED_UID'] ?? $record['uid']);
+        $identifier = $record->getMainType() . '-' . $record->getOverlaidUid();
         return $identifier;
     }
 }

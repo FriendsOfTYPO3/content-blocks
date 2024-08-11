@@ -125,6 +125,19 @@ Settings
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
+.. confval:: relationship
+   :name: collection-relationship
+
+   :Required: false
+   :Type: string
+   :Default: oneToMany
+
+   The relationship defines the cardinality between the relations. Possible
+   values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and
+   :yaml:`oneToOne`. In case of a [x]toOne relation, the processed field will
+   be filled directly with the record instead of a collection of records. In
+   addition, :yaml:`maxitems` will be automatically set to :yaml:`1`.
+
 .. confval:: appearance.collapseAll
    :name: collection-appearance.collapseAll
 

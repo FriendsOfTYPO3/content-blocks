@@ -49,6 +49,7 @@ final class CollectionFieldType implements FieldTypeInterface
     private string $symmetric_field = '';
     private string $symmetric_label = '';
     private string $symmetric_sortby = '';
+    private string $relationship = '';
 
     public static function getName(): string
     {
@@ -94,6 +95,7 @@ final class CollectionFieldType implements FieldTypeInterface
         $self->symmetric_field = (string)($settings['symmetric_field'] ?? $self->symmetric_field);
         $self->symmetric_label = (string)($settings['symmetric_label'] ?? $self->symmetric_label);
         $self->symmetric_sortby = (string)($settings['symmetric_sortby'] ?? $self->symmetric_sortby);
+        $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
         return $self;
     }
 
@@ -175,6 +177,9 @@ final class CollectionFieldType implements FieldTypeInterface
         }
         if ($this->symmetric_sortby !== '') {
             $config['symmetric_sortby'] = $this->symmetric_sortby;
+        }
+        if ($this->relationship !== '') {
+            $config['relationship'] = $this->relationship;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

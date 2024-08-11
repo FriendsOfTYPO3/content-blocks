@@ -1,9 +1,0 @@
-"pages"
-,"uid","pid","title","doktype"
-,2,1,"Record Storage",254
-"test_record"
-,"uid","pid","title","record_collection"
-,1,2,"Record 1",1
-"record_collection"
-,"uid","pid","text","foreign_table_parent_uid",
-,1,2,"Collection 1",1
