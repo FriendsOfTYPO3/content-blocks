@@ -32,7 +32,7 @@
                                 <f:variable name="link_title">
                                     <f:if condition="{item.link_title}">
                                         <f:then>{item.link_title}</f:then>
-                                        <f:else><cb:translate key="readmore"/></f:else>
+                                        <f:else><f:translate key="{cb:languagePath()}:readmore"/></f:else>
                                     </f:if>
                                 </f:variable>
                                 <div class="card-footer">

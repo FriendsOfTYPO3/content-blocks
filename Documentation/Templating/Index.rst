@@ -144,11 +144,12 @@ means if you use an asset ViewHelper in a partial, you have to provide
 Translation ViewHelper
 ======================
 
-This ViewHelper looks directly in the `Labels.xlf` file for the given key.
+Content Blocks provides a LanguagePathViewHelper to retrieve the LLL-path for
+the Labels.xlf file of the current Content Block.
 
 .. code-block:: html
 
-    <cb:translate key="my.contentblock.header" />
+    <f:translate key="{cb:languagePath()}:header"/>
 
 As described above in the asset ViewHelper, the :html:`{data}` variable is
 required to resolve the Content Block automatically. You can also set
@@ -156,7 +157,7 @@ required to resolve the Content Block automatically. You can also set
 
 .. code-block:: html
 
-    <cb:translate key="my.contentblock.header" name="vendor/name" />
+    <f:translate key="{cb:languagePath(name: 'vendor/name')}:header"/>
 
 Partials
 ========

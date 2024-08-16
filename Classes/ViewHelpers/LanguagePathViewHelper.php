@@ -26,39 +26,35 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 use TYPO3Fluid\Fluid\Exception;
 
 /**
- * AssetPathViewHelper
+ * LanguagePathViewHelper
  *
  * ONLY TO BE USED INSIDE CONTENT BLOCKS
  *
  * Examples
  * ========
  *
- * <f:asset.css identifier="my-css" href="{cb:assetPath()}/style.css" />
+ * <f:translate key="{cb:languagePath()}:header" />
  */
-class AssetPathViewHelper extends AbstractViewHelper
+class LanguagePathViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('name', 'string', 'Target Content Block name. If not set, the current Content Block will be used');
+        $this->registerArgument('name', 'string', 'The vendor/package of the Content Block.');
     }
 
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
+    {
         $name = (string)($arguments['name'] ?? $renderingContext->getVariableProvider()->get('data._name'));
         if ($name === '') {
-            throw new Exception(__CLASS__ . ' seemingly called outside Content Blocks context.', 1701198923);
+            throw new Exception(__CLASS__ . ' seemingly called outside Content Blocks context.', 1699271759);
         }
         $contentBlockRegistry = GeneralUtility::makeInstance(ContentBlockRegistry::class);
-        $contentBlock = $contentBlockRegistry->getContentBlock($name);
-        $assetExtPath = ContentBlockPathUtility::getHostExtPublicContentBlockPath(
-            $contentBlock->getHostExtension(),
-            $name
-        );
-        return $assetExtPath;
+        if (!$contentBlockRegistry->hasContentBlock($name)) {
+            throw new Exception('Content block with the name "' . $name . '" is not registered.', 1699272189);
+        }
+        $languagePath = 'LLL:' . $contentBlockRegistry->getContentBlockExtPath($name) . '/' . ContentBlockPathUtility::getLanguageFilePath();
+        return $languagePath;
     }
 }

@@ -5,8 +5,8 @@
 >
 
 <f:asset.css identifier="content-block-css" href="{cb:assetPath()}/Frontend.css"/>
-<f:asset.script identifier="content-block-script" file="{cb:assetPath()}/Frontend.js"/>
+<f:asset.script identifier="content-block-script" src="{cb:assetPath()}/Frontend.js"/>
 
 <h1>{data.header}</h1>
 <p>{data.bodytext}</p>
-<span><cb:translate key="title"/></span>
+<span><f:translate key="{cb:languagePath()}:title"/></span>

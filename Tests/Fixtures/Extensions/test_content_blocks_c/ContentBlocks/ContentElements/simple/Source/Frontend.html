@@ -17,6 +17,6 @@
 <p>tableName:{data.mainType}</p>
 <p>creationDate:{data.systemProperties.createdAt.timestamp}</p>
 <p>updateDate:{data.systemProperties.lastUpdatedAt.timestamp}</p>
-<span><cb:translate key="title"/></span>
+<span><f:translate key="{cb:languagePath()}:title"/></span>
 <img src="{f:uri.resource(path: '{cb:assetPath()}/Icon.svg')}" alt="">
 <img src="{f:uri.resource(path: '{cb:assetPath()}/Icon.svg', absolute: '1')}" alt="">
