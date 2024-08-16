@@ -39,7 +39,7 @@ class HtmlTemplateCodeGenerator
             $defaultContent[] = '                   {data.title}';
             $defaultContent[] = '                </dd>';
             $defaultContent[] = '            </dl>';
-            $defaultContent[] = '            <be:link.editRecord class="btn btn-default" uid="{data.uid}" table="{data.tableName}" fields="title">';
+            $defaultContent[] = '            <be:link.editRecord class="btn btn-default" uid="{data.uid}" table="{data.mainType}" fields="title">';
             $defaultContent[] = '               Edit page properties';
             $defaultContent[] = '            </be:link.editRecord>';
             $defaultContent[] = '        </div>';
