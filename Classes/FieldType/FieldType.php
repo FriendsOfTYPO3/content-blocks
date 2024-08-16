@@ -48,11 +48,15 @@ enum FieldType: string
     case LINEBREAK = 'Linebreak';
     case TAB = 'Tab';
     case UUID = 'Uuid';
+    case PASS = 'Pass';
 
     public static function isValidFlexFormField(FieldTypeInterface $fieldType): bool
     {
         $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
         if ($fieldTypeEnum?->isStructureField()) {
+            return false;
+        }
+        if ($fieldTypeEnum === FieldType::PASS) {
             return false;
         }
         return $fieldTypeEnum !== self::FLEXFORM;

@@ -176,7 +176,9 @@ final class ContentBlockCompiler
             $fieldTypeName = $result->fieldType::getName();
             $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
             $input->languagePath->addPathSegment($result->identifier);
-            $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
+            if ($fieldTypeEnum !== FieldType::PASS) {
+                $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
+            }
             if ($fieldTypeEnum === FieldType::FLEXFORM) {
                 $field = $this->processFlexForm($input, $field);
             }
@@ -410,6 +412,7 @@ final class ContentBlockCompiler
         $fields = match ($fieldTypeEnum) {
             Fieldtype::PALETTE => $this->handlePalette($input, $result, $rootField),
             FieldType::TAB => $this->handleTab($input, $result, $rootField),
+            FieldType::PASS => [$rootField],
             default => $this->handleDefault($input, $result, $rootField)
         };
         return $fields;

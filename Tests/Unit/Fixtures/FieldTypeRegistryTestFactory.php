@@ -34,6 +34,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\LinebreakFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\LinkFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\NumberFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\PaletteFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\PassFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\PasswordFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\RadioFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\RelationFieldType;
@@ -74,6 +75,7 @@ class FieldTypeRegistryTestFactory
             new TextareaFieldType(),
             new TextFieldType(),
             new UuidFieldType(),
+            new PassFieldType(),
         ];
         $keyedFieldTypes = [];
         foreach ($fieldTypes as $fieldType) {

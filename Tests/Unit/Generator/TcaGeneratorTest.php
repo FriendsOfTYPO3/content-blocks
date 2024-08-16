@@ -164,6 +164,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'Uuid',
                             ],
                             [
+                                'identifier' => 'pass',
+                                'type' => 'Pass',
+                            ],
+                            [
                                 'identifier' => 'collection',
                                 'type' => 'Collection',
                                 'labelField' => 'text2',
@@ -409,6 +413,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:uuid.description',
                                     'config' => [],
                                 ],
+                                't3ce_example_pass' => [
+                                    'config' => [],
+                                ],
                             ],
                         ],
                         't3ce_testblock' => [
@@ -556,6 +563,12 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'uuid',
                             ],
                             'exclude' => true,
+                        ],
+                        't3ce_example_pass' => [
+                            'label' => 'pass',
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
                         ],
                     ],
                     'palettes' => [

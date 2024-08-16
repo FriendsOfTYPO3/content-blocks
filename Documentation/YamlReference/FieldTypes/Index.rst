@@ -28,6 +28,7 @@ some additional options, which are not available in TCA to ease the usage.
 *  :ref:`Link <field_type_link>`
 *  :ref:`Number <field_type_number>`
 *  :ref:`Palette <field_type_palette>`
+*  :ref:`Pass <field_type_pass>`
 *  :ref:`Password <field_type_password>`
 *  :ref:`Radio <field_type_radio>`
 *  :ref:`Relation <field_type_relation>`
@@ -227,6 +228,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
     Link/Index
     Number/Index
     Palette/Index
+    Pass/Index
     Password/Index
     Radio/Index
     Relation/Index
