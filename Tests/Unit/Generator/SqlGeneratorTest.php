@@ -70,9 +70,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                "CREATE TABLE `foobar`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `foobar`(`tablenames` varchar(255) DEFAULT '' NOT NULL);",
-                "CREATE TABLE `foobar`(`fieldname` varchar(255) DEFAULT '' NOT NULL);",
+                'CREATE TABLE `foobar` (KEY parent_uid (foreign_table_parent_uid));',
+                "CREATE TABLE `foobar` (`fieldname` varchar(255) DEFAULT '' NOT NULL);",
             ],
         ];
 
@@ -104,7 +103,7 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
+                'CREATE TABLE `foo_bar_collection` (KEY parent_uid (foreign_table_parent_uid));',
             ],
         ];
 
@@ -151,8 +150,8 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                "CREATE TABLE `collection2`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
-                "CREATE TABLE `foo_bar_collection`(`foreign_table_parent_uid` int(11) DEFAULT '0' NOT NULL, KEY parent_uid (foreign_table_parent_uid));",
+                'CREATE TABLE `collection2` (KEY parent_uid (foreign_table_parent_uid));',
+                'CREATE TABLE `foo_bar_collection` (KEY parent_uid (foreign_table_parent_uid));',
             ],
         ];
     }

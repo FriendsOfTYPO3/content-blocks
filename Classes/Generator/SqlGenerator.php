@@ -57,11 +57,8 @@ class SqlGenerator
                 if ($column->getSql() === '') {
                     continue;
                 }
+                // Add SQL specific for that field. Note: Core field type definitions are ALL handled in Core already.
                 $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(' . $column->getSql() . ');';
-            }
-            $hasInternalDescription = $tableDefinition->getCapability()->hasInternalDescription();
-            if ($hasInternalDescription) {
-                $sql[] = 'CREATE TABLE `' . $tableDefinition->getTable() . '`' . '(internal_description text);';
             }
             $resultSql = $this->handleParentReferences($tableDefinition);
             $sql = array_merge($sql, $resultSql);
@@ -74,22 +71,17 @@ class SqlGenerator
         $sql = [];
         foreach ($tableDefinition->getParentReferences() ?? [] as $parentReference) {
             $parentTcaConfig = $parentReference->getTca()['config'];
+            // Generate indexes for the parent uid field for better performance.
             if (isset($parentTcaConfig['foreign_field'])) {
                 $foreignField = $parentTcaConfig['foreign_field'];
-                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`' . $foreignField . '` int(11) DEFAULT \'0\' NOT NULL, KEY parent_uid (' . $foreignField . '));';
+                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '` (KEY parent_uid (' . $foreignField . '));';
                 if (!in_array($sqlStatement, $sql, true)) {
                     $sql[] = $sqlStatement;
                 }
             }
-            if (isset($parentTcaConfig['foreign_table_field'])) {
-                $foreignTableField = $parentTcaConfig['foreign_table_field'];
-                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`' . $foreignTableField . '` varchar(255) DEFAULT \'\' NOT NULL);';
-                if (!in_array($sqlStatement, $sql, true)) {
-                    $sql[] = $sqlStatement;
-                }
-            }
+            // The foreign_match_fields fields are automatically added, so that feature "shareAcrossFields" works.
             foreach ($parentTcaConfig['foreign_match_fields'] ?? [] as $foreignMatchField => $foreignMatchValue) {
-                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '`(`' . $foreignMatchField . '` varchar(255) DEFAULT \'\' NOT NULL);';
+                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->getTable() . '` (`' . $foreignMatchField . '` varchar(255) DEFAULT \'\' NOT NULL);';
                 if (!in_array($sqlStatement, $sql, true)) {
                     $sql[] = $sqlStatement;
                 }
