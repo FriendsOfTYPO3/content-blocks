@@ -132,6 +132,8 @@ class TcaGenerator
         'ds',
         'ds_pointerField',
         'exclude',
+        // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
+        'generatorOptions',
     ];
 
     /**
