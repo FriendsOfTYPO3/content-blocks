@@ -104,6 +104,25 @@ Settings
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
+.. confval:: relationship
+   :name: select-relationship
+
+   :Required: false
+   :Type: string
+   :Default: oneToMany
+
+   .. note::
+
+      This can only be used in combination with :yaml:`foreign_table`.
+
+   The relationship defines the cardinality between the relations. Possible
+   values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and
+   :yaml:`oneToOne`. In case of a [x]toOne relation, the processed field will
+   be filled directly with the record instead of a collection of records. In
+   addition, :yaml:`maxitems` will be automatically set to :yaml:`1`. If the
+   :yaml:`renderType` is set to :yaml:`selectSingle`, a relationship
+   :yaml:`manyToOne` is automatically inferred.
+
 .. confval:: allowedCustomProperties
    :name: select-allowedCustomProperties
 

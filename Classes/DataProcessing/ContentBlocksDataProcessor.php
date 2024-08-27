@@ -18,15 +18,17 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
-class ContentBlocksDataProcessor implements DataProcessorInterface
+readonly class ContentBlocksDataProcessor implements DataProcessorInterface
 {
     public function __construct(
-        protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly RelationResolver $relationResolver,
-        protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
+        protected TableDefinitionCollection $tableDefinitionCollection,
+        protected RecordFactory $recordFactory,
+        protected ContentBlockDataDecorator $contentBlockDataDecorator,
+        protected ContentTypeResolver $contentTypeResolver,
     ) {}
 
     public function process(
@@ -36,28 +38,21 @@ class ContentBlocksDataProcessor implements DataProcessorInterface
         array $processedData
     ): array {
         $request = $cObj->getRequest();
-        $this->relationResolver->setRequest($request);
         $this->contentBlockDataDecorator->setRequest($request);
         $table = $cObj->getCurrentTable();
         if (!$this->tableDefinitionCollection->hasTable($table)) {
             return $processedData;
         }
-        $tableDefinition = $this->tableDefinitionCollection->getTable($table);
-        $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $processedData['data']);
+        $resolveRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow(
+            $table,
+            $processedData['data'],
+        );
+        $contentTypeDefinition = $this->contentTypeResolver->resolve($resolveRecord);
         if ($contentTypeDefinition === null) {
+            $processedData['data'] = $resolveRecord;
             return $processedData;
         }
-        $resolvedData = $this->relationResolver->resolve(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $processedData['data'],
-            $table,
-        );
-        $processedData['data'] = $this->contentBlockDataDecorator->decorate(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $resolvedData,
-        );
+        $processedData['data'] = $this->contentBlockDataDecorator->decorate($resolveRecord);
         return $processedData;
     }
 }

@@ -1,8 +1,0 @@
-"test_record"
-,"uid","pid","title","record_collection"
-,1,1,"Record 1",1
-,2,1,"Record 2",1
-"record_collection"
-,"uid","pid","text","foreign_table_parent_uid",
-,1,1,"Collection 1",1
-,2,1,"Collection 2",2,

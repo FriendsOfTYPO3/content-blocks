@@ -8,6 +8,12 @@ fields:
     fields:
       - identifier: fieldA
         type: Text
+  - identifier: collection_one_to_one
+    type: Collection
+    relationship: oneToOne
+    fields:
+      - identifier: fieldA
+        type: Text
   - identifier: collection2
     type: Collection
     table: collection_alt_table
@@ -55,9 +61,6 @@ fields:
     MM: block_pages_mm
   - identifier: folder
     type: Folder
-  - identifier: folder_recursive
-    type: Folder
-    recursive: true
   - identifier: palette
     type: Palette
     fields:

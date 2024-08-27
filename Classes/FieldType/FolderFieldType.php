@@ -34,6 +34,7 @@ final class FolderFieldType implements FieldTypeInterface
     private bool $multiple = false;
     private bool $hideMoveIcons = false;
     private array $elementBrowserEntryPoints = [];
+    private string $relationship = '';
 
     public static function getName(): string
     {
@@ -64,6 +65,7 @@ final class FolderFieldType implements FieldTypeInterface
         $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
         $self->hideMoveIcons = (bool)($settings['hideMoveIcons'] ?? $self->hideMoveIcons);
         $self->elementBrowserEntryPoints = (array)($settings['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
+        $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
 
         return $self;
     }
@@ -98,6 +100,9 @@ final class FolderFieldType implements FieldTypeInterface
         }
         if ($this->elementBrowserEntryPoints !== []) {
             $config['elementBrowserEntryPoints'] = $this->elementBrowserEntryPoints;
+        }
+        if ($this->relationship !== '') {
+            $config['relationship'] = $this->relationship;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

@@ -17,33 +17,31 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
-use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Module\ModuleData;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentTypeResolver;
-use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-class PageLayout
+readonly class PageLayout
 {
     public function __construct(
-        protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly RelationResolver $relationResolver,
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
-        protected readonly ContentBlockDataDecorator $contentBlockDataDecorator,
-        protected readonly RootPathsSettings $rootPathsSettings,
+        protected TableDefinitionCollection $tableDefinitionCollection,
+        protected RecordFactory $recordFactory,
+        protected ContentBlockRegistry $contentBlockRegistry,
+        protected ContentBlockDataDecorator $contentBlockDataDecorator,
+        protected RootPathsSettings $rootPathsSettings,
+        protected ContentTypeResolver $contentTypeResolver,
     ) {}
 
     public function __invoke(ModifyPageLayoutContentEvent $event): void
@@ -59,21 +57,23 @@ class PageLayout
         if (!$this->tableDefinitionCollection->hasTable($pageTypeTable)) {
             return;
         }
-        $tableDefinition = $this->tableDefinitionCollection->getTable($pageTypeTable);
-        $contentTypeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
-        if ($contentTypeDefinitionCollection === null) {
-            return;
-        }
         $pageUid = (int)($request->getQueryParams()['id'] ?? 0);
         $pageRow = BackendUtility::getRecord($pageTypeTable, $pageUid);
-        $contentTypeDefinition = ContentTypeResolver::resolve($tableDefinition, $pageRow);
+        if ($pageRow === null) {
+            return;
+        }
+        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow(
+            $pageTypeTable,
+            $pageRow,
+        );
+        $contentTypeDefinition = $this->contentTypeResolver->resolve($resolvedRecord);
         if ($contentTypeDefinition === null) {
             return;
         }
         if ($this->getEditorPreviewExtPath($contentTypeDefinition) === null) {
             return;
         }
-        $contentBlockData = $this->getContentBlockData($pageRow, $request, $contentTypeDefinition, $tableDefinition);
+        $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord);
         $view = $this->createView($contentTypeDefinition, $pageUid);
         $view->setRequest($request);
         $view->assign('data', $contentBlockData);
@@ -128,27 +128,5 @@ class PageLayout
             return null;
         }
         return $contentBlockExtPath;
-    }
-
-    protected function getContentBlockData(
-        ?array $pageRow,
-        ServerRequestInterface $request,
-        ContentTypeInterface $contentTypeDefinition,
-        TableDefinition $tableDefinition,
-    ): ContentBlockData {
-        $pageTypeTable = 'pages';
-        $this->relationResolver->setRequest($request);
-        $resolvedData = $this->relationResolver->resolve(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $pageRow,
-            $pageTypeTable,
-        );
-        $contentBlockData = $this->contentBlockDataDecorator->decorate(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $resolvedData,
-        );
-        return $contentBlockData;
     }
 }

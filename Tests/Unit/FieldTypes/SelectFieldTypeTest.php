@@ -39,7 +39,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'non_available_field' => 'foo',
                 'default' => 1,
-                'renderType' => 'selectSingle',
+                'renderType' => 'selectCheckbox',
                 'readOnly' => 1,
                 'size' => 1,
                 'MM' => 'foo',
@@ -94,7 +94,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'renderType' => 'selectSingle',
+                    'renderType' => 'selectCheckbox',
                     'type' => 'select',
                     'default' => 1,
                     'readOnly' => true,
@@ -185,6 +185,23 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'config' => [
                     'type' => 'select',
                     'items' => [],
+                ],
+            ],
+        ];
+
+        yield 'renderType selectSingle infers relationship manyToOne' => [
+            'config' => [
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'foo',
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'renderType' => 'selectSingle',
+                    'type' => 'select',
+                    'foreign_table' => 'foo',
+                    'items' => [],
+                    'relationship' => 'manyToOne',
                 ],
             ],
         ];

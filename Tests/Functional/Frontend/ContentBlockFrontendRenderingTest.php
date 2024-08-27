@@ -100,6 +100,22 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function relationsAreResolvedForCollectionsRelationOneToOne(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_one_to_one.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('fieldAOneToOne11: lorem foo bar', $html);
+    }
+
+    #[Test]
     public function relationsAreResolvedForCollectionsRecursive(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/collections_recursive.csv');
@@ -118,6 +134,22 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('fieldA_raw1: 2', $html);
         self::assertStringContainsString('fieldB2: lorem foo bar B2', $html);
         self::assertStringContainsString('fieldA2: lorem foo bar A2', $html);
+    }
+
+    #[Test]
+    public function relationsAreResolvedForFileReferences(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/file_references.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('image:kasper-skarhoj1.jpg', $html);
     }
 
     #[Test]

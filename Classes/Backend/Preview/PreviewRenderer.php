@@ -21,10 +21,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
-use TYPO3\CMS\ContentBlocks\DataProcessing\RelationResolver;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -37,7 +37,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 {
     public function __construct(
         protected TableDefinitionCollection $tableDefinitionCollection,
-        protected RelationResolver $relationResolver,
+        protected RecordFactory $recordFactory,
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected RootPathsSettings $rootPathsSettings,
@@ -67,19 +67,8 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $result = parent::renderPageModulePreviewContent($item);
             return $result;
         }
-        $this->relationResolver->setRequest($request);
-        $resolvedData = $this->relationResolver->resolve(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $record,
-            $table,
-        );
-        $data = $this->contentBlockDataDecorator->decorate(
-            $contentTypeDefinition,
-            $tableDefinition,
-            $resolvedData,
-            $item->getContext(),
-        );
+        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $record);
+        $data = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
         $view = $this->createView($contentBlockPrivatePath, $request, $item);
         $view->assign('data', $data);
         $result = (string)$view->render();

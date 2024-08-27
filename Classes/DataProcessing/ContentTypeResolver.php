@@ -18,22 +18,31 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\Core\Domain\Record;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentTypeResolver
+readonly class ContentTypeResolver
 {
-    public static function resolve(TableDefinition $tableDefinition, array $record): ?ContentTypeInterface
+    public function __construct(
+        protected TableDefinitionCollection $tableDefinitionCollection,
+    ) {}
+
+    public function resolve(Record $record): ?ContentTypeInterface
     {
+        $tableDefinition = $this->tableDefinitionCollection->getTable($record->getMainType());
         $typeName = $tableDefinition->getTypeField() !== null
-            ? ($record[$tableDefinition->getTypeField()] ?? null)
+            ? $record->getRecordType()
             : '1';
         if ($typeName === null) {
             return null;
         }
         $typeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
+        if ($typeDefinitionCollection === null) {
+            return null;
+        }
         if (!$typeDefinitionCollection->hasType($typeName)) {
             return null;
         }

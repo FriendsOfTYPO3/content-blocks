@@ -1,8 +1,0 @@
-"test_record"
-,"uid","pid","title","record_collection","foreign_table_parent_uid","tablenames","fieldname","t3_origuid"
-,1,1,"Record 1",1,1,"tt_content","typo3tests_contentelementb_collection_external","0"
-,2,1,"Record 2",1,1,"tt_content","typo3tests_contentelementb_collection_external","0"
-"tt_content"
-,"uid","pid","t3ver_oid","t3ver_wsid","typo3tests_contentelementb_collection_external","CType"
-,1,1,0,0,2,"typo3tests_contentelementb"
-,2,1,1,1,2,"typo3tests_contentelementb"

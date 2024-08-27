@@ -55,6 +55,7 @@ final class SelectFieldType implements FieldTypeInterface
 
     // Only for renderType="selectTree"
     private array $treeConfig = [];
+    private string $relationship = '';
 
     public static function getName(): string
     {
@@ -104,6 +105,14 @@ final class SelectFieldType implements FieldTypeInterface
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
         $self->treeConfig = (array)($settings['treeConfig'] ?? $self->treeConfig);
+        $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
+        if (
+            $self->renderType === 'selectSingle'
+            && $self->foreign_table !== ''
+            && $self->relationship === ''
+        ) {
+            $self->relationship = 'manyToOne';
+        }
         $self->setCustomProperties($settings);
 
         return $self;
@@ -188,6 +197,9 @@ final class SelectFieldType implements FieldTypeInterface
         }
         if ($this->treeConfig !== []) {
             $config['treeConfig'] = $this->treeConfig;
+        }
+        if ($this->relationship !== '') {
+            $config['relationship'] = $this->relationship;
         }
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);

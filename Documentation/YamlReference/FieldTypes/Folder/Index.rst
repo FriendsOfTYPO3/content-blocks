@@ -49,6 +49,19 @@ Settings
    prevents the record from being saved if the limit is not satisfied.
    The field can be set as required by setting `minitems` to at least 1.
 
+.. confval:: relationship
+   :name: folder-relationship
+
+   :Required: false
+   :Type: string
+   :Default: oneToMany
+
+   The relationship defines the cardinality between the relations. Possible
+   values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and
+   :yaml:`oneToOne`. In case of a [x]toOne relation, the processed field will
+   be filled directly with the folder instead of a collection of folders. In
+   addition, :yaml:`maxitems` will be automatically set to :yaml:`1`.
+
 For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-folder>`.
 
 Examples

@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\Core\Collection\LazyRecordCollection;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -43,16 +44,13 @@ class GridProcessor
         }
     }
 
-    /**
-     * @param ContentBlockData|array<ContentBlockData> $resolvedField
-     */
     public function processGrid(
         RelationGrid $relationGrid,
         PageLayoutContext $context,
         TcaFieldDefinition $tcaFieldDefinition,
-        ContentBlockData|array $resolvedField,
+        ContentBlockData|LazyRecordCollection $resolvedField,
     ): void {
-        if (!is_array($resolvedField)) {
+        if (!is_iterable($resolvedField)) {
             $resolvedField = [$resolvedField];
         }
         $gridLabel = $tcaFieldDefinition->getLabelPath();
