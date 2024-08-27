@@ -119,3 +119,5 @@ fields:
         type: Textarea
   - identifier: json
     type: Json
+  - identifier: pass
+    type: Pass
