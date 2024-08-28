@@ -47,7 +47,7 @@ class SimpleTcaSchemaFactory implements SingletonInterface
     public function get(string $schemaName): SimpleTcaSchema
     {
         if (!$this->has($schemaName)) {
-            throw new UndefinedSchemaException('No TCA schema exists for the name "' . $schemaName . '".', 1661540376);
+            throw new UndefinedSchemaException('No TCA schema exists for the name "' . $schemaName . '".', 1661540377);
         }
         return $this->schemas[$schemaName];
     }
