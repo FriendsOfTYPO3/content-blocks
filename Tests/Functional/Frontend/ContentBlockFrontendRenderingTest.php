@@ -312,20 +312,19 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         self::assertStringContainsString('Category 2', $html);
     }
 
-    // @todo This needs to be fixed in Core.
-    //    #[Test]
-    //    public function passFieldIsResolved(): void
-    //    {
-    //        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/pass.csv');
-    //        $this->setUpFrontendRootPage(
-    //            self::ROOT_PAGE_ID,
-    //            [
-    //                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
-    //            ]
-    //        );
-    //        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
-    //        $html = (string)$response->getBody();
-    //
-    //        self::assertStringContainsString('pass: MyPassValue', $html);
-    //    }
+    #[Test]
+    public function passFieldIsResolved(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/pass.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('pass: MyPassValue', $html);
+    }
 }
