@@ -692,31 +692,8 @@ class TcaGenerator
     protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
     {
         $showItemArray = $typeDefinition->getShowItems();
-        $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
-        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
-        if ($firstItemIsTab) {
-            $tabDefinition = array_shift($showItemArray);
-            $generalTab = $this->processShowItem([$tabDefinition]);
-        }
         $showItem = $this->processShowItem($showItemArray);
-        $parts = [
-            $generalTab,
-            '--palette--;;general',
-        ];
-        if ($showItem !== '') {
-            $parts[] = $showItem;
-        }
-        $systemFields = [
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
-            '--palette--;;language',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access',
-            '--palette--;;hidden',
-            '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
-            'rowDescription',
-        ];
-        $parts = array_merge($parts, $systemFields);
-        $result = implode(',', $parts);
+        $result = $showItem;
         return $result;
     }
 
