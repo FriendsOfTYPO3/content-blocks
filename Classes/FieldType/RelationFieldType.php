@@ -41,6 +41,7 @@ final class RelationFieldType implements FieldTypeInterface
     private string $dontRemapTablesOnCopy = '';
     private bool $localizeReferencesAtParentLocalization = false;
     private bool $hideMoveIcons = false;
+    private bool $hideDeleteIcon = false;
     private bool $hideSuggest = false;
     private bool $prepend_tname = false;
     private array $elementBrowserEntryPoints = [];
@@ -87,6 +88,7 @@ final class RelationFieldType implements FieldTypeInterface
         $self->dontRemapTablesOnCopy = (string)($settings['dontRemapTablesOnCopy'] ?? $self->dontRemapTablesOnCopy);
         $self->localizeReferencesAtParentLocalization = (bool)($settings['localizeReferencesAtParentLocalization'] ?? $self->localizeReferencesAtParentLocalization);
         $self->hideMoveIcons = (bool)($settings['hideMoveIcons'] ?? $self->hideMoveIcons);
+        $self->hideDeleteIcon = (bool)($settings['hideDeleteIcon'] ?? $self->hideDeleteIcon);
         $self->hideSuggest = (bool)($settings['hideSuggest'] ?? $self->hideSuggest);
         $self->prepend_tname = (bool)($settings['prepend_tname'] ?? $self->prepend_tname);
         $self->elementBrowserEntryPoints = (array)($settings['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
@@ -151,6 +153,9 @@ final class RelationFieldType implements FieldTypeInterface
         }
         if ($this->hideMoveIcons) {
             $config['hideMoveIcons'] = true;
+        }
+        if ($this->hideDeleteIcon) {
+            $config['hideDeleteIcon'] = true;
         }
         if ($this->hideSuggest) {
             $config['hideSuggest'] = true;
