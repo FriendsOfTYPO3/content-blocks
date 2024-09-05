@@ -33,6 +33,11 @@ To add a new Field Type it is required to implement the
 :php:`\TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface`. Have a look at
 the Core implementations to get a feeling on how to implement them.
 
+.. note::
+
+    The registration is based on dependency injection. Make sure your extension
+    has it enabled in Configuration/Services.yaml.
+
 .. code-block:: php
 
     interface FieldTypeInterface
