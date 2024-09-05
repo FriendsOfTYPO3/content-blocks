@@ -46,6 +46,7 @@ final class FolderFieldTypeTest extends UnitTestCase
                 'autoSizeMax' => 1,
                 'multiple' => 1,
                 'hideMoveIcons' => 1,
+                'hideDeleteIcon' => 1,
                 'elementBrowserEntryPoints' => [
                     'foo' => 'bar',
                 ],
@@ -70,6 +71,7 @@ final class FolderFieldTypeTest extends UnitTestCase
                     'autoSizeMax' => 1,
                     'multiple' => true,
                     'hideMoveIcons' => true,
+                    'hideDeleteIcon' => true,
                     'elementBrowserEntryPoints' => [
                         'foo' => 'bar',
                     ],
@@ -95,6 +97,7 @@ final class FolderFieldTypeTest extends UnitTestCase
                 'autoSizeMax' => 0,
                 'multiple' => 0,
                 'hideMoveIcons' => 0,
+                'hideDeleteIcon' => 0,
                 'elementBrowserEntryPoints' => [],
                 'foo' => '',
             ],

@@ -33,6 +33,7 @@ final class FolderFieldType implements FieldTypeInterface
     private int $autoSizeMax = 0;
     private bool $multiple = false;
     private bool $hideMoveIcons = false;
+    private bool $hideDeleteIcon = false;
     private array $elementBrowserEntryPoints = [];
 
     public static function getName(): string
@@ -63,6 +64,7 @@ final class FolderFieldType implements FieldTypeInterface
         $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
         $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
         $self->hideMoveIcons = (bool)($settings['hideMoveIcons'] ?? $self->hideMoveIcons);
+        $self->hideDeleteIcon = (bool)($settings['hideDeleteIcon'] ?? $self->hideDeleteIcon);
         $self->elementBrowserEntryPoints = (array)($settings['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
 
         return $self;
@@ -95,6 +97,9 @@ final class FolderFieldType implements FieldTypeInterface
         }
         if ($this->hideMoveIcons) {
             $config['hideMoveIcons'] = true;
+        }
+        if ($this->hideDeleteIcon) {
+            $config['hideDeleteIcon'] = true;
         }
         if ($this->elementBrowserEntryPoints !== []) {
             $config['elementBrowserEntryPoints'] = $this->elementBrowserEntryPoints;
