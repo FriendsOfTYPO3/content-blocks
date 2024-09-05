@@ -66,6 +66,7 @@ final class RelationFieldTypeTest extends UnitTestCase
                 'dontRemapTablesOnCopy' => 'foo',
                 'localizeReferencesAtParentLocalization' => 1,
                 'hideMoveIcons' => 1,
+                'hideDeleteIcon' => 1,
                 'hideSuggest' => 1,
                 'prepend_tname' => 1,
                 'elementBrowserEntryPoints' => [
@@ -121,6 +122,7 @@ final class RelationFieldTypeTest extends UnitTestCase
                     'dontRemapTablesOnCopy' => 'foo',
                     'localizeReferencesAtParentLocalization' => true,
                     'hideMoveIcons' => true,
+                    'hideDeleteIcon' => true,
                     'hideSuggest' => true,
                     'prepend_tname' => true,
                     'elementBrowserEntryPoints' => [
@@ -166,6 +168,7 @@ final class RelationFieldTypeTest extends UnitTestCase
                 'dontRemapTablesOnCopy' => '',
                 'localizeReferencesAtParentLocalization' => 0,
                 'hideMoveIcons' => 0,
+                'hideDeleteIcon' => 0,
                 'hideSuggest' => 0,
                 'prepend_tname' => 0,
                 'elementBrowserEntryPoints' => [],
