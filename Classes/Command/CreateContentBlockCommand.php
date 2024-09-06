@@ -34,6 +34,7 @@ use TYPO3\CMS\ContentBlocks\Service\PackageResolver;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageInterface;
 
@@ -43,6 +44,7 @@ class CreateContentBlockCommand extends Command
         protected readonly ContentBlockBuilder $contentBlockBuilder,
         protected readonly PackageResolver $packageResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
+        protected readonly CacheManager $cacheManager,
     ) {
         parent::__construct();
     }
@@ -203,8 +205,11 @@ class CreateContentBlockCommand extends Command
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
         $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');
-        $output->writeln('<comment>Please run the following commands now and every time you change the EditorInterface.yaml file.</comment>');
+        $output->writeln('<comment>Please run the following commands every time you change the EditorInterface.yaml file.</comment>');
         $output->writeln('<comment>Alternatively, flush the system cache in the backend and run the Database Analyzer.</comment>');
+
+        // Flush system cache to make the new content block available in the system
+        $this->cacheManager->flushCachesInGroup('system');
 
         $command = Environment::isComposerMode() ? 'vendor/bin/typo3' : 'typo3/sysext/core/bin/typo3';
         $output->writeln($command . ' cache:flush -g system');
