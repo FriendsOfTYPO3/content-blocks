@@ -36,6 +36,7 @@ use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Package\PackageActivationService;
 use TYPO3\CMS\Core\Package\PackageInterface;
 
 class CreateContentBlockCommand extends Command
@@ -45,6 +46,7 @@ class CreateContentBlockCommand extends Command
         protected readonly PackageResolver $packageResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly CacheManager $cacheManager,
+        protected readonly PackageActivationService $packageActivationService,
     ) {
         parent::__construct();
     }
@@ -210,6 +212,9 @@ class CreateContentBlockCommand extends Command
 
         // Flush system cache to make the new content block available in the system
         $this->cacheManager->flushCachesInGroup('system');
+
+        // Update database to add new fields
+        $this->packageActivationService->updateDatabase();
 
         $command = Environment::isComposerMode() ? 'vendor/bin/typo3' : 'typo3/sysext/core/bin/typo3';
         $output->writeln($command . ' cache:flush -g system');
