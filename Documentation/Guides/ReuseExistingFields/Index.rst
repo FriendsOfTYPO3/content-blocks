@@ -95,9 +95,7 @@ that are eligible for reuse:
 *  `subheader`
 *  `bodytext`
 *  `date`
-*  `assets`
 *  `image`
-*  `media`
 *  `categories`
 *  `pages`
 
