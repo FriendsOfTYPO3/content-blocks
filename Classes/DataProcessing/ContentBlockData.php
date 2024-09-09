@@ -91,6 +91,16 @@ final class ContentBlockData implements RecordInterface
         return $this->_record->getRawRecord()->toArray();
     }
 
+    public function has(string $id): bool
+    {
+        return $this->_record->has($id);
+    }
+
+    public function get(string $id): mixed
+    {
+        return $this->_record->get($id);
+    }
+
     public function offsetExists(mixed $offset): bool
     {
         if ($offset === '_name') {
