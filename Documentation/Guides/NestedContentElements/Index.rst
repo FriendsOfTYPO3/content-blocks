@@ -154,7 +154,7 @@ to prevent fetching any child elements.
 
    If you do not build upon :typoscript:`styles.content.get.where`, you need to
    integrate the logic yourself. The necessary API providing all the columns is
-   available via :php:`TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService->getAllFieldNames()`.
+   available via :php:`TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend`.
    This can be used to apply the same approach to :php:`TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor`.
 
    Example:
