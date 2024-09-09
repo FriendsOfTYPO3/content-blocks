@@ -43,6 +43,8 @@ explicitly in contrast to base fields. For this, you have to know the
         type: Text
         useExistingField: true
 
+.. _cb_reuse_existing_cb_fields:
+
 Reusing Content Block fields
 ============================
 
