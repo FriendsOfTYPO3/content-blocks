@@ -211,6 +211,10 @@ class CreateContentBlockCommand extends Command
         // Flush system cache to make the new content block available in the system
         $this->cacheManager->flushCachesInGroup('system');
 
+        // TypoScript cache needs to be flushed to enable the new CType for the frontend
+        // @todo Core should define "typoscript" as a system cache
+        $this->cacheManager->getCache('typoscript')->flush();
+
         $command = Environment::isComposerMode() ? 'vendor/bin/typo3' : 'typo3/sysext/core/bin/typo3';
         $output->writeln($command . ' cache:flush -g system');
         $output->writeln($command . ' extension:setup --extension=' . $extension);
