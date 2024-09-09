@@ -157,6 +157,20 @@ to prevent fetching any child elements.
    available via :php:`TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService->getAllFieldNames()`.
    This can be used to apply the same approach to :php:`TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor`.
 
+   Example:
+
+   .. code-block:: typoscript
+
+      20 = CONTENT
+      20 {
+        table = tt_content
+        select {
+          where = {#colPos}={register:colPos}
+          where.insertData = 1
+          where.postUserFunc = TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend
+        }
+
+
 Preventing output in backend
 ============================
 
