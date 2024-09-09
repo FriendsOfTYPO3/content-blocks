@@ -17,13 +17,13 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
-use TYPO3\CMS\Core\Domain\Record;
+use TYPO3\CMS\Core\Domain\RecordInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
 final class ResolvedContentBlockDataRelation
 {
-    public Record $record;
+    public RecordInterface $record;
     public array $resolved = [];
 }

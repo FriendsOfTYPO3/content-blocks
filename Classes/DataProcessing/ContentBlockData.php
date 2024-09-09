@@ -51,7 +51,7 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
  * - {data.computedProperties.localizedUid}
  * - {data.computedProperties.versionedUid}
  */
-final class ContentBlockData implements RecordInterface, \ArrayAccess
+final class ContentBlockData implements RecordInterface
 {
     public function __construct(
         protected ?Record $_record = null,
