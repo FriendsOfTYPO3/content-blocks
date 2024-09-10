@@ -173,6 +173,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'appearance' => [
                                     'useSortable' => false,
                                 ],
+                                'behaviour' => [
+                                    'allowLanguageSynchronization' => true,
+                                ],
                                 'fields' => [
                                     [
                                         'identifier' => 'text',
@@ -285,17 +288,14 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_textarea' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:textarea.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:textarea.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_number' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:number.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:number.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_email' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:email.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:email.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_check' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:check.label',
@@ -314,22 +314,18 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_color' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:color.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:color.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_file' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:file.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:file.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_category' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:category.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:category.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_datetime' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:datetime.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:datetime.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_select' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:select.label',
@@ -355,7 +351,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_link' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:link.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:link.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_radio' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:radio.label',
@@ -376,7 +371,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_relation' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:relation.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:relation.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_collection' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.label',
@@ -397,17 +391,14 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'pages' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pages.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pages.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_password' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:password.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:password.description',
-                                    'config' => [],
                                 ],
                                 't3ce_example_uuid' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:uuid.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:uuid.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -418,12 +409,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_testblock_text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:text.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:text.description',
-                                    'config' => [],
                                 ],
                                 'bodytext' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:bodytext.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:bodytext.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -526,6 +515,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'inline',
                                 'foreign_table' => 't3ce_example_collection',
                                 'foreign_field' => 'foreign_table_parent_uid',
+                                'behaviour' => [
+                                    'allowLanguageSynchronization' => true,
+                                ],
                             ],
                             'exclude' => true,
                         ],
@@ -985,7 +977,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -1623,7 +1614,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/Source/Language/Labels.xlf:text.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -1633,12 +1623,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text.description',
-                                    'config' => [],
                                 ],
                                 'text2' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text2.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/Source/Language/Labels.xlf:text2.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -1845,12 +1833,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.description',
-                                    'config' => [],
                                 ],
                                 'color' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:color.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:color.description',
-                                    'config' => [],
                                 ],
                                 'collection' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:collection.label',
@@ -2161,17 +2147,14 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.description',
-                                    'config' => [],
                                 ],
                                 'slug' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.description',
-                                    'config' => [],
                                 ],
                                 'nav_title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2221,17 +2204,14 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:title.description',
-                                    'config' => [],
                                 ],
                                 'slug' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:slug.description',
-                                    'config' => [],
                                 ],
                                 'nav_title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/Source/Language/Labels.xlf:nav_title.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2431,7 +2411,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2442,7 +2421,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/testblock/Source/Language/Labels.xlf:flex.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2658,7 +2636,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'pi_flexform' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:pi_flexform.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2669,7 +2646,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'pi_flexform' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example2/Source/Language/Labels.xlf:pi_flexform.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2680,7 +2656,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'pi_flexform' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example3/Source/Language/Labels.xlf:pi_flexform.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -2873,7 +2848,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -3024,7 +2998,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:flex.description',
-                                    'config' => [],
                                 ],
                             ],
                         ],
@@ -3311,7 +3284,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'columnsOverrides' => [
                                 'a_field' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.label',
-                                    'config' => [],
                                     'description' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.description',
                                 ],
                             ],
@@ -3491,7 +3463,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'columnsOverrides' => [
                                 'a_field' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.label',
-                                    'config' => [],
                                     'description' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/Source/Language/Labels.xlf:a_field.description',
                                 ],
                             ],

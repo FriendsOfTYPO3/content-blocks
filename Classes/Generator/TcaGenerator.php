@@ -38,6 +38,7 @@ use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -134,6 +135,7 @@ class TcaGenerator
         'exclude',
         // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
         'generatorOptions',
+        'behaviour.allowLanguageSynchronization',
     ];
 
     /**
@@ -417,15 +419,20 @@ class TcaGenerator
                 if ($optionKey === null) {
                     continue;
                 }
-                unset($overrideTca['config'][$optionKey]);
+                $configKey = 'config.' . $optionKey;
+                if (ArrayUtility::isValidPath($overrideTca, $configKey, '.')) {
+                    $overrideTca = ArrayUtility::removeByPath($overrideTca, $configKey, '.');
+                    $this->cleanupEmptyArrays($overrideTca, $configKey);
+                }
                 unset($overrideTca[$optionKey]);
             }
             $overrideTca = $this->addUseSortableIfEnabled($overrideColumn, $tableDefinition, $overrideTca);
-            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription(
+            $overrideColumnArray = $this->determineLabelAndDescription(
                 $typeDefinition,
                 $overrideColumn,
                 $overrideTca,
             );
+            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideColumnArray;
         }
         return $columnsOverrides;
     }
@@ -479,8 +486,10 @@ class TcaGenerator
             if ($optionKey === null) {
                 continue;
             }
-            if (array_key_exists($optionKey, ($column->getTca()['config'] ?? []))) {
-                $configuration = $column->getTca()['config'][$optionKey];
+            $fullConfiguration = $column->getTca();
+            $configKey = 'config.' . $optionKey;
+            if (ArrayUtility::isValidPath($fullConfiguration, $configKey, '.')) {
+                $configuration = ArrayUtility::getValueByPath($fullConfiguration, $configKey, '.');
                 // Support for existing flexForm fields.
                 if ($optionKey === 'ds') {
                     if ($column->useExistingField()) {
@@ -494,8 +503,7 @@ class TcaGenerator
                         $configuration['default'] = $this->getDefaultFlexFormDefinition();
                     }
                 }
-
-                $columnTca['config'][$optionKey] = $configuration;
+                $columnTca = ArrayUtility::setValueByPath($columnTca, $configKey, $configuration, '.');
             }
             if (array_key_exists($optionKey, $column->getTca())) {
                 $columnTca[$optionKey] = $column->getTca()[$optionKey];
@@ -547,6 +555,24 @@ class TcaGenerator
             return $option['option'];
         }
         return null;
+    }
+
+    /**
+     * Helper method to clean up empty arrays after options have been removed.
+     */
+    protected function cleanupEmptyArrays(array &$configuration, string $optionKey): void
+    {
+        $parts = explode('.', $optionKey);
+        // Last part is already removed.
+        array_pop($parts);
+        $currentOption = &$configuration;
+        foreach ($parts as $part) {
+            if ($currentOption[$part] === []) {
+                unset($currentOption[$part]);
+                break;
+            }
+            $currentOption = &$currentOption[$part];
+        }
     }
 
     /**
