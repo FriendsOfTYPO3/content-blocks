@@ -152,3 +152,5 @@ The full list:
    * ds
    * ds_pointerField
    * exclude
+   * generatorOptions
+   * behaviour.allowLanguageSynchronization
