@@ -124,21 +124,21 @@ class CreateContentBlockCommand extends Command
             if ($rootVendor !== '') {
                 $default = $rootVendor;
             }
-            $contentBlockVendorQuestion = new Question('Enter your vendor name (lowercase, separated by dashes "-")', $default);
+            $contentBlockVendorQuestion = new Question('Define vendor (<comment>vendor-name</comment>/content-block-name)', $default);
             $contentBlockVendorQuestion->setValidator($this->validateName(...));
             while (($vendor = $io->askQuestion($contentBlockVendorQuestion)) === false) {
-                $output->writeln('<error>Your vendor name does not match the requirement.</error>');
+                $output->writeln('<error>Your vendor name does not match the requirements.</error>');
             }
         }
         $vendor = strtolower($vendor);
         if ($input->getOption('name')) {
             $name = $input->getOption('name');
             if (!ContentBlockNameValidator::isValid($name)) {
-                $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
+                $output->writeln('<error>Your Content Block name does not match the requirements.</error>');
                 return Command::INVALID;
             }
         } else {
-            $contentBlockNameQuestion = new Question('Enter your ' . $contentType->getHumanReadable() . ' name (lowercase, separated by dashes "-")');
+            $contentBlockNameQuestion = new Question('Define name (' . $vendor . '/<comment>content-block-name</comment>)');
             $contentBlockNameQuestion->setValidator($this->validateName(...));
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
                 $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
@@ -171,7 +171,7 @@ class CreateContentBlockCommand extends Command
             $title = $input->getOption('title');
         } else {
             $defaultTitle = $vendor . '/' . $name;
-            $question = new Question('Enter human-readable title', $defaultTitle);
+            $question = new Question('Define title', $defaultTitle);
             $title = $io->askQuestion($question);
         }
 
