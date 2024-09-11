@@ -8,6 +8,15 @@ Palette
 The :yaml:`Palette` field is used to group other fields. Grouped fields will be
 displayed next to each other rather than below each other.
 
+.. warning::
+
+   Palettes are defined on table definition level. This means if you define a
+   Palette with identifier "my_palette" in Content Block A and Content Block B
+   of the same type (e.g. ContentElement), then they will override each other.
+   So make sure to have unique identifiers. An exception to this rule is using
+   Palettes inside :ref:`Basics <field_type_basic>`. Then you can share them,
+   while the configuration always stays the same, as they are centrally defined.
+
 Labels
 ======
 
