@@ -12,7 +12,7 @@ already defined in the TYPO3 Core. Content Blocks only adds new types to it. A
 minimal Page Type looks like this:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/PageType/blog/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/PageTypes/blog/EditorInterface.yaml
 
     name: example/blog
     typeName: 1701284006
