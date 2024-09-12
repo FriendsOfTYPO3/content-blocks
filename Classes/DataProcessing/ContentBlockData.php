@@ -91,6 +91,16 @@ final class ContentBlockData implements RecordInterface, \ArrayAccess
         return $this->_record->getRawRecord()->toArray();
     }
 
+    public function has(string $id): bool
+    {
+        return $this->_record->has($id);
+    }
+
+    public function get(string $id): mixed
+    {
+        return $this->_record->get($id);
+    }
+
     public function offsetExists(mixed $offset): bool
     {
         if ($offset === '_name') {
@@ -105,7 +115,7 @@ final class ContentBlockData implements RecordInterface, \ArrayAccess
         if (array_key_exists($offset, $this->_processed)) {
             return true;
         }
-        return $this->_record->offsetExists($offset);
+        return $this->_record->has((string)$offset);
     }
 
     public function offsetGet(mixed $offset): mixed
@@ -122,7 +132,7 @@ final class ContentBlockData implements RecordInterface, \ArrayAccess
         if (array_key_exists($offset, $this->_processed)) {
             return $this->_processed[$offset];
         }
-        return $this->_record->offsetGet($offset);
+        return $this->_record->get((string)$offset);
     }
 
     public function offsetSet(mixed $offset, mixed $value): void

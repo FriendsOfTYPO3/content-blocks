@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\Core\Domain\Record;
+use TYPO3\CMS\Core\Domain\RecordInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -30,7 +30,7 @@ readonly class ContentTypeResolver
         protected TableDefinitionCollection $tableDefinitionCollection,
     ) {}
 
-    public function resolve(Record $record): ?ContentTypeInterface
+    public function resolve(RecordInterface $record): ?ContentTypeInterface
     {
         $tableDefinition = $this->tableDefinitionCollection->getTable($record->getMainType());
         $typeName = $tableDefinition->getTypeField() !== null
