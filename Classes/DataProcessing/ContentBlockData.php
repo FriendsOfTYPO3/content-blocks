@@ -51,7 +51,7 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
  * - {data.computedProperties.localizedUid}
  * - {data.computedProperties.versionedUid}
  */
-final class ContentBlockData implements RecordInterface
+final class ContentBlockData implements RecordInterface, \ArrayAccess
 {
     public function __construct(
         protected ?Record $_record = null,
@@ -115,7 +115,7 @@ final class ContentBlockData implements RecordInterface
         if (array_key_exists($offset, $this->_processed)) {
             return true;
         }
-        return $this->_record->offsetExists($offset);
+        return $this->_record->has((string)$offset);
     }
 
     public function offsetGet(mixed $offset): mixed
@@ -132,7 +132,7 @@ final class ContentBlockData implements RecordInterface
         if (array_key_exists($offset, $this->_processed)) {
             return $this->_processed[$offset];
         }
-        return $this->_record->offsetGet($offset);
+        return $this->_record->get((string)$offset);
     }
 
     public function offsetSet(mixed $offset, mixed $value): void

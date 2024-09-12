@@ -91,9 +91,9 @@ final class ContentBlockDataDecorator
             }
             // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
             if ($fieldType instanceof PassFieldType) {
-                $resolvedField = $resolvedRelation->record->getRawRecord()[$tcaFieldDefinition->getUniqueIdentifier()];
+                $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->getUniqueIdentifier());
             } else {
-                $resolvedField = $resolvedRelation->record[$tcaFieldDefinition->getUniqueIdentifier()];
+                $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->getUniqueIdentifier());
             }
             if ($this->isRelationField($resolvedField)) {
                 $resolvedField = $this->handleRelation(
