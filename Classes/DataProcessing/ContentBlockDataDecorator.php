@@ -26,7 +26,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\PassFieldType;
 use TYPO3\CMS\Core\Collection\LazyRecordCollection;
-use TYPO3\CMS\Core\Domain\ProcessedRecordInterface;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\RecordInterface;
 
