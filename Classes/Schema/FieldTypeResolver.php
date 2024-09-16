@@ -35,7 +35,7 @@ class FieldTypeResolver
             throw new \InvalidArgumentException('Tried to resolve type of non-existing field.', 1680110446);
         }
         $tcaType = $configuration['config']['type'];
-        foreach ($this->fieldTypeRegistry as $fieldType) {
+        foreach ($this->fieldTypeRegistry->all() as $fieldType) {
             if ($fieldType::getTcaType() === $tcaType) {
                 return $fieldType;
             }
