@@ -84,7 +84,7 @@ extension.
 Backend preview
 ===============
 
-Just like for Content Elements, you can define an **EditorPreview.html** file
+Just like for Content Elements, you can define an **preview.html** file
 to create a preview of your Page Type. This can be used to preview custom
 properties and to link directly to them. To make them prettier it is advised to
 utilise CSS bootstrap classes like `card`.
@@ -105,8 +105,8 @@ Icons for states
 Page Types can have special states like disabled or hidden in menu. Depending
 on this state, the icon changes or is overlayed with another icon. As for now,
 the "hide in menu" and "is site root" states can be supplied via a custom icons.
-Put an icon with the name **IconHideInMenu.svg** and one with **IconRoot.svg**
-inside your Assets folder to use them.
+Put an icon with the name **icon-hide-in-menu.svg** and one with **IconRoot.svg**
+inside your assets folder to use them.
 
 Processing of page data
 =======================

@@ -51,10 +51,10 @@ templates.
    partials.
 
 In order to use the standard FSC fields, you should include them as Basics in
-your EditorInterface.yaml file. These are already shipped by Content Blocks.
+your config.yaml file. These are already shipped by Content Blocks.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/fsc-test/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/fsc-test/config.yaml
 
     name: vendor/fsc-test
     title: FSC Element
@@ -65,10 +65,10 @@ your EditorInterface.yaml file. These are already shipped by Content Blocks.
         type: Basic
 
 Now the setup is complete and all what's left to do is to use the newly
-available layout in your Frontend.html templates.
+available layout in your frontend.html templates.
 
 .. code-block:: html
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/fsc-test/Source/Frontend.html
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/fsc-test/templates/frontend.html
 
    <f:layout/>
 

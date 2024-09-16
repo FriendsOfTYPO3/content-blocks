@@ -58,7 +58,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $contentTypeDefinition = $contentTypeCollection->getFirst();
         }
         $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
-        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
         $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();

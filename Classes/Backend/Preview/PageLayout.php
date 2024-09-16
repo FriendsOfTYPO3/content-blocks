@@ -115,7 +115,7 @@ readonly class PageLayout
     protected function getContentBlockPrivatePath(ContentTypeInterface $contentTypeDefinition): string
     {
         $contentBlockExtPath = $this->getEditorPreviewExtPath($contentTypeDefinition);
-        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
         return $contentBlockPrivatePath;
     }
 

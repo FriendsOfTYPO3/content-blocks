@@ -6,7 +6,7 @@ Basics (Mixins)
 ===============
 
 **Basics**, also known as partials or mixins, are used to have a pre-defined set
-of fields that can be used to better organize your EditorInterface.yaml file and
+of fields that can be used to better organize your config.yaml file and
 to reduce redundancy by sharing them between multiple Content Blocks.
 
 .. note::
@@ -39,7 +39,7 @@ This is an example on how to add the classic Fluid Styled Content **Appearance**
 Tab and the additional **Links** palette.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/config.yaml
 
     name: example/basics
     basics:
@@ -58,7 +58,7 @@ be done by using the according Basic :yaml:`identifier` and the type
 :yaml:`Basic`.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/config.yaml
 
     name: example/basics
     fields:
@@ -102,7 +102,7 @@ Example on how to create a single Basic:
         type: Text
         label: LLL:EXT:sitepackage/Resources/Private/Language/locallang.xlf:a_basic_field
 
-The :yaml:`fields` part is exactly the same as in the EditorInterface.yaml. Here
+The :yaml:`fields` part is exactly the same as in the config.yaml. Here
 you can define a Tab, a Palette or simply a set of fields.
 
 The most practical way to use Basics is to use pre-defined tabs as the global

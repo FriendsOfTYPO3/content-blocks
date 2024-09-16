@@ -12,7 +12,7 @@ additional features like own variables and ViewHelpers with it.
 Accessing variables
 ===================
 
-Inside your `Frontend.html` or `EditorPreview.html` file you can access the
+Inside your `frontend.html` or `preview.html` file you can access the
 properties of your Content Element as usual by the :html:`{data}` variable.
 This variable, however, is special. It has real superpowers!
 
@@ -112,8 +112,8 @@ experience for the editors. With this feature, there is the possibility to
 provide nearly the same layout in the frontend and the backend, so the editors
 easily find the element they want to edit.
 
-The frontend template is located in **Source/Frontend.html** and the backend
-template in **Source/EditorPreview.html**.
+The frontend template is located in **templates/frontend.html** and the backend
+template in **templates/preview.html**.
 
 .. _asset_view_helpers:
 
@@ -125,11 +125,11 @@ the current Content Block in the template.
 
 .. code-block:: html
 
-    <f:comment><!-- Include the Assets/Frontend.css stylesheet --></f:comment>
-    <f:asset.css identifier="myCssIdentifier" href="{cb:assetPath()}/Frontend.css"/>
+    <f:comment><!-- Include the assets/frontend.css stylesheet --></f:comment>
+    <f:asset.css identifier="myCssIdentifier" href="{cb:assetPath()}/frontend.css"/>
 
-    <f:comment><!-- Include the Assets/Frontend.js script --></f:comment>
-    <f:asset.script identifier="myJavascriptIdentifier" src="{cb:assetPath()}/Frontend.js"/>
+    <f:comment><!-- Include the assets/frontend.js script --></f:comment>
+    <f:asset.script identifier="myJavascriptIdentifier" src="{cb:assetPath()}/frontend.js"/>
 
 The information of the current Content Block is stored in :html:`{data}`. This
 means if you use an asset ViewHelper in a partial, you have to provide
@@ -139,13 +139,13 @@ means if you use an asset ViewHelper in a partial, you have to provide
 .. code-block:: html
 
     <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
-    <f:asset.script identifier="myJavascriptIdentifier" href="{cb:assetPath(name: 'vendor/name')}/Frontend.js"/>
+    <f:asset.script identifier="myJavascriptIdentifier" href="{cb:assetPath(name: 'vendor/name')}/frontend.js"/>
 
 Translation ViewHelper
 ======================
 
 Content Blocks provides a LanguagePathViewHelper to retrieve the LLL-path for
-the Labels.xlf file of the current Content Block.
+the labels.xlf file of the current Content Block.
 
 .. code-block:: html
 
@@ -164,7 +164,7 @@ Partials
 
 Partials are a very useful feature of Fluid. You can use them to split up your
 templates into smaller parts. If you want to use a partial in a Content Block,
-you can create a subdirectory **Partials** in the **Source** directory and place
+you can create a subdirectory **partials** in the **templates** directory and place
 your partials there.
 
 This part is automatically added, but you can also
@@ -176,7 +176,7 @@ want to make use of automatic detection of the current Content Block.
 
 .. code-block:: html
 
-   <f:render partial="Component.html" arguments="{data: data, foo: 'bar'}"/>
+   <f:render partial="component" arguments="{data: data, foo: 'bar'}"/>
 
 See also:
 
@@ -186,7 +186,7 @@ Layouts
 =======
 
 Analogous to partials, you can also use layouts. You can create a subdirectory
-`Layouts` in the `Source` directory and place your layouts there. The
+`layouts` in the `templates` directory and place your layouts there. The
 configuration is added automatically, but you can also extend or overwrite the
 TypoScript configuration in your sitepackage. Afterwards you can use your
 layouts as usual in Fluid.

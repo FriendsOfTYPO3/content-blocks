@@ -53,7 +53,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/icon.svg',
                 ],
             ],
         ];
@@ -62,7 +62,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple2/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple2/icon.svg',
                 ],
             ],
         ];
@@ -71,7 +71,7 @@ final class IconGeneratorTest extends FunctionalTestCase
             [
                 'provider' => SvgIconProvider::class,
                 'options' => [
-                    'source' => 'EXT:test_content_blocks_c/Resources/Public/ContentBlocks/simple/basics/Icon.svg',
+                    'source' => 'EXT:test_content_blocks_c/Resources/Public/ContentBlocks/simple/basics/icon.svg',
                 ],
             ],
         ];

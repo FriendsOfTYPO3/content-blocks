@@ -73,5 +73,5 @@ cases like file references or collections.
 
 :ref:`Fluid <t3coreapi:fluid-introduction>` is the templating engine for TYPO3
 and is both used in the backend and the frontend. Content Blocks registers a
-`Frontend.html` and a `EditorPreview.html` file, which can immediately be used
+`frontend.html` and a `preview.html` file, which can immediately be used
 for styling your Content Element. Layouts and partials can be used as usual.

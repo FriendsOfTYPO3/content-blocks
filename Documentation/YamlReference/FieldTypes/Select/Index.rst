@@ -48,7 +48,7 @@ Settings
    .. tip::
 
       You can omit the label, if you have the translation already in your
-      Labels.xlf file.
+      labels.xlf file.
 
       .. code-block:: yaml
 

@@ -49,7 +49,7 @@ class HtmlTemplateCodeGenerator
             $package = $contentBlockConfiguration->getName();
             $vendor = $contentBlockConfiguration->getVendor();
 
-            $defaultContent[] = '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/EditorPreview.css"/>';
+            $defaultContent[] = '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/editor-preview.css"/>';
             $defaultContent[] = '';
             $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
             $defaultContent[] = 'Header: {data.header}';
@@ -64,8 +64,8 @@ class HtmlTemplateCodeGenerator
     {
         $package = $contentBlockConfiguration->getName();
         $vendor = $contentBlockConfiguration->getVendor();
-        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="{cb:assetPath()}/Frontend.css"/>';
-        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="{cb:assetPath()}/Frontend.js"/>';
+        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="{cb:assetPath()}/frontend.css"/>';
+        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="{cb:assetPath()}/frontend.js"/>';
         $frontendTemplate[] = '';
         $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $frontendTemplate[] = 'Header: {data.header}';

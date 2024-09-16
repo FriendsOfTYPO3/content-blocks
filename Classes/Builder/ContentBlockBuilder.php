@@ -65,9 +65,13 @@ class ContentBlockBuilder
 
         $this->initializeRegistries($contentBlock);
 
-        // Create public Assets directory.
-        $publicPath = $basePath . '/' . ContentBlockPathUtility::getPublicFolder();
-        GeneralUtility::mkdir_deep($publicPath);
+        // Create base directories for a Content Block.
+        $assetsPath = $basePath . '/' . ContentBlockPathUtility::getAssetsFolder();
+        $templatePath = $basePath . '/' . ContentBlockPathUtility::getTemplatesFolder();
+        $languagePath = $basePath . '/' . ContentBlockPathUtility::getLanguageFolder();
+        GeneralUtility::mkdir_deep($assetsPath);
+        GeneralUtility::mkdir_deep($templatePath);
+        GeneralUtility::mkdir_deep($languagePath);
 
         $this->createLabelsXlf($contentBlock, $basePath);
         $this->createEditorInterfaceYaml($contentBlock, $basePath);
@@ -76,7 +80,7 @@ class ContentBlockBuilder
         if ($contentType === ContentType::CONTENT_ELEMENT) {
             $this->createFrontendHtml($contentBlock, $basePath);
             $this->createBackendPreviewHtml($contentBlock, $basePath);
-            $this->createExamplePublicAssets($publicPath);
+            $this->createExamplePublicAssets($assetsPath);
         }
         $this->copyDefaultIcon($contentType, $basePath);
         if ($contentType === ContentType::PAGE_TYPE) {
@@ -115,7 +119,6 @@ class ContentBlockBuilder
 
     protected function createLabelsXlf(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        GeneralUtility::mkdir_deep($basePath . '/' . ContentBlockPathUtility::getLanguageFolderPath());
         $xliffContent = $this->languageFileGenerator->generate($contentBlock);
         GeneralUtility::writeFile(
             $basePath . '/' . ContentBlockPathUtility::getLanguageFilePath(),
@@ -142,15 +145,15 @@ class ContentBlockBuilder
     protected function createExamplePublicAssets(string $publicPath): void
     {
         GeneralUtility::writeFile(
-            $publicPath . '/EditorPreview.css',
+            $publicPath . '/editor-preview.css',
             '/* Created by Content Blocks */'
         );
         GeneralUtility::writeFile(
-            $publicPath . '/Frontend.css',
+            $publicPath . '/frontend.css',
             '/* Created by Content Blocks */'
         );
         GeneralUtility::writeFile(
-            $publicPath . '/Frontend.js',
+            $publicPath . '/frontend.js',
             '/* Created by Content Blocks */'
         );
     }

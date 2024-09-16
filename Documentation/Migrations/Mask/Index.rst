@@ -46,7 +46,7 @@ vendor and name, which you don't want in this case. We disable prefixing, so we
 can adopt the existing Mask fields.
 
 .. code-block:: yaml
-   :caption: EXT:site_package/ContentBlocks/ContentElements/slider/EditorInterface.yaml
+   :caption: EXT:site_package/ContentBlocks/ContentElements/slider/config.yaml
 
     name: tx-mask/slider
     typeName: mask_slider
@@ -62,7 +62,7 @@ All other fields can be re-defined in Content Blocks as usual. Don't forget
 to prefix **all** fields with `tx_mask`, even inside Collections.
 
 .. code-block:: yaml
-   :caption: EXT:site_package/ContentBlocks/ContentElements/slider/EditorInterface.yaml
+   :caption: EXT:site_package/ContentBlocks/ContentElements/slider/config.yaml
 
     name: tx-mask/slider
     typeName: mask_slider
@@ -83,29 +83,29 @@ to prefix **all** fields with `tx_mask`, even inside Collections.
 Templates
 ---------
 
-This is the easy part. Simply copy the Mask template into **Frontend.html** and
+This is the easy part. Simply copy the Mask template into **frontend.html** and
 you are done. That said, if you didn't use any partials or layouts. If so, move
-these to the according **Source/Partials** and **Source/Layouts** folder in your
+these to the according **templates/partials** and **templates/Layouts** folder in your
 Content Block.
 
 Icon
 ----
 
 In case you've used a custom SVG icon for the Mask Element, you can rename it
-to **Icon.svg** and move it to the **Assets** folder. For FontAwesome icons you
+to **icon.svg** and move it to the **assets** folder. For FontAwesome icons you
 can download the SVG version from the official website.
 
 Labels
 ------
 
 Mask doesn't have a translation feature. Labels can be copied from the backend
-module view, and pasted directly into the **Labels.xlf** file.
+module view, and pasted directly into the **labels.xlf** file.
 
 .. tip::
 
     Use the :ref:`command <command_language_generate>`
     :bash:`content-blocks:language:generate vendor/name` to automatically
-    generate the **Labels.xlf** file with automatic keys prefilled.
+    generate the **labels.xlf** file with automatic keys prefilled.
 
 Finish
 ------
@@ -151,7 +151,7 @@ You do the migration as described with Collections above. In addition, you have
 to add some more config.
 
 .. code-block:: yaml
-   :caption: EXT:site_package/ContentBlocks/ContentElements/nested-content/EditorInterface.yaml
+   :caption: EXT:site_package/ContentBlocks/ContentElements/nested-content/config.yaml
 
     name: tx-mask/nested-content
     typeName: mask_nested_content
@@ -169,7 +169,7 @@ The limitation is, that you can't add constraints to the available CTypes in the
 child field. However, you can set a default value.
 
 .. code-block:: yaml
-   :caption: EXT:site_package/ContentBlocks/ContentElements/nested-content/EditorInterface.yaml
+   :caption: EXT:site_package/ContentBlocks/ContentElements/nested-content/config.yaml
 
     name: tx-mask/nested-content
     typeName: mask_nested_content

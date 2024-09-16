@@ -107,7 +107,7 @@ class GenerateLanguageFileCommand extends Command
     protected function writeLabelsXlf(LoadedContentBlock $contentBlock): void
     {
         $contentBlockPath = GeneralUtility::getFileAbsFileName($contentBlock->getExtPath());
-        $labelsFolder = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFolderPath();
+        $labelsFolder = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFolder();
         $labelsXlfPath = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
         $result = $this->languageFileGenerator->generate($contentBlock);
         GeneralUtility::mkdir_deep($labelsFolder);

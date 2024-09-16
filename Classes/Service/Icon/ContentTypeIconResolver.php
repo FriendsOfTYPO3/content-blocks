@@ -33,7 +33,7 @@ class ContentTypeIconResolver
     {
         $allowedFileExtension = ['svg', 'png', 'gif'];
         foreach ($allowedFileExtension as $fileExtension) {
-            $iconPathWithoutFileExtension = ContentBlockPathUtility::getPublicFolder() . '/' . $input->identifier;
+            $iconPathWithoutFileExtension = ContentBlockPathUtility::getAssetsFolder() . '/' . $input->identifier;
             $relativeIconPath = $iconPathWithoutFileExtension . '.' . $fileExtension;
             $checkIconPath = $input->absolutePath . '/' . $relativeIconPath;
             if (!file_exists($checkIconPath)) {

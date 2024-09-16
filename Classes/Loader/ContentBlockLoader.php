@@ -145,6 +145,9 @@ class ContentBlockLoader
             $contentBlockFolderName = $splFileInfo->getRelativePathname();
             $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
             $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentBlockExtPath, $contentType);
+            if ($editorInterfaceYaml === null) {
+                continue;
+            }
             $result[] = $this->loadSingleContentBlock(
                 $editorInterfaceYaml['name'],
                 $contentType,
@@ -157,15 +160,12 @@ class ContentBlockLoader
         return $result;
     }
 
-    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, string $contentBlockExtPath, ContentType $contentType): array
+    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, string $contentBlockExtPath, ContentType $contentType): ?array
     {
         $contentBlockDefinitionFileName = ContentBlockPathUtility::getContentBlockDefinitionFileName();
         $yamlPath = $absoluteContentBlockPath . '/' . $contentBlockDefinitionFileName;
         if (!file_exists($yamlPath)) {
-            throw new \RuntimeException(
-                'Found Content Block folder in "' . $contentBlockExtPath . '" but ' . $contentBlockDefinitionFileName . ' is missing.',
-                1711039210
-            );
+            return null;
         }
         $editorInterfaceYaml = Yaml::parseFile($yamlPath);
         if (!is_array($editorInterfaceYaml) || strlen($editorInterfaceYaml['name'] ?? '') < 3 || !str_contains($editorInterfaceYaml['name'], '/')) {
@@ -285,7 +285,7 @@ class ContentBlockLoader
         $fileSystem = new Filesystem();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $hostExtension = $loadedContentBlock->getHostExtension();
-            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder();
+            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getAssetsFolder();
             $contentBlockAbsolutePublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
             // If the Content Block does not have an Assets folder, nothing to publish here.
             if (!file_exists($contentBlockAbsolutePublicPath)) {
