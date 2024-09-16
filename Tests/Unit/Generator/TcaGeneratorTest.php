@@ -582,7 +582,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'editlock' => 'editlock',
                         'versioningWS' => true,
                         'hideTable' => true,
-                        'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
                         'transOrigDiffSourceField' => 'l10n_diffsource',
                         'languageField' => 'sys_language_uid',
@@ -625,100 +624,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'editlock' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'endtime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                                'range' => [
-                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                                ],
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'sys_language_uid' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                            'config' => [
-                                'type' => 'language',
-                            ],
-                        ],
-                        'l10n_parent' => [
-                            'displayCond' => 'FIELD:sys_language_uid:>:0',
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectSingle',
-                                'items' => [
-                                    [
-                                        'label' => '',
-                                        'value' => 0,
-                                    ],
-                                ],
-                                'foreign_table' => 't3ce_example_collection',
-                                'foreign_table_where' => 'AND t3ce_example_collection.pid=###CURRENT_PID### AND t3ce_example_collection.sys_language_uid IN (-1,0)',
-                                'default' => 0,
-                            ],
-                        ],
-                        'l10n_diffsource' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'sorting' => [
                             'config' => [
                                 'type' => 'passthrough',
@@ -784,7 +689,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'editlock' => 'editlock',
                         'versioningWS' => true,
                         'hideTable' => true,
-                        'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
                         'transOrigDiffSourceField' => 'l10n_diffsource',
                         'languageField' => 'sys_language_uid',
@@ -822,100 +726,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'editlock' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'endtime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                                'range' => [
-                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                                ],
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'sys_language_uid' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                            'config' => [
-                                'type' => 'language',
-                            ],
-                        ],
-                        'l10n_parent' => [
-                            'displayCond' => 'FIELD:sys_language_uid:>:0',
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectSingle',
-                                'items' => [
-                                    [
-                                        'label' => '',
-                                        'value' => 0,
-                                    ],
-                                ],
-                                'foreign_table' => 'collection2',
-                                'foreign_table_where' => 'AND collection2.pid=###CURRENT_PID### AND collection2.sys_language_uid IN (-1,0)',
-                                'default' => 0,
-                            ],
-                        ],
-                        'l10n_diffsource' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'sorting' => [
                             'config' => [
                                 'type' => 'passthrough',
@@ -1082,7 +892,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'editlock' => 'editlock',
                         'versioningWS' => true,
                         'hideTable' => false,
-                        'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
                         'transOrigDiffSourceField' => 'l10n_diffsource',
                         'languageField' => 'sys_language_uid',
@@ -1117,100 +926,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'editlock' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'endtime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                                'range' => [
-                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                                ],
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'sys_language_uid' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                            'config' => [
-                                'type' => 'language',
-                            ],
-                        ],
-                        'l10n_parent' => [
-                            'displayCond' => 'FIELD:sys_language_uid:>:0',
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectSingle',
-                                'items' => [
-                                    [
-                                        'label' => '',
-                                        'value' => 0,
-                                    ],
-                                ],
-                                'foreign_table' => 'foobar',
-                                'foreign_table_where' => 'AND foobar.pid=###CURRENT_PID### AND foobar.sys_language_uid IN (-1,0)',
-                                'default' => 0,
-                            ],
-                        ],
-                        'l10n_diffsource' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'sorting' => [
                             'config' => [
                                 'type' => 'passthrough',
@@ -1322,45 +1037,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'endtime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                                'range' => [
-                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                                ],
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
                         't3ce_example_text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
@@ -1375,15 +1051,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text2.description',
                             'config' => [
                                 'type' => 'input',
-                            ],
-                        ],
-                        'internal_description' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
-                            'config' => [
-                                'type' => 'text',
-                                'rows' => 5,
-                                'cols' => 30,
                             ],
                         ],
                     ],
@@ -1479,50 +1146,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
                         't3ce_example_text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/Source/Language/Labels.xlf:text.label',
@@ -1605,7 +1228,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'editlock' => 'editlock',
                         'versioningWS' => true,
                         'hideTable' => false,
-                        'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
                         'transOrigDiffSourceField' => 'l10n_diffsource',
                         'languageField' => 'sys_language_uid',
@@ -1663,100 +1285,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'editlock' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'endtime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                                'range' => [
-                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                                ],
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'sys_language_uid' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                            'config' => [
-                                'type' => 'language',
-                            ],
-                        ],
-                        'l10n_parent' => [
-                            'displayCond' => 'FIELD:sys_language_uid:>:0',
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectSingle',
-                                'items' => [
-                                    [
-                                        'label' => '',
-                                        'value' => 0,
-                                    ],
-                                ],
-                                'foreign_table' => 'foobar',
-                                'foreign_table_where' => 'AND foobar.pid=###CURRENT_PID### AND foobar.sys_language_uid IN (-1,0)',
-                                'default' => 0,
-                            ],
-                        ],
-                        'l10n_diffsource' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'sorting' => [
                             'config' => [
                                 'type' => 'passthrough',
@@ -1912,7 +1440,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'editlock' => 'editlock',
                         'versioningWS' => true,
                         'hideTable' => true,
-                        'transOrigPointerField' => 'l10n_parent',
                         'translationSource' => 'l10n_source',
                         'transOrigDiffSourceField' => 'l10n_diffsource',
                         'languageField' => 'sys_language_uid',
@@ -1950,100 +1477,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'editlock' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'hidden' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                            'config' => [
-                                'type' => 'check',
-                                'renderType' => 'checkboxToggle',
-                            ],
-                        ],
-                        'fe_group' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectMultipleSideBySide',
-                                'size' => 5,
-                                'maxitems' => 20,
-                                'items' => [
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                                        'value' => -1,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                                        'value' => -2,
-                                    ],
-                                    [
-                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                                        'value' => '--div--',
-                                    ],
-                                ],
-                                'exclusiveKeys' => '-1,-2',
-                                'foreign_table' => 'fe_groups',
-                            ],
-                        ],
-                        'starttime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'endtime' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                            'config' => [
-                                'type' => 'datetime',
-                                'default' => 0,
-                                'range' => [
-                                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                                ],
-                            ],
-                            'l10n_mode' => 'exclude',
-                            'l10n_display' => 'defaultAsReadonly',
-                        ],
-                        'sys_language_uid' => [
-                            'exclude' => true,
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                            'config' => [
-                                'type' => 'language',
-                            ],
-                        ],
-                        'l10n_parent' => [
-                            'displayCond' => 'FIELD:sys_language_uid:>:0',
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                            'config' => [
-                                'type' => 'select',
-                                'renderType' => 'selectSingle',
-                                'items' => [
-                                    [
-                                        'label' => '',
-                                        'value' => 0,
-                                    ],
-                                ],
-                                'foreign_table' => 'collection',
-                                'foreign_table_where' => 'AND collection.pid=###CURRENT_PID### AND collection.sys_language_uid IN (-1,0)',
-                                'default' => 0,
-                            ],
-                        ],
-                        'l10n_diffsource' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'sorting' => [
                             'config' => [
                                 'type' => 'passthrough',
