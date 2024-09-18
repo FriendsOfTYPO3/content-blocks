@@ -891,8 +891,8 @@ final class ContentBlockCompiler
         $fieldTypeName = $field['type'];
         if (!$this->fieldTypeRegistry->has($fieldTypeName)) {
             $validTypesList = array_map(
-                fn(FieldTypeInterface $fieldType) => $fieldType::getName(),
-                $this->fieldTypeRegistry->getAll()
+                fn(FieldTypeInterface $fieldType): string => $fieldType::getName(),
+                $this->fieldTypeRegistry->toArray()
             );
             sort($validTypesList);
             $validTypes = implode(', ', $validTypesList);

@@ -17,51 +17,46 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
-class FieldTypeRegistry implements \IteratorAggregate
+final readonly class FieldTypeRegistry
 {
-    /**
-     * @var FieldTypeInterface[]
-     */
-    protected array $fieldTypesArray;
-
     public function __construct(
-        /**
-         * @var \IteratorAggregate<FieldTypeInterface>
-         */
-        #[TaggedIterator('content_blocks.field_type', defaultIndexMethod: 'getName')]
-        protected \IteratorAggregate $fieldTypes,
-    ) {
-        $this->fieldTypesArray = iterator_to_array($this->fieldTypes);
+        #[AutowireLocator('content_blocks.field_type', defaultIndexMethod: 'getName')]
+        private ServiceLocator $types,
+        #[AutowireIterator('content_blocks.field_type')]
+        private iterable $fieldTypes,
+    ) {}
+
+    public function has(string $type): bool
+    {
+        return $this->types->has($type);
     }
 
-    public function has(string $fieldTypeName): bool
+    public function get(string $type): FieldTypeInterface
     {
-        return array_key_exists($fieldTypeName, $this->fieldTypesArray);
+        return $this->types->get($type);
     }
 
-    public function get(string $fieldTypeName): FieldTypeInterface
+    /**
+     * @return iterable<FieldTypeInterface>
+     */
+    public function all(): iterable
     {
-        if (!array_key_exists($fieldTypeName, $this->fieldTypesArray)) {
-            throw new \InvalidArgumentException(
-                'Field type with name "' . $fieldTypeName . '" does not exist',
-                1710083790
-            );
-        }
-        return $this->fieldTypesArray[$fieldTypeName];
+        return $this->fieldTypes;
     }
 
     /**
      * @return FieldTypeInterface[]
      */
-    public function getAll(): array
+    public function toArray(): array
     {
-        return $this->fieldTypesArray;
-    }
-
-    public function getIterator(): \Traversable
-    {
-        return $this->fieldTypes;
+        $allFieldTypes = [];
+        foreach ($this->fieldTypes as $fieldType) {
+            $allFieldTypes[] = $fieldType;
+        }
+        return $allFieldTypes;
     }
 }
