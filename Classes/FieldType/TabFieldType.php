@@ -24,7 +24,7 @@ final class TabFieldType implements FieldTypeInterface
 {
     public static function getName(): string
     {
-        return 'Tab';
+        return SpecialFieldType::TAB->value;
     }
 
     public static function getTcaType(): string

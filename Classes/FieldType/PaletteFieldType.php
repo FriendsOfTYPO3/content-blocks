@@ -24,7 +24,7 @@ final class PaletteFieldType implements FieldTypeInterface
 {
     public static function getName(): string
     {
-        return 'Palette';
+        return SpecialFieldType::PALETTE->value;
     }
 
     public static function getTcaType(): string
