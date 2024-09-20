@@ -32,7 +32,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
@@ -447,9 +446,8 @@ class TcaGenerator
      */
     protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
     {
-        $fieldTypeName = $overrideColumn->getFieldType()->getName();
-        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
-        if ($fieldTypeEnum !== FieldType::COLLECTION) {
+        $fieldType = $overrideColumn->getFieldType();
+        if ($fieldType::getTcaType() !== 'inline') {
             return $overrideTca;
         }
         $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
@@ -553,10 +551,9 @@ class TcaGenerator
         if (is_string($option)) {
             return $option;
         }
-        $fieldTypeName = $tcaFieldDefinition->getFieldType()->getName();
-        $currentFieldType = FieldType::tryFrom($fieldTypeName);
-        $fieldTypeFromOption = FieldType::tryFrom($option['type']);
-        if ($fieldTypeFromOption === $currentFieldType) {
+        $fieldType = $tcaFieldDefinition->getFieldType();
+        $fieldTypeName = $fieldType::getName();
+        if ($fieldTypeName === $option['type']) {
             return $option['option'];
         }
         return null;
@@ -692,12 +689,11 @@ class TcaGenerator
         if ($labelField === null) {
             $labelFieldCandidate = null;
             // These are preferred, as they most often provide a meaningful preview of the record.
-            $preferredLabelTypes = [FieldType::TEXT, FieldType::TEXTAREA, FieldType::EMAIL, FieldType::UUID];
+            $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
                 $fieldType = $columnFieldDefinition->getFieldType();
-                $fieldTypeName = $fieldType::getName();
-                $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
-                if (in_array($fieldTypeEnum, $preferredLabelTypes, true)) {
+                $tcaType = $fieldType::getTcaType();
+                if (in_array($tcaType, $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
                     break;
                 }
