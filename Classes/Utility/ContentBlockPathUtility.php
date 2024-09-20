@@ -45,11 +45,6 @@ class ContentBlockPathUtility
         return 'preview.html';
     }
 
-    public static function getBackendPreviewFileNameWithoutExtension(): string
-    {
-        return substr(self::getBackendPreviewFileName(), 0, -5);
-    }
-
     public static function getBackendPreviewPath(): string
     {
         return self::getTemplatesFolder() . '/' . self::getBackendPreviewFileName();
@@ -58,11 +53,6 @@ class ContentBlockPathUtility
     public static function getFrontendTemplateFileName(): string
     {
         return 'frontend.html';
-    }
-
-    public static function getFrontendTemplateFileNameWithoutExtension(): string
-    {
-        return substr(self::getFrontendTemplateFileName(), 0, -5);
     }
 
     public static function getFrontendTemplatePath(): string
