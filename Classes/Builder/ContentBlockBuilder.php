@@ -145,7 +145,7 @@ class ContentBlockBuilder
     protected function createExamplePublicAssets(string $publicPath): void
     {
         GeneralUtility::writeFile(
-            $publicPath . '/editor-preview.css',
+            $publicPath . '/preview.css',
             '/* Created by Content Blocks */'
         );
         GeneralUtility::writeFile(

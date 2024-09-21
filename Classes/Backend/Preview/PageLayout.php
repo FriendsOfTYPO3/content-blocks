@@ -104,7 +104,7 @@ readonly class PageLayout
     protected function getContentBlocksPartialRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
         $partialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/Partials/';
+        $partialRootPaths[] = $contentBlockPrivatePath . '/partials/';
         return $partialRootPaths;
     }
 
@@ -114,7 +114,7 @@ readonly class PageLayout
     protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
         $partialRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/Layouts';
+        $partialRootPaths[] = $contentBlockPrivatePath . '/layouts';
         return $partialRootPaths;
     }
 

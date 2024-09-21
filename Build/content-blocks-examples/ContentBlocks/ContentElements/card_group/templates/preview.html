@@ -5,7 +5,7 @@
     data-namespace-typo3-fluid="true"
 >
 
-<f:asset.css identifier="cbCardGroupCssBackend" href="{cb:assetPath()}/EditorPreview.css"/>
+<f:asset.css identifier="cbCardGroupCssBackend" href="{cb:assetPath()}/preview.css"/>
 
 <div class="cb-card-group">
     <f:if condition="{data.card_group_item}">
@@ -13,7 +13,7 @@
             <f:for each="{data.card_group_item}" as="item" iteration="iteration">
 
                 <div class="card-group-element-item">
-                    <be:link.editRecord uid="{item.uid}" table="{item.tableName}">
+                    <be:link.editRecord uid="{item.uid}" table="{item.mainType}">
                         <div class="card">
                             <f:if condition="{item.image.0}">
                                 <div class="card-img-top">

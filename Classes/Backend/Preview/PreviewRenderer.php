@@ -105,7 +105,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             'EXT:backend/Resources/Private/Partials/',
             'EXT:content_blocks/Resources/Private/Partials/',
             ...$contentBlockPartialRootPaths,
-            $contentBlockPrivatePath . '/Partials/',
+            $contentBlockPrivatePath . '/partials/',
         ];
         return $partialRootPaths;
     }
@@ -116,7 +116,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
         $layoutRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $layoutRootPaths[] = $contentBlockPrivatePath . '/Layouts/';
+        $layoutRootPaths[] = $contentBlockPrivatePath . '/layouts/';
         return $layoutRootPaths;
     }
 }

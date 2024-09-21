@@ -4,7 +4,7 @@
     data-namespace-typo3-fluid="true"
 >
 
-<f:asset.css identifier="cbCardGroupCssFrontend" href="{cb:assetPath()}/Frontend.css"/>
+<f:asset.css identifier="cbCardGroupCssFrontend" href="{cb:assetPath()}/frontend.css"/>
 
 <div class="cb-card-group">
     <f:if condition="{data.card_group_item}">
@@ -16,7 +16,7 @@
                         <f:if condition="{item.image.0}">
                             <div class="card-img-top">
                                 <f:render partial="LinkWrap" arguments="{link: item.link, link_title: item.title}" contentAs="content">
-                                    <f:image src="{item.image.0.uid}" treatIdAsReference="1"/>
+                                    <f:image image="{item.image.0}"/>
                                 </f:render>
                             </div>
                         </f:if>

@@ -49,7 +49,7 @@ class HtmlTemplateCodeGenerator
             $package = $contentBlockConfiguration->getName();
             $vendor = $contentBlockConfiguration->getVendor();
 
-            $defaultContent[] = '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/editor-preview.css"/>';
+            $defaultContent[] = '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/preview.css"/>';
             $defaultContent[] = '';
             $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
             $defaultContent[] = 'Header: {data.header}';

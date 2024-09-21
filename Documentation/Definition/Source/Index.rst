@@ -58,7 +58,7 @@ You can access your fields by the variable :html:`{data}`.
 
 Learn more about :ref:`templating <cb_templating>`.
 
-Partials
+partials
 ========
 
 For larger Content Elements, you can divide your **frontend.html** template into
@@ -66,10 +66,25 @@ smaller chunks by creating separate partials here.
 
 Partials are included as you normally would in any Fluid template.
 
+.. note::
+
+   Due to current Fluid restrictions, partials have to start with an uppercase
+   letter. This restriction might be lifted in later Fluid versions (v5 or above).
+
+
 .. code-block:: html
 
-   <f:render partial="component" arguments="{_all}"/>
+   <f:render partial="Component" arguments="{_all}"/>
 
 See also:
 
-*  Learn how to :ref:`share Partials <cb_extension_partials>` between Content Blocks.
+*  Learn how to :ref:`share partials <cb_extension_partials>` between Content Blocks.
+
+layouts
+=======
+
+You can also add layouts to your Content Block if needed.
+
+.. code-block:: html
+
+   <f:layout name="MyLayout">

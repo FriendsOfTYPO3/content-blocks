@@ -45,10 +45,10 @@ Example:
         myvendor_mycontentblockname {
             file = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/frontend.html
             layoutRootPaths {
-                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/Layouts/
+                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/layouts/
             }
             partialRootPaths {
-                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/Partials/
+                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/partials/
             }
         }
     }

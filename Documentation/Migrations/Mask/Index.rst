@@ -85,7 +85,7 @@ Templates
 
 This is the easy part. Simply copy the Mask template into **frontend.html** and
 you are done. That said, if you didn't use any partials or layouts. If so, move
-these to the according **templates/partials** and **templates/Layouts** folder in your
+these to the according **templates/partials** and **templates/layouts** folder in your
 Content Block.
 
 Icon
