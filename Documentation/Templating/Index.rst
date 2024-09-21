@@ -176,7 +176,7 @@ want to make use of automatic detection of the current Content Block.
 
 .. code-block:: html
 
-   <f:render partial="component" arguments="{data: data, foo: 'bar'}"/>
+   <f:render partial="Component" arguments="{data: data, foo: 'bar'}"/>
 
 See also:
 
