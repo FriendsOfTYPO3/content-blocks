@@ -76,8 +76,8 @@ Extend every Content Block
             }
         }
         dataProcessing {
-            10 = menu
-            10 {
+            200 = menu
+            200 {
               special = rootline
               as = breadcrumb
             }
@@ -101,8 +101,8 @@ Extending a specific Content Block
             }
         }
         dataProcessing {
-            10 = menu
-            10 {
+            200 = menu
+            200 {
               special = rootline
               as = breadcrumb
             }
