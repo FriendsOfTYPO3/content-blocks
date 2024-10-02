@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Link', tcaType: 'link', searchable: true)]
-final class LinkFieldType implements FieldTypeInterface
+final class LinkFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -97,10 +97,5 @@ final class LinkFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

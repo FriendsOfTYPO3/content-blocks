@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: SpecialFieldType::PALETTE->value, tcaType: '')]
-final class PaletteFieldType implements FieldTypeInterface
+final class PaletteFieldType extends AbstractFieldType
 {
     public static function createFromArray(array $settings): PaletteFieldType
     {
@@ -31,10 +31,5 @@ final class PaletteFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         return [];
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

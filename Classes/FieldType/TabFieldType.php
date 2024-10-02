@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: SpecialFieldType::TAB->value, tcaType: '')]
-final class TabFieldType implements FieldTypeInterface
+final class TabFieldType extends AbstractFieldType
 {
     public static function createFromArray(array $settings): TabFieldType
     {
@@ -31,10 +31,5 @@ final class TabFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         return [];
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

@@ -35,6 +35,7 @@ final readonly class FieldTypeRegistry
         return $this->types->has($type);
     }
 
+    // @todo is it possible to retrieve the service by FQCN and "name" at the same time?
     public function get(string $type): FieldTypeInterface
     {
         return $this->types->get($type);
@@ -58,13 +59,5 @@ final readonly class FieldTypeRegistry
             $allFieldTypes[] = $fieldType;
         }
         return $allFieldTypes;
-    }
-
-    public function getAttribute(FieldTypeInterface $fieldType): FieldType
-    {
-        $reflectionClass = new \ReflectionClass($fieldType::class);
-        $attribute = $reflectionClass->getAttributes(FieldType::class)[0];
-        $instance = $attribute->newInstance();
-        return $instance;
     }
 }

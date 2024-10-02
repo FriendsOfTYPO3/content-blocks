@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Json', tcaType: 'json', searchable: true)]
-final class JsonFieldType implements FieldTypeInterface
+final class JsonFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -76,10 +76,5 @@ final class JsonFieldType implements FieldTypeInterface
 
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

@@ -176,8 +176,8 @@ final class ContentBlockCompiler
         foreach ($fields as $field) {
             $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
-            $attribute = $this->fieldTypeRegistry->getAttribute($result->fieldType);
-            $tcaType = $attribute->tcaType;
+            $fieldTypeService = $this->fieldTypeRegistry->get($result->fieldType::class);
+            $tcaType = $fieldTypeService->getTcaType();
             if ($tcaType !== 'passthrough') {
                 $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
             }
@@ -280,8 +280,8 @@ final class ContentBlockCompiler
     private function collectItemLabels(ProcessingInput $input, FieldTypeInterface $fieldType, array $field): array
     {
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
-        $tcaFieldType = $attribute->tcaType;
+        $fieldTypeService = $this->fieldTypeRegistry->get($fieldType::class);
+        $tcaFieldType = $fieldTypeService->getTcaType();
         if (!in_array($tcaFieldType, $itemsFieldTypes, true)) {
             return $field;
         }
@@ -404,8 +404,8 @@ final class ContentBlockCompiler
     {
         $type = $rootField['type'] ?? '';
         $rootFieldType = $this->resolveType($input, $rootField);
-        $attribute = $this->fieldTypeRegistry->getAttribute($rootFieldType);
-        $tcaType = $attribute->tcaType;
+        $fieldTypeService = $this->fieldTypeRegistry->get($rootFieldType::class);
+        $tcaType = $fieldTypeService->getTcaType();
         $specialFieldType = SpecialFieldType::tryFrom($type);
         if (
             $specialFieldType === SpecialFieldType::LINEBREAK
@@ -1125,8 +1125,7 @@ final class ContentBlockCompiler
             return false;
         }
         $fieldType = $this->fieldTypeRegistry->get($type);
-        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
-        if ($attribute->tcaType === 'passthrough') {
+        if ($fieldType->getTcaType() === 'passthrough') {
             return false;
         }
         if ($fieldType instanceof FlexFormFieldType) {

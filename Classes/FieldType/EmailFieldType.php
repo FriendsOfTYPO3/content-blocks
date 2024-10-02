@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Email', tcaType: 'email', searchable: true)]
-final class EmailFieldType implements FieldTypeInterface
+final class EmailFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -91,10 +91,5 @@ final class EmailFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

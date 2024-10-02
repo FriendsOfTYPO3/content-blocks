@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Textarea', tcaType: 'text', searchable: true)]
-final class TextareaFieldType implements FieldTypeInterface
+final class TextareaFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -130,10 +130,5 @@ final class TextareaFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

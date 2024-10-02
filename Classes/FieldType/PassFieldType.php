@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Pass', tcaType: 'passthrough')]
-final class PassFieldType implements FieldTypeInterface
+final class PassFieldType extends AbstractFieldType
 {
     private mixed $default = '';
 

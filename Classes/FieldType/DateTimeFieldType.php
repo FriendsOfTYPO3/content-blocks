@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'DateTime', tcaType: 'datetime')]
-final class DateTimeFieldType implements FieldTypeInterface
+final class DateTimeFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -108,11 +108,6 @@ final class DateTimeFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 
     /**

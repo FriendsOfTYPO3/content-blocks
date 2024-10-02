@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Text', tcaType: 'input')]
-final class TextFieldType implements FieldTypeInterface
+final class TextFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -38,16 +38,6 @@ final class TextFieldType implements FieldTypeInterface
     private array $valuePicker = [];
     private array $eval = [];
     private ?bool $autocomplete = null;
-
-    public static function getTcaType(): string
-    {
-        return 'input';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): TextFieldType
     {
@@ -117,10 +107,5 @@ final class TextFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

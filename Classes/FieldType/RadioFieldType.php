@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Radio', tcaType: 'radio')]
-final class RadioFieldType implements FieldTypeInterface
+final class RadioFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithCustomProperties;
@@ -66,10 +66,5 @@ final class RadioFieldType implements FieldTypeInterface
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

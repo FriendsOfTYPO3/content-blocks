@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Slug', tcaType: 'slug', searchable: true)]
-final class SlugFieldType implements FieldTypeInterface
+final class SlugFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -74,10 +74,5 @@ final class SlugFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

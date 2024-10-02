@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'File', tcaType: 'file')]
-final class FileFieldType implements FieldTypeInterface
+final class FileFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -129,10 +129,5 @@ final class FileFieldType implements FieldTypeInterface
             }
         }
         return $cropVariants;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

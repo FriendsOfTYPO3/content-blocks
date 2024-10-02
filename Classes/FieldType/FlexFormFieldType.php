@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'FlexForm', tcaType: 'flex', searchable: true)]
-final class FlexFormFieldType implements FieldTypeInterface
+final class FlexFormFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -52,11 +52,6 @@ final class FlexFormFieldType implements FieldTypeInterface
         $config['ds'] = $this->ds;
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 
     /**

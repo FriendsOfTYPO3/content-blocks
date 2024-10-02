@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * @internal Not part of TYPO3's public API.
  */
 #[FieldType(name: 'Uuid', tcaType: 'uuid', searchable: true)]
-final class UuidFieldType implements FieldTypeInterface
+final class UuidFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -58,10 +58,5 @@ final class UuidFieldType implements FieldTypeInterface
 
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

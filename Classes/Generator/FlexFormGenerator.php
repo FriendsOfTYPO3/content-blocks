@@ -118,8 +118,8 @@ class FlexFormGenerator
         }
         $fieldType = $flexFormTcaDefinition->getFieldType();
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
-        if (in_array($attribute->tcaType, $itemsFieldTypes, true)) {
+        $fieldTypeService = $this->fieldTypeRegistry->get($fieldType::class);
+        if (in_array($fieldTypeService->getTcaType(), $itemsFieldTypes, true)) {
             $items = $flexFormTca['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 if (!isset($item['labelPath'])) {
