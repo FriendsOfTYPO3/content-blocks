@@ -20,10 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
-final readonly class FieldTypeRegistry
+final readonly class TcaFieldTypeRegistry
 {
     public function __construct(
-        #[AutowireLocator(FieldType::TAG_NAME, indexAttribute: 'name')]
+        #[AutowireLocator(FieldType::TAG_NAME, indexAttribute: 'tcaType')]
         private ServiceLocator $types,
     ) {}
 
@@ -34,17 +34,6 @@ final readonly class FieldTypeRegistry
 
     public function get(string $type): FieldTypeInterface
     {
-        if (!$this->has($type) && class_exists($type)) {
-            $type = $this->getNameFromAttribute($type);
-        }
         return $this->types->get($type);
-    }
-
-    private function getNameFromAttribute(string $fieldType): string
-    {
-        $reflectionClass = new \ReflectionClass($fieldType);
-        $attribute = $reflectionClass->getAttributes(FieldType::class)[0];
-        $instance = $attribute->newInstance();
-        return $instance->name;
     }
 }

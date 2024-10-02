@@ -893,19 +893,6 @@ final class ContentBlockCompiler
         }
         $this->assertTypeExists($field, $input);
         $fieldTypeName = $field['type'];
-        if (!$this->fieldTypeRegistry->has($fieldTypeName)) {
-            $validTypesList = array_map(
-                fn(FieldTypeInterface $fieldType): string => (new \ReflectionClass($fieldType::class))->getAttributes(FieldType::class)[0]->name,
-                $this->fieldTypeRegistry->toArray()
-            );
-            sort($validTypesList);
-            $validTypes = implode(', ', $validTypesList);
-            throw new \InvalidArgumentException(
-                'The type "' . $field['type'] . '" is not a valid type in Content Block "'
-                . $input->contentBlock->getName() . '". Valid types are: ' . $validTypes . '.',
-                1697625849
-            );
-        }
         $fieldType = $this->fieldTypeRegistry->get($fieldTypeName);
         $fieldTypeEnum = SpecialFieldType::tryFrom($fieldTypeName);
         if ($fieldTypeEnum !== SpecialFieldType::LINEBREAK) {
