@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Slug', tcaType: 'slug', searchable: true)]
 final class SlugFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -31,21 +32,6 @@ final class SlugFieldType implements FieldTypeInterface
     private string $fallbackCharacter = '';
     private array $generatorOptions = [];
     private bool $prependSlash = false;
-
-    public static function getName(): string
-    {
-        return 'Slug';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'slug';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): FieldTypeInterface
     {
@@ -64,7 +50,7 @@ final class SlugFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'slug';
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }

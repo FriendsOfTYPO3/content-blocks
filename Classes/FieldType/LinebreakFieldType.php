@@ -20,23 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: SpecialFieldType::LINEBREAK->value, tcaType: '')]
 final class LinebreakFieldType implements FieldTypeInterface
 {
-    public static function getName(): string
-    {
-        return SpecialFieldType::LINEBREAK->value;
-    }
-
-    public static function getTcaType(): string
-    {
-        return '';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
     public static function createFromArray(array $settings): LinebreakFieldType
     {
         return new self();

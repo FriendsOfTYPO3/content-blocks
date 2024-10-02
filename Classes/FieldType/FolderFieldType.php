@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Folder', tcaType: 'folder')]
 final class FolderFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -35,21 +36,6 @@ final class FolderFieldType implements FieldTypeInterface
     private bool $hideDeleteIcon = false;
     private array $elementBrowserEntryPoints = [];
     private string $relationship = '';
-
-    public static function getName(): string
-    {
-        return 'Folder';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'folder';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): FolderFieldType
     {
@@ -73,7 +59,7 @@ final class FolderFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'folder';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

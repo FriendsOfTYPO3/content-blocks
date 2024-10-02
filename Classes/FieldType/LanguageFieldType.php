@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Language', tcaType: 'language')]
 final class LanguageFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -27,21 +28,6 @@ final class LanguageFieldType implements FieldTypeInterface
     private int $default = 0;
     private bool $readOnly = false;
     private bool $required = false;
-
-    public static function getName(): string
-    {
-        return 'Language';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'language';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): LanguageFieldType
     {
@@ -56,7 +42,7 @@ final class LanguageFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'language';
         if ($this->default !== 0) {
             $config['default'] = $this->default;
         }

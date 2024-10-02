@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Uuid', tcaType: 'uuid', searchable: true)]
 final class UuidFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -27,21 +28,6 @@ final class UuidFieldType implements FieldTypeInterface
     private int $size = 0;
     private bool $enableCopyToClipboard = true;
     private ?int $version = null;
-
-    public static function getName(): string
-    {
-        return 'Uuid';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'uuid';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): UuidFieldType
     {
@@ -59,7 +45,7 @@ final class UuidFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'uuid';
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

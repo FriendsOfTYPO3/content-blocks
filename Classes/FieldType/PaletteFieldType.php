@@ -20,23 +20,9 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: SpecialFieldType::PALETTE->value, tcaType: '')]
 final class PaletteFieldType implements FieldTypeInterface
 {
-    public static function getName(): string
-    {
-        return SpecialFieldType::PALETTE->value;
-    }
-
-    public static function getTcaType(): string
-    {
-        return '';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
     public static function createFromArray(array $settings): PaletteFieldType
     {
         return new self();

@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Password', tcaType: 'password')]
 final class PasswordFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -34,21 +35,6 @@ final class PasswordFieldType implements FieldTypeInterface
     private int $size = 0;
     private bool $hashed = true;
     private string $passwordPolicy = '';
-
-    public static function getName(): string
-    {
-        return 'Password';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'password';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): PasswordFieldType
     {
@@ -73,7 +59,7 @@ final class PasswordFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'password';
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

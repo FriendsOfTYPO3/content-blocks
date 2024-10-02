@@ -20,24 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Pass', tcaType: 'passthrough')]
 final class PassFieldType implements FieldTypeInterface
 {
     private mixed $default = '';
-
-    public static function getName(): string
-    {
-        return 'Pass';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'passthrough';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): PassFieldType
     {
@@ -48,7 +34,7 @@ final class PassFieldType implements FieldTypeInterface
 
     public function getTca(): array
     {
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'passthrough';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

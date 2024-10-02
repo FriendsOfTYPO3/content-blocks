@@ -32,6 +32,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
@@ -153,6 +155,7 @@ class TcaGenerator
         protected readonly LanguageFileRegistry $languageFileRegistry,
         protected readonly SystemExtensionAvailability $systemExtensionAvailability,
         protected readonly FlexFormGenerator $flexFormGenerator,
+        protected readonly FieldTypeRegistry $fieldTypeRegistry,
     ) {}
 
     public function __invoke(BeforeTcaOverridesEvent $event): void
@@ -447,7 +450,8 @@ class TcaGenerator
     protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
     {
         $fieldType = $overrideColumn->getFieldType();
-        if ($fieldType::getTcaType() !== 'inline') {
+        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+        if ($attribute->tcaType !== 'inline') {
             return $overrideTca;
         }
         $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
@@ -552,7 +556,7 @@ class TcaGenerator
             return $option;
         }
         $fieldType = $tcaFieldDefinition->getFieldType();
-        $fieldTypeName = $fieldType::getName();
+        $fieldTypeName = (new \ReflectionClass($fieldType::class))->getAttributes(FieldType::class)[0]->newInstance()->name;
         if ($fieldTypeName === $option['type']) {
             return $option['option'];
         }
@@ -584,8 +588,8 @@ class TcaGenerator
     protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
         $fieldType = $overrideColumn->getFieldType();
-        $tcaFieldType = $fieldType::getTcaType();
-        if ($tcaFieldType === 'passthrough') {
+        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+        if ($attribute->tcaType === 'passthrough') {
             return $column;
         }
         $name = $typeDefinition->getName();
@@ -598,7 +602,7 @@ class TcaGenerator
             $column['description'] = $descriptionPath;
         }
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
+        if (in_array($attribute->tcaType, $itemsFieldTypes, true)) {
             $items = $column['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 if (!isset($item['labelPath'])) {
@@ -692,8 +696,8 @@ class TcaGenerator
             $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
                 $fieldType = $columnFieldDefinition->getFieldType();
-                $tcaType = $fieldType::getTcaType();
-                if (in_array($tcaType, $preferredLabelTypes, true)) {
+                $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+                if (in_array($attribute->tcaType, $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
                     break;
                 }
@@ -834,7 +838,9 @@ class TcaGenerator
         $searchFieldsString = $baseTca[$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
         foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $field) {
-            if ($field->getFieldType()->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
+            $fieldType = $field->getFieldType();
+            $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+            if ($attribute->searchable && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
                 $searchFields[] = $field->getUniqueIdentifier();
             }
         }

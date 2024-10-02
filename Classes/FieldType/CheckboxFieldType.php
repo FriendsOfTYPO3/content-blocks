@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Checkbox', tcaType: 'check')]
 final class CheckboxFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -33,21 +34,6 @@ final class CheckboxFieldType implements FieldTypeInterface
     private string $eval = '';
     private array $validation = [];
     private array $items = [];
-
-    public static function getName(): string
-    {
-        return 'Checkbox';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'check';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): CheckboxFieldType
     {
@@ -69,7 +55,7 @@ final class CheckboxFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'check';
         if ($this->default > 0) {
             $config['default'] = $this->default;
         }

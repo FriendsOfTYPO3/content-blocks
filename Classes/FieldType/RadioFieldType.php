@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Radio', tcaType: 'radio')]
 final class RadioFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -29,21 +30,6 @@ final class RadioFieldType implements FieldTypeInterface
     private bool $readOnly = false;
     private string $itemsProcFunc = '';
     private array $items = [];
-
-    public static function getName(): string
-    {
-        return 'Radio';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'radio';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): RadioFieldType
     {
@@ -64,7 +50,7 @@ final class RadioFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'radio';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

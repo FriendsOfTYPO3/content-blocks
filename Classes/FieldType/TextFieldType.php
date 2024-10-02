@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Text', tcaType: 'input')]
 final class TextFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -37,11 +38,6 @@ final class TextFieldType implements FieldTypeInterface
     private array $valuePicker = [];
     private array $eval = [];
     private ?bool $autocomplete = null;
-
-    public static function getName(): string
-    {
-        return 'Text';
-    }
 
     public static function getTcaType(): string
     {
@@ -79,7 +75,7 @@ final class TextFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'input';
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

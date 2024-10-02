@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Select', tcaType: 'select')]
 final class SelectFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -56,21 +57,6 @@ final class SelectFieldType implements FieldTypeInterface
     // Only for renderType="selectTree"
     private array $treeConfig = [];
     private string $relationship = '';
-
-    public static function getName(): string
-    {
-        return 'Select';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'select';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): SelectFieldType
     {
@@ -121,7 +107,7 @@ final class SelectFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'select';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

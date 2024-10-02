@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'FlexForm', tcaType: 'flex', searchable: true)]
 final class FlexFormFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -30,21 +31,6 @@ final class FlexFormFieldType implements FieldTypeInterface
     private array $flexFormDefinitions = [];
     private string $ds_pointerField = '';
     private array $ds = [];
-
-    public static function getName(): string
-    {
-        return 'FlexForm';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'flex';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): FlexFormFieldType
     {
@@ -59,7 +45,7 @@ final class FlexFormFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'flex';
         if ($this->ds_pointerField !== '') {
             $config['ds_pointerField'] = $this->ds_pointerField;
         }

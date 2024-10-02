@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Json', tcaType: 'json', searchable: true)]
 final class JsonFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -31,21 +32,6 @@ final class JsonFieldType implements FieldTypeInterface
     private bool $required = false;
     private bool $readOnly = false;
     private string $placeholder = '';
-
-    public static function getName(): string
-    {
-        return 'Json';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'json';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): JsonFieldType
     {
@@ -65,7 +51,7 @@ final class JsonFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'json';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

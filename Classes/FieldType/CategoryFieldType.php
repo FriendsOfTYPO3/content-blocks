@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Category', tcaType: 'category')]
 final class CategoryFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -32,21 +33,6 @@ final class CategoryFieldType implements FieldTypeInterface
     private string $exclusiveKeys = '';
     private array $treeConfig = [];
     private string $relationship = '';
-
-    public static function getName(): string
-    {
-        return 'Category';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'category';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): CategoryFieldType
     {
@@ -70,7 +56,7 @@ final class CategoryFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'category';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

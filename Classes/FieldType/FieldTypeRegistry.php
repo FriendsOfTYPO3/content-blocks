@@ -24,9 +24,9 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 final readonly class FieldTypeRegistry
 {
     public function __construct(
-        #[AutowireLocator('content_blocks.field_type', defaultIndexMethod: 'getName')]
+        #[AutowireLocator(FieldType::TAG_NAME, indexAttribute: 'name')]
         private ServiceLocator $types,
-        #[AutowireIterator('content_blocks.field_type')]
+        #[AutowireIterator(FieldType::TAG_NAME)]
         private iterable $fieldTypes,
     ) {}
 
@@ -58,5 +58,13 @@ final readonly class FieldTypeRegistry
             $allFieldTypes[] = $fieldType;
         }
         return $allFieldTypes;
+    }
+
+    public function getAttribute(FieldTypeInterface $fieldType): FieldType
+    {
+        $reflectionClass = new \ReflectionClass($fieldType::class);
+        $attribute = $reflectionClass->getAttributes(FieldType::class)[0];
+        $instance = $attribute->newInstance();
+        return $instance;
     }
 }

@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Relation', tcaType: 'group')]
 final class RelationFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -49,21 +50,6 @@ final class RelationFieldType implements FieldTypeInterface
     private array $suggestOptions = [];
     private array $appearance = [];
     private string $relationship = '';
-
-    public static function getName(): string
-    {
-        return 'Relation';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'group';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): RelationFieldType
     {
@@ -104,7 +90,7 @@ final class RelationFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'group';
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

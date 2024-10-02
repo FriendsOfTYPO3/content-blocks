@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Color', tcaType: 'color', searchable: true)]
 final class ColorFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -33,21 +34,6 @@ final class ColorFieldType implements FieldTypeInterface
     private string $placeholder = '';
     private array $valuePicker = [];
     private ?bool $autocomplete = null;
-
-    public static function getName(): string
-    {
-        return 'Color';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'color';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): ColorFieldType
     {
@@ -71,7 +57,7 @@ final class ColorFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'color';
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

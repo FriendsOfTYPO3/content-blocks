@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'File', tcaType: 'file')]
 final class FileFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -38,21 +39,6 @@ final class FileFieldType implements FieldTypeInterface
     private bool $extendedPalette = true;
     private array $cropVariants = [];
     private string $relationship = '';
-
-    public static function getName(): string
-    {
-        return 'File';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'file';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): FileFieldType
     {
@@ -81,7 +67,7 @@ final class FileFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'file';
         if ($this->allowed !== [] && $this->allowed !== '') {
             $config['allowed'] = $this->allowed;
         }

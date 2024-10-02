@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Email', tcaType: 'email', searchable: true)]
 final class EmailFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -34,21 +35,6 @@ final class EmailFieldType implements FieldTypeInterface
     private array $eval = [];
     private ?bool $autocomplete = null;
     private array $valuePicker = [];
-
-    public static function getName(): string
-    {
-        return 'Email';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'email';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
 
     public static function createFromArray(array $settings): EmailFieldType
     {
@@ -72,7 +58,7 @@ final class EmailFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'email';
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

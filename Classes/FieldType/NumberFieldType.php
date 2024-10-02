@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'Number', tcaType: 'number')]
 final class NumberFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -36,21 +37,6 @@ final class NumberFieldType implements FieldTypeInterface
     private array $range = [];
     private array $slider = [];
     private string $format = '';
-
-    public static function getName(): string
-    {
-        return 'Number';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'number';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): NumberFieldType
     {
@@ -78,7 +64,7 @@ final class NumberFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'number';
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

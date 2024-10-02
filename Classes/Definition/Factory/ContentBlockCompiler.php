@@ -29,10 +29,10 @@ use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
-use TYPO3\CMS\ContentBlocks\FieldType\SelectFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\SpecialFieldType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
@@ -176,7 +176,8 @@ final class ContentBlockCompiler
         foreach ($fields as $field) {
             $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
-            $tcaType = $result->fieldType::getTcaType();
+            $attribute = $this->fieldTypeRegistry->getAttribute($result->fieldType);
+            $tcaType = $attribute->tcaType;
             if ($tcaType !== 'passthrough') {
                 $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
             }
@@ -279,7 +280,8 @@ final class ContentBlockCompiler
     private function collectItemLabels(ProcessingInput $input, FieldTypeInterface $fieldType, array $field): array
     {
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        $tcaFieldType = $fieldType::getTcaType();
+        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+        $tcaFieldType = $attribute->tcaType;
         if (!in_array($tcaFieldType, $itemsFieldTypes, true)) {
             return $field;
         }
@@ -351,7 +353,7 @@ final class ContentBlockCompiler
         } else {
             $typeFieldDefinition = [
                 'identifier' => $result->tableDefinition->typeField,
-                'type' => SelectFieldType::getName(),
+                'type' => 'Select',
                 'renderType' => 'selectSingle',
                 'prefixField' => false,
                 'default' => $result->contentType->typeName,
@@ -400,16 +402,19 @@ final class ContentBlockCompiler
 
     private function handleRootField(array $rootField, ProcessingInput $input, ProcessedFieldsResult $result): array
     {
+        $type = $rootField['type'] ?? '';
         $rootFieldType = $this->resolveType($input, $rootField);
-        $specialFieldType = SpecialFieldType::tryFrom($rootFieldType::getName());
+        $attribute = $this->fieldTypeRegistry->getAttribute($rootFieldType);
+        $tcaType = $attribute->tcaType;
+        $specialFieldType = SpecialFieldType::tryFrom($type);
         if (
             $specialFieldType === SpecialFieldType::LINEBREAK
             && ($rootField['ignoreIfNotInPalette'] ?? false)
         ) {
             return [];
         }
-        $this->assertNoLinebreakOutsideOfPalette($rootFieldType, $input->contentBlock);
-        if ($rootFieldType::getTcaType() === 'passthrough') {
+        $this->assertNoLinebreakOutsideOfPalette($type, $input->contentBlock);
+        if ($tcaType === 'passthrough') {
             return [$rootField];
         }
         $fields = match ($specialFieldType) {
@@ -438,18 +443,18 @@ final class ContentBlockCompiler
         $fields = [];
         $paletteItems = [];
         foreach ($rootPalette['fields'] as $paletteField) {
-            $paletteFieldType = $this->resolveType($input, $paletteField);
-            if (SpecialFieldType::LINEBREAK::tryFrom($paletteFieldType::getName()) === SpecialFieldType::LINEBREAK) {
+            $type = $paletteField['type'] ?? '';
+            if (SpecialFieldType::LINEBREAK::tryFrom($type) === SpecialFieldType::LINEBREAK) {
                 $paletteItems[] = new LinebreakDefinition();
             } else {
                 $this->assertNoPaletteInPalette(
-                    $paletteFieldType,
+                    $type,
                     $paletteField['identifier'],
                     $rootPaletteIdentifier,
                     $input->contentBlock
                 );
                 $this->assertNoTabInPalette(
-                    $paletteFieldType,
+                    $type,
                     $paletteField['identifier'],
                     $rootPaletteIdentifier,
                     $input->contentBlock
@@ -890,7 +895,7 @@ final class ContentBlockCompiler
         $fieldTypeName = $field['type'];
         if (!$this->fieldTypeRegistry->has($fieldTypeName)) {
             $validTypesList = array_map(
-                fn(FieldTypeInterface $fieldType): string => $fieldType::getName(),
+                fn(FieldTypeInterface $fieldType): string => (new \ReflectionClass($fieldType::class))->getAttributes(FieldType::class)[0]->name,
                 $this->fieldTypeRegistry->toArray()
             );
             sort($validTypesList);
@@ -902,7 +907,7 @@ final class ContentBlockCompiler
             );
         }
         $fieldType = $this->fieldTypeRegistry->get($fieldTypeName);
-        $fieldTypeEnum = SpecialFieldType::tryFrom($fieldType::getName());
+        $fieldTypeEnum = SpecialFieldType::tryFrom($fieldTypeName);
         if ($fieldTypeEnum !== SpecialFieldType::LINEBREAK) {
             $this->assertIdentifierExists($field, $input);
         }
@@ -935,9 +940,9 @@ final class ContentBlockCompiler
         return $languagePath;
     }
 
-    private function assertNoLinebreakOutsideOfPalette(FieldTypeInterface $fieldType, LoadedContentBlock $contentBlock): void
+    private function assertNoLinebreakOutsideOfPalette(string $type, LoadedContentBlock $contentBlock): void
     {
-        if (SpecialFieldType::tryFrom($fieldType::getName()) === SpecialFieldType::LINEBREAK) {
+        if (SpecialFieldType::tryFrom($type) === SpecialFieldType::LINEBREAK) {
             throw new \InvalidArgumentException(
                 'Linebreaks are only allowed within Palettes in Content Block "'
                 . $contentBlock->getName() . '".',
@@ -984,12 +989,12 @@ final class ContentBlockCompiler
     }
 
     private function assertNoPaletteInPalette(
-        FieldTypeInterface $fieldType,
+        string $type,
         string $identifier,
         string $rootFieldIdentifier,
         LoadedContentBlock $contentBlock
     ): void {
-        if (SpecialFieldType::tryFrom($fieldType::getName()) === SpecialFieldType::PALETTE) {
+        if (SpecialFieldType::tryFrom($type) === SpecialFieldType::PALETTE) {
             throw new \InvalidArgumentException(
                 'Palette "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier
                 . '" in Content Block "' . $contentBlock->getName() . '".',
@@ -999,12 +1004,12 @@ final class ContentBlockCompiler
     }
 
     private function assertNoTabInPalette(
-        FieldTypeInterface $fieldType,
+        string $type,
         string $identifier,
         string $rootFieldIdentifier,
         LoadedContentBlock $contentBlock
     ): void {
-        if (SpecialFieldType::tryFrom($fieldType::getName()) === SpecialFieldType::TAB) {
+        if (SpecialFieldType::tryFrom($type) === SpecialFieldType::TAB) {
             throw new \InvalidArgumentException(
                 'Tab "' . $identifier . '" is not allowed inside palette "' . $rootFieldIdentifier
                 . '" in Content Block "' . $contentBlock->getName() . '".',
@@ -1061,11 +1066,12 @@ final class ContentBlockCompiler
     private function validateFlexFormContainsValidFieldTypes(array $field, LoadedContentBlock $contentBlock): void
     {
         foreach ($field['fields'] ?? [] as $flexField) {
-            if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SHEET) {
+            $flexFieldType = $flexField['type'] ?? '';
+            if (FlexFormSubType::tryFrom($flexFieldType) === FlexFormSubType::SHEET) {
                 $this->validateFlexFormContainsValidFieldTypes($flexField, $contentBlock);
                 continue;
             }
-            if (FlexFormSubType::tryFrom($flexField['type']) === FlexFormSubType::SECTION) {
+            if (FlexFormSubType::tryFrom($flexFieldType) === FlexFormSubType::SECTION) {
                 if (empty($flexField['container'])) {
                     throw new \InvalidArgumentException(
                         'FlexForm field "' . $field['identifier'] . '" has a Section "'
@@ -1084,9 +1090,10 @@ final class ContentBlockCompiler
                         );
                     }
                     foreach ($container['fields'] as $containerField) {
+                        $type = $containerField['type'] ?? '';
                         if (
-                            !$this->fieldTypeRegistry->has($containerField['type'])
-                            || !$this->isValidFlexFormField($this->fieldTypeRegistry->get($containerField['type']))
+                            !$this->fieldTypeRegistry->has($type)
+                            || !$this->isValidFlexFormField($type,)
                         ) {
                             throw new \InvalidArgumentException(
                                 'FlexForm field "' . $field['identifier'] . '" has an invalid field of type "'
@@ -1101,7 +1108,7 @@ final class ContentBlockCompiler
             }
             if (
                 !$this->fieldTypeRegistry->has($flexField['type'])
-                || !$this->isValidFlexFormField($this->fieldTypeRegistry->get($flexField['type']))
+                || !$this->isValidFlexFormField($flexFieldType)
             ) {
                 throw new \InvalidArgumentException(
                     'Field type "' . $flexField['type'] . '" with identifier "' . $flexField['identifier']
@@ -1112,12 +1119,14 @@ final class ContentBlockCompiler
         }
     }
 
-    private function isValidFlexFormField(FieldTypeInterface $fieldType): bool
+    private function isValidFlexFormField(string $type): bool
     {
-        if (SpecialFieldType::tryFrom($fieldType::getName()) !== null) {
+        if (SpecialFieldType::tryFrom($type) !== null) {
             return false;
         }
-        if ($fieldType::getTcaType() === 'passthrough') {
+        $fieldType = $this->fieldTypeRegistry->get($type);
+        $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+        if ($attribute->tcaType === 'passthrough') {
             return false;
         }
         if ($fieldType instanceof FlexFormFieldType) {

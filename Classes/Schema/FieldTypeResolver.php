@@ -36,7 +36,8 @@ class FieldTypeResolver
         }
         $tcaType = $configuration['config']['type'];
         foreach ($this->fieldTypeRegistry->all() as $fieldType) {
-            if ($fieldType::getTcaType() === $tcaType) {
+            $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+            if ($attribute->tcaType === $tcaType) {
                 return $fieldType;
             }
         }

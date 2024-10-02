@@ -17,9 +17,17 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
-interface FieldTypeInterface
+/**
+ * Service tag to autoconfigure field types
+ */
+#[\Attribute(\Attribute::TARGET_CLASS)]
+class FieldType
 {
-    public static function createFromArray(array $settings): FieldTypeInterface;
-    public function getTca(): array;
-    public function getSql(string $column): string;
+    public const TAG_NAME = 'content_blocks.field_type';
+
+    public function __construct(
+        public string $name,
+        public string $tcaType,
+        public bool $searchable = false,
+    ) {}
 }

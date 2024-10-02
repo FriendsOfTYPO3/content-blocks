@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[FieldType(name: 'DateTime', tcaType: 'datetime')]
 final class DateTimeFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
@@ -37,21 +38,6 @@ final class DateTimeFieldType implements FieldTypeInterface
     private string $dbType = '';
     private bool $disableAgeDisplay = false;
     private string $format = '';
-
-    public static function getName(): string
-    {
-        return 'DateTime';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'datetime';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
 
     public static function createFromArray(array $settings): DateTimeFieldType
     {
@@ -78,7 +64,7 @@ final class DateTimeFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = 'datetime';
         if ($this->default !== '') {
             $config['default'] = $this->dbType !== '' ? $this->default : $this->convertDateToTimestamp($this->default);
         }

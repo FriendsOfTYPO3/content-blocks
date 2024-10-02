@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\FieldType\SpecialFieldType;
 use TYPO3\CMS\Core\Collection\LazyRecordCollection;
 use TYPO3\CMS\Core\Domain\Record;
@@ -41,6 +42,7 @@ final class ContentBlockDataDecorator
         private readonly GridProcessor $gridProcessor,
         private readonly ContentObjectProcessor $contentObjectProcessor,
         private readonly ContentTypeResolver $contentTypeResolver,
+        private readonly FieldTypeRegistry $fieldTypeRegistry,
     ) {}
 
     public function setRequest(ServerRequestInterface $request): void
@@ -83,11 +85,12 @@ final class ContentBlockDataDecorator
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
-            if (SpecialFieldType::tryFrom($fieldType::getName()) !== null) {
+            $attribute = $this->fieldTypeRegistry->getAttribute($fieldType);
+            if (SpecialFieldType::tryFrom($attribute->name) !== null) {
                 continue;
             }
             // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
-            if ($fieldType::getTcaType() === 'passthrough') {
+            if ($attribute->tcaType === 'passthrough') {
                 $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->getUniqueIdentifier());
             } else {
                 $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->getUniqueIdentifier());
