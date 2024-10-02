@@ -21,7 +21,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
  * Service tag to autoconfigure field types
  */
 #[\Attribute(\Attribute::TARGET_CLASS)]
-class FieldType
+readonly class FieldType
 {
     public const TAG_NAME = 'content_blocks.field_type';
 
