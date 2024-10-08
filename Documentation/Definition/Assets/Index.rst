@@ -31,13 +31,13 @@ many official TYPO3 icons `here <https://typo3.github.io/TYPO3.Icons/icons/conte
 Allowed file extensions are **svg**, **png** and **gif** (in preferred order).
 
 icon-hide-in-menu.svg
-==================
+=====================
 
 This is a special icon for Page Types for the "hide in menu" state. The same
 logic applies as for the standard icon.svg.
 
-IconRoot.svg
-============
+icon-root.svg
+=============
 
 This is a special icon for Page Types for the "is_siteroot" state. The same
 logic applies as for the standard icon.svg.
