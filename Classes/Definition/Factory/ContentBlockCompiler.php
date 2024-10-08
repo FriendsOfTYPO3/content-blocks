@@ -175,8 +175,7 @@ final class ContentBlockCompiler
         foreach ($fields as $field) {
             $this->initializeField($input, $result, $field);
             $input->languagePath->addPathSegment($result->identifier);
-            $fieldTypeService = $this->fieldTypeRegistry->get($result->fieldType::class);
-            $tcaType = $fieldTypeService->getTcaType();
+            $tcaType = $result->fieldType->getTcaType();
             if ($tcaType !== 'passthrough') {
                 $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
             }
