@@ -57,7 +57,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
  * - Validates the YAML-schema and errors out in case of incorrect definition.
  * - Assigns and tracks unique identifiers for use in database column names.
  * - Collects automatic language keys, which can be used to generate the
- *   Labels.xlf file with a command.
+ *   labels.xlf file with a command.
  * - Recursively resolves Collections and creates additional anonymous Record
  *   Types based on them. Meaning one Content Block can indeed define more than
  *   one Content Type with the use of Collections.

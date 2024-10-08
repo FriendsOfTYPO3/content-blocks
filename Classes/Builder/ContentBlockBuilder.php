@@ -74,7 +74,7 @@ class ContentBlockBuilder
         GeneralUtility::mkdir_deep($languagePath);
 
         $this->createLabelsXlf($contentBlock, $basePath);
-        $this->createEditorInterfaceYaml($contentBlock, $basePath);
+        $this->createConfigYaml($contentBlock, $basePath);
 
         $contentType = $contentBlock->getContentType();
         if ($contentType === ContentType::CONTENT_ELEMENT) {
@@ -101,7 +101,7 @@ class ContentBlockBuilder
         $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
     }
 
-    protected function createEditorInterfaceYaml(LoadedContentBlock $contentBlock, string $basePath): void
+    protected function createConfigYaml(LoadedContentBlock $contentBlock, string $basePath): void
     {
         $contentType = $contentBlock->getContentType();
         $yamlContent = $contentBlock->getYaml();

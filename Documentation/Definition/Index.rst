@@ -26,7 +26,7 @@ named **assets**, **templates** and **language**.
 ..  toctree::
     :titlesonly:
 
-    EditorInterface/Index
+    ConfigYaml/Index
     Assets/Index
-    Source/Index
+    Templates/Index
     Language/Index

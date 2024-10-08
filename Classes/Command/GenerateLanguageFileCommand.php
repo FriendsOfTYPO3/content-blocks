@@ -52,7 +52,7 @@ class GenerateLanguageFileCommand extends Command
             'print',
             'p',
             InputOption::VALUE_NONE,
-            'Print Labels.xlf to terminal instead of writing to file system.'
+            'Print labels.xlf to terminal instead of writing to file system.'
         );
         $this->addOption(
             'extension',

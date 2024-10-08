@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
 
 /**
  * Contains main logic for Basic replacement. Basics are simply added/replaced
- * in the EditorInterface.yaml fields array. Basics are used either globally
+ * in the config.yaml fields array. Basics are used either globally
  * in the `basics` array (appended at the end of fields) or locally as the
  * field Type `Basic` (in place replacement). Nesting of Basics is allowed for
  * a maximum nesting level of 8.
