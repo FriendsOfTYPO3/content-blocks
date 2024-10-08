@@ -12,14 +12,16 @@ Content Types in TYPO3. This includes Content Elements, Page Types and generic
 Record Types. A YAML file serves as a basis for field definitions.
 Content Blocks acts hereby as a generator for more complicated low-level code
 and makes smart assumptions based on best practice. This significantly reduces
-redundancies and boilerplate code and enables users to concentrate on their
-actual work rather than fiddling with the almighty Core API.
+redundancies as well as boilerplate code and enables users to concentrate on
+their domain logic.
 
 .. note::
 
-   Content Blocks is not a replacement for the current system. It is a good
-   basis to get started. However, for more advanced use-cases knowledge about
-   the underlying API is required.
+   Content Blocks started out as a layer on top of TYPO3 and still is. The
+   long-term goal is to integrate the concept of a Content Block into the Core
+   as a first-class citizen. As of now, some knowledge of the underlying Core
+   API is required to fully grasp the possibilities of this extension and how
+   to customize the result.
 
 For more technical, historical and conceptual insights about Content Blocks we
 recommend these further readings:
