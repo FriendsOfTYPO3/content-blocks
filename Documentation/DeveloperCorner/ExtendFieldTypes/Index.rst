@@ -17,7 +17,7 @@ When to add new field types
 You can add own field types whenever you have fields with a distinct set of
 configuration options set. These options can be set as default in your type
 so you gain a semantic naming for this field. For example type `Money` could
-be the core type :yaml:`Number` with :yaml:`format` set to :yaml:`decimal` as
+be the core TCA type :php:`number` with :yaml:`format` set to :yaml:`decimal` as
 default value.
 
 Another use case is having a custom made TCA
@@ -31,7 +31,11 @@ Adding a new Field Type
 
 To add a new Field Type it is required to implement the
 :php:`\TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface`. Have a look at
-the Core implementations to get a feeling on how to implement them.
+the Core implementations to get a feeling on how to implement them. You may
+extend :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType` for easier
+usage. The registration itself happens through the PHP attribute
+:php:`TYPO3\CMS\ContentBlocks\FieldType\FieldType`, which expects the
+:php:`name`, :php:`tcaType` and :php:`searchable` arguments.
 
 .. note::
 
@@ -42,13 +46,15 @@ the Core implementations to get a feeling on how to implement them.
 
     interface FieldTypeInterface
     {
-        public static function createFromArray(array $settings): FieldTypeInterface;
+        public function getName(): string;
+        public function getTcaType(): string;
+        public function isSearchable(): bool;
+        public function setName(string $name): void;
+        public function setTcaType(string $tcaType): void;
+        public function setSearchable(bool $searchable): void;
+        public function createFromArray(array $settings): FieldTypeInterface;
         public function getTca(): array;
         public function getSql(string $column): string;
-        public static function getName(): string;
-        public static function getTcaType(): string;
-        public static function isSearchable(): bool;
-        public static function hasItems(): bool;
     }
 
 createFromArray
@@ -70,22 +76,28 @@ getSql
 
 The SQL definition for your database column. Use :php:`$column` as the
 column name. Return empty string to fall back to standard definition.
+Defined by :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType` to return
+empty string for automatic detection. Override this, if you need a specific
+column definition.
 
-getName
--------
+setName/getName
+---------------
 
 This is the actual type identifier for usage in the YAML :yaml:`type` option.
 It is recommended to use UpperCamelCase, but it's not required.
+Defined by :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType`.
 
-getTcaType
-----------
+setTcaType/getTcaType
+---------------------
 
 The TCA type, the new Content Blocks type is based on.
+Defined by :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType`.
 
-isSearchable
-------------
+setSearchable/isSearchable
+--------------------------
 
 Whether the field contents should be searchable in global search.
+Defined by :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType`.
 
 Example
 =======
@@ -100,10 +112,12 @@ Example for a field type "Money".
 
     namespace VENDOR\MyExtension\FieldType;
 
-    use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
+    use TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType;
+    use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
     use TYPO3\CMS\ContentBlocks\FieldType\WithCommonProperties;
 
-    final class MoneyFieldType implements FieldTypeInterface
+    #[FieldType(name: 'Money', tcaType: 'number', searchable: false)]
+    final class MoneyFieldType extends AbstractFieldType
     {
         use WithCommonProperties;
 
@@ -111,24 +125,10 @@ Example for a field type "Money".
         private bool $required = false;
         private bool $nullable = false;
 
-        public static function getName(): string
+        public function createFromArray(array $settings): self
         {
-            return 'Money';
-        }
-
-        public static function getTcaType(): string
-        {
-            return 'number';
-        }
-
-        public static function isSearchable(): bool
-        {
-            return false;
-        }
-
-        public static function createFromArray(array $settings): self
-        {
-            $self = new self();
+            // Clone the service instance, so that state for name, tcaType and searchable is carried over.
+            $self = clone $this;
             $self->setCommonProperties($settings);
             $default = $settings['default'] ?? $self->default;
             $self->default = (float)$default;
@@ -140,7 +140,7 @@ Example for a field type "Money".
         public function getTca(): array
         {
             $tca = $this->toTca();
-            $config['type'] = self::getTcaType();
+            $config['type'] = $this->getTcaType();
             if ($this->default !== 0.0) {
                 $config['default'] = $this->default;
             }
@@ -150,14 +150,5 @@ Example for a field type "Money".
             $config['format'] = 'decimal';
             $tca['config'] = array_replace($tca['config'] ?? [], $config);
             return $tca;
-        }
-
-        public function getSql(string $column): string
-        {
-            $null = ' NOT NULL';
-            if ($this->nullable) {
-                $null = '';
-            }
-            return "`$column` decimal(10,2) DEFAULT '0.00'" . $null;
         }
     }
