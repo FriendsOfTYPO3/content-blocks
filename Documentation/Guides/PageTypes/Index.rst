@@ -103,10 +103,19 @@ Icons for states
 ================
 
 Page Types can have special states like disabled or hidden in menu. Depending
-on this state, the icon changes or is overlayed with another icon. As for now,
-the "hide in menu" and "is site root" states can be supplied via a custom icons.
-Put an icon with the name **icon-hide-in-menu.svg** and one with **IconRoot.svg**
-inside your assets folder to use them.
+on this state, the icon changes or is overlaid with another icon. As for now,
+the "hide in menu" and "is site root" states can be supplied via custom icons.
+Put an icon with the name **icon-hide-in-menu.svg** and one with
+**icon-root.svg** inside your assets folder to use them.
+
+.. code-block:: none
+   :caption: Directory structure of a Content Block
+
+   ├── assets
+   │   │── icon.svg
+   │   │── icon-hide-in-menu.svg
+   │   └── icon-root.svg
+   └── config.yaml
 
 Processing of page data
 =======================
