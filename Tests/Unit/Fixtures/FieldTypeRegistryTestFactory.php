@@ -82,6 +82,6 @@ class FieldTypeRegistryTestFactory
             $keyedFieldTypes[$fieldType::getName()] = fn(): FieldTypeInterface => $fieldType;
         }
         $serviceLocator = new ServiceLocator($keyedFieldTypes);
-        return new FieldTypeRegistry($serviceLocator, $fieldTypes);
+        return new FieldTypeRegistry($serviceLocator);
     }
 }

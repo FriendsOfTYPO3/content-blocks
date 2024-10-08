@@ -40,6 +40,13 @@ final readonly class FieldTypeRegistry
         return $this->types->get($type);
     }
 
+    public function all(): \Generator
+    {
+        foreach ($this->types as $type) {
+            yield $type;
+        }
+    }
+
     private function getNameFromAttribute(string $fieldType): string
     {
         $reflectionClass = new \ReflectionClass($fieldType);
