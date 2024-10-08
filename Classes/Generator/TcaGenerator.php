@@ -553,7 +553,7 @@ class TcaGenerator
             return $option;
         }
         $fieldType = $tcaFieldDefinition->getFieldType();
-        $fieldTypeName = (new \ReflectionClass($fieldType::class))->getAttributes(FieldType::class)[0]->newInstance()->name;
+        $fieldTypeName = $fieldType->getName();
         if ($fieldTypeName === $option['type']) {
             return $option['option'];
         }

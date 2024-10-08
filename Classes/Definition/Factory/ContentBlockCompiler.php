@@ -278,8 +278,7 @@ final class ContentBlockCompiler
     private function collectItemLabels(ProcessingInput $input, FieldTypeInterface $fieldType, array $field): array
     {
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        $fieldTypeService = $this->fieldTypeRegistry->get($fieldType::class);
-        $tcaFieldType = $fieldTypeService->getTcaType();
+        $tcaFieldType = $fieldType->getTcaType();
         if (!in_array($tcaFieldType, $itemsFieldTypes, true)) {
             return $field;
         }
@@ -402,8 +401,7 @@ final class ContentBlockCompiler
     {
         $type = $rootField['type'] ?? '';
         $rootFieldType = $this->resolveType($input, $rootField);
-        $fieldTypeService = $this->fieldTypeRegistry->get($rootFieldType::class);
-        $tcaType = $fieldTypeService->getTcaType();
+        $tcaType = $rootFieldType->getTcaType();
         $specialFieldType = SpecialFieldType::tryFrom($type);
         if (
             $specialFieldType === SpecialFieldType::LINEBREAK
