@@ -43,7 +43,7 @@ The outcome of the research and the discussions in the community is:
 *  The entered name (vendor/name) in the config.yaml file defines the identifier of a content block
 *  GUI to create / kickstart a new content block
 *  If there are breaking changes, support e.g via UpgradeWizards to migrate easily to the new version
-*  Better UX for editors by shipping a template (preview.html) for the backend preview
+*  Better UX for editors by shipping a template (backend-preview.html) for the backend preview
 *  Usage of the AssetCollector: JavaScript and CSS in backend and frontend
 *  The content blocks are encapsulated, in a own folder
 *  You can move a content block from one project to another project and it will work out of the box

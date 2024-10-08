@@ -10,10 +10,10 @@ directory structure of extensions, this would be the **Resources/Private**
 folder. There is a limited set of directories and files, which you can place
 here.
 
-preview.html
-============
+backend-preview.html
+====================
 
-The **preview.html** can be added to customize the backend preview for
+The **backend-preview.html** can be added to customize the backend preview for
 your editors. By default, TYPO3 comes with a standard preview renderer. However,
 it is specialized in rendering the preview of Core Content Elements. This means
 only Core fields like :sql:`header`, :sql:`subheader` or :sql:`bodytext` are

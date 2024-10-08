@@ -42,7 +42,7 @@ class ContentBlockPathUtility
 
     public static function getBackendPreviewFileName(): string
     {
-        return 'preview.html';
+        return 'backend-preview.html';
     }
 
     public static function getBackendPreviewPath(): string

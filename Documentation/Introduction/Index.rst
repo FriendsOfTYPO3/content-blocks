@@ -42,7 +42,7 @@ easily copy-pasted into other projects.
    ├── language
    │    └── labels.xlf
    ├── templates
-   │   ├── preview.html
+   │   ├── backend-preview.html
    │   └── frontend.html
    └── config.yaml
 

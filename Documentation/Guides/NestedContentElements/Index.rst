@@ -103,7 +103,7 @@ the backend. For this Content Blocks provides ready to use Fluid partials which
 are able to render backend previews the same way the Core page layout does it.
 
 .. code-block:: html
-   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/templates/preview.html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/templates/backend-preview.html
 
     <f:render partial="PageLayout/Grid" arguments="{data: data, identifier: 'tabs_item'}"/>
 

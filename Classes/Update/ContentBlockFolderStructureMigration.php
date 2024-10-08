@@ -114,7 +114,7 @@ class ContentBlockFolderStructureMigration implements UpgradeWizardInterface
             rename($path . '/templates/Layouts', $path . '/templates/layouts');
         }
         if (file_exists($path . '/templates/EditorPreview.html')) {
-            rename($path . '/templates/EditorPreview.html', $path . '/templates/preview.html');
+            rename($path . '/templates/EditorPreview.html', $path . '/templates/backend-preview.html');
         }
         if (file_exists($path . '/templates/Language')) {
             rename($path . '/templates/Language', $path . '/language');

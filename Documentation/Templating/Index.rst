@@ -12,7 +12,7 @@ additional features like own variables and ViewHelpers with it.
 Accessing variables
 ===================
 
-Inside your `frontend.html` or `preview.html` file you can access the
+Inside your `frontend.html` or `backend-preview.html` file you can access the
 properties of your Content Element as usual by the :html:`{data}` variable.
 This variable, however, is special. It has real superpowers!
 
@@ -113,7 +113,7 @@ provide nearly the same layout in the frontend and the backend, so the editors
 easily find the element they want to edit.
 
 The frontend template is located in **templates/frontend.html** and the backend
-template in **templates/preview.html**.
+template in **templates/backend-preview.html**.
 
 .. _asset_view_helpers:
 

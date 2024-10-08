@@ -19,7 +19,7 @@ named **assets**, **templates** and **language**.
    ├── templates
    |   ├── partials
    |   |   └── Component.html
-   │   ├── preview.html
+   │   ├── backend-preview.html
    │   └── frontend.html
    └── config.yaml
 
