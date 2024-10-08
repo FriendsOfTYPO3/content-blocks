@@ -34,9 +34,9 @@ final class CategoryFieldType extends AbstractFieldType
     private array $treeConfig = [];
     private string $relationship = '';
 
-    public static function createFromArray(array $settings): CategoryFieldType
+    public function createFromArray(array $settings): CategoryFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -56,7 +56,7 @@ final class CategoryFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'category';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

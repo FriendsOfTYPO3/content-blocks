@@ -25,16 +25,16 @@ final class PassFieldType extends AbstractFieldType
 {
     private mixed $default = '';
 
-    public static function createFromArray(array $settings): PassFieldType
+    public function createFromArray(array $settings): PassFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->default = $settings['default'] ?? $self->default;
         return $self;
     }
 
     public function getTca(): array
     {
-        $config['type'] = 'passthrough';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

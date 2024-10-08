@@ -36,9 +36,9 @@ final class PasswordFieldType extends AbstractFieldType
     private bool $hashed = true;
     private string $passwordPolicy = '';
 
-    public static function createFromArray(array $settings): PasswordFieldType
+    public function createFromArray(array $settings): PasswordFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -59,7 +59,7 @@ final class PasswordFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'password';
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

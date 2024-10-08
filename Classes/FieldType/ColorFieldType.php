@@ -35,9 +35,9 @@ final class ColorFieldType extends AbstractFieldType
     private array $valuePicker = [];
     private ?bool $autocomplete = null;
 
-    public static function createFromArray(array $settings): ColorFieldType
+    public function createFromArray(array $settings): ColorFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -57,7 +57,7 @@ final class ColorFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'color';
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

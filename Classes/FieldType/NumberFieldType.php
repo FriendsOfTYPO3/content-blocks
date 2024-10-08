@@ -38,9 +38,9 @@ final class NumberFieldType extends AbstractFieldType
     private array $slider = [];
     private string $format = '';
 
-    public static function createFromArray(array $settings): NumberFieldType
+    public function createFromArray(array $settings): NumberFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->format = (string)($settings['format'] ?? $self->format);
         $default = $settings['default'] ?? $self->default;
@@ -64,7 +64,7 @@ final class NumberFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'number';
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

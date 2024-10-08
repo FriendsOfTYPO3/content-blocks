@@ -33,7 +33,6 @@ class FlexFormGenerator
 {
     public function __construct(
         protected readonly LanguageFileRegistry $languageFileRegistry,
-        protected readonly FieldTypeRegistry $fieldTypeRegistry,
     ) {}
 
     public function generate(FlexFormDefinition $flexFormDefinition): string
@@ -118,8 +117,7 @@ class FlexFormGenerator
         }
         $fieldType = $flexFormTcaDefinition->getFieldType();
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        $fieldTypeService = $this->fieldTypeRegistry->get($fieldType::class);
-        if (in_array($fieldTypeService->getTcaType(), $itemsFieldTypes, true)) {
+        if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
             $items = $flexFormTca['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 if (!isset($item['labelPath'])) {

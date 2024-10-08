@@ -33,9 +33,9 @@ final class JsonFieldType extends AbstractFieldType
     private bool $readOnly = false;
     private string $placeholder = '';
 
-    public static function createFromArray(array $settings): JsonFieldType
+    public function createFromArray(array $settings): JsonFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->required = (bool)($settings['required'] ?? $self->required);
@@ -51,7 +51,7 @@ final class JsonFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'json';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

@@ -58,9 +58,9 @@ final class SelectFieldType extends AbstractFieldType
     private array $treeConfig = [];
     private string $relationship = '';
 
-    public static function createFromArray(array $settings): SelectFieldType
+    public function createFromArray(array $settings): SelectFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -107,7 +107,7 @@ final class SelectFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'select';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

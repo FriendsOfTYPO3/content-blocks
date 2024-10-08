@@ -44,9 +44,9 @@ final class TextareaFieldType extends AbstractFieldType
     private string $richtextConfiguration = '';
     private string $format = '';
 
-    public static function createFromArray(array $settings): TextareaFieldType
+    public function createFromArray(array $settings): TextareaFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -73,7 +73,7 @@ final class TextareaFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'text';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

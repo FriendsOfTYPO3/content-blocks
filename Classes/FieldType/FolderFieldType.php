@@ -37,9 +37,9 @@ final class FolderFieldType extends AbstractFieldType
     private array $elementBrowserEntryPoints = [];
     private string $relationship = '';
 
-    public static function createFromArray(array $settings): FolderFieldType
+    public function createFromArray(array $settings): FolderFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -59,7 +59,7 @@ final class FolderFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'folder';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

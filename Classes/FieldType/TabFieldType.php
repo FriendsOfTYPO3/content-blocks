@@ -23,7 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 #[FieldType(name: SpecialFieldType::TAB->value, tcaType: '')]
 final class TabFieldType extends AbstractFieldType
 {
-    public static function createFromArray(array $settings): TabFieldType
+    public function createFromArray(array $settings): TabFieldType
     {
         return new self();
     }

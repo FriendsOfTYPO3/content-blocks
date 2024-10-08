@@ -40,9 +40,9 @@ final class FileFieldType extends AbstractFieldType
     private array $cropVariants = [];
     private string $relationship = '';
 
-    public static function createFromArray(array $settings): FileFieldType
+    public function createFromArray(array $settings): FileFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $allowed = $settings['allowed'] ?? $self->allowed;
         if (is_array($allowed) || is_string($allowed)) {
@@ -67,7 +67,7 @@ final class FileFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'file';
+        $config['type'] = $this->getTcaType();
         if ($this->allowed !== [] && $this->allowed !== '') {
             $config['allowed'] = $this->allowed;
         }

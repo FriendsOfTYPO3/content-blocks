@@ -29,9 +29,9 @@ final class UuidFieldType extends AbstractFieldType
     private bool $enableCopyToClipboard = true;
     private ?int $version = null;
 
-    public static function createFromArray(array $settings): UuidFieldType
+    public function createFromArray(array $settings): UuidFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->size = (int)($settings['size'] ?? $self->size);
         if (array_key_exists('version', $settings)) {
@@ -45,7 +45,7 @@ final class UuidFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'uuid';
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }

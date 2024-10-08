@@ -36,7 +36,7 @@ final class SqlColumnDefinition
         $this->column = $columnDefinition['uniqueIdentifier'];
         /** @var FieldTypeInterface $fieldType */
         $fieldType = $columnDefinition['type'];
-        $this->fieldType = $fieldType::createFromArray($columnDefinition['config']);
+        $this->fieldType = $fieldType->createFromArray($columnDefinition['config']);
     }
 
     public function getColumn(): string

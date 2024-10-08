@@ -23,7 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 #[FieldType(name: SpecialFieldType::PALETTE->value, tcaType: '')]
 final class PaletteFieldType extends AbstractFieldType
 {
-    public static function createFromArray(array $settings): PaletteFieldType
+    public function createFromArray(array $settings): PaletteFieldType
     {
         return new self();
     }

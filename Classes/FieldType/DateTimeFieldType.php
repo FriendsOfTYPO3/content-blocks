@@ -39,9 +39,9 @@ final class DateTimeFieldType extends AbstractFieldType
     private bool $disableAgeDisplay = false;
     private string $format = '';
 
-    public static function createFromArray(array $settings): DateTimeFieldType
+    public function createFromArray(array $settings): DateTimeFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -64,7 +64,7 @@ final class DateTimeFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'datetime';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->dbType !== '' ? $this->default : $this->convertDateToTimestamp($this->default);
         }

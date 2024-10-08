@@ -29,7 +29,6 @@ use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
@@ -1080,7 +1079,7 @@ final class ContentBlockCompiler
                         $type = $containerField['type'] ?? '';
                         if (
                             !$this->fieldTypeRegistry->has($type)
-                            || !$this->isValidFlexFormField($type,)
+                            || !$this->isValidFlexFormField($type)
                         ) {
                             throw new \InvalidArgumentException(
                                 'FlexForm field "' . $field['identifier'] . '" has an invalid field of type "'

@@ -23,7 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 #[FieldType(name: SpecialFieldType::LINEBREAK->value, tcaType: '')]
 final class LinebreakFieldType extends AbstractFieldType
 {
-    public static function createFromArray(array $settings): LinebreakFieldType
+    public function createFromArray(array $settings): LinebreakFieldType
     {
         return new self();
     }

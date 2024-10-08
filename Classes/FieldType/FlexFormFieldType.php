@@ -32,9 +32,9 @@ final class FlexFormFieldType extends AbstractFieldType
     private string $ds_pointerField = '';
     private array $ds = [];
 
-    public static function createFromArray(array $settings): FlexFormFieldType
+    public function createFromArray(array $settings): FlexFormFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->ds_pointerField = (string)($settings['ds_pointerField'] ?? $self->ds_pointerField);
         $self->ds = (array)($settings['ds'] ?? $self->ds);
@@ -45,7 +45,7 @@ final class FlexFormFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'flex';
+        $config['type'] = $this->getTcaType();
         if ($this->ds_pointerField !== '') {
             $config['ds_pointerField'] = $this->ds_pointerField;
         }

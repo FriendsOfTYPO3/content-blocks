@@ -33,9 +33,9 @@ final class SlugFieldType extends AbstractFieldType
     private array $generatorOptions = [];
     private bool $prependSlash = false;
 
-    public static function createFromArray(array $settings): FieldTypeInterface
+    public function createFromArray(array $settings): FieldTypeInterface
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
@@ -50,7 +50,7 @@ final class SlugFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'slug';
+        $config['type'] = $this->getTcaType();
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }

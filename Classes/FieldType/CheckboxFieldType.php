@@ -35,9 +35,9 @@ final class CheckboxFieldType extends AbstractFieldType
     private array $validation = [];
     private array $items = [];
 
-    public static function createFromArray(array $settings): CheckboxFieldType
+    public function createFromArray(array $settings): CheckboxFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (int)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -55,7 +55,7 @@ final class CheckboxFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'check';
+        $config['type'] = $this->getTcaType();
         if ($this->default > 0) {
             $config['default'] = $this->default;
         }

@@ -51,9 +51,9 @@ final class RelationFieldType extends AbstractFieldType
     private array $appearance = [];
     private string $relationship = '';
 
-    public static function createFromArray(array $settings): RelationFieldType
+    public function createFromArray(array $settings): RelationFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -90,7 +90,7 @@ final class RelationFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'group';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

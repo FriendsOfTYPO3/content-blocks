@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class FlexFormFieldTypeTest extends UnitTestCase
@@ -64,7 +64,9 @@ final class FlexFormFieldTypeTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FlexFormFieldType::createFromArray($config);
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldType = $fieldTypeRegistry->get('FlexForm');
+        $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }

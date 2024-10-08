@@ -25,7 +25,7 @@ interface FieldTypeInterface
     public function setName(string $name): void;
     public function setTcaType(string $tcaType): void;
     public function setSearchable(bool $searchable): void;
-    public static function createFromArray(array $settings): FieldTypeInterface;
+    public function createFromArray(array $settings): FieldTypeInterface;
     public function getTca(): array;
     public function getSql(string $column): string;
 }

@@ -31,9 +31,9 @@ final class RadioFieldType extends AbstractFieldType
     private string $itemsProcFunc = '';
     private array $items = [];
 
-    public static function createFromArray(array $settings): RadioFieldType
+    public function createFromArray(array $settings): RadioFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -50,7 +50,7 @@ final class RadioFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'radio';
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }

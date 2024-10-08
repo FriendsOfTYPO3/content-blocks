@@ -52,9 +52,9 @@ final class CollectionFieldType extends AbstractFieldType
     private string $symmetric_sortby = '';
     private string $relationship = '';
 
-    public static function createFromArray(array $settings): CollectionFieldType
+    public function createFromArray(array $settings): CollectionFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
@@ -88,7 +88,7 @@ final class CollectionFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'inline';
+        $config['type'] = $this->getTcaType();
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }

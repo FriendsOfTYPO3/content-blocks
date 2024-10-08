@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'Text', tcaType: 'input')]
+#[FieldType(name: 'Text', tcaType: 'input', searchable: true)]
 final class TextFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
@@ -39,9 +39,9 @@ final class TextFieldType extends AbstractFieldType
     private array $eval = [];
     private ?bool $autocomplete = null;
 
-    public static function createFromArray(array $settings): TextFieldType
+    public function createFromArray(array $settings): TextFieldType
     {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -65,7 +65,7 @@ final class TextFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = 'input';
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
