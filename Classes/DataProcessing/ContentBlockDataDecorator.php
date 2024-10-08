@@ -42,7 +42,6 @@ final class ContentBlockDataDecorator
         private readonly GridProcessor $gridProcessor,
         private readonly ContentObjectProcessor $contentObjectProcessor,
         private readonly ContentTypeResolver $contentTypeResolver,
-        private readonly FieldTypeRegistry $fieldTypeRegistry,
     ) {}
 
     public function setRequest(ServerRequestInterface $request): void
@@ -85,12 +84,11 @@ final class ContentBlockDataDecorator
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
-            $fieldTypeService = $this->fieldTypeRegistry->get($fieldType::class);
-            if (SpecialFieldType::tryFrom($fieldTypeService->getName()) !== null) {
+            if (SpecialFieldType::tryFrom($fieldType->getName()) !== null) {
                 continue;
             }
             // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
-            if ($fieldTypeService->getTcaType() === 'passthrough') {
+            if ($fieldType->getTcaType() === 'passthrough') {
                 $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->getUniqueIdentifier());
             } else {
                 $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->getUniqueIdentifier());
