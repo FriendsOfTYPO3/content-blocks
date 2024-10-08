@@ -93,7 +93,7 @@ utilise CSS bootstrap classes like `card`.
 
     <div class="card card-size-medium">
         <div class="card-body">
-            <be:link.editRecord uid="{data.uid}" table="{data.tableName}" fields="author">
+            <be:link.editRecord uid="{data.uid}" table="{data.mainType}" fields="author">
                 Author: {data.author}
             </be:link.editRecord>
         </div>
