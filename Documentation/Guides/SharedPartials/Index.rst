@@ -40,8 +40,8 @@ For a specific Content Block
 
 .. _editor_preview_partials:
 
-For all EditorPreview.html templates
-====================================
+For all backend-preview.html templates
+======================================
 
 Sometimes it is needed to include partials from another source to be used in the
 preview. For this some Page TsConfig is needed. This can be included in the

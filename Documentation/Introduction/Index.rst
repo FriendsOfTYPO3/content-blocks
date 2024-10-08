@@ -37,26 +37,26 @@ easily copy-pasted into other projects.
 .. code-block:: none
    :caption: Directory structure of a Content Block
 
-   ├── Assets
-   │   └── Icon.svg
-   ├── Source
-   │   ├── Language
-   │   │   └── Labels.xlf
-   │   ├── EditorPreview.html
-   │   └── Frontend.html
-   └── EditorInterface.yaml
+   ├── assets
+   │   └── icon.svg
+   ├── language
+   │    └── labels.xlf
+   ├── templates
+   │   ├── backend-preview.html
+   │   └── frontend.html
+   └── config.yaml
 
 *  Learn more about the :ref:`Content Block definition <cb_definition>`
 
-EditorInterface.yaml
-====================
+config.yaml
+===========
 
 This file is the **basis** for the definition. It defines **exactly** one
 Content Type. Using YAML over PHP includes a wider range of people, which is
 able to modify Content Blocks without the need of a developer.
 
 .. code-block:: yaml
-   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name/EditorInterface.yaml
+   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name/config.yaml
 
     name: vendor/content-block-name
     fields:

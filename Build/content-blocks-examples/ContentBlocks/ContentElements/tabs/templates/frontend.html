@@ -1,0 +1,26 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:asset.css identifier="cbTabsCssFrontend" href="{cb:assetPath()}/frontend.css"/>
+<f:asset.script identifier="cbTabsJsFrontend" src="{cb:assetPath()}/frontend.js"/>
+
+<div class="cb-tabs">
+    <div class="tab">
+        <f:for each="{data.tabs_item}" as="item" iteration="i">
+            <button class="tab-links{f:if(condition: i.isFirst, then: ' active', else: '')}" data-target="tab-{data.uid}-{item.uid}">
+                {item.header}
+            </button>
+        </f:for>
+    </div>
+    <f:for each="{data._grids.tabs_item}" as="item" iteration="i">
+        <f:variable name="style">style="display:{f:if(condition: i.isFirst, then: 'block', else: 'none')};"</f:variable>
+        <div id="tab-{data.uid}-{grid.uid}" class="tab-content" {style -> f:format.raw()}>
+            <f:format.raw>{item.content}</f:format.raw>
+        </div>
+    </f:for>
+</div>
+
+</html>

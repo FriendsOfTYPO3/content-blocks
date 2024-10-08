@@ -28,7 +28,7 @@ Common root options
    :Required: false
    :Type: string
 
-   This is the title of the Content Block. If you have a Labels.xlf file, you
+   This is the title of the Content Block. If you have a labels.xlf file, you
    should define it there with the key :xml:`title`. If both are defined, the
    translation file has precedence. If nothing is defined, the title falls back
    to :yaml:`name`.

@@ -5,7 +5,7 @@
 YAML reference
 ==============
 
-The heart of a Content Block is the `EditorInterface.yaml` file. Here you can
+The heart of a Content Block is the `config.yaml` file. Here you can
 find all possible configuration options. There are slight differences, whether
 you are dealing with :ref:`Content Elements <yaml_reference_content_element>`,
 :ref:`Page Types <yaml_reference_page_types>` or

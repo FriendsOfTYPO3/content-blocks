@@ -26,7 +26,9 @@ use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 /**
  * Sets up Fluid and applies the same DataProcessor as the frontend to the data record.
@@ -41,6 +43,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected RootPathsSettings $rootPathsSettings,
+        protected ViewFactoryInterface $viewFactory,
     ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
@@ -58,7 +61,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             $contentTypeDefinition = $contentTypeCollection->getFirst();
         }
         $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
-        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
 
         // Fall back to standard preview rendering if EditorPreview.html does not exist.
         $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
@@ -71,7 +74,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $data = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
         $view = $this->createView($contentBlockPrivatePath, $request, $item);
         $view->assign('data', $data);
-        $result = (string)$view->render();
+        $result = $view->render();
         return $result;
     }
 
@@ -79,15 +82,17 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         string $contentBlockPrivatePath,
         ServerRequestInterface $request,
         GridColumnItem $item
-    ): StandaloneView {
+    ): ViewInterface {
         $pageUid = $item->getContext()->getPageId();
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths($this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid));
-        $view->setPartialRootPaths($this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid));
-        $view->setTemplateRootPaths([$contentBlockPrivatePath]);
-        $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
-        $view->setRequest($request);
-        return $view;
+        $partialRootPaths = $this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid);
+        $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid);
+        $viewFactoryData = new ViewFactoryData(
+            partialRootPaths: $partialRootPaths,
+            layoutRootPaths: $layoutRootPaths,
+            templatePathAndFilename: $contentBlockPrivatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName(),
+            request: $request
+        );
+        return $this->viewFactory->create($viewFactoryData);
     }
 
     /**
@@ -100,7 +105,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
             'EXT:backend/Resources/Private/Partials/',
             'EXT:content_blocks/Resources/Private/Partials/',
             ...$contentBlockPartialRootPaths,
-            $contentBlockPrivatePath . '/Partials/',
+            $contentBlockPrivatePath . '/partials/',
         ];
         return $partialRootPaths;
     }
@@ -111,7 +116,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
         $layoutRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $layoutRootPaths[] = $contentBlockPrivatePath . '/Layouts/';
+        $layoutRootPaths[] = $contentBlockPrivatePath . '/layouts/';
         return $layoutRootPaths;
     }
 }

@@ -40,11 +40,11 @@ final class LanguagePathViewHelperTest extends FunctionalTestCase
         return [
             'name explicitly set' => [
                 '<cb:languagePath name="typo3tests/content-element-b" />',
-                'LLL:EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/Source/Language/Labels.xlf',
+                'LLL:EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/language/labels.xlf',
             ],
             'fallback to name from context' => [
                 '<cb:languagePath />',
-                'LLL:EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/Source/Language/Labels.xlf',
+                'LLL:EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/language/labels.xlf',
             ],
         ];
     }

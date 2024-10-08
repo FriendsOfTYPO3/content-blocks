@@ -10,7 +10,7 @@ not a Content Element or Page Type. Adding custom records requires you to define
 a :yaml:`table` name. A minimal example looks like this:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/config.yaml
 
     name: example/my-record-type
     table: tx_vendor_my_record_type
@@ -35,7 +35,7 @@ It is also possible to allow creation of Record Types in normal pages. For that
 you have to enable :yaml:`ignorePageTypeRestriction`:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/config.yaml
 
     name: example/my-record-type
     table: my_record_type
@@ -58,7 +58,7 @@ interface as a select dropdown. The different types will be also added
 automatically to the list:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/diver/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/diver/config.yaml
 
     name: example/diver
     table: person
@@ -69,7 +69,7 @@ automatically to the list:
         type: Text
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/instructor/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/instructor/config.yaml
 
     name: example/instructor
     table: person
@@ -94,7 +94,7 @@ as the "default" type. This is done simply by giving it the highest
 configuration for all other types.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/default/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/default/config.yaml
 
     name: example/default
     table: my_record
@@ -109,7 +109,7 @@ configuration for all other types.
         type: Text
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/special/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/special/config.yaml
 
     name: example/special
     table: my_record
@@ -162,7 +162,7 @@ In addition, you can set a fixed :yaml:`typeName` if you wish. In this example
 we extend the News records with a custom type:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-news-record/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-news-record/config.yaml
 
     name: example/my-news-record
     table: tx_news_domain_model_news

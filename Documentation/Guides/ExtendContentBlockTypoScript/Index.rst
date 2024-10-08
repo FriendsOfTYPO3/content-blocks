@@ -35,7 +35,7 @@ known as "TypoScript Object Browser", the Content Elements created by Content
 Blocks can be found as usual in the section `tt_content`.
 
 The name corresponds to the :confval:`typeName <content-element-typename>`
-defined in EditorInterface.yaml.
+defined in config.yaml.
 
 Example:
 
@@ -43,15 +43,12 @@ Example:
 
     tt_content {
         myvendor_mycontentblockname {
+            file = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/frontend.html
             layoutRootPaths {
-                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/Source/Layouts/
+                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/layouts/
             }
             partialRootPaths {
-                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/Source/Partials/
-            }
-            templateName = Frontend
-            templateRootPaths {
-                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/Source/
+                20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/partials/
             }
         }
     }

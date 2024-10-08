@@ -1,19 +1,19 @@
 .. include:: /Includes.rst.txt
 .. _cb_definition_source:
 
-======
-Source
-======
+=========
+templates
+=========
 
-The **Source** folder contains private resources. If you are familiar with the
+The **templates** folder contains private resources. If you are familiar with the
 directory structure of extensions, this would be the **Resources/Private**
 folder. There is a limited set of directories and files, which you can place
 here.
 
-EditorPreview.html
-==================
+backend-preview.html
+====================
 
-The **EditorPreview.html** can be added to customize the backend preview for
+The **backend-preview.html** can be added to customize the backend preview for
 your editors. By default, TYPO3 comes with a standard preview renderer. However,
 it is specialized in rendering the preview of Core Content Elements. This means
 only Core fields like :sql:`header`, :sql:`subheader` or :sql:`bodytext` are
@@ -50,7 +50,7 @@ See also:
 *  Learn more about :ref:`templating <cb_templating>`.
 *  Learn how to include :ref:`shared partials <editor_preview_partials>`
 
-Frontend.html
+frontend.html
 =============
 
 This is the default frontend rendering definition for :ref:`Content Elements <yaml_reference_content_element>`.
@@ -58,18 +58,33 @@ You can access your fields by the variable :html:`{data}`.
 
 Learn more about :ref:`templating <cb_templating>`.
 
-Partials
+partials
 ========
 
-For larger Content Elements, you can divide your **Frontend.html** template into
+For larger Content Elements, you can divide your **frontend.html** template into
 smaller chunks by creating separate partials here.
 
 Partials are included as you normally would in any Fluid template.
 
+.. note::
+
+   Due to current Fluid restrictions, partials have to start with an uppercase
+   letter. This restriction might be lifted in later Fluid versions (v5 or above).
+
+
 .. code-block:: html
 
-   <f:render partial="Component.html" arguments="{_all}"/>
+   <f:render partial="Component" arguments="{_all}"/>
 
 See also:
 
-*  Learn how to :ref:`share Partials <cb_extension_partials>` between Content Blocks.
+*  Learn how to :ref:`share partials <cb_extension_partials>` between Content Blocks.
+
+layouts
+=======
+
+You can also add layouts to your Content Block if needed.
+
+.. code-block:: html
+
+   <f:layout name="MyLayout">

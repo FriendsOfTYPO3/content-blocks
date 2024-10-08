@@ -1,11 +1,11 @@
 .. include:: /Includes.rst.txt
 .. _cb_definition_editor_interface:
 
-====================
-EditorInterface.yaml
-====================
+===========
+config.yaml
+===========
 
-The heart of a Content Block is the **EditorInterface.yaml** file. This YAML
+The heart of a Content Block is the **config.yaml** file. This YAML
 file defines both the available fields and the structure:
 
 .. code-block:: yaml

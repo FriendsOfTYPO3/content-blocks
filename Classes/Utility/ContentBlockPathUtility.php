@@ -37,72 +37,57 @@ class ContentBlockPathUtility
 
     public static function getContentBlockDefinitionFileName(): string
     {
-        return 'EditorInterface.yaml';
+        return 'config.yaml';
     }
 
     public static function getBackendPreviewFileName(): string
     {
-        return 'EditorPreview.html';
-    }
-
-    public static function getBackendPreviewFileNameWithoutExtension(): string
-    {
-        return substr(self::getBackendPreviewFileName(), 0, -5);
+        return 'backend-preview.html';
     }
 
     public static function getBackendPreviewPath(): string
     {
-        return self::getPrivateFolder() . '/' . self::getBackendPreviewFileName();
+        return self::getTemplatesFolder() . '/' . self::getBackendPreviewFileName();
     }
 
     public static function getFrontendTemplateFileName(): string
     {
-        return 'Frontend.html';
-    }
-
-    public static function getFrontendTemplateFileNameWithoutExtension(): string
-    {
-        return substr(self::getFrontendTemplateFileName(), 0, -5);
+        return 'frontend.html';
     }
 
     public static function getFrontendTemplatePath(): string
     {
-        return self::getPrivateFolder() . '/' . self::getFrontendTemplateFileName();
-    }
-
-    public static function getLanguageFolderPath(): string
-    {
-        return self::getPrivateFolder() . '/Language';
+        return self::getTemplatesFolder() . '/' . self::getFrontendTemplateFileName();
     }
 
     public static function getLanguageFilePath(): string
     {
-        return self::getLanguageFolderPath() . '/Labels.xlf';
+        return self::getLanguageFolder() . '/labels.xlf';
     }
 
     public static function getIconNameWithoutFileExtension(): string
     {
-        return 'Icon';
+        return 'icon';
     }
 
     public static function getIconHideInMenuNameWithoutFileExtension(): string
     {
-        return 'IconHideInMenu';
+        return 'icon-hide-in-menu';
     }
 
     public static function getIconRootNameWithoutFileExtension(): string
     {
-        return 'IconRoot';
+        return 'icon-root';
     }
 
     public static function getIconPathWithoutFileExtension(): string
     {
-        return self::getPublicFolder() . '/' . self::getIconNameWithoutFileExtension();
+        return self::getAssetsFolder() . '/' . self::getIconNameWithoutFileExtension();
     }
 
     public static function getHideInMenuIconPathWithoutFileExtension(): string
     {
-        return self::getPublicFolder() . '/' . self::getIconHideInMenuNameWithoutFileExtension();
+        return self::getAssetsFolder() . '/' . self::getIconHideInMenuNameWithoutFileExtension();
     }
 
     public static function getRelativeContentElementsPath(): string
@@ -140,14 +125,19 @@ class ContentBlockPathUtility
         return 'RecordTypes';
     }
 
-    public static function getPublicFolder(): string
+    public static function getAssetsFolder(): string
     {
-        return 'Assets';
+        return 'assets';
     }
 
-    public static function getPrivateFolder(): string
+    public static function getTemplatesFolder(): string
     {
-        return 'Source';
+        return 'templates';
+    }
+
+    public static function getLanguageFolder(): string
+    {
+        return 'language';
     }
 
     public static function getHostExtPublicContentBlockBasePath(string $hostExtension): string
