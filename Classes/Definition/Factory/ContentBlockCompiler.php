@@ -1072,14 +1072,12 @@ final class ContentBlockCompiler
                         );
                     }
                     foreach ($container['fields'] as $containerField) {
-                        $type = $containerField['type'] ?? '';
-                        if (
-                            !$this->fieldTypeRegistry->has($type)
-                            || !$this->isValidFlexFormField($type)
-                        ) {
+                        $containerFieldTypeName = $containerField['type'] ?? '';
+                        $this->fieldTypeRegistry->get($containerFieldTypeName);
+                        if (!$this->isValidFlexFormField($containerFieldTypeName)) {
                             throw new \InvalidArgumentException(
                                 'FlexForm field "' . $field['identifier'] . '" has an invalid field of type "'
-                                . $containerField['type'] . '" inside of a "container" item. Please use valid field'
+                                . $containerFieldTypeName . '" inside of a "container" item. Please use valid field'
                                 . ' types in Content Block "' . $contentBlock->getName() . '".',
                                 1686330594
                             );
@@ -1088,12 +1086,11 @@ final class ContentBlockCompiler
                 }
                 continue;
             }
-            if (
-                !$this->fieldTypeRegistry->has($flexField['type'])
-                || !$this->isValidFlexFormField($flexFieldType)
-            ) {
+            $flexFieldTypeName = $flexField['type'];
+            $this->fieldTypeRegistry->get($flexFieldTypeName);
+            if (!$this->isValidFlexFormField($flexFieldTypeName)) {
                 throw new \InvalidArgumentException(
-                    'Field type "' . $flexField['type'] . '" with identifier "' . $flexField['identifier']
+                    'Field type "' . $flexFieldTypeName . '" with identifier "' . $flexField['identifier']
                     . '" is not allowed inside FlexForm in Content Block "' . $contentBlock->getName() . '".',
                     1685220309
                 );
