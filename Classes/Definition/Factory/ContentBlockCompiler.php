@@ -438,18 +438,19 @@ final class ContentBlockCompiler
         $fields = [];
         $paletteItems = [];
         foreach ($rootPalette['fields'] as $paletteField) {
-            $type = $paletteField['type'] ?? '';
-            if (SpecialFieldType::LINEBREAK::tryFrom($type) === SpecialFieldType::LINEBREAK) {
+            $paletteFieldType = $this->resolveType($input, $paletteField);
+            $fieldTypeName = $paletteFieldType->getName();
+            if (SpecialFieldType::tryFrom($fieldTypeName) === SpecialFieldType::LINEBREAK) {
                 $paletteItems[] = new LinebreakDefinition();
             } else {
                 $this->assertNoPaletteInPalette(
-                    $type,
+                    $fieldTypeName,
                     $paletteField['identifier'],
                     $rootPaletteIdentifier,
                     $input->contentBlock
                 );
                 $this->assertNoTabInPalette(
-                    $type,
+                    $fieldTypeName,
                     $paletteField['identifier'],
                     $rootPaletteIdentifier,
                     $input->contentBlock
