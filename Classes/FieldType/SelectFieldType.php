@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class SelectFieldType implements FieldTypeInterface
+#[FieldType(name: 'Select', tcaType: 'select')]
+final class SelectFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithCustomProperties;
@@ -57,24 +58,9 @@ final class SelectFieldType implements FieldTypeInterface
     private array $treeConfig = [];
     private string $relationship = '';
 
-    public static function getName(): string
+    public function createFromArray(array $settings): SelectFieldType
     {
-        return 'Select';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'select';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
-    public static function createFromArray(array $settings): SelectFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
         if (is_string($default) || is_int($default)) {
@@ -121,7 +107,7 @@ final class SelectFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -204,10 +190,5 @@ final class SelectFieldType implements FieldTypeInterface
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

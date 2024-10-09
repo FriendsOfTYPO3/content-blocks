@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\FolderFieldType;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class FolderFieldTypeTest extends UnitTestCase
@@ -113,7 +113,9 @@ final class FolderFieldTypeTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FolderFieldType::createFromArray($config);
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldType = $fieldTypeRegistry->get('Folder');
+        $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }

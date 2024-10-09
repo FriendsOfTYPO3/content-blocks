@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class CollectionFieldTypeTest extends UnitTestCase
@@ -176,7 +176,9 @@ final class CollectionFieldTypeTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = CollectionFieldType::createFromArray($config);
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldType = $fieldTypeRegistry->get('Collection');
+        $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }

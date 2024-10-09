@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class CheckboxFieldType implements FieldTypeInterface
+#[FieldType(name: 'Checkbox', tcaType: 'check')]
+final class CheckboxFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithCustomProperties;
@@ -34,24 +35,9 @@ final class CheckboxFieldType implements FieldTypeInterface
     private array $validation = [];
     private array $items = [];
 
-    public static function getName(): string
+    public function createFromArray(array $settings): CheckboxFieldType
     {
-        return 'Checkbox';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'check';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
-    public static function createFromArray(array $settings): CheckboxFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (int)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -69,7 +55,7 @@ final class CheckboxFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->default > 0) {
             $config['default'] = $this->default;
         }
@@ -97,10 +83,5 @@ final class CheckboxFieldType implements FieldTypeInterface
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

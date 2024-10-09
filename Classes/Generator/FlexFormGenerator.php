@@ -30,7 +30,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FlexFormGenerator
 {
-    public function __construct(protected readonly LanguageFileRegistry $languageFileRegistry) {}
+    public function __construct(
+        protected readonly LanguageFileRegistry $languageFileRegistry,
+    ) {}
 
     public function generate(FlexFormDefinition $flexFormDefinition): string
     {
@@ -114,8 +116,7 @@ class FlexFormGenerator
         }
         $fieldType = $flexFormTcaDefinition->getFieldType();
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        $tcaFieldType = $fieldType::getTcaType();
-        if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
+        if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
             $items = $flexFormTca['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 if (!isset($item['labelPath'])) {

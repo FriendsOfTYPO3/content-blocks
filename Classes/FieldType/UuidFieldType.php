@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class UuidFieldType implements FieldTypeInterface
+#[FieldType(name: 'Uuid', tcaType: 'uuid', searchable: true)]
+final class UuidFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -28,24 +29,9 @@ final class UuidFieldType implements FieldTypeInterface
     private bool $enableCopyToClipboard = true;
     private ?int $version = null;
 
-    public static function getName(): string
+    public function createFromArray(array $settings): UuidFieldType
     {
-        return 'Uuid';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'uuid';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
-
-    public static function createFromArray(array $settings): UuidFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->size = (int)($settings['size'] ?? $self->size);
         if (array_key_exists('version', $settings)) {
@@ -59,7 +45,7 @@ final class UuidFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
@@ -72,10 +58,5 @@ final class UuidFieldType implements FieldTypeInterface
 
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

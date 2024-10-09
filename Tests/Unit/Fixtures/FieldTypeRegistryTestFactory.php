@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\ColorFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\DateTimeFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\EmailFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\FieldType\FileFieldType;
@@ -79,9 +80,15 @@ class FieldTypeRegistryTestFactory
         ];
         $keyedFieldTypes = [];
         foreach ($fieldTypes as $fieldType) {
-            $keyedFieldTypes[$fieldType::getName()] = fn(): FieldTypeInterface => $fieldType;
+            $reflectionClass = new \ReflectionClass($fieldType);
+            $attributes = $reflectionClass->getAttributes(FieldType::class);
+            $fieldTypeAttribute = $attributes[0]->newInstance();
+            $fieldType->setName($fieldTypeAttribute->name);
+            $fieldType->setTcaType($fieldTypeAttribute->tcaType);
+            $fieldType->setSearchable($fieldTypeAttribute->searchable);
+            $keyedFieldTypes[$fieldType->getName()] = fn(): FieldTypeInterface => $fieldType;
         }
         $serviceLocator = new ServiceLocator($keyedFieldTypes);
-        return new FieldTypeRegistry($serviceLocator, $fieldTypes);
+        return new FieldTypeRegistry($serviceLocator);
     }
 }

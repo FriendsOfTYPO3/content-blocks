@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ColorFieldType implements FieldTypeInterface
+#[FieldType(name: 'Color', tcaType: 'color', searchable: true)]
+final class ColorFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -34,24 +35,9 @@ final class ColorFieldType implements FieldTypeInterface
     private array $valuePicker = [];
     private ?bool $autocomplete = null;
 
-    public static function getName(): string
+    public function createFromArray(array $settings): ColorFieldType
     {
-        return 'Color';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'color';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
-
-    public static function createFromArray(array $settings): ColorFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -71,7 +57,7 @@ final class ColorFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
@@ -101,10 +87,5 @@ final class ColorFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

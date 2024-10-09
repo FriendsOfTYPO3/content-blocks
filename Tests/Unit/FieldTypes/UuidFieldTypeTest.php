@@ -19,7 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\UuidFieldType;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class UuidFieldTypeTest extends UnitTestCase
@@ -85,25 +85,10 @@ final class UuidFieldTypeTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = UuidFieldType::createFromArray($config);
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldType = $fieldTypeRegistry->get('Uuid');
+        $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
-    }
-
-    public static function getSqlReturnsExpectedSqlDefinitionDataProvider(): iterable
-    {
-        yield 'default varchar column' => [
-            'uniqueColumnName' => 'cb_example_myText',
-            'expectedSql' => '',
-        ];
-    }
-
-    #[DataProvider('getSqlReturnsExpectedSqlDefinitionDataProvider')]
-    #[Test]
-    public function getSqlReturnsExpectedSqlDefinition(string $uniqueColumnName, string $expectedSql): void
-    {
-        $fieldType = UuidFieldType::createFromArray([]);
-
-        self::assertSame($expectedSql, $fieldType->getSql($uniqueColumnName));
     }
 }

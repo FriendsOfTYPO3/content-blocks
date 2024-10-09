@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class CollectionFieldType implements FieldTypeInterface
+#[FieldType(name: 'Collection', tcaType: 'inline')]
+final class CollectionFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -51,24 +52,9 @@ final class CollectionFieldType implements FieldTypeInterface
     private string $symmetric_sortby = '';
     private string $relationship = '';
 
-    public static function getName(): string
+    public function createFromArray(array $settings): CollectionFieldType
     {
-        return 'Collection';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'inline';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
-    public static function createFromArray(array $settings): CollectionFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
@@ -102,7 +88,7 @@ final class CollectionFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->readOnly) {
             $config['readOnly'] = true;
         }
@@ -183,10 +169,5 @@ final class CollectionFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

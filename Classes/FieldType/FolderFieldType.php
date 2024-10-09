@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class FolderFieldType implements FieldTypeInterface
+#[FieldType(name: 'Folder', tcaType: 'folder')]
+final class FolderFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -36,24 +37,9 @@ final class FolderFieldType implements FieldTypeInterface
     private array $elementBrowserEntryPoints = [];
     private string $relationship = '';
 
-    public static function getName(): string
+    public function createFromArray(array $settings): FolderFieldType
     {
-        return 'Folder';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'folder';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
-    public static function createFromArray(array $settings): FolderFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -73,7 +59,7 @@ final class FolderFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -109,10 +95,5 @@ final class FolderFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

@@ -83,11 +83,11 @@ final class ContentBlockDataDecorator
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
-            if (SpecialFieldType::tryFrom($fieldType::getName()) !== null) {
+            if (SpecialFieldType::tryFrom($fieldType->getName()) !== null) {
                 continue;
             }
             // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
-            if ($fieldType::getTcaType() === 'passthrough') {
+            if ($fieldType->getTcaType() === 'passthrough') {
                 $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->getUniqueIdentifier());
             } else {
                 $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->getUniqueIdentifier());

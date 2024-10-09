@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class JsonFieldType implements FieldTypeInterface
+#[FieldType(name: 'Json', tcaType: 'json', searchable: true)]
+final class JsonFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -32,24 +33,9 @@ final class JsonFieldType implements FieldTypeInterface
     private bool $readOnly = false;
     private string $placeholder = '';
 
-    public static function getName(): string
+    public function createFromArray(array $settings): JsonFieldType
     {
-        return 'Json';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'json';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
-
-    public static function createFromArray(array $settings): JsonFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->required = (bool)($settings['required'] ?? $self->required);
@@ -65,7 +51,7 @@ final class JsonFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -90,10 +76,5 @@ final class JsonFieldType implements FieldTypeInterface
 
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

@@ -44,7 +44,6 @@ final class TcaFieldDefinition
         if ($fieldType === null) {
             throw new \InvalidArgumentException('The type in the config for a TcaFieldDefinition must not be empty.', 1629277139);
         }
-
         $self = new self();
         return $self
             ->withParentContentType(ContentType::getByTable($array['parentTable'] ?? ''))
@@ -53,7 +52,7 @@ final class TcaFieldDefinition
             ->withLabelPath($array['labelPath'] ?? '')
             ->withDescriptionPath($array['descriptionPath'] ?? '')
             ->withUseExistingField($array['config']['useExistingField'] ?? false)
-            ->withFieldType($fieldType::createFromArray($array['config']));
+            ->withFieldType($fieldType->createFromArray($array['config']));
     }
 
     public function getUniqueIdentifier(): string

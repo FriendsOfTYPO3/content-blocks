@@ -17,17 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
-use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 final readonly class FieldTypeRegistry
 {
     public function __construct(
-        #[AutowireLocator('content_blocks.field_type', defaultIndexMethod: 'getName')]
+        #[AutowireLocator(FieldType::TAG_NAME, indexAttribute: 'name')]
         private ServiceLocator $types,
-        #[AutowireIterator('content_blocks.field_type')]
-        private iterable $fieldTypes,
     ) {}
 
     public function has(string $type): bool
@@ -41,22 +38,12 @@ final readonly class FieldTypeRegistry
     }
 
     /**
-     * @return iterable<FieldTypeInterface>
+     * @return \Generator<FieldTypeInterface>
      */
-    public function all(): iterable
+    public function all(): \Generator
     {
-        return $this->fieldTypes;
-    }
-
-    /**
-     * @return FieldTypeInterface[]
-     */
-    public function toArray(): array
-    {
-        $allFieldTypes = [];
-        foreach ($this->fieldTypes as $fieldType) {
-            $allFieldTypes[] = $fieldType;
+        foreach ($this->types as $type) {
+            yield $type;
         }
-        return $allFieldTypes;
     }
 }

@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TextareaFieldType implements FieldTypeInterface
+#[FieldType(name: 'Textarea', tcaType: 'text', searchable: true)]
+final class TextareaFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -43,24 +44,9 @@ final class TextareaFieldType implements FieldTypeInterface
     private string $richtextConfiguration = '';
     private string $format = '';
 
-    public static function getName(): string
+    public function createFromArray(array $settings): TextareaFieldType
     {
-        return 'Textarea';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'text';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
-
-    public static function createFromArray(array $settings): TextareaFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -87,7 +73,7 @@ final class TextareaFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;
         }
@@ -144,10 +130,5 @@ final class TextareaFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

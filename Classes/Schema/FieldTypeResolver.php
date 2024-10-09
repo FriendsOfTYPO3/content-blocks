@@ -36,10 +36,13 @@ class FieldTypeResolver
         }
         $tcaType = $configuration['config']['type'];
         foreach ($this->fieldTypeRegistry->all() as $fieldType) {
-            if ($fieldType::getTcaType() === $tcaType) {
+            if ($fieldType->getTcaType() === $tcaType) {
                 return $fieldType;
             }
         }
-        throw new \InvalidArgumentException('Field type "' . $tcaType . '" is either not implemented or cannot be shared in Content Blocks.', 1680110918);
+        throw new \InvalidArgumentException(
+            'Field type "' . $tcaType . '" is either not implemented or cannot be shared in Content Blocks.',
+            1680110918
+        );
     }
 }

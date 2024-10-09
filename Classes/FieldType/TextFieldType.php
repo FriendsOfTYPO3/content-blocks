@@ -20,7 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TextFieldType implements FieldTypeInterface
+#[FieldType(name: 'Text', tcaType: 'input', searchable: true)]
+final class TextFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
 
@@ -38,24 +39,9 @@ final class TextFieldType implements FieldTypeInterface
     private array $eval = [];
     private ?bool $autocomplete = null;
 
-    public static function getName(): string
+    public function createFromArray(array $settings): TextFieldType
     {
-        return 'Text';
-    }
-
-    public static function getTcaType(): string
-    {
-        return 'input';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return true;
-    }
-
-    public static function createFromArray(array $settings): TextFieldType
-    {
-        $self = new self();
+        $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -79,7 +65,7 @@ final class TextFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         $tca = $this->toTca();
-        $config['type'] = self::getTcaType();
+        $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
@@ -121,10 +107,5 @@ final class TextFieldType implements FieldTypeInterface
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

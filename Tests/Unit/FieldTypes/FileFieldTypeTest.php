@@ -19,8 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\FieldTypes;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\ContentBlocks\FieldType\FileFieldType;
-use TYPO3\CMS\Core\Resource\AbstractFile;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
+use TYPO3\CMS\Core\Resource\FileType;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class FileFieldTypeTest extends UnitTestCase
@@ -185,13 +185,13 @@ final class FileFieldTypeTest extends UnitTestCase
                     'type' => 'file',
                     'overrideChildTca' => [
                         'types' => [
-                            AbstractFile::FILETYPE_IMAGE => [
+                            FileType::IMAGE->value => [
                                 'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                             ],
-                            AbstractFile::FILETYPE_AUDIO => [
+                            FileType::AUDIO->value => [
                                 'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                             ],
-                            AbstractFile::FILETYPE_VIDEO => [
+                            FileType::VIDEO->value => [
                                 'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                             ],
                         ],
@@ -205,7 +205,9 @@ final class FileFieldTypeTest extends UnitTestCase
     #[Test]
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
-        $fieldConfiguration = FileFieldType::createFromArray($config);
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldType = $fieldTypeRegistry->get('File');
+        $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());
     }

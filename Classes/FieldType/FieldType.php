@@ -18,18 +18,16 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
 /**
- * @internal Not part of TYPO3's public API.
+ * Service tag to autoconfigure field types
  */
-#[FieldType(name: SpecialFieldType::PALETTE->value, tcaType: '')]
-final class PaletteFieldType extends AbstractFieldType
+#[\Attribute(\Attribute::TARGET_CLASS)]
+readonly class FieldType
 {
-    public function createFromArray(array $settings): PaletteFieldType
-    {
-        return new self();
-    }
+    public const TAG_NAME = 'content_blocks.field_type';
 
-    public function getTca(): array
-    {
-        return [];
-    }
+    public function __construct(
+        public string $name,
+        public string $tcaType,
+        public bool $searchable = false,
+    ) {}
 }

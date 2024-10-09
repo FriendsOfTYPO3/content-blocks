@@ -20,24 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TabFieldType implements FieldTypeInterface
+#[FieldType(name: SpecialFieldType::TAB->value, tcaType: '')]
+final class TabFieldType extends AbstractFieldType
 {
-    public static function getName(): string
-    {
-        return SpecialFieldType::TAB->value;
-    }
-
-    public static function getTcaType(): string
-    {
-        return '';
-    }
-
-    public static function isSearchable(): bool
-    {
-        return false;
-    }
-
-    public static function createFromArray(array $settings): TabFieldType
+    public function createFromArray(array $settings): TabFieldType
     {
         return new self();
     }
@@ -45,10 +31,5 @@ final class TabFieldType implements FieldTypeInterface
     public function getTca(): array
     {
         return [];
-    }
-
-    public function getSql(string $column): string
-    {
-        return '';
     }
 }

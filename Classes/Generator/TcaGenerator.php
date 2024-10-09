@@ -447,7 +447,7 @@ class TcaGenerator
     protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
     {
         $fieldType = $overrideColumn->getFieldType();
-        if ($fieldType::getTcaType() !== 'inline') {
+        if ($fieldType->getTcaType() !== 'inline') {
             return $overrideTca;
         }
         $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
@@ -552,7 +552,7 @@ class TcaGenerator
             return $option;
         }
         $fieldType = $tcaFieldDefinition->getFieldType();
-        $fieldTypeName = $fieldType::getName();
+        $fieldTypeName = $fieldType->getName();
         if ($fieldTypeName === $option['type']) {
             return $option['option'];
         }
@@ -584,8 +584,7 @@ class TcaGenerator
     protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
         $fieldType = $overrideColumn->getFieldType();
-        $tcaFieldType = $fieldType::getTcaType();
-        if ($tcaFieldType === 'passthrough') {
+        if ($fieldType->getTcaType() === 'passthrough') {
             return $column;
         }
         $name = $typeDefinition->getName();
@@ -598,7 +597,7 @@ class TcaGenerator
             $column['description'] = $descriptionPath;
         }
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        if (in_array($tcaFieldType, $itemsFieldTypes, true)) {
+        if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
             $items = $column['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 if (!isset($item['labelPath'])) {
@@ -692,8 +691,7 @@ class TcaGenerator
             $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
                 $fieldType = $columnFieldDefinition->getFieldType();
-                $tcaType = $fieldType::getTcaType();
-                if (in_array($tcaType, $preferredLabelTypes, true)) {
+                if (in_array($fieldType->getTcaType(), $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
                     break;
                 }
@@ -834,7 +832,8 @@ class TcaGenerator
         $searchFieldsString = $baseTca[$tableDefinition->getTable()]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
         foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $field) {
-            if ($field->getFieldType()->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
+            $fieldType = $field->getFieldType();
+            if ($fieldType->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
                 $searchFields[] = $field->getUniqueIdentifier();
             }
         }
