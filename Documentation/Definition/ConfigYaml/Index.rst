@@ -9,7 +9,7 @@ The heart of a Content Block is the **config.yaml** file. This YAML
 file defines both the available fields and the structure:
 
 .. code-block:: yaml
-   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name
+   :caption: EXT:some_extension/ContentBlocks/ContentElements/content-block-name/config.yaml
 
     name: vendor/content-block-name
     fields:
