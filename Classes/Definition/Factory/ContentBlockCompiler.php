@@ -399,18 +399,17 @@ final class ContentBlockCompiler
 
     private function handleRootField(array $rootField, ProcessingInput $input, ProcessedFieldsResult $result): array
     {
-        $type = $rootField['type'] ?? '';
         $rootFieldType = $this->resolveType($input, $rootField);
-        $tcaType = $rootFieldType->getTcaType();
-        $specialFieldType = SpecialFieldType::tryFrom($type);
+        $fieldTypeName = $rootFieldType->getName();
+        $specialFieldType = SpecialFieldType::tryFrom($fieldTypeName);
         if (
             $specialFieldType === SpecialFieldType::LINEBREAK
             && ($rootField['ignoreIfNotInPalette'] ?? false)
         ) {
             return [];
         }
-        $this->assertNoLinebreakOutsideOfPalette($type, $input->contentBlock);
-        if ($tcaType === 'passthrough') {
+        $this->assertNoLinebreakOutsideOfPalette($fieldTypeName, $input->contentBlock);
+        if ($rootFieldType->getTcaType() === 'passthrough') {
             return [$rootField];
         }
         $fields = match ($specialFieldType) {
