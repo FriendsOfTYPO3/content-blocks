@@ -890,8 +890,7 @@ final class ContentBlockCompiler
         $this->assertTypeExists($field, $input);
         $fieldTypeName = $field['type'];
         $fieldType = $this->fieldTypeRegistry->get($fieldTypeName);
-        $fieldTypeEnum = SpecialFieldType::tryFrom($fieldTypeName);
-        if ($fieldTypeEnum !== SpecialFieldType::LINEBREAK) {
+        if (SpecialFieldType::tryFrom($fieldTypeName) !== SpecialFieldType::LINEBREAK) {
             $this->assertIdentifierExists($field, $input);
         }
         return $fieldType;
