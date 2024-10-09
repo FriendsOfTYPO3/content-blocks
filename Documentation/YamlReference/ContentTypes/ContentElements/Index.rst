@@ -16,7 +16,7 @@ do need to know the name, you can inspect it e.g. in the Page TsConfig module.
 A minimal Content Element looks like this:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/cta/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/cta/config.yaml
 
     name: example/cta
     fields:
@@ -27,7 +27,7 @@ In case you need the well-known `Appearance` tab back, you can add pre-defined
 Basics to your definition:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/cta/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/cta/config.yaml
 
     name: example/cta
     basics:
@@ -50,7 +50,7 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    :Required: false
    :Type: string
 
-   This is the description of the Content Element. If you have a Labels.xlf
+   This is the description of the Content Element. If you have a labels.xlf
    file, you should define it there with the key :xml:`description`. If both are
    defined, the translation file has precedence.
 

@@ -13,15 +13,6 @@ these folders will be resolved automatically and are available in Fluid.
 Settings
 ========
 
-.. confval:: recursive
-   :name: folder-recursive
-
-   :Required: false
-   :Type: boolean
-   :Default: false
-
-   Files in the selected folder will be resolved recursively.
-
 .. confval:: elementBrowserEntryPoints
    :name: folder-elementBrowserEntryPoints
 
@@ -86,7 +77,6 @@ Advanced / use case
     fields:
       - identifier: folder
         type: Folder
-        recursive: true
         elementBrowserEntryPoints:
           _default: '1:/styleguide/'
         minitems: 1

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="example/imageslider">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title">
+				<source>Imageslider</source>
+			</trans-unit>
+			<trans-unit id="description" resname="description">
+				<source>Add an imageslider based on Swiffy Slider</source>
+			</trans-unit>
+			<trans-unit id="header.label" resname="header.label">
+				<source>Header</source>
+			</trans-unit>
+			<trans-unit id="assets.label" resname="assets.label">
+				<source>Assets</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

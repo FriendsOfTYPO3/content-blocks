@@ -162,20 +162,17 @@ class ServiceProvider extends AbstractServiceProvider
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
                     $extPath = $contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName());
-                    $privatePath = $extPath . '/' . ContentBlockPathUtility::getPrivateFolder();
-                    $template = ContentBlockPathUtility::getFrontendTemplateFileNameWithoutExtension();
+                    $privatePath = $extPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
+                    $template = ContentBlockPathUtility::getFrontendTemplateFileName();
                     $typoScript = <<<HEREDOC
 tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
 tt_content.{$typeDefinition->getTypeName()} {
-    templateName = {$template}
-    templateRootPaths {
-        20 = $privatePath/
-    }
+    file = $privatePath/$template
     partialRootPaths {
-        20 = $privatePath/Partials/
+        20 = $privatePath/partials/
     }
     layoutRootPaths {
-        20 = $privatePath/Layouts/
+        20 = $privatePath/layouts/
     }
 }
 HEREDOC;

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures;
 
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use TYPO3\CMS\ContentBlocks\FieldType\CategoryFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\CheckboxFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
@@ -49,7 +50,6 @@ class FieldTypeRegistryTestFactory
 {
     public static function create(): FieldTypeRegistry
     {
-        /** @var FieldTypeInterface[] $fieldTypes */
         $fieldTypes = [
             new CategoryFieldType(),
             new CheckboxFieldType(),
@@ -79,9 +79,9 @@ class FieldTypeRegistryTestFactory
         ];
         $keyedFieldTypes = [];
         foreach ($fieldTypes as $fieldType) {
-            $keyedFieldTypes[$fieldType::getName()] = $fieldType;
+            $keyedFieldTypes[$fieldType::getName()] = fn(): FieldTypeInterface => $fieldType;
         }
-        $fieldTypesIterator = new \ArrayObject($keyedFieldTypes);
-        return new FieldTypeRegistry($fieldTypesIterator);
+        $serviceLocator = new ServiceLocator($keyedFieldTypes);
+        return new FieldTypeRegistry($serviceLocator, $fieldTypes);
     }
 }

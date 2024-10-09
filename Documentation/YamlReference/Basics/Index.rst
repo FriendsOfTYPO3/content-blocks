@@ -5,15 +5,28 @@
 Basics (Mixins)
 ===============
 
-Basics are a concept like partials or mixins. They are used to have a
-pre-defined set of fields that can be reused and have to be defined only once.
-It is important to understand that Basics are a very simple "search & replace"
-kind of mechanic. Once included in your Content Block they act like they were
-defined there directly. This also means that it is normally required to
-re-define the label in every Content Block. Hence it is recommended to reference
-labels with the full **LLL:EXT** path.
+**Basics**, also known as partials or mixins, are used to have a pre-defined set
+of fields that can be used to better organize your config.yaml file and
+to reduce redundancy by sharing them between multiple Content Blocks.
 
-There are **two** different ways of using it.
+.. note::
+
+    It is important to understand that Basics are a very simple "search & replace"
+    kind of mechanic. Once included in your Content Block they act like they were
+    defined there directly. This also means that it is normally required to
+    re-define the label in every Content Block. Hence it is recommended to reference
+    labels with the full **LLL:EXT** path.
+
+.. warning::
+
+    Be cautious when using Basics in multiple Content Blocks with
+    :ref:`prefixing <cb_reuse_existing_cb_fields>` enabled. This may lead to the
+    database schema creating one new column for each included field. It is
+    recommended to either use fixed prefixes with :yaml:`prefixType: vendor` or
+    to disable the prefix for each field in the Basic with
+    :yaml:`prefixField: false`.
+
+There are **two** different ways of using Basics.
 
 Basics as additional fields
 ===========================
@@ -26,7 +39,7 @@ This is an example on how to add the classic Fluid Styled Content **Appearance**
 Tab and the additional **Links** palette.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/config.yaml
 
     name: example/basics
     basics:
@@ -45,7 +58,7 @@ be done by using the according Basic :yaml:`identifier` and the type
 :yaml:`Basic`.
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/config.yaml
 
     name: example/basics
     fields:
@@ -89,7 +102,7 @@ Example on how to create a single Basic:
         type: Text
         label: LLL:EXT:sitepackage/Resources/Private/Language/locallang.xlf:a_basic_field
 
-The :yaml:`fields` part is exactly the same as in the EditorInterface.yaml. Here
+The :yaml:`fields` part is exactly the same as in the config.yaml. Here
 you can define a Tab, a Palette or simply a set of fields.
 
 The most practical way to use Basics is to use pre-defined tabs as the global

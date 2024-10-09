@@ -32,12 +32,12 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -134,6 +134,7 @@ class TcaGenerator
         'exclude',
         // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
         'generatorOptions',
+        'behaviour.allowLanguageSynchronization',
     ];
 
     /**
@@ -422,15 +423,20 @@ class TcaGenerator
                 if ($optionKey === null) {
                     continue;
                 }
-                unset($overrideTca['config'][$optionKey]);
+                $configKey = 'config.' . $optionKey;
+                if (ArrayUtility::isValidPath($overrideTca, $configKey, '.')) {
+                    $overrideTca = ArrayUtility::removeByPath($overrideTca, $configKey, '.');
+                    $this->cleanupEmptyArrays($overrideTca, $configKey);
+                }
                 unset($overrideTca[$optionKey]);
             }
             $overrideTca = $this->addUseSortableIfEnabled($overrideColumn, $tableDefinition, $overrideTca);
-            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $this->determineLabelAndDescription(
+            $overrideColumnArray = $this->determineLabelAndDescription(
                 $typeDefinition,
                 $overrideColumn,
                 $overrideTca,
             );
+            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideColumnArray;
         }
         return $columnsOverrides;
     }
@@ -440,9 +446,8 @@ class TcaGenerator
      */
     protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
     {
-        $fieldTypeName = $overrideColumn->getFieldType()->getName();
-        $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
-        if ($fieldTypeEnum !== FieldType::COLLECTION) {
+        $fieldType = $overrideColumn->getFieldType();
+        if ($fieldType::getTcaType() !== 'inline') {
             return $overrideTca;
         }
         $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()
@@ -484,8 +489,10 @@ class TcaGenerator
             if ($optionKey === null) {
                 continue;
             }
-            if (array_key_exists($optionKey, ($column->getTca()['config'] ?? []))) {
-                $configuration = $column->getTca()['config'][$optionKey];
+            $fullConfiguration = $column->getTca();
+            $configKey = 'config.' . $optionKey;
+            if (ArrayUtility::isValidPath($fullConfiguration, $configKey, '.')) {
+                $configuration = ArrayUtility::getValueByPath($fullConfiguration, $configKey, '.');
                 // Support for existing flexForm fields.
                 if ($optionKey === 'ds') {
                     if ($column->useExistingField()) {
@@ -499,8 +506,7 @@ class TcaGenerator
                         $configuration['default'] = $this->getDefaultFlexFormDefinition();
                     }
                 }
-
-                $columnTca['config'][$optionKey] = $configuration;
+                $columnTca = ArrayUtility::setValueByPath($columnTca, $configKey, $configuration, '.');
             }
             if (array_key_exists($optionKey, $column->getTca())) {
                 $columnTca[$optionKey] = $column->getTca()[$optionKey];
@@ -545,13 +551,30 @@ class TcaGenerator
         if (is_string($option)) {
             return $option;
         }
-        $fieldTypeName = $tcaFieldDefinition->getFieldType()->getName();
-        $currentFieldType = FieldType::tryFrom($fieldTypeName);
-        $fieldTypeFromOption = FieldType::tryFrom($option['type']);
-        if ($fieldTypeFromOption === $currentFieldType) {
+        $fieldType = $tcaFieldDefinition->getFieldType();
+        $fieldTypeName = $fieldType::getName();
+        if ($fieldTypeName === $option['type']) {
             return $option['option'];
         }
         return null;
+    }
+
+    /**
+     * Helper method to clean up empty arrays after options have been removed.
+     */
+    protected function cleanupEmptyArrays(array &$configuration, string $optionKey): void
+    {
+        $parts = explode('.', $optionKey);
+        // Last part is already removed.
+        array_pop($parts);
+        $currentOption = &$configuration;
+        foreach ($parts as $part) {
+            if ($currentOption[$part] === []) {
+                unset($currentOption[$part]);
+                break;
+            }
+            $currentOption = &$currentOption[$part];
+        }
     }
 
     /**
@@ -666,12 +689,11 @@ class TcaGenerator
         if ($labelField === null) {
             $labelFieldCandidate = null;
             // These are preferred, as they most often provide a meaningful preview of the record.
-            $preferredLabelTypes = [FieldType::TEXT, FieldType::TEXTAREA, FieldType::EMAIL, FieldType::UUID];
+            $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
             foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
                 $fieldType = $columnFieldDefinition->getFieldType();
-                $fieldTypeName = $fieldType::getName();
-                $fieldTypeEnum = FieldType::tryFrom($fieldTypeName);
-                if (in_array($fieldTypeEnum, $preferredLabelTypes, true)) {
+                $tcaType = $fieldType::getTcaType();
+                if (in_array($tcaType, $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
                     break;
                 }
@@ -922,127 +944,9 @@ class TcaGenerator
         }
         if ($capability->isLanguageAware()) {
             $ctrl += [
-                'transOrigPointerField' => 'l10n_parent',
                 'translationSource' => 'l10n_source',
                 'transOrigDiffSourceField' => 'l10n_diffsource',
                 'languageField' => 'sys_language_uid',
-            ];
-        }
-        if ($capability->isEditLockingEnabled()) {
-            $columns['editlock'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:editlock',
-                'config' => [
-                    'type' => 'check',
-                    'renderType' => 'checkboxToggle',
-                ],
-            ];
-        }
-        if ($capability->hasDisabledRestriction()) {
-            $columns['hidden'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.disable',
-                'config' => [
-                    'type' => 'check',
-                    'renderType' => 'checkboxToggle',
-                ],
-            ];
-        }
-        if ($capability->hasUserGroupRestriction()) {
-            $columns['fe_group'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-                'config' => [
-                    'type' => 'select',
-                    'renderType' => 'selectMultipleSideBySide',
-                    'size' => 5,
-                    'maxitems' => 20,
-                    'items' => [
-                        [
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                            'value' => -1,
-                        ],
-                        [
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                            'value' => -2,
-                        ],
-                        [
-                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                            'value' => '--div--',
-                        ],
-                    ],
-                    'exclusiveKeys' => '-1,-2',
-                    'foreign_table' => 'fe_groups',
-                ],
-            ];
-        }
-        if ($capability->hasStartTimeRestriction()) {
-            $columns['starttime'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                'config' => [
-                    'type' => 'datetime',
-                    'default' => 0,
-                ],
-                'l10n_mode' => 'exclude',
-                'l10n_display' => 'defaultAsReadonly',
-            ];
-        }
-        if ($capability->hasEndTimeRestriction()) {
-            $columns['endtime'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                'config' => [
-                    'type' => 'datetime',
-                    'default' => 0,
-                    'range' => [
-                        'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                    ],
-                ],
-                'l10n_mode' => 'exclude',
-                'l10n_display' => 'defaultAsReadonly',
-            ];
-        }
-        if ($capability->isLanguageAware()) {
-            $columns['sys_language_uid'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                'config' => [
-                    'type' => 'language',
-                ],
-            ];
-            $columns['l10n_parent'] = [
-                'displayCond' => 'FIELD:sys_language_uid:>:0',
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                'config' => [
-                    'type' => 'select',
-                    'renderType' => 'selectSingle',
-                    'items' => [
-                        [
-                            'label' => '',
-                            'value' => 0,
-                        ],
-                    ],
-                    'foreign_table' => $tableDefinition->getTable(),
-                    'foreign_table_where' => 'AND ' . $tableDefinition->getTable() . '.pid=###CURRENT_PID### AND ' . $tableDefinition->getTable() . '.sys_language_uid IN (-1,0)',
-                    'default' => 0,
-                ],
-            ];
-            $columns['l10n_diffsource'] = [
-                'config' => [
-                    'type' => 'passthrough',
-                ],
-            ];
-        }
-        if ($capability->hasInternalDescription()) {
-            $columns['internal_description'] = [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.description',
-                'config' => [
-                    'type' => 'text',
-                    'rows' => 5,
-                    'cols' => 30,
-                ],
             ];
         }
 

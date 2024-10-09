@@ -23,10 +23,10 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
-use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
-use TYPO3\CMS\ContentBlocks\FieldType\PassFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\SpecialFieldType;
 use TYPO3\CMS\Core\Collection\LazyRecordCollection;
 use TYPO3\CMS\Core\Domain\Record;
+use TYPO3\CMS\Core\Domain\RecordInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -49,7 +49,7 @@ final class ContentBlockDataDecorator
         $this->contentObjectProcessor->setRequest($request);
     }
 
-    public function decorate(Record $resolvedRecord, ?PageLayoutContext $context = null): ContentBlockData
+    public function decorate(RecordInterface $resolvedRecord, ?PageLayoutContext $context = null): ContentBlockData
     {
         $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRecord->getMainType());
         $contentTypeDefinition = $this->contentTypeResolver->resolve($resolvedRecord);
@@ -83,15 +83,14 @@ final class ContentBlockDataDecorator
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
-            $fieldTypeEnum = FieldType::tryFrom($fieldType::getName());
-            if ($fieldTypeEnum?->isStructureField()) {
+            if (SpecialFieldType::tryFrom($fieldType::getName()) !== null) {
                 continue;
             }
             // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
-            if ($fieldType instanceof PassFieldType) {
-                $resolvedField = $resolvedRelation->record->getRawRecord()[$tcaFieldDefinition->getUniqueIdentifier()];
+            if ($fieldType::getTcaType() === 'passthrough') {
+                $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->getUniqueIdentifier());
             } else {
-                $resolvedField = $resolvedRelation->record[$tcaFieldDefinition->getUniqueIdentifier()];
+                $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->getUniqueIdentifier());
             }
             if ($this->isRelationField($resolvedField)) {
                 $resolvedField = $this->handleRelation(
@@ -157,7 +156,7 @@ final class ContentBlockDataDecorator
     }
 
     private function handleRelation(
-        Record|LazyRecordCollection $resolvedField,
+        RecordInterface|LazyRecordCollection $resolvedField,
         int $depth,
         ?PageLayoutContext $context = null,
     ): ContentBlockData|LazyRecordCollection {
@@ -189,7 +188,7 @@ final class ContentBlockDataDecorator
     }
 
     private function transformSelectRelation(
-        LazyRecordCollection|Record $processedField,
+        LazyRecordCollection|RecordInterface $processedField,
         int $depth,
         ?PageLayoutContext $context = null,
     ): LazyRecordCollection|ContentBlockData {
@@ -228,7 +227,7 @@ final class ContentBlockDataDecorator
     }
 
     private function transformSingleRelation(
-        Record $item,
+        RecordInterface $item,
         int $depth,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
@@ -275,6 +274,9 @@ final class ContentBlockDataDecorator
         array $grids = [],
     ): ContentBlockData {
         $resolvedData = $resolvedRelation->resolved;
+        if ($resolvedRelation->record instanceof Record === false) {
+            throw new \RuntimeException('Resolved record is not a record instance');
+        }
         $contentBlockData = new ContentBlockData($resolvedRelation->record, $name, $grids, $resolvedData);
         return $contentBlockData;
     }
@@ -285,7 +287,7 @@ final class ContentBlockDataDecorator
      */
     private function buildFakeContentBlockDataObject(ResolvedContentBlockDataRelation $resolvedRelation): ContentBlockData
     {
-        $typeName = $resolvedRelation->record->getRecordType() !== null ? $resolvedRelation->record->getRecordType() : '1';
+        $typeName = $resolvedRelation->record->getRecordType() ?? '1';
         $fakeName = 'core/' . $typeName;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
             $resolvedRelation,
@@ -294,9 +296,14 @@ final class ContentBlockDataDecorator
         return $contentBlockDataObject;
     }
 
-    private function getRecordIdentifier(Record $record): string
+    private function getRecordIdentifier(RecordInterface $record): string
     {
-        $identifier = $record->getMainType() . '-' . $record->getOverlaidUid();
+        $identifier = $record->getMainType();
+
+        if ($record instanceof Record) {
+            $identifier .= '-' . $record->getOverlaidUid();
+        }
+
         return $identifier;
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="hov/notype">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title">
+				<source>No type record</source>
+			</trans-unit>
+			<trans-unit id="description" resname="description">
+				<source>Record with only one type</source>
+			</trans-unit>
+			<trans-unit id="title.label" resname="title.label">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="text.label" resname="text.label">
+				<source>Text</source>
+			</trans-unit>
+			<trans-unit id="image.label" resname="image.label">
+				<source>Image</source>
+			</trans-unit>
+			<trans-unit id="text3.label" resname="text3.label">
+				<source>Textarea</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

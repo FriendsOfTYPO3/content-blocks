@@ -126,21 +126,21 @@ class CreateContentBlockCommand extends Command
             if ($rootVendor !== '') {
                 $default = $rootVendor;
             }
-            $contentBlockVendorQuestion = new Question('Enter your vendor name (lowercase, separated by dashes "-")', $default);
+            $contentBlockVendorQuestion = new Question('Define vendor (<comment>vendor-name</comment>/content-block-name)', $default);
             $contentBlockVendorQuestion->setValidator($this->validateName(...));
             while (($vendor = $io->askQuestion($contentBlockVendorQuestion)) === false) {
-                $output->writeln('<error>Your vendor name does not match the requirement.</error>');
+                $output->writeln('<error>Your vendor name does not match the requirements.</error>');
             }
         }
         $vendor = strtolower($vendor);
         if ($input->getOption('name')) {
             $name = $input->getOption('name');
             if (!ContentBlockNameValidator::isValid($name)) {
-                $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
+                $output->writeln('<error>Your Content Block name does not match the requirements.</error>');
                 return Command::INVALID;
             }
         } else {
-            $contentBlockNameQuestion = new Question('Enter your ' . $contentType->getHumanReadable() . ' name (lowercase, separated by dashes "-")');
+            $contentBlockNameQuestion = new Question('Define name (' . $vendor . '/<comment>content-block-name</comment>)');
             $contentBlockNameQuestion->setValidator($this->validateName(...));
             while (($name = $io->askQuestion($contentBlockNameQuestion)) === false) {
                 $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
@@ -173,7 +173,7 @@ class CreateContentBlockCommand extends Command
             $title = $input->getOption('title');
         } else {
             $defaultTitle = $vendor . '/' . $name;
-            $question = new Question('Enter human-readable title', $defaultTitle);
+            $question = new Question('Define title', $defaultTitle);
             $title = $io->askQuestion($question);
         }
 
@@ -207,11 +207,15 @@ class CreateContentBlockCommand extends Command
         $this->contentBlockBuilder->create($contentBlockConfiguration);
 
         $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');
-        $output->writeln('<comment>Please run the following commands every time you change the EditorInterface.yaml file.</comment>');
+        $output->writeln('<comment>Please run the following commands every time you change the config.yaml file.</comment>');
         $output->writeln('<comment>Alternatively, flush the system cache in the backend and run the Database Analyzer.</comment>');
 
         // Flush system cache to make the new content block available in the system
         $this->cacheManager->flushCachesInGroup('system');
+
+        // TypoScript cache needs to be flushed to enable the new CType for the frontend
+        // @todo Core should define "typoscript" as a system cache
+        $this->cacheManager->getCache('typoscript')->flush();
 
         // Update database to add new fields
         $this->packageActivationService->updateDatabase();

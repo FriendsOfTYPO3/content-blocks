@@ -78,8 +78,8 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         // @todo The path should be absolute. See: https://github.com/TYPO3/testing-framework/issues/577
         self::assertStringContainsString('<link href="typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/Frontend.css', $html);
         self::assertStringContainsString('<script src="typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/Frontend.js', $html);
-        self::assertStringContainsString('<img src="typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/Icon.svg', $html);
-        self::assertStringContainsString('<img src="http://localhost/typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/Icon.svg', $html);
+        self::assertStringContainsString('<img src="typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/icon.svg', $html);
+        self::assertStringContainsString('<img src="http://localhost/typo3conf/ext/test_content_blocks_c/Resources/Public/ContentBlocks/simple/simple/icon.svg', $html);
     }
 
     #[Test]

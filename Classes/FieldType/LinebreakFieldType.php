@@ -24,7 +24,7 @@ final class LinebreakFieldType implements FieldTypeInterface
 {
     public static function getName(): string
     {
-        return 'Linebreak';
+        return SpecialFieldType::LINEBREAK->value;
     }
 
     public static function getTcaType(): string

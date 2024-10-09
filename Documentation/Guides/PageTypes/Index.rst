@@ -84,7 +84,7 @@ extension.
 Backend preview
 ===============
 
-Just like for Content Elements, you can define an **EditorPreview.html** file
+Just like for Content Elements, you can define an **backend-preview.html** file
 to create a preview of your Page Type. This can be used to preview custom
 properties and to link directly to them. To make them prettier it is advised to
 utilise CSS bootstrap classes like `card`.
@@ -93,7 +93,7 @@ utilise CSS bootstrap classes like `card`.
 
     <div class="card card-size-medium">
         <div class="card-body">
-            <be:link.editRecord uid="{data.uid}" table="{data.tableName}" fields="author">
+            <be:link.editRecord uid="{data.uid}" table="{data.mainType}" fields="author">
                 Author: {data.author}
             </be:link.editRecord>
         </div>
@@ -103,10 +103,19 @@ Icons for states
 ================
 
 Page Types can have special states like disabled or hidden in menu. Depending
-on this state, the icon changes or is overlayed with another icon. As for now,
-the "hide in menu" and "is site root" states can be supplied via a custom icons.
-Put an icon with the name **IconHideInMenu.svg** and one with **IconRoot.svg**
-inside your Assets folder to use them.
+on this state, the icon changes or is overlaid with another icon. As for now,
+the "hide in menu" and "is site root" states can be supplied via custom icons.
+Put an icon with the name **icon-hide-in-menu.svg** and one with
+**icon-root.svg** inside your assets folder to use them.
+
+.. code-block:: none
+   :caption: Directory structure of a Content Block
+
+   ├── assets
+   │   │── icon.svg
+   │   │── icon-hide-in-menu.svg
+   │   └── icon-root.svg
+   └── config.yaml
 
 Processing of page data
 =======================

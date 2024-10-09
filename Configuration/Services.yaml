@@ -64,10 +64,6 @@ services:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
-    arguments:
-      - '@TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry'
-      - '@TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry'
-      - '@TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory'
 
   TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry:
     factory:

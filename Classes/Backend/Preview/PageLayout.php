@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Module\ModuleData;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -28,7 +29,9 @@ use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -42,6 +45,7 @@ readonly class PageLayout
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected RootPathsSettings $rootPathsSettings,
         protected ContentTypeResolver $contentTypeResolver,
+        protected ViewFactoryInterface $viewFactory,
     ) {}
 
     public function __invoke(ModifyPageLayoutContentEvent $event): void
@@ -74,22 +78,24 @@ readonly class PageLayout
             return;
         }
         $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord);
-        $view = $this->createView($contentTypeDefinition, $pageUid);
-        $view->setRequest($request);
+        $view = $this->createView($contentTypeDefinition, $pageUid, $request);
         $view->assign('data', $contentBlockData);
-        $renderedView = (string)$view->render();
+        $renderedView = $view->render();
         $event->addHeaderContent($renderedView);
     }
 
-    protected function createView(ContentTypeInterface $contentTypeDefinition, int $pageUid): StandaloneView
+    protected function createView(ContentTypeInterface $contentTypeDefinition, int $pageUid, ServerRequestInterface $request): ViewInterface
     {
         $contentBlockPrivatePath = $this->getContentBlockPrivatePath($contentTypeDefinition);
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths($this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid));
-        $view->setPartialRootPaths($this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid));
-        $view->setTemplateRootPaths([$contentBlockPrivatePath]);
-        $view->setTemplate(ContentBlockPathUtility::getBackendPreviewFileNameWithoutExtension());
-        return $view;
+        $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid);
+        $partialRootPaths = $this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid);
+        $viewData = new ViewFactoryData(
+            partialRootPaths: $partialRootPaths,
+            layoutRootPaths: $layoutRootPaths,
+            templatePathAndFilename: $contentBlockPrivatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName(),
+            request: $request,
+        );
+        return $this->viewFactory->create($viewData);
     }
 
     /**
@@ -98,7 +104,7 @@ readonly class PageLayout
     protected function getContentBlocksPartialRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
         $partialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/Partials/';
+        $partialRootPaths[] = $contentBlockPrivatePath . '/partials/';
         return $partialRootPaths;
     }
 
@@ -108,14 +114,14 @@ readonly class PageLayout
     protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
         $partialRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/Layouts';
+        $partialRootPaths[] = $contentBlockPrivatePath . '/layouts';
         return $partialRootPaths;
     }
 
     protected function getContentBlockPrivatePath(ContentTypeInterface $contentTypeDefinition): string
     {
         $contentBlockExtPath = $this->getEditorPreviewExtPath($contentTypeDefinition);
-        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getPrivateFolder();
+        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
         return $contentBlockPrivatePath;
     }
 

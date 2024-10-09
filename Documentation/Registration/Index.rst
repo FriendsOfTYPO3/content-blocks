@@ -30,7 +30,7 @@ folder. These are named **ContentElements**, **PageTypes** and **RecordTypes**.
    └── composer.json
 
 The system loads them automatically as soon as it finds any folder inside these
-directories, which has a file with the name **EditorInterface.yaml** inside.
+directories, which has a file with the name **config.yaml** inside.
 Refer to the :ref:`YAML reference <yaml_reference>`, on how to define this file.
 
 .. tip::

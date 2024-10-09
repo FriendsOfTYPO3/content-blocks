@@ -24,7 +24,6 @@ final class FolderFieldType implements FieldTypeInterface
 {
     use WithCommonProperties;
 
-    private bool $recursive = false;
     private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
@@ -56,7 +55,6 @@ final class FolderFieldType implements FieldTypeInterface
     {
         $self = new self();
         $self->setCommonProperties($settings);
-        $self->recursive = (bool)($settings['recursive'] ?? $self->recursive);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
@@ -116,10 +114,5 @@ final class FolderFieldType implements FieldTypeInterface
     public function getSql(string $column): string
     {
         return '';
-    }
-
-    public function isRecursive(): bool
-    {
-        return $this->recursive;
     }
 }

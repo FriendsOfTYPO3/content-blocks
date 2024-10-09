@@ -12,7 +12,7 @@ not a Content Element or Page Type. Adding custom records requires you to define
 a :yaml:`table` name. A minimal example looks like this:
 
 .. code-block:: yaml
-   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/EditorInterface.yaml
+   :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/config.yaml
 
     name: example/my-record-type
     table: tx_vendor_my_record_type

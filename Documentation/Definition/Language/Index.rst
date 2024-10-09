@@ -2,20 +2,20 @@
 .. _cb_definition_language:
 
 ========
-Language
+language
 ========
 
 This is the folder for your translations. In fact, if you only have one
 language, there is no actual need to maintain translations here. However, it is
 best practice to separate labels and configuration.
 
-Labels.xlf
+labels.xlf
 ==========
 
 This XLF file is the **english** basis for your translations. All translations
 for backend labels as well as for frontend labels are defined here. Translations
 to other languages are defined in separate files prefixed with the language code
-e.g. **de.Labels.xlf**.
+e.g. **de.labels.xlf**.
 
 *  Learn more about the :ref:`XLIFF Format in TYPO3 <t3coreapi:xliff>`
 
@@ -43,29 +43,29 @@ Have a look at the example beneath for better understanding.
 
    You don't have to remember all these rules. The command
    :ref:`content-blocks:language:generate <command_language_generate>` creates
-   the Labels.xlf file with all available keys for you.
+   the labels.xlf file with all available keys for you.
 
 .. note::
 
-   Labels defined in Labels.xlf will always override :yaml:`label` defined in
-   EditorInterface.yaml.
+   Labels defined in labels.xlf will always override :yaml:`label` defined in
+   config.yaml.
 
 Workflow
 --------
 
 The recommended workflow is defining the :yaml:`label` in the
-EditorInterface.yaml first. When you are done, you run the command to
-auto-generate the Labels.xlf file. After that you can remove the labels from
+config.yaml first. When you are done, you run the command to
+auto-generate the labels.xlf file. After that you can remove the labels from
 the yaml definition. You can also skip the first step and generate the xlf
 without defining labels first. This will add the :yaml:`identifier` as label
 and you can adjust it afterwards. Either way, it is recommended to maintain a
-Labels.xlf file so you don't mix labels with configuration.
+labels.xlf file so you don't mix labels with configuration.
 
 .. code-block:: xml
 
     <?xml version="1.0"?>
     <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-        <file datatype="plaintext" original="Labels.xlf" source-language="en" product-name="example">
+        <file datatype="plaintext" original="labels.xlf" source-language="en" product-name="example">
             <header/>
             <body>
                 <!-- Title and description of the Content Type -->

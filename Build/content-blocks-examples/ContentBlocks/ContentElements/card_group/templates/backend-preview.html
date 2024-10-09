@@ -1,0 +1,52 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:asset.css identifier="cbCardGroupCssBackend" href="{cb:assetPath()}/preview.css"/>
+
+<div class="cb-card-group">
+    <f:if condition="{data.card_group_item}">
+        <div class="card-group-element card-group-element-align-{data.settings.alignment} card-group-element-columns-{data.settings.row_items}">
+            <f:for each="{data.card_group_item}" as="item" iteration="iteration">
+
+                <div class="card-group-element-item">
+                    <be:link.editRecord uid="{item.uid}" table="{item.mainType}">
+                        <div class="card">
+                            <f:if condition="{item.image.0}">
+                                <div class="card-img-top">
+                                    <f:image image="{item.image.0}" width="400"/>
+                                </div>
+                            </f:if>
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    {item.title}
+                                </h3>
+                                <f:if condition="{item.bodytext}">
+                                    <f:transform.html>{item.bodytext}</f:transform.html>
+                                </f:if>
+                            </div>
+                            <f:if condition="{item.link}">
+                                <f:variable name="link_title">
+                                    <f:if condition="{item.link_title}">
+                                        <f:then>{item.link_title}</f:then>
+                                        <f:else><f:translate key="{cb:languagePath()}:readmore"/></f:else>
+                                    </f:if>
+                                </f:variable>
+                                <div class="card-footer">
+                                    <span class="btn-text">
+                                        {link_title}
+                                    </span>
+                                </div>
+                            </f:if>
+                        </div>
+                    </be:link.editRecord>
+                </div>
+            </f:for>
+        </div>
+    </f:if>
+</div>
+
+</html>

@@ -37,13 +37,13 @@ The outcome of the research and the discussions in the community is:
 
 *  A content block is a definition in your {extDir}/ContentBlocks/ folder, which will be determined and loaded automatically
 *  A content block is not a TYPO3 Extension but a sub-resource, so there is no PHP, TypoScript, SQL nor TSconfig inside
-*  The configuration for a new content element is stored in a YAML file, the EditorInterface.yaml
+*  The configuration for a new content element is stored in a YAML file, the config.yaml
 *  Content blocks are made for frontend developers / TYPO3 beginners as main target group
 *  As a common best practice in TYPO3, labels and every other language related stuff is stored in a XLF file. This will be registered and processed by convention
-*  The entered name (vendor/name) in the EditorInterface.yaml file defines the identifier of a content block
+*  The entered name (vendor/name) in the config.yaml file defines the identifier of a content block
 *  GUI to create / kickstart a new content block
 *  If there are breaking changes, support e.g via UpgradeWizards to migrate easily to the new version
-*  Better UX for editors by shipping a template (EditorPreview.html) for the backend preview
+*  Better UX for editors by shipping a template (backend-preview.html) for the backend preview
 *  Usage of the AssetCollector: JavaScript and CSS in backend and frontend
 *  The content blocks are encapsulated, in a own folder
 *  You can move a content block from one project to another project and it will work out of the box
@@ -53,9 +53,9 @@ The outcome of the research and the discussions in the community is:
 What it does
 ============
 
-Basically, this extension registers the new content type with the entered vendor/name in the corresponding EditorInterface.yaml
+Basically, this extension registers the new content type with the entered vendor/name in the corresponding config.yaml
 file in TYPO3 and the newContentElementWizard, and translates the YAML-file into TCA and SQL.
-It registers the Labels.xlf and sets the labels and descriptions by the field identifiers,
+It registers the labels.xlf and sets the labels and descriptions by the field identifiers,
 registers the icon and adds the necessary TypoScript.
 
 So it is a abstraction layer to ease up and speed up the work of integrators and frontend developers.
@@ -85,7 +85,7 @@ Learnings are:
 * Overriding of TCA is essential to add custom functions
 * Copy and paste is useful and easy
 * Writing the YAML file is not so hard as expected, but a GUI for editing would be beneficial
-* The identifiers in the Labels.xlf are not so easy to work with, would be better to have a GUI for that
+* The identifiers in the labels.xlf are not so easy to work with, would be better to have a GUI for that
 * The GUI / kickstarter in big projects should not be available in production environment
 
 

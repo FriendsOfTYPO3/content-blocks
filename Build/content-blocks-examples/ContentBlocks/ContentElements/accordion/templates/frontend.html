@@ -1,0 +1,21 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:asset.css identifier="cbAccordionCssFrontend" href="{cb:assetPath()}/frontend.css"/>
+<f:asset.script identifier="cbAccordionJsFrontend" src="{cb:assetPath()}/frontend.js"/>
+
+<div class="cb-accordion">
+    <f:for each="{data.accordion_item}" as="item">
+        <button class="accordion-item">
+            {item.text}
+        </button>
+        <div class="panel">
+            <f:format.html>{item.textarea}</f:format.html>
+        </div>
+    </f:for>
+</div>
+
+</html>

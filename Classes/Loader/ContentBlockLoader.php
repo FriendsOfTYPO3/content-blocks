@@ -49,7 +49,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * |__ ContentBlocks
  *     |__ ContentElements
  *     |   |__ block-a
- *     |   |   |__ EditorInterface.yaml < name: vendor/block-a
+ *     |   |   |__ config.yaml < name: vendor/block-a
  *     |   |__ block-b
  *     |__ PageTypes
  *     |   |__ block-c
@@ -58,7 +58,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * These sub-folders may contain any number of Content Blocks. The folder name
  * of a Content Block is not important, but should, for clarity, be the same as
- * the Content Block name. They must contain an EditorInterface.yaml file with a
+ * the Content Block name. They must contain a config.yaml file with a
  * `name` config. Just like for composer names, it must consist of a vendor and
  * package part separated by a slash. The name parts must be lowercase and can
  * be separated by dashes.
@@ -144,33 +144,33 @@ class ContentBlockLoader
             $absoluteContentBlockPath = $splFileInfo->getPathname();
             $contentBlockFolderName = $splFileInfo->getRelativePathname();
             $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
-            $editorInterfaceYaml = $this->parseEditorInterfaceYaml($absoluteContentBlockPath, $contentBlockExtPath, $contentType);
+            $configYaml = $this->parseConfigYaml($absoluteContentBlockPath, $contentBlockExtPath, $contentType);
+            if ($configYaml === null) {
+                continue;
+            }
             $result[] = $this->loadSingleContentBlock(
-                $editorInterfaceYaml['name'],
+                $configYaml['name'],
                 $contentType,
                 $absoluteContentBlockPath,
                 $extensionKey,
                 $contentBlockExtPath,
-                $editorInterfaceYaml,
+                $configYaml,
             );
         }
         return $result;
     }
 
-    protected function parseEditorInterfaceYaml(string $absoluteContentBlockPath, string $contentBlockExtPath, ContentType $contentType): array
+    protected function parseConfigYaml(string $absoluteContentBlockPath, string $contentBlockExtPath, ContentType $contentType): ?array
     {
         $contentBlockDefinitionFileName = ContentBlockPathUtility::getContentBlockDefinitionFileName();
         $yamlPath = $absoluteContentBlockPath . '/' . $contentBlockDefinitionFileName;
         if (!file_exists($yamlPath)) {
-            throw new \RuntimeException(
-                'Found Content Block folder in "' . $contentBlockExtPath . '" but ' . $contentBlockDefinitionFileName . ' is missing.',
-                1711039210
-            );
+            return null;
         }
         $editorInterfaceYaml = Yaml::parseFile($yamlPath);
         if (!is_array($editorInterfaceYaml) || strlen($editorInterfaceYaml['name'] ?? '') < 3 || !str_contains($editorInterfaceYaml['name'], '/')) {
             throw new \RuntimeException(
-                'Invalid EditorInterface.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".',
+                'Invalid config.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".',
                 1678224283
             );
         }
@@ -285,7 +285,7 @@ class ContentBlockLoader
         $fileSystem = new Filesystem();
         foreach ($loadedContentBlocks as $loadedContentBlock) {
             $hostExtension = $loadedContentBlock->getHostExtension();
-            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getPublicFolder();
+            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getAssetsFolder();
             $contentBlockAbsolutePublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
             // If the Content Block does not have an Assets folder, nothing to publish here.
             if (!file_exists($contentBlockAbsolutePublicPath)) {

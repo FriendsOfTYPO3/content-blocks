@@ -24,7 +24,7 @@ In order to have nested Content Elements, we need to make use of the field type
 relation to another table. In our case :sql:`tt_content`.
 
 .. code-block:: yaml
-   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/EditorInterface.yaml
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/config.yaml
 
     name: example/tabs
     fields:
@@ -55,7 +55,7 @@ contains all relations which might have a frontend rendering definition defined
 in TypoScript. Normally, these are only Content Elements.
 
 .. code-block:: html
-   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/templates/frontend.html
 
     <f:for each="{data._grids.tabs_item}" as="item" iteration="i">
         <f:comment><!-- {item.data} contains the Content Block data object. --></f:comment>
@@ -81,7 +81,7 @@ used as a child. This method is a lot more flexible, but requires a little bit
 more work.
 
 .. code-block:: html
-   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/Frontend.html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/templates/frontend.html
 
     <f:for each="{data.tabs_item}" as="item" iteration="i">
         <div class="tab-item" data-uid="{item.uid}">
@@ -103,7 +103,7 @@ the backend. For this Content Blocks provides ready to use Fluid partials which
 are able to render backend previews the same way the Core page layout does it.
 
 .. code-block:: html
-   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/Source/BackendPreview.html
+   :caption: EXT:my_extension/ContentBlocks/ContentElements/tabs/templates/backend-preview.html
 
     <f:render partial="PageLayout/Grid" arguments="{data: data, identifier: 'tabs_item'}"/>
 
@@ -154,8 +154,22 @@ to prevent fetching any child elements.
 
    If you do not build upon :typoscript:`styles.content.get.where`, you need to
    integrate the logic yourself. The necessary API providing all the columns is
-   available via :php:`TYPO3\CMS\ContentBlocks\Service\ContentElementParentFieldService->getAllFieldNames()`.
+   available via :php:`TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend`.
    This can be used to apply the same approach to :php:`TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor`.
+
+   Example:
+
+   .. code-block:: typoscript
+
+      20 = CONTENT
+      20 {
+        table = tt_content
+        select {
+          where = {#colPos}={register:colPos}
+          where.insertData = 1
+          where.postUserFunc = TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend
+        }
+
 
 Preventing output in backend
 ============================

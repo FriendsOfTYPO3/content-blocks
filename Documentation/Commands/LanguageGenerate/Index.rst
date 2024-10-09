@@ -5,9 +5,9 @@
 Language Generate command
 =========================
 
-The command :bash:`content-blocks:language:generate` updates the Labels.xlf
+The command :bash:`content-blocks:language:generate` updates the labels.xlf
 content for the specified Content Block. Already set labels in both the
-Labels.xlf file and in the EditorInterface.yaml are considered. The Labels.xlf
+labels.xlf file and in the config.yaml are considered. The labels.xlf
 file has precedence over inline labels in the YAML definition. Optional keys
 like descriptions or labels for existing fields will only be be generated if
 they have been set manually. Custom translations, which don't belong to the
@@ -33,7 +33,7 @@ Options
    :Shortcut: p
    :Type: bool
 
-   Print Labels.xlf to terminal instead of writing to file system.
+   Print labels.xlf to terminal instead of writing to file system.
 
 .. confval:: extension
    :name: language-generate-extension
@@ -41,21 +41,21 @@ Options
    :Shortcut: e
    :Type: string
 
-   Write Labels.xlf to all Content Blocks within the given extension.
+   Write labels.xlf to all Content Blocks within the given extension.
 
-Write up-to-date Labels.xlf file for Content Block example/example.
+Write up-to-date labels.xlf file for Content Block example/example.
 
 .. code-block:: bash
 
    vendor/bin/typo3 content-blocks:language:generate example/example
 
-Update all Labels.xlf files within the extension "site_package".
+Update all labels.xlf files within the extension "site_package".
 
 .. code-block:: bash
 
    vendor/bin/typo3 content-blocks:language:generate example/example --extension="site_package"
 
-Print up-to-date Labels.xlf content for Content Block example/example.
+Print up-to-date labels.xlf content for Content Block example/example.
 
 .. code-block:: bash
 
@@ -67,7 +67,7 @@ Example output:
 
     <?xml version="1.0"?>
     <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-        <file datatype="plaintext" original="Labels.xlf" source-language="en" date="2023-12-03T08:37:53+00:00" product-name="demo/demo">
+        <file datatype="plaintext" original="labels.xlf" source-language="en" date="2023-12-03T08:37:53+00:00" product-name="demo/demo">
             <header/>
             <body>
                 <trans-unit id="title" resname="title">
