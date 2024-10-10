@@ -63,19 +63,20 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
    :Required: false
    :Type: string
-   :Default: common
+   :Default: default
 
-   By default, all new Content Elements are placed in the `common` tab of the
-   "New Content Element Wizard". You can choose another tab, if you want to
-   group your elements.
+   The group is used for the grouping of the record type selector in the edit
+   view of records. In addition, it is used for the "New Content Element Wizard"
+   for the tab grouping. By default, all new types are placed in the `default`
+   group.
 
    .. code-block:: yaml
 
        group: special
 
-   The Core defines these standard tabs, which are always available:
+   The Core defines these groups for Content Elements:
 
-   *  `common`
+   *  `default`
    *  `menu`
    *  `special`
    *  `forms`

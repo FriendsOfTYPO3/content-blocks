@@ -46,6 +46,30 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
        table: tx_vendor_my_custom_table_name
 
+.. confval:: group
+   :name: record-type-group
+
+   :Required: false
+   :Type: string
+
+   The group is used for the grouping of the record type selector in the edit
+   view of records. By default records are not grouped.
+
+   .. note::
+
+      Grouping only makes sense, if you define :ref:`multiple types <yaml_reference_record_type_multiple_types>`
+      for one :yaml:`table`. Otherwise, the record type selector is not
+      displayed.
+
+   .. note::
+
+      The group needs to be registered first, before you can use it here. See
+      :ref:`this guide <cb_guide_new_groups>` on how to do it.
+
+   .. code-block:: yaml
+
+       group: my_group
+
 .. confval:: labelField
    :name: record-type-labelField
 

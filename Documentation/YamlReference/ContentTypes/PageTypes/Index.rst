@@ -53,3 +53,25 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
       We recommend to use the **current unix timestamp** fo your type name. This
       is almost guaranteed unique. The kickstart command will default to the
       current timestamp as well.
+
+.. confval:: group
+   :name: page-type-group
+
+   :Required: false
+   :Type: string
+   :Default: default
+
+   The group is used for the grouping of the record type selector in the edit
+   view of records. In addition, it is used for the "Create multiple pages" view
+   for selecting the type. By default, all new types are placed in the `default`
+   group.
+
+   .. code-block:: yaml
+
+       group: special
+
+   The Core defines these groups for Page Types:
+
+   *  `default`
+   *  `link`
+   *  `special`
