@@ -275,7 +275,7 @@ final class ContentBlockDataDecorator
     ): ContentBlockData {
         $resolvedData = $resolvedRelation->resolved;
         if ($resolvedRelation->record instanceof Record === false) {
-            throw new \RuntimeException('Resolved record is not a record instance');
+            throw new \RuntimeException('Resolved record is not a record instance', 1728587332);
         }
         $contentBlockData = new ContentBlockData($resolvedRelation->record, $name, $grids, $resolvedData);
         return $contentBlockData;
