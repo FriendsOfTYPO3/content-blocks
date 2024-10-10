@@ -14,7 +14,7 @@ doesn't even require database migrations.
 
 .. note::
 
-   This guide assumes you are on the latest Mask version v8 and TYPO3 v12.
+   This guide assumes you are on the latest Mask version.
 
 Manual migration
 ================
