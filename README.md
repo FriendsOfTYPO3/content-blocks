@@ -13,7 +13,7 @@ eventually this will become a Core feature in TYPO3 v13 LTS.
 | **Repository:**    | https://github.com/nhovratov/content-blocks                                         |
 | **Documentation:** | https://docs.typo3.org/p/contentblocks/content-blocks/main/en-us/                   |
 | **TER:**           | https://extensions.typo3.org/extension/content_blocks                               |
-| **Packagist:**     | https://packagist.org/packages/contentblocks/content-blocks                         |
+| **Packagist:**     | https://packagist.org/packages/friendsoftypo3/content-blocks                        |
 | **Examples:**      | https://github.com/nhovratov/content-blocks/tree/main/Build/content-blocks-examples |
 
 ## Roadmap 2024
@@ -35,7 +35,7 @@ eventually this will become a Core feature in TYPO3 v13 LTS.
 Require this package via composer:
 
 ```
-composer req contentblocks/content-blocks
+composer req friendsoftypo3/content-blocks
 ```
 
 Or install it via the Extension Manager in the TYPO3 backend. The extension key

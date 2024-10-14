@@ -1,5 +1,5 @@
 {
-	"name": "contentblocks/content-blocks",
+	"name": "friendsoftypo3/content-blocks",
 	"type": "typo3-cms-extension",
 	"description": "TYPO3 CMS Content Blocks - Content Types API",
 	"homepage": "https://typo3.org",

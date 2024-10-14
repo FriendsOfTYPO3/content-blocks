@@ -55,7 +55,7 @@ class ServiceProvider extends AbstractServiceProvider
 
     protected static function getPackageName(): string
     {
-        return 'contentblocks/content-blocks';
+        return 'friendsoftypo3/content-blocks';
     }
 
     public function getFactories(): array

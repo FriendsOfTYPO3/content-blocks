@@ -17,7 +17,7 @@
 		"sort-packages": true
 	},
 	"require": {
-		"contentblocks/content-blocks": "*"
+		"friendsoftypo3/content-blocks": "*"
 	},
 	"extra": {
 		"typo3/cms": {
