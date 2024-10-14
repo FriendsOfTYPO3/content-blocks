@@ -41,6 +41,9 @@
 		"typo3/cms-fluid": "dev-main",
 		"typo3/cms-frontend": "dev-main"
 	},
+	"replace": {
+		"contentblocks/content-blocks": "*"
+	},
 	"extra": {
 		"typo3/cms": {
 			"web-dir": ".Build/public",
