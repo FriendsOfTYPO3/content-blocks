@@ -28,7 +28,7 @@ eventually this will become a Core feature in TYPO3 v13 LTS.
 | [TYPO3 v13.2](https://typo3.org/article/typo3-v132-ready-set-ride)                                      | 02.07         |
 | [Content Blocks compatibility v13](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.8.0) | 11.07         |
 | [Content Blocks (partly) Core integration](https://typo3.org/article/typo3-v133-prepare-for-the-fun)    | 17.09         |
-| Content Blocks 1.0                                                                                      | 15.10         |
+| [Content Blocks 1.0](https://github.com/friendsoftypo3/content-blocks/releases/tag/1.0.0)               | 15.10         |
 
 ## Installation
 
