@@ -11,7 +11,7 @@ eventually this will become a Core feature in TYPO3 v13 LTS.
 |                    | URL                                                                                 |
 |--------------------|-------------------------------------------------------------------------------------|
 | **Repository:**    | https://github.com/nhovratov/content-blocks                                         |
-| **Documentation:** | https://docs.typo3.org/p/contentblocks/content-blocks/main/en-us/                   |
+| **Documentation:** | https://docs.typo3.org/p/friendsoftypo3/content-blocks/main/en-us/                  |
 | **TER:**           | https://extensions.typo3.org/extension/content_blocks                               |
 | **Packagist:**     | https://packagist.org/packages/friendsoftypo3/content-blocks                        |
 | **Examples:**      | https://github.com/nhovratov/content-blocks/tree/main/Build/content-blocks-examples |

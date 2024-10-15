@@ -9,7 +9,7 @@ Using Composer:
 
 .. code-block:: shell
 
-    composer require contentblocks/content-blocks
+    composer require friendsoftypo3/content-blocks
 
 For installations that don't use Composer, activate the Content Blocks extension
 in the Extension Manager.

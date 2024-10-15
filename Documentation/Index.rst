@@ -11,7 +11,7 @@ TYPO3 Content Blocks
     content_blocks
 
 :Package name:
-     contentblocks/content-blocks
+     friendsoftypo3/content-blocks
 
 :Version:
     |release|
