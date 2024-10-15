@@ -21,7 +21,7 @@ a custom :yaml:`table` and a :yaml:`labelField` field. Per default all extra
 features like workspaces, language support, frontend restrictions, etc. are
 enabled. You can selectively disable each one of them, if you don't use them.
 
-Full examples can be found in the examples repository: https://github.com/nhovratov/content-blocks/tree/main/Build/content-blocks-examples
+Full examples can be found in the examples repository: https://github.com/friendsoftypo3/content-blocks/tree/main/Build/content-blocks-examples
 
 **Table of Contents**
 
