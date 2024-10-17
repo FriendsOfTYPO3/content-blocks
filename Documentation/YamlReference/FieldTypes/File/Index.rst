@@ -141,3 +141,35 @@ Allow media types like audio, video and youtube (or vimeo).
       - identifier: media
         type: File
         allowed: common-media-types
+
+Set specific crop variantes for an image field.
+
+.. code-block:: yaml
+
+    name: example/image
+    fields:
+      - identifier: image
+        type: File
+        allowed: common-image-types
+        cropVariants:
+          desktop:
+            title: Desktop
+            allowedAspectRatios:
+              portrait:
+                title: Portrait
+                value: 0.75
+              landscape:
+                title: Landscape
+                value: 4 / 3
+          tablet:
+            title: Tablet
+            allowedAspectRatios:
+              square:
+                title: Square
+                value: 0.75
+          smartphone:
+            title: Smartphone
+            allowedAspectRatios:
+              landscape:
+                title: Landscape
+                value: 4 / 3
