@@ -43,7 +43,7 @@ is `content_blocks`.
 
 ## Usage
 
-Refer to the [Documentation](https://docs.typo3.org/c/contentblocks/content-blocks/main/en-us)
+Refer to the [Documentation](https://docs.typo3.org/p/friendsoftypo3/content-blocks/main/en-us)
 on how to use the Content Blocks API.
 
 ## JSON Schema
