@@ -114,10 +114,10 @@ Example interaction:
 After running the make command
 ==============================
 
-In order to create the newly added database tables or fields, first you have to
-clear the caches and then run the database compare. You can do the same in the
-TYPO3 Backend by using the Database Analyzer. Repeat this step every time you
-add new fields to your Content Block definition.
+In order to create newly added database tables or fields, you have to clear the
+caches and then run the database compare. You can do the same in the TYPO3
+Backend by using the Database Analyzer. Repeat this step every time you add new
+fields to your Content Block definition.
 
 .. code-block:: bash
 

@@ -6,7 +6,7 @@
 This is the standalone repository for the TYPO3 Content Blocks project. Content
 Blocks provides a new API to create custom Content Types like Content Elements,
 Page Types or generic Record Types. Use it now in your TYPO3 v12/v13 project and
-eventually this will become a Core feature in TYPO3 v13 LTS.
+eventually this will become a Core feature in TYPO3 v14 LTS.
 
 |                    | URL                                                                                      |
 |--------------------|------------------------------------------------------------------------------------------|
@@ -103,18 +103,3 @@ make test-docs
 
 You can reach us on the TYPO3 Slack channel `#cig-structuredcontent`. We
 appreciate any constructive feedback.
-
-## FAQ
-
-Q: Will the [content_blocks_reg_api](https://github.com/TYPO3-Initiatives/content-block-registration-api)
-be further developed for TYPO3 v12?
-
-A: The predecessor `content_blocks_reg_api`, which was initially created in 2020,
-will not be further developed for TYPO3 v12. This system extension will replace
-it completely. Migration steps will be provided as soon as we will reach a stable
-development state.
-
-This extension has been developed entirely from scratch and has, besides the
-initial concept, nothing to do with the content_blocks_reg_api. The goal was to
-create a system extension, which combines the best concepts from Content Blocks
-and the [Mask](https://github.com/Gernott/mask) extension.

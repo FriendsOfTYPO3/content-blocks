@@ -121,8 +121,7 @@ Processing of page data
 =======================
 
 In order to have resolved relations also for Page Types, you need to add the
-:php:`ContentBlocksDataProcessor` to your data processor list. Right now, this
-does not resolve relations for the native, standard Page Type.
+:php:`ContentBlocksDataProcessor` to your data processor list.
 
 .. code-block:: typoscript
 

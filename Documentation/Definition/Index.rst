@@ -17,8 +17,8 @@ named **assets**, **templates** and **language**.
    ├── language
    │    └── labels.xlf
    ├── templates
-   |   ├── partials
-   |   |   └── Component.html
+   │   ├── partials
+   │   │   └── Component.html
    │   ├── backend-preview.html
    │   └── frontend.html
    └── config.yaml
