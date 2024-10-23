@@ -17,9 +17,9 @@ Plugins and contentRenderingTemplates
 =====================================
 
 Plugins from other extensions probably won't work without `fluid_styled_content`
-as the rendering definition is defined there for both `CType`-based and
-`list_type`-based plugins. So you have to define it yourself e.g. in your
-sitepackage.
+as the rendering definition :typoscript:`lib.contentElement` is defined there
+for both `CType`-based and `list_type`-based plugins. So you have to define it
+yourself e.g. in your sitepackage.
 
 .. code-block:: typoscript
    :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
@@ -31,11 +31,40 @@ sitepackage.
       template.value = <f:cObject typoscriptObjectPath="tt_content.list.20.{data.list_type}" table="tt_content" data="{data}"/>
     }
 
-    # @todo snippet for CType based plugins.
+    # Specific rendering for CType plugins. Normally defined in fluid_styled_content.
+    # This needs to be added for every registered plugin separately.
+    tt_content.plugin_name = FLUIDTEMPLATE
+    tt_content.plugin_name {
+      template = TEXT
+      template.value = <f:cObject typoscriptObjectPath="tt_content.{data.CType}.20" data="{data}" table="tt_content" />
+    }
 
-The TypoScript snippet above defines the default rendering definition for the
+The first snippet above defines the default rendering definition for the
 record type `list`. This is a generic type for plugins, which further specify
 their type in the field `list_type`.
+
+The second snippet defines a rendering definition for a specific CType-based
+plugin. As these plugins are independent from each other, this needs to be added
+for every plugin. Tip: If you don't want to repeat this step over and over again
+it is also possible to define your own :typoscript:`lib.contentElement` with
+the :typoscript:`FLUIDTEMPLATE` cObject:
+
+.. code-block:: typoscript
+
+    lib.contentElement = FLUIDTEMPLATE
+    lib.contentElement {
+        templateRootPaths {
+            0 = EXT:sitepackage/Resources/Private/Templates/
+        }
+    }
+
+Then, add a template with name `Generic.html`. Add the cObject ViewHelper from
+the snippet above and it will work automatically. This can also be done for
+list-type plugin with `List.html`.
+
+Which method you choose is up to you. The pure TypoScript variant is more
+robust as the template one, as changes are to be expected in the Core in this
+area.
 
 contentRenderingTemplates
 -------------------------
