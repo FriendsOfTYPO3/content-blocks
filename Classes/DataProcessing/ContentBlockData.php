@@ -51,7 +51,7 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
  * - {data.computedProperties.localizedUid}
  * - {data.computedProperties.versionedUid}
  */
-final class ContentBlockData implements RecordInterface, \ArrayAccess
+final class ContentBlockData implements RecordInterface
 {
     public function __construct(
         protected ?Record $_record = null,
@@ -93,46 +93,36 @@ final class ContentBlockData implements RecordInterface, \ArrayAccess
 
     public function has(string $id): bool
     {
+        if ($id === '_name') {
+            return true;
+        }
+        if ($id === '_raw') {
+            return true;
+        }
+        if ($id === '_grids') {
+            return true;
+        }
+        if (array_key_exists($id, $this->_processed)) {
+            return true;
+        }
         return $this->_record->has($id);
     }
 
     public function get(string $id): mixed
     {
-        return $this->_record->get($id);
-    }
-
-    public function offsetExists(mixed $offset): bool
-    {
-        if ($offset === '_name') {
-            return true;
-        }
-        if ($offset === '_raw') {
-            return true;
-        }
-        if ($offset === '_grids') {
-            return true;
-        }
-        if (array_key_exists($offset, $this->_processed)) {
-            return true;
-        }
-        return $this->_record->has((string)$offset);
-    }
-
-    public function offsetGet(mixed $offset): mixed
-    {
-        if ($offset === '_name') {
+        if ($id === '_name') {
             return $this->_name;
         }
-        if ($offset === '_raw') {
+        if ($id === '_raw') {
             return $this->toArray();
         }
-        if ($offset === '_grids') {
+        if ($id === '_grids') {
             return $this->_grids;
         }
-        if (array_key_exists($offset, $this->_processed)) {
-            return $this->_processed[$offset];
+        if (array_key_exists($id, $this->_processed)) {
+            return $this->_processed[$id];
         }
-        return $this->_record->get((string)$offset);
+        return $this->_record->get($id);
     }
 
     public function offsetSet(mixed $offset, mixed $value): void
