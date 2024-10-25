@@ -133,3 +133,18 @@ In order to have resolved relations also for Page Types, you need to add the
             }
         }
     }
+
+Remove entry in Page Tree `NewPageDragArea`
+===========================================
+
+In some cases you don't want your page type to be selectable in the drag area
+of the page tree. You can remove it with user tsconfig.
+
+.. code-block:: typoscript
+   :caption: EXT:site_package/Configuration/user.tsconfig
+
+    options {
+      pageTree {
+        doktypesToShowInNewPageDragArea := removeFromList(1701284006)
+      }
+    }
