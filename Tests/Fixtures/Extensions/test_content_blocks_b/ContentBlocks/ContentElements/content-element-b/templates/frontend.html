@@ -20,7 +20,7 @@
 <f:if condition="{data.collection_recursive}">
     <f:for each="{data.collection_recursive}" as="item">
         fieldA{item.uid}: {item.fieldA}
-        fieldA_raw{item.uid}: {item._raw.collection_inner}
+        fieldA_raw{item.uid}: {item.rawRecord.collection_inner}
         <f:for each="{item.collection_inner}" as="item_inner">
             fieldB{item_inner.uid}: {item_inner.fieldB}
         </f:for>

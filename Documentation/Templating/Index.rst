@@ -20,7 +20,7 @@ In contrast to the usual array, we are dealing with an object here. This allows
 us to magically access our own custom properties very easily. Normally you would
 access the processed properties. This is done by simply accessing the desired
 property like :html:`{data.header}`. The raw properties have to be accessed by
-:html:`{data._raw.some_field}`. But most of the time you shouldn't need them.
+:html:`{data.rawRecord.some_field}`.
 
 All fields with relations are resolved automatically to an array. This includes
 `Collection`, `Select`, `Relation`, `File`, `Folder`, `Category` and `FlexForm`
@@ -91,8 +91,8 @@ Have a look at this code example to grasp what's possible:
     {data.versionInfo.state.value}
     {data.versionInfo.stageId}
 
-    <!-- To access the raw (unprocessed) database record use `_raw` -->
-    {data._raw.some_field}
+    <!-- To access the raw (unprocessed) database record use `rawRecord` -->
+    {data.rawRecord.some_field}
 
 See also: https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/13.2/Feature-103783-RecordTransformationDataProcessor.html#usage-in-fluid-templates
 

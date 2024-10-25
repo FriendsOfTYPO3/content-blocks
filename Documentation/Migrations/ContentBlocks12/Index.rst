@@ -68,6 +68,7 @@ Record object
 Content Blocks now uses the :php:`\TYPO3\CMS\Core\Domain\Record` under the hood.
 This has changed how some record attributes are accessed.
 
+*  `{data._raw}` ➡️ `{data.rawRecord}`
 *  `{data.typeName}` ➡️ `{data.recordType}`
 *  `{data.tableName}` ➡️ `{data.mainType}`
 *  `{data.creationDate}` ➡️ `{data.systemProperties.createdAt}`

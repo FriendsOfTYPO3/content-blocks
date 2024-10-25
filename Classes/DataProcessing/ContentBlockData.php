@@ -96,9 +96,6 @@ final class ContentBlockData implements RecordInterface
         if ($id === '_name') {
             return true;
         }
-        if ($id === '_raw') {
-            return true;
-        }
         if ($id === '_grids') {
             return true;
         }
@@ -112,9 +109,6 @@ final class ContentBlockData implements RecordInterface
     {
         if ($id === '_name') {
             return $this->_name;
-        }
-        if ($id === '_raw') {
-            return $this->toArray();
         }
         if ($id === '_grids') {
             return $this->_grids;
