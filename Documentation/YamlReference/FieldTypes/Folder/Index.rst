@@ -7,8 +7,8 @@ Folder
 
 :php:`type => 'folder' // TCA`
 
-The :yaml:`Folder` type enables to select one or more folders. Files within
-these folders will be resolved automatically and are available in Fluid.
+The :yaml:`Folder` type enables to select one or more folders. This field type
+is resolved to an array of :php:`\TYPO3\CMS\Core\Resource\Folder` objects.
 
 Settings
 ========
@@ -80,3 +80,24 @@ Advanced / use case
         elementBrowserEntryPoints:
           _default: '1:/styleguide/'
         minitems: 1
+
+
+Usage in Fluid
+==============
+
+In most cases you want to retrieve the files within the folders. To achieve
+this, you have to access the files via the :php:`getFiles()` method. In Fluid
+this looks like this for a field with :yaml:`identifier: folder`.
+
+.. hint::
+
+    If you've defined :yaml:`relationship: manyToOne`, then you can omit the
+    outer :html:`f:for` loop.
+
+.. code-block:: html
+
+    <f:for each="{data.folder}" as="folder">
+        <f:for each="{folder.files}" as="image">
+            <f:image image="{item}" />
+        </f:for>
+    </f:for>
