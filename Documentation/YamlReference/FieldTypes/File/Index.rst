@@ -173,3 +173,13 @@ Set specific crop variantes for an image field.
               landscape:
                 title: Landscape
                 value: 4 / 3
+
+
+Usage in Fluid
+==============
+
+.. code-block:: html
+
+    <f:for each="{data.image}" as="image">
+        <f:image image="{image}" width="120" maxHeight="100"/>
+    </f:for>
