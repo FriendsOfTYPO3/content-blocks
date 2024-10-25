@@ -141,8 +141,10 @@ means if you use an asset ViewHelper in a partial, you have to provide
     <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
     <f:asset.script identifier="myJavascriptIdentifier" href="{cb:assetPath(name: 'vendor/name')}/frontend.js"/>
 
-Translation ViewHelper
-======================
+.. _language_path_view_helper:
+
+LanguagePath ViewHelper
+=======================
 
 Content Blocks provides a LanguagePathViewHelper to retrieve the LLL-path for
 the labels.xlf file of the current Content Block.
