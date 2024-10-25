@@ -8,7 +8,8 @@ Link
 :php:`type => 'link' // TCA`
 
 The :yaml:`Link` type creates a field with a link wizard. It is possible to link
-to pages, files or even records (if configured).
+to pages, files or even records (if configured). This field is resolved to an
+object of type :php:`\TYPO3\CMS\Core\LinkHandling\TypolinkParameter`.
 
 Settings
 ========
@@ -30,6 +31,16 @@ Settings
    :Default: false
 
    If set, the field becomes mandatory.
+
+.. confval:: nullable
+   :name: link-nullable
+
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   If set, the field value will resolve to `null` if no link is provided.
+   Useful, if field is optional.
 
 .. confval:: allowedTypes
    :name: link-allowedTypes
@@ -77,3 +88,23 @@ Advanced / use case
           items:
             - [ 'TYPO3 CMS', 'https://www.typo3.org' ]
             - [ 'TYPO3 GmbH', 'https://www.typo3.com' ]
+
+
+Usage in Fluid
+==============
+
+As this field is an object of type :php:`\TYPO3\CMS\Core\LinkHandling\TypolinkParameter`
+you have to check for the property :html:`url` to determine whether the field is
+set or not.
+
+.. note::
+
+    Alternatively, you can set the field :yaml:`nullable: true`. In this case
+    the value will resolve to `null` if not set.
+
+
+.. code-block:: html
+
+    <f:if condition="{data.link_field.url}">
+        <f:link.typolink parameter="{data.link_field}">Link</f:link.typolink>
+    </f:if>
