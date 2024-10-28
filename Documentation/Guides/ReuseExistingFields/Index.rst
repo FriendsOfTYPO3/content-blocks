@@ -154,3 +154,4 @@ The full list:
    * exclude
    * generatorOptions
    * behaviour.allowLanguageSynchronization
+   * format (type: Number)
