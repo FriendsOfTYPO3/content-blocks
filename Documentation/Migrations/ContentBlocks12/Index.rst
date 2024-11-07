@@ -31,6 +31,12 @@ the :ref:`new structure <cb_definition>`.
 Ensure the extension with the old Content Block structure is loaded in the
 system before running this wizard.
 
+.. warning::
+
+    On case-insensitive file systems like Windows or MacOS have, the renaming
+    of folder `Assets` to `assets` won't be registered in git. This needs to
+    be commited on a case-sensitive file system e.g. inside your ddev container.
+
 New AssetPathViewHelper
 =======================
 
