@@ -119,16 +119,6 @@ final class ContentBlockData implements RecordInterface
         return $this->_record->get($id);
     }
 
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        $this->_processed[$offset] = $value;
-    }
-
-    public function offsetUnset(mixed $offset): void
-    {
-        unset($this->_processed[$offset]);
-    }
-
     public function getVersionInfo(): ?VersionInfo
     {
         return $this->_record->getVersionInfo();
