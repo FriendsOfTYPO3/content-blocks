@@ -46,11 +46,17 @@ Common field options
 
 Field options, which can be defined inside the :yaml:`fields` array.
 
+..  confval-menu::
+    :name: confval-common-field-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: identifier
    :name: field-types-identifier
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    The field's identifier has to be unique within a Content Block. Exception is
    within a collections' field array, as this starts a new scope.
@@ -68,9 +74,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: type
    :name: field-types-type
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    The field's type. See :ref:`field_types`.
 
@@ -82,9 +87,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: label
    :name: field-types-label
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    By default labels should be defined inside the :file:`labels.xlf` file. But in
    case there is only one language for the backend you may define labels directly
@@ -99,9 +103,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: description
    :name: field-types-description
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The same as for `label` above.
 
@@ -114,9 +117,9 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: useExistingField
    :name: field-types-useExistingField
-
-   :Required: false
-   :Type: bool
+   :required: false
+   :type: bool
+   :default: false
 
    If set to true, the identifier is treated as an existing field from the Core
    or your own defined field in TCA. To learn more about reusing fields read
@@ -130,10 +133,9 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: prefixField
    :name: field-types-prefixField
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    If set to false, the prefixing is disabled for this field. This overrules the
    global option :confval:`prefixFields <root-prefixFields>`.
@@ -147,10 +149,9 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: prefixType
    :name: field-types-prefixType
-
-   :Required: false
-   :Type: string
-   :Default: full
+   :required: false
+   :type: string
+   :default: full
 
    Determines how to prefix the field if local :yaml:`prefixField` or global
    :yaml:`prefixFields` is enabled. Can be either :yaml:`full` (default) or
@@ -166,10 +167,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: displayCond
    :name: field-types-displayCond
-
-   :Required: false
-   :Type: string|array
-   :Default: ''
+   :required: false
+   :type: string|array
 
    Can be used to display the field only under certain conditions.
    Please have a look at the :ref:`official documentation <t3tca:columns-properties-displaycond>`
@@ -195,10 +194,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
 .. confval:: onChange
    :name: field-types-onChange
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
 
    Can be used to trigger a reload of the Content Type when this specific
    field is changed. Should be used, if a rule of :yaml:`displayCond` is used
