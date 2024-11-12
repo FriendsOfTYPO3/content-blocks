@@ -218,6 +218,9 @@ class ContentBlockLoader
         // Create typeName
         $typeName = $yaml['typeName'] ?? UniqueIdentifierCreator::createContentTypeIdentifier($name);
         $yaml['typeName'] ??= $typeName;
+        if (!array_key_exists('table', $yaml)) {
+            throw new \RuntimeException('Content Block "' . $name . '" does not define required "table".', 1731412650);
+        }
         $table = $yaml['table'];
         $yaml = $this->basicsService->applyBasics($yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
