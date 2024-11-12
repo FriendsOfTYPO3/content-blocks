@@ -177,5 +177,4 @@ Public assets
 =============
 
 The `assets` folder of your Content Block is now symlinked to the extension's
-`Resources/Public/ContentBlocks/*` folder. You should add this folder to your
-.gitignore file.
+`Resources/Public/ContentBlocks/*` folder.

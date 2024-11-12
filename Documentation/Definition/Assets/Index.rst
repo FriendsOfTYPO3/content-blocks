@@ -16,12 +16,6 @@ This folder will be symlinked or copied to
 is to keep the modular style of a Content Type but still leverage the TYPO3
 asset publishing mechanism.
 
-When using a version control system, that path should be ignored by adding this
-line to the host extension's :file:`.gitignore` file:
-
-.. code-block::
-    /Resources/Public/ContentBlocks
-
 icon.svg
 ========
 

@@ -292,6 +292,11 @@ class ContentBlockLoader
                 continue;
             }
             $hostAbsolutePublicContentBlockBasePath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockBasePath($hostExtension);
+            // Prevent symlinks from being added to git index.
+            $gitIgnorePath = $hostAbsolutePublicContentBlockBasePath . '/.gitignore';
+            if (!file_exists($gitIgnorePath)) {
+                file_put_contents($gitIgnorePath, '*');
+            }
             $hostAbsolutePublicContentBlockBasePathWithVendor = $hostAbsolutePublicContentBlockBasePath . '/' . $loadedContentBlock->getVendor();
             $contentBlockRelativePublicPath = $fileSystem->makePathRelative(
                 $contentBlockAbsolutePublicPath,
