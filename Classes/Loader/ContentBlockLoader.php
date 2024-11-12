@@ -295,6 +295,7 @@ class ContentBlockLoader
             // Prevent symlinks from being added to git index.
             $gitIgnorePath = $hostAbsolutePublicContentBlockBasePath . '/.gitignore';
             if (!file_exists($gitIgnorePath)) {
+                GeneralUtility::mkdir_deep($hostAbsolutePublicContentBlockBasePath);
                 file_put_contents($gitIgnorePath, '*');
             }
             $hostAbsolutePublicContentBlockBasePathWithVendor = $hostAbsolutePublicContentBlockBasePath . '/' . $loadedContentBlock->getVendor();
