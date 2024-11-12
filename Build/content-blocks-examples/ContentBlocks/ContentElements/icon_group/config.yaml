@@ -4,7 +4,6 @@ fields:
     useExistingField: true
   - identifier: pi_flexform
     useExistingField: true
-    type: FlexForm
     fields:
       - identifier: alignment
         type: Select
