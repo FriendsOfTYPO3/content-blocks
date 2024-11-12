@@ -52,6 +52,7 @@ final class ColorFieldTypeTest extends UnitTestCase
                         ['Two', '2'],
                     ],
                 ],
+                'opacity' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -79,6 +80,7 @@ final class ColorFieldTypeTest extends UnitTestCase
                             ['Two', '2'],
                         ],
                     ],
+                    'opacity' => true,
                 ],
             ],
         ];
@@ -104,6 +106,7 @@ final class ColorFieldTypeTest extends UnitTestCase
                 'valuePicker' => [
                     'items' => [],
                 ],
+                'opacity' => false,
             ],
             'expectedTca' => [
                 'config' => [

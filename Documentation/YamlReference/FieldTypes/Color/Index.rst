@@ -30,6 +30,15 @@ Settings
 
    If set, the field will become mandatory.
 
+.. confval:: opacity
+   :name: color-opacity
+
+   :Required: false
+   :Type: boolean
+   :Default: false
+
+   Enables selection of opacity for the color.
+
 .. confval:: valuePicker
    :name: color-valuePicker
 
