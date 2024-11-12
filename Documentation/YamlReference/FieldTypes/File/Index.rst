@@ -142,7 +142,7 @@ Allow media types like audio, video and youtube (or vimeo).
         type: File
         allowed: common-media-types
 
-Set specific crop variantes for an image field.
+Set specific crop variants for an image field.
 
 .. code-block:: yaml
 
@@ -158,9 +158,19 @@ Set specific crop variantes for an image field.
               portrait:
                 title: Portrait
                 value: 0.75
-              landscape:
-                title: Landscape
-                value: 4 / 3
+            landscape:
+              title: Landscape
+              value: 4 / 3
+            focusArea:
+              x: 0.3
+              y: 0.3
+              width: 0.4
+              height: 0.4
+            coverAreas:
+              - x: 0.1
+                y: 0.8
+                width: 0.8
+                height: 0.1
           tablet:
             title: Tablet
             allowedAspectRatios:
@@ -173,7 +183,6 @@ Set specific crop variantes for an image field.
               landscape:
                 title: Landscape
                 value: 4 / 3
-
 
 Usage in Fluid
 ==============
