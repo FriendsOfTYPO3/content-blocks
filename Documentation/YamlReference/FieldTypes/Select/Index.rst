@@ -186,8 +186,6 @@ Select single:
         type: Select
         renderType: selectSingle
         default: 'one'
-        minitems: 1
-        maxitems: 3
         items:
           - label: 'The first'
             value: one
