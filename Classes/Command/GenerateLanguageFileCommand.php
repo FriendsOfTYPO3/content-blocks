@@ -22,10 +22,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Package\Exception\UnknownPackageException;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -37,6 +40,9 @@ class GenerateLanguageFileCommand extends Command
         protected readonly LanguageFileGenerator $languageFileGenerator,
         protected readonly PackageManager $packageManager,
         protected readonly ContentBlockLoader $contentBlockLoader,
+        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected readonly FieldTypeRegistry $fieldTypeRegistry,
+        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {
         parent::__construct();
     }
@@ -65,6 +71,13 @@ class GenerateLanguageFileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
+        $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $this->fieldTypeRegistry,
+            $this->simpleTcaSchemaFactory,
+        );
+        $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
+        $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
         $contentBlockName = $input->getArgument('content-block');
         $print = (bool)$input->getOption('print');
         $extension = (string)$input->getOption('extension');
