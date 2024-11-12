@@ -83,7 +83,7 @@ to prefix **all** fields with `tx_mask`, even inside Collections.
 Templates
 ---------
 
-This is the easy part. Simply copy the Mask template into **frontend.html** and
+This is the easy part. Simply copy the Mask template into **templates/frontend.html** and
 you are done. That said, if you didn't use any partials or layouts. If so, move
 these to the according **templates/partials** and **templates/layouts** folder in your
 Content Block.
