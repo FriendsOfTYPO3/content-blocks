@@ -158,9 +158,9 @@ Set specific crop variants for an image field.
               portrait:
                 title: Portrait
                 value: 0.75
-            landscape:
-              title: Landscape
-              value: 4 / 3
+              landscape:
+                title: Landscape
+                value: 4 / 3
             focusArea:
               x: 0.3
               y: 0.3
