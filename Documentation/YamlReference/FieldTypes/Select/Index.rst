@@ -57,6 +57,29 @@ Settings
             - value: two
             - value: three
 
+   .. hint::
+
+      You can also use icons so they are displayed in the backend.
+      See :ref:`select-icons` for a full example.
+
+      .. code-block:: yaml
+
+          items:
+            - value: image-left
+              icon: content-beside-text-img-left
+            - value: image-right
+              icon: content-beside-text-img-right
+            - value: image-above
+              icon: content-beside-text-img-above-center
+
+      For this you need the following setting according to the :ref:`TCA documentation <t3tca:tca_property_fieldWizard_selectIcons>`.
+
+      .. code-block:: yaml
+
+          fieldWizard:
+            selectIcons:
+              disabled: false
+
    XLF translation keys for items have the following convention:
 
    .. code-block:: xml
@@ -232,3 +255,30 @@ Select tree:
         foreign_table_where: 'ORDER BY pages.uid'
         treeConfig:
           parentField: pid
+
+
+..  _select-icons:
+
+Select with icons:
+
+.. code-block:: yaml
+
+   name: example/select
+    fields:
+      - identifier: select_icons
+        type: Select
+        renderType: selectSingle
+        fieldWizard:
+          selectIcons:
+            disabled: false
+        default: 'image-left'
+        items:
+          - label: 'Image beside text (left)'
+            value: image-left
+            icon: content-beside-text-img-left
+          - label: 'Image beside text (right)'
+            value: image-right
+            icon: content-beside-text-img-right
+          - label: 'Image above text (center)'
+            value: image-above
+            icon: content-beside-text-img-above-center
