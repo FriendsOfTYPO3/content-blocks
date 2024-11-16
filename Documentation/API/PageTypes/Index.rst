@@ -5,8 +5,7 @@
 Page Types
 ==========
 
-This is a guide. For YAML reference refer to
-:ref:`this page <yaml_reference_page_types>`.
+For YAML reference refer to :ref:`this page <yaml_reference_page_types>`.
 
 Page Types (also known as doktypes) do exist since the beginning of time.
 However, it was always hard to create custom ones and there were no extensions
@@ -30,56 +29,14 @@ Elements. This approach also opens up the possibility to use your Page Types in
 plugins. See the `blog extension <https://extensions.typo3.org/extension/blog>`__
 which utilises this concept.
 
-Use as Frontend template
-========================
+Frontend template
+=================
 
-Historically, the backend layout / page layout is used as the switch for
-frontend templates and is still considered best practice. This means you have
-to define an additional page layout for each new Page Type and assign it.
+There is no default frontend template for Page Types, as this depends heavily
+on your setup. Typically the sitepackage extension of your site defines the
+page templates depending on the selected page layout.
 
-An alternative, more modern approach is to map the frontend template to the
-Page Type directly. This makes it possible to have different backend layouts
-per Page Type, but still render the same template. This can heavily reduce the
-amount of frontend templates which need to be created for each slight layout
-variation.
-
-In order to make use of this technique, you need to add a :typoscript:`CASE`
-cObject with the :typoscript:`key` set to :typoscript:`doktype`. This allows us
-to render a different frontend template depending on the Page Type. This setup
-expects a Blog.html file inside the Resources/Private/Templates folder in your
-extension.
-
-.. code-block:: typoscript
-
-    page = PAGE
-    page {
-      10 = FLUIDTEMPLATE
-      10 {
-        templateRootPaths {
-          0 = EXT:site_package/Resources/Private/Templates/
-        }
-        templateName = TEXT
-        templateName {
-          cObject = CASE
-          cObject {
-            key.field = doktype
-
-            default = TEXT
-            default.value = Default
-
-            1701284006 = TEXT
-            1701284006.value = Blog
-          }
-        }
-      }
-    }
-
-.. hint::
-
-   At the time of writing there is no Core solution to have a page layout as
-   default value for a specific Page Type. This has to be done via DataHandler
-   hooks. Have a look at `this extension <https://github.com/b13/doktypemapper>`__
-   for this.
+Read more about :ref:`Page Type / template mapping <page-types-template>`.
 
 Backend preview
 ===============

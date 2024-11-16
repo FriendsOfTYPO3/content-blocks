@@ -114,6 +114,18 @@ use content types as sub-resources inside extensions.
 
          .. rst-class:: card-header h3
 
+            .. rubric:: :ref:`API <api>`
+
+         .. container:: card-body
+
+            Deep dive into the Content Blocks API.
+
+   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+
+      .. container:: card px-0 h-100
+
+         .. rst-class:: card-header h3
+
             .. rubric:: :ref:`Guides <guides>`
 
          .. container:: card-body
@@ -145,6 +157,7 @@ use content types as sub-resources inside extensions.
     Commands/Index
     YamlReference/Index
     Templating/Index
+    API/Index
     Guides/Index
     DeveloperCorner/Index
     Migrations/Index

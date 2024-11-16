@@ -6,7 +6,7 @@
 Reuse existing fields
 =====================
 
-It's possible to reuse already existing fields by using the :yaml:`useExistingField`
+It's possible to reuse already existing fields by using the :confval:`useExistingField <field-types-useexistingfield>`
 flag. By doing so, you can extend existing fields with your own properties on a
 per element level.
 
