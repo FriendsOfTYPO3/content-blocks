@@ -57,7 +57,7 @@ Settings
             - value: two
             - value: three
 
-   .. hint::
+   .. tip::
 
       You can also use icons so they are displayed in the backend.
       See :ref:`select-icons` for a full example.
@@ -264,21 +264,21 @@ Select with icons:
 .. code-block:: yaml
 
    name: example/select
-    fields:
-      - identifier: select_icons
-        type: Select
-        renderType: selectSingle
-        fieldWizard:
-          selectIcons:
-            disabled: false
-        default: 'image-left'
-        items:
-          - label: 'Image beside text (left)'
-            value: image-left
-            icon: content-beside-text-img-left
-          - label: 'Image beside text (right)'
-            value: image-right
-            icon: content-beside-text-img-right
-          - label: 'Image above text (center)'
-            value: image-above
-            icon: content-beside-text-img-above-center
+   fields:
+     - identifier: select_icons
+       type: Select
+       renderType: selectSingle
+       fieldWizard:
+         selectIcons:
+           disabled: false
+       default: 'image-left'
+       items:
+         - label: 'Image beside text (left)'
+           value: image-left
+           icon: content-beside-text-img-left
+         - label: 'Image beside text (right)'
+           value: image-right
+           icon: content-beside-text-img-right
+         - label: 'Image above text (center)'
+           value: image-above
+           icon: content-beside-text-img-above-cent
