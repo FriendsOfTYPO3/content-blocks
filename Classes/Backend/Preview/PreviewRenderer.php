@@ -149,7 +149,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $layoutRootPaths = [
             'EXT:content_blocks/Resources/Private/Layouts/Preview/' . $section,
             ...$this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid),
-            $templatePath . '/layouts/'
+            $templatePath . '/layouts/',
         ];
         return $layoutRootPaths;
     }
