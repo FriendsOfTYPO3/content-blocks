@@ -4,12 +4,15 @@
     data-namespace-typo3-fluid="true"
 >
 
-<f:asset.css identifier="cbImagesliderCssBackend" href="{cb:assetPath()}/preview.css"/>
+<f:layout name="Preview"/>
 
-<div class="cb-imageslider">
-    <f:for each="{data.assets}" as="asset">
-        <f:image image="{asset}" height="75"/>
-    </f:for>
-</div>
+<f:section name="Content">
+    <f:asset.css identifier="cbIconGroupCssBackend" href="{cb:assetPath()}/preview.css"/>
+    <div class="cb-imageslider">
+        <f:for each="{data.assets}" as="asset">
+            <f:image image="{asset}" height="75"/>
+        </f:for>
+    </div>
+</f:section>
 
 </html>
