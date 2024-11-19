@@ -49,10 +49,29 @@ class HtmlTemplateCodeGenerator
             $package = $contentBlockConfiguration->getName();
             $vendor = $contentBlockConfiguration->getVendor();
 
-            $defaultContent[] = '<f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/preview.css"/>';
+            $defaultContent[] = '<html';
+            $defaultContent[] = '    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"';
+            $defaultContent[] = '    data-namespace-typo3-fluid="true"';
+            $defaultContent[] = '>';
             $defaultContent[] = '';
-            $defaultContent[] = 'Preview for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
-            $defaultContent[] = 'Header: {data.header}';
+            $defaultContent[] = '<f:layout name="Preview"/>';
+            $defaultContent[] = '';
+            $defaultContent[] = '<f:section name="Header">';
+            $defaultContent[] = '    <be:link.editRecord uid="{data.uid}" table="{data.mainType}">{data.header}</be:link.editRecord>';
+            $defaultContent[] = '</f:section>';
+            $defaultContent[] = '';
+            $defaultContent[] = '<f:section name="Content">';
+            $defaultContent[] = '    <f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/preview.css"/>';
+            $defaultContent[] = '    Preview for Content Block: ' . $contentBlockConfiguration->getName();
+            $defaultContent[] = '</f:section>';
+            $defaultContent[] = '';
+            $defaultContent[] = '<f:comment>';
+            $defaultContent[] = '<!-- Uncomment to override preview footer -->';
+            $defaultContent[] = '<f:section name="Footer">';
+            $defaultContent[] = '    My custom Footer';
+            $defaultContent[] = '</f:section>';
+            $defaultContent[] = '</f:comment>';
+            $defaultContent[] = '';
         }
 
         $defaultContentString = implode("\n", $defaultContent);
