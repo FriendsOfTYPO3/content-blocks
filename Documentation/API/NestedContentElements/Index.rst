@@ -5,10 +5,6 @@
 Nested Content Elements
 =======================
 
-..  warning::
-
-    This feature currently does not work with the new PageContentFetching API.
-
 It is possible to nest Content Elements within Content Blocks.
 By default, TYPO3 would render those nested elements within the TYPO3 Page
 Module in the backend and the frontend output. Content Blocks delivers an API
@@ -168,10 +164,11 @@ to prevent fetching any child elements.
 
 ..  note::
 
-    If you do not build upon :typoscript:`styles.content.get`, you need to
-    integrate the logic yourself. The necessary API providing all the columns is
-    available via :php:`TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend`.
-    This can be used to apply the same approach to :php:`TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor`.
+    If you do not build upon :typoscript:`styles.content.get` or the
+    :php-short:`TYPO3\CMS\Frontend\DataProcessing\PageContentFetchingProcessor`,
+    you need to integrate the logic yourself. The necessary API providing all
+    the columns is available via :php:`TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend`.
+    This can be used to apply the same approach to :php-short:`TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor`.
 
     Example:
 
