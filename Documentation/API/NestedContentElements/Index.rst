@@ -5,6 +5,10 @@
 Nested Content Elements
 =======================
 
+.. warning::
+
+    This feature does currently not work with the new PageContentFetching API.
+
 It is possible to nest Content Elements within Content Blocks.
 By default, TYPO3 would render those nested elements within the TYPO3 Page
 Module in the backend and the frontend output. Content Blocks delivers an API
