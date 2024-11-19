@@ -11,6 +11,7 @@ lib.contentBlock {
         10 = content-blocks
     }
 }
+styles.content.get.select.where.postUserFunc = TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend
 ');
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['cb'][] = 'TYPO3\\CMS\\ContentBlocks\\ViewHelpers';
