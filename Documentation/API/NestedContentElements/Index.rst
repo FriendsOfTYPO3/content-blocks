@@ -7,7 +7,7 @@ Nested Content Elements
 
 ..  warning::
 
-    This feature does currently not work with the new PageContentFetching API.
+    This feature currently does not work with the new PageContentFetching API.
 
 It is possible to nest Content Elements within Content Blocks.
 By default, TYPO3 would render those nested elements within the TYPO3 Page
@@ -20,7 +20,7 @@ and integration for common setups to prevent this unwanted behaviour.
    solution does not provide drag and drop or creation of new child elements
    in the Page Module.
 
-..  _cb-nested-elements:
+..  _cb_nested_elements:
 
 How to create nested Content Elements
 =====================================
@@ -51,7 +51,7 @@ your root Content Element. For better usability the default CType can be
 overridden with :yaml:`overrideChildTca`. Right now, it is not possible to
 restrict certain CTypes.
 
-..  _cb-nested-elements-frontend:
+..  _cb_nested_elements_frontend:
 
 Render nested Content Elements in the frontend
 ==============================================
@@ -103,7 +103,7 @@ more work.
     You can also use :ref:`global partials <cb_extension_partials>` for the
     second method to have less duplication.
 
-..  _cb-nested-elements-backend:
+..  _cb_nested_elements_backend:
 
 Render nested Content Elements in the backend
 =============================================
@@ -128,7 +128,7 @@ to render.
 This preview is limited to control buttons like edit, delete and hide. No
 support for drag and drop or creation of new child elements is given.
 
-..  _cb-nested-vs-container:
+..  _cb_nested_vs_container:
 
 When to use nested Content Elements vs. container extensions
 ============================================================
@@ -143,7 +143,7 @@ child Content Element relations and these child elements are unlikely to be
 moved elsewhere, you might be better off using simple nested Content Elements.
 An example could be a "Tab module" or a "Content Carousel".
 
-..  _cb-nested-concept:
+..  _cb_nested_concept:
 
 Concept
 =======
@@ -156,7 +156,7 @@ TYPO3 even though created within another Content Element.
 Extensions like EXT:container work completely different as they assign a
 specific colPos value to the child elements.
 
-..  _cb-nesting-prevent-output-fe
+..  _cb_nesting_prevent_output_fe:
 
 Preventing output in frontend
 =============================
@@ -186,7 +186,7 @@ to prevent fetching any child elements.
             where.postUserFunc = TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere->extend
           }
 
-..  _cb-nesting-prevent-output-be
+..  _cb_nesting_prevent_output_be:
 
 Preventing output in backend
 ============================
