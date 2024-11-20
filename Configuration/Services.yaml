@@ -96,5 +96,5 @@ services:
     tags:
       - name: 'console.command'
         command: 'content-blocks:language:generate'
-        description: 'Update Labels.xlf for the given Content Block'
+        description: 'Update labels.xlf for the given Content Block'
         schedulable: false
