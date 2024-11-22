@@ -160,6 +160,7 @@ use content types as sub-resources inside extensions.
     API/Index
     Guides/Index
     DeveloperCorner/Index
+    ChangeLog/Index
     Migrations/Index
     KnownProblems/Index
     Appendix/Index
