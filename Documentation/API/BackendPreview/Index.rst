@@ -14,6 +14,8 @@ A preview can be defined by creating a file `templates/backend-preview.html`
 inside your Content Block. This file is already created for you, if you use the
 kickstart command.
 
+..  _api_backend_preview_content_elements:
+
 Content Elements
 ================
 
@@ -51,6 +53,8 @@ the standard preview rendering of TYPO3. If a section is omitted, the fallback
 rendering from TYPO3 will be used instead. You can also include CSS just like in
 the frontend with :html:`f:asset.css` View Helper.
 
+..  _api_backend_preview_page_types:
+
 Page Types
 ==========
 
@@ -62,6 +66,8 @@ have to define any sections.
     :alt: Page Type preview in the TYPO3 backend
 
 This is an example of a Page Type preview.
+
+..  _api_backend_preview_record_types:
 
 Record Types
 ============
