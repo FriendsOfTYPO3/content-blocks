@@ -1,4 +1,5 @@
 .. include:: /Includes.rst.txt
+.. _api_page_types:
 .. _cb_guides_page_types:
 
 ==========

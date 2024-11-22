@@ -1,4 +1,5 @@
 .. include:: /Includes.rst.txt
+.. _api_record_types:
 .. _cb_guides_record_types:
 
 ============
