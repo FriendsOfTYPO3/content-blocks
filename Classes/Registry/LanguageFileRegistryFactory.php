@@ -25,11 +25,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class LanguageFileRegistryFactory
+readonly class LanguageFileRegistryFactory
 {
     public function __construct(
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
-        protected readonly LocalizationParserInterface $localizationParser,
+        protected ContentBlockRegistry $contentBlockRegistry,
+        protected LocalizationParserInterface $localizationParser,
     ) {}
 
     public function create(): LanguageFileRegistry

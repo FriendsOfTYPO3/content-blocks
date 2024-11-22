@@ -33,15 +33,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentBlockBuilder
+readonly class ContentBlockBuilder
 {
     public function __construct(
-        protected readonly HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
-        protected readonly LanguageFileGenerator $languageFileGenerator,
-        protected readonly ContentBlockRegistry $contentBlockRegistry,
-        protected readonly FieldTypeRegistry $fieldTypeRegistry,
-        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
-        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected HtmlTemplateCodeGenerator $htmlTemplateCodeGenerator,
+        protected LanguageFileGenerator $languageFileGenerator,
+        protected ContentBlockRegistry $contentBlockRegistry,
+        protected FieldTypeRegistry $fieldTypeRegistry,
+        protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {}
 
     /**

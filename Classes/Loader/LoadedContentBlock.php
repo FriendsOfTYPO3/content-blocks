@@ -25,16 +25,16 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class LoadedContentBlock
+final readonly class LoadedContentBlock
 {
     public function __construct(
-        private readonly string $name,
-        private readonly array $yaml,
-        private readonly ContentTypeIcon $icon,
-        private readonly string $hostExtension,
-        private readonly string $extPath,
-        private readonly ContentType $contentType,
-        private readonly ?PageIconSet $pageIconSet = null,
+        private string $name,
+        private array $yaml,
+        private ContentTypeIcon $icon,
+        private string $hostExtension,
+        private string $extPath,
+        private ContentType $contentType,
+        private ?PageIconSet $pageIconSet = null,
     ) {}
 
     public static function fromArray(array $array): LoadedContentBlock

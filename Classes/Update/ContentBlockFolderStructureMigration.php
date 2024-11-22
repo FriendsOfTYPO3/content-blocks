@@ -23,10 +23,10 @@ use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 #[UpgradeWizard('contentBlocksFolderStructureMigration')]
-class ContentBlockFolderStructureMigration implements UpgradeWizardInterface
+readonly class ContentBlockFolderStructureMigration implements UpgradeWizardInterface
 {
     public function __construct(
-        protected readonly PackageManager $packageManager,
+        protected PackageManager $packageManager,
     ) {}
 
     public function getTitle(): string

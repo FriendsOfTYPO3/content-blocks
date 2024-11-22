@@ -52,9 +52,9 @@ class BasicsLoader
     protected BasicsRegistry $basicsRegistry;
 
     public function __construct(
-        protected readonly PackageManager $packageManager,
+        readonly protected PackageManager $packageManager,
         #[Autowire(service: 'cache.core')]
-        protected readonly PhpFrontend $cache,
+        readonly protected PhpFrontend $cache,
     ) {}
 
     public function load(): BasicsRegistry

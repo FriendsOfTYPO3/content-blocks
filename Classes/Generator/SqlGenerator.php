@@ -29,13 +29,13 @@ use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
  * @internal Not part of TYPO3's public API.
  */
 #[AsEventListener(identifier: 'content-blocks-sql')]
-class SqlGenerator
+readonly class SqlGenerator
 {
     public function __construct(
-        protected readonly ContentBlockLoader $contentBlockLoader,
-        protected readonly TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
-        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
-        protected readonly FieldTypeRegistry $fieldTypeRegistry,
+        protected ContentBlockLoader $contentBlockLoader,
+        protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
+        protected SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected FieldTypeRegistry $fieldTypeRegistry,
     ) {}
 
     public function __invoke(AlterTableDefinitionStatementsEvent $event): void

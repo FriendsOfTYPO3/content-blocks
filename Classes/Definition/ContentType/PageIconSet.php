@@ -20,10 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class PageIconSet
+final readonly class PageIconSet
 {
     public function __construct(
-        public readonly ContentTypeIcon $iconHideInMenu,
-        public readonly ContentTypeIcon $iconRoot,
+        public ContentTypeIcon $iconHideInMenu,
+        public ContentTypeIcon $iconRoot,
     ) {}
 }

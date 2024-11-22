@@ -19,15 +19,15 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 
-final class CompilationResult
+final readonly class CompilationResult
 {
     public function __construct(
-        private readonly AutomaticLanguageKeysRegistry $automaticLanguageKeys,
+        private AutomaticLanguageKeysRegistry $automaticLanguageKeys,
         /**
          * @var array<string, array>
          */
-        private readonly array $parentReferences,
-        private readonly array $mergedTableDefinitions,
+        private array $parentReferences,
+        private array $mergedTableDefinitions,
     ) {}
 
     public function getAutomaticLanguageKeys(): AutomaticLanguageKeysRegistry

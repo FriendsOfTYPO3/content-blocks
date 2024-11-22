@@ -24,10 +24,10 @@ use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchema;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
+final readonly class NativeTableCapabilityProxy implements SystemFieldPalettesInterface
 {
     public function __construct(
-        private readonly SimpleTcaSchema $tcaSchema
+        private SimpleTcaSchema $tcaSchema
     ) {}
 
     public function hasAccessPalette(): bool

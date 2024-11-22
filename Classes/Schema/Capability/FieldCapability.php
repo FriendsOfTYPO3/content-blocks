@@ -22,10 +22,10 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class FieldCapability implements SchemaCapabilityInterface
+final readonly class FieldCapability implements SchemaCapabilityInterface
 {
     public function __construct(
-        protected readonly TcaFieldTypeInterface $field
+        protected TcaFieldTypeInterface $field
     ) {}
 
     public function getFieldName(): string

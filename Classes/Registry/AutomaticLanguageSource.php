@@ -20,10 +20,10 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class AutomaticLanguageSource
+final readonly class AutomaticLanguageSource
 {
     public function __construct(
-        public readonly string $key,
-        public readonly string $value,
+        public string $key,
+        public string $value,
     ) {}
 }

@@ -100,65 +100,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @internal Not part of TYPO3's public API.
  */
 #[Autoconfigure(public: true)]
-class TcaGenerator
+readonly class TcaGenerator
 {
-    /**
-     * These fields are required for automatic default SQL schema generation
-     * or for relation resolving Core API. Thus, these fields can't be
-     * overridden through type overrides, as merged column config is only
-     * available in FormEngine context.
-     *
-     * @var string[]|array{type: string, option: string}
-     */
-    protected array $nonOverridableOptions = [
-        'type',
-        'relationship',
-        'dbType',
-        'nullable',
-        'MM',
-        'MM_opposite_field',
-        'MM_hasUidField',
-        'MM_oppositeUsage',
-        [
-            'type' => 'Relation',
-            'option' => 'allowed',
-        ],
-        'foreign_table',
-        'foreign_field',
-        'foreign_table_field',
-        'foreign_match_fields',
-        'foreign_sortby',
-        'foreign_default_sortby',
-        'symmetric_field',
-        'symmetric_sortby',
-        'ds',
-        'ds_pointerField',
-        'exclude',
-        // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
-        'generatorOptions',
-        'behaviour.allowLanguageSynchronization',
-        [
-            'type' => 'Number',
-            'option' => 'format',
-        ],
-    ];
-
-    /**
-     * Associative arrays, which can be extended without the need to
-     * use columnsOverrides.
-     *
-     * @var string[]
-     */
-    protected array $extensibleOptions = [
-        'ds',
-    ];
-
     public function __construct(
-        protected readonly TableDefinitionCollection $tableDefinitionCollection,
-        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
-        protected readonly LanguageFileRegistry $languageFileRegistry,
-        protected readonly SystemExtensionAvailability $systemExtensionAvailability,
-        protected readonly FlexFormGenerator $flexFormGenerator,
+        protected TableDefinitionCollection $tableDefinitionCollection,
+        protected SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected LanguageFileRegistry $languageFileRegistry,
+        protected SystemExtensionAvailability $systemExtensionAvailability,
+        protected FlexFormGenerator $flexFormGenerator,
     ) {}
 
     public function __invoke(BeforeTcaOverridesEvent $event): void
@@ -419,12 +368,56 @@ class TcaGenerator
         return $showItemString;
     }
 
+    /**
+     * These fields are required for automatic default SQL schema generation
+     * or for relation resolving Core API. Thus, these fields can't be
+     * overridden through type overrides, as merged column config is only
+     * available in FormEngine context.
+     *
+     * @return string[]|array{type: string, option: string}
+     */
+    protected static function getNonOverridableOptions(): array
+    {
+        return [
+            'type',
+            'relationship',
+            'dbType',
+            'nullable',
+            'MM',
+            'MM_opposite_field',
+            'MM_hasUidField',
+            'MM_oppositeUsage',
+            [
+                'type' => 'Relation',
+                'option' => 'allowed',
+            ],
+            'foreign_table',
+            'foreign_field',
+            'foreign_table_field',
+            'foreign_match_fields',
+            'foreign_sortby',
+            'foreign_default_sortby',
+            'symmetric_field',
+            'symmetric_sortby',
+            'ds',
+            'ds_pointerField',
+            'exclude',
+            // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
+            'generatorOptions',
+            'behaviour.allowLanguageSynchronization',
+            [
+                'type' => 'Number',
+                'option' => 'format',
+            ],
+        ];
+    }
+
     protected function getColumnsOverrides(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
             $overrideTca = $overrideColumn->getTca();
-            foreach ($this->nonOverridableOptions as $option) {
+            foreach (self::getNonOverridableOptions() as $option) {
                 $optionKey = $this->getOptionKey($option, $overrideColumn);
                 if ($optionKey === null) {
                     continue;
@@ -488,8 +481,10 @@ class TcaGenerator
      */
     protected function getColumnTcaForTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $baseTca): array
     {
+        // FlexForm "ds" can be extended without columnsOverrides.
+        $extensibleOptions = ['ds'];
         $columnTca = [];
-        $iterateOptions = $column->useExistingField() ? $this->extensibleOptions : $this->nonOverridableOptions;
+        $iterateOptions = $column->useExistingField() ? $extensibleOptions : self::getNonOverridableOptions();
         foreach ($iterateOptions as $option) {
             $optionKey = $this->getOptionKey($option, $column);
             if ($optionKey === null) {

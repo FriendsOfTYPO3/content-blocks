@@ -22,12 +22,12 @@ use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class TcaField implements TcaFieldTypeInterface
+final readonly class TcaField implements TcaFieldTypeInterface
 {
     public function __construct(
-        private readonly FieldTypeInterface $fieldType,
-        private readonly string $name,
-        private readonly array $columnConfig,
+        private FieldTypeInterface $fieldType,
+        private string $name,
+        private array $columnConfig,
     ) {}
 
     public function getType(): FieldTypeInterface

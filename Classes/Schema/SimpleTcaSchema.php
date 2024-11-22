@@ -24,13 +24,13 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class SimpleTcaSchema
+final readonly class SimpleTcaSchema
 {
     public function __construct(
-        protected readonly string $name,
-        protected readonly FieldCollection $fields,
-        protected readonly FieldCollection $systemFields,
-        protected readonly array $schemaConfiguration,
+        protected string $name,
+        protected FieldCollection $fields,
+        protected FieldCollection $systemFields,
+        protected array $schemaConfiguration,
     ) {}
 
     public function getName(): string

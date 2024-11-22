@@ -23,10 +23,10 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
  * @internal
  */
 #[Autoconfigure(public: true)]
-class ContentWhere
+readonly class ContentWhere
 {
     public function __construct(
-        protected readonly array $parentFieldNames
+        protected array $parentFieldNames
     ) {}
 
     public function extend(string $where): string

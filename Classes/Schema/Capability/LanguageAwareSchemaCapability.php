@@ -26,13 +26,13 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
  *
  * @internal Not part of TYPO3's public API.
  */
-class LanguageAwareSchemaCapability implements SchemaCapabilityInterface
+readonly class LanguageAwareSchemaCapability implements SchemaCapabilityInterface
 {
     public function __construct(
-        protected readonly TcaFieldTypeInterface $languageField,
-        protected readonly TcaFieldTypeInterface $originPointerField,
-        protected readonly ?TcaFieldTypeInterface $translationSourceField,
-        protected readonly ?TcaFieldTypeInterface $diffSourceField
+        protected TcaFieldTypeInterface $languageField,
+        protected TcaFieldTypeInterface $originPointerField,
+        protected ?TcaFieldTypeInterface $translationSourceField,
+        protected ?TcaFieldTypeInterface $diffSourceField
     ) {}
 
     public function getLanguageField(): TcaFieldTypeInterface

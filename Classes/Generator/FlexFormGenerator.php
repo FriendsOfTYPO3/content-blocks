@@ -28,10 +28,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class FlexFormGenerator
+readonly class FlexFormGenerator
 {
     public function __construct(
-        protected readonly LanguageFileRegistry $languageFileRegistry,
+        protected LanguageFileRegistry $languageFileRegistry,
     ) {}
 
     public function generate(FlexFormDefinition $flexFormDefinition): string

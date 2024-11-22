@@ -26,9 +26,9 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
  *
  * @internal Not part of TYPO3's public API.
  */
-class BasicsService
+readonly class BasicsService
 {
-    public function __construct(protected readonly BasicsRegistry $basicsRegistry) {}
+    public function __construct(protected BasicsRegistry $basicsRegistry) {}
 
     public function applyBasics(array $yaml): array
     {

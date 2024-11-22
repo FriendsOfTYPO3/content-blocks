@@ -23,12 +23,12 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
  *
  * @internal Not part of TYPO3's public API.
  */
-final class LoadedBasic
+final readonly class LoadedBasic
 {
     public function __construct(
-        private readonly string $hostExtension,
-        private readonly string $identifier,
-        private readonly array $fields,
+        private string $hostExtension,
+        private string $identifier,
+        private array $fields,
     ) {}
 
     public static function fromArray(array $array, string $hostExtension = ''): LoadedBasic
