@@ -22,6 +22,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
@@ -34,6 +35,14 @@ use TYPO3\CMS\Core\Package\Exception\UnknownPackageException;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[Autoconfigure(tags: [
+    [
+        'name' => 'console.command',
+        'command' => 'content-blocks:language:generate',
+        'description' => 'Update labels.xlf for the given Content Block',
+        'schedulable' => false,
+    ],
+])]
 class GenerateLanguageFileCommand extends Command
 {
     public function __construct(

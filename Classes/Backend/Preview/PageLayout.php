@@ -27,6 +27,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -36,6 +37,7 @@ use TYPO3\CMS\Core\View\ViewInterface;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[AsEventListener(identifier: 'content-blocks-page-preview')]
 readonly class PageLayout
 {
     public function __construct(

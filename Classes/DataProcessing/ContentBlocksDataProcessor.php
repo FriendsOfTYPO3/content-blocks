@@ -17,11 +17,16 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
+#[Autoconfigure(
+    tags: [['name' => 'data.processor', 'identifier' => 'content-blocks']],
+    public: true
+)]
 readonly class ContentBlocksDataProcessor implements DataProcessorInterface
 {
     public function __construct(

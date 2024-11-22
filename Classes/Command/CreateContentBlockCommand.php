@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
@@ -38,6 +39,19 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageInterface;
 
+#[Autoconfigure(tags: [
+    [
+        'name' => 'console.command',
+        'command' => 'content-blocks:create',
+        'description' => 'Create a Content Block',
+        'schedulable' => false,
+    ],
+    [
+        'name' => 'console.command',
+        'command' => 'make:content-block',
+        'schedulable' => false,
+    ],
+])]
 class CreateContentBlockCommand extends Command
 {
     public function __construct(

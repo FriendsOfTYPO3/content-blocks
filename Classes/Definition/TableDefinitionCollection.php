@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
@@ -24,6 +25,7 @@ use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[Autoconfigure(public: true)]
 final class TableDefinitionCollection implements \IteratorAggregate
 {
     /** @var TableDefinition[] */

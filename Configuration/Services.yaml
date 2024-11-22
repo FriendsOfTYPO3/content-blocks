@@ -7,60 +7,17 @@ services:
   TYPO3\CMS\ContentBlocks\:
     resource: '../Classes/*'
 
-  TYPO3\CMS\ContentBlocks\UserFunction\:
-    resource: '../Classes/UserFunction/*'
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Generator\TcaGenerator:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Generator\SqlGenerator:
-    public: true
-    tags:
-      - name: event.listener
-        identifier: 'content-blocks-sql'
-        event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
-
-  TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer:
-    public: true
-
-  TYPO3\CMS\ContentBlocks\Backend\Preview\PageLayout:
-    tags:
-      - name: 'event.listener'
-        identifier: 'content-blocks-page-preview'
-        event: 'TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent'
-
-  TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlocksDataProcessor:
-    autoconfigure: false
-    public: true
-    tags:
-      - { name: 'data.processor', identifier: 'content-blocks' }
-
-  TYPO3\CMS\ContentBlocks\Basics\BasicsLoader:
-    arguments:
-      $cache: '@cache.core'
-
   TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Basics\BasicsLoader'
       - 'load'
 
-  TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader:
-    arguments:
-      $cache: '@cache.core'
-
   TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry:
-    public: true
     factory:
       - '@TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader'
       - 'load'
 
-  TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory:
-    arguments:
-      $cache: '@cache.core'
-
   TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection:
-    public: true
     factory:
       - '@TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory'
       - 'create'
@@ -74,27 +31,3 @@ services:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryFactory'
       - 'create'
-
-  TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand:
-    tags:
-      - name: 'console.command'
-        command: 'content-blocks:create'
-        description: 'Create a Content Block'
-        schedulable: false
-      - name: 'console.command'
-        command: 'make:content-block'
-        schedulable: false
-
-  TYPO3\CMS\ContentBlocks\Command\ListContentBlocksCommand:
-    tags:
-      - name: 'console.command'
-        command: 'content-blocks:list'
-        description: 'List available Content Blocks'
-        schedulable: false
-
-  TYPO3\CMS\ContentBlocks\Command\GenerateLanguageFileCommand:
-    tags:
-      - name: 'console.command'
-        command: 'content-blocks:language:generate'
-        description: 'Update labels.xlf for the given Content Block'
-        schedulable: false

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -70,6 +71,7 @@ class ContentBlockLoader
     protected ContentBlockRegistry $contentBlockRegistry;
 
     public function __construct(
+        #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
         protected readonly PackageManager $packageManager,

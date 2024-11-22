@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\NativeTableCapabilityProxy;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
@@ -98,6 +99,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @internal Not part of TYPO3's public API.
  */
+#[Autoconfigure(public: true)]
 class TcaGenerator
 {
     /**

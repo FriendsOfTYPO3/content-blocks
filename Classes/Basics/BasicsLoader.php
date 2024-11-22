@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Basics;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -52,6 +53,7 @@ class BasicsLoader
 
     public function __construct(
         protected readonly PackageManager $packageManager,
+        #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
     ) {}
 

@@ -22,11 +22,13 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[AsEventListener(identifier: 'content-blocks-sql')]
 class SqlGenerator
 {
     public function __construct(

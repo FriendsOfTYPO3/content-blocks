@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
@@ -35,6 +36,7 @@ final class TableDefinitionCollectionFactory
     protected TableDefinitionCollection $tableDefinitionCollection;
 
     public function __construct(
+        #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
         protected readonly ContentBlockCompiler $contentBlockCompiler,
     ) {}

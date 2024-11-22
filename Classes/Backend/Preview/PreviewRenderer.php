@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
@@ -35,6 +36,7 @@ use TYPO3\CMS\Core\View\ViewInterface;
  *
  * @internal Not part of TYPO3's public API.
  */
+#[Autoconfigure(public: true)]
 class PreviewRenderer extends StandardContentPreviewRenderer
 {
     public function __construct(

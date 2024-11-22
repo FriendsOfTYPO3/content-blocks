@@ -17,9 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\UserFunction;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+
 /**
  * @internal
  */
+#[Autoconfigure(public: true)]
 class ContentWhere
 {
     public function __construct(

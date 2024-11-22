@@ -17,12 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
 /**
  * @internal Not part of TYPO3's public API.
  */
+#[Autoconfigure(public: true)]
 final class ContentBlockRegistry
 {
     /**
