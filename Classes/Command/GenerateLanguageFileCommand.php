@@ -158,8 +158,23 @@ class GenerateLanguageFileCommand extends Command
         $labelsFolder = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFolder();
         $labelsXlfPath = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
         $result = $this->languageFileGenerator->generate($contentBlock);
+        // Avoid writing new labels.xlf if it is identical to the current one.
+        if (file_exists($labelsXlfPath)) {
+            $current = file_get_contents($labelsXlfPath);
+            $currentWithoutDate = $this->removeDateFromXLF($current);
+            $resultWithoutDate = $this->removeDateFromXLF($result);
+            if ($currentWithoutDate === $resultWithoutDate) {
+                return;
+            }
+        }
         GeneralUtility::mkdir_deep($labelsFolder);
         GeneralUtility::writeFile($labelsXlfPath, $result);
+    }
+
+    protected function removeDateFromXLF(string $xlf): string
+    {
+        $result = preg_replace('/date="(.*)"/', '', $xlf);
+        return $result;
     }
 
     protected function printLabelsXlf(
