@@ -7,10 +7,6 @@ Record Types
 
 Folder: `ContentBlocks/RecordTypes`.
 
-Record Types are generic Content Types in TYPO3. Basically everything, which is
-not a Content Element or Page Type. Adding custom records requires you to define
-a :yaml:`table` name. A minimal example looks like this:
-
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/config.yaml
 
