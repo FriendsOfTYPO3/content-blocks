@@ -5,8 +5,12 @@
 Basic
 =====
 
-The :yaml:`Basic` type can be used to include a pre-defined set of fields. Read
-the main article about Basics :ref:`here <basics>`.
+The :yaml:`Basic` type can be used to include a pre-defined set of fields. Most
+commonly used to include shared :ref:`Palettes <field_type_palette>`.
+
+Can also be used as a root option :ref:`basics <confval-root-basics>`.
+
+Read the main article about :ref:`Basics <basics>`.
 
 Example:
 
@@ -14,10 +18,6 @@ Example:
    :caption: EXT:your_extension/ContentBlocks/ContentElements/basics/config.yaml
 
     name: example/basics
-    basics:
-        - TYPO3/Appearance
     fields:
-        - identifier: header
-          useExistingField: true
-        - identifier: TYPO3/Links
+        - identifier: TYPO3/Header
           type: Basic

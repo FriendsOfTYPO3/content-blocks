@@ -34,4 +34,3 @@ Full examples can be found in the examples repository: https://github.com/friend
    ContentTypes/PageTypes/Index
    ContentTypes/RecordTypes/Index
    FieldTypes/Index
-   Basics/Index

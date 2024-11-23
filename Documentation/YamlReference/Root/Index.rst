@@ -106,9 +106,28 @@ Common root options
       The **default** loading order is **undefined** and depends on the
       (file-)system and the order, in which extensions are loaded.
 
+.. confval:: basics
+   :name: root-basics
+   :required: false
+   :type: array
+
+   Globally defined :yaml:`basics` are appended to the very end of your
+   :yaml:`fields` array. Most commonly used to include shared
+   :ref:`Tabs <field_type_tab>`.
+
+   ..  code-block:: yaml
+
+       basics:
+           - TYPO3/Appearance
+           - TYPO3/Links
+
+   Can also be used as a Field Type :ref:`Basic <field_type_basic>`.
+
+   Learn more about the concept of :ref:`Basics <basics>`.
+
 .. confval:: fields
    :name: root-fields
-^^^   :required: false
+   :required: false
    :type: array
 
    The main entry point for the field definitions. Fields defined in this array
