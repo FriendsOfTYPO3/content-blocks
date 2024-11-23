@@ -1,15 +1,11 @@
 .. include:: /Includes.rst.txt
 .. _yaml_reference_page_types:
 
-==========
-Page Types
-==========
+=========
+PageTypes
+=========
 
-Folder: `ContentBlocks/PageTypes`.
-
-Page Types are a special Content Type in TYPO3. The basic structure is
-already defined in the TYPO3 Core. Content Blocks only adds new types to it. A
-minimal Page Type looks like this:
+Folder: `ContentBlocks/PageTypes`
 
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/PageTypes/blog/config.yaml
@@ -20,15 +16,8 @@ minimal Page Type looks like this:
       - identifier: additional_field
         type: Text
 
-This will create a new Page Type entry above the page tree, which you can drag
-and drop as usual. Your custom fields will be added after the `nav_title` field.
-SEO fields will be automatically added, if you have the SEO system extension
-installed.
-
-.. tip::
-
-    Check out this :ref:`comprehensive guide <cb_guides_page_types>` on ways to
-    utilize Page Types.
+Check out this :ref:`comprehensive guide <cb_guides_page_types>` on ways to
+utilize Page Types.
 
 Options
 =======
