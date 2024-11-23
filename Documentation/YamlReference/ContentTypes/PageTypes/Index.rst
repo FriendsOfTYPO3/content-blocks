@@ -16,8 +16,7 @@ Folder: `ContentBlocks/PageTypes`
       - identifier: additional_field
         type: Text
 
-Check out this :ref:`comprehensive guide <cb_guides_page_types>` on ways to
-utilize Page Types.
+Learn more about :ref:`Page Types <cb_guides_page_types>`.
 
 Options
 =======

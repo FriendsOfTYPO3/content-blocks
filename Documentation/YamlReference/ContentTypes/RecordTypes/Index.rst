@@ -1,11 +1,11 @@
 .. include:: /Includes.rst.txt
 .. _yaml_reference_record_type:
 
-============
-Record Types
-============
+===========
+RecordTypes
+===========
 
-Folder: `ContentBlocks/RecordTypes`.
+Folder: `ContentBlocks/RecordTypes`
 
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/RecordTypes/my-record-type/config.yaml
@@ -17,8 +17,7 @@ Folder: `ContentBlocks/RecordTypes`.
       - identifier: title
         type: Text
 
-Check out this :ref:`comprehensive guide <cb_guides_record_types>` on ways to
-utilize Record Types.
+Learn more about :ref:`Record Types <cb_guides_record_types>`.
 
 Options
 =======
