@@ -3,13 +3,13 @@
 	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="example/text">
 		<header/>
 		<body>
-			<trans-unit id="title" resname="title">
+			<trans-unit id="title">
 				<source>Text</source>
 			</trans-unit>
-			<trans-unit id="description" resname="description">
+			<trans-unit id="description">
 				<source>Simple text element</source>
 			</trans-unit>
-			<trans-unit id="header.label" resname="header.label">
+			<trans-unit id="header.label">
 				<source>Header</source>
 			</trans-unit>
 		</body>

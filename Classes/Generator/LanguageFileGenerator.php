@@ -85,7 +85,7 @@ class LanguageFileGenerator
         $key = $automaticLanguageSource->key;
         $value = htmlspecialchars($automaticLanguageSource->value);
         $sourceContent = <<<HEREDOC
-			<trans-unit id="$key" resname="$key">
+			<trans-unit id="$key">
 				<source>$value</source>
 			</trans-unit>
 HEREDOC;

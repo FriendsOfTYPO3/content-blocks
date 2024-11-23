@@ -3,22 +3,22 @@
 	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="hov/record1">
 		<header/>
 		<body>
-			<trans-unit id="title" resname="title">
+			<trans-unit id="title">
 				<source>Record 1</source>
 			</trans-unit>
-			<trans-unit id="description" resname="description">
+			<trans-unit id="description">
 				<source>This is your content block description</source>
 			</trans-unit>
-			<trans-unit id="title.label" resname="title.label">
+			<trans-unit id="title.label">
 				<source>Custom title 1</source>
 			</trans-unit>
-			<trans-unit id="text.label" resname="text.label">
+			<trans-unit id="text.label">
 				<source>Text</source>
 			</trans-unit>
-			<trans-unit id="image.label" resname="image.label">
+			<trans-unit id="image.label">
 				<source>Image</source>
 			</trans-unit>
-			<trans-unit id="text3.label" resname="text3.label">
+			<trans-unit id="text3.label">
 				<source>Textarea</source>
 			</trans-unit>
 		</body>

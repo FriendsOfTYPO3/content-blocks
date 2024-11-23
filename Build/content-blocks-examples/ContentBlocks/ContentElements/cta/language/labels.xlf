@@ -3,28 +3,28 @@
 	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="example/cta">
 		<header/>
 		<body>
-			<trans-unit id="title" resname="title">
+			<trans-unit id="title">
 				<source>Call to action</source>
 			</trans-unit>
-			<trans-unit id="description" resname="description">
+			<trans-unit id="description">
 				<source>Add a call to action button with additional information</source>
 			</trans-unit>
-			<trans-unit id="tabs.tab_1" resname="tabs.tab_1">
+			<trans-unit id="tabs.tab_1">
 				<source>Custom Tab name</source>
 			</trans-unit>
-			<trans-unit id="header.label" resname="header.label">
+			<trans-unit id="header.label">
 				<source>Header</source>
 			</trans-unit>
-			<trans-unit id="bodytext.label" resname="bodytext.label">
+			<trans-unit id="bodytext.label">
 				<source>Content</source>
 			</trans-unit>
-			<trans-unit id="link.label" resname="link.label">
+			<trans-unit id="link.label">
 				<source>Link</source>
 			</trans-unit>
-			<trans-unit id="link_title.label" resname="link_title.label">
+			<trans-unit id="link_title.label">
 				<source>Link title</source>
 			</trans-unit>
-			<trans-unit id="background_image.label" resname="background_image.label">
+			<trans-unit id="background_image.label">
 				<source>Background image</source>
 			</trans-unit>
 		</body>
