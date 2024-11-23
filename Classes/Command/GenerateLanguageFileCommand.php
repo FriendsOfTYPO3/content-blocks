@@ -106,7 +106,9 @@ class GenerateLanguageFileCommand extends Command
 
         if ($print) {
             $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $output);
-        } elseif ($extension !== '') {
+            return Command::SUCCESS;
+        }
+        if ($extension !== '') {
             try {
                 $this->packageManager->getPackage($extension);
             } catch (UnknownPackageException) {
@@ -119,10 +121,10 @@ class GenerateLanguageFileCommand extends Command
                 }
                 $this->writeLabelsXlf($contentBlock);
             }
-        } else {
-            $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
-            $this->writeLabelsXlf($contentBlock);
+            return Command::SUCCESS;
         }
+        $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
+        $this->writeLabelsXlf($contentBlock);
         return Command::SUCCESS;
     }
 
