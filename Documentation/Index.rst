@@ -144,6 +144,18 @@ use content types as sub-resources inside extensions.
 
             Features targeted to developers specifically.
 
+   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+
+      .. container:: card px-0 h-100
+
+         .. rst-class:: card-header h3
+
+            .. rubric:: :ref:`Changelog <changelogs>`
+
+         .. container:: card-body
+
+            Documentation of all changes.
+
 **Table of Contents**
 
 ..  toctree::

@@ -29,7 +29,7 @@ preview for custom Content Elements.
     Previews for Content Elements now must define the layout :html:`Preview` and
     any of the sections :html:`Header`, :html:`Content` or :html:`Footer`.
 
-..  code-block::
+..  code-block:: html
     :caption: EXT:my_package/ContentBlocks/ContentElements/my-element/templates/backend-preview.html
 
     <f:layout name="Preview"/>
