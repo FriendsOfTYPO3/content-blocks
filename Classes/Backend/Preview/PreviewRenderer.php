@@ -30,6 +30,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
+use TYPO3Fluid\Fluid\View\Exception\InvalidSectionException;
+use TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException;
 
 /**
  * Sets up Fluid and applies the same DataProcessor as the frontend to the data record.
@@ -48,11 +50,112 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected ViewFactoryInterface $viewFactory,
     ) {}
 
+    public function renderPageModulePreviewHeader(GridColumnItem $item): string
+    {
+        if (!$this->hasPreviewLayout($item)) {
+            return parent::renderPageModulePreviewHeader($item);
+        }
+        try {
+            $preview = $this->renderPreview($item, 'Header');
+        } catch (InvalidSectionException|InvalidTemplateResourceException) {
+            return parent::renderPageModulePreviewHeader($item);
+        }
+        return $preview;
+    }
+
     public function renderPageModulePreviewContent(GridColumnItem $item): string
+    {
+        if (!$this->hasPreviewLayout($item)) {
+            $template = $this->getContentBlockTemplatePath($item) . '/' . ContentBlockPathUtility::getBackendPreviewFileName();
+            trigger_error(
+                'The Content Blocks preview template "' . $template . '" should be migrated to use the Preview layout.',
+                E_USER_DEPRECATED
+            );
+        }
+        try {
+            $preview = $this->renderPreview($item, 'Content');
+        } catch (InvalidSectionException|InvalidTemplateResourceException) {
+            return parent::renderPageModulePreviewContent($item);
+        }
+        return $preview;
+    }
+
+    public function renderPageModulePreviewFooter(GridColumnItem $item): string
+    {
+        if (!$this->hasPreviewLayout($item)) {
+            return parent::renderPageModulePreviewFooter($item);
+        }
+        try {
+            $preview = $this->renderPreview($item, 'Footer');
+        } catch (InvalidSectionException|InvalidTemplateResourceException) {
+            return parent::renderPageModulePreviewFooter($item);
+        }
+        return $preview;
+    }
+
+    protected function renderPreview(GridColumnItem $item, string $section): string
     {
         /** @var ServerRequestInterface $request */
         $request = $GLOBALS['TYPO3_REQUEST'];
         $record = $item->getRecord();
+        $table = $item->getTable();
+        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $record);
+        $data = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
+        $view = $this->createView($request, $item, $section);
+        $view->assign('data', $data);
+        $result = $view->render();
+        $result = trim($result);
+        return $result;
+    }
+
+    protected function createView(
+        ServerRequestInterface $request,
+        GridColumnItem $item,
+        string $section,
+    ): ViewInterface {
+        $templatePath = $this->getContentBlockTemplatePath($item);
+        $pageUid = $item->getContext()->getPageId();
+        $partialRootPaths = $this->getContentBlocksPartialRootPaths($templatePath, $pageUid);
+        $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($templatePath, $pageUid, $section);
+        $viewFactoryData = new ViewFactoryData(
+            partialRootPaths: $partialRootPaths,
+            layoutRootPaths: $layoutRootPaths,
+            templatePathAndFilename: $templatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName(),
+            request: $request
+        );
+        return $this->viewFactory->create($viewFactoryData);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function getContentBlocksPartialRootPaths(string $templatePath, int $pageUid): array
+    {
+        $contentBlockPartialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
+        $partialRootPaths = [
+            'EXT:backend/Resources/Private/Partials/',
+            'EXT:content_blocks/Resources/Private/Partials/',
+            ...$contentBlockPartialRootPaths,
+            $templatePath . '/partials/',
+        ];
+        return $partialRootPaths;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function getContentBlocksLayoutRootPaths(string $templatePath, int $pageUid, string $section): array
+    {
+        $layoutRootPaths = [
+            'EXT:content_blocks/Resources/Private/Layouts/Preview/' . $section,
+            ...$this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid),
+            $templatePath . '/layouts/',
+        ];
+        return $layoutRootPaths;
+    }
+
+    protected function getContentBlockTemplatePath(GridColumnItem $item): string
+    {
         $recordType = $item->getRecordType();
         $table = $item->getTable();
         $tableDefinition = $this->tableDefinitionCollection->getTable($table);
@@ -64,61 +167,21 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         }
         $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
         $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
+        return $contentBlockPrivatePath;
+    }
 
-        // Fall back to standard preview rendering if EditorPreview.html does not exist.
-        $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
-        $editorPreviewAbsPath = GeneralUtility::getFileAbsFileName($editorPreviewExtPath);
-        if (!file_exists($editorPreviewAbsPath)) {
-            $result = parent::renderPageModulePreviewContent($item);
-            return $result;
+    /**
+     * @deprecated Remove in Content Blocks v2.0
+     */
+    protected function hasPreviewLayout(GridColumnItem $item): bool
+    {
+        $templatePath = $this->getContentBlockTemplatePath($item);
+        $templatePathAndFilename = $templatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName();
+        $absoluteTemplatePath = GeneralUtility::getFileAbsFileName($templatePathAndFilename);
+        if (!file_exists($absoluteTemplatePath)) {
+            return false;
         }
-        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $record);
-        $data = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
-        $view = $this->createView($contentBlockPrivatePath, $request, $item);
-        $view->assign('data', $data);
-        $result = $view->render();
-        return $result;
-    }
-
-    protected function createView(
-        string $contentBlockPrivatePath,
-        ServerRequestInterface $request,
-        GridColumnItem $item
-    ): ViewInterface {
-        $pageUid = $item->getContext()->getPageId();
-        $partialRootPaths = $this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid);
-        $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid);
-        $viewFactoryData = new ViewFactoryData(
-            partialRootPaths: $partialRootPaths,
-            layoutRootPaths: $layoutRootPaths,
-            templatePathAndFilename: $contentBlockPrivatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName(),
-            request: $request
-        );
-        return $this->viewFactory->create($viewFactoryData);
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    protected function getContentBlocksPartialRootPaths(string $contentBlockPrivatePath, int $pageUid): array
-    {
-        $contentBlockPartialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
-        $partialRootPaths = [
-            'EXT:backend/Resources/Private/Partials/',
-            'EXT:content_blocks/Resources/Private/Partials/',
-            ...$contentBlockPartialRootPaths,
-            $contentBlockPrivatePath . '/partials/',
-        ];
-        return $partialRootPaths;
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
-    {
-        $layoutRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $layoutRootPaths[] = $contentBlockPrivatePath . '/layouts/';
-        return $layoutRootPaths;
+        $contents = file_get_contents($absoluteTemplatePath);
+        return str_contains($contents, '<f:layout name="Preview"');
     }
 }

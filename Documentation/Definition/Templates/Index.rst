@@ -14,41 +14,9 @@ backend-preview.html
 ====================
 
 The **backend-preview.html** can be added to customize the backend preview for
-your editors. By default, TYPO3 comes with a standard preview renderer. However,
-it is specialized in rendering the preview of Core Content Elements. This means
-only Core fields like :sql:`header`, :sql:`subheader` or :sql:`bodytext` are
-considered. Therefore, it is advised to provide an own preview for custom
-Content Elements. Previews for **Page Types** are displayed at the top of the
-content area and beneath the page title. Previews for **Record Types** can only
-be shown as nested child records of Content Elements in the Page Module like so:
+your editors.
 
-.. code-block:: html
-
-    <f:comment>Provide the identifier of the child Collection to render a grid preview</f:comment>
-    <f:render partial="PageLayout/Grid" arguments="{data: data, identifier: 'tabs_item'}"/>
-
-.. note::
-
-   In backend context, all hidden relations like Collections or file references
-   are displayed by default. Thus, the integrator should style those hidden
-   elements accordingly or simply not render them.
-
-   .. code-block:: html
-
-      <!-- Hidden relations like Collections -->
-      <f:for each="{data.relations}" as="item">
-          <f:if condition="{item.systemProperties.disabled}"><!-- Style or hide --></f:if>
-      </f:for>
-
-      <!-- Hidden file references -->
-      <f:for each="{data.images}" as="file">
-          <f:if condition="{file.properties.hidden}"><!-- Style or hide --></f:if>
-      </f:for>
-
-See also:
-
-*  Learn more about :ref:`templating <cb_templating>`.
-*  Learn how to include :ref:`shared partials <editor_preview_partials>`
+Learn more about :ref:`backend previews <api_backend_preview>`.
 
 frontend.html
 =============

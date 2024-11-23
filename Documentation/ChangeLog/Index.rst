@@ -14,3 +14,4 @@ Every change in the Content Blocks API is documented here.
    :titlesonly:
 
    1.0/Index
+   1.1/Index

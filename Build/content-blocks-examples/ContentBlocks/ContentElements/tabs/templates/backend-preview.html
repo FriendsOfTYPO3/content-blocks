@@ -3,6 +3,10 @@
     data-namespace-typo3-fluid="true"
 >
 
-<f:render partial="PageLayout/Grid" arguments="{data: data, identifier: 'tabs_item'}"/>
+<f:layout name="Preview"/>
+
+<f:section name="Content">
+    <f:render partial="PageLayout/Grid" arguments="{data: data, identifier: 'tabs_item'}"/>
+</f:section>
 
 </html>

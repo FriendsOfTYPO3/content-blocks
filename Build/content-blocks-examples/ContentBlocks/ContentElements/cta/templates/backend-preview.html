@@ -4,12 +4,17 @@
     data-namespace-typo3-fluid="true"
 >
 
-<f:asset.css identifier="cbCtaCssBackend" href="{cb:assetPath()}/preview.css"/>
+<f:layout name="Preview"/>
 
-<div class="cb-cta">
-    <h2>{data.header}</h2>
-    <f:format.raw>{data.bodytext}</f:format.raw>
-    <f:link.typolink parameter="{data.link}" class="btn-cta">{data.link_title}</f:link.typolink>
-</div>
+<f:section name="Header"/>
+
+<f:section name="Content">
+    <f:asset.css identifier="cbCtaCssBackend" href="{cb:assetPath()}/preview.css"/>
+    <div class="cb-cta">
+        <h2>{data.header}</h2>
+        <f:format.raw>{data.bodytext}</f:format.raw>
+        <f:link.typolink parameter="{data.link}" class="btn-cta">{data.link_title}</f:link.typolink>
+    </div>
+</f:section>
 
 </html>
