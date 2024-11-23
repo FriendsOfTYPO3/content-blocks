@@ -79,6 +79,48 @@ class GenerateLanguageFileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $contentBlockName = $input->getArgument('content-block');
+        $print = (bool)$input->getOption('print');
+        $extension = (string)$input->getOption('extension');
+        return $print
+             ? $this->startPrintProcess($contentBlockName, $extension, $output)
+             : $this->startWriteProcess($contentBlockName, $extension, $output);
+    }
+
+    protected function startPrintProcess(
+        ?string $contentBlockName,
+        string $extension,
+        OutputInterface $output,
+    ): int {
+        $valid = $this->validatePrintMode($contentBlockName, $extension, $output);
+        if ($valid === false) {
+            return Command::INVALID;
+        }
+        $contentBlockRegistry = $this->loadUncachedContentBlockRegistry();
+        $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $output);
+        return Command::SUCCESS;
+    }
+
+    protected function startWriteProcess(
+        ?string $contentBlockName,
+        string $extension,
+        OutputInterface $output,
+    ): int {
+        $valid = $this->validateWriteMode($contentBlockName, $extension, $output);
+        if ($valid === false) {
+            return Command::INVALID;
+        }
+        $contentBlockRegistry = $this->loadUncachedContentBlockRegistry();
+        if ($extension !== '') {
+            return $this->writeForAllInExtension($extension, $contentBlockRegistry, $output);
+        }
+        $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
+        $this->writeLabelsXlf($contentBlock);
+        return Command::SUCCESS;
+    }
+
+    protected function loadUncachedContentBlockRegistry(): ContentBlockRegistry
+    {
         $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
         $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
@@ -87,44 +129,26 @@ class GenerateLanguageFileCommand extends Command
         );
         $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
         $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
-        $contentBlockName = $input->getArgument('content-block');
-        $print = (bool)$input->getOption('print');
-        $extension = (string)$input->getOption('extension');
+        return $contentBlockRegistry;
+    }
 
-        if ($print && $contentBlockName === null) {
-            if ($extension) {
-                $output->writeln('<error>Using `--extension` for print mode is not allowed. Please provide a Content Block as first argument.</error>');
-            } else {
-                $output->writeln('<error>Please provide a Content Block as first argument.</error>');
-            }
+    protected function writeForAllInExtension(
+        string $extension,
+        ContentBlockRegistry $contentBlockRegistry,
+        OutputInterface $output,
+    ): int {
+        try {
+            $this->packageManager->getPackage($extension);
+        } catch (UnknownPackageException) {
+            $output->writeln('<error>Extension with key "' . $extension . '" does not exist.</error>');
             return Command::INVALID;
         }
-        if (!$print && $contentBlockName === null && $extension === '') {
-            $output->writeln('<error>Either provide a Content Block as first argument or set --extension to process all Content Blocks within the extension.</error>');
-            return Command::INVALID;
-        }
-
-        if ($print) {
-            $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $output);
-            return Command::SUCCESS;
-        }
-        if ($extension !== '') {
-            try {
-                $this->packageManager->getPackage($extension);
-            } catch (UnknownPackageException) {
-                $output->writeln('<error>Extension with key "' . $extension . '" does not exist.</error>');
-                return Command::INVALID;
+        foreach ($contentBlockRegistry->getAll() as $contentBlock) {
+            if ($contentBlock->getHostExtension() !== $extension) {
+                continue;
             }
-            foreach ($contentBlockRegistry->getAll() as $contentBlock) {
-                if ($contentBlock->getHostExtension() !== $extension) {
-                    continue;
-                }
-                $this->writeLabelsXlf($contentBlock);
-            }
-            return Command::SUCCESS;
+            $this->writeLabelsXlf($contentBlock);
         }
-        $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
-        $this->writeLabelsXlf($contentBlock);
         return Command::SUCCESS;
     }
 
@@ -138,10 +162,35 @@ class GenerateLanguageFileCommand extends Command
         GeneralUtility::writeFile($labelsXlfPath, $result);
     }
 
-    protected function printLabelsXlf(ContentBlockRegistry $contentBlockRegistry, string $contentBlockName, OutputInterface $output): void
-    {
+    protected function printLabelsXlf(
+        ContentBlockRegistry $contentBlockRegistry,
+        string $contentBlockName,
+        OutputInterface $output
+    ): void {
         $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
         $result = $this->languageFileGenerator->generate($contentBlock);
         $output->writeln($result, OutputInterface::OUTPUT_RAW);
+    }
+
+    protected function validatePrintMode(?string $contentBlockName, string $extension, OutputInterface $output): bool
+    {
+        if ($contentBlockName !== null) {
+            return true;
+        }
+        if ($extension !== '') {
+            $output->writeln('<error>Using `--extension` for print mode is not allowed. Please provide a Content Block as first argument.</error>');
+        } else {
+            $output->writeln('<error>Please provide a Content Block as first argument.</error>');
+        }
+        return false;
+    }
+
+    protected function validateWriteMode(?string $contentBlockName, string $extension, OutputInterface $output): bool
+    {
+        if ($contentBlockName === null && $extension === '') {
+            $output->writeln('<error>Either provide a Content Block as first argument or set --extension to process all Content Blocks within the extension.</error>');
+            return false;
+        }
+        return true;
     }
 }
