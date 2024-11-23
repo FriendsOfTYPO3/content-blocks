@@ -29,11 +29,17 @@ Options
 
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
+..  confval-menu::
+    :name: confval-record-types-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: table
    :name: record-type-table
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    The custom table name to be used for the new Record Type.
 
@@ -48,9 +54,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: group
    :name: record-type-group
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The group is used for the grouping of the record type selector in the edit
    view of records. By default records are not grouped.
@@ -72,9 +77,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: labelField
    :name: record-type-labelField
-
-   :Required: true
-   :Type: string|array
+   :required: true
+   :type: string|array
 
    Defines which field should be used as the title of the record. If not
    defined, the first valid child field will be used as the label. It is
@@ -93,9 +97,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: fallbackLabelFields
    :name: record-type-fallbackLabelFields
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Defines which fields should be used as fallback, if :yaml:`labelField` is not
    filled. The first filled field which is found will be used. Can only be used
@@ -112,9 +115,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: typeField
    :name: record-type-typeField
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The field identifier to use as the type switch. This field will be
    automatically generated and prepended as the very first field. The item list
@@ -128,10 +130,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: typeName
    :name: record-type-typeName
-
-   :Required: false
-   :Type: string
-   :Default: automatically generated from :yaml:`name`
+   :required: false
+   :type: string
+   :default: automatically generated from :yaml:`name`
 
    The identifier of the new Record Type. It is automatically generated from
    the name, if not defined manually.
@@ -142,10 +143,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: languageAware
    :name: record-type-languageAware
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    If set to :yaml:`false`, language related fields are not created. Namely
    :sql:`sys_language_uid`, :sql:`l10n_parent`, :sql:`l10n_source` and :sql:`l10n_diffsource`.
@@ -157,10 +157,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: workspaceAware
    :name: record-type-workspaceAware
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    Creates workspace related fields. Namely :sql:`t3ver_oid`, :sql:`t3ver_wsid`,
    :sql:`t3ver_state` and :sql:`t3ver_stage`. If
@@ -174,10 +173,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: editLocking
    :name: record-type-editLocking
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    If set to :yaml:`false`, the functionality to lock the editing for editors is
    removed. This refers to the :sql:`editlock` field.
@@ -189,10 +187,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: restriction
    :name: record-type-restriction
-
-   :Required: false
-   :Type: array
-   :Default: true (for all sub properties)
+   :required: false
+   :type: array
+   :default: true (for all sub properties)
 
    There are several restrictions in TYPO3, which filter records by certain
    constraints.
@@ -219,10 +216,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: softDelete
    :name: record-type-softDelete
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    When deleting records in the TYPO3 backend, they are not really deleted in
    the database. They are merely flagged as deleted. Disabling this option,
@@ -235,10 +231,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: trackCreationDate
    :name: record-type-trackCreationDate
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    Tracks the timestamp of the creation date. Disabling this option removes this
    information.
@@ -249,10 +244,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: trackUpdateDate
    :name: record-type-trackUpdateDate
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    Tracks the timestamp of the last update. Disabling this option removes this
    information.
@@ -263,10 +257,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: sortable
    :name: record-type-sortable
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    Tracks the order of records. Arrows will appear to sort records explicitly.
    Disabling this option removes this functionality. This corresponds to the
@@ -278,10 +271,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: sortField
    :name: record-type-sortField
-
-   :Required: false
-   :Type: string|array
-   :Default: true
+   :required: false
+   :type: string|array
 
    The field identifier to use for sorting records. If set, this will disable
    the :yaml:`sortable` option automatically. This corresponds to the TCA option
@@ -302,10 +293,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: internalDescription
    :name: record-type-internalDescription
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If enabled, this adds a new tab `Notes` with a description field. When filled
    with text, a record information will be displayed in the editing view. This
@@ -318,10 +308,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: rootLevelType
    :name: record-type-rootLevelType
-
-   :Required: false
-   :Type: string
-   :Default: onlyOnPages
+   :required: false
+   :type: string
+   :default: onlyOnPages
 
    Restricts the place, where the record can be created. Possible values are
    :yaml:`onlyOnPages` (default), :yaml:`onlyOnRootLevel` and :yaml:`both`. This
@@ -333,9 +322,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: security
    :name: record-type-security
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    :yaml:`ignoreWebMountRestriction`
       default false, Allows users to access records that are not in their defined web-mount, thus bypassing this restriction.
@@ -355,10 +343,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: readOnly
    :name: record-type-readOnly
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If enabled, the record can not be edited in the TYPO3 backend anymore.
 
@@ -368,10 +355,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: adminOnly
    :name: record-type-adminOnly
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If enabled, only admins can edit the record.
 
@@ -381,10 +367,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: hideAtCopy
    :name: record-type-hideAtCopy
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If enabled, the record will be disabled, when copied. Only works, if
    :yaml:`restriction.disabled` is set to :yaml:`true`.
@@ -395,9 +380,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: appendLabelAtCopy
    :name: record-type-appendLabelAtCopy
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    If set, the label field :yaml:`labelField` will be appended with this
    string, when copied.

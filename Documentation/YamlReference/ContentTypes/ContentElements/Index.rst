@@ -44,11 +44,17 @@ Options
 
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
+..  confval-menu::
+    :name: confval-content-element-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: description
    :name: content-element-description
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    This is the description of the Content Element. If you have a labels.xlf
    file, you should define it there with the key :xml:`description`. If both are
@@ -60,10 +66,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: group
    :name: content-element-group
-
-   :Required: false
-   :Type: string
-   :Default: default
+   :required: false
+   :type: string
+   :default: default
 
    The group is used for the grouping of the record type selector in the edit
    view of records. In addition, it is used for the "New Content Element Wizard"
@@ -84,10 +89,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: typeName
    :name: content-element-typeName
-
-   :Required: false
-   :Type: string
-   :Default: automatically generated from :yaml:`name`
+   :required: false
+   :type: string
+   :default: automatically generated from :yaml:`name`
 
    The identifier of the new Content Element. It is automatically generated from
    the name, if not defined manually.
@@ -98,10 +102,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: saveAndClose
    :name: content-element-saveAndClose
-
-   :Required: false
-   :Type: bool
-   :Default: false
+   :required: false
+   :type: bool
+   :default: false
 
    Can be activated in order to skip the edit view when adding the Content
    Element via the NewContentElementWizard. This can be useful if you have a

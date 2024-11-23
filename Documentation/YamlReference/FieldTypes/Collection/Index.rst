@@ -32,11 +32,17 @@ or gif files. These should be 64x64px.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-collection-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: labelField
    :name: collection-labelField
-
-   :Required: true
-   :Type: string|array
+   :required: true
+   :type: string|array
 
    Defines which field should be used as the title of the record. If not
    defined, the first valid child field will be used as the label. It is
@@ -55,9 +61,8 @@ Settings
 
 .. confval:: fallbackLabelFields
    :name: collection-fallbackLabelFields
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Defines which fields should be used as fallback, if :yaml:`labelField` is not
    filled. The first filled field which is found will be used. Can only be used
@@ -74,9 +79,8 @@ Settings
 
 .. confval:: table
    :name: collection-table
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Alternative table name for the Collection. Default is :yaml:`identifier` with
    prefix if enabled.
@@ -87,9 +91,8 @@ Settings
 
 .. confval:: fields
    :name: collection-fields
-
-   :Required: true
-   :Type: array
+   :required: true
+   :type: array
 
    Configures a set of fields as repeatable child objects. All fields defined in
    field types are possible as children. It is also possible to further nest
@@ -107,30 +110,27 @@ Settings
 
 .. confval:: minitems
    :name: collection-minitems
-
-   :Required: false
-   :Type: integer
-   :Default: "0"
+   :required: false
+   :type: integer
+   :default: "0"
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: maxitems
    :name: collection-maxitems
-
-   :Required: false
-   :Type: integer
-   :Default: "0"
+   :required: false
+   :type: integer
+   :default: "0"
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: relationship
    :name: collection-relationship
-
-   :Required: false
-   :Type: string
-   :Default: oneToMany
+   :required: false
+   :type: string
+   :default: oneToMany
 
    The relationship defines the cardinality between the relations. Possible
    values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and
@@ -140,10 +140,9 @@ Settings
 
 .. confval:: appearance.collapseAll
    :name: collection-appearance.collapseAll
-
-   :Required: false
-   :Type: bool|null
-   :Default: null
+   :required: false
+   :type: bool|null
+   :default: null
 
    * Default (null): Last collapsed/expanded state is remembered
    * true: Show all child records collapsed
@@ -151,19 +150,17 @@ Settings
 
 .. confval:: appearance.levelLinksPosition
    :name: collection-appearance.levelLinksPosition
-
-   :Required: false
-   :Type: string
-   :Default: top
+   :required: false
+   :type: string
+   :default: top
 
    Defines where to show the "New record" link in relation to the child records.
    Valid keywords are :yaml:`top`, :yaml:`bottom` and :yaml:`both`.
 
 .. confval:: foreign_table
    :name: collection-foreign-table
-
-   :Required: false
-   :Type: string (table)
+   :required: false
+   :type: string (table)
 
    It is possible to reference another table instead of creating a new one. This
    table can be defined by another :ref:`Content Block <yaml_reference_record_type_in_collection>`,
@@ -176,9 +173,8 @@ Settings
 
 .. confval:: foreign_field
    :name: collection-foreign_field
-
-   :Required: false
-   :Type: string (field)
+   :required: false
+   :type: string (field)
 
    It is possible to override the field name pointing to the parent record. Per
    default it is called :sql:`foreign_table_parent_uid`. This corresponds with
@@ -186,10 +182,9 @@ Settings
 
 .. confval:: shareAcrossTables
    :name: collection-shareAcrossTables
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    Allows to reference a Record Type across multiple **tables**, if
    :confval:`foreign_table <collection-foreign-table>`
@@ -203,10 +198,9 @@ Settings
 
 .. confval:: shareAcrossFields
    :name: collection-shareAcrossFields
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    Allows to reference a Record Type across multiple **fields**, if
    :confval:`foreign_table <collection-foreign-table>`

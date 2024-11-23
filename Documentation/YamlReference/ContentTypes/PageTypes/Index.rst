@@ -35,11 +35,17 @@ Options
 
 Here you can find all :ref:`common root options <yaml_reference_common>`.
 
+..  confval-menu::
+    :name: confval-page-types-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: typeName
    :name: page-type-typeName
-
-   :Required: true
-   :Type: integer
+   :required: true
+   :type: integer
 
    The :yaml:`typeName` has to be a numerical value. There are some reserved
    numbers, which you can't use either: 1, 3, 4, 6, 7, 199, 254, 255.
@@ -56,10 +62,9 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
 
 .. confval:: group
    :name: page-type-group
-
-   :Required: false
-   :Type: string
-   :Default: default
+   :required: false
+   :type: string
+   :default: default
 
    The group is used for the grouping of the record type selector in the edit
    view of records. In addition, it is used for the "Create multiple pages" view
