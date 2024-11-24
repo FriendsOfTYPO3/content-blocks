@@ -46,9 +46,6 @@ class HtmlTemplateCodeGenerator
             $defaultContent[] = '    </div>';
             $defaultContent[] = '</html>';
         } else {
-            $package = $contentBlockConfiguration->getName();
-            $vendor = $contentBlockConfiguration->getVendor();
-
             $defaultContent[] = '<html';
             $defaultContent[] = '    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"';
             $defaultContent[] = '    data-namespace-typo3-fluid="true"';
@@ -61,7 +58,6 @@ class HtmlTemplateCodeGenerator
             $defaultContent[] = '</f:section>';
             $defaultContent[] = '';
             $defaultContent[] = '<f:section name="Content">';
-            $defaultContent[] = '    <f:asset.css identifier="content-block-' . $vendor . '-' . $package . '-be" href="{cb:assetPath()}/preview.css"/>';
             $defaultContent[] = '    Preview for Content Block: ' . $contentBlockConfiguration->getName();
             $defaultContent[] = '</f:section>';
             $defaultContent[] = '';
@@ -81,11 +77,6 @@ class HtmlTemplateCodeGenerator
 
     public function generateFrontendTemplate(LoadedContentBlock $contentBlockConfiguration): string
     {
-        $package = $contentBlockConfiguration->getName();
-        $vendor = $contentBlockConfiguration->getVendor();
-        $frontendTemplate[] = '<f:asset.css identifier="content-block-css-' . $vendor . '-' . $package . '" href="{cb:assetPath()}/frontend.css"/>';
-        $frontendTemplate[] = '<f:asset.script identifier="content-block-js-' . $vendor . '-' . $package . '" src="{cb:assetPath()}/frontend.js"/>';
-        $frontendTemplate[] = '';
         $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $frontendTemplate[] = 'Header: {data.header}';
         $frontendTemplateString = implode("\n", $frontendTemplate);

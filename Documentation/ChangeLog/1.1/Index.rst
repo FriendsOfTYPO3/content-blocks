@@ -33,6 +33,30 @@ Content Elements:
         <div>My footer</div>
     </f:section>
 
+Skeletons for creation of new Content Blocks
+--------------------------------------------
+
+It is now possible to define an additional :shell:`skeleton-path` for the
+:shell:`make:content-block` command. This is a path relative to your current
+working directory, which contains a skeleton for one or more content types.
+
+..  code-block:: shell
+
+    vendor/bin/typo3 make:content-block --skeleton-path="my-skeleton"
+
+..  code-block::
+    :caption: A folder "my-skeleton" has a skeleton for different content types
+
+    my-skeleton
+    ├── content-element
+    │   ├─ assets
+    │   │  └─ icon.svg
+    │   └─ templates
+    │      ├─ backend-preview.html
+    │      └─ frontend.html
+    ├── page-type
+    └── record-type
+
 Deprecations
 ============
 

@@ -47,7 +47,7 @@ readonly class ContentBlockBuilder
     /**
      * Writes a Content Block to file system.
      */
-    public function create(LoadedContentBlock $contentBlock): void
+    public function create(LoadedContentBlock $contentBlock, string $skeletonPath = null): void
     {
         $name = $contentBlock->getPackage();
         $extPath = $contentBlock->getExtPath();
@@ -63,6 +63,7 @@ readonly class ContentBlockBuilder
             );
         }
 
+        $this->copySkeleton($basePath, $skeletonPath);
         $this->initializeRegistries($contentBlock);
 
         // Create base directories for a Content Block.
@@ -80,7 +81,6 @@ readonly class ContentBlockBuilder
         if ($contentType === ContentType::CONTENT_ELEMENT) {
             $this->createFrontendHtml($contentBlock, $basePath);
             $this->createBackendPreviewHtml($contentBlock, $basePath);
-            $this->createExamplePublicAssets($assetsPath);
         }
         $this->copyDefaultIcon($contentType, $basePath);
         if ($contentType === ContentType::PAGE_TYPE) {
@@ -126,36 +126,34 @@ readonly class ContentBlockBuilder
         );
     }
 
+    protected function copySkeleton(string $basePath, ?string $skeletonPath): void
+    {
+        if ($skeletonPath === null) {
+            return;
+        }
+        if (is_dir($skeletonPath)) {
+            GeneralUtility::copyDirectory($skeletonPath, $basePath);
+        }
+    }
+
     protected function createBackendPreviewHtml(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        GeneralUtility::writeFile(
-            $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath(),
-            $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlock)
-        );
+        $filePath = $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
+        if (file_exists($filePath)) {
+            return;
+        }
+        $backendPreviewHtml = $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlock);
+        GeneralUtility::writeFile($filePath, $backendPreviewHtml);
     }
 
     protected function createFrontendHtml(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        GeneralUtility::writeFile(
-            $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath(),
-            $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlock)
-        );
-    }
-
-    protected function createExamplePublicAssets(string $publicPath): void
-    {
-        GeneralUtility::writeFile(
-            $publicPath . '/preview.css',
-            '/* Created by Content Blocks */'
-        );
-        GeneralUtility::writeFile(
-            $publicPath . '/frontend.css',
-            '/* Created by Content Blocks */'
-        );
-        GeneralUtility::writeFile(
-            $publicPath . '/frontend.js',
-            '/* Created by Content Blocks */'
-        );
+        $filePath = $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath();
+        if (file_exists($filePath)) {
+            return;
+        }
+        $frontendHtml = $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlock);
+        GeneralUtility::writeFile($filePath, $frontendHtml);
     }
 
     protected function copyDefaultIcon(ContentType $contentType, string $basePath): void
@@ -163,6 +161,9 @@ readonly class ContentBlockBuilder
         $defaultIcon = ContentTypeIconResolver::getDefaultContentTypeIcon($contentType);
         $absoluteDefaultIconPath = GeneralUtility::getFileAbsFileName($defaultIcon);
         $contentBlockIconPath = $basePath . '/' . ContentBlockPathUtility::getIconPathWithoutFileExtension() . '.svg';
+        if (file_exists($contentBlockIconPath)) {
+            return;
+        }
         copy($absoluteDefaultIconPath, $contentBlockIconPath);
     }
 
@@ -171,6 +172,9 @@ readonly class ContentBlockBuilder
         $hideInMenuIcon = 'EXT:content_blocks/Resources/Public/Icons/DefaultPageTypeIconHideInMenu.svg';
         $absoluteHideInMenuIconPath = GeneralUtility::getFileAbsFileName($hideInMenuIcon);
         $contentBlockHideInMenuIconPath = $basePath . '/' . ContentBlockPathUtility::getHideInMenuIconPathWithoutFileExtension() . '.svg';
+        if (file_exists($contentBlockHideInMenuIconPath)) {
+            return;
+        }
         copy($absoluteHideInMenuIconPath, $contentBlockHideInMenuIconPath);
     }
 }

@@ -12,58 +12,81 @@ by the `EXT:make` extension.
 Options
 =======
 
+..  confval-menu::
+    :name: confval-make-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: content-type
    :name: make-content-type
-
-   :Required: true
-   :Type: string
+   :required: true
+   :default: content-element
+   :type: string
 
    :bash:`content-element`, :bash:`page-type` or :bash:`record-type`
 
 .. confval:: vendor
    :name: make-vendor
-
-   :Required: true
-   :Type: string
+   :required: true
+   :default: (vendor of root composer.json)
+   :type: string
 
    Your vendor name. Lowercase, separated by dashes.
 
 .. confval:: name
    :name: make-name
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    Your Content Block name (this is not the title). Lowercase, separated by dashes.
 
 .. confval:: extension
    :name: make-extension
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    The host extension, where to store your new Content Block.
 
 .. confval:: title
    :name: make-title
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The human-readable title for your Content Block.
 
 .. confval:: type-name
    :name: make-type-name
-
-   :Required: false
-   :Type: string|int
+   :required: false
+   :type: string|int
 
    Custom type name. Required for content-type :bash:`page-type` (must be int).
 
-.. important::
+   .. important::
 
-    The :bash:`type-name` option is required and has to be an integer value, if you
-    choose the :bash:`page-type` content type.
+       The :bash:`type-name` option is required and has to be an integer value, if you
+       choose the :bash:`page-type` content type.
+
+.. confval:: skeleton-path
+   :name: make-skeleton-path
+   :required: false
+   :type: string
+
+   A path relative to the current working directory, which holds a skeleton of
+   a Content Block.
+
+   .. code-block::
+
+    my-skeleton
+    ├── content-element
+    │   ├─ assets
+    │   │  └─ icon.svg
+    │   └─ templates
+    │      ├─ backend-preview.html
+    │      └─ frontend.html
+    ├── page-type
+    └── record-type
 
 This will give you an overview of all available options:
 
