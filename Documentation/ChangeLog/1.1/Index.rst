@@ -38,7 +38,8 @@ Skeletons for creation of new Content Blocks
 
 It is now possible to define an additional :shell:`skeleton-path` for the
 :shell:`make:content-block` command. This is a path relative to your current
-working directory, which contains a skeleton for one or more content types.
+working directory, which contains a skeleton for one or more content types. If
+no path is defined, the command will fall back to `content-blocks-skeleton`.
 
 ..  code-block:: shell
 

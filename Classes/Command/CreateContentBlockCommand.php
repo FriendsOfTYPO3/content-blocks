@@ -105,7 +105,8 @@ class CreateContentBlockCommand extends Command
             'skeleton-path',
             '',
             InputOption::VALUE_OPTIONAL,
-            'A folder which contains a basic skeleton for the new Content Block.'
+            'A folder which contains a basic skeleton for one or more content types.',
+            'content-blocks-skeleton'
         );
     }
 
@@ -223,12 +224,10 @@ class CreateContentBlockCommand extends Command
         );
 
         $skeletonPath = $input->getOption('skeleton-path');
-        if ($skeletonPath !== null) {
-            $skeletonPath = rtrim($skeletonPath, '/');
-            $skeletonPath = getcwd() . '/' . $skeletonPath;
-            $contentTypeFolderName = $contentType->getShortName();
-            $skeletonPath .= '/' . $contentTypeFolderName;
-        }
+        $skeletonPath = rtrim($skeletonPath, '/');
+        $skeletonPath = getcwd() . '/' . $skeletonPath;
+        $contentTypeFolderName = $contentType->getShortName();
+        $skeletonPath .= '/' . $contentTypeFolderName;
         $this->contentBlockBuilder->create($contentBlockConfiguration, $skeletonPath);
 
         $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');

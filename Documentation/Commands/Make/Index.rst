@@ -71,6 +71,7 @@ Options
 .. confval:: skeleton-path
    :name: make-skeleton-path
    :required: false
+   :default: content-blocks-skeleton
    :type: string
 
    A path relative to the current working directory, which holds a skeleton of
