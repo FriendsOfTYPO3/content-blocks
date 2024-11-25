@@ -46,6 +46,12 @@ is `content_blocks`.
 Refer to the [Documentation](https://docs.typo3.org/p/friendsoftypo3/content-blocks/main/en-us)
 on how to use the Content Blocks API.
 
+##  Feedback and Support
+
+You can reach us on the TYPO3 Slack channel `#cig-structuredcontent`. We
+appreciate any constructive feedback and will help you, if you have any
+problems.
+
 ## JSON Schema
 
 Enable validation and auto-completion with [JSON schema](https://github.com/nhovratov/content-blocks-json-schema)
@@ -98,8 +104,3 @@ You can test if the syntax and references are ok with
 ```
 make test-docs
 ```
-
-## Feedback
-
-You can reach us on the TYPO3 Slack channel `#cig-structuredcontent`. We
-appreciate any constructive feedback.
