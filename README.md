@@ -16,20 +16,6 @@ eventually this will become a Core feature in TYPO3 v14 LTS.
 | **Packagist:**     | https://packagist.org/packages/friendsoftypo3/content-blocks                             |
 | **Examples:**      | https://github.com/friendsoftypo3/content-blocks/tree/main/Build/content-blocks-examples |
 
-## Roadmap 2024
-
-| Milestone                                                                                               | Date          |
-|---------------------------------------------------------------------------------------------------------|---------------|
-| [Content Blocks v0.6](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.6.0)              | 26.02         |
-| [Content Blocks v0.7](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.7.0)              | 01.04         |
-| [Core patch](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721)                                     | 01.04 - 23.04 |
-| [TYPO3 v13.1](https://typo3.org/article/typo3-v131-the-surfers-starterkit)                              | 23.04         |
-| [Review period](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721/19)                               | 23.04 - 14.06 |
-| [TYPO3 v13.2](https://typo3.org/article/typo3-v132-ready-set-ride)                                      | 02.07         |
-| [Content Blocks compatibility v13](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.8.0) | 11.07         |
-| [Content Blocks (partly) Core integration](https://typo3.org/article/typo3-v133-prepare-for-the-fun)    | 17.09         |
-| [Content Blocks 1.0](https://github.com/friendsoftypo3/content-blocks/releases/tag/1.0.0)               | 15.10         |
-
 ## Installation
 
 Require this package via composer:
@@ -104,3 +90,17 @@ You can test if the syntax and references are ok with
 ```
 make test-docs
 ```
+
+## Roadmap 2024
+
+| Milestone                                                                                               | Date          |
+|---------------------------------------------------------------------------------------------------------|---------------|
+| [Content Blocks v0.6](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.6.0)              | 26.02         |
+| [Content Blocks v0.7](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.7.0)              | 01.04         |
+| [Core patch](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721)                                     | 01.04 - 23.04 |
+| [TYPO3 v13.1](https://typo3.org/article/typo3-v131-the-surfers-starterkit)                              | 23.04         |
+| [Review period](https://review.typo3.org/c/Packages/TYPO3.CMS/+/83721/19)                               | 23.04 - 14.06 |
+| [TYPO3 v13.2](https://typo3.org/article/typo3-v132-ready-set-ride)                                      | 02.07         |
+| [Content Blocks compatibility v13](https://github.com/friendsoftypo3/content-blocks/releases/tag/0.8.0) | 11.07         |
+| [Content Blocks (partly) Core integration](https://typo3.org/article/typo3-v133-prepare-for-the-fun)    | 17.09         |
+| [Content Blocks 1.0](https://github.com/friendsoftypo3/content-blocks/releases/tag/1.0.0)               | 15.10         |
