@@ -34,9 +34,9 @@ on how to use the Content Blocks API.
 
 ##  Feedback and Support
 
-You can reach us on the TYPO3 Slack channel `#cig-structuredcontent`. We
-appreciate any constructive feedback and will help you, if you have any
-problems.
+You can reach us on the [TYPO3 Slack](https://typo3.org/community/meet/chat-slack)
+channel `#cig-structuredcontent`. We  appreciate any constructive feedback and
+will help you, if you have any problems.
 
 ## JSON Schema
 
