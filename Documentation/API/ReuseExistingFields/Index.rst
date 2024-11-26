@@ -132,9 +132,10 @@ The full list:
 .. warning::
 
    It is not possible to override the properties below. The reason is they are
-   used in the SqlSchema generation to provide a proper db type and in
-   RelationHandler to resolve the records. The :yaml:`type` of a field must not
-   be changed in any case.
+   used in the SqlSchema generation to provide a proper db type, in
+   RelationHandler to resolve the records and in DataHandler for language
+   synchronisation and more. The :yaml:`type` of a field must not be changed in
+   any case.
 
    * type
    * relationship
@@ -155,3 +156,4 @@ The full list:
    * generatorOptions
    * behaviour.allowLanguageSynchronization
    * format (type: Number)
+   * l10n_mode
