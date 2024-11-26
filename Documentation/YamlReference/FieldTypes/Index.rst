@@ -22,6 +22,7 @@ some additional options, which are not available in TCA to ease the usage.
 *  :ref:`File <field_type_file>`
 *  :ref:`FlexForm <field_type_flexform>`
 *  :ref:`Folder <field_type_folder>`
+*  :ref:`Inline <field_type_collection>`
 *  :ref:`Json <field_type_json>`
 *  :ref:`Language <field_type_language>`
 *  :ref:`Linebreak <field_type_linebreak>`
