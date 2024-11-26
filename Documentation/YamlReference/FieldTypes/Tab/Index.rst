@@ -9,6 +9,9 @@ The :yaml:`Tab` field can be used to create a new tab in the editor interface.
 It needs an unique `identifier` and can be placed between any two fields. Note:
 Prohibited inside `Palettes`.
 
+Pre-defined tabs as for example the :yaml:`TYPO3/Appearance` tab for Content
+Elements are available as :ref:`Basics <basics-pre-defined>`.
+
 Labels
 ======
 

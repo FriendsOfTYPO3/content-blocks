@@ -8,6 +8,9 @@ Palette
 The :yaml:`Palette` field is used to group other fields. Grouped fields will be
 displayed next to each other rather than below each other.
 
+Pre-defined palettes as for example the :yaml:`TYPO3/Header` palette for Content
+Elements are available as :ref:`Basics <basics-pre-defined>`.
+
 .. warning::
 
    Palettes are defined on table definition level. This means if you define a
