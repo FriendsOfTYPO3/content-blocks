@@ -8,6 +8,9 @@ Palette
 The :yaml:`Palette` field is used to group other fields. Grouped fields will be
 displayed next to each other rather than below each other.
 
+Existing palettes as for example the `header` palette in a content element
+are available as :ref:`field type Basic <field-type-basic>`
+
 .. warning::
 
    Palettes are defined on table definition level. This means if you define a
