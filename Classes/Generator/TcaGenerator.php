@@ -134,6 +134,7 @@ class TcaGenerator
         // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
         'generatorOptions',
         'behaviour.allowLanguageSynchronization',
+        'l10n_mode',
     ];
 
     /**
