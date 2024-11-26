@@ -409,6 +409,7 @@ readonly class TcaGenerator
                 'type' => 'Number',
                 'option' => 'format',
             ],
+            'l10n_mode',
         ];
     }
 
