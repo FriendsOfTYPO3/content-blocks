@@ -73,6 +73,8 @@ be done by using the according Basic :yaml:`identifier` and the type
    a new :ref:`custom field type <extending-field-types>`. This requires PHP
    code, however.
 
+.. _basics-pre-defined:
+
 Pre-defined Basics
 ==================
 
