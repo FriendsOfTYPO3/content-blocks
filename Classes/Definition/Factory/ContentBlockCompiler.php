@@ -572,8 +572,12 @@ final class ContentBlockCompiler
 
     private function assignRelationConfigToCollectionField(array $field, ProcessedFieldsResult $result): void
     {
+        $isMM = (bool)($field['MM'] ?? false);
         $isExternalCollection = array_key_exists('foreign_table', $field);
-        $result->tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
+        // MM relations must not have foreign_field set.
+        if (!$isMM) {
+            $result->tcaFieldDefinition['config']['foreign_field'] ??= 'foreign_table_parent_uid';
+        }
         if ($isExternalCollection) {
             if ($field['shareAcrossTables'] ?? false) {
                 $result->tcaFieldDefinition['config']['foreign_table_field'] ??= 'tablenames';

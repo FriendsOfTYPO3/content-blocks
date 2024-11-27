@@ -224,6 +224,21 @@ final class TcaGeneratorTest extends UnitTestCase
                                             ],
                                         ],
                                     ],
+                                    [
+                                        'identifier' => 'collection_mm',
+                                        'type' => 'Collection',
+                                        'MM' => 'collection_mm_table',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'text',
+                                                'type' => 'Text',
+                                            ],
+                                            [
+                                                'identifier' => 'text2',
+                                                'type' => 'Text',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -602,7 +617,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.tabs.tab_1,text2,--palette--;;palette_inline,collection2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.tabs.tab_1,text2,--palette--;;palette_inline,collection2,collection_mm,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -674,6 +689,16 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'inline',
                                 'foreign_table' => 'collection2',
                                 'foreign_field' => 'foreign_table_parent_uid',
+                            ],
+                        ],
+                        'collection_mm' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.description',
+                            'config' => [
+                                'type' => 'inline',
+                                'foreign_table' => 'collection_mm',
+                                'MM' => 'collection_mm_table',
                             ],
                         ],
                     ],
@@ -748,6 +773,77 @@ final class TcaGeneratorTest extends UnitTestCase
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection2.text2.label',
                             'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection2.text2.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                    ],
+                ],
+                'collection_mm' => [
+                    'ctrl' => [
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.label',
+                        'label' => 'text',
+                        'sortby' => 'sorting',
+                        'tstamp' => 'tstamp',
+                        'crdate' => 'crdate',
+                        'delete' => 'deleted',
+                        'editlock' => 'editlock',
+                        'versioningWS' => true,
+                        'hideTable' => true,
+                        'translationSource' => 'l10n_source',
+                        'transOrigDiffSourceField' => 'l10n_diffsource',
+                        'languageField' => 'sys_language_uid',
+                        'enablecolumns' => [
+                            'disabled' => 'hidden',
+                            'starttime' => 'starttime',
+                            'endtime' => 'endtime',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'typeicon_classes' => [
+                            'default' => 'collection_mm-1',
+                        ],
+                        'searchFields' => 'text,text2',
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
+                        'previewRenderer' => PreviewRenderer::class,
+                    ],
+                    'types' => [
+                        '1' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                        ],
+                    ],
+                    'palettes' => [
+                        'language' => [
+                            'showitem' => 'sys_language_uid,l10n_parent',
+                        ],
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
+                        ],
+                    ],
+                    'columns' => [
+                        'sorting' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'text' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.text.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.text.description',
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                        ],
+                        'text2' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.text2.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.text2.description',
                             'config' => [
                                 'type' => 'input',
                             ],

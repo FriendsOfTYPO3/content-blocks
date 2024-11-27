@@ -954,6 +954,9 @@ readonly class TcaGenerator
         // This is a child table and can only be created by the parent.
         foreach ($tableDefinition->getParentReferences() ?? [] as $parentReference) {
             $parentTcaConfig = $parentReference->getTca()['config'];
+            if ($parentTcaConfig['MM'] ?? false) {
+                continue;
+            }
             if (isset($parentTcaConfig['foreign_field'])) {
                 $foreignField = $parentTcaConfig['foreign_field'];
                 $columns[$foreignField] = [
