@@ -553,6 +553,11 @@ final class ContentBlockCompiler
         if ($isExternalCollection || $fields === []) {
             return;
         }
+        $isMM = (bool)($field['MM'] ?? false);
+        if ($isMM) {
+            // Disable sorting as it is already handled in MM table.
+            $field['sortable'] = false;
+        }
         // The Collection's title equals the field label.
         $field['title'] = $field['label'];
         // Anonymous Collections can't have a type field.

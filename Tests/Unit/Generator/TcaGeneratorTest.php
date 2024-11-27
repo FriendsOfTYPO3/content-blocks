@@ -783,7 +783,6 @@ final class TcaGeneratorTest extends UnitTestCase
                     'ctrl' => [
                         'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.label',
                         'label' => 'text',
-                        'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
                         'delete' => 'deleted',
@@ -827,11 +826,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'sorting' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.text.label',
