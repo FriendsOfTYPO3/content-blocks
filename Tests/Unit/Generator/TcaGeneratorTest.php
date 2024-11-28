@@ -639,11 +639,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'sorting' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'foreign_table_parent_uid' => [
                             'config' => [
                                 'type' => 'passthrough',
@@ -751,11 +746,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'sorting' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'foreign_table_parent_uid' => [
                             'config' => [
                                 'type' => 'passthrough',
@@ -1016,11 +1006,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'sorting' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         't3ce_example_number' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.label',
@@ -1375,11 +1360,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'sorting' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'text' => [
                             'label' => 'text',
                             'exclude' => true,
@@ -1567,11 +1547,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                     ],
                     'columns' => [
-                        'sorting' => [
-                            'config' => [
-                                'type' => 'passthrough',
-                            ],
-                        ],
                         'text' => [
                             'exclude' => true,
                             'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.text.label',

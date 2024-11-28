@@ -911,11 +911,6 @@ readonly class TcaGenerator
             $ctrl['default_sortby'] = $capability->getSortFieldAsString();
         } elseif ($capability->isSortable()) {
             $ctrl['sortby'] = 'sorting';
-            $columns['sorting'] = [
-                'config' => [
-                    'type' => 'passthrough',
-                ],
-            ];
         }
 
         $rootLevelCapability = $capability->getRootLevelCapability();
