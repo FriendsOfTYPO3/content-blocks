@@ -1,0 +1,8 @@
+page = PAGE
+page.10 = PAGEVIEW
+page.10 {
+  paths.10 = EXT:content_blocks_examples/Resources/Private/Templates
+  dataProcessing {
+    10 = page-content
+  }
+}
