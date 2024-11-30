@@ -75,7 +75,6 @@ able to modify Content Blocks without the need of a developer.
 
 *  Refer to the :ref:`YAML reference <yaml_reference>` for a complete overview.
 *  Learn more about :ref:`reusing fields <cb_reuse_existing_fields>`
-*  Learn how to :ref:`extend TCA <cb_extendTca>` of Content Blocks (for advanced users).
 
 Registration
 ============

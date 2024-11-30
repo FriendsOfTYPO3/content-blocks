@@ -35,5 +35,4 @@ the documentation. Furthermore, own custom fields can be reused as well.
 
 *  Refer to the :ref:`YAML reference <yaml_reference>` for a complete overview.
 *  Learn more about :ref:`reusing fields <cb_reuse_existing_fields>`
-*  Learn how to :ref:`extend TCA <cb_extendTca>` of Content Blocks (for advanced users).
 *  For more information about the YAML syntax refer to `YAML RFC <https://github.com/yaml/summit.yaml.io/wiki/YAML-RFC-Index>`__
