@@ -16,38 +16,34 @@ Settings
 
 .. confval:: default
    :name: link-default
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    Default value set if a new record is created.
 
 .. confval:: required
    :name: link-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field becomes mandatory.
 
 .. confval:: nullable
    :name: link-nullable
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field value will resolve to `null` if no link is provided.
    Useful, if field is optional.
 
 .. confval:: allowedTypes
    :name: link-allowedTypes
-
-   :Required: false
-   :Type: array
-   :Default: '[*]'
+   :required: false
+   :type: array
+   :default: '[*]'
 
    Allow list of link types. Possible values are :yaml:`page`, :yaml:`url`,
    :yaml:`file`, :yaml:`folder`, :yaml:`email`, :yaml:`telephone` and

@@ -14,10 +14,9 @@ Settings
 
 .. confval:: extendedPalette
    :name: file-extendedPalette
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    If enabled, an additional image or media palette will be rendered. For
    image files it consists of the additional fields `crop`, `alternative` and
@@ -27,30 +26,27 @@ Settings
 
 .. confval:: allowed
    :name: file-allowed
-
-   :Required: false
-   :Type: string|array
-   :Default: ''
+   :required: false
+   :type: string|array
+   :default: ''
 
     Possible values: `common-image-types`, `common-media-types` or your custom
     list of file types.
 
 .. confval:: maxitems
    :name: file-maxitems
-
-   :Required: false
-   :Type: integer
-   :Default: 99999
+   :required: false
+   :type: integer
+   :default: 99999
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: minitems
    :name: file-minitems
-
-   :Required: false
-   :Type: integer
-   :Default: "0"
+   :required: false
+   :type: integer
+   :default: "0"
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
@@ -58,10 +54,9 @@ Settings
 
 .. confval:: relationship
    :name: file-relationship
-
-   :Required: false
-   :Type: string
-   :Default: oneToMany
+   :required: false
+   :type: string
+   :default: oneToMany
 
    The relationship defines the cardinality between the relations. Possible
    values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and
@@ -72,10 +67,9 @@ Settings
 
 .. confval:: cropVariants
    :name: file-cropVariants
-
-   :Required: false
-   :Type: array
-   :Default: []
+   :required: false
+   :type: array
+   :default: []
 
    It is possible to define crop variants for this specific field and Content
    Block. This documentation only covers the most basic configuration. Refer to

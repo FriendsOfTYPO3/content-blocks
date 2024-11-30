@@ -14,29 +14,26 @@ Settings
 
 .. confval:: size
    :name: uuid-size
-
-   :Required: false
-   :Type: integer
-   :Default: 30
+   :required: false
+   :type: integer
+   :default: 30
 
    Size for the input field. Min value is 10 and max value is 50.
 
 .. confval:: version
    :name: uuid-version
-
-   :Required: false
-   :Type: integer
-   :Default: 4
+   :required: false
+   :type: integer
+   :default: 4
 
    Version for the uuid. Please have a look at the `Symphony Documentation <https://symfony.com/doc/current/components/uid.html#uuids>`__ for more information.
 
 
 .. confval:: enableCopyToClipboard
    :name: uuid-enableCopyToClipboard
-
-   :Required: false
-   :Type: boolean
-   :Default: true
+   :required: false
+   :type: boolean
+   :default: true
 
    If set to false, the button for copying the uuid into the clipboard will not be rendered.
 

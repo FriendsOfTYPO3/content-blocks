@@ -14,9 +14,8 @@ Settings
 
 .. confval:: renderType
    :name: select-renderType
-
-   :Required: yes
-   :Type: string
+   :required: yes
+   :type: string
 
    *  :yaml:`selectSingle`
    *  :yaml:`selectCheckBox`
@@ -26,9 +25,8 @@ Settings
 
 .. confval:: items
    :name: select-items
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Contains the elements for the selector box. Each item is an array. An item
    consists of a :yaml:`label` and a :yaml:`value`.
@@ -101,17 +99,15 @@ Settings
 
 .. confval:: default
    :name: select-default
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Default value set if a new record is created.
 
 .. confval:: maxitems
    :name: select-maxitems
-
-   :Required: false
-   :Type: integer
+   :required: false
+   :type: integer
 
    Maximum number of child items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
@@ -119,9 +115,8 @@ Settings
 
 .. confval:: minitems
    :name: select-minitems
-
-   :Required: false
-   :Type: integer
+   :required: false
+   :type: integer
 
    Minimum number of child items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
@@ -129,10 +124,9 @@ Settings
 
 .. confval:: relationship
    :name: select-relationship
-
-   :Required: false
-   :Type: string
-   :Default: oneToMany
+   :required: false
+   :type: string
+   :default: oneToMany
 
    .. note::
 
@@ -148,10 +142,9 @@ Settings
 
 .. confval:: allowedCustomProperties
    :name: select-allowedCustomProperties
-
-   :Required: false
-   :Type: array
-   :Default: ["itemsProcConfig"]
+   :required: false
+   :type: array
+   :default: ["itemsProcConfig"]
 
    Sometimes it is needed to provide custom configuration for the :ref:`itemsProcFunc <t3tca:tca_property_itemsProcFunc>`
    functionality. These extra properties need to be explicitly allowed via this

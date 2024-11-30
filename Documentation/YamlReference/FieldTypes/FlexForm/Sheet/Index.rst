@@ -21,33 +21,29 @@ Settings
 
 .. confval:: identifier
    :name: sheet-identifier
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    A unique identifier
 
 .. confval:: label
    :name: sheet-label
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Define a label. If not defined, :yaml:`identifier` is used as fallback.
 
 .. confval:: description
    :name: sheet-description
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Define a description.
 
 .. confval:: linkTitle
    :name: sheet-linkTitle
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The link title is displayed when hovering over the tab.
 

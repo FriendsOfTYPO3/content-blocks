@@ -14,10 +14,9 @@ Settings
 
 .. confval:: default
    :name: checkbox-default
-
-   :Required: false
-   :Type: integer (bit value)
-   :Default: "0"
+   :required: false
+   :type: integer (bit value)
+   :default: "0"
 
    The default value corresponds to a bit value. If you only have one checkbox
    having 1 or 0 will work to turn it on or off by default. For more than one
@@ -25,9 +24,8 @@ Settings
 
 .. confval:: items
    :name: checkbox-items
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Only necessary if more than one checkbox is desired. Contains the checkbox
    elements as separate array items. The `label` can also be defined as a
@@ -60,20 +58,18 @@ Settings
 
 .. confval:: renderType
    :name: checkbox-renderType
-
-   :Required: false
-   :Type: string
-   :Default: check
+   :required: false
+   :type: string
+   :default: check
 
    *  :yaml:`checkboxToggle`
    *  :yaml:`checkboxLabeledToggle`
 
 .. confval:: allowedCustomProperties
    :name: checkbox-allowedCustomProperties
-
-   :Required: false
-   :Type: array
-   :Default: ["itemsProcConfig"]
+   :required: false
+   :type: array
+   :default: ["itemsProcConfig"]
 
    Sometimes it is needed to provide custom configuration for the :ref:`itemsProcFunc <t3tca:tca_property_itemsProcFunc>`
    functionality. These extra properties need to be explicitly allowed via this

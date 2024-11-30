@@ -16,16 +16,16 @@ Settings
 .. confval:: eval
    :name: slug-eval
 
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    :yaml:`unique`, :yaml:`uniqueInSite` or :yaml:`uniqueInPid`.
 
 .. confval:: generatorOptions
    :name: slug-generatorOptions
 
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Options related to the generation of the slug. Keys:
 

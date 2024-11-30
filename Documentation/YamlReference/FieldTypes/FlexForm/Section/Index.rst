@@ -20,25 +20,22 @@ Settings
 
 .. confval:: identifier
    :name: section-identifier
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    A unique identifier
 
 .. confval:: label
    :name: section-label
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Define a label. If not defined, :yaml:`identifier` is used as fallback.
 
 .. confval:: container
    :name: section-container
-
-   :Required: true
-   :Type: array
+   :required: true
+   :type: array
 
    Define one or more Containers with fields.
 

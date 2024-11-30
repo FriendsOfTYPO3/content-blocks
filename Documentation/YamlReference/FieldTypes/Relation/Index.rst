@@ -15,9 +15,8 @@ Settings
 
 .. confval:: allowed
    :name: relation-allowed
-
-   :Required: true
-   :Type: string (table name, comma-separated)
+   :required: true
+   :type: string (table name, comma-separated)
 
    One or more tables, that should be referenced.
 
@@ -26,18 +25,16 @@ Settings
 
 .. confval:: maxitems
    :name: relation-maxitems
-
-   :Required: false
-   :Type: integer
+   :required: false
+   :type: integer
 
    Maximum number of items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: minitems
    :name: relation-minitems
-
-   :Required: false
-   :Type: integer
+   :required: false
+   :type: integer
 
    Minimum number of items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
@@ -45,10 +42,9 @@ Settings
 
 .. confval:: relationship
    :name: relation-relationship
-
-   :Required: false
-   :Type: string
-   :Default: oneToMany
+   :required: false
+   :type: string
+   :default: oneToMany
 
    The relationship defines the cardinality between the relations. Possible
    values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and

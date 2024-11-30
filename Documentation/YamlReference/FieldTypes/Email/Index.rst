@@ -16,28 +16,25 @@ Settings
 
 .. confval:: default
    :name: email-default
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    Default value set if a new record is created.
 
 .. confval:: placeholder
    :name: email-placeholder
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    Placeholder text for the field.
 
 .. confval:: required
    :name: email-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field becomes mandatory.
 

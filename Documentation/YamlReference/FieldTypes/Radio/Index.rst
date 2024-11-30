@@ -16,18 +16,16 @@ Settings
 
 .. confval:: default
    :name: radio-default
-
-   :Required: false
-   :Type: string|int
-   :Default: ''
+   :required: false
+   :type: string|int
+   :default: ''
 
    Default value set if a new record is created.
 
 .. confval:: items
    :name: radio-items
-
-   :Required: true
-   :Type: array
+   :required: true
+   :type: array
 
    Contains the radio items. Each item is an array with the keys :yaml:`label`
    and :yaml:`value`. Values are usually integers, but can also be strings if
@@ -68,9 +66,9 @@ Settings
 .. confval:: allowedCustomProperties
    :name: radio-allowedCustomProperties
 
-   :Required: false
-   :Type: array
-   :Default: ["itemsProcConfig"]
+   :required: false
+   :type: array
+   :default: ["itemsProcConfig"]
 
    Sometimes it is needed to provide custom configuration for the :ref:`itemsProcFunc <t3tca:tca_property_itemsProcFunc>`
    functionality. These extra properties need to be explicitly allowed via this

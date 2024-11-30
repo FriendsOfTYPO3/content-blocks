@@ -14,27 +14,24 @@ Settings
 
 .. confval:: format
    :name: number-format
-
-   :Required: false
-   :Type: string
-   :Default: 'integer'
+   :required: false
+   :type: string
+   :default: 'integer'
 
    Possible values: `integer` (default) or `decimal`.
 
 .. confval:: default
    :name: number-default
-
-   :Required: false
-   :Type: integer
-   :Default: "0"
+   :required: false
+   :type: integer
+   :default: "0"
 
    Default value set if a new record is created.
 
 .. confval:: range
    :name: number-range
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    An array which defines an integer range within the value must be.
 
@@ -54,18 +51,16 @@ Settings
 
 .. confval:: required
    :name: number-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field becomes mandatory.
 
 .. confval:: slider
    :name: number-slider
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Render a value slider next to the field. Available keys:
 

@@ -23,9 +23,8 @@ Settings
 ========
 
 .. confval:: fields
-
-   :Required: true
-   :Type: array
+   :required: true
+   :type: array
 
    Fields to be used inside the FlexForm definition.
 

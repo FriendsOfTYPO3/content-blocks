@@ -15,10 +15,9 @@ Settings
 
 .. confval:: ignoreIfNotInPalette
    :name: ignoreIfNotInPalette
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    Normally, linebreaks can only be defined inside of a palette. With this flag
    set to true, linebreaks can also appear outside of palettes (but do nothing).

@@ -15,44 +15,39 @@ Settings
 
 .. confval:: default
    :name: textarea-default
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Default value set if a new record is created.
 
 .. confval:: placeholder
    :name: textarea-placeholder
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Placeholder text for the field.
 
 .. confval:: rows
    :name: textarea-rows
-
-   :Required: false
-   :Type: integer
-   :Default: 5
+   :required: false
+   :type: integer
+   :default: 5
 
    Abstract value for the height of the `<textarea>` field. Max value is 20.
 
 .. confval:: required
    :name: textarea-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field will become mandatory.
 
 .. confval:: enableRichtext
    :name: textarea-enableRichtext
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set to true, the system renders a Rich Text Editor if that is enabled for
    the editor (default: yes), and if a suitable editor extension is loaded
@@ -63,9 +58,8 @@ Settings
 
 .. confval:: richtextConfiguration
    :name: textarea-richtextConfiguration
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The value is a key in :php:`$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']`
    array and specifies the YAML configuration source field used for that RTE

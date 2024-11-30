@@ -15,9 +15,8 @@ Settings
 
 .. confval:: relationship
    :name: category-relationship
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Depending on the relationship, the category relations is stored (internally)
    in a different way. Possible keywords are `oneToOne`, `oneToMany` or
@@ -25,20 +24,18 @@ Settings
 
 .. confval:: maxitems
    :name: category-maxitems
-
-   :Required: false
-   :Type: integer
-   :Default: "0"
+   :required: false
+   :type: integer
+   :default: "0"
 
    Maximum number of items. Defaults to a high value. JavaScript record
    validation prevents the record from being saved if the limit is not satisfied.
 
 .. confval:: minitems
    :name: category-minitems
-
-   :Required: false
-   :Type: integer
-   :Default: "0"
+   :required: false
+   :type: integer
+   :default: "0"
 
    Minimum number of items. Defaults to 0. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
@@ -46,9 +43,8 @@ Settings
 
 .. confval:: treeConfig.startingPoints
    :name: category-treeConfig.startingPoints
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Allows to set one or more roots (category uids), from which the categories
    should be taken from.

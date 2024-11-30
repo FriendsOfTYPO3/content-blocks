@@ -14,19 +14,17 @@ Settings
 
 .. confval:: hashed
    :name: password-hashed
-
-   :Required: false
-   :Type: bool
-   :Default: true
+   :required: false
+   :type: bool
+   :default: true
 
    Whether the password should be hashed with the configured hashing algorithm.
    Set this value to :yaml:`false` to disable hashing.
 
 .. confval:: passwordPolicy
    :name: password-passwordPolicy
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The :ref:`password policy <t3coreapi:password-policies>` will ensure, that
    the new password complies with the configured password policy.
@@ -36,26 +34,23 @@ Settings
 
 .. confval:: placeholder
    :name: password-placeholder
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    Placeholder text for the field.
 
 .. confval:: required
    :name: password-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field becomes mandatory.
 
 .. confval:: size
    :name: password-size
-
-   :Required: false
-   :Type: integer
+   :required: false
+   :type: integer
 
    Abstract value for the width of the `<input>` field.
 

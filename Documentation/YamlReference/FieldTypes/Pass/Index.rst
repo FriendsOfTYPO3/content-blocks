@@ -15,10 +15,9 @@ Settings
 
 .. confval:: default
    :name: pass-default
-
-   :Required: false
-   :Type: mixed
-   :Default: ''
+   :required: false
+   :type: mixed
+   :default: ''
 
    Default value set if a new record is created.
 

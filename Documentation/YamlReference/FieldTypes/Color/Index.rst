@@ -14,36 +14,32 @@ Settings
 
 .. confval:: default
    :name: color-default
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    Default value set if a new record is created.
 
 .. confval:: required
    :name: color-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field will become mandatory.
 
 .. confval:: opacity
    :name: color-opacity
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    Enables selection of opacity for the color.
 
 .. confval:: valuePicker
    :name: color-valuePicker
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    Renders a select box with static values next to the input field. When
    a value is selected in the box, the value is transferred to the field. Keys:

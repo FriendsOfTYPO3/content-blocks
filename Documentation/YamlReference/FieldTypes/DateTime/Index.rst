@@ -15,30 +15,27 @@ Settings
 
 .. confval:: default
    :name: datetime-default
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    Default value in `Y-m-d` format. Set if a new record is created.
    For example :yaml:`2023-01-01`.
 
 .. confval:: format
    :name: datetime-format
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    Defines how the date should be formatted in the backend. Possible values are
    `datetime`, `date` or `time` and `timesec`.
 
 .. confval:: dbType
    :name: datetime-dbType
-
-   :Required: false
-   :Type: string
-   :Default: ''
+   :required: false
+   :type: string
+   :default: ''
 
    This option changes the date field to a native MySql :sql:`DATETIME`,
    :sql:`DATE` or :sql:`TIME` field. Possible values are `datetime`, `date`
@@ -46,9 +43,8 @@ Settings
 
 .. confval:: range
    :name: datetime-range
-
-   :Required: false
-   :Type: array
+   :required: false
+   :type: array
 
    An array which defines an integer range within which the value must be. Keys:
 
@@ -70,19 +66,17 @@ Settings
 
 .. confval:: disableAgeDisplay
    :name: datetime-disableAgeDisplay
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    Disable the display of the age in the backend view.
 
 .. confval:: required
    :name: datetime-required
-
-   :Required: false
-   :Type: boolean
-   :Default: false
+   :required: false
+   :type: boolean
+   :default: false
 
    If set, the field becomes mandatory.
 
