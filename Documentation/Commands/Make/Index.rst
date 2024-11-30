@@ -12,58 +12,96 @@ by the `EXT:make` extension.
 Options
 =======
 
+..  confval-menu::
+    :name: confval-make-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: content-type
    :name: make-content-type
-
-   :Required: true
-   :Type: string
+   :required: true
+   :default: content-element
+   :type: string
 
    :bash:`content-element`, :bash:`page-type` or :bash:`record-type`
 
 .. confval:: vendor
    :name: make-vendor
-
-   :Required: true
-   :Type: string
+   :required: true
+   :default: (vendor of root composer.json)
+   :type: string
 
    Your vendor name. Lowercase, separated by dashes.
 
 .. confval:: name
    :name: make-name
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    Your Content Block name (this is not the title). Lowercase, separated by dashes.
 
 .. confval:: extension
    :name: make-extension
-
-   :Required: true
-   :Type: string
+   :required: true
+   :type: string
 
    The host extension, where to store your new Content Block.
 
 .. confval:: title
    :name: make-title
-
-   :Required: false
-   :Type: string
+   :required: false
+   :type: string
 
    The human-readable title for your Content Block.
 
 .. confval:: type-name
    :name: make-type-name
-
-   :Required: false
-   :Type: string|int
+   :required: false
+   :type: string|int
 
    Custom type name. Required for content-type :bash:`page-type` (must be int).
 
-.. important::
+   .. important::
 
-    The :bash:`type-name` option is required and has to be an integer value, if you
-    choose the :bash:`page-type` content type.
+       The :bash:`type-name` option is required and has to be an integer value, if you
+       choose the :bash:`page-type` content type.
+
+..  confval:: skeleton-path
+    :name: make-skeleton-path
+    :required: false
+    :default: content-blocks-skeleton
+    :type: string
+
+    A path relative to the current working directory, which holds a skeleton of
+    a Content Block. Only needed, if you want to use a different name or path
+    other than `content-blocks-skeleton`.
+
+    ..  card::
+        :class: mb-4
+
+        ..  directory-tree::
+            :level: 4
+
+            *   :path:`content-blocks-skeleton`
+
+                *   :path:`content-element`
+
+                    *   :path:`assets`
+
+                        *   :file:`icon.svg`
+
+                    *   :path:`templates`
+
+                        *   :file:`backend-preview.html`
+                        *   :file:`frontend.html`
+
+                *   :path:`page-type`
+
+                *  :path:`record-type`
+
+    Learn more about :ref:`Content Blocks skeleton <cb_skeleton_path>`
 
 This will give you an overview of all available options:
 
@@ -123,3 +161,53 @@ fields to your Content Block definition.
 
    vendor/bin/typo3 cache:flush -g system
    vendor/bin/typo3 extension:setup --extension=my_sitepackage
+
+.. _cb_skeleton_path:
+
+Content Block skeleton
+----------------------
+
+.. versionadded:: 1.1
+
+It is now possible to define a "skeleton" for your Content Blocks. To do this
+create a folder called `content-blocks-skeleton` in your project root. This
+folder may contain default templates or assets for one or more Content Types. It
+is used as a base when creating new types with the :shell:`make:content-block`
+command. In order to add a skeleton for Content Elements, create a folder called
+`content-element` within that directory. Then, the structure is identical to
+your concrete Content Block as you know it. You may place any files there. They
+will simply be copied when a new Content Block is created. It is not possible to
+define `language/labels.xlf` or `config.yaml` this way, as they are dynamically
+generated based on your arguments.
+
+..  card::
+    :class: mb-4
+
+    ..  directory-tree::
+        :level: 4
+
+        *   :path:`content-blocks-skeleton`
+
+            *   :path:`content-element`
+
+                *   :path:`assets`
+
+                    *   :file:`icon.svg`
+
+                *   :path:`templates`
+
+                    *   :file:`backend-preview.html`
+                    *   :file:`frontend.html`
+
+            *   :path:`page-type`
+
+            *  :path:`record-type`
+
+In case you want to name the skeleton folder differently or place it somewhere
+else, you can override the default folder by providing the option
+:shell:`--skeleton-path` with a relative path to your current working directory.
+
+..  code-block:: shell
+    :caption: You can use an alternative skeleton path
+
+    vendor/bin/typo3 make:content-block --skeleton-path="my-alternative-skeleton-path"

@@ -69,4 +69,13 @@ enum ContentType
             self::RECORD_TYPE => null,
         };
     }
+
+    public function getShortName(): string
+    {
+        return match ($this) {
+            self::CONTENT_ELEMENT => 'content-element',
+            self::PAGE_TYPE => 'page-type',
+            self::RECORD_TYPE => 'record-type',
+        };
+    }
 }

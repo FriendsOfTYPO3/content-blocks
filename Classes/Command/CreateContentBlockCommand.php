@@ -101,6 +101,13 @@ class CreateContentBlockCommand extends Command
             InputOption::VALUE_OPTIONAL,
             'Host extension in which the Content Block should be stored.'
         );
+        $this->addOption(
+            'skeleton-path',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'A folder which contains a basic skeleton for one or more content types.',
+            'content-blocks-skeleton'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -216,7 +223,12 @@ class CreateContentBlockCommand extends Command
             contentType: $contentType
         );
 
-        $this->contentBlockBuilder->create($contentBlockConfiguration);
+        $skeletonPath = $input->getOption('skeleton-path');
+        $skeletonPath = rtrim($skeletonPath, '/');
+        $skeletonPath = getcwd() . '/' . $skeletonPath;
+        $contentTypeFolderName = $contentType->getShortName();
+        $skeletonPath .= '/' . $contentTypeFolderName;
+        $this->contentBlockBuilder->create($contentBlockConfiguration, $skeletonPath);
 
         $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');
         $output->writeln('<comment>Please run the following commands every time you change the config.yaml file.</comment>');
