@@ -31,7 +31,7 @@ TYPO3 Content Blocks
     |today|
 
 
-The TYPO3 Content Blocks extension, :composer:`friendsoftypo3/content-blocks`, provides a simplified 
+The TYPO3 Content Blocks extension, :composer:`friendsoftypo3/content-blocks`, provides a simplified
 way to register and use content types as sub-resources inside extensions.
 
 .. container:: row m-0 p-0
@@ -174,6 +174,7 @@ way to register and use content types as sub-resources inside extensions.
     DeveloperCorner/Index
     ChangeLog/Index
     Migrations/Index
+    FAQ/Index
     KnownProblems/Index
     Appendix/Index
 
