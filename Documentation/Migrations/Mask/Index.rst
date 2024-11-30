@@ -84,9 +84,28 @@ Templates
 ---------
 
 This is the easy part. Simply copy the Mask template into **templates/frontend.html** and
-you are done. That said, if you didn't use any partials or layouts. If so, move
+you are done `*`. That said, if you didn't use any partials or layouts. If so, move
 these to the according **templates/partials** and **templates/layouts** folder in your
 Content Block.
+
+.. note::
+
+    `*` This is not the whole truth. In some rare cases you need to adapt the
+    template when migrating to Content Blocks >= 1.0. Most probably usages of
+    the type `Link` field need adaptions:
+
+    .. code-block:: html
+
+        <!-- Before -->
+        <f:if condition="{data.tx_mask_link_field}">
+            <!-- -->
+        </f:if>
+
+
+        <!-- After -->
+        <f:if condition="{data.tx_mask_link_field.url}">
+            <!-- -->
+        </f:if>
 
 Icon
 ----
