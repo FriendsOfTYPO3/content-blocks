@@ -70,43 +70,43 @@ Example output:
         <file datatype="plaintext" original="labels.xlf" source-language="en" date="2023-12-03T08:37:53+00:00" product-name="demo/demo">
             <header/>
             <body>
-                <trans-unit id="title" resname="title">
+                <trans-unit id="title">
                     <source>My demo title</source>
                 </trans-unit>
-                <trans-unit id="description" resname="description">
+                <trans-unit id="description">
                     <source>This is just a demo/demo</source>
                 </trans-unit>
-                <trans-unit id="header.label" resname="header.label">
+                <trans-unit id="header.label">
                     <source>Existing field override</source>
                 </trans-unit>
-                <trans-unit id="slug.label" resname="slug.label">
+                <trans-unit id="slug.label">
                     <source>My Slug</source>
                 </trans-unit>
-                <trans-unit id="slug.description" resname="slug.description">
+                <trans-unit id="slug.description">
                     <source>My Slug Description</source>
                 </trans-unit>
-                <trans-unit id="my_collection.label" resname="my_collection.label">
+                <trans-unit id="my_collection.label">
                     <source>my_collection</source>
                 </trans-unit>
-                <trans-unit id="my_collection.text.label" resname="my_collection.text.label">
+                <trans-unit id="my_collection.text.label">
                     <source>text</source>
                 </trans-unit>
-                <trans-unit id="my_collection.my_collection.label" resname="my_collection.my_collection.label">
+                <trans-unit id="my_collection.my_collection.label">
                     <source>my_collection</source>
                 </trans-unit>
-                <trans-unit id="my_collection.my_collection.text.label" resname="my_collection.my_collection.text.label">
+                <trans-unit id="my_collection.my_collection.text.label">
                     <source>text</source>
                 </trans-unit>
-                <trans-unit id="external_table.label" resname="external_table.label">
+                <trans-unit id="external_table.label">
                     <source>external_table</source>
                 </trans-unit>
-                <trans-unit id="external_table_2.label" resname="external_table_2.label">
+                <trans-unit id="external_table_2.label">
                     <source>external_table_2</source>
                 </trans-unit>
-                <trans-unit id="related_content.label" resname="related_content.label">
+                <trans-unit id="related_content.label">
                     <source>related_content</source>
                 </trans-unit>
-                <trans-unit id="my-custom-key" resname="my-custom-key">
+                <trans-unit id="my-custom-key">
                     <source>My translation</source>
                 </trans-unit>
             </body>
