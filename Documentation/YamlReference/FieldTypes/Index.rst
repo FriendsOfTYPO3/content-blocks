@@ -2,7 +2,7 @@
 .. _field_types:
 
 ===========
-Field types
+Field Types
 ===========
 
 The Content Block field types mirror the available
@@ -12,7 +12,6 @@ some additional options, which are not available in TCA to ease the usage.
 
 ..  rst-class:: horizbuttons-attention-m
 
-*  :ref:`Basic <field_type_basic>`
 *  :ref:`Category <field_type_category>`
 *  :ref:`Checkbox <field_type_checkbox>`
 *  :ref:`Collection <field_type_collection>`
@@ -24,20 +23,26 @@ some additional options, which are not available in TCA to ease the usage.
 *  :ref:`Folder <field_type_folder>`
 *  :ref:`Json <field_type_json>`
 *  :ref:`Language <field_type_language>`
-*  :ref:`Linebreak <field_type_linebreak>`
 *  :ref:`Link <field_type_link>`
 *  :ref:`Number <field_type_number>`
-*  :ref:`Palette <field_type_palette>`
 *  :ref:`Pass <field_type_pass>`
 *  :ref:`Password <field_type_password>`
 *  :ref:`Radio <field_type_radio>`
 *  :ref:`Relation <field_type_relation>`
 *  :ref:`Select <field_type_select>`
 *  :ref:`Slug <field_type_slug>`
-*  :ref:`Tab <field_type_tab>`
 *  :ref:`Text <field_type_text>`
 *  :ref:`Textarea <field_type_textarea>`
 *  :ref:`Uuid <field_type_uuid>`
+
+Special field types:
+
+..  rst-class:: horizbuttons-attention-m
+
+*  :ref:`Basic <field_type_basic>`
+*  :ref:`Linebreak <field_type_linebreak>`
+*  :ref:`Palette <field_type_palette>`
+*  :ref:`Tab <field_type_tab>`
 
 Common field options
 ====================
@@ -205,33 +210,9 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
       onChange: reload
 
-.. toctree::
+..  toctree::
     :maxdepth: 1
     :titlesonly:
+    :glob:
 
-    Basic/Index
-    Category/Index
-    Checkbox/Index
-    Collection/Index
-    Color/Index
-    DateTime/Index
-    Email/Index
-    File/Index
-    FlexForm/Index
-    Folder/Index
-    Json/Index
-    Language/Index
-    Linebreak/Index
-    Link/Index
-    Number/Index
-    Palette/Index
-    Pass/Index
-    Password/Index
-    Radio/Index
-    Relation/Index
-    Select/Index
-    Slug/Index
-    Tab/Index
-    Text/Index
-    Textarea/Index
-    Uuid/Index
+    */Index
