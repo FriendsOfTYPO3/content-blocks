@@ -17,15 +17,15 @@ named **assets**, **templates** and **language**.
 
             *   :path:`my-content-block`
 
-                *   :path:`assets`
+                *   :path:`assets`(:ref:`details <cb_definition_assets>`)
 
                     *   :file:`icon.svg`
 
-                *   :path:`language`
+                *   :path:`language`(:ref:`details <cb_definition_language>`)
 
                     *   :file:`labels.xlf`
 
-                *   :path:`templates`
+                *   :path:`templates`(:ref:`details <cb_definition_source>`)
 
                     *   :path:`partials`
 
@@ -34,7 +34,7 @@ named **assets**, **templates** and **language**.
                     *   :file:`backend-preview.html`
                     *   :file:`frontend.html`
 
-                *   :file:`config.yaml`
+                *   :file:`config.yaml`(:ref:`details <cb_definition_editor_interface>`)
 
 ..  toctree::
     :titlesonly:
