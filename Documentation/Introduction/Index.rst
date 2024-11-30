@@ -36,17 +36,28 @@ The goal is to **encapsulate** all resources belonging to the Content Block
 inside one **component**. This leads to re-usable components, which can be
 easily copy-pasted into other projects.
 
-.. code-block:: none
-   :caption: Directory structure of a Content Block
+..  card::
+    :class: mb-4
 
-   ├── assets
-   │   └── icon.svg
-   ├── language
-   │    └── labels.xlf
-   ├── templates
-   │   ├── backend-preview.html
-   │   └── frontend.html
-   └── config.yaml
+    ..  directory-tree::
+        :level: 3
+
+            *   :path:`my-content-block`
+
+                *   :path:`assets`
+
+                    *   :file:`icon.svg`
+
+                *   :path:`language`
+
+                    *   :file:`labels.xlf`
+
+                *   :path:`templates`
+
+                    *   :file:`backend-preview.html`
+                    *   :file:`frontend.html`
+
+                *   :file:`config.yaml`
 
 *  Learn more about the :ref:`Content Block definition <cb_definition>`
 
@@ -77,24 +88,37 @@ folder. For this purpose an already loaded extension is required as a host.
 Depending on the Content Type the Content Block is put into a predestinated
 sub-folder.
 
-.. code-block:: none
-   :caption: Content Blocks reside in the `ContentBlocks` folder of an extension
-   :emphasize-lines: 3
+..  card::
+    :class: mb-4
 
-   ├── Classes
-   ├── Configuration
-   ├── ContentBlocks
-   │   ├── ContentElements
-   │   │   ├── block1
-   │   │   └── block2
-   │   ├── PageTypes
-   │   │   ├── block3
-   │   │   └── block4
-   │   └── RecordTypes
-   │       ├── block5
-   │       └── block6
-   ├── Resources
-   └── composer.json
+    ..  directory-tree::
+        :level: 4
+
+            *   :path:`my_extension`
+
+                *   :path:`Classes`
+
+                *   :path:`Configuration`
+
+                *   :path:`ContentBlocks`
+
+                    *   :path:`ContentElements`
+
+                        *   :path:`content-block-1`
+                        *   :path:`content-block-2`
+
+                    *   :path:`PageTypes`
+
+                        *   :path:`content-block-3`
+                        *   :path:`content-block-4`
+
+                    *   :path:`RecordTypes`
+
+                        *   :path:`content-block-5`
+                        *   :path:`content-block-6`
+
+                *   :file:`ext_emconf.php`
+                *   :file:`composer.json`
 
 *  Kickstart a Content Block with the :ref:`make:content-block command <cb_skeleton>`
 *  Learn more about the :ref:`registration process <cb_installation>`

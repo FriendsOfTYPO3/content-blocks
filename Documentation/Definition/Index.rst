@@ -12,16 +12,32 @@ named **assets**, **templates** and **language**.
 .. code-block:: none
    :caption: Directory structure of a Content Block
 
-   ├── assets
-   │   └── icon.svg
-   ├── language
-   │    └── labels.xlf
-   ├── templates
-   │   ├── partials
-   │   │   └── Component.html
-   │   ├── backend-preview.html
-   │   └── frontend.html
-   └── config.yaml
+..  card::
+    :class: mb-4
+
+    ..  directory-tree::
+        :level: 4
+
+            *   :path:`my-content-block`
+
+                *   :path:`assets`
+
+                    *   :file:`icon.svg`
+
+                *   :path:`language`
+
+                    *   :file:`labels.xlf`
+
+                *   :path:`templates`
+
+                    *   :path:`partials`
+
+                        *   :file:`MyPartial.html`
+
+                    *   :file:`backend-preview.html`
+                    *   :file:`frontend.html`
+
+                *   :file:`config.yaml`
 
 ..  toctree::
     :titlesonly:
