@@ -10,30 +10,41 @@ The Content Block field types mirror the available
 reflect the actual usage. For the most part options are identical. There are
 some additional options, which are not available in TCA to ease the usage.
 
+Simple Field Types:
+
 ..  rst-class:: horizbuttons-attention-m
 
-*  :ref:`Category <field_type_category>`
 *  :ref:`Checkbox <field_type_checkbox>`
-*  :ref:`Collection <field_type_collection>`
 *  :ref:`Color <field_type_color>`
 *  :ref:`DateTime <field_type_datetime>`
 *  :ref:`Email <field_type_email>`
-*  :ref:`File <field_type_file>`
-*  :ref:`FlexForm <field_type_flexform>`
-*  :ref:`Folder <field_type_folder>`
-*  :ref:`Json <field_type_json>`
-*  :ref:`Language <field_type_language>`
 *  :ref:`Link <field_type_link>`
 *  :ref:`Number <field_type_number>`
-*  :ref:`Pass <field_type_pass>`
 *  :ref:`Password <field_type_password>`
 *  :ref:`Radio <field_type_radio>`
-*  :ref:`Relation <field_type_relation>`
-*  :ref:`Select <field_type_select>`
 *  :ref:`Slug <field_type_slug>`
 *  :ref:`Text <field_type_text>`
 *  :ref:`Textarea <field_type_textarea>`
 *  :ref:`Uuid <field_type_uuid>`
+
+Relational Field Types:
+
+..  rst-class:: horizbuttons-attention-m
+
+*  :ref:`Category <field_type_category>`
+*  :ref:`Collection <field_type_collection>`
+*  :ref:`File <field_type_file>`
+*  :ref:`Folder <field_type_folder>`
+*  :ref:`Language <field_type_language>`
+*  :ref:`Relation <field_type_relation>`
+*  :ref:`Select <field_type_select>`
+
+Structural Field Types:
+
+..  rst-class:: horizbuttons-attention-m
+
+*  :ref:`FlexForm <field_type_flexform>`
+*  :ref:`Json <field_type_json>`
 
 Special field types:
 
@@ -42,6 +53,7 @@ Special field types:
 *  :ref:`Basic <field_type_basic>`
 *  :ref:`Linebreak <field_type_linebreak>`
 *  :ref:`Palette <field_type_palette>`
+*  :ref:`Pass <field_type_pass>`
 *  :ref:`Tab <field_type_tab>`
 
 Common field options
