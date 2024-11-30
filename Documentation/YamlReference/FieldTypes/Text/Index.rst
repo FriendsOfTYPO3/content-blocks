@@ -13,6 +13,13 @@ features applied.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-text-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: text-default
    :required: false

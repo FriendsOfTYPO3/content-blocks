@@ -12,6 +12,13 @@ The :yaml:`Color` type provides a simple color picker.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-color-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: color-default
    :required: false

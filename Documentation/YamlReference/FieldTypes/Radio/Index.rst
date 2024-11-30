@@ -14,6 +14,13 @@ a string, too.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-radio-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: radio-default
    :required: false

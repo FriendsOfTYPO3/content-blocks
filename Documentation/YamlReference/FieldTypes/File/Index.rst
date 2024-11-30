@@ -12,6 +12,13 @@ The :yaml:`File` type generates a field for file relations.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-file-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: extendedPalette
    :name: file-extendedPalette
    :required: false

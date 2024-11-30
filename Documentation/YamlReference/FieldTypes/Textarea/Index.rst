@@ -13,6 +13,13 @@ be enabled.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-textarea-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: textarea-default
    :required: false

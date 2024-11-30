@@ -18,6 +18,13 @@ buttons to choose from.
 Settings
 --------
 
+..  confval-menu::
+    :name: confval-section-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: identifier
    :name: section-identifier
    :required: true

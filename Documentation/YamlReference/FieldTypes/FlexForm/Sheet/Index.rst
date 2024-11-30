@@ -19,6 +19,13 @@ rendering.
 Settings
 --------
 
+..  confval-menu::
+    :name: confval-sheet-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: identifier
    :name: sheet-identifier
    :required: true

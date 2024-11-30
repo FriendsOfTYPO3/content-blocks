@@ -13,6 +13,13 @@ is resolved to an array of :php:`\TYPO3\CMS\Core\Resource\Folder` objects.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-folder-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: elementBrowserEntryPoints
    :name: folder-elementBrowserEntryPoints
    :required: false

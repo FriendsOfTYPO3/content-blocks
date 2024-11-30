@@ -12,6 +12,13 @@ The :yaml:`Json` type is for a textarea which will be rendered as a json editor.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-json-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: cols
    :name: json-cols
    :required: false

@@ -13,9 +13,15 @@ for the record.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-slug-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: eval
    :name: slug-eval
-
    :required: false
    :type: string
 
@@ -23,7 +29,6 @@ Settings
 
 .. confval:: generatorOptions
    :name: slug-generatorOptions
-
    :required: false
    :type: array
 

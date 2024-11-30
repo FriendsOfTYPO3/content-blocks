@@ -12,6 +12,13 @@ The :yaml:`Number` only allows integers or decimals as input values.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-number-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: format
    :name: number-format
    :required: false

@@ -13,6 +13,13 @@ the value is stored as a timestamp.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-datetime-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: datetime-default
    :required: false

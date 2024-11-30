@@ -12,6 +12,13 @@ The :yaml:`Select` type generates a simple select field.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-select-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: renderType
    :name: select-renderType
    :required: yes

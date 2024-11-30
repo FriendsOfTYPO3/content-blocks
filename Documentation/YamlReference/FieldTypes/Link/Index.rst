@@ -14,6 +14,13 @@ object of type :php:`\TYPO3\CMS\Core\LinkHandling\TypolinkParameter`.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-link-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: link-default
    :required: false

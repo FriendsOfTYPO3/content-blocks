@@ -12,6 +12,13 @@ The :yaml:`Password` type generates a password field.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-password-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: hashed
    :name: password-hashed
    :required: false

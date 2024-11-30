@@ -12,6 +12,13 @@ The :yaml:`Uuid` type is for a text input which contains an uuid value.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-uuid-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: size
    :name: uuid-size
    :required: false

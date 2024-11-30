@@ -12,6 +12,13 @@ The :yaml:`Checkbox` type generates one or more checkbox fields.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-checkbox-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: checkbox-default
    :required: false

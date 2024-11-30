@@ -14,6 +14,13 @@ message warning will be displayed.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-email-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: default
    :name: email-default
    :required: false

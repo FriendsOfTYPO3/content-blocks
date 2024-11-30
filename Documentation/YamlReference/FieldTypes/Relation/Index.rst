@@ -13,6 +13,13 @@ be available to select from the Record Selector.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-relation-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: allowed
    :name: relation-allowed
    :required: true

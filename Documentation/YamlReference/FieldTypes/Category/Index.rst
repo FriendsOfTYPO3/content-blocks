@@ -13,6 +13,13 @@ taken from the system table :sql:`sys_categories`.
 Settings
 ========
 
+..  confval-menu::
+    :name: confval-category-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
 .. confval:: relationship
    :name: category-relationship
    :required: false
