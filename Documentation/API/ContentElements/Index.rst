@@ -36,8 +36,12 @@ Basics to your definition:
 
 The Appearance tab will then be added after all your custom fields.
 
+.. _about_content_elements:
+
 About TYPO3 Content Elements
 ============================
+
+   Defining "Content Elements" in TYPO3 is hard and the learning curve is steep.
 
 Despite the possibility to customize TYPO3 to ones needs, most people used the
 standard Content Elements shipped with TYPO3 Core. This is, of course,

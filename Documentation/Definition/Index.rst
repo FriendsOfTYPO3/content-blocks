@@ -9,9 +9,6 @@ The minimal viable definition consists of a folder with a YAML file named
 **config.yaml** inside. All other resources are split into three folders
 named **assets**, **templates** and **language**.
 
-.. code-block:: none
-   :caption: Directory structure of a Content Block
-
 ..  card::
     :class: mb-4
 
