@@ -13,24 +13,13 @@ can do it with own TCA overrides.
 How to override Content Blocks TCA
 ==================================
 
-.. note::
-
-   First make sure, you've added Content Blocks as a dependency in your
-   extension.
-
 Finding the correct identifier
 ------------------------------
 
-The identifier to use in TCA depends on whether the Content Block uses
-:yaml:`prefixFields` or not. If this feature is enabled, your field identifiers
-are prefixed with the vendor and content block name. Example:
-:yaml:`my-vendor/my-content-block` and field identifier :yaml:`header` result
-in :php:`myvendor_mycontentblock_header`. See how dashes are removed and the two
-parts are glued together with an underscore. The same goes for the table name of
-:yaml:`Collection` fields. `myvendor_mycontentblock` is also the resulting
-:yaml:`typeName`, if not set explicitly. This can be used to override the TCA
-:php:`types` array. Otherwise, the field and table identifiers defined in the
-YAML config are identical to the TCA one.
+In order to find out the internal identifier, which is used in TCA you need to
+know how :ref:`prefixing <api_prefixing>` works in Content Blocks. You can also
+simply inspect the TCA in the Configuration module of the `typo3/cms-lowlevel`
+extension.
 
 Fields in tt_content
 --------------------
