@@ -3,7 +3,7 @@
 .. _cb_reuse_existing_fields:
 
 =====================
-Reuse existing fields
+Reuse Existing Fields
 =====================
 
 It's possible to reuse already existing fields by using the :confval:`useExistingField <field-types-useexistingfield>`
