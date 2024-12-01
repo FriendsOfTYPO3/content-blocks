@@ -164,6 +164,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
            type: Text
            prefixField: false
 
+   Read more about :ref:`prefixing <api_prefixing>`.
+
 .. confval:: prefixType
    :name: field-types-prefixType
    :required: false
@@ -181,6 +183,8 @@ Field options, which can be defined inside the :yaml:`fields` array.
            type: Text
            prefixField: true
            prefixType: vendor
+
+   Read more about :ref:`prefixing <api_prefixing>`.
 
 .. confval:: displayCond
    :name: field-types-displayCond

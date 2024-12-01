@@ -20,7 +20,7 @@ to reduce redundancy by sharing them between multiple Content Blocks.
 .. warning::
 
     Be cautious when using Basics in multiple Content Blocks with
-    :ref:`prefixing <cb_reuse_existing_cb_fields>` enabled. This may lead to the
+    :ref:`prefixing <api_prefixing>` enabled. This may lead to the
     database schema creating one new column for each included field. It is
     recommended to either use fixed prefixes with :yaml:`prefixType: vendor` or
     to disable the prefix for each field in the Basic with

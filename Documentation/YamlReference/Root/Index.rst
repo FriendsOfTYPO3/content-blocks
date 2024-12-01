@@ -51,12 +51,13 @@ Common root options
    The default behavior is to convert the both :yaml:`name` parts into a prefix.
    All dashes are removed in this process and the parts are combined with an
    underscore to prevent collisions. In order to better reuse fields between
-   Content Blocks, it can be useful to deactivate this option. Read more about
-   :ref:`reusing fields here <cb_reuse_existing_fields>`.
+   Content Blocks, it can be useful to deactivate this option.
 
    .. code-block:: yaml
 
        prefixFields: false
+
+   Read more about :ref:`prefixing <api_prefixing>`.
 
 .. confval:: prefixType
    :name: root-prefixType
@@ -73,6 +74,8 @@ Common root options
        prefixFields: true
        prefixType: vendor
 
+   Read more about :ref:`prefixing <api_prefixing>`.
+
 .. confval:: vendorPrefix
    :name: root-vendorPrefix
    :required: false
@@ -85,6 +88,8 @@ Common root options
    .. code-block:: yaml
 
        vendorPrefix: tx_sitepackage
+
+   Read more about :ref:`prefixing <api_prefixing>`.
 
 .. confval:: priority
    :name: root-priority
