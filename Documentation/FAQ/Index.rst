@@ -43,3 +43,6 @@ Answers to frequently asked questions.
         There is no drawback to it. Normally, you don't even want future changes
         to a Content Block from external parties. By owning the Content Block
         your code can't break with an update.
+
+        If you really need to override a Content Block, you can always fall back
+        to traditional methods like :ref:`TCA Overrides <cb_extendTca>`.
