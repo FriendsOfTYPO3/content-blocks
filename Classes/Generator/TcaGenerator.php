@@ -410,6 +410,7 @@ readonly class TcaGenerator
                 'option' => 'format',
             ],
             'l10n_mode',
+            'dbFieldLength',
         ];
     }
 

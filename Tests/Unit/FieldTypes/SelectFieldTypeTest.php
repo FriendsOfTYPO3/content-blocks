@@ -82,6 +82,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'itemsProcConfig' => [
                     'foo' => 'bar',
                 ],
+                'dbFieldLength' => 10,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -136,6 +137,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'treeConfig' => [
                         'foo' => 'bar',
                     ],
+                    'dbFieldLength' => 10,
                     'itemsProcConfig' => [
                         'foo' => 'bar',
                     ],
@@ -180,6 +182,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'sortItems' => [],
                 'appearance' => [],
                 'treeConfig' => [],
+                'dbFieldLength' => 0,
             ],
             'expectedTca' => [
                 'config' => [

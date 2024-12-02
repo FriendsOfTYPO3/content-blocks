@@ -147,6 +147,15 @@ Settings
    :yaml:`renderType` is set to :yaml:`selectSingle`, a relationship
    :yaml:`manyToOne` is automatically inferred.
 
+.. confval:: dbFieldLength
+   :name: select-dbFieldLength
+   :required: false
+   :type: int
+   :default: 255
+
+   This option can be used to set an alternative size for the database
+   :sql:`varchar` column. The default size is `255`.
+
 .. confval:: allowedCustomProperties
    :name: select-allowedCustomProperties
    :required: false

@@ -57,6 +57,7 @@ final class SelectFieldType extends AbstractFieldType
     // Only for renderType="selectTree"
     private array $treeConfig = [];
     private string $relationship = '';
+    private int $dbFieldLength = 0;
 
     public function createFromArray(array $settings): SelectFieldType
     {
@@ -99,6 +100,7 @@ final class SelectFieldType extends AbstractFieldType
         ) {
             $self->relationship = 'manyToOne';
         }
+        $self->dbFieldLength = (int)($settings['dbFieldLength'] ?? $self->dbFieldLength);
         $self->setCustomProperties($settings);
 
         return $self;
@@ -186,6 +188,9 @@ final class SelectFieldType extends AbstractFieldType
         }
         if ($this->relationship !== '') {
             $config['relationship'] = $this->relationship;
+        }
+        if ($this->dbFieldLength !== 0) {
+            $config['dbFieldLength'] = $this->dbFieldLength;
         }
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
