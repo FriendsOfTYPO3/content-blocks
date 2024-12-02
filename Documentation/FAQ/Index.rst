@@ -47,13 +47,6 @@ Answers to frequently asked questions.
         If you really need to override a Content Block, you can always fall back
         to traditional methods like :ref:`TCA Overrides <cb_extendTca>`.
 
-    ..  accordion-item:: How can I extend an existing Content Block?
-        :name: yaml
-        :header-level: 2
-
-        Same as before: This is not possible by default. Nevertheless, you can
-        always extend the TypoScript the old way and use e.g. partials from your
-        sitepackage or libraries from outside. But this way you are on your own.
 
     ..  accordion-item:: Can I add PHP code to my content blocks?
         :name: add-php-code
@@ -95,17 +88,7 @@ Answers to frequently asked questions.
         your Content Block CSS to your main CSS file, and remove the CSS
         registration in the Content Block.
 
-    ..  accordion-item:: Can I add Content Blocks assets (JS and CSS) to my build process?
-        :name: assets-build-process
-        :header-level: 2
-
-        This is not a specific Content Blocks question. You can add your assets
-        to the build process like you do with any other assets. E.G. you can add
-        your Content Block CSS to your main CSS file, and remove the CSS
-        registration in the Content Block.
-
-    ..  accordion-item:: Will there be a GUI (Graphical User Interface) for
-        Content Blocks?
+    ..  accordion-item:: Will there be a GUI (Graphical User Interface) for Content Blocks?
         :name: content-blocks-gui
         :header-level: 2
 
