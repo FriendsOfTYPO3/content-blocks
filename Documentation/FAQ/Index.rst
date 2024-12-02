@@ -56,7 +56,7 @@ Answers to frequently asked questions.
         sitepackage or libraries from outside. But this way you are on your own.
 
     ..  accordion-item:: Can I add PHP code to my content blocks?
-        :name: yaml
+        :name: add-php-code
         :header-level: 2
 
         The Content Blocks API does support PHP files at all. If you want to add
@@ -64,14 +64,14 @@ Answers to frequently asked questions.
         ways.
 
     ..  accordion-item:: Can I use twig engine with Content Blocks?
-        :name: yaml
+        :name: twig-in-content-blocks
         :header-level: 2
 
         Not out of the box. As the main rendering engine for TYPO3 is fluid, you
         have to do some custom work to get twig working with Content Blocks.
 
     ..  accordion-item:: Can I use headless with Content Blocks?
-        :name: yaml
+        :name: headless-with-content-blocks
         :header-level: 2
 
         Content Blocks generating the TYPO3 core things under the hood (TCA,
@@ -79,7 +79,7 @@ Answers to frequently asked questions.
         you have to do with the core content elements.
 
     ..  accordion-item:: Are the Content Blocks assets (JS and CSS) compressed by the the core?
-        :name: yaml
+        :name: assets-compression
         :header-level: 2
 
         Content Blocks using the core asset collector, so the assets not get
@@ -87,7 +87,7 @@ Answers to frequently asked questions.
         used on the page, each file is included separate.
 
     ..  accordion-item:: Can I add Content Blocks assets (JS and CSS) to my build process?
-        :name: yaml
+        :name: assets-build-process
         :header-level: 2
 
         This is not a specific Content Blocks question. You can add your assets
@@ -96,7 +96,7 @@ Answers to frequently asked questions.
         registration in the Content Block.
 
     ..  accordion-item:: Can I add Content Blocks assets (JS and CSS) to my build process?
-        :name: yaml
+        :name: assets-build-process
         :header-level: 2
 
         This is not a specific Content Blocks question. You can add your assets
@@ -104,8 +104,9 @@ Answers to frequently asked questions.
         your Content Block CSS to your main CSS file, and remove the CSS
         registration in the Content Block.
 
-    ..  accordion-item:: Will there be a GUI (Graphical User Interface) for Content Blocks?
-        :name: yaml
+    ..  accordion-item:: Will there be a GUI (Graphical User Interface) for
+        Content Blocks?
+        :name: content-blocks-gui
         :header-level: 2
 
         Yes, the Content Types Team is working on a GUI for Content Blocks. The
