@@ -26,3 +26,7 @@ These examples are some small packages, which show how to use the Content Blocks
 
 * Record "notype" with only one type
 * "record1" and "record2" show an example with 2 types
+
+### File Types
+
+* Example override of the image file type

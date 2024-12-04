@@ -3125,4 +3125,95 @@ final class TcaGeneratorTest extends UnitTestCase
 
         self::assertSame($expected, $tca);
     }
+
+    public static function sysFileReferenceTypeIsAddedDataProvider(): iterable
+    {
+        yield 'FileType image is added' => [
+            'contentBlockArray' => [
+                'name' => 'my-vendor/my-file-reference',
+                'hostExtension' => 'my_extension',
+                'extPath' => 'EXT:my_extension/ContentBlocks/FileTypes/my-file-reference',
+                'icon' => [
+                    'iconIdentifier' => 'my_file_reference',
+                ],
+                'yaml' => [
+                    'table' => 'sys_file_reference',
+                    'typeName' => 2,
+                    'fields' => [
+                        [
+                            'identifier' => 'my-field',
+                            'type' => 'Text',
+                            'label' => 'My Text field',
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'sys_file_reference' => [
+                    'label' => 'uid_local',
+                    'columns' => [
+                        'myvendor_myfilereference_my-field' => [
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'exclude' => true,
+                            'label' => 'my-field',
+                        ],
+                    ],
+                    'types' => [
+                        2 => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,myvendor_myfilereference_my-field,--palette--;;filePalette',
+                            'columnsOverrides' => [
+                                'myvendor_myfilereference_my-field' => [
+                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/FileTypes/my-file-reference/language/labels.xlf:my-field.label',
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/FileTypes/my-file-reference/language/labels.xlf:my-field.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'ctrl' => [
+                        'searchFields' => 'myvendor_myfilereference_my-field',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('sysFileReferenceTypeIsAddedDataProvider')]
+    #[Test]
+    public function sysFileReferenceTypeIsAdded(array $contentBlockArray, array $expected): void
+    {
+        $baseTca = [
+            'sys_file_reference' => [
+                'label' => 'uid_local',
+            ],
+        ];
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
+        $contentBlockRegistry->register($contentBlock);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader))
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
+            $languageFileRegistry,
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+
+        $beforeTcaOverridesEvent = new BeforeTcaOverridesEvent($baseTca);
+        $tcaGenerator($beforeTcaOverridesEvent);
+        $tca = $beforeTcaOverridesEvent->getTca();
+
+        self::assertSame($expected, $tca);
+    }
 }

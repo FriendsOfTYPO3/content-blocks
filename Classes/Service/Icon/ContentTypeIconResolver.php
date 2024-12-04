@@ -74,7 +74,8 @@ class ContentTypeIconResolver
         $iconPath = match ($contentType) {
             ContentType::CONTENT_ELEMENT => 'EXT:content_blocks/Resources/Public/Icons/DefaultContentElementIcon.svg',
             ContentType::PAGE_TYPE => 'EXT:content_blocks/Resources/Public/Icons/DefaultPageTypeIcon.svg',
-            ContentType::RECORD_TYPE => 'EXT:content_blocks/Resources/Public/Icons/DefaultRecordTypeIcon.svg',
+            // @todo FileType doesn't need an icon, but this is right now required for ContentTypeInterface.
+            ContentType::FILE_TYPE, ContentType::RECORD_TYPE => 'EXT:content_blocks/Resources/Public/Icons/DefaultRecordTypeIcon.svg',
         };
         return $iconPath;
     }

@@ -41,7 +41,9 @@ final class ContentTypeFactory
         return match ($contentType) {
             ContentType::CONTENT_ELEMENT => ContentElementDefinition::createFromArray($typeDefinition, $table),
             ContentType::PAGE_TYPE => PageTypeDefinition::createFromArray($typeDefinition, $table),
-            ContentType::RECORD_TYPE => RecordTypeDefinition::createFromArray($typeDefinition, $table)
+            // @todo It's not ideal that FileType reuses RecordTypeDefinition.
+            // @todo It actually only needs showItems, overrideColumns and typeName. Create new interface?
+            ContentType::FILE_TYPE, ContentType::RECORD_TYPE => RecordTypeDefinition::createFromArray($typeDefinition, $table)
         };
     }
 }

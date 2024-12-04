@@ -26,7 +26,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\RecordTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -152,7 +151,7 @@ readonly class TcaGenerator
                 }
                 $fieldType->setDataStructure($dataStructure);
             }
-            if ($tableDefinition->hasTypeField()) {
+            if ($tableDefinition->hasTypeField() || $tableDefinition->getContentType() === ContentType::FILE_TYPE) {
                 $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column, $baseTca);
                 // Ensure label exists for the standard column definition. This is used e.g. in the List module.
                 if (!$column->useExistingField()) {
@@ -296,20 +295,23 @@ readonly class TcaGenerator
     protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
         $columnsOverrides = $this->getColumnsOverrides($typeDefinition, $tableDefinition);
-        $tca = match ($typeDefinition::class) {
-            ContentElementDefinition::class => $this->processContentElement($typeDefinition, $columnsOverrides),
-            PageTypeDefinition::class => $this->processPageType($typeDefinition, $columnsOverrides),
-            RecordTypeDefinition::class => $this->processRecordType($typeDefinition, $columnsOverrides, $tableDefinition),
-            default => throw new \InvalidArgumentException(
-                'Unsupported type definition: ' . $typeDefinition::class,
-                1714050376
-            ),
+        $tca = match ($tableDefinition->getContentType()) {
+            ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides),
+            ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides),
+            ContentType::FILE_TYPE => $this->processFileType($typeDefinition, $columnsOverrides),
+            ContentType::RECORD_TYPE => $this->processRecordType($typeDefinition, $columnsOverrides, $tableDefinition),
         };
         return $tca;
     }
 
-    protected function processContentElement(ContentElementDefinition $typeDefinition, array $columnsOverrides): array
+    protected function processContentElement(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
+        if (!$typeDefinition instanceof ContentElementDefinition) {
+            throw new \InvalidArgumentException(
+                'Expected ContentElementDefinition, got ' . get_class($typeDefinition),
+                1733344806
+            );
+        }
         $typeDefinitionArray = [
             'previewRenderer' => PreviewRenderer::class,
             'showitem' => $this->getContentElementStandardShowItem($typeDefinition),
@@ -323,7 +325,7 @@ readonly class TcaGenerator
         return $typeDefinitionArray;
     }
 
-    protected function processPageType(PageTypeDefinition $typeDefinition, array $columnsOverrides): array
+    protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
         $typeDefinitionArray = [
             'showitem' => $this->getPageTypeStandardShowItem($typeDefinition),
@@ -334,7 +336,18 @@ readonly class TcaGenerator
         return $typeDefinitionArray;
     }
 
-    protected function processRecordType(RecordTypeDefinition $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
+    protected function processFileType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
+    {
+        $typeDefinitionArray = [
+            'showitem' => $this->getFileTypeStandardShowItem($typeDefinition),
+        ];
+        if ($columnsOverrides !== []) {
+            $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+        }
+        return $typeDefinitionArray;
+    }
+
+    protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
     {
         $typeDefinitionArray = [
             'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition, $tableDefinition),
@@ -772,6 +785,27 @@ readonly class TcaGenerator
         }
         $systemFields = $this->buildSystemFields($capability);
         $parts = array_merge($parts, $systemFields);
+        $showItem = implode(',', $parts);
+        return $showItem;
+    }
+
+    protected function getFileTypeStandardShowItem(ContentTypeInterface $typeDefinition): string
+    {
+        $showItemArray = $typeDefinition->getShowItems();
+        $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
+        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        if ($firstItemIsTab) {
+            $tabDefinition = array_shift($showItemArray);
+            $generalTab = $this->processShowItem([$tabDefinition]);
+        }
+        $showItem = $this->processShowItem($showItemArray);
+        $parts = [];
+        $parts[] = $generalTab;
+        if ($showItem !== '') {
+            $parts[] = $showItem;
+        }
+        // Add hidden palette with system fields and uid_local.
+        $parts[] = '--palette--;;filePalette';
         $showItem = implode(',', $parts);
         return $showItem;
     }
