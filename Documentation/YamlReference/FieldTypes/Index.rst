@@ -22,6 +22,7 @@ Simple Field Types:
 *  :ref:`Number <field_type_number>`
 *  :ref:`Password <field_type_password>`
 *  :ref:`Radio <field_type_radio>`
+*  :ref:`SelectNumber <field_type_select-number>`
 *  :ref:`Slug <field_type_slug>`
 *  :ref:`Text <field_type_text>`
 *  :ref:`Textarea <field_type_textarea>`
