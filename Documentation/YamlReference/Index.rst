@@ -33,4 +33,5 @@ Full examples can be found in the examples repository: https://github.com/friend
    ContentTypes/ContentElements/Index
    ContentTypes/PageTypes/Index
    ContentTypes/RecordTypes/Index
+   ContentTypes/FileTypes/Index
    FieldTypes/Index

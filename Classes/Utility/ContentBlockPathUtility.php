@@ -30,6 +30,7 @@ class ContentBlockPathUtility
         $contentTypeFolder = match ($contentType) {
             ContentType::CONTENT_ELEMENT => self::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => self::getRelativePageTypesPath(),
+            ContentType::FILE_TYPE => self::getRelativeFileTypesPath(),
             ContentType::RECORD_TYPE => self::getRelativeRecordTypesPath(),
         };
         return 'EXT:' . $extensionKey . '/' . $contentTypeFolder . '/' . $contentBlockFolderName;
@@ -105,6 +106,11 @@ class ContentBlockPathUtility
         return self::getSubDirectoryName() . '/' . self::getRecordTypesFolder();
     }
 
+    public static function getRelativeFileTypesPath(): string
+    {
+        return self::getSubDirectoryName() . '/' . self::getFileTypesFolder();
+    }
+
     public static function getSubDirectoryName(): string
     {
         return 'ContentBlocks';
@@ -123,6 +129,11 @@ class ContentBlockPathUtility
     public static function getRecordTypesFolder(): string
     {
         return 'RecordTypes';
+    }
+
+    public static function getFileTypesFolder(): string
+    {
+        return 'FileTypes';
     }
 
     public static function getAssetsFolder(): string

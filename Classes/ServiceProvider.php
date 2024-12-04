@@ -392,7 +392,7 @@ HEREDOC;
             $cache->set('ContentBlocks_PageTypes', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
         }
         foreach ($pageTypesFromContentBlocks as $pageType) {
-            $pageDoktypeRegistry->add($pageType, []);
+            $pageDoktypeRegistry->add((int)$pageType, []);
         }
         return $pageDoktypeRegistry;
     }
