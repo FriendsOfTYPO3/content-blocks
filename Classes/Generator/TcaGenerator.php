@@ -181,8 +181,12 @@ readonly class TcaGenerator
                 if ($tableDefinition->hasTypeField()) {
                     // Ensure "type" is always set when a type field exists. This could be missing when an existing
                     // record is extended with a new record type.
-                    $tca['ctrl']['type'] ??= $tableDefinition->getTypeField();
-                    $tca['ctrl']['typeicon_column'] ??= $tableDefinition->getTypeField();
+                    if ($isNewTable || !isset($baseTca[$tableDefinition->getTable()]['ctrl']['type'])) {
+                        $tca['ctrl']['type'] ??= $tableDefinition->getTypeField();
+                    }
+                    if ($isNewTable || !isset($baseTca[$tableDefinition->getTable()]['ctrl']['typeicon_column'])) {
+                        $tca['ctrl']['typeicon_column'] ??= $tableDefinition->getTypeField();
+                    }
                 }
             }
             if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT && $typeDefinition->hasColumn('bodytext')) {
