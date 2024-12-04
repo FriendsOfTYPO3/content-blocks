@@ -5,10 +5,20 @@
 Field Types
 ===========
 
-The Content Block field types mirror the available
-:ref:`TCA types <t3tca:columns-types>`. Some types have been renamed to better
-reflect the actual usage. For the most part options are identical. There are
-some additional options, which are not available in TCA to ease the usage.
+These are the Content Blocks Field Types, which you can use out of the box. They
+cover mostly basic types. :ref:`Custom Field Types <extending-field-types>` can
+be developed from scratch. More semantic field types may be added over time.
+
+If you are familiar with :ref:`TCA types <t3tca:columns-types>`, then you will
+probably recognize most of these types. Some types have been renamed for better
+clarity.
+
+.. note::
+
+    The documented field options here are not complete. You are allowed to use
+    every option, which you can also find in the :ref:`TCA <t3tca:columns-types>`
+    documentation. Have a look at the :ref:`TCA type mapping <type_mapping>` if
+    you are unsure, which field type is the counterpart to the TCA type.
 
 Simple Field Types:
 

@@ -5,10 +5,10 @@
 TCA type mapping
 ================
 
-Content Blocks redefines all Core TCA types. Most of them are the same, but have
-a capital letter as the first character. Some are slightly different. Here is an
-overview of the mapping. This is also useful to know, if you want to reuse
-custom fields.
+Content Blocks redefines all Core :ref:`TCA types <t3tca:columns-types>` Most of
+them are the same, but have a capital letter as the first character. Some are
+slightly different. Here is an overview of the mapping. This is also useful to
+know, if you want to reuse custom fields.
 
 +-------------+---------------+
 | TCA         | ContentBlocks |
