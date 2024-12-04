@@ -38,6 +38,44 @@ final readonly class FieldTypeRegistry
     }
 
     /**
+     * Base field types are types, which are an exact mirror of the TCA type counterpart.
+     *
+     * @return \Generator<FieldTypeInterface>
+     */
+    public function getBaseFieldTypes(): \Generator
+    {
+        foreach (
+            [
+                'Category',
+                'Checkbox',
+                'Collection',
+                'Color',
+                'DateTime',
+                'Email',
+                'File',
+                'FlexForm',
+                'Folder',
+                'ImageManipulation',
+                'Json',
+                'Language',
+                'Link',
+                'Number',
+                'Pass',
+                'Password',
+                'Radio',
+                'Relation',
+                'Select',
+                'Slug',
+                'Textarea',
+                'Text',
+                'Uuid',
+            ] as $fieldType
+        ) {
+            yield $this->get($fieldType);
+        }
+    }
+
+    /**
      * @return \Generator<FieldTypeInterface>
      */
     public function all(): \Generator

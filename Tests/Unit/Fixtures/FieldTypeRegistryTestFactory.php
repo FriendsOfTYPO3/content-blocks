@@ -30,6 +30,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\FieldType\FileFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FolderFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\ImageManipulationFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\JsonFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\LanguageFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\LinebreakFieldType;
@@ -61,6 +62,7 @@ class FieldTypeRegistryTestFactory
             new FileFieldType(),
             new FlexFormFieldType(),
             new FolderFieldType(),
+            new ImageManipulationFieldType(),
             new JsonFieldType(),
             new LanguageFieldType(),
             new LinebreakFieldType(),
