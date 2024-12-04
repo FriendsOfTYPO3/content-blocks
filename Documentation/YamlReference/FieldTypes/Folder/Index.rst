@@ -5,8 +5,6 @@
 Folder
 ======
 
-:php:`type => 'folder' // TCA`
-
 The :yaml:`Folder` type enables to select one or more folders. This field type
 is resolved to an array of :php:`\TYPO3\CMS\Core\Resource\Folder` objects.
 
@@ -55,8 +53,6 @@ Settings
    :yaml:`oneToOne`. In case of a [x]toOne relation, the processed field will
    be filled directly with the folder instead of a collection of folders. In
    addition, :yaml:`maxitems` will be automatically set to :yaml:`1`.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-folder>`.
 
 Examples
 ========

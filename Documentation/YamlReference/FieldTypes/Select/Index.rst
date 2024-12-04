@@ -5,8 +5,6 @@
 Select
 ======
 
-:php:`type => 'select' // TCA`
-
 The :yaml:`Select` type generates a simple select field.
 
 Settings
@@ -166,8 +164,6 @@ Settings
    functionality. These extra properties need to be explicitly allowed via this
    option. This option receives an array of those strings. By default, the
    custom option :yaml:`itemsProcConfig` is allowed.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-select>`.
 
 Example
 =======

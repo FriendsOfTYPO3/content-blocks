@@ -5,8 +5,6 @@
 Pass
 ====
 
-:php:`type => 'passthrough' // TCA`
-
 The :yaml:`Pass` type provides a virtual field, which is not visible in the
 backend. It is useful for extension logic handling this value independently.
 

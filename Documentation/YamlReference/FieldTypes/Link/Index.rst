@@ -5,8 +5,6 @@
 Link
 ====
 
-:php:`type => 'link' // TCA`
-
 The :yaml:`Link` type creates a field with a link wizard. It is possible to link
 to pages, files or even records (if configured). This field is resolved to an
 object of type :php:`\TYPO3\CMS\Core\LinkHandling\TypolinkParameter`.
@@ -55,8 +53,6 @@ Settings
    Allow list of link types. Possible values are :yaml:`page`, :yaml:`url`,
    :yaml:`file`, :yaml:`folder`, :yaml:`email`, :yaml:`telephone` and
    :yaml:`record`.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-link>`.
 
 Example
 =======

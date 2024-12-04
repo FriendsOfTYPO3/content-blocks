@@ -5,8 +5,6 @@
 Slug
 ====
 
-:php:`type => 'slug' // TCA`
-
 The :yaml:`Slug` type generates a slug field, which generates a unique string
 for the record.
 
@@ -46,8 +44,6 @@ Settings
       generatorOptions:
         fields:
           - header
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-slug>`.
 
 Examples
 ========

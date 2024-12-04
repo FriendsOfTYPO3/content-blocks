@@ -5,8 +5,6 @@
 Checkbox
 ========
 
-:php:`type => 'check' // TCA`
-
 The :yaml:`Checkbox` type generates one or more checkbox fields.
 
 Settings
@@ -83,8 +81,6 @@ Settings
    option. This option receives an array of those strings. By default, the
    custom option :yaml:`itemsProcConfig` is allowed.
 
-
-For advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-check>`.
 
 Examples
 ========

@@ -5,8 +5,6 @@
 Collection
 ==========
 
-:php:`type => 'inline' // TCA`
-
 The :yaml:`Collection` type generates a field for
 :ref:`Inline-Relational-Record-Editing (IRRE) <t3tca:columns-inline>`, which
 allows nesting of other :ref:`field types <field_types>`. This field type allows
@@ -210,8 +208,6 @@ Settings
 
    This will create a new field called :sql:`fieldname`. It corresponds to the
    TCA option :ref:`foreign_match_fields <t3tca:columns-inline-properties-foreign-match-fields>`.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-inline-properties>`
 
 Example
 =======

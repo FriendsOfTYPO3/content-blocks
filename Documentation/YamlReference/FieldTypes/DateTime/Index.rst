@@ -5,8 +5,6 @@
 DateTime
 ========
 
-:php:`type => 'datetime' // TCA`
-
 The :yaml:`DateTime` type provides a date picker. If not configured otherwise,
 the value is stored as a timestamp.
 
@@ -86,8 +84,6 @@ Settings
    :default: false
 
    If set, the field becomes mandatory.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-datetime>`.
 
 Examples
 ========

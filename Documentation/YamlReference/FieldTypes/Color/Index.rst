@@ -5,8 +5,6 @@
 Color
 =====
 
-:php:`type => 'color' // TCA`
-
 The :yaml:`Color` type provides a simple color picker.
 
 Settings
@@ -65,8 +63,6 @@ Settings
           - [ 'Red', '#FF0000' ]
           - [ 'Green', '#008000' ]
           - [ 'Blue', '#0000FF' ]
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-color>`.
 
 Example
 =======

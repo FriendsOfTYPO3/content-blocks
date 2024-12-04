@@ -5,8 +5,6 @@
 Email
 =====
 
-:php:`type => 'email' // TCA`
-
 The :yaml:`Email` type creates an input field, which is validated against an
 email pattern. If the input does not contain a valid email address, a flash
 message warning will be displayed.
@@ -44,8 +42,6 @@ Settings
    :default: false
 
    If set, the field becomes mandatory.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-email>`.
 
 Example
 =======

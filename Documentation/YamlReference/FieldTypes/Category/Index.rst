@@ -5,8 +5,6 @@
 Category
 ========
 
-:php:`type => 'category' // TCA`
-
 The :yaml:`Category` type can handle relations to categories. The categories are
 taken from the system table :sql:`sys_categories`.
 

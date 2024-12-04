@@ -5,8 +5,6 @@
 Json
 ====
 
-:php:`type => 'json' // TCA`
-
 The :yaml:`Json` type is for a textarea which will be rendered as a json editor.
 
 Settings

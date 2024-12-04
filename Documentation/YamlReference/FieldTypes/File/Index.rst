@@ -5,8 +5,6 @@
 File
 ====
 
-:php:`type => 'file' // TCA`
-
 The :yaml:`File` type generates a field for file relations.
 
 Settings
@@ -98,8 +96,6 @@ Settings
           landscape:
             title: Landscape
             value: 4 / 3
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-file>`.
 
 Example
 =======

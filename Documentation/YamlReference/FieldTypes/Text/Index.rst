@@ -5,8 +5,6 @@
 Text
 ====
 
-:php:`type => 'input' // TCA`
-
 The :yaml:`Text` type generates a simple input field, possibly with additional
 features applied.
 
@@ -88,8 +86,6 @@ Settings
         items:
           - [ 'Want to join our team? Take the initiative!', 'Job offer general' ]
           - [ 'We are looking for ...', 'Job offer specific' ]
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-input>`.
 
 Examples
 ========

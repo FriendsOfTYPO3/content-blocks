@@ -5,8 +5,6 @@
 Radio
 =====
 
-:php:`type => 'radio' // TCA`
-
 The :yaml:`Radio` type creates a set of radio buttons. The value is typically
 stored as integer value, each radio item has one assigned number, but it can be
 a string, too.
@@ -81,8 +79,6 @@ Settings
    functionality. These extra properties need to be explicitly allowed via this
    option. This option receives an array of those strings. By default, the
    custom option :yaml:`itemsProcConfig` is allowed.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-radio>`.
 
 Example
 =======

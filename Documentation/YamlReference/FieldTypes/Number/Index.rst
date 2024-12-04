@@ -5,8 +5,6 @@
 Number
 ======
 
-:php:`type => 'number' // TCA`
-
 The :yaml:`Number` only allows integers or decimals as input values.
 
 Settings
@@ -89,8 +87,6 @@ Settings
    .. tip::
 
       It is advised to also define a range property when using the slider, otherwise the slider will go from 0 to 10000.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-number>`.
 
 Examples
 ========

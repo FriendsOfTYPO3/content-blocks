@@ -5,8 +5,6 @@
 Textarea
 ========
 
-:php:`type => 'text' // TCA`
-
 The :yaml:`Textarea` type is for multi line text input. A Rich Text Editor can
 be enabled.
 

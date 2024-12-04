@@ -5,8 +5,6 @@
 Uuid
 ====
 
-:php:`type => 'uuid' // TCA`
-
 The :yaml:`Uuid` type is for a text input which contains an uuid value.
 
 Settings
@@ -34,7 +32,6 @@ Settings
    :default: 4
 
    Version for the uuid. Please have a look at the `Symphony Documentation <https://symfony.com/doc/current/components/uid.html#uuids>`__ for more information.
-
 
 .. confval:: enableCopyToClipboard
    :name: uuid-enableCopyToClipboard

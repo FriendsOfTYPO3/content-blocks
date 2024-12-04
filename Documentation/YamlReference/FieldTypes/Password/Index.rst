@@ -5,8 +5,6 @@
 Password
 ========
 
-:php:`type => 'password' // TCA`
-
 The :yaml:`Password` type generates a password field.
 
 Settings
@@ -60,8 +58,6 @@ Settings
    :type: integer
 
    Abstract value for the width of the `<input>` field.
-
-For more advanced configuration refer to the :ref:`TCA documentation <t3tca:columns-password>`.
 
 Examples
 ========
