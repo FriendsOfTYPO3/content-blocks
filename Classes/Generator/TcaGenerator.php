@@ -33,6 +33,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
@@ -376,9 +377,9 @@ readonly class TcaGenerator
      *
      * @return string[]|array{type: string, option: string}
      */
-    protected static function getNonOverridableOptions(): array
+    protected static function getNonOverridableOptions(FieldTypeInterface $fieldType): array
     {
-        return [
+        $nonOverridableOptions = [
             'type',
             'relationship',
             'dbType',
@@ -412,6 +413,13 @@ readonly class TcaGenerator
             'l10n_mode',
             'dbFieldLength',
         ];
+        $fieldNonOverridableOptions = [];
+        // @todo experimental. Could be added as interface method later.
+        if (method_exists($fieldType, 'getNonOverridableOptions')) {
+            $fieldNonOverridableOptions = $fieldType->getNonOverridableOptions();
+        }
+        $mergedNonOverridableOptions = array_merge($nonOverridableOptions, $fieldNonOverridableOptions);
+        return $mergedNonOverridableOptions;
     }
 
     protected function getColumnsOverrides(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
@@ -419,7 +427,9 @@ readonly class TcaGenerator
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
             $overrideTca = $overrideColumn->getTca();
-            foreach (self::getNonOverridableOptions() as $option) {
+            $fieldType = $overrideColumn->getFieldType();
+            $nonOverridableOptions = self::getNonOverridableOptions($fieldType);
+            foreach ($nonOverridableOptions as $option) {
                 $optionKey = $this->getOptionKey($option, $overrideColumn);
                 if ($optionKey === null) {
                     continue;
@@ -486,7 +496,8 @@ readonly class TcaGenerator
         // FlexForm "ds" can be extended without columnsOverrides.
         $extensibleOptions = ['ds'];
         $columnTca = [];
-        $iterateOptions = $column->useExistingField() ? $extensibleOptions : self::getNonOverridableOptions();
+        $fieldType = $column->getFieldType();
+        $iterateOptions = $column->useExistingField() ? $extensibleOptions : self::getNonOverridableOptions($fieldType);
         foreach ($iterateOptions as $option) {
             $optionKey = $this->getOptionKey($option, $column);
             if ($optionKey === null) {
