@@ -9,12 +9,12 @@
 
 <div class="cb-accordion">
     <f:for each="{data.accordion_item}" as="item">
-        <button class="accordion-item">
+        <details>
+        <summary class="accordion-item">
             {item.text}
-        </button>
-        <div class="panel">
-            <f:format.html>{item.textarea}</f:format.html>
-        </div>
+        </summary>
+        <f:format.html>{item.textarea}</f:format.html>
+        </details>
     </f:for>
 </div>
 
