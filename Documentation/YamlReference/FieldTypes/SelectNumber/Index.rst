@@ -18,17 +18,17 @@ Settings
     :default:
     :required:
 
-.. confval:: default
-   :name: select-number-default
-   :required: false
-   :type: integer
+..  confval:: default
+    :name: select-number-default
+    :required: false
+    :type: integer
 
    Default value set if a new record is created.
 
-.. confval:: items
-   :name: select-number-items
-   :required: false
-   :type: array
+..  confval:: items
+    :name: select-number-items
+    :required: false
+    :type: array
 
    Contains the elements for the selector box. Each item is an array. An item
    consists of a :yaml:`label` and a :yaml:`value`.
@@ -103,7 +103,7 @@ Example
 Minimal
 -------
 
-.. code-block:: yaml
+..  code-block:: yaml
 
     name: example/select-number
     fields:
@@ -122,10 +122,10 @@ Advanced / use case
 
 Select with icons:
 
-.. code-block:: yaml
+..  code-block:: yaml
 
-   name: example/select-number
-   fields:
+    name: example/select-number
+    fields:
      - identifier: select_number_icons
        type: SelectNumber
        fieldWizard:
