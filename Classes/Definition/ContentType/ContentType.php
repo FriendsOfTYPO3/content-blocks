@@ -20,11 +20,11 @@ namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-enum ContentType
+enum ContentType: string
 {
-    case CONTENT_ELEMENT;
-    case PAGE_TYPE;
-    case RECORD_TYPE;
+    case CONTENT_ELEMENT = 'content-element';
+    case PAGE_TYPE = 'page-type';
+    case RECORD_TYPE = 'record-type';
 
     public function getTable(): ?string
     {
@@ -67,15 +67,6 @@ enum ContentType
         return match ($this) {
             self::CONTENT_ELEMENT, self::PAGE_TYPE => 'default',
             self::RECORD_TYPE => null,
-        };
-    }
-
-    public function getShortName(): string
-    {
-        return match ($this) {
-            self::CONTENT_ELEMENT => 'content-element',
-            self::PAGE_TYPE => 'page-type',
-            self::RECORD_TYPE => 'record-type',
         };
     }
 }

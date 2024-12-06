@@ -81,6 +81,38 @@ else, you can override the default folder by providing the option
 
     vendor/bin/typo3 make:content-block --skeleton-path="my-alternative-skeleton-path"
 
+Make command defaults
+---------------------
+
+It is now possible to define default options for the make command via a yaml
+config file. By default, the command looks for a file called
+`content-blocks.yaml` in the current working directory. The location and name
+can be overridden with the :shell:`--config-path` option.
+
+..  code-block:: shell
+
+    vendor/bin/typo3 make:content-block --config-path="some-folder/my-config.yaml"
+
+An example yaml config file contents may look like this:
+
+..  code-block:: yaml
+    :caption: content-blocks.yaml
+
+    vendor: nh
+    extension: content_blocks_examples
+    content-type: record-type
+    skeleton-path: folder1/content-block-skeletons
+
+This config sets defaults for :yaml:`vendor`, :yaml:`skeleton-path`,
+:yaml:`extension` and :yaml:`content-type`. These are all possible options right
+now.
+
+Now, whenever you run this command, these options will be set by default. This
+does not mean, the questions for these options will be skipped, only that they
+are the default value, if you just press `Enter` without any input. They will
+be visible in brackets at the very right `[default value]`.
+
+
 Field Type SelectNumber
 -----------------------
 

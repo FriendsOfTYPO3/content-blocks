@@ -103,6 +103,16 @@ Options
 
     Learn more about :ref:`Content Blocks skeleton <cb_skeleton_path>`
 
+..  confval:: config-path
+    :name: make-config-path
+    :required: false
+    :default: content-blocks.yaml
+    :type: string
+
+    A path to a yaml config file path, which contains defaults for this command.
+
+    Learn more about :ref:`Content Blocks defaults <cb_defaults>`
+
 This will give you an overview of all available options:
 
 .. code-block:: bash
@@ -211,3 +221,38 @@ else, you can override the default folder by providing the option
     :caption: You can use an alternative skeleton path
 
     vendor/bin/typo3 make:content-block --skeleton-path="my-alternative-skeleton-path"
+
+.. _cb_defaults:
+
+Defaults
+--------
+
+.. versionadded:: 1.1
+
+It is now possible to define default options for this command via a yaml config
+file. By default, the command looks for a file called `content-blocks.yaml` in
+the current working directory. The location and name can be overridden with the
+:shell:`--config-path` option.
+
+..  code-block:: shell
+
+    vendor/bin/typo3 make:content-block --config-path="some-folder/my-config.yaml"
+
+An example yaml config file contents may look like this:
+
+..  code-block:: yaml
+    :caption: content-blocks.yaml
+
+    vendor: nh
+    extension: content_blocks_examples
+    content-type: record-type
+    skeleton-path: folder1/content-block-skeletons
+
+This config sets defaults for :yaml:`vendor`, :yaml:`skeleton-path`,
+:yaml:`extension` and :yaml:`content-type`. These are all possible options right
+now.
+
+Now, whenever you run this command, these options will be set by default. This
+does not mean, the questions for these options will be skipped, only that they
+are the default value, if you just press `Enter` without any input. They will
+be visible in brackets at the very right `[default value]`.
