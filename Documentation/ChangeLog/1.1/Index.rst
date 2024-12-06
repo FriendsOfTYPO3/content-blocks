@@ -5,6 +5,8 @@
 1.1
 ===
 
+..  contents::
+
 Features
 ========
 
@@ -78,6 +80,25 @@ else, you can override the default folder by providing the option
     :caption: You can use an alternative skeleton path
 
     vendor/bin/typo3 make:content-block --skeleton-path="my-alternative-skeleton-path"
+
+Field Type SelectNumber
+-----------------------
+
+A new field type :ref:`SelectNumber <field_type_select-number>` is added. This
+new type allows to have a select field with exclusively integer values. The
+database column will also have type :sql:`int`, which saves precious row size.
+
+..  code-block:: yaml
+
+    name: example/select-number
+    fields:
+      - identifier: select_number
+        type: SelectNumber
+        items:
+          - label: 'The first'
+            value: 1
+          - label: 'The second'
+            value: 2
 
 Deprecations
 ============
