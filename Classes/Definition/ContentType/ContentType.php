@@ -24,6 +24,7 @@ enum ContentType
 {
     case CONTENT_ELEMENT;
     case PAGE_TYPE;
+    case FILE_TYPE;
     case RECORD_TYPE;
 
     public function getTable(): ?string
@@ -31,6 +32,7 @@ enum ContentType
         return match ($this) {
             self::CONTENT_ELEMENT => 'tt_content',
             self::PAGE_TYPE => 'pages',
+            self::FILE_TYPE => 'sys_file_reference',
             self::RECORD_TYPE => null,
         };
     }
@@ -40,7 +42,7 @@ enum ContentType
         return match ($this) {
             self::CONTENT_ELEMENT => 'CType',
             self::PAGE_TYPE => 'doktype',
-            self::RECORD_TYPE => null,
+            self::FILE_TYPE, self::RECORD_TYPE => null,
         };
     }
 
@@ -49,6 +51,7 @@ enum ContentType
         return match ($table) {
             'tt_content' => self::CONTENT_ELEMENT,
             'pages' => self::PAGE_TYPE,
+            'sys_file_reference' => self::FILE_TYPE,
             default => self::RECORD_TYPE,
         };
     }
@@ -58,6 +61,7 @@ enum ContentType
         return match ($this) {
             self::CONTENT_ELEMENT => 'Content Element',
             self::PAGE_TYPE => 'Page Type',
+            self::FILE_TYPE => 'File Type',
             self::RECORD_TYPE => 'Record Type',
         };
     }
@@ -66,7 +70,7 @@ enum ContentType
     {
         return match ($this) {
             self::CONTENT_ELEMENT, self::PAGE_TYPE => 'default',
-            self::RECORD_TYPE => null,
+            self::FILE_TYPE, self::RECORD_TYPE => null,
         };
     }
 
@@ -75,6 +79,7 @@ enum ContentType
         return match ($this) {
             self::CONTENT_ELEMENT => 'content-element',
             self::PAGE_TYPE => 'page-type',
+            self::FILE_TYPE => 'file-type',
             self::RECORD_TYPE => 'record-type',
         };
     }
