@@ -126,7 +126,7 @@ class CreateContentBlockCommand extends Command
             throw new \RuntimeException('No packages were found in which to store the Content Block.', 1678699706);
         }
         $configPath = $input->getOption('config-path');
-        $defaults = $this->loadDefaultsFromContentBlocksConfig($configPath);
+        $defaults = $this->loadDefaultsFromContentBlocksConfig($configPath, $output);
 
         if ($input->getOption('content-type')) {
             $contentTypeFromInput = $input->getOption('content-type');
@@ -307,7 +307,7 @@ class CreateContentBlockCommand extends Command
      *     extension: ?string
      * }
      */
-    private function loadDefaultsFromContentBlocksConfig(?string $configPath): array
+    private function loadDefaultsFromContentBlocksConfig(?string $configPath, OutputInterface $output): array
     {
         $config = [
             'content-type' => 'content-element',
@@ -326,8 +326,13 @@ class CreateContentBlockCommand extends Command
         }
         try {
             $yaml = Yaml::parseFile($path);
-        } catch (ParseException) {
+        } catch (ParseException $e) {
+            $output->writeln('<bg=yellow;options=bold>Warning: Error occurred parsing default config in "' . $configFile . '".</>');
+            $output->writeln('<bg=yellow;options=bold>Message: ' . $e->getMessage() . '</>');
             return $config;
+        }
+        if (!is_array($yaml)) {
+            $output->writeln('<bg=yellow;options=bold>Warning: Expected default config to be array in "' . $configFile . '".</>');
         }
         foreach (array_keys($config) as $key) {
             $config[$key] = $yaml[$key] ?? $config[$key];
