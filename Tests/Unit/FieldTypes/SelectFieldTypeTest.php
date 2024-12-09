@@ -47,7 +47,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'MM_match_fields' => [
                     'foo' => 'bar',
                 ],
-                'MM_oppositeUsage' => 'foo',
+                'MM_oppositeUsage' => ['foo'],
                 'MM_table_where' => 'foo',
                 'dontRemapTablesOnCopy' => 'foo',
                 'localizeReferencesAtParentLocalization' => 1,
@@ -105,7 +105,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'MM_match_fields' => [
                         'foo' => 'bar',
                     ],
-                    'MM_oppositeUsage' => 'foo',
+                    'MM_oppositeUsage' => ['foo'],
                     'MM_table_where' => 'foo',
                     'dontRemapTablesOnCopy' => 'foo',
                     'localizeReferencesAtParentLocalization' => true,
@@ -162,7 +162,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'MM' => '',
                 'MM_opposite_field' => '',
                 'MM_match_fields' => [],
-                'MM_oppositeUsage' => '',
+                'MM_oppositeUsage' => [],
                 'MM_table_where' => '',
                 'dontRemapTablesOnCopy' => '',
                 'localizeReferencesAtParentLocalization' => 0,

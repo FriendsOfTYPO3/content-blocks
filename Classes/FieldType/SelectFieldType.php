@@ -32,7 +32,7 @@ final class SelectFieldType extends AbstractFieldType
     private string $MM = '';
     private string $MM_opposite_field = '';
     private array $MM_match_fields = [];
-    private string $MM_oppositeUsage = '';
+    private array $MM_oppositeUsage = [];
     private string $MM_table_where = '';
     private string $dontRemapTablesOnCopy = '';
     private bool $localizeReferencesAtParentLocalization = false;
@@ -72,7 +72,7 @@ final class SelectFieldType extends AbstractFieldType
         $self->MM = (string)($settings['MM'] ?? $self->MM);
         $self->MM_opposite_field = (string)($settings['MM_opposite_field'] ?? $self->MM_opposite_field);
         $self->MM_match_fields = (array)($settings['MM_match_fields'] ?? $self->MM_match_fields);
-        $self->MM_oppositeUsage = (string)($settings['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
+        $self->MM_oppositeUsage = (array)($settings['MM_oppositeUsage'] ?? $self->MM_oppositeUsage);
         $self->MM_table_where = (string)($settings['MM_table_where'] ?? $self->MM_table_where);
         $self->dontRemapTablesOnCopy = (string)($settings['dontRemapTablesOnCopy'] ?? $self->dontRemapTablesOnCopy);
         $self->localizeReferencesAtParentLocalization = (bool)($settings['localizeReferencesAtParentLocalization'] ?? $self->localizeReferencesAtParentLocalization);
@@ -128,7 +128,7 @@ final class SelectFieldType extends AbstractFieldType
         if ($this->MM_match_fields !== []) {
             $config['MM_match_fields'] = $this->MM_match_fields;
         }
-        if ($this->MM_oppositeUsage !== '') {
+        if ($this->MM_oppositeUsage !== []) {
             $config['MM_oppositeUsage'] = $this->MM_oppositeUsage;
         }
         if ($this->MM_table_where !== '') {
