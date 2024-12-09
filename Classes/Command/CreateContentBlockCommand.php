@@ -25,6 +25,8 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockBuilder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
@@ -106,7 +108,12 @@ class CreateContentBlockCommand extends Command
             '',
             InputOption::VALUE_OPTIONAL,
             'A folder which contains a basic skeleton for one or more content types.',
-            'content-blocks-skeleton'
+        );
+        $this->addOption(
+            'config-path',
+            '',
+            InputOption::VALUE_OPTIONAL,
+            'A path to a yaml config file for this command. Default is content-blocks.yaml in the current directory.',
         );
     }
 
@@ -118,21 +125,15 @@ class CreateContentBlockCommand extends Command
         if ($availablePackages === []) {
             throw new \RuntimeException('No packages were found in which to store the Content Block.', 1678699706);
         }
+        $configPath = $input->getOption('config-path');
+        $defaults = $this->loadDefaultsFromContentBlocksConfig($configPath, $output);
 
         if ($input->getOption('content-type')) {
             $contentTypeFromInput = $input->getOption('content-type');
         } else {
-            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the Content Type of your Content Block', $this->getSupportedTypes(), 'content-element'));
+            $contentTypeFromInput = $io->askQuestion(new ChoiceQuestion('Choose the Content Type of your Content Block', $this->getSupportedTypes(), $defaults['content-type']));
         }
-        $contentType = match ($contentTypeFromInput) {
-            'content-element' => ContentType::CONTENT_ELEMENT,
-            'page-type' => ContentType::PAGE_TYPE,
-            'record-type' => ContentType::RECORD_TYPE,
-            default => throw new \RuntimeException(
-                'Content type "' . $contentTypeFromInput . '" could not be found. Please choose one of these types: ' . implode(', ', array_keys($this->getSupportedTypes())),
-                1678781014
-            )
-        };
+        $contentType = ContentType::from($contentTypeFromInput);
         if ($input->getOption('vendor')) {
             $vendor = $input->getOption('vendor');
             if (!ContentBlockNameValidator::isValid($vendor)) {
@@ -145,6 +146,7 @@ class CreateContentBlockCommand extends Command
             if ($rootVendor !== '') {
                 $default = $rootVendor;
             }
+            $default = $defaults['vendor'] ?? $default;
             $contentBlockVendorQuestion = new Question('Define vendor (<comment>vendor-name</comment>/content-block-name)', $default);
             $contentBlockVendorQuestion->setValidator($this->validateName(...));
             while (($vendor = $io->askQuestion($contentBlockVendorQuestion)) === false) {
@@ -211,7 +213,7 @@ class CreateContentBlockCommand extends Command
                 );
             }
         } else {
-            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $this->getPackageTitles($availablePackages)));
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $this->getPackageTitles($availablePackages), $defaults['extension']));
         }
 
         $contentBlockConfiguration = new LoadedContentBlock(
@@ -223,10 +225,10 @@ class CreateContentBlockCommand extends Command
             contentType: $contentType
         );
 
-        $skeletonPath = $input->getOption('skeleton-path');
+        $skeletonPath = $input->getOption('skeleton-path') ?? $defaults['skeleton-path'];
         $skeletonPath = rtrim($skeletonPath, '/');
         $skeletonPath = getcwd() . '/' . $skeletonPath;
-        $contentTypeFolderName = $contentType->getShortName();
+        $contentTypeFolderName = $contentType->value;
         $skeletonPath .= '/' . $contentTypeFolderName;
         $this->contentBlockBuilder->create($contentBlockConfiguration, $skeletonPath);
 
@@ -280,7 +282,11 @@ class CreateContentBlockCommand extends Command
      */
     protected function getSupportedTypes(): array
     {
-        return ['content-element' => 'Content Element', 'page-type' => 'Page Type', 'record-type' => 'Record Type'];
+        $supportedTypes = [];
+        foreach (ContentType::cases() as $contentType) {
+            $supportedTypes[$contentType->value] = $contentType->getHumanReadable();
+        }
+        return $supportedTypes;
     }
 
     protected function getExtPath(string $extension, ContentType $contentType): string
@@ -291,6 +297,47 @@ class CreateContentBlockCommand extends Command
             ContentType::PAGE_TYPE => $base . ContentBlockPathUtility::getRelativePageTypesPath(),
             ContentType::RECORD_TYPE => $base . ContentBlockPathUtility::getRelativeRecordTypesPath()
         };
+    }
+
+    /**
+     * @return array{
+     *     content-type: string,
+     *     vendor: ?string,
+     *     skeleton-path: string,
+     *     extension: ?string
+     * }
+     */
+    private function loadDefaultsFromContentBlocksConfig(?string $configPath, OutputInterface $output): array
+    {
+        $config = [
+            'content-type' => 'content-element',
+            'vendor' => null,
+            'skeleton-path' => 'content-blocks-skeleton',
+            'extension' => null,
+        ];
+        $currentDirectory = getcwd();
+        if ($currentDirectory === false) {
+            return $config;
+        }
+        $configFile = $configPath ?? 'content-blocks.yaml';
+        $path = $currentDirectory . '/' . $configFile;
+        if (!file_exists($path)) {
+            return $config;
+        }
+        try {
+            $yaml = Yaml::parseFile($path);
+        } catch (ParseException $e) {
+            $output->writeln('<bg=yellow;options=bold>Warning: Error occurred parsing default config in "' . $configFile . '".</>');
+            $output->writeln('<bg=yellow;options=bold>Message: ' . $e->getMessage() . '</>');
+            return $config;
+        }
+        if (!is_array($yaml)) {
+            $output->writeln('<bg=yellow;options=bold>Warning: Expected default config to be array in "' . $configFile . '".</>');
+        }
+        foreach (array_keys($config) as $key) {
+            $config[$key] = $yaml[$key] ?? $config[$key];
+        }
+        return $config;
     }
 
     private function createContentBlockContentElementConfiguration(string $vendor, string $name, string $title, ?string $typeName = ''): array
