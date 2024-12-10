@@ -40,6 +40,7 @@ use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 #[Autoconfigure(tags: [
     [
@@ -230,6 +231,7 @@ class CreateContentBlockCommand extends Command
         $skeletonPath = getcwd() . '/' . $skeletonPath;
         $contentTypeFolderName = $contentType->value;
         $skeletonPath .= '/' . $contentTypeFolderName;
+        $skeletonPath = GeneralUtility::fixWindowsFilePath($skeletonPath);
         $this->contentBlockBuilder->create($contentBlockConfiguration, $skeletonPath);
 
         $output->writeln('<info>Successfully created new Content Block "' . $vendor . '/' . $name . '" inside ' . $extension . '.</info>');
@@ -321,6 +323,7 @@ class CreateContentBlockCommand extends Command
         }
         $configFile = $configPath ?? 'content-blocks.yaml';
         $path = $currentDirectory . '/' . $configFile;
+        $path = GeneralUtility::fixWindowsFilePath($path);
         if (!file_exists($path)) {
             return $config;
         }
