@@ -96,7 +96,7 @@ this looks like this for a field with :yaml:`identifier: folder`.
 .. code-block:: html
 
     <f:for each="{data.folder}" as="folder">
-        <f:for each="{folder.files}" as="image">
+        <f:for each="{folder.files}" as="item">
             <f:image image="{item}" />
         </f:for>
     </f:for>
