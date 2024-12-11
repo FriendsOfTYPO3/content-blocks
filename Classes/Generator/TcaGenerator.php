@@ -602,6 +602,7 @@ readonly class TcaGenerator
     protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
         $fieldType = $overrideColumn->getFieldType();
+        $fieldTca = $fieldType->getTca();
         if ($fieldType->getTcaType() === 'passthrough') {
             return $column;
         }
@@ -616,7 +617,7 @@ readonly class TcaGenerator
         }
         $itemsFieldTypes = ['select', 'radio', 'check'];
         if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
-            $items = $column['config']['items'] ?? [];
+            $items = $fieldTca['config']['items'] ?? [];
             foreach ($items as $index => $item) {
                 if (!isset($item['labelPath'])) {
                     continue;
