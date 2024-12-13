@@ -2,6 +2,14 @@ name: example/card-group
 fields:
   - identifier: header
     useExistingField: true
+  - identifier: row_items
+    type: Radio
+    default: 1
+    items:
+      - value: 1
+      - value: 2
+      - value: 3
+      - value: 4
   - identifier: settings
     type: FlexForm
     fields:
@@ -12,14 +20,6 @@ fields:
           - value: 'left'
           - value: 'center'
           - value: 'right'
-      - identifier: row_items
-        type: Select
-        renderType: selectSingle
-        items:
-          - value: '1'
-          - value: '2'
-          - value: '3'
-          - value: '4'
   - identifier: card_group_item
     type: Collection
     labelField: title

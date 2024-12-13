@@ -95,6 +95,6 @@ final class SelectNumberFieldType extends AbstractFieldType
 
     public function getNonOverridableOptions(): array
     {
-        return ['renderType', 'items'];
+        return ['renderType'];
     }
 }

@@ -163,6 +163,10 @@ readonly class TcaGenerator
             }
         }
         foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($typeDefinition->getOverrideColumns() as $column) {
+                $columnTca = $tca['columns'][$column->getUniqueIdentifier()];
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->determineItemsLabel($typeDefinition, $column, $columnTca);
+            }
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
@@ -416,6 +420,7 @@ readonly class TcaGenerator
             ],
             'l10n_mode',
             'dbFieldLength',
+            'items',
         ];
         $fieldNonOverridableOptions = [];
         // @todo experimental. Could be added as interface method later.
@@ -602,7 +607,6 @@ readonly class TcaGenerator
     protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
         $fieldType = $overrideColumn->getFieldType();
-        $fieldTca = $fieldType->getTca();
         if ($fieldType->getTcaType() === 'passthrough') {
             return $column;
         }
@@ -615,20 +619,28 @@ readonly class TcaGenerator
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $column['description'] = $descriptionPath;
         }
+        return $column;
+    }
+
+    protected function determineItemsLabel(ContentTypeInterface $typeDefinition, TcaFieldDefinition $tcaFieldDefinition, array $column): array
+    {
+        $name = $typeDefinition->getName();
+        $fieldType = $tcaFieldDefinition->getFieldType();
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
-            $items = $fieldTca['config']['items'] ?? [];
-            foreach ($items as $index => $item) {
-                if (!isset($item['labelPath'])) {
-                    continue;
-                }
-                $labelPath = $item['labelPath'];
-                unset($column['config']['items'][$index]['labelPath']);
-                if (!$this->languageFileRegistry->isset($name, $labelPath)) {
-                    continue;
-                }
-                $column['config']['items'][$index]['label'] = $labelPath;
+        if (!in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
+            return $column;
+        }
+        $items = $column['config']['items'] ?? [];
+        foreach ($items as $index => $item) {
+            if (!isset($item['labelPath'])) {
+                continue;
             }
+            $labelPath = $item['labelPath'];
+            unset($column['config']['items'][$index]['labelPath']);
+            if (!$this->languageFileRegistry->isset($name, $labelPath)) {
+                continue;
+            }
+            $column['config']['items'][$index]['label'] = $labelPath;
         }
         return $column;
     }

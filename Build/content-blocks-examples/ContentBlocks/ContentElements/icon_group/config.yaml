@@ -2,6 +2,13 @@ name: example/icon-group
 fields:
   - identifier: header
     useExistingField: true
+  - identifier: row_items
+    type: SelectNumber
+    items:
+      - value: 1
+      - value: 2
+      - value: 3
+      - value: 4
   - identifier: pi_flexform
     useExistingField: true
     fields:
@@ -12,14 +19,6 @@ fields:
           - value: 'left'
           - value: 'center'
           - value: 'right'
-      - identifier: row_items
-        type: Select
-        renderType: selectSingle
-        items:
-          - value: '1'
-          - value: '2'
-          - value: '3'
-          - value: '4'
       - identifier: icon_position
         type: Select
         renderType: selectSingle

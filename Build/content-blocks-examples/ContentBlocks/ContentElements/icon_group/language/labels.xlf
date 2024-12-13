@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="example/icon-group">
+	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-12-13T08:39:35+00:00" product-name="example/icon-group">
 		<header/>
 		<body>
 			<trans-unit id="title">
@@ -11,6 +11,21 @@
 			</trans-unit>
 			<trans-unit id="header.label">
 				<source>Header</source>
+			</trans-unit>
+			<trans-unit id="row_items.label">
+				<source>Items per row</source>
+			</trans-unit>
+			<trans-unit id="row_items.items.1.label">
+				<source>1</source>
+			</trans-unit>
+			<trans-unit id="row_items.items.2.label">
+				<source>2</source>
+			</trans-unit>
+			<trans-unit id="row_items.items.3.label">
+				<source>3</source>
+			</trans-unit>
+			<trans-unit id="row_items.items.4.label">
+				<source>4</source>
 			</trans-unit>
 			<trans-unit id="pi_flexform.label">
 				<source>Settings</source>
@@ -26,21 +41,6 @@
 			</trans-unit>
 			<trans-unit id="pi_flexform.alignment.items.right.label">
 				<source>Right</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.row_items.label">
-				<source>Items per row</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.row_items.items.1.label">
-				<source>1</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.row_items.items.2.label">
-				<source>2</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.row_items.items.3.label">
-				<source>3</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.row_items.items.4.label">
-				<source>4</source>
 			</trans-unit>
 			<trans-unit id="pi_flexform.icon_position.label">
 				<source>Icon position</source>
