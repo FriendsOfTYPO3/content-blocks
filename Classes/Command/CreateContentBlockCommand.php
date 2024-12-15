@@ -40,6 +40,7 @@ use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\PackageInterface;
+use TYPO3\CMS\Core\Resource\FileType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 #[Autoconfigure(tags: [
@@ -181,6 +182,20 @@ class CreateContentBlockCommand extends Command
             PageTypeNameValidator::validate($typeName, $vendor . '/' . $name);
             $typeName = (int)$typeName;
         }
+        if ($contentType === ContentType::FILE_TYPE) {
+            $choices = ['text', 'image', 'audio', 'video', 'application'];
+            if ($typeName === null) {
+                $whatIsTheTypeName = new ChoiceQuestion('Choose a file type.', $choices, 'image');
+                $typeName = $io->askQuestion($whatIsTheTypeName);
+            }
+            $result = FileType::tryFromMimeType($typeName);
+            if ($result === FileType::UNKNOWN) {
+                throw new \InvalidArgumentException(
+                    'Please choose a valid file type. Valid types are: ' . implode(', ', $choices),
+                    1734180384
+                );
+            }
+        }
 
         $contentBlockName = $vendor . '/' . $name;
         if ($this->contentBlockRegistry->hasContentBlock($contentBlockName)) {
@@ -191,9 +206,8 @@ class CreateContentBlockCommand extends Command
             return Command::INVALID;
         }
 
-        if ($input->getOption('title')) {
-            $title = $input->getOption('title');
-        } else {
+        $title = $input->getOption('title');
+        if ($contentType !== ContentType::FILE_TYPE && $title === null) {
             $defaultTitle = $vendor . '/' . $name;
             $question = new Question('Define title', $defaultTitle);
             $title = $io->askQuestion($question);
@@ -203,6 +217,7 @@ class CreateContentBlockCommand extends Command
             ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $title, $typeName),
             ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $title, $typeName),
             ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $title, $typeName),
+            ContentType::FILE_TYPE => $this->createContentBlockFileTypeConfiguration($vendor, $name, $typeName),
         };
 
         if ($input->getOption('extension')) {
@@ -297,7 +312,8 @@ class CreateContentBlockCommand extends Command
         return match ($contentType) {
             ContentType::CONTENT_ELEMENT => $base . ContentBlockPathUtility::getRelativeContentElementsPath(),
             ContentType::PAGE_TYPE => $base . ContentBlockPathUtility::getRelativePageTypesPath(),
-            ContentType::RECORD_TYPE => $base . ContentBlockPathUtility::getRelativeRecordTypesPath()
+            ContentType::RECORD_TYPE => $base . ContentBlockPathUtility::getRelativeRecordTypesPath(),
+            ContentType::FILE_TYPE => $base . ContentBlockPathUtility::getRelativeFileTypesPath(),
         };
     }
 
@@ -411,6 +427,62 @@ class CreateContentBlockCommand extends Command
                 'identifier' => $labelField,
                 'type' => 'Text',
                 'label' => 'Title',
+            ],
+        ];
+        return $configuration;
+    }
+
+    private function createContentBlockFileTypeConfiguration(string $vendor, string $name, ?string $typeName = ''): array
+    {
+        $fullName = $vendor . '/' . $name;
+        $configuration = [
+            'name' => $fullName,
+            'table' => 'sys_file_reference',
+        ];
+        if ($typeName !== '' && $typeName !== null) {
+            $configuration['typeName'] = $typeName;
+        }
+        $configuration['fields'] = [
+            [
+                'identifier' => 'image_overlay_palette',
+                'type' => 'Palette',
+                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette',
+                'fields' => [
+                    [
+                        'identifier' => 'alternative',
+                        'useExistingField' => true,
+                    ],
+                    [
+                        'identifier' => 'description',
+                        'useExistingField' => true,
+                    ],
+                    [
+                        'type' => 'Linebreak',
+                    ],
+                    [
+                        'identifier' => 'link',
+                        'useExistingField' => true,
+                    ],
+                    [
+                        'identifier' => 'title',
+                        'useExistingField' => true,
+                    ],
+                    [
+                        'type' => 'Linebreak',
+                    ],
+                    [
+                        'identifier' => 'example_custom_field',
+                        'type' => 'Text',
+                        'label' => 'My custom Field',
+                    ],
+                    [
+                        'type' => 'Linebreak',
+                    ],
+                    [
+                        'identifier' => 'crop',
+                        'useExistingField' => true,
+                    ],
+                ],
             ],
         ];
         return $configuration;

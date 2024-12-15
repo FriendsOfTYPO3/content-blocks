@@ -67,22 +67,26 @@ readonly class ContentBlockBuilder
         $this->initializeRegistries($contentBlock);
 
         // Create base directories for a Content Block.
+        $contentType = $contentBlock->getContentType();
         $assetsPath = $basePath . '/' . ContentBlockPathUtility::getAssetsFolder();
         $templatePath = $basePath . '/' . ContentBlockPathUtility::getTemplatesFolder();
         $languagePath = $basePath . '/' . ContentBlockPathUtility::getLanguageFolder();
-        GeneralUtility::mkdir_deep($assetsPath);
-        GeneralUtility::mkdir_deep($templatePath);
+        if ($contentType !== ContentType::FILE_TYPE) {
+            GeneralUtility::mkdir_deep($assetsPath);
+            GeneralUtility::mkdir_deep($templatePath);
+        }
         GeneralUtility::mkdir_deep($languagePath);
 
         $this->createLabelsXlf($contentBlock, $basePath);
         $this->createConfigYaml($contentBlock, $basePath);
 
-        $contentType = $contentBlock->getContentType();
         if ($contentType === ContentType::CONTENT_ELEMENT) {
             $this->createFrontendHtml($contentBlock, $basePath);
             $this->createBackendPreviewHtml($contentBlock, $basePath);
         }
-        $this->copyDefaultIcon($contentType, $basePath);
+        if ($contentType !== ContentType::FILE_TYPE) {
+            $this->copyDefaultIcon($contentType, $basePath);
+        }
         if ($contentType === ContentType::PAGE_TYPE) {
             $this->copyHideInMenuIcon($basePath);
             $this->createBackendPreviewHtml($contentBlock, $basePath);
@@ -107,7 +111,7 @@ readonly class ContentBlockBuilder
         $yamlContent = $contentBlock->getYaml();
         unset($yamlContent['title']);
         unset($yamlContent['description']);
-        if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
+        if ($contentType !== ContentType::RECORD_TYPE) {
             unset($yamlContent['table']);
             unset($yamlContent['typeField']);
         }
