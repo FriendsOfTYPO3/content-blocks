@@ -16,12 +16,19 @@ doesn't even require database migrations.
 
    This guide assumes you are on the latest Mask version.
 
+Automatic migration
+===================
+
+Follow the steps in the README of the migration extension:
+
+https://github.com/nhovratov/mask-to-content-blocks
+
+It is still recommended you read the manual migration guide to understand, what
+the automatic command is doing and what manual steps you have to do afterwards.
+
 Manual migration
 ================
 
-As of now, there is no automatic migration from Mask to Content Blocks. This
-might come in the future. For now, let's see how to do the migration manually.
-The advantage is that you might better understand how the extension works.
 Install Content Blocks in parallel to Mask and follow the steps below.
 
 Recreation of a Mask Element
