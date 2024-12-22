@@ -89,6 +89,10 @@ Field options, which can be defined inside the :yaml:`fields` array.
    The field's identifier has to be unique within a Content Block. Exception is
    within a collections' field array, as this starts a new scope.
 
+   Additionally, the identifier for fields of the type collection has to be unique 
+   for all Content Blocks within a TYPO3 website, if those fields share the same
+   foreign table.
+
    .. warning::
 
       Avoid using dashes "-" inside your identifiers. They are not guaranteed to
