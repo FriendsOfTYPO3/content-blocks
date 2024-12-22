@@ -31,7 +31,7 @@ recommend these further readings:
 Quick start
 ===========
 
-If you use the `Site Package Builder <https://get.typo3.org/sitepackage/new/>`
+If you use the `Site Package Builder <https://get.typo3.org/sitepackage/new/>_`
 with the "Site Package Tutorial" package the generated site package contains
 two example Content Blocks. They are also explained in the
 `Site Package Tutorial, chapter Custom Content Blocks <https://docs.typo3.org/permalink/t3sitepackage:content-blocks>`_.
