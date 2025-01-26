@@ -11,7 +11,7 @@ Known Problems
 Row size too large
 ==================
 
-Read `this TYPO3 changelog document by @lolli <https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/13.2/Important-104153-AboutDatabaseErrorRowSizeTooLarge.html#important-104153-about-database-error-row-size-too-large/>`__ for in depth explanation and more tips.
+Read `this TYPO3 changelog document by @lolli <https://docs.typo3.org/permalink/changelog:important-104153-1718790066>`__ for in depth explanation and more tips.
 
 Field labels displayed as identifier
 ====================================
