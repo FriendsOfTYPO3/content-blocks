@@ -5,8 +5,6 @@
 TYPO3 Content Blocks
 ====================
 
-.. only:: html
-
 :Extension key:
     content_blocks
 
@@ -34,127 +32,52 @@ TYPO3 Content Blocks
 The TYPO3 Content Blocks extension, :composer:`friendsoftypo3/content-blocks`, provides a simplified
 way to register and use content types as sub-resources inside extensions.
 
-.. container:: row m-0 p-0
+..  card-grid::
+    :columns: 1
+    :columns-md: 2
+    :gap: 4
+    :class: pb-4
+    :card-height: 100
 
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+    ..  card:: :ref:`Introduction <introduction>`
 
-      .. container:: card px-0 h-100
+        What is a Content Block?
 
-         .. rst-class:: card-header h3
+    ..  card:: :ref:`Installation <extension_installation>`
 
-            .. rubric:: :ref:`Introduction <introduction>`
+        Install the Content Blocks extension.
 
-         .. container:: card-body
+    ..  card:: :ref:`Definition <cb_definition>`
 
-            What is a Content Block?
+        Learn about which parts a Content Block consists.
 
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+    ..  card:: :ref:`Kickstart command <cb_skeleton>`
 
-      .. container:: card px-0 h-100
+        Kickstart a new Content Block.
 
-         .. rst-class:: card-header h3
+    ..  card:: :ref:`YAML reference <yaml_reference>`
 
-            .. rubric:: :ref:`Installation <extension_installation>`
+        Reference of all available settings.
 
-         .. container:: card-body
+    ..  card:: :ref:`Templating <cb_templating>`
 
-            Install the Content Blocks extension.
+        Learn to use Content Blocks inside your Fluid template.
 
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+    ..  card:: :ref:`API <api>`
 
-      .. container:: card px-0 h-100
+        Deep dive into the Content Blocks API.
 
-         .. rst-class:: card-header h3
+    ..  card:: :ref:`Guides <guides>`
 
-            .. rubric:: :ref:`Definition <cb_definition>`
+        Comprehensive guides for specific use cases.
 
-         .. container:: card-body
+    ..  card:: :ref:`Developer corner <developer-corner>`
 
-            Learn about which parts a Content Block consists.
+        Features targeted to developers specifically.
 
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
+    ..  card:: :ref:`Changelog <changelogs>`
 
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`Kickstart command <cb_skeleton>`
-
-         .. container:: card-body
-
-            Kickstart a new Content Block.
-
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
-
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`YAML reference <yaml_reference>`
-
-         .. container:: card-body
-
-            Reference of all available settings.
-
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
-
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`Templating <cb_templating>`
-
-         .. container:: card-body
-
-            Learn to use Content Blocks inside your Fluid template.
-
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
-
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`API <api>`
-
-         .. container:: card-body
-
-            Deep dive into the Content Blocks API.
-
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
-
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`Guides <guides>`
-
-         .. container:: card-body
-
-            Comprehensive guides for specific use cases.
-
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
-
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`Developer corner <developer-corner>`
-
-         .. container:: card-body
-
-            Features targeted to developers specifically.
-
-   .. container:: col-md-6 pl-0 pr-3 py-3 m-0
-
-      .. container:: card px-0 h-100
-
-         .. rst-class:: card-header h3
-
-            .. rubric:: :ref:`Changelog <changelogs>`
-
-         .. container:: card-body
-
-            Documentation of all changes.
+        Documentation of all changes.
 
 **Table of Contents**
 
