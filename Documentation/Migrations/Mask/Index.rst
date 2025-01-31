@@ -26,7 +26,7 @@ The migration creates an exact equivalent of your Mask Elements as Content
 Blocks. As already mentioned, no database migrations are necessary. The elements
 will be re-defined in place. The command gathers all assets like icons and
 templates and puts them into the appropriate folders. The config.yaml file is
-build based on the mask.json file(s). Templates are simply copied, so they
+built based on the mask.json file(s). Templates are simply copied, so they
 potentially need manual migration.
 
 Install the extension via composer. If you are on classic mode, do the
