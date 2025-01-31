@@ -19,9 +19,46 @@ doesn't even require database migrations.
 Automatic migration
 ===================
 
-Follow the steps in the README of the migration extension:
+*  https://extensions.typo3.org/extension/mask_to_content_blocks
+*  https://github.com/nhovratov/mask-to-content-blocks
 
-https://github.com/nhovratov/mask-to-content-blocks
+The migration creates an exact equivalent of your Mask Elements as Content
+Blocks. As already mentioned, no database migrations are necessary. The elements
+will be re-defined in place. The command gathers all assets like icons and
+templates and puts them into the appropriate folders. The config.yaml file is
+build based on the mask.json file(s). Templates are simply copied, so they
+potentially need manual migration.
+
+Install the extension via composer. If you are on classic mode, do the
+equivalent in the extension manager.
+
+.. code:: shell
+
+    composer req nhovratov/mask-to-content-blocks
+
+If you haven't yet installed Content Blocks itself, install it as well:
+
+.. code-block:: shell
+
+    composer req friendsoftypo3/content-blocks
+
+Then run the migration command. This migration will create the Content Blocks
+into the same extension, where your Mask elements are currently loaded.
+
+.. code-block:: shell
+
+    bin/typo3 mask-to-content-blocks:migrate
+
+Next, remove Mask and this extension:
+
+.. code-block:: shell
+
+    composer remove mask/mask nhovratov/mask-to-content-blocks
+
+.. note::
+
+    Removing Mask is necessary, or else the Content Elements are defined twice:
+    by Mask and by Content Blocks. The Mask definition will "win".
 
 It is still recommended you read the manual migration guide to understand, what
 the automatic command is doing and what manual steps you have to do afterwards.
