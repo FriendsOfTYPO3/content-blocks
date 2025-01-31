@@ -1,7 +1,7 @@
 {
 	"name": "friendsoftypo3/content-blocks",
 	"type": "typo3-cms-extension",
-	"description": "TYPO3 CMS Content Blocks - Content Types API",
+	"description": "TYPO3 CMS Content Blocks - Content Types API | Define reusable components via YAML",
 	"homepage": "https://typo3.org",
 	"license": ["GPL-2.0-or-later"],
 	"authors": [{
