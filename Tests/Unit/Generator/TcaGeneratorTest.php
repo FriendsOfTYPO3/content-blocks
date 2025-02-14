@@ -545,13 +545,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                             'exclude' => true,
                         ],
-                        'bodytext' => [
-                            'config' => [
-                                'search' => [
-                                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\' OR {#CType}=\'t3ce_example\' OR {#CType}=\'t3ce_testblock\'',
-                                ],
-                            ],
-                        ],
                         't3ce_example_password' => [
                             'label' => 'password',
                             'config' => [
@@ -1571,9 +1564,6 @@ final class TcaGeneratorTest extends UnitTestCase
             'label' => 'Core bodytext field',
             'config' => [
                 'type' => 'text',
-                'search' => [
-                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\'',
-                ],
             ],
         ];
         $baseTca['tt_content']['columns']['assets'] = [

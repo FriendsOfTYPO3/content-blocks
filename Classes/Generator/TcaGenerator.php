@@ -194,10 +194,6 @@ readonly class TcaGenerator
                     }
                 }
             }
-            if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT && $typeDefinition->hasColumn('bodytext')) {
-                $tca['columns']['bodytext']['config']['search']['andWhere'] ??= $baseTca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
-                $tca['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
-            }
         }
         $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition, $baseTca);
         $tca = $this->cleanTableTca($tca);
@@ -873,15 +869,6 @@ readonly class TcaGenerator
         }
         $searchFieldsCommaSeparated = implode(',', $searchFields);
         return $searchFieldsCommaSeparated;
-    }
-
-    protected function extendBodyTextSearchAndWhere(ContentTypeInterface $contentTypeDefinition): string
-    {
-        $andWhere = '';
-        if ($contentTypeDefinition->hasColumn('bodytext')) {
-            $andWhere .= ' OR {#CType}=\'' . $contentTypeDefinition->getTypeName() . '\'';
-        }
-        return $andWhere;
     }
 
     protected function generateBaseTableTca(TableDefinition $tableDefinition): array
