@@ -9,9 +9,9 @@ Every change in the Content Blocks API is documented here.
 
 **Table of Contents:**
 
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
+..  toctree::
+    :maxdepth: 1
+    :titlesonly:
+    :glob:
 
-   1.0/Index
-   1.1/Index
+    */Index

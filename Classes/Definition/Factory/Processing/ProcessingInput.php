@@ -82,9 +82,16 @@ final class ProcessingInput
 
     private function resolveTypeName(): string|int
     {
+        if (array_key_exists('typeName', $this->yaml)) {
+            return $this->yaml['typeName'];
+        }
         if ($this->typeField === null) {
             return '1';
         }
-        return $this->yaml['typeName'];
+        // This should never happen.
+        throw new \InvalidArgumentException(
+            'Unexpected exception: Missing "typeName" detected.',
+            1734179318
+        );
     }
 }
