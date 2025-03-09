@@ -42,7 +42,7 @@ final class NumberFieldType extends AbstractFieldType
         $self->setCommonProperties($settings);
         $self->format = (string)($settings['format'] ?? $self->format);
         $defaultCastAsType = $self->format === 'decimal' ? 'float' : 'int';
-        $self->setNullableAndDefault($settings, $defaultCastAsType, '');
+        $self->setNullableAndDefault($settings, $defaultCastAsType);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->required = (bool)($settings['required'] ?? $self->required);
