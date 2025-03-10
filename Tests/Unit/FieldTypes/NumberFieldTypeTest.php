@@ -163,7 +163,6 @@ final class NumberFieldTypeTest extends UnitTestCase
             ],
         ];
 
-
         yield 'default value null for nullable' => [
             'config' => [
                 'nullable' => true,

@@ -58,8 +58,6 @@ final class NumberFieldType extends AbstractFieldType
         return $self;
     }
 
-
-
     public function getTca(): array
     {
         $tca = $this->toTca();

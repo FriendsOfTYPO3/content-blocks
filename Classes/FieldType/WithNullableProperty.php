@@ -28,15 +28,15 @@ trait WithNullableProperty
 
     protected function setNullableAndDefault(array $settings, string $defaultCastAsType): void
     {
-        if(array_key_exists('nullable', $settings)) {
-            $this->nullable = (bool) $settings['nullable'];
+        if (array_key_exists('nullable', $settings)) {
+            $this->nullable = (bool)$settings['nullable'];
         }
-        if(array_key_exists('default', $settings)) {
+        if (array_key_exists('default', $settings)) {
             $this->hasDefault = true;
             $this->default = $this->castDefaultValue($settings['default'], $defaultCastAsType);
             return;
         }
-        if($this->nullable) {
+        if ($this->nullable) {
             $this->hasDefault = true;
             $this->default = null;
         }
@@ -45,9 +45,9 @@ trait WithNullableProperty
     protected function castDefaultValue(mixed $defaultValue, string $castAsType): int|float|string
     {
         $castedDefaultValue = $this->default = match ($castAsType) {
-            'int' => (int) $defaultValue,
-            'float' => (float) $defaultValue,
-            'string' => (string) $defaultValue,
+            'int' => (int)$defaultValue,
+            'float' => (float)$defaultValue,
+            'string' => (string)$defaultValue,
             default => throw new \RuntimeException('The castAsType <' . $castAsType . '>  is not supported.', 1741534222),
         };
         return $castedDefaultValue;
