@@ -83,7 +83,7 @@ class ContentBlockLoader
         if (isset($this->contentBlockRegistry)) {
             return $this->contentBlockRegistry;
         }
-        if (is_array($contentBlocks = $this->cache->require('content-blocks'))) {
+        if (is_array($contentBlocks = $this->getFromCache())) {
             $contentBlocks = array_map(fn(array $contentBlock): LoadedContentBlock => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
             $this->contentBlockRegistry = $this->fillContentBlockRegistry($contentBlocks);
             return $this->contentBlockRegistry;

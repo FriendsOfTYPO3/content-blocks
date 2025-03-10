@@ -47,7 +47,7 @@ readonly class ContentBlockBuilder
     /**
      * Writes a Content Block to file system.
      */
-    public function create(LoadedContentBlock $contentBlock, string $skeletonPath = null): void
+    public function create(LoadedContentBlock $contentBlock, ?string $skeletonPath = null): void
     {
         $name = $contentBlock->getPackage();
         $extPath = $contentBlock->getExtPath();

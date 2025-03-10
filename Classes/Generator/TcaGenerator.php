@@ -33,6 +33,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
@@ -162,6 +163,10 @@ readonly class TcaGenerator
             }
         }
         foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($typeDefinition->getOverrideColumns() as $column) {
+                $columnTca = $tca['columns'][$column->getUniqueIdentifier()];
+                $tca['columns'][$column->getUniqueIdentifier()] = $this->determineItemsLabel($typeDefinition, $column, $columnTca);
+            }
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
                 $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
@@ -188,10 +193,6 @@ readonly class TcaGenerator
                         $tca['ctrl']['typeicon_column'] ??= $tableDefinition->getTypeField();
                     }
                 }
-            }
-            if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT && $typeDefinition->hasColumn('bodytext')) {
-                $tca['columns']['bodytext']['config']['search']['andWhere'] ??= $baseTca[$typeDefinition->getTable()]['columns']['bodytext']['config']['search']['andWhere'] ?? '';
-                $tca['columns']['bodytext']['config']['search']['andWhere'] .= $this->extendBodyTextSearchAndWhere($typeDefinition);
             }
         }
         $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition, $baseTca);
@@ -380,9 +381,9 @@ readonly class TcaGenerator
      *
      * @return string[]|array{type: string, option: string}
      */
-    protected static function getNonOverridableOptions(): array
+    protected static function getNonOverridableOptions(FieldTypeInterface $fieldType): array
     {
-        return [
+        $nonOverridableOptions = [
             'type',
             'relationship',
             'dbType',
@@ -415,7 +416,15 @@ readonly class TcaGenerator
             ],
             'l10n_mode',
             'dbFieldLength',
+            'items',
         ];
+        $fieldNonOverridableOptions = [];
+        // @todo experimental. Could be added as interface method later.
+        if (method_exists($fieldType, 'getNonOverridableOptions')) {
+            $fieldNonOverridableOptions = $fieldType->getNonOverridableOptions();
+        }
+        $mergedNonOverridableOptions = array_merge($nonOverridableOptions, $fieldNonOverridableOptions);
+        return $mergedNonOverridableOptions;
     }
 
     protected function getColumnsOverrides(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
@@ -423,7 +432,9 @@ readonly class TcaGenerator
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
             $overrideTca = $overrideColumn->getTca();
-            foreach (self::getNonOverridableOptions() as $option) {
+            $fieldType = $overrideColumn->getFieldType();
+            $nonOverridableOptions = self::getNonOverridableOptions($fieldType);
+            foreach ($nonOverridableOptions as $option) {
                 $optionKey = $this->getOptionKey($option, $overrideColumn);
                 if ($optionKey === null) {
                     continue;
@@ -490,7 +501,8 @@ readonly class TcaGenerator
         // FlexForm "ds" can be extended without columnsOverrides.
         $extensibleOptions = ['ds'];
         $columnTca = [];
-        $iterateOptions = $column->useExistingField() ? $extensibleOptions : self::getNonOverridableOptions();
+        $fieldType = $column->getFieldType();
+        $iterateOptions = $column->useExistingField() ? $extensibleOptions : self::getNonOverridableOptions($fieldType);
         foreach ($iterateOptions as $option) {
             $optionKey = $this->getOptionKey($option, $column);
             if ($optionKey === null) {
@@ -603,20 +615,28 @@ readonly class TcaGenerator
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $column['description'] = $descriptionPath;
         }
+        return $column;
+    }
+
+    protected function determineItemsLabel(ContentTypeInterface $typeDefinition, TcaFieldDefinition $tcaFieldDefinition, array $column): array
+    {
+        $name = $typeDefinition->getName();
+        $fieldType = $tcaFieldDefinition->getFieldType();
         $itemsFieldTypes = ['select', 'radio', 'check'];
-        if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
-            $items = $column['config']['items'] ?? [];
-            foreach ($items as $index => $item) {
-                if (!isset($item['labelPath'])) {
-                    continue;
-                }
-                $labelPath = $item['labelPath'];
-                unset($column['config']['items'][$index]['labelPath']);
-                if (!$this->languageFileRegistry->isset($name, $labelPath)) {
-                    continue;
-                }
-                $column['config']['items'][$index]['label'] = $labelPath;
+        if (!in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
+            return $column;
+        }
+        $items = $column['config']['items'] ?? [];
+        foreach ($items as $index => $item) {
+            if (!isset($item['labelPath'])) {
+                continue;
             }
+            $labelPath = $item['labelPath'];
+            unset($column['config']['items'][$index]['labelPath']);
+            if (!$this->languageFileRegistry->isset($name, $labelPath)) {
+                continue;
+            }
+            $column['config']['items'][$index]['label'] = $labelPath;
         }
         return $column;
     }
@@ -849,15 +869,6 @@ readonly class TcaGenerator
         }
         $searchFieldsCommaSeparated = implode(',', $searchFields);
         return $searchFieldsCommaSeparated;
-    }
-
-    protected function extendBodyTextSearchAndWhere(ContentTypeInterface $contentTypeDefinition): string
-    {
-        $andWhere = '';
-        if ($contentTypeDefinition->hasColumn('bodytext')) {
-            $andWhere .= ' OR {#CType}=\'' . $contentTypeDefinition->getTypeName() . '\'';
-        }
-        return $andWhere;
     }
 
     protected function generateBaseTableTca(TableDefinition $tableDefinition): array

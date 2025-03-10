@@ -319,16 +319,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_check' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:check.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:check.description',
-                                    'config' => [
-                                        'items' => [
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:check.items.0.label',
-                                            ],
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:check.items.1.label',
-                                            ],
-                                        ],
-                                    ],
                                 ],
                                 't3ce_example_color' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:color.label',
@@ -351,20 +341,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.description',
                                     'config' => [
                                         'renderType' => 'selectSingle',
-                                        'items' => [
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.items.label',
-                                                'value' => '',
-                                            ],
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.items.select_1.label',
-                                                'value' => 'select_1',
-                                            ],
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.items.select_2.label',
-                                                'value' => 'select_2',
-                                            ],
-                                        ],
                                     ],
                                 ],
                                 't3ce_example_link' => [
@@ -374,18 +350,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_radio' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:radio.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:radio.description',
-                                    'config' => [
-                                        'items' => [
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:radio.items.1.label',
-                                                'value' => '1',
-                                            ],
-                                            [
-                                                'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:radio.items.2.label',
-                                                'value' => '2',
-                                            ],
-                                        ],
-                                    ],
                                 ],
                                 't3ce_example_relation' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:relation.label',
@@ -471,6 +435,14 @@ final class TcaGeneratorTest extends UnitTestCase
                             'label' => 'check',
                             'config' => [
                                 'type' => 'check',
+                                'items' => [
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:check.items.0.label',
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:check.items.1.label',
+                                    ],
+                                ],
                             ],
                             'exclude' => true,
                         ],
@@ -506,6 +478,20 @@ final class TcaGeneratorTest extends UnitTestCase
                             'label' => 'select',
                             'config' => [
                                 'type' => 'select',
+                                'items' => [
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.items.label',
+                                        'value' => '',
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.items.select_1.label',
+                                        'value' => 'select_1',
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:select.items.select_2.label',
+                                        'value' => 'select_2',
+                                    ],
+                                ],
                             ],
                             'exclude' => true,
                         ],
@@ -520,6 +506,16 @@ final class TcaGeneratorTest extends UnitTestCase
                             'label' => 'radio',
                             'config' => [
                                 'type' => 'radio',
+                                'items' => [
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:radio.items.1.label',
+                                        'value' => '1',
+                                    ],
+                                    [
+                                        'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:radio.items.2.label',
+                                        'value' => '2',
+                                    ],
+                                ],
                             ],
                             'exclude' => true,
                         ],
@@ -548,13 +544,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'type' => 'input',
                             ],
                             'exclude' => true,
-                        ],
-                        'bodytext' => [
-                            'config' => [
-                                'search' => [
-                                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\' OR {#CType}=\'t3ce_example\' OR {#CType}=\'t3ce_testblock\'',
-                                ],
-                            ],
                         ],
                         't3ce_example_password' => [
                             'label' => 'password',
@@ -1575,9 +1564,6 @@ final class TcaGeneratorTest extends UnitTestCase
             'label' => 'Core bodytext field',
             'config' => [
                 'type' => 'text',
-                'search' => [
-                    'andWhere' => '{#CType}=\'text\' OR {#CType}=\'textpic\' OR {#CType}=\'textmedia\'',
-                ],
             ],
         ];
         $baseTca['tt_content']['columns']['assets'] = [

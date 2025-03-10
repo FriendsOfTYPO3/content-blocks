@@ -66,7 +66,7 @@ readonly class BasicsService
 
     protected function applyBasicsToSubFields(array $fields, int $depth = 0): array
     {
-        if ($depth === 9) {
+        if ($depth === 99) {
             throw new \RuntimeException('Infinite loop in Basics processing detected.', 1711291137);
         }
         $newFields = [];

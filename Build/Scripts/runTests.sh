@@ -345,15 +345,6 @@ IS_CORE_CI=0
 PHPSTAN_CONFIG_FILE="phpstan.neon"
 IMAGE_PREFIX="ghcr.io/typo3/"
 
-# ENV var "CI" is set by gitlab-ci. We use it here to distinct 'local' and 'CI' environment.
-if [ "$CI" == "true" ]; then
-    IS_CORE_CI=1
-    PHPSTAN_CONFIG_FILE="phpstan.ci.neon"
-
-    # Set to empty to use docker hub (default) again. CI only until image cache issue has been solved in infrastructure.
-    IMAGE_PREFIX="typo3/"
-fi
-
 # Detect arm64 and use a seleniarm image.
 # In a perfect world selenium would have a arm64 integrated, but that is not on the horizon.
 # So for the time being we have to use seleniarm image.
@@ -409,7 +400,7 @@ while getopts ":a:s:c:d:i:j:k:p:e:xy:o:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;

@@ -157,3 +157,4 @@ The full list:
    * behaviour.allowLanguageSynchronization
    * format (type: Number)
    * l10n_mode
+   * items

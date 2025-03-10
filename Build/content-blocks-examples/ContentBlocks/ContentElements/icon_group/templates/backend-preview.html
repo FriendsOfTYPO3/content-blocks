@@ -10,7 +10,7 @@
     <f:asset.css identifier="cbIconGroupCssBackend" href="{cb:assetPath()}/preview.css"/>
     <div class="cb-icon-group">
         <f:if condition="{data.icon_group_item}">
-            <div class="icongroup icongroup-align-{data.pi_flexform.alignment} icongroup-columns-{data.pi_flexform.row_items} icongroup-iconposition-{data.pi_flexform.icon_position}">
+            <div class="icongroup icongroup-align-{data.pi_flexform.alignment} icongroup-columns-{data.row_items} icongroup-iconposition-{data.pi_flexform.icon_position}">
                 <f:for each="{data.icon_group_item}" as="item" iteration="iteration">
                     <div class="icongroup-item">
                         <f:if condition="{item.icon}">

@@ -42,6 +42,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\PasswordFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\RadioFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\RelationFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\SelectFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\SelectNumberFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\SlugFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\TabFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\TextareaFieldType;
@@ -79,6 +80,7 @@ class FieldTypeRegistryTestFactory
             new TextFieldType(),
             new UuidFieldType(),
             new PassFieldType(),
+            new SelectNumberFieldType(),
         ];
         $keyedFieldTypes = [];
         foreach ($fieldTypes as $fieldType) {

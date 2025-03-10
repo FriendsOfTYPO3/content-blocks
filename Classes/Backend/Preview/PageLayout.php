@@ -115,9 +115,9 @@ readonly class PageLayout
      */
     protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
     {
-        $partialRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/layouts';
-        return $partialRootPaths;
+        $layoutRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
+        $layoutRootPaths[] = $contentBlockPrivatePath . '/layouts';
+        return $layoutRootPaths;
     }
 
     protected function getContentBlockPrivatePath(ContentTypeInterface $contentTypeDefinition): string

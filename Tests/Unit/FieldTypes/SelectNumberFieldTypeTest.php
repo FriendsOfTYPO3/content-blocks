@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class SelectFieldTypeTest extends UnitTestCase
+final class SelectNumberFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -39,47 +39,17 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'non_available_field' => 'foo',
                 'default' => 1,
-                'renderType' => 'selectCheckbox',
                 'readOnly' => 1,
                 'size' => 1,
-                'MM' => 'foo',
-                'MM_opposite_field' => 'foo',
-                'MM_match_fields' => [
-                    'foo' => 'bar',
-                ],
-                'MM_oppositeUsage' => ['foo'],
-                'MM_table_where' => 'foo',
-                'dontRemapTablesOnCopy' => 'foo',
-                'localizeReferencesAtParentLocalization' => 1,
-                'maxitems' => 1,
-                'minitems' => 1,
-                'foreign_table' => 'foo',
-                'itemsProcFunc' => 'foo',
-                'allowNonIdValues' => 1,
                 'authMode' => 'foo',
                 'disableNoMatchingValueElement' => 1,
-                'exclusiveKeys' => 'key',
-                'fileFolderConfig' => [
-                    'foo' => 'bar',
-                ],
-                'foreign_table_prefix' => 'key',
-                'foreign_table_where' => 'key',
                 'itemGroups' => [
                     'foo' => 'bar',
                 ],
                 'items' => [
-                    'foo' => 'bar',
+                    ['label' => 'Foo', 'value' => 1],
                 ],
                 'sortItems' => [
-                    'foo' => 'bar',
-                ],
-                'appearance' => [
-                    'foo' => 'bar',
-                ],
-                'treeConfig' => [
-                    'foo' => 'bar',
-                ],
-                'itemsProcConfig' => [
                     'foo' => 'bar',
                 ],
                 'dbFieldLength' => 10,
@@ -95,50 +65,20 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'renderType' => 'selectCheckbox',
                     'type' => 'select',
+                    'renderType' => 'selectSingle',
                     'default' => 1,
                     'readOnly' => true,
                     'size' => 1,
-                    'MM' => 'foo',
-                    'MM_opposite_field' => 'foo',
-                    'MM_match_fields' => [
-                        'foo' => 'bar',
-                    ],
-                    'MM_oppositeUsage' => ['foo'],
-                    'MM_table_where' => 'foo',
-                    'dontRemapTablesOnCopy' => 'foo',
-                    'localizeReferencesAtParentLocalization' => true,
-                    'maxitems' => 1,
-                    'minitems' => 1,
-                    'foreign_table' => 'foo',
-                    'itemsProcFunc' => 'foo',
-                    'allowNonIdValues' => true,
                     'authMode' => 'foo',
                     'disableNoMatchingValueElement' => true,
-                    'exclusiveKeys' => 'key',
-                    'fileFolderConfig' => [
-                        'foo' => 'bar',
-                    ],
-                    'foreign_table_prefix' => 'key',
-                    'foreign_table_where' => 'key',
                     'itemGroups' => [
                         'foo' => 'bar',
                     ],
                     'items' => [
-                        'foo' => 'bar',
+                        ['label' => 'Foo', 'value' => 1],
                     ],
                     'sortItems' => [
-                        'foo' => 'bar',
-                    ],
-                    'appearance' => [
-                        'foo' => 'bar',
-                    ],
-                    'treeConfig' => [
-                        'foo' => 'bar',
-                    ],
-                    'dbFieldLength' => 10,
-                    'itemsProcConfig' => [
                         'foo' => 'bar',
                     ],
                 ],
@@ -156,55 +96,20 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'exclude' => false,
                 'non_available_field' => 'foo',
                 'default' => '',
-                'renderType' => '',
                 'readOnly' => 0,
                 'size' => 0,
-                'MM' => '',
-                'MM_opposite_field' => '',
-                'MM_match_fields' => [],
-                'MM_oppositeUsage' => [],
-                'MM_table_where' => '',
-                'dontRemapTablesOnCopy' => '',
-                'localizeReferencesAtParentLocalization' => 0,
-                'maxitems' => 0,
-                'minitems' => 0,
-                'foreign_table' => '',
-                'itemsProcFunc' => '',
                 'allowNonIdValues' => 0,
                 'authMode' => '',
                 'disableNoMatchingValueElement' => 0,
-                'exclusiveKeys' => '',
-                'fileFolderConfig' => [],
-                'foreign_table_prefix' => '',
-                'foreign_table_where' => '',
                 'itemGroups' => [],
                 'items' => [],
                 'sortItems' => [],
-                'appearance' => [],
-                'treeConfig' => [],
-                'dbFieldLength' => 0,
             ],
             'expectedTca' => [
                 'config' => [
                     'type' => 'select',
-                    'items' => [],
-                ],
-            ],
-        ];
-
-        yield 'renderType selectSingle infers relationship manyToOne' => [
-            'config' => [
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'foo',
-            ],
-            'expectedTca' => [
-                'exclude' => true,
-                'config' => [
                     'renderType' => 'selectSingle',
-                    'type' => 'select',
-                    'foreign_table' => 'foo',
                     'items' => [],
-                    'relationship' => 'manyToOne',
                 ],
             ],
         ];
@@ -215,7 +120,7 @@ final class SelectFieldTypeTest extends UnitTestCase
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldType = $fieldTypeRegistry->get('Select');
+        $fieldType = $fieldTypeRegistry->get('SelectNumber');
         $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());

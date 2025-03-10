@@ -26,6 +26,18 @@ recommend these further readings:
 *  :ref:`Defining Content Types the Core way <core-content-types>`
 *  :ref:`History <cb_history>`
 
+.. _introduction-quick-start:
+
+Quick start
+===========
+
+If you use the `Site Package Builder <https://get.typo3.org/sitepackage/new/>`_
+with the "Site Package Tutorial" package the generated site package contains
+two example Content Blocks. They are also explained in the
+`Site Package Tutorial, chapter Custom Content Blocks <https://docs.typo3.org/permalink/t3sitepackage:content-blocks>`_.
+
+.. _introduction-definition:
+
 Definition
 ==========
 
@@ -58,6 +70,8 @@ easily copy-pasted into other projects.
 
 *  Learn more about the :ref:`Content Block definition <cb_definition>`
 
+.. _introduction-config:
+
 config.yaml
 ===========
 
@@ -75,6 +89,8 @@ able to modify Content Blocks without the need of a developer.
 
 *  Refer to the :ref:`YAML reference <yaml_reference>` for a complete overview.
 *  Learn more about :ref:`reusing fields <cb_reuse_existing_fields>`
+
+.. _introduction-registration:
 
 Registration
 ============
@@ -118,6 +134,8 @@ sub-folder.
 
 *  Kickstart a Content Block with the :ref:`make:content-block command <cb_skeleton>`
 *  Learn more about the :ref:`registration process <cb_installation>`
+
+.. _introduction-terminology:
 
 Terminology
 ===========
