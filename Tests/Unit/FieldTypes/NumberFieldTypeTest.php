@@ -125,6 +125,7 @@ final class NumberFieldTypeTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'number',
+                    'default' => 0,
                     'autocomplete' => false,
                 ],
             ],
@@ -156,7 +157,39 @@ final class NumberFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'type' => 'number',
+                    'default' => 0.0,
                     'format' => 'decimal',
+                ],
+            ],
+        ];
+
+
+        yield 'default value null for nullable' => [
+            'config' => [
+                'nullable' => true,
+                'format' => 'int',
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'number',
+                    'default' => null,
+                    'nullable' => true,
+                    'format' => 'int',
+                ],
+            ],
+        ];
+
+        yield 'no default value set' => [
+            'config' => [
+                'nullable' => false,
+                'format' => 'int',
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'number',
+                    'format' => 'int',
                 ],
             ],
         ];

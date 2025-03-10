@@ -67,7 +67,7 @@ final class NumberFieldType extends AbstractFieldType
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
-        if ($this->default !== '') {
+        if ($this->hasDefault === true) {
             $config['default'] = $this->default;
         }
         if ($this->readOnly) {

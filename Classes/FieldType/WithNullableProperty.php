@@ -23,6 +23,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 trait WithNullableProperty
 {
     private bool $nullable = false;
+    private bool $hasDefault = false;
     private null|int|float|string $default = null;
 
     protected function setNullableAndDefault(array $settings, string $defaultCastAsType): void
@@ -31,14 +32,14 @@ trait WithNullableProperty
             $this->nullable = (bool) $settings['nullable'];
         }
         if(array_key_exists('default', $settings)) {
+            $this->hasDefault = true;
             $this->default = $this->castDefaultValue($settings['default'], $defaultCastAsType);
             return;
         }
         if($this->nullable) {
+            $this->hasDefault = true;
             $this->default = null;
-            return;
         }
-        $this->default = '';
     }
 
     protected function castDefaultValue(mixed $defaultValue, string $castAsType): int|float|string
@@ -50,5 +51,20 @@ trait WithNullableProperty
             default => throw new \RuntimeException('The castAsType <' . $castAsType . '>  is not supported.', 1741534222),
         };
         return $castedDefaultValue;
+    }
+
+    public function isNullable(): bool
+    {
+        return $this->nullable;
+    }
+
+    public function hasDefault(): bool
+    {
+        return $this->hasDefault;
+    }
+
+    public function getDefault(): float|int|string|null
+    {
+        return $this->default;
     }
 }
