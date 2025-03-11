@@ -973,6 +973,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'yaml' => [
                         'table' => 'foobar',
+                        'typeName' => '1',
                         'fields' => [
                             [
                                 'identifier' => 'number',
@@ -1053,6 +1054,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'yaml' => [
                         'table' => 'foobar',
+                        'typeName' => '1',
                         'labelField' => [
                             'text',
                             'text2',
@@ -1167,6 +1169,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'yaml' => [
                         'table' => 'foobar',
+                        'typeName' => '1',
                         'labelField' => [
                             'text',
                         ],
@@ -1841,6 +1844,7 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
             'yaml' => [
                 'table' => 'my_custom_table',
+                'typeName' => 'test_test',
             ],
         ];
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
@@ -2666,6 +2670,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'name' => 'bar/foo',
             'yaml' => [
                 'table' => 'tt_content',
+                'typeName' => 'bar_foo',
                 'prefixFields' => true,
                 'prefixType' => 'full',
                 'fields' => [

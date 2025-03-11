@@ -62,6 +62,29 @@ final class ContentBlockRegistryTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function canRetrieveContentBlockByTableRecordWithType(): void
+    {
+        $contentBlocksRegistry = $this->get(ContentBlockRegistry::class);
+
+        $table = 'tt_content';
+        $record = ['CType' => 'typo3tests_contentelementa'];
+        $contentBlock = $contentBlocksRegistry->getFromRawRecord($table, $record);
+
+        self::assertNotNull($contentBlock);
+    }
+
+    #[Test]
+    public function canRetrieveContentBlockByTableRecordWithoutType(): void
+    {
+        $contentBlocksRegistry = $this->get(ContentBlockRegistry::class);
+
+        $table = 'test_record';
+        $contentBlock = $contentBlocksRegistry->getFromRawRecord($table);
+
+        self::assertNotNull($contentBlock);
+    }
+
+    #[Test]
     public function unknownNameThrowsException(): void
     {
         $contentBlocksRegistry = $this->get(ContentBlockRegistry::class);

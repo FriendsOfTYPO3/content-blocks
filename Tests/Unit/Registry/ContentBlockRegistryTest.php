@@ -31,12 +31,14 @@ final class ContentBlockRegistryTest extends UnitTestCase
             'name' => 'example/a',
             'yaml' => [
                 'table' => 'tt_content',
+                'typeName' => 'example_a',
             ],
         ]);
         $loadedContentBlockB = LoadedContentBlock::fromArray([
             'name' => 'example/a',
             'yaml' => [
                 'table' => 'tt_content',
+                'typeName' => 'example_a',
             ],
         ]);
 

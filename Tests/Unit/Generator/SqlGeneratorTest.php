@@ -41,6 +41,7 @@ final class SqlGeneratorTest extends UnitTestCase
                     'name' => 'foo/parent',
                     'yaml' => [
                         'table' => 'tt_content',
+                        'typeName' => 'foo_parent',
                         'fields' => [
                             [
                                 'identifier' => 'collection',
@@ -56,6 +57,7 @@ final class SqlGeneratorTest extends UnitTestCase
                     'name' => 'foo/bar',
                     'yaml' => [
                         'table' => 'foobar',
+                        'typeName' => 'foo_bar',
                         'fields' => [
                             [
                                 'identifier' => 'text',
