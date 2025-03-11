@@ -74,6 +74,18 @@ overridden on a per element basis. Here it is not needed to define
         type: Text # same type
         max: 10 # different settings
 
+Reusing Select fields
+_____________________
+
+By default, it is not possible to reuse type `Select`, `Radio` or `Checkbox`
+fields with different `items` per element. The `items` have to be the same for
+every element by, for example, putting them into a Basic. It is still possible
+to add/remove items with Page TSconfig.
+
+There is one exception to this rule. When used in conjunction with
+:yaml:`useExistingField` the `items` can be set per element. For this, the
+field has to be defined in base TCA with no `items` set. This is mostly for
+backwards compatibility reasons.
 
 Best practice
 =============
@@ -100,6 +112,7 @@ that are eligible for reuse:
 *  `image`
 *  `categories`
 *  `pages`
+*  `records`
 
 For example, if you want to use the existing column :sql:`bodytext`,
 :sql:`header` or :sql:`image` you can do one of the following:
@@ -158,3 +171,6 @@ The full list:
    * format (type: Number)
    * l10n_mode
    * items
+
+There is an exception for :yaml:`items` when used in conjunction with
+:yaml:`useExistingField` for backwards compatibility reasons.
