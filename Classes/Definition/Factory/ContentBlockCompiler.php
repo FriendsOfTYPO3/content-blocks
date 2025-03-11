@@ -91,6 +91,11 @@ final class ContentBlockCompiler
      */
     private array $typeFieldPerTable = [];
 
+    /**
+     * @var array<string, string>
+     */
+    private array $fieldTypePerIdentifier = [];
+
     public function compile(
         ContentBlockRegistry $contentBlockRegistry,
         FieldTypeRegistry $fieldTypeRegistry,
@@ -133,6 +138,7 @@ final class ContentBlockCompiler
     {
         $this->parentReferences = [];
         $this->typeFieldPerTable = [];
+        $this->fieldTypePerIdentifier = [];
         unset($this->automaticLanguageKeysRegistry);
         unset($this->simpleTcaSchemaFactory);
         unset($this->fieldTypeRegistry);
@@ -203,6 +209,8 @@ final class ContentBlockCompiler
         $result->fieldType = $this->resolveType($input, $field);
         $result->uniqueIdentifier = $this->chooseIdentifier($input, $field);
         $result->identifierToUniqueMap[$result->identifier] = $result->uniqueIdentifier;
+        $this->fieldTypePerIdentifier[$input->table][$result->uniqueIdentifier] ??= $result->fieldType->getName();
+        $this->assertUniqueIdentifiersHaveSameFieldType($input, $result);
     }
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
@@ -1030,6 +1038,18 @@ final class ContentBlockCompiler
                 'The identifier "' . $result->identifier . '" in Content Block "' . $contentBlock->getName()
                 . '" does exist more than once. Please choose unique identifiers.',
                 1677407942
+            );
+        }
+    }
+
+    private function assertUniqueIdentifiersHaveSameFieldType(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
+        $fieldType1 = $this->fieldTypePerIdentifier[$input->table][$result->uniqueIdentifier];
+        $fieldType2 = $result->fieldType->getName();
+        if ($fieldType1 !== $fieldType2) {
+            throw new \InvalidArgumentException(
+                'Field Types for identifier "' . $result->uniqueIdentifier . '" do not match (' . $fieldType1 . ', ' . $fieldType2 . ')',
+                1741707494
             );
         }
     }

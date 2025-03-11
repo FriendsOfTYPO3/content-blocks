@@ -158,6 +158,78 @@ final class ContentBlockCompilerTest extends UnitTestCase
         );
     }
 
+    public static function differentTypesPerIdentifierThrowExceptionDataProvider(): iterable
+    {
+        yield 'Two Content Blocks with same identifier and different types' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'foo',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 't3ce/example2',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
+                    'extPath' => 'EXT:example/ContentBlocks/example2',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'foo_bar2',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'foo',
+                                'type' => 'Link',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('differentTypesPerIdentifierThrowExceptionDataProvider')]
+    #[Test]
+    public function differentTypesPerIdentifierThrowException(array $contentBlocks): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1741707494);
+
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
+    }
+
     #[Test]
     public function paletteInsidePaletteIsNotAllowed(): void
     {
