@@ -44,7 +44,7 @@ trait WithNullableProperty
 
     protected function castDefaultValue(mixed $defaultValue, string $castAsType): int|float|string
     {
-        $castedDefaultValue = $this->default = match ($castAsType) {
+        $castedDefaultValue = match ($castAsType) {
             'int' => (int)$defaultValue,
             'float' => (float)$defaultValue,
             'string' => (string)$defaultValue,
