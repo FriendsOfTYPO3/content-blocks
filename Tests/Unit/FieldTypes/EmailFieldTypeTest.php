@@ -94,7 +94,34 @@ final class EmailFieldTypeTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'email',
+                    'default' => '',
                     'autocomplete' => false,
+                ],
+            ],
+        ];
+
+        yield 'default value null for nullable' => [
+            'config' => [
+                'nullable' => true,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'email',
+                    'default' => null,
+                    'nullable' => true,
+                ],
+            ],
+        ];
+
+        yield 'no default value set' => [
+            'config' => [
+                'nullable' => false,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'email',
                 ],
             ],
         ];
