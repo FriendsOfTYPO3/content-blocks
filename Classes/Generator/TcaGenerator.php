@@ -439,6 +439,10 @@ readonly class TcaGenerator
                 if ($optionKey === null) {
                     continue;
                 }
+                // Backwards compatibility for reusing select fields with different items.
+                if ($optionKey === 'items' && $overrideColumn->useExistingField()) {
+                    continue;
+                }
                 $configKey = 'config.' . $optionKey;
                 if (ArrayUtility::isValidPath($overrideTca, $configKey, '.')) {
                     $overrideTca = ArrayUtility::removeByPath($overrideTca, $configKey, '.');
@@ -615,6 +619,7 @@ readonly class TcaGenerator
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $column['description'] = $descriptionPath;
         }
+        $column = $this->determineItemsLabel($typeDefinition, $overrideColumn, $column);
         return $column;
     }
 
