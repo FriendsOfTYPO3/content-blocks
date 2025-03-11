@@ -24,6 +24,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
+use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
@@ -39,10 +40,10 @@ final class TableDefinitionCollectionFactory
         #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
         protected readonly ContentBlockCompiler $contentBlockCompiler,
+        protected readonly ContentBlockLoader $contentBlockLoader,
     ) {}
 
     public function create(
-        ContentBlockRegistry $contentBlockRegistry,
         FieldTypeRegistry $fieldTypeRegistry,
         SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ): TableDefinitionCollection {
@@ -53,6 +54,7 @@ final class TableDefinitionCollectionFactory
             $this->tableDefinitionCollection = $tableDefinitionCollection;
             return $this->tableDefinitionCollection;
         }
+        $contentBlockRegistry = $this->contentBlockLoader->loadUncached();
         $this->tableDefinitionCollection = $this->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,

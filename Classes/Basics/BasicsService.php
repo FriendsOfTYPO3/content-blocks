@@ -28,20 +28,18 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
  */
 readonly class BasicsService
 {
-    public function __construct(protected BasicsRegistry $basicsRegistry) {}
-
-    public function applyBasics(array $yaml): array
+    public function applyBasics(BasicsRegistry $basicsRegistry, array $yaml): array
     {
         if (is_array($yaml['basics'] ?? null)) {
             foreach ($yaml['basics'] as $basics) {
                 $yaml['fields'] = $this->addBasicsToFields(
+                    $basicsRegistry,
                     $yaml['fields'] ?? [],
                     $basics
                 );
             }
         }
-        $yaml['fields'] = $this->applyBasicsToSubFields($yaml['fields'] ?? []);
-
+        $yaml['fields'] = $this->applyBasicsToSubFields($basicsRegistry, $yaml['fields'] ?? []);
         return $yaml;
     }
 
@@ -53,18 +51,18 @@ readonly class BasicsService
      * @param string $identifier identifier of the Basic
      * @return array fields with the basic's fields added or just the fields from the Content Block
      */
-    protected function addBasicsToFields(array $fields, string $identifier): array
+    protected function addBasicsToFields(BasicsRegistry $basicsRegistry, array $fields, string $identifier): array
     {
-        if ($this->basicsRegistry->hasBasic($identifier)) {
+        if ($basicsRegistry->hasBasic($identifier)) {
             $fields = array_merge(
                 $fields,
-                $this->basicsRegistry->getBasic($identifier)->getFields()
+                $basicsRegistry->getBasic($identifier)->getFields()
             );
         }
         return $fields;
     }
 
-    protected function applyBasicsToSubFields(array $fields, int $depth = 0): array
+    protected function applyBasicsToSubFields(BasicsRegistry $basicsRegistry, array $fields, int $depth = 0): array
     {
         if ($depth === 99) {
             throw new \RuntimeException('Infinite loop in Basics processing detected.', 1711291137);
@@ -72,11 +70,11 @@ readonly class BasicsService
         $newFields = [];
         foreach ($fields as $field) {
             if (is_array($field['fields'] ?? null)) {
-                $field['fields'] = $this->applyBasicsToSubFields($field['fields']);
+                $field['fields'] = $this->applyBasicsToSubFields($basicsRegistry, $field['fields']);
             }
             if (($field['type'] ?? '') === 'Basic') {
-                $basic = $this->basicsRegistry->getBasic($field['identifier']);
-                $appliedFields = $this->applyBasicsToSubFields($basic->getFields(), ++$depth);
+                $basic = $basicsRegistry->getBasic($field['identifier']);
+                $appliedFields = $this->applyBasicsToSubFields($basicsRegistry, $basic->getFields(), ++$depth);
                 $newFields = array_merge($newFields, $appliedFields);
             } else {
                 $newFields[] = $field;

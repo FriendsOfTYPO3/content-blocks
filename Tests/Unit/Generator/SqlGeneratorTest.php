@@ -170,7 +170,7 @@ final class SqlGeneratorTest extends UnitTestCase
         $loader = $this->createMock(ContentBlockLoader::class);
         $loader->method('loadUncached')->willReturn($contentBlockRegistry);
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollectionFactory = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler));
+        $tableDefinitionCollectionFactory = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader));
         $sqlGenerator = new SqlGenerator($loader, $tableDefinitionCollectionFactory, $simpleTcaSchemaFactory, $fieldTypeRegistry);
 
         $result = $sqlGenerator->generate();

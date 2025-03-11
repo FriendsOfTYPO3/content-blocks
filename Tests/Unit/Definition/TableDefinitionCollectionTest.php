@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
@@ -73,7 +74,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
@@ -92,7 +94,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
@@ -133,7 +136,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
@@ -203,7 +207,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,
@@ -273,7 +278,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
         $contentBlockCompiler = new ContentBlockCompiler();
-        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler);
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
         $tableDefinitionCollection = $tableDefinitionCollectionFactory->createUncached(
             $contentBlockRegistry,
             $fieldTypeRegistry,

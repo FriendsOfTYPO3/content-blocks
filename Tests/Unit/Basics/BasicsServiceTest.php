@@ -323,9 +323,9 @@ final class BasicsServiceTest extends UnitTestCase
             $basicsRegistry->register($basic);
         }
 
-        $basicsService = new BasicsService($basicsRegistry);
+        $basicsService = new BasicsService();
 
-        self::assertSame($expected, $basicsService->applyBasics($yaml));
+        self::assertSame($expected, $basicsService->applyBasics($basicsRegistry, $yaml));
     }
 
     public static function basicsAreAppendedByTopLevelBasicsArrayDataProvider(): iterable
@@ -639,9 +639,9 @@ final class BasicsServiceTest extends UnitTestCase
             $basicsRegistry->register($basic);
         }
 
-        $basicsService = new BasicsService($basicsRegistry);
+        $basicsService = new BasicsService();
 
-        self::assertSame($expected, $basicsService->applyBasics($yaml));
+        self::assertSame($expected, $basicsService->applyBasics($basicsRegistry, $yaml));
     }
 
     #[Test]
@@ -720,7 +720,7 @@ final class BasicsServiceTest extends UnitTestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionCode(1711291137);
 
-        $basicsService = new BasicsService($basicsRegistry);
-        $basicsService->applyBasics($yaml);
+        $basicsService = new BasicsService();
+        $basicsService->applyBasics($basicsRegistry, $yaml);
     }
 }

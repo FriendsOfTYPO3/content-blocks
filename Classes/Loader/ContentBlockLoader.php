@@ -22,6 +22,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
@@ -74,6 +75,7 @@ class ContentBlockLoader
         #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
+        protected readonly BasicsLoader $basicsLoader,
         protected readonly PackageManager $packageManager,
         protected readonly IconProcessor $iconProcessor,
     ) {}
@@ -224,7 +226,8 @@ class ContentBlockLoader
             throw new \RuntimeException('Content Block "' . $name . '" does not define required "table".', 1731412650);
         }
         $table = $yaml['table'];
-        $yaml = $this->basicsService->applyBasics($yaml);
+        $basicsRegistry = $this->basicsLoader->loadUncached();
+        $yaml = $this->basicsService->applyBasics($basicsRegistry, $yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
         $contentBlockIcon = new ContentTypeIcon();
         $baseIconInput = new ContentTypeIconResolverInput(
