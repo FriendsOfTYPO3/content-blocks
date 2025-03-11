@@ -24,13 +24,12 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 final class TextareaFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+    use WithNullableProperty;
 
-    private string $default = '';
     private bool $readOnly = false;
     private bool $required = false;
     private int $max = 0;
     private int $min = 0;
-    private bool $nullable = false;
     private string $mode = '';
     private string $placeholder = '';
     private string $is_in = '';
@@ -48,12 +47,11 @@ final class TextareaFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
-        $self->default = (string)($settings['default'] ?? $self->default);
+        $self->setNullableAndDefault($settings, 'string');
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->required = (bool)($settings['required'] ?? $self->required);
         $self->max = (int)($settings['max'] ?? $self->max);
         $self->min = (int)($settings['min'] ?? $self->min);
-        $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
         $self->mode = (string)($settings['mode'] ?? $self->mode);
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
         $self->is_in = (string)($settings['is_in'] ?? $self->is_in);
@@ -74,7 +72,7 @@ final class TextareaFieldType extends AbstractFieldType
     {
         $tca = $this->toTca();
         $config['type'] = $this->getTcaType();
-        if ($this->default !== '') {
+        if ($this->hasDefault) {
             $config['default'] = $this->default;
         }
         if ($this->readOnly) {

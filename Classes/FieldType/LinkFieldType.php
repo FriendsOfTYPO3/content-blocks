@@ -24,12 +24,11 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 final class LinkFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+    use WithNullableProperty;
 
-    private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
     private bool $required = false;
-    private bool $nullable = false;
     private string $mode = '';
     private string $placeholder = '';
     private array $valuePicker = [];
@@ -41,11 +40,10 @@ final class LinkFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
-        $self->default = (string)($settings['default'] ?? $self->default);
+        $self->setNullableAndDefault($settings, 'string');
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->required = (bool)($settings['required'] ?? $self->required);
-        $self->nullable = (bool)($settings['nullable'] ?? $self->nullable);
         $self->mode = (string)($settings['mode'] ?? $self->mode);
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
         if (isset($settings['autocomplete'])) {
@@ -65,7 +63,7 @@ final class LinkFieldType extends AbstractFieldType
         if ($this->size !== 0) {
             $config['size'] = $this->size;
         }
-        if ($this->default !== '') {
+        if ($this->hasDefault) {
             $config['default'] = $this->default;
         }
         if ($this->readOnly) {

@@ -394,6 +394,9 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_testblock_text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:text.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:text.description',
+                                    'config' => [
+                                        'default' => '',
+                                    ],
                                 ],
                                 'bodytext' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:bodytext.label',

@@ -111,7 +111,34 @@ final class ColorFieldTypeTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'color',
+                    'default' => '',
                     'autocomplete' => false,
+                ],
+            ],
+        ];
+
+        yield 'default value null for nullable' => [
+            'config' => [
+                'nullable' => true,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'color',
+                    'default' => null,
+                    'nullable' => true,
+                ],
+            ],
+        ];
+
+        yield 'no default value set' => [
+            'config' => [
+                'nullable' => false,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'color',
                 ],
             ],
         ];

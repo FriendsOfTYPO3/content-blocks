@@ -120,7 +120,34 @@ final class LinkFieldTypeTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'link',
+                    'default' => '',
                     'autocomplete' => false,
+                ],
+            ],
+        ];
+
+        yield 'default value null for nullable' => [
+            'config' => [
+                'nullable' => true,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'link',
+                    'default' => null,
+                    'nullable' => true,
+                ],
+            ],
+        ];
+
+        yield 'no default value set' => [
+            'config' => [
+                'nullable' => false,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'link',
                 ],
             ],
         ];

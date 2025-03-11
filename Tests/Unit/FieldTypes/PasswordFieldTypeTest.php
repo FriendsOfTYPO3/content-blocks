@@ -98,8 +98,35 @@ final class PasswordFieldTypeTest extends UnitTestCase
             'expectedTca' => [
                 'config' => [
                     'type' => 'password',
+                    'default' => '',
                     'autocomplete' => false,
                     'hashed' => false,
+                ],
+            ],
+        ];
+
+        yield 'default value null for nullable' => [
+            'config' => [
+                'nullable' => true,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'password',
+                    'default' => null,
+                    'nullable' => true,
+                ],
+            ],
+        ];
+
+        yield 'no default value set' => [
+            'config' => [
+                'nullable' => false,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'password',
                 ],
             ],
         ];
