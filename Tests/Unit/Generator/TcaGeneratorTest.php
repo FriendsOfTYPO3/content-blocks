@@ -274,7 +274,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'items' => [
                                     ['value' => 1],
                                     ['value' => 2],
-                                    ['value' => 3]
+                                    ['value' => 3],
                                 ],
                             ],
                         ],
