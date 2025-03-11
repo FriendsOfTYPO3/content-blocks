@@ -220,7 +220,11 @@ class ContentBlockLoader
             $yaml['typeField'] = $contentType->getTypeField();
         }
         // Create typeName
-        $typeName = $yaml['typeName'] ?? UniqueIdentifierCreator::createContentTypeIdentifier($name);
+        if ($contentType === ContentType::RECORD_TYPE) {
+            $typeName = $yaml['typeName'] ?? '1';
+        } else {
+            $typeName = $yaml['typeName'] ?? UniqueIdentifierCreator::createContentTypeIdentifier($name);
+        }
         $yaml['typeName'] ??= $typeName;
         if (!array_key_exists('table', $yaml)) {
             throw new \RuntimeException('Content Block "' . $name . '" does not define required "table".', 1731412650);
