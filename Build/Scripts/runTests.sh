@@ -497,7 +497,7 @@ case ${TEST_SUITE} in
                 echo "call \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
                 exit 1
         esac
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     acceptanceInstall)
         handleDbmsAndDriverOptions
@@ -531,19 +531,19 @@ case ${TEST_SUITE} in
                 echo "call \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
                 exit 1
         esac
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     buildCss)
         setUpDockerComposeDotEnv
         docker compose run build_css
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     buildJavascript)
         setUpDockerComposeDotEnv
         docker compose run build_javascript
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     cgl)
         # Active dry-run for cgl needs not "-n" but specific options
@@ -553,7 +553,7 @@ case ${TEST_SUITE} in
         setUpDockerComposeDotEnv
         docker compose run cgl
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     cglHeader)
         # Active dry-run for cgl needs not "-n" but specific options
@@ -563,91 +563,91 @@ case ${TEST_SUITE} in
         setUpDockerComposeDotEnv
         docker compose run cgl_header
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkAnnotations)
         setUpDockerComposeDotEnv
         docker compose run check_annotations
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkTestClassFinal)
         setUpDockerComposeDotEnv
         docker compose run check_test_class_final
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkTestMethodsPrefix)
         setUpDockerComposeDotEnv
         docker compose run check_test_methods_prefix
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkBom)
         setUpDockerComposeDotEnv
         docker compose run check_bom
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkComposer)
         setUpDockerComposeDotEnv
         docker compose run check_composer
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkExceptionCodes)
         setUpDockerComposeDotEnv
         docker compose run check_exception_codes
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkExtensionScannerRst)
         setUpDockerComposeDotEnv
         docker compose run check_extension_scanner_rst
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkFilePathLength)
         setUpDockerComposeDotEnv
         docker compose run check_file_path_length
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkGitSubmodule)
         setUpDockerComposeDotEnv
         docker compose run check_git_submodule
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkGruntClean)
         setUpDockerComposeDotEnv
         docker compose run check_grunt_clean
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkIsoDatabase)
         setUpDockerComposeDotEnv
         docker compose run check_iso_database
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkNamespaceIntegrity)
         setUpDockerComposeDotEnv
         docker compose run check_namespace_integrity
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkPermissions)
         setUpDockerComposeDotEnv
         docker compose run check_permissions
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     checkRst)
         setUpDockerComposeDotEnv
         docker compose run check_rst
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     clean)
         cleanBuildFiles
@@ -671,31 +671,31 @@ case ${TEST_SUITE} in
         setUpDockerComposeDotEnv
         docker compose run composer_install
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     composerInstallMax)
         setUpDockerComposeDotEnv
         docker compose run composer_install_max
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     composerInstallMin)
         setUpDockerComposeDotEnv
         docker compose run composer_install_min
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     composerTestDistribution)
         setUpDockerComposeDotEnv
         docker compose run composer_test_distribution
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     composerValidate)
         setUpDockerComposeDotEnv
         docker compose run composer_validate
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     functional)
         handleDbmsAndDriverOptions
@@ -737,7 +737,7 @@ case ${TEST_SUITE} in
                 echo "call \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
                 exit 1
         esac
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     functionalDeprecated)
         handleDbmsAndDriverOptions
@@ -776,73 +776,73 @@ case ${TEST_SUITE} in
                 echo "call \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
                 exit 1
         esac
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     lintPhp)
         setUpDockerComposeDotEnv
         docker compose run lint_php
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     lintScss)
         setUpDockerComposeDotEnv
         docker compose run lint_scss
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     lintTypescript)
         setUpDockerComposeDotEnv
         docker compose run lint_typescript
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     lintHtml)
         setUpDockerComposeDotEnv
         docker compose run lint_html
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     listExceptionCodes)
         setUpDockerComposeDotEnv
         docker compose run list_exception_codes
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     phpstan)
         setUpDockerComposeDotEnv
         docker compose run phpstan
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     phpstanGenerateBaseline)
         setUpDockerComposeDotEnv
         docker compose run phpstan_generate_baseline
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     unit)
         setUpDockerComposeDotEnv
         docker compose run unit
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     unitDeprecated)
         setUpDockerComposeDotEnv
         docker compose run unitDeprecated
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     unitJavascript)
         setUpDockerComposeDotEnv
         docker compose run unitJavascript
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     unitRandom)
         setUpDockerComposeDotEnv
         docker compose run unitRandom
         SUITE_EXIT_CODE=$?
-        docker compose down
+        docker compose down --remove-orphans
         ;;
     update)
         # prune unused, dangling local volumes
