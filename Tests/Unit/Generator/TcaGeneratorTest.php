@@ -268,6 +268,15 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'default' => '',
                                 'placeholder' => '',
                             ],
+                            [
+                                'identifier' => 'header_layout',
+                                'useExistingField' => true,
+                                'items' => [
+                                    ['value' => 1],
+                                    ['value' => 2],
+                                    ['value' => 3],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -388,7 +397,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         't3ce_testblock' => [
-                            'showitem' => 'bodytext,t3ce_testblock_text',
+                            'showitem' => 'bodytext,t3ce_testblock_text,header_layout',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 't3ce_testblock_text' => [
@@ -401,6 +410,26 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'bodytext' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:bodytext.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:bodytext.description',
+                                ],
+                                'header_layout' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:header_layout.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:header_layout.description',
+                                    'config' => [
+                                        'items' => [
+                                            [
+                                                'value' => 1,
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:header_layout.items.1.label',
+                                            ],
+                                            [
+                                                'value' => 2,
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:header_layout.items.2.label',
+                                            ],
+                                            [
+                                                'value' => 3,
+                                                'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:header_layout.items.3.label',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -1580,6 +1609,13 @@ final class TcaGeneratorTest extends UnitTestCase
             'config' => [
                 'type' => 'group',
                 'allowed' => 'pages',
+            ],
+        ];
+        $baseTca['tt_content']['columns']['header_layout'] = [
+            'label' => 'Core header layout field',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
             ],
         ];
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
