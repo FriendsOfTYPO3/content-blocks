@@ -92,7 +92,7 @@ final class ContentBlockCompiler
     private array $typeFieldPerTable = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, array<string, string>>
      */
     private array $fieldTypePerIdentifier = [];
 
