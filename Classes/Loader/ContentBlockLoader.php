@@ -148,7 +148,7 @@ class ContentBlockLoader
             $absoluteContentBlockPath = $splFileInfo->getPathname();
             $contentBlockFolderName = $splFileInfo->getRelativePathname();
             $contentBlockExtPath = ContentBlockPathUtility::getContentBlockExtPath($extensionKey, $contentBlockFolderName, $contentType);
-            $configYaml = $this->parseConfigYaml($absoluteContentBlockPath, $contentBlockExtPath, $contentType);
+            $configYaml = $this->parseConfigYaml($absoluteContentBlockPath, $contentType);
             if ($configYaml === null) {
                 continue;
             }
@@ -164,7 +164,7 @@ class ContentBlockLoader
         return $result;
     }
 
-    protected function parseConfigYaml(string $absoluteContentBlockPath, string $contentBlockExtPath, ContentType $contentType): ?array
+    protected function parseConfigYaml(string $absoluteContentBlockPath, ContentType $contentType): ?array
     {
         $contentBlockDefinitionFileName = ContentBlockPathUtility::getContentBlockDefinitionFileName();
         $yamlPath = $absoluteContentBlockPath . '/' . $contentBlockDefinitionFileName;
