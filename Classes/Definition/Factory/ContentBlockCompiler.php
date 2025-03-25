@@ -39,6 +39,7 @@ use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Resource\FileType;
 
 /**
  * This class does the main heavy-lifting of parsing and preparing loaded
@@ -148,13 +149,27 @@ final class ContentBlockCompiler
     {
         $mergedResult = [];
         foreach ($tableDefinitionList as $table => $definition) {
-            // We are reversing the table definition list here, so that higher priority
-            // Content Block definitions override lower ones. This is especially
-            // important for the default value of type fields (record type selector).
-            $reversedTableDefinitions = array_reverse($definition['tableDefinitions']);
-            $combinedTableDefinitions = array_replace_recursive(...$reversedTableDefinitions);
-            $mergedResult[$table] = $combinedTableDefinitions;
-            $mergedResult[$table]['typeDefinitions'] = $definition['typeDefinitions'];
+            // Table definitions could be empty, if only overrides exists to a native TCA table.
+            if (isset($definition['tableDefinitions'])) {
+                // We are reversing the table definition list here, so that higher priority
+                // Content Block definitions override lower ones. This is especially
+                // important for the default value of type fields (record type selector).
+                $reversedTableDefinitions = array_reverse($definition['tableDefinitions']);
+                $combinedTableDefinitions = array_replace_recursive(...$reversedTableDefinitions);
+                $mergedResult[$table] = $combinedTableDefinitions;
+                $mergedResult[$table]['typeDefinitions'] = $definition['typeDefinitions'] ?? [];
+            }
+            // Override only fields and palettes, if not already existing.
+            foreach ($definition['tableOverrideDefinitions'] ?? [] as $override) {
+                $mergedResult[$table]['contentType'] ??= $override['contentType'];
+                foreach ($override['fields'] as $key => $field) {
+                    $mergedResult[$table]['fields'][$key] ??= $field;
+                }
+                $mergedResult[$table]['palettes'] = array_merge(
+                    $mergedResult[$table]['palettes'] ?? [],
+                    $override['palettes']
+                );
+            }
         }
         return $mergedResult;
     }
@@ -172,7 +187,8 @@ final class ContentBlockCompiler
         }
         $this->prefixTcaConfigFields($input, $result);
         $this->collectOverrideColumns($result);
-        $this->collectDefinitions($input, $result);
+        $this->collectTableDefinition($input, $result);
+        $this->collectTypeDefinition($input, $result);
         return $result->tableDefinitionList;
     }
 
@@ -190,6 +206,12 @@ final class ContentBlockCompiler
             }
             if (in_array($tcaType, ['select', 'radio', 'check'], true)) {
                 $field = $this->collectItemLabels($input, $result->fieldType, $field);
+            }
+            if ($tcaType === 'file' || $tcaType === 'inline') {
+                $overrideChildTca = $this->processTypeOverride($input, $result, $field);
+                foreach ($overrideChildTca as $type => $typeDefinition) {
+                    $field['overrideChildTca']['types'][$type]['showitem'] = $typeDefinition['showItems'];
+                }
             }
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($tcaType === 'inline') {
@@ -540,15 +562,26 @@ final class ContentBlockCompiler
      * Collect table definitions and Content Types and carry them over to the next stack.
      * This compiler will merge the table definitions and type definitions at the very end.
      */
-    private function collectDefinitions(ProcessingInput $input, ProcessedFieldsResult $result): void
+    private function collectTableDefinition(ProcessingInput $input, ProcessedFieldsResult $result): void
     {
         $table = $input->table;
         $tableDefinition = $result->tableDefinition->toArray();
         $result->tableDefinitionList[$table]['tableDefinitions'][] = $tableDefinition;
+    }
+
+    private function collectTypeDefinition(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
+        $table = $input->table;
+        $typeDefinition = $this->contentTypeToArray($input, $result);
+        $result->tableDefinitionList[$table]['typeDefinitions'][] = $typeDefinition;
+    }
+
+    private function contentTypeToArray(ProcessingInput $input, ProcessedFieldsResult $result): array
+    {
         $isRootTable = $input->isRootTable();
         $identifier = $input->yaml['identifier'] ?? '';
         $typeDefinition = $result->contentType->toArray($isRootTable, $identifier);
-        $result->tableDefinitionList[$table]['typeDefinitions'][] = $typeDefinition;
+        return $typeDefinition;
     }
 
     private function processCollection(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
@@ -581,6 +614,58 @@ final class ContentBlockCompiler
             tableDefinitionList: $result->tableDefinitionList,
         );
         $result->tableDefinitionList = $this->processRootFields($newInput);
+    }
+
+    private function processTypeOverride(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    {
+        if (($field['overrideType'] ?? []) === []) {
+            return [];
+        }
+        $tcaType = $result->fieldType->getTcaType();
+        if ($tcaType === 'file') {
+            $foreignTable = 'sys_file_reference';
+        } else {
+            if (!array_key_exists('foreign_table', $field)) {
+                throw new \InvalidArgumentException('Cannot use "overrideType" on anonymous Collection.', 1742935388);
+            }
+            $foreignTable = $field['foreign_table'];
+        }
+        $contentType = ContentType::getByTable($foreignTable);
+        $overrideChildTca = [];
+        $overrideTypes = $field['overrideType'];
+        // For tables without a type field, the type keys can be omitted.
+        if (array_is_list($field['overrideType'])) {
+            $overrideTypes = [
+                '1' => $field['overrideType'],
+            ];
+        }
+        foreach ($overrideTypes as $type => $fields) {
+            $typeName = $type;
+            if ($tcaType === 'file') {
+                $typeName = FileType::tryFromMimeType($type)->value;
+            }
+            $yaml = [
+                'table' => $foreignTable,
+                'typeName' => $typeName,
+                'fields' => $fields,
+            ];
+            $newInput = new ProcessingInput(
+                simpleTcaSchemaFactory: $this->simpleTcaSchemaFactory,
+                yaml: $yaml,
+                contentBlock: $input->contentBlock,
+                table: $foreignTable,
+                rootTable: $input->rootTable,
+                languagePath: $input->languagePath,
+                contentType: $contentType,
+                tableDefinitionList: $result->tableDefinitionList,
+            );
+            $tableDefinitionList = $this->processRootFields($newInput);
+            $typeDefinition = array_pop($tableDefinitionList[$foreignTable]['typeDefinitions']);
+            $overrideChildTca[$typeName] = $typeDefinition;
+            $overrideTableDefinition = array_pop($tableDefinitionList[$foreignTable]['tableDefinitions']);
+            $result->tableDefinitionList[$foreignTable]['tableOverrideDefinitions'][] = $overrideTableDefinition;
+        }
+        return $overrideChildTca;
     }
 
     private function assignRelationConfigToCollectionField(array $field, ProcessedFieldsResult $result): void

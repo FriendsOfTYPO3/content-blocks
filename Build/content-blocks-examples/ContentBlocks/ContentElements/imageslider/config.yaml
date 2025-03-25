@@ -5,3 +5,15 @@ fields:
   - identifier: assets
     useExistingField: true
     allowed: jpg,jpeg,png,svg,gif
+    overrideType:
+      image:
+        - identifier: imageslider_palette
+          type: Palette
+          label: 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette'
+          fields:
+            - identifier: alternative
+              useExistingField: true
+            - identifier: description
+              useExistingField: true
+            - identifier: my_text_field_test
+              type: Text

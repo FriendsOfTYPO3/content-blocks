@@ -328,7 +328,7 @@ readonly class TcaGenerator
     protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
         $typeDefinitionArray = [
-            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition),
+            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -339,7 +339,7 @@ readonly class TcaGenerator
     protected function processFileType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
         $typeDefinitionArray = [
-            'showitem' => $this->getFileTypeStandardShowItem($typeDefinition),
+            'showitem' => $this->getFileTypeStandardShowItem($typeDefinition->getShowItems()),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -350,7 +350,7 @@ readonly class TcaGenerator
     protected function processRecordType(ContentTypeInterface $typeDefinition, array $columnsOverrides, TableDefinition $tableDefinition): array
     {
         $typeDefinitionArray = [
-            'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition, $tableDefinition),
+            'showitem' => $this->getRecordTypeStandardShowItem($typeDefinition->getShowItems(), $tableDefinition->getTable()),
         ];
         if ($tableDefinition->hasTypeField() && $columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -469,6 +469,7 @@ readonly class TcaGenerator
                 $overrideColumn,
                 $overrideTca,
             );
+            $overrideColumnArray = $this->processOverrideChildTca($overrideColumn, $overrideColumnArray, $tableDefinition);
             $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideColumnArray;
         }
         return $columnsOverrides;
@@ -506,6 +507,7 @@ readonly class TcaGenerator
     {
         $standardTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
         $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
+        $columnTca = $this->processOverrideChildTca($column, $columnTca, $tableDefinition);
         return $columnTca;
     }
 
@@ -551,6 +553,32 @@ readonly class TcaGenerator
         // Add TCA for automatically added typeField.
         if ($tableDefinition->getTypeField() === $column->getIdentifier()) {
             $columnTca = $column->getTca();
+        }
+        return $columnTca;
+    }
+
+    protected function processOverrideChildTca(TcaFieldDefinition $tcaFieldDefinition, array $columnTca, TableDefinition $tableDefinition): array
+    {
+        $baseField = $tableDefinition->getTcaFieldDefinitionCollection()->getField($tcaFieldDefinition->getUniqueIdentifier());
+        if (($columnTca['config']['overrideChildTca']['types'] ?? []) === []) {
+            return $columnTca;
+        }
+        if ($tcaFieldDefinition->getFieldType()->getTcaType() === 'file') {
+            $foreignTable = 'sys_file_reference';
+        } else {
+            $foreignTable = $baseField->getTca()['config']['foreign_table'];
+        }
+        $contentType = ContentType::getByTable($foreignTable);
+        foreach ($columnTca['config']['overrideChildTca']['types'] as $type => $typeConfig) {
+            if (is_array($typeConfig['showitem'] ?? null)) {
+                $showItem = match ($contentType) {
+                    ContentType::FILE_TYPE => $this->getFileTypeStandardShowItem($typeConfig['showitem']),
+                    ContentType::RECORD_TYPE => $this->getRecordTypeStandardShowItem($typeConfig['showitem'], $foreignTable),
+                    ContentType::CONTENT_ELEMENT => $this->processShowItem($typeConfig['showitem']),
+                    ContentType::PAGE_TYPE => $this->getPageTypeStandardShowItem($typeConfig['showitem']),
+                };
+                $columnTca['config']['overrideChildTca']['types'][$type]['showitem'] = $showItem;
+            }
         }
         return $columnTca;
     }
@@ -734,7 +762,8 @@ readonly class TcaGenerator
             $labelFieldCandidate = null;
             // These are preferred, as they most often provide a meaningful preview of the record.
             $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
-            foreach ($tableDefinition->getTcaFieldDefinitionCollection() as $columnFieldDefinition) {
+            $tcaFieldDefinitionCollection = $tableDefinition->getDefaultTypeDefinition()->getOverrideColumns();
+            foreach ($tcaFieldDefinitionCollection as $columnFieldDefinition) {
                 $fieldType = $columnFieldDefinition->getFieldType();
                 if (in_array($fieldType->getTcaType(), $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
@@ -762,9 +791,11 @@ readonly class TcaGenerator
         return $showItem;
     }
 
-    protected function getRecordTypeStandardShowItem(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): string
+    /**
+     * @param array<string|PaletteDefinition|TabDefinition> $showItemArray
+     */
+    protected function getRecordTypeStandardShowItem(array $showItemArray, string $table): string
     {
-        $showItemArray = $typeDefinition->getShowItems();
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
         $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
         if ($firstItemIsTab) {
@@ -777,10 +808,11 @@ readonly class TcaGenerator
         if ($showItem !== '') {
             $parts[] = $showItem;
         }
-        if ($this->simpleTcaSchemaFactory->has($tableDefinition->getTable())) {
-            $tcaSchema = $this->simpleTcaSchemaFactory->get($tableDefinition->getTable());
+        if ($this->simpleTcaSchemaFactory->has($table)) {
+            $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
             $capability = new NativeTableCapabilityProxy($tcaSchema);
         } else {
+            $tableDefinition = $this->tableDefinitionCollection->getTable($table);
             $capability = $tableDefinition->getCapability();
         }
         $systemFields = $this->buildSystemFields($capability);
@@ -789,9 +821,11 @@ readonly class TcaGenerator
         return $showItem;
     }
 
-    protected function getFileTypeStandardShowItem(ContentTypeInterface $typeDefinition): string
+    /**
+     * @param array<string|PaletteDefinition|TabDefinition> $showItemArray
+     */
+    protected function getFileTypeStandardShowItem(array $showItemArray): string
     {
-        $showItemArray = $typeDefinition->getShowItems();
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
         $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
         if ($firstItemIsTab) {
@@ -832,7 +866,10 @@ readonly class TcaGenerator
         return $parts;
     }
 
-    protected function getPageTypeStandardShowItem(ContentTypeInterface $typeDefinition): string
+    /**
+     * @param array<string|PaletteDefinition|TabDefinition> $showItemArray
+     */
+    protected function getPageTypeStandardShowItem(array $showItemArray): string
     {
         $general = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
@@ -876,7 +913,7 @@ readonly class TcaGenerator
         ];
 
         $parts[] = $general;
-        $showItem = $this->processShowItem($typeDefinition->getShowItems());
+        $showItem = $this->processShowItem($showItemArray);
         if ($showItem !== '') {
             $parts[] = [$showItem];
         }

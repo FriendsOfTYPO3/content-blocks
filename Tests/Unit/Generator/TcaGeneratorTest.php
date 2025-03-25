@@ -3216,4 +3216,410 @@ final class TcaGeneratorTest extends UnitTestCase
 
         self::assertSame($expected, $tca);
     }
+
+    public static function sysFileReferencePaletteIsAddedForOverrideChildDataProvider(): iterable
+    {
+        yield 'sys_file_reference palette and overrideChildTca added' => [
+            'contentBlockArray' => [
+                'name' => 'my-vendor/my-element',
+                'hostExtension' => 'my_extension',
+                'extPath' => 'EXT:my_extension/ContentBlocks/ContentElements/my-element',
+                'icon' => [
+                    'iconIdentifier' => 'my_element',
+                ],
+                'yaml' => [
+                    'table' => 'tt_content',
+                    'typeField' => 'CType',
+                    'typeName' => 'my_element',
+                    'fields' => [
+                        [
+                            'identifier' => 'file',
+                            'type' => 'File',
+                            'label' => 'My file',
+                            'overrideType' => [
+                                'image' => [
+                                    [
+                                        'identifier' => 'my_file_palette',
+                                        'type' => 'Palette',
+                                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette',
+                                        'fields' => [
+                                            [
+                                                'identifier' => 'alternative',
+                                                'useExistingField' => true,
+                                            ],
+                                            [
+                                                'identifier' => 'description',
+                                                'useExistingField' => true,
+                                            ],
+                                            [
+                                                'type' => 'Linebreak',
+                                            ],
+                                            [
+                                                'identifier' => 'link',
+                                                'useExistingField' => true,
+                                            ],
+                                            [
+                                                'identifier' => 'title',
+                                                'useExistingField' => true,
+                                            ],
+                                            [
+                                                'type' => 'Linebreak',
+                                            ],
+                                            [
+                                                'identifier' => 'example_custom_field',
+                                                'type' => 'Text',
+                                                'label' => 'My custom Field',
+                                            ],
+                                            [
+                                                'type' => 'Linebreak',
+                                            ],
+                                            [
+                                                'identifier' => 'crop',
+                                                'useExistingField' => true,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'sys_file_reference' => [
+                    'palettes' => [
+                        'my_file_palette' => [
+                            'showitem' => 'alternative,description,--linebreak--,link,title,--linebreak--,example_custom_field,--linebreak--,crop',
+                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.palettes.my_file_palette.label',
+                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.palettes.my_file_palette.description',
+                        ],
+                    ],
+                    'columns' => [
+                        'example_custom_field' => [
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'exclude' => true,
+                            'label' => 'example_custom_field',
+                        ],
+                    ],
+                    'ctrl' => [
+                        'searchFields' => 'alternative,description,link,title,example_custom_field',
+                    ],
+                ],
+                'tt_content' => [
+                    'columns' => [
+                        'myvendor_myelement_file' => [
+                            'config' => [
+                                'type' => 'file',
+                            ],
+                            'exclude' => true,
+                            'label' => 'file',
+                        ],
+                    ],
+                    'types' => [
+                        'my_element' => [
+                            'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
+                            'showitem' => 'myvendor_myelement_file',
+                            'columnsOverrides' => [
+                                'myvendor_myelement_file' => [
+                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.label',
+                                    'config' => [
+                                        'overrideChildTca' => [
+                                            'types' => [
+                                                2 => [
+                                                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;my_file_palette,--palette--;;filePalette',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            'my_element' => 'my_element',
+                        ],
+                        'searchFields' => '',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('sysFileReferencePaletteIsAddedForOverrideChildDataProvider')]
+    #[Test]
+    public function sysFileReferencePaletteIsAddedForOverrideChild(array $contentBlockArray, array $expected): void
+    {
+        $baseTca = [
+            'sys_file_reference' => [
+                'label' => 'uid_local',
+                'columns' => [
+                    'alternative' => [
+                        'config' => [
+                            'type' => 'input',
+                        ],
+                    ],
+                    'description' => [
+                        'config' => [
+                            'type' => 'text',
+                        ],
+                    ],
+                    'link' => [
+                        'config' => [
+                            'type' => 'link',
+                        ],
+                    ],
+                    'title' => [
+                        'config' => [
+                            'type' => 'input',
+                        ],
+                    ],
+                    'crop' => [
+                        'config' => [
+                            'type' => 'imageManipulation',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $baseTca['tt_content']['ctrl']['type'] = 'CType';
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
+        $contentBlockRegistry->register($contentBlock);
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader))
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
+            $languageFileRegistry,
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+
+        $tca = $tcaGenerator->generate($baseTca);
+
+        self::assertSame($expected, $tca);
+    }
+
+    public static function overrideChildTcaAddedForTableWithNoTypeDataProvider(): iterable
+    {
+        yield 'Adding overrideChildTca to existing table without type works' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'extPath' => 'EXT:foo/ContentBlocks/RecordTypes/example',
+                    'icon' => [
+                        'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/Assets/icon.svg',
+                        'iconProvider' => SvgIconProvider::class,
+                        'iconIdentifier' => 'foobar-1',
+                    ],
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'typeName' => '1',
+                        'fields' => [
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 'my-vendor/my-element',
+                    'hostExtension' => 'my_extension',
+                    'extPath' => 'EXT:my_extension/ContentBlocks/ContentElements/my-element',
+                    'icon' => [
+                        'iconIdentifier' => 'my_element',
+                    ],
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'my_element',
+                        'fields' => [
+                            [
+                                'identifier' => 'my_collection',
+                                'type' => 'Collection',
+                                'label' => 'My Collection',
+                                'foreign_table' => 'foobar',
+                                'overrideType' => [
+                                    [
+                                        'identifier' => 't3ce_example_number',
+                                        'type' => 'Number',
+                                        'useExistingField' => true,
+                                    ],
+                                    [
+                                        'identifier' => 'example_custom_field',
+                                        'type' => 'Text',
+                                        'label' => 'My custom Field',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'foobar' => [
+                    'ctrl' => [
+                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:title',
+                        'label' => 't3ce_example_number',
+                        'sortby' => 'sorting',
+                        'tstamp' => 'tstamp',
+                        'crdate' => 'crdate',
+                        'delete' => 'deleted',
+                        'editlock' => 'editlock',
+                        'versioningWS' => true,
+                        'hideTable' => true,
+                        'translationSource' => 'l10n_source',
+                        'transOrigDiffSourceField' => 'l10n_diffsource',
+                        'languageField' => 'sys_language_uid',
+                        'enablecolumns' => [
+                            'disabled' => 'hidden',
+                            'starttime' => 'starttime',
+                            'endtime' => 'endtime',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'typeicon_classes' => [
+                            'default' => 'foobar-1',
+                        ],
+                        'searchFields' => 'example_custom_field',
+                        'previewRenderer' => PreviewRenderer::class,
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
+                    ],
+                    'types' => [
+                        '1' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                        ],
+                    ],
+                    'palettes' => [
+                        'language' => [
+                            'showitem' => 'sys_language_uid,l10n_parent',
+                        ],
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
+                        ],
+                    ],
+                    'columns' => [
+                        't3ce_example_number' => [
+                            'exclude' => true,
+                            'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.label',
+                            'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.description',
+                            'config' => [
+                                'type' => 'number',
+                            ],
+                        ],
+                        'foreign_table_parent_uid' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'example_custom_field' => [
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.example_custom_field.label',
+                            'exclude' => true,
+                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.example_custom_field.description',
+                        ],
+                    ],
+                ],
+                'tt_content' => [
+                    'columns' => [
+                        'myvendor_myelement_my_collection' => [
+                            'config' => [
+                                'type' => 'inline',
+                                'foreign_table' => 'foobar',
+                                'foreign_field' => 'foreign_table_parent_uid',
+                            ],
+                            'exclude' => true,
+                            'label' => 'my_collection',
+                        ],
+                    ],
+                    'types' => [
+                        'my_element' => [
+                            'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
+                            'showitem' => 'myvendor_myelement_my_collection',
+                            'columnsOverrides' => [
+                                'myvendor_myelement_my_collection' => [
+                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
+                                    'config' => [
+                                        'overrideChildTca' => [
+                                            'types' => [
+                                                '1' => [
+                                                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,example_custom_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                                                ],
+                                            ],
+                                        ],
+                                        'appearance' => [
+                                            'useSortable' => true,
+                                        ],
+                                    ],
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            'my_element' => 'my_element',
+                        ],
+                        'searchFields' => '',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('overrideChildTcaAddedForTableWithNoTypeDataProvider')]
+    #[Test]
+    public function overrideChildTcaAddedForTableWithNoType(array $contentBlocks, array $expected): void
+    {
+        $baseTca['tt_content']['ctrl']['type'] = 'CType';
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register($contentBlock);
+        }
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader))
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
+            $languageFileRegistry,
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+        $tca = $tcaGenerator->generate($baseTca);
+
+        self::assertEquals($expected, $tca);
+    }
 }
