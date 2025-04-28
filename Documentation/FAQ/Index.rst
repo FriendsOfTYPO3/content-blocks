@@ -52,7 +52,7 @@ Answers to frequently asked questions.
         :name: add-php-code
         :header-level: 2
 
-        The Content Blocks API does support PHP files at all. If you want to add
+        The Content Blocks API does not support PHP files at all. If you want to add
         some PHP logic to your Content Blocks, you have to use the old common
         ways.
 
