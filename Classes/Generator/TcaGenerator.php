@@ -744,9 +744,9 @@ readonly class TcaGenerator
     protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
     {
         $showItemArray = $typeDefinition->getShowItems();
+        $showItemArray[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended';
         $showItem = $this->processShowItem($showItemArray);
-        $result = $showItem;
-        return $result;
+        return $showItem;
     }
 
     protected function getRecordTypeStandardShowItem(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): string
