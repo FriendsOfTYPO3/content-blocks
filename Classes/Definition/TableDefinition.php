@@ -47,7 +47,7 @@ final class TableDefinition
         $tableDefinition = $tableDefinition
             ->withTable($table)
             ->withTypeField($definition['typeField'] ?? null)
-            ->withCapability(TableDefinitionCapability::createFromArray($definition['raw']))
+            ->withCapability(TableDefinitionCapability::createFromArray($definition['raw'] ?? []))
             ->withContentType($definition['contentType'] ?? null)
             ->withTcaColumnsDefinition(TcaFieldDefinitionCollection::createFromArray($definition['fields'] ?? [], $table))
             ->withSqlDefinition(SqlColumnDefinitionCollection::createFromArray($definition['fields'] ?? [], $table))

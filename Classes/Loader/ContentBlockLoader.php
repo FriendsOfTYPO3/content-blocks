@@ -36,6 +36,7 @@ use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Resource\FileType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -112,6 +113,10 @@ class ContentBlockLoader
             if (is_dir($recordTypesFolder)) {
                 $loadedContentBlocks[] = $this->loadContentBlocksInExtension($recordTypesFolder, $extensionKey, ContentType::RECORD_TYPE);
             }
+            $fileTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeFileTypesPath();
+            if (is_dir($fileTypesFolder)) {
+                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($fileTypesFolder, $extensionKey, ContentType::FILE_TYPE);
+            }
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
         $sortByPriority = fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
@@ -171,14 +176,14 @@ class ContentBlockLoader
         if (!file_exists($yamlPath)) {
             return null;
         }
-        $editorInterfaceYaml = Yaml::parseFile($yamlPath);
-        if (!is_array($editorInterfaceYaml) || strlen($editorInterfaceYaml['name'] ?? '') < 3 || !str_contains($editorInterfaceYaml['name'], '/')) {
+        $config = Yaml::parseFile($yamlPath);
+        if (!is_array($config) || strlen($config['name'] ?? '') < 3 || !str_contains($config['name'], '/')) {
             throw new \RuntimeException(
                 'Invalid config.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".',
                 1678224283
             );
         }
-        [$vendor, $name] = explode('/', $editorInterfaceYaml['name']);
+        [$vendor, $name] = explode('/', $config['name']);
         if (!ContentBlockNameValidator::isValid($vendor)) {
             throw new \InvalidArgumentException(
                 'Invalid vendor name for Content Block "' . $vendor . '". The vendor must be lowercase and consist of words separated by -',
@@ -192,15 +197,23 @@ class ContentBlockLoader
             );
         }
         if ($contentType === ContentType::PAGE_TYPE) {
-            if (!array_key_exists('typeName', $editorInterfaceYaml)) {
+            if (!array_key_exists('typeName', $config)) {
                 throw new \InvalidArgumentException(
-                    'Missing mandatory integer value for "typeName" in ContentBlock "' . $editorInterfaceYaml['name'] . '".',
+                    'Missing mandatory integer value for "typeName" in ContentBlock "' . $config['name'] . '".',
                     1689286814
                 );
             }
-            PageTypeNameValidator::validate($editorInterfaceYaml['typeName'], $editorInterfaceYaml['name']);
+            PageTypeNameValidator::validate($config['typeName'], $config['name']);
         }
-        return $editorInterfaceYaml;
+        if ($contentType === ContentType::FILE_TYPE) {
+            if (!array_key_exists('typeName', $config)) {
+                throw new \InvalidArgumentException(
+                    'Missing mandatory file type for "typeName" in ContentBlock "' . $config['name'] . '".',
+                    1733583692
+                );
+            }
+        }
+        return $config;
     }
 
     protected function loadSingleContentBlock(
@@ -214,18 +227,16 @@ class ContentBlockLoader
         if (!file_exists($absolutePath)) {
             throw new \RuntimeException('Content Block "' . $name . '" could not be found in "' . $absolutePath . '".', 1678699637);
         }
-        // Override table and typeField for Content Elements and Page Types.
-        if ($contentType === ContentType::CONTENT_ELEMENT || $contentType === ContentType::PAGE_TYPE) {
+        // Hard override table.
+        if ($contentType->getTable() !== null) {
             $yaml['table'] = $contentType->getTable();
+        }
+        // Hard override type field.
+        if ($contentType->getTypeField() !== null) {
             $yaml['typeField'] = $contentType->getTypeField();
         }
-        // Create typeName
-        if ($contentType === ContentType::RECORD_TYPE) {
-            $typeName = $yaml['typeName'] ?? '1';
-        } else {
-            $typeName = $yaml['typeName'] ?? UniqueIdentifierCreator::createContentTypeIdentifier($name);
-        }
-        $yaml['typeName'] ??= $typeName;
+        $typeName = $this->createTypeName($contentType, $yaml, $name);
+        $yaml['typeName'] = $typeName;
         if (!array_key_exists('table', $yaml)) {
             throw new \RuntimeException('Content Block "' . $name . '" does not define required "table".', 1731412650);
         }
@@ -257,6 +268,23 @@ class ContentBlockLoader
             contentType: $contentType,
             pageIconSet: $pageIconSet,
         );
+    }
+
+    protected function createTypeName(ContentType $contentType, array $yaml, string $name): string
+    {
+        if ($contentType === ContentType::FILE_TYPE) {
+            $fileType = $yaml['typeName'] ?? '0';
+            $typeName = FileType::tryFromMimeType($fileType)->value;
+            return (string)$typeName;
+        }
+        if (isset($yaml['typeName'])) {
+            return (string)$yaml['typeName'];
+        }
+        if ($contentType === ContentType::RECORD_TYPE) {
+            return '1';
+        }
+        $typeName = UniqueIdentifierCreator::createContentTypeIdentifier($name);
+        return $typeName;
     }
 
     protected function constructPageIconSet(ContentTypeIconResolverInput $baseIconInput): ?PageIconSet

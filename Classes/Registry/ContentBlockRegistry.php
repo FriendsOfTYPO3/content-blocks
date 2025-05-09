@@ -96,15 +96,15 @@ final class ContentBlockRegistry
     private function registerTypeName(LoadedContentBlock $contentBlock): void
     {
         // If typeName is not set explicitly, then it is inferred from the name, which is unique.
+        $contentType = $contentBlock->getContentType();
         $yaml = $contentBlock->getYaml();
         $typeField = $yaml['typeField'] ?? null;
-        if ($typeField === null) {
+        if ($typeField === null && $contentType !== ContentType::FILE_TYPE) {
             $typeName = '1';
         }
         $typeName ??= (string)$yaml['typeName'];
 
         // The typeName has to be unique per table. Get it from the YAML for Record Types.
-        $contentType = $contentBlock->getContentType();
         $table = $contentType->getTable() ?? $yaml['table'];
         if (!isset($this->typeNamesByTable[$table]['types'][$typeName])) {
             $this->typeNamesByTable[$table]['typeField'] ??= $typeField;

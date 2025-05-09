@@ -82,7 +82,7 @@ final class ProcessingInput
 
     private function resolveTypeName(): string|int
     {
-        if ($this->typeField === null) {
+        if ($this->typeField === null && $this->contentType !== ContentType::FILE_TYPE) {
             return '1';
         }
         return $this->yaml['typeName'];

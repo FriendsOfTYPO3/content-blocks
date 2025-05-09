@@ -82,8 +82,8 @@ class ListContentBlocksCommand extends Command
         $list = [];
         foreach ($this->contentBlockRegistry->getAll() as $loadedContentBlock) {
             $table = match ($loadedContentBlock->getContentType()) {
-                ContentType::CONTENT_ELEMENT, ContentType::PAGE_TYPE => $loadedContentBlock->getContentType()->getTable(),
                 ContentType::RECORD_TYPE => $loadedContentBlock->getYaml()['table'],
+                default => $loadedContentBlock->getContentType()->getTable(),
             };
             $typeName = $loadedContentBlock->getYaml()['typeName'];
             $list[] = [
