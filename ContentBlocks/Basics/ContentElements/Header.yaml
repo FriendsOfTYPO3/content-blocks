@@ -8,12 +8,15 @@ fields:
     fields:
       -
         identifier: header
+        type: Input
         useExistingField: true
       -
         type: Linebreak
       -
         identifier: header_layout
+        type: Select
         useExistingField: true
       -
         identifier: header_position
+        type: Select
         useExistingField: true
