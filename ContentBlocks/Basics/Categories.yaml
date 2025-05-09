@@ -7,4 +7,5 @@ fields:
     label: LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories
   -
     identifier: categories
+    type: Category
     useExistingField: true

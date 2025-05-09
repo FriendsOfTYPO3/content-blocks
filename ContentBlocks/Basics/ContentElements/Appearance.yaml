@@ -12,13 +12,17 @@ fields:
     fields:
       -
         identifier: layout
+        type: Select
         useExistingField: true
       -
         identifier: frame_class
+        type: Select
         useExistingField: true
       -
         identifier: space_before_class
+        type: Select
         useExistingField: true
       -
         identifier: space_after_class
+        type: Select
         useExistingField: true

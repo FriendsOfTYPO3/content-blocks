@@ -7,7 +7,9 @@ fields:
     fields:
       -
         identifier: sectionIndex
+        type: Checkbox
         useExistingField: true
       -
         identifier: linkToTop
+        type: Checkbox
         useExistingField: true
