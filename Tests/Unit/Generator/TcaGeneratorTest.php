@@ -3320,7 +3320,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'types' => [
                         'my_element' => [
                             'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
-                            'showitem' => 'myvendor_myelement_file',
+                            'showitem' => 'myvendor_myelement_file,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'columnsOverrides' => [
                                 'myvendor_myelement_file' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.label',
@@ -3557,7 +3557,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'types' => [
                         'my_element' => [
                             'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
-                            'showitem' => 'myvendor_myelement_my_collection',
+                            'showitem' => 'myvendor_myelement_my_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'columnsOverrides' => [
                                 'myvendor_myelement_my_collection' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
@@ -3824,7 +3824,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'types' => [
                         'my_element' => [
                             'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
-                            'showitem' => 'myvendor_myelement_my_collection',
+                            'showitem' => 'myvendor_myelement_my_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
                             'columnsOverrides' => [
                                 'myvendor_myelement_my_collection' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
