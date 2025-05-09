@@ -12,25 +12,30 @@ Folder: `ContentBlocks/FileTypes`
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/FileTypes/image/config.yaml
 
-    name: example/image
+    name: example/file-type-image
     typeName: image
+    prefixFields: false
     fields:
-      - identifier: alternative
-        useExistingField: true
-      - identifier: description
-        useExistingField: true
-      - type: Linebreak
-      - identifier: link
-        useExistingField: true
-      - identifier: title
-        useExistingField: true
-      - type: Linebreak
-      - identifier: example_custom_field
-        type: Text
-        label: 'My custom Field'
-      - type: Linebreak
-      - identifier: crop
-        useExistingField: true
+      - identifier: image_overlay_palette
+        type: Palette
+        label: 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette'
+        fields:
+          - identifier: alternative
+            useExistingField: true
+          - identifier: description
+            useExistingField: true
+          - type: Linebreak
+          - identifier: link
+            useExistingField: true
+          - identifier: title
+            useExistingField: true
+          - type: Linebreak
+          - identifier: example_custom_field
+            type: Text
+            label: 'My custom Field'
+          - type: Linebreak
+          - identifier: crop
+            useExistingField: true
 
 Learn more about :ref:`File Types <api_file_types>`.
 

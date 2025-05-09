@@ -13,7 +13,7 @@ File Types are a special Content Type in TYPO3. They relate to the field type
 :ref:`file <field-type-file>`. Every time you create a new file reference, the
 type of the child record is automatically determined by the file mime type.
 
-There is a finite amount of types:
+There is a fixed amount of types:
 
 *  text
 *  image
@@ -29,25 +29,30 @@ minimal example looks like this:
 .. code-block:: yaml
    :caption: EXT:your_extension/ContentBlocks/FileTypes/image/config.yaml
 
-    name: example/image
+    name: example/file-type-image
     typeName: image
+    prefixFields: false
     fields:
-      - identifier: alternative
-        useExistingField: true
-      - identifier: description
-        useExistingField: true
-      - type: Linebreak
-      - identifier: link
-        useExistingField: true
-      - identifier: title
-        useExistingField: true
-      - type: Linebreak
-      - identifier: example_custom_field
-        type: Text
-        label: 'My custom Field'
-      - type: Linebreak
-      - identifier: crop
-        useExistingField: true
+      - identifier: image_overlay_palette
+        type: Palette
+        label: 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette'
+        fields:
+          - identifier: alternative
+            useExistingField: true
+          - identifier: description
+            useExistingField: true
+          - type: Linebreak
+          - identifier: link
+            useExistingField: true
+          - identifier: title
+            useExistingField: true
+          - type: Linebreak
+          - identifier: example_custom_field
+            type: Text
+            label: 'My custom Field'
+          - type: Linebreak
+          - identifier: crop
+            useExistingField: true
 
 In this example, we re-define the :yaml:`image` file type. For the most part
 everything is identical to the standard definition. We only added another custom
@@ -59,6 +64,10 @@ method, you have full control over the available fields and their position.
     use it, if you want to modify the arrangement of fields globally. Also,
     don't use this in third party extensions. Better provide a :yaml:`Basic`,
     which the extension user should include in his project.
+
+.. tip::
+    In case you only want to re-define a file definition in the context of
+    another element, then use :ref:`Type Overrides <api_type_overrides>` instead.
 
 ..  note::
     If you have the option :ref:`extendedPalette <confval-file-extendedpalette>`

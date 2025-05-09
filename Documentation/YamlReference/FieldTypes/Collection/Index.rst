@@ -209,6 +209,43 @@ Settings
    This will create a new field called :sql:`fieldname`. It corresponds to the
    TCA option :ref:`foreign_match_fields <t3tca:columns-inline-properties-foreign-match-fields>`.
 
+.. confval:: overrideType
+   :name: collection-overrideType
+   :required: false
+   :type: array
+   :default: []
+
+   Type Overrides can be used to override the Record Definition in the context of
+   as single field. This option only makes sense, if you don't define :yaml:`fields`,
+   but an external :yaml:`foreign_table`, that you want to override.
+   Refer to the :ref:`API documentation <api_type_overrides>` if you want to
+   learn more.
+
+   .. code-block:: yaml
+
+       name: friendsoftypo3/example
+       table: tx_friendsoftypo3_example
+       prefixFields: false
+       labelField: title
+       fields:
+         -
+           identifier: title
+           type: Text
+           label: Title
+         - identifier: collection_override
+           type: Collection
+           foreign_table: tx_hov_domain_model_record1
+           overrideType:
+             record1:
+               - identifier: type
+                 type: Select
+                 useExistingField: true
+               - identifier: title
+                 type: Text
+                 useExistingField: true
+               - identifier: custom_field
+                 type: Text
+
 Example
 =======
 

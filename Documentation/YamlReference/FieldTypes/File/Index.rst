@@ -97,6 +97,41 @@ Settings
             title: Landscape
             value: 4 / 3
 
+.. confval:: overrideType
+   :name: file-overrideType
+   :required: false
+   :type: array
+   :default: []
+
+   Type Overrides can be used to override the File Definition in the context of
+   as single field. Refer to the :ref:`API documentation <api_type_overrides>`
+   if you want to learn more.
+
+   .. code-block:: yaml
+
+      overrideType:
+        image:
+          - identifier: image_overlay_palette
+            type: Palette
+            label: 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette'
+            fields:
+              - identifier: alternative
+                useExistingField: true
+              - identifier: description
+                useExistingField: true
+              - type: Linebreak
+              - identifier: link
+                useExistingField: true
+              - identifier: title
+                useExistingField: true
+              - type: Linebreak
+              - identifier: example_custom_field
+                type: Text
+                label: 'My custom Field'
+              - type: Linebreak
+              - identifier: crop
+                useExistingField: true
+
 Example
 =======
 
