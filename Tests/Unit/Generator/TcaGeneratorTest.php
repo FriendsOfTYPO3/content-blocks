@@ -3622,4 +3622,271 @@ final class TcaGeneratorTest extends UnitTestCase
 
         self::assertEquals($expected, $tca);
     }
+
+    public static function overrideChildTcaAddedForTableWithTypeDataProvider(): iterable
+    {
+        yield 'Adding overrideChildTca to existing table with type works' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/programmer',
+                    'extPath' => 'EXT:foo/ContentBlocks/RecordTypes/example',
+                    'icon' => [
+                        'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/assets/icon.svg',
+                        'iconProvider' => SvgIconProvider::class,
+                        'iconIdentifier' => 'employee-programmer',
+                    ],
+                    'yaml' => [
+                        'table' => 'employee',
+                        'typeName' => 'programmer',
+                        'typeField' => 'type',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 't3ce/designer',
+                    'extPath' => 'EXT:foo/ContentBlocks/RecordTypes/example',
+                    'icon' => [
+                        'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/assets/icon.svg',
+                        'iconProvider' => SvgIconProvider::class,
+                        'iconIdentifier' => 'employee-designer',
+                    ],
+                    'yaml' => [
+                        'table' => 'employee',
+                        'typeName' => 'designer',
+                        'typeField' => 'type',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 'my-vendor/my-element',
+                    'hostExtension' => 'my_extension',
+                    'extPath' => 'EXT:my_extension/ContentBlocks/ContentElements/my-element',
+                    'icon' => [
+                        'iconIdentifier' => 'my_element',
+                    ],
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'my_element',
+                        'fields' => [
+                            [
+                                'identifier' => 'my_collection',
+                                'type' => 'Collection',
+                                'label' => 'My Collection',
+                                'foreign_table' => 'employee',
+                                'overrideType' => [
+                                    'programmer' => [
+                                        [
+                                            'identifier' => 'type',
+                                            'type' => 'Select',
+                                            'useExistingField' => true,
+                                        ],
+                                        [
+                                            'identifier' => 'number',
+                                            'type' => 'Number',
+                                            'useExistingField' => true,
+                                        ],
+                                        [
+                                            'identifier' => 'example_custom_field',
+                                            'type' => 'Text',
+                                            'label' => 'My custom Field',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'employee' => [
+                    'ctrl' => [
+                        'title' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:title',
+                        'label' => 'number',
+                        'sortby' => 'sorting',
+                        'tstamp' => 'tstamp',
+                        'crdate' => 'crdate',
+                        'delete' => 'deleted',
+                        'editlock' => 'editlock',
+                        'versioningWS' => true,
+                        'hideTable' => true,
+                        'translationSource' => 'l10n_source',
+                        'transOrigDiffSourceField' => 'l10n_diffsource',
+                        'languageField' => 'sys_language_uid',
+                        'enablecolumns' => [
+                            'disabled' => 'hidden',
+                            'starttime' => 'starttime',
+                            'endtime' => 'endtime',
+                            'fe_group' => 'fe_group',
+                        ],
+                        'typeicon_classes' => [
+                            'programmer' => 'employee-programmer',
+                            'designer' => 'employee-designer',
+                            'default' => 'employee-programmer',
+                        ],
+                        'searchFields' => 'example_custom_field',
+                        'previewRenderer' => PreviewRenderer::class,
+                        'security' => [
+                            'ignorePageTypeRestriction' => true,
+                        ],
+                        'type' => 'type',
+                        'typeicon_column' => 'type',
+                    ],
+                    'types' => [
+                        'programmer' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'columnsOverrides' => [
+                                'number' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.description',
+                                ],
+                            ],
+                        ],
+                        'designer' => [
+                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'columnsOverrides' => [
+                                'number' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'palettes' => [
+                        'language' => [
+                            'showitem' => 'sys_language_uid,l10n_parent',
+                        ],
+                        'hidden' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+                            'showitem' => 'hidden',
+                        ],
+                        'access' => [
+                            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
+                            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,--linebreak--,fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,--linebreak--,editlock',
+                        ],
+                    ],
+                    'columns' => [
+                        'number' => [
+                            'exclude' => true,
+                            'config' => [
+                                'type' => 'number',
+                            ],
+                            'label' => 'number',
+                        ],
+                        'foreign_table_parent_uid' => [
+                            'config' => [
+                                'type' => 'passthrough',
+                            ],
+                        ],
+                        'example_custom_field' => [
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'label' => 'example_custom_field',
+                            'exclude' => true,
+                        ],
+                        'type' => [
+                            'config' => [
+                                'type' => 'select',
+                                'renderType' => 'selectSingle',
+                                'items' => [],
+                                'default' => 'programmer',
+                            ],
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.type',
+                            'exclude' => true,
+                        ],
+                    ],
+                ],
+                'tt_content' => [
+                    'columns' => [
+                        'myvendor_myelement_my_collection' => [
+                            'config' => [
+                                'type' => 'inline',
+                                'foreign_table' => 'employee',
+                                'foreign_field' => 'foreign_table_parent_uid',
+                            ],
+                            'exclude' => true,
+                            'label' => 'my_collection',
+                        ],
+                    ],
+                    'types' => [
+                        'my_element' => [
+                            'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
+                            'showitem' => 'myvendor_myelement_my_collection',
+                            'columnsOverrides' => [
+                                'myvendor_myelement_my_collection' => [
+                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
+                                    'config' => [
+                                        'overrideChildTca' => [
+                                            'types' => [
+                                                'programmer' => [
+                                                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,example_custom_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                                                ],
+                                            ],
+                                        ],
+                                        'appearance' => [
+                                            'useSortable' => true,
+                                        ],
+                                    ],
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            'my_element' => 'my_element',
+                        ],
+                        'searchFields' => '',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('overrideChildTcaAddedForTableWithTypeDataProvider')]
+    #[Test]
+    public function overrideChildTcaAddedForTableWithType(array $contentBlocks, array $expected): void
+    {
+        $baseTca['tt_content']['ctrl']['type'] = 'CType';
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory->initialize($baseTca);
+        $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register($contentBlock);
+        }
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollection = (new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader))
+            ->createUncached($contentBlockRegistry, $fieldTypeRegistry, $simpleTcaSchemaFactory);
+        $systemExtensionAvailability = new TestSystemExtensionAvailability();
+        $systemExtensionAvailability->addAvailableExtension('workspaces');
+        $languageFileRegistry = new NoopLanguageFileRegistry();
+        $flexFormGenerator = new FlexFormGenerator($languageFileRegistry);
+        $tcaGenerator = new TcaGenerator(
+            $tableDefinitionCollection,
+            $simpleTcaSchemaFactory,
+            $languageFileRegistry,
+            $systemExtensionAvailability,
+            $flexFormGenerator,
+        );
+        $tca = $tcaGenerator->generate($baseTca);
+
+        self::assertEquals($expected, $tca);
+    }
 }
