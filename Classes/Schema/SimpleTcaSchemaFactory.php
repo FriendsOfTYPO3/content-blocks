@@ -17,10 +17,14 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema;
 
+use InvalidArgumentException;
+use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldCollection;
 use TYPO3\CMS\ContentBlocks\Schema\Field\TcaField;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -33,7 +37,9 @@ class SimpleTcaSchemaFactory implements SingletonInterface
     public function __construct(
         protected FieldTypeResolver $typeResolver,
     ) {
-        $this->initialize($GLOBALS['TCA'] ?? []);
+        // ext_tables.php checker (Check for Broken Extensions backend functionality) does not load TCA.
+        // So we need to do it manually.
+        $this->initialize($GLOBALS['TCA'] ?? $this->loadConfigurationTcaFiles());
     }
 
     public function initialize(array $tca): void
@@ -79,5 +85,40 @@ class SimpleTcaSchemaFactory implements SingletonInterface
         }
         $schema = new SimpleTcaSchema($schemaName, $allFields, $systemFields, $schemaDefinition['ctrl'] ?? []);
         return $schema;
+    }
+
+    /**
+     * Load TCA configuration files.
+     *
+     * @see \TYPO3\CMS\Core\Configuration\Tca\TcaFactory::loadConfigurationTcaFiles()
+     */
+    private function loadConfigurationTcaFiles(): array
+    {
+        // To require TCA in a safe scoped environment avoiding local variable clashes.
+        // Note: Return type 'mixed' is intended, otherwise broken TCA files with missing "return [];" statement would
+        //       emit a "return value must be of type array, int returned" PHP TypeError. This is mitigated by an array
+        //       check below.
+        $scopedReturnRequire = static function (string $filename): mixed {
+            return require $filename;
+        };
+        // First load "full table" files from Configuration/TCA
+        $tca = [];
+        $activePackages = GeneralUtility::makeInstance(PackageManager::class)->getActivePackages();
+        foreach ($activePackages as $package) {
+            try {
+                $finder = Finder::create()->files()->sortByName()->depth(0)->name('*.php')->in($package->getPackagePath() . 'Configuration/TCA');
+            } catch (InvalidArgumentException) {
+                // No such directory in this package
+                continue;
+            }
+            foreach ($finder as $fileInfo) {
+                $tcaOfTable = $scopedReturnRequire($fileInfo->getPathname());
+                if (is_array($tcaOfTable)) {
+                    $tcaTableName = substr($fileInfo->getBasename(), 0, -4);
+                    $tca[$tcaTableName] = $tcaOfTable;
+                }
+            }
+        }
+        return $tca;
     }
 }
