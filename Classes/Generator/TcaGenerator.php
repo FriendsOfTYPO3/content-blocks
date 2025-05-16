@@ -748,13 +748,17 @@ readonly class TcaGenerator
         return $newDsConfiguration;
     }
 
-    protected function resolveLabelField(TableDefinition $tableDefinition): string
+    protected function resolveLabelField(TableDefinition $tableDefinition): ?string
     {
         $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
         $labelField = null;
         if ($labelCapability->hasLabelField()) {
             $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
-            $labelField = $tableDefinition->getTcaFieldDefinitionCollection()->getField($labelFieldIdentifier);
+            $tableDefinitionCollection = $tableDefinition->getTcaFieldDefinitionCollection();
+            if (!$tableDefinitionCollection->hasField($labelFieldIdentifier)) {
+                return null;
+            }
+            $labelField = $tableDefinitionCollection->getField($labelFieldIdentifier);
         }
         // If there is no user-defined label field, look for preferred field type first.
         // Otherwise, use first field as label regardless of the type.
@@ -773,14 +777,7 @@ readonly class TcaGenerator
             }
             $labelField ??= $labelFieldCandidate;
         }
-        if ($labelField === null) {
-            throw new \InvalidArgumentException(
-                'Option "labelField" is missing for custom table "' . $tableDefinition->getTable() . '" and no field could be automatically determined.',
-                1700157578,
-            );
-        }
-
-        return $labelField->getUniqueIdentifier();
+        return $labelField?->getUniqueIdentifier();
     }
 
     protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
@@ -958,14 +955,15 @@ readonly class TcaGenerator
         if ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathTitle)) {
             $title = $languagePathTitle;
         }
-        $ctrl = [
-            'title' => $title,
-            'label' => $this->resolveLabelField($tableDefinition),
-            'hideTable' => $tableDefinition->getParentReferences() !== null,
-            'enablecolumns' => $capability->buildRestrictionsTca(),
-            'previewRenderer' => PreviewRenderer::class,
-        ];
-
+        $ctrl = [];
+        $ctrl['title'] = $title;
+        $labelField = $this->resolveLabelField($tableDefinition);
+        if ($labelField !== null) {
+            $ctrl['label'] = $labelField;
+        }
+        $ctrl['hideTable'] = $tableDefinition->getParentReferences() !== null;
+        $ctrl['enablecolumns'] = $capability->buildRestrictionsTca();
+        $ctrl['previewRenderer'] = PreviewRenderer::class;
         $labelCapability = $tableDefinition->getCapability()->getLabelCapability();
         if ($labelCapability->hasAdditionalLabelFields()) {
             $ctrl['label_alt'] = $labelCapability->getAdditionalLabelFieldsAsString();

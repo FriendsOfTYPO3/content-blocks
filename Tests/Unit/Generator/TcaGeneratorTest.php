@@ -1833,7 +1833,7 @@ final class TcaGeneratorTest extends UnitTestCase
     }
 
     #[Test]
-    public function missingLabelFieldThrowsException(): void
+    public function missingLabelFieldIsIgnored(): void
     {
         $yaml = [
             'name' => 'test/test',
@@ -1869,11 +1869,9 @@ final class TcaGeneratorTest extends UnitTestCase
             $flexFormGenerator,
         );
 
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionCode(1700157578);
-        $this->expectExceptionMessage('Option "labelField" is missing for custom table "my_custom_table" and no field could be automatically determined.');
+        $result = $tcaGenerator->generate([]);
 
-        $tcaGenerator->generate([]);
+        self::assertArrayNotHasKey('label', $result['my_custom_table']['ctrl']);
     }
 
     public static function checkFlexFormTcaDataProvider(): iterable
