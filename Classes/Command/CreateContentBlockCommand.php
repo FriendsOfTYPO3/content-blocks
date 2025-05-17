@@ -39,6 +39,7 @@ use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Package\PackageActivationService;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Resource\FileType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -63,6 +64,7 @@ class CreateContentBlockCommand extends Command
         protected readonly PackageResolver $packageResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly CacheManager $cacheManager,
+        protected readonly PackageActivationService $packageActivationService,
     ) {
         parent::__construct();
     }
@@ -259,6 +261,9 @@ class CreateContentBlockCommand extends Command
         // TypoScript cache needs to be flushed to enable the new CType for the frontend
         // @todo Core should define "typoscript" as a system cache
         $this->cacheManager->getCache('typoscript')->flush();
+
+        // Update database to add new fields
+        $this->packageActivationService->updateDatabase();
 
         $command = Environment::isComposerMode() ? 'vendor/bin/typo3' : 'typo3/sysext/core/bin/typo3';
         $output->writeln($command . ' cache:flush -g system');
