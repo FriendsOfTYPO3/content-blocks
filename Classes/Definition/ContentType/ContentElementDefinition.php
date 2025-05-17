@@ -17,44 +17,41 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class ContentElementDefinition extends ContentTypeDefinition implements ContentTypeInterface
+final readonly class ContentElementDefinition implements ContentTypeInterface
 {
-    private bool $saveAndClose = false;
+    use ContentTypeDefinition;
 
-    public static function createFromArray(array $array, string $table): ContentElementDefinition
-    {
-        $self = new self();
-        return $self
-            ->withTable($table)
-            ->withIdentifier($array['identifier'])
-            ->withTitle($array['title'])
-            ->withDescription($array['description'])
-            ->withTypeName($array['typeName'])
-            ->withColumns($array['columns'] ?? [])
-            ->withShowItems($array['showItems'] ?? [])
-            ->withOverrideColumns($array['overrideColumns'] ?? [])
-            ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '')
-            ->withPriority($array['priority'] ?? 0)
-            ->withSaveAndClose($array['saveAndClose'])
-            ->withGroup($array['group'])
-            ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
-            ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
-            ->withLanguagePathDescription($array['languagePathDescription'] ?? null);
-    }
+    public function __construct(
+        public string $table,
+        public string $identifier,
+        public string $title,
+        public string $description,
+        public string|int $typeName,
+        /** @var string[] */
+        public array $columns,
+        /** @var array<string|PaletteDefinition|TabDefinition> */
+        public array $showItems,
+        /** @var TcaFieldDefinition[] */
+        public array $overrideColumns,
+        public string $vendor,
+        public string $package,
+        public int $priority,
+        public ContentTypeIcon $typeIcon,
+        public string $languagePathTitle,
+        public string $languagePathDescription,
+        public ?string $group,
+        public bool $saveAndClose,
+    ) {}
 
     public function hasSaveAndClose(): bool
     {
         return $this->saveAndClose;
-    }
-
-    public function withSaveAndClose(bool $saveAndClose): self
-    {
-        $clone = clone $this;
-        $clone->saveAndClose = $saveAndClose;
-        return $clone;
     }
 }

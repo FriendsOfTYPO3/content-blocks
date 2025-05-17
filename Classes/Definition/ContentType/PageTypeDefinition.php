@@ -17,44 +17,38 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
-final class PageTypeDefinition extends ContentTypeDefinition implements ContentTypeInterface
+final readonly class PageTypeDefinition implements ContentTypeInterface
 {
-    private PageIconSet $pageIconSet;
+    use ContentTypeDefinition;
 
-    public static function createFromArray(array $array, string $table): PageTypeDefinition
-    {
-        $self = new self();
-        $iconHideInMenu = ContentTypeIcon::fromArray($array['typeIconHideInMenu'] ?? []);
-        $iconRoot = ContentTypeIcon::fromArray($array['typeIconRoot'] ?? []);
-        $pageIconSet = new PageIconSet($iconHideInMenu, $iconRoot);
-        return $self
-            ->withTable($table)
-            ->withIdentifier($array['identifier'])
-            ->withTitle($array['title'])
-            ->withDescription($array['description'])
-            ->withTypeName($array['typeName'])
-            ->withColumns($array['columns'] ?? [])
-            ->withShowItems($array['showItems'] ?? [])
-            ->withOverrideColumns($array['overrideColumns'] ?? [])
-            ->withVendor($array['vendor'] ?? '')
-            ->withPackage($array['package'] ?? '')
-            ->withTypeIcon(ContentTypeIcon::fromArray($array['typeIcon'] ?? []))
-            ->withPageIconSet($pageIconSet)
-            ->withPriority($array['priority'] ?? 0)
-            ->withLanguagePathTitle($array['languagePathTitle'] ?? null)
-            ->withLanguagePathDescription($array['languagePathDescription'] ?? null)
-            ->withGroup($array['group']);
-    }
-
-    public function withPageIconSet(PageIconSet $pageIconSet): self
-    {
-        $clone = clone $this;
-        $clone->pageIconSet = $pageIconSet;
-        return $clone;
-    }
+    public function __construct(
+        public string $table,
+        public string $identifier,
+        public string $title,
+        public string $description,
+        public string|int $typeName,
+        /** @var string[] */
+        public array $columns,
+        /** @var array<string|PaletteDefinition|TabDefinition> */
+        public array $showItems,
+        /** @var TcaFieldDefinition[] */
+        public array $overrideColumns,
+        public string $vendor,
+        public string $package,
+        public int $priority,
+        public ContentTypeIcon $typeIcon,
+        public string $languagePathTitle,
+        public string $languagePathDescription,
+        public ?string $group,
+        public PageIconSet $pageIconSet,
+    ) {}
 
     public function getPageIconSet(): PageIconSet
     {

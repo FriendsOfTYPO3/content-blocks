@@ -24,27 +24,8 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-abstract class ContentTypeDefinition
+trait ContentTypeDefinition
 {
-    private string $identifier = '';
-    private string $title = '';
-    private string $description = '';
-    private string $table = '';
-    private string|int $typeName = '';
-    /** @var string[] */
-    private array $columns = [];
-    /** @var array<string|PaletteDefinition|TabDefinition> */
-    private array $showItems = [];
-    /** @var TcaFieldDefinition[] */
-    private array $overrideColumns = [];
-    private string $vendor = '';
-    private string $package = '';
-    private int $priority = 0;
-    private ContentTypeIcon $typeIcon;
-    private string $languagePathTitle;
-    private string $languagePathDescription;
-    private ?string $group = null;
-
     public function getIdentifier(): string
     {
         return $this->identifier;
@@ -137,119 +118,5 @@ abstract class ContentTypeDefinition
     public function getGroup(): ?string
     {
         return $this->group;
-    }
-
-    public function withIdentifier(string $identifier): static
-    {
-        $clone = clone $this;
-        $clone->identifier = $identifier;
-        return $clone;
-    }
-
-    public function withTitle(string $title): static
-    {
-        $clone = clone $this;
-        $clone->title = $title;
-        return $clone;
-    }
-
-    public function withDescription(string $description): static
-    {
-        $clone = clone $this;
-        $clone->description = $description;
-        return $clone;
-    }
-
-    public function withTable(string $table): static
-    {
-        $clone = clone $this;
-        $clone->table = $table;
-        return $clone;
-    }
-
-    /**
-     * @param string[] $columns
-     */
-    public function withColumns(array $columns): static
-    {
-        $clone = clone $this;
-        $clone->columns = $columns;
-        return $clone;
-    }
-
-    /**
-     * @param array<string|PaletteDefinition|TabDefinition> $showItems
-     */
-    public function withShowItems(array $showItems): static
-    {
-        $clone = clone $this;
-        $clone->showItems = $showItems;
-        return $clone;
-    }
-
-    /**
-     * @param array<TcaFieldDefinition> $overrideColumns
-     */
-    public function withOverrideColumns(array $overrideColumns): static
-    {
-        $clone = clone $this;
-        $clone->overrideColumns = $overrideColumns;
-        return $clone;
-    }
-
-    public function withVendor(string $vendor): static
-    {
-        $clone = clone $this;
-        $clone->vendor = $vendor;
-        return $clone;
-    }
-
-    public function withPackage(string $package): static
-    {
-        $clone = clone $this;
-        $clone->package = $package;
-        return $clone;
-    }
-
-    public function withTypeName(string|int $type): static
-    {
-        $clone = clone $this;
-        $clone->typeName = $type;
-        return $clone;
-    }
-
-    public function withPriority(int $priority): static
-    {
-        $clone = clone $this;
-        $clone->priority = $priority;
-        return $clone;
-    }
-
-    public function withTypeIcon(ContentTypeIcon $typeIcon): static
-    {
-        $clone = clone $this;
-        $clone->typeIcon = $typeIcon;
-        return $clone;
-    }
-
-    public function withLanguagePathTitle(string $languagePathTitle): static
-    {
-        $clone = clone $this;
-        $clone->languagePathTitle = $languagePathTitle;
-        return $clone;
-    }
-
-    public function withLanguagePathDescription(string $languagePathDescription): static
-    {
-        $clone = clone $this;
-        $clone->languagePathDescription = $languagePathDescription;
-        return $clone;
-    }
-
-    public function withGroup(?string $group): static
-    {
-        $clone = clone $this;
-        $clone->group = $group;
-        return $clone;
     }
 }

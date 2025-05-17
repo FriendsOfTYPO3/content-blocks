@@ -24,7 +24,6 @@ use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
  */
 interface ContentTypeInterface
 {
-    public static function createFromArray(array $array, string $table): ContentTypeInterface;
     public function getName(): string;
     public function getVendor(): string;
     public function getPackage(): string;

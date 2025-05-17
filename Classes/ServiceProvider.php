@@ -22,7 +22,7 @@ use Psr\Container\ContainerInterface;
 use TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent;
 use TYPO3\CMS\Backend\View\Event\ModifyDatabaseQueryForContentEvent;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
-use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
@@ -105,7 +105,7 @@ class ServiceProvider extends AbstractServiceProvider
         $arrayObject = new \ArrayObject();
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
-            /** @var ContentTypeDefinition $typeDefinition */
+            /** @var ContentTypeInterface $typeDefinition */
             foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
                 $icon = $typeDefinition->getTypeIcon();
                 $iconConfig = [
