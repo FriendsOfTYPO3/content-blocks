@@ -61,7 +61,7 @@ final class ContentTypeFactory
     {
         $arguments = $this->prepareCommonArguments($typeDefinition);
         $arguments['table'] = $table;
-        $arguments['saveAndClose'] = $typeDefinition['saveAndClose'];
+        $arguments['saveAndClose'] = $typeDefinition['saveAndClose'] ?? false;
         $contentElementDefinition = new ContentElementDefinition(...$arguments);
         return $contentElementDefinition;
     }
