@@ -19,6 +19,7 @@ This feature can be used for different purposes:
 * Reorder fields of the child record
 * Remove fields from the child record
 * Add completely new fields to the child record
+* Override options like label, description, renderType etc.
 
 For either of those purposes you need to re-define the :yaml:`fields` definition
 for the specified type.

@@ -57,7 +57,7 @@ Type Overrides
 
 Content Blocks now features a way to override types in the context of a
 Collection with the new field option :yaml:`overrideType`. This does also
-work for the :yaml:`File`.
+work for the Field Type :yaml:`File`.
 
 .. code-block:: yaml
 
