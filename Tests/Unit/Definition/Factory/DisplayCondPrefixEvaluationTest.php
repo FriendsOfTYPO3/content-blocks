@@ -74,7 +74,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         );
         $tcaFieldDefinition = $tableDefinitionCollection
             ->getTable('tt_content')
-            ->getTcaFieldDefinitionCollection()
+            ->tcaFieldDefinitionCollection
             ->getField('bar_foo_aField');
 
         $tca = $tcaFieldDefinition->getTca();
@@ -190,7 +190,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         );
         $tcaFieldDefinition = $tableDefinitionCollection
             ->getTable('tt_content')
-            ->getTcaFieldDefinitionCollection()
+            ->tcaFieldDefinitionCollection
             ->getField('bar_foo_aField');
 
         $tca = $tcaFieldDefinition->getTca();

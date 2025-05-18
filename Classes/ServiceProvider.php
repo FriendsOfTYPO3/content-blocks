@@ -103,10 +103,11 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockIcons(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
+        /** @var TableDefinitionCollection $tableDefinitionCollection */
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
             /** @var ContentTypeInterface $typeDefinition */
-            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
                 $icon = $typeDefinition->getTypeIcon();
                 $iconConfig = [
                     $icon->iconIdentifier => [
@@ -137,12 +138,13 @@ class ServiceProvider extends AbstractServiceProvider
     public static function getContentBlockPageTypes(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
+        /** @var TableDefinitionCollection $tableDefinitionCollection */
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         if (!$tableDefinitionCollection->hasTable(ContentType::PAGE_TYPE->getTable())) {
             return $arrayObject;
         }
         $tableDefinition = $tableDefinitionCollection->getTable(ContentType::PAGE_TYPE->getTable());
-        foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+        foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
             $arrayObject->append($typeDefinition->getTypeName());
         }
         return $arrayObject;
@@ -159,10 +161,11 @@ class ServiceProvider extends AbstractServiceProvider
         }
 
         $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
+        /** @var TableDefinitionCollection $tableDefinitionCollection */
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
-                if ($tableDefinition->getContentType() === ContentType::CONTENT_ELEMENT) {
+            foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
+                if ($tableDefinition->contentType === ContentType::CONTENT_ELEMENT) {
                     $extPath = $contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName());
                     $extPrivatePath = $extPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
                     $templateFileName = ContentBlockPathUtility::getFrontendTemplateFileName();
@@ -201,9 +204,10 @@ HEREDOC;
             return $arrayObject;
         }
 
+        /** @var TableDefinitionCollection $tableDefinitionCollection */
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->getContentTypeDefinitionCollection() ?? [] as $typeDefinition) {
+            foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
                 if ($typeDefinition instanceof PageTypeDefinition) {
                     $options = 'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $typeDefinition->getTypeName() . ')';
                     $arrayObject->append($options);
@@ -225,12 +229,13 @@ HEREDOC;
             return $arrayObject;
         }
 
+        /** @var TableDefinitionCollection $tableDefinitionCollection */
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         $contentElementTable = ContentType::CONTENT_ELEMENT->getTable();
         if ($tableDefinitionCollection->hasTable($contentElementTable)) {
             $fieldNames = [];
             $contentElementTableDefinition = $tableDefinitionCollection->getTable($contentElementTable);
-            foreach ($contentElementTableDefinition->getParentReferences() ?? [] as $parentReference) {
+            foreach ($contentElementTableDefinition->parentReferences as $parentReference) {
                 $fieldConfiguration = $parentReference->getTca()['config'] ?? [];
                 if (($fieldConfiguration['foreign_table'] ?? '') === $contentElementTable) {
                     $foreignField = $fieldConfiguration['foreign_field'];

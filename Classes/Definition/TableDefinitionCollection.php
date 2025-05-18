@@ -43,8 +43,8 @@ final class TableDefinitionCollection implements \IteratorAggregate
 
     public function addTable(TableDefinition $tableDefinition): void
     {
-        if (!$this->hasTable($tableDefinition->getTable())) {
-            $this->definitions[$tableDefinition->getTable()] = $tableDefinition;
+        if (!$this->hasTable($tableDefinition->table)) {
+            $this->definitions[$tableDefinition->table] = $tableDefinition;
         }
     }
 
@@ -70,8 +70,7 @@ final class TableDefinitionCollection implements \IteratorAggregate
                 1702413869
             );
         }
-        $contentElementCollection = $this->getTable($contentElementTable)
-            ->getContentTypeDefinitionCollection();
+        $contentElementCollection = $this->getTable($contentElementTable)->contentTypeDefinitionCollection;
         if (!$contentElementCollection->hasType($CType)) {
             throw new \InvalidArgumentException(
                 'No Content Element for typeName "' . $CType . '" exists.',

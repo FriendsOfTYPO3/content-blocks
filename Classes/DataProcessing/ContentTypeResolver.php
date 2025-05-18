@@ -33,16 +33,13 @@ readonly class ContentTypeResolver
     public function resolve(RecordInterface $record): ?ContentTypeInterface
     {
         $tableDefinition = $this->tableDefinitionCollection->getTable($record->getMainType());
-        $typeName = $tableDefinition->getTypeField() !== null
+        $typeName = $tableDefinition->hasTypeField()
             ? $record->getRecordType()
             : '1';
         if ($typeName === null) {
             return null;
         }
-        $typeDefinitionCollection = $tableDefinition->getContentTypeDefinitionCollection();
-        if ($typeDefinitionCollection === null) {
-            return null;
-        }
+        $typeDefinitionCollection = $tableDefinition->contentTypeDefinitionCollection;
         if (!$typeDefinitionCollection->hasType($typeName)) {
             return null;
         }

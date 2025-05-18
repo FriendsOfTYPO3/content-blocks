@@ -81,7 +81,7 @@ final class ContentBlockDataDecorator
         $processedContentBlockData = [];
         $grids = [];
         foreach ($contentTypeDefinition->getColumns() as $column) {
-            $tcaFieldDefinition = $tableDefinition->getTcaFieldDefinitionCollection()->getField($column);
+            $tcaFieldDefinition = $tableDefinition->tcaFieldDefinitionCollection->getField($column);
             $fieldType = $tcaFieldDefinition->getFieldType();
             if (SpecialFieldType::tryFrom($fieldType->getName()) !== null) {
                 continue;

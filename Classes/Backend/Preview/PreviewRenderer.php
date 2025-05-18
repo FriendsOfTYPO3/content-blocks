@@ -164,7 +164,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $recordType = $item->getRecordType();
         $table = $item->getTable();
         $tableDefinition = $this->tableDefinitionCollection->getTable($table);
-        $contentTypeCollection = $tableDefinition->getContentTypeDefinitionCollection();
+        $contentTypeCollection = $tableDefinition->contentTypeDefinitionCollection;
         if ($contentTypeCollection->hasType($recordType)) {
             $contentTypeDefinition = $contentTypeCollection->getType($recordType);
         } else {

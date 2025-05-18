@@ -285,7 +285,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
             $fieldTypeRegistry,
             $simpleTcaSchemaFactory
         );
-        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->getContentTypeDefinitionCollection();
+        $typeDefinitionCollection = $tableDefinitionCollection->getTable('tt_content')->contentTypeDefinitionCollection;
         $result = [];
         foreach ($typeDefinitionCollection as $typeDefinition) {
             $result[] = $typeDefinition->getName();

@@ -19,7 +19,11 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\VarExporter\VarExporter;
+use TYPO3\CMS\ContentBlocks\Definition\Capability\TableDefinitionCapability;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\SqlColumnDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
@@ -79,45 +83,40 @@ final class TableDefinitionCollectionFactory
         $automaticLanguageKeysRegistry = $compilationResult->getAutomaticLanguageKeys();
         $tableDefinitionCollection = new TableDefinitionCollection($automaticLanguageKeysRegistry);
         foreach ($compilationResult->getMergedTableDefinitions() as $table => $tableDefinition) {
-            $newTableDefinition = TableDefinition::createFromTableArray($table, $tableDefinition);
-            $newTableDefinition = $this->enrichCollectionsWithParentReference($compilationResult, $newTableDefinition);
+            $arguments = [];
+            $arguments['table'] = $table;
+            $arguments['typeField'] = $tableDefinition['typeField'] ?? null;
+            $arguments['contentType'] = $tableDefinition['contentType'];
+            $arguments['tcaFieldDefinitionCollection'] = TcaFieldDefinitionCollection::createFromArray($tableDefinition['fields'] ?? [], $table);
+            $arguments['sqlColumnDefinitionCollection'] = SqlColumnDefinitionCollection::createFromArray($tableDefinition['fields'] ?? [], $table);
+            $arguments['paletteDefinitionCollection'] = PaletteDefinitionCollection::createFromArray($tableDefinition['palettes'] ?? [], $table);
+            $typeDefinitions = $tableDefinition['typeDefinitions'] ?? [];
+            $typeDefinitionCollection = ContentTypeDefinitionCollection::createFromArray($typeDefinitions, $table);
+            $arguments['contentTypeDefinitionCollection'] = $typeDefinitionCollection;
+            $capability = TableDefinitionCapability::createFromArray($tableDefinition['raw'] ?? []);
+            $references = $compilationResult->getParentReferences()[$table] ?? [];
+            $parentReferences = TcaFieldDefinitionCollection::createFromArray($references, $table);
+            $arguments['parentReferences'] = $parentReferences;
+            $capability = $this->extendCapability($parentReferences, $capability);
+            $arguments['capability'] = $capability;
+            $newTableDefinition = new TableDefinition(...$arguments);
             $tableDefinitionCollection->addTable($newTableDefinition);
         }
         return $tableDefinitionCollection;
     }
 
-    private function enrichCollectionsWithParentReference(
-        CompilationResult $compilationResult,
-        TableDefinition $newTableDefinition
-    ): TableDefinition {
-        if (isset($compilationResult->getParentReferences()[$newTableDefinition->getTable()])) {
-            $references = $compilationResult->getParentReferences()[$newTableDefinition->getTable()];
-            $tcaFieldDefinitionCollection = TcaFieldDefinitionCollection::createFromArray(
-                $references,
-                $newTableDefinition->getTable()
-            );
-            $newTableDefinition = $this->enrichTableDefinition($tcaFieldDefinitionCollection, $newTableDefinition);
-        }
-        return $newTableDefinition;
-    }
-
-    private function enrichTableDefinition(
-        TcaFieldDefinitionCollection $references,
-        TableDefinition $newTableDefinition,
-    ): TableDefinition {
-        $newTableDefinition = $newTableDefinition->withParentReferences($references);
+    private function extendCapability(TcaFieldDefinitionCollection $parentReferences, TableDefinitionCapability $capability): TableDefinitionCapability
+    {
         // If root Content Type is a Content Element, allow the external table to be put in standard pages.
-        foreach ($references as $reference) {
+        foreach ($parentReferences as $reference) {
             if (
                 $reference->getParentContentType() === ContentType::CONTENT_ELEMENT
                 || $reference->getParentContentType() === ContentType::PAGE_TYPE
             ) {
-                $capability = $newTableDefinition->getCapability();
                 $capability = $capability->withIgnorePageTypeRestriction(true);
-                $newTableDefinition = $newTableDefinition->withCapability($capability);
             }
         }
-        return $newTableDefinition;
+        return $capability;
     }
 
     private function getFromCache(): false|TableDefinitionCollection
