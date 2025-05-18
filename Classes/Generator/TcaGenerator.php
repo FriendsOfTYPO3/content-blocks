@@ -89,10 +89,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * TCA. It is taken care for existing FlexForm fields like pi_flexform, so that
  * alternative config is added with the correct `ds` key.
  *
- * Search fields are added automatically based on the type of the field. For
- * Content Elements specifically the `bodytext` search option `andWhere` is
- * populated with additional CType conditions so that it will be discovered in
- * the global search.
+ * Search fields are added automatically based on the type of the field.
  *
  * The `appearance.useSortable` option is enabled for Collections automatically
  * when sorting is enabled for the related table.
