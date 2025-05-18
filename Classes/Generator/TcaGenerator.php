@@ -294,7 +294,11 @@ readonly class TcaGenerator
 
     protected function processTypeDefinition(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
     {
-        $columnsOverrides = $this->getColumnsOverrides($typeDefinition, $tableDefinition);
+        $columnsOverrides = $this->getColumnsOverrides($typeDefinition);
+        foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
+            $overrideTca = $columnsOverrides[$overrideColumn->uniqueIdentifier];
+            $columnsOverrides[$overrideColumn->uniqueIdentifier] = $this->addUseSortableIfEnabled($overrideColumn, $tableDefinition, $overrideTca);
+        }
         $tca = match ($tableDefinition->contentType) {
             ContentType::CONTENT_ELEMENT => $this->processContentElement($typeDefinition, $columnsOverrides),
             ContentType::PAGE_TYPE => $this->processPageType($typeDefinition, $columnsOverrides),
@@ -440,7 +444,7 @@ readonly class TcaGenerator
         return $mergedNonOverridableOptions;
     }
 
-    protected function getColumnsOverrides(ContentTypeInterface $typeDefinition, TableDefinition $tableDefinition): array
+    protected function getColumnsOverrides(ContentTypeInterface $typeDefinition): array
     {
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
@@ -463,14 +467,13 @@ readonly class TcaGenerator
                 }
                 unset($overrideTca[$optionKey]);
             }
-            $overrideTca = $this->addUseSortableIfEnabled($overrideColumn, $tableDefinition, $overrideTca);
-            $overrideColumnArray = $this->determineLabelAndDescription(
+            $overrideTca = $this->determineLabelAndDescription(
                 $typeDefinition,
                 $overrideColumn,
                 $overrideTca,
             );
-            $overrideColumnArray = $this->processOverrideChildTca($overrideColumn, $overrideColumnArray);
-            $columnsOverrides[$overrideColumn->uniqueIdentifier] = $overrideColumnArray;
+            $overrideTca = $this->processOverrideChildTca($overrideColumn, $overrideTca);
+            $columnsOverrides[$overrideColumn->uniqueIdentifier] = $overrideTca;
         }
         return $columnsOverrides;
     }
@@ -572,6 +575,7 @@ readonly class TcaGenerator
                 ContentType::PAGE_TYPE => $this->getPageTypeStandardShowItem($typeOverride->getShowItems()),
             };
             $columnTca['config']['overrideChildTca']['types'][$typeOverride->getTypeName()]['showitem'] = $showItem;
+            $columnTca['config']['overrideChildTca']['types'][$typeOverride->getTypeName()]['columnsOverrides'] = $this->getColumnsOverrides($typeOverride);
         }
         return $columnTca;
     }

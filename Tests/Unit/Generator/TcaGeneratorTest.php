@@ -3328,6 +3328,32 @@ final class TcaGeneratorTest extends UnitTestCase
                                             'types' => [
                                                 2 => [
                                                     'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;my_file_palette,--palette--;;filePalette',
+                                                    'columnsOverrides' => [
+                                                        'alternative' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.alternative.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.alternative.description',
+                                                        ],
+                                                        'description' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.description.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.description.description',
+                                                        ],
+                                                        'link' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.link.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.link.description',
+                                                        ],
+                                                        'title' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.title.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.title.description',
+                                                        ],
+                                                        'example_custom_field' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.example_custom_field.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.example_custom_field.description',
+                                                        ],
+                                                        'crop' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.crop.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.crop.description',
+                                                        ],
+                                                    ],
                                                 ],
                                             ],
                                         ],
@@ -3565,6 +3591,16 @@ final class TcaGeneratorTest extends UnitTestCase
                                             'types' => [
                                                 '1' => [
                                                     'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,example_custom_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                                                    'columnsOverrides' => [
+                                                        't3ce_example_number' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.t3ce_example_number.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.t3ce_example_number.description',
+                                                        ],
+                                                        'example_custom_field' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.example_custom_field.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.example_custom_field.description',
+                                                        ],
+                                                    ],
                                                 ],
                                             ],
                                         ],
@@ -3832,6 +3868,23 @@ final class TcaGeneratorTest extends UnitTestCase
                                             'types' => [
                                                 'programmer' => [
                                                     'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,example_custom_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                                                    'columnsOverrides' => [
+                                                        'type' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.type.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.type.description',
+                                                            'config' => [
+                                                                'items' => [],
+                                                            ],
+                                                        ],
+                                                        'number' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.number.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.number.description',
+                                                        ],
+                                                        'example_custom_field' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.example_custom_field.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.example_custom_field.description',
+                                                        ],
+                                                    ],
                                                 ],
                                             ],
                                         ],
