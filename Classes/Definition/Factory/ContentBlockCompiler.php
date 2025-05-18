@@ -208,10 +208,7 @@ final class ContentBlockCompiler
                 $field = $this->collectItemLabels($input, $result->fieldType, $field);
             }
             if ($tcaType === 'file' || $tcaType === 'inline') {
-                $overrideChildTca = $this->processTypeOverride($input, $result, $field);
-                foreach ($overrideChildTca as $type => $typeDefinition) {
-                    $field['overrideChildTca']['types'][$type]['showitem'] = $typeDefinition['showItems'];
-                }
+                $field['typeOverrides'] = $this->processTypeOverride($input, $result, $field);
             }
             $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
             if ($tcaType === 'inline') {
@@ -661,7 +658,8 @@ final class ContentBlockCompiler
             );
             $tableDefinitionList = $this->processRootFields($newInput);
             $typeDefinition = array_pop($tableDefinitionList[$foreignTable]['typeDefinitions']);
-            $overrideChildTca[$typeName] = $typeDefinition;
+            $typeDefinition['typeName'] = $typeName;
+            $overrideChildTca[] = $typeDefinition;
             $overrideTableDefinition = array_pop($tableDefinitionList[$foreignTable]['tableDefinitions']);
             $result->tableDefinitionList[$foreignTable]['tableOverrideDefinitions'][] = $overrideTableDefinition;
         }

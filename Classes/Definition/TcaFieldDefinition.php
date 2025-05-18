@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 /**
@@ -33,6 +34,7 @@ final readonly class TcaFieldDefinition
         public string $descriptionPath,
         public bool $useExistingField,
         public FieldTypeInterface $fieldType,
+        public ?ContentTypeDefinitionCollection $typeOverrides = null,
     ) {
         if ($uniqueIdentifier === '') {
             throw new \InvalidArgumentException('The identifier for a TcaFieldDefinition must not be empty.', 1629277138);

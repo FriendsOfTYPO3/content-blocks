@@ -469,7 +469,7 @@ readonly class TcaGenerator
                 $overrideColumn,
                 $overrideTca,
             );
-            $overrideColumnArray = $this->processOverrideChildTca($overrideColumn, $overrideColumnArray, $tableDefinition);
+            $overrideColumnArray = $this->processOverrideChildTca($overrideColumn, $overrideColumnArray);
             $columnsOverrides[$overrideColumn->uniqueIdentifier] = $overrideColumnArray;
         }
         return $columnsOverrides;
@@ -507,7 +507,7 @@ readonly class TcaGenerator
     {
         $standardTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
         $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
-        $columnTca = $this->processOverrideChildTca($column, $columnTca, $tableDefinition);
+        $columnTca = $this->processOverrideChildTca($column, $columnTca);
         return $columnTca;
     }
 
@@ -557,28 +557,21 @@ readonly class TcaGenerator
         return $columnTca;
     }
 
-    protected function processOverrideChildTca(TcaFieldDefinition $tcaFieldDefinition, array $columnTca, TableDefinition $tableDefinition): array
+    protected function processOverrideChildTca(TcaFieldDefinition $tcaFieldDefinition, array $columnTca): array
     {
-        $baseField = $tableDefinition->tcaFieldDefinitionCollection->getField($tcaFieldDefinition->uniqueIdentifier);
-        if (($columnTca['config']['overrideChildTca']['types'] ?? []) === []) {
+        $typeOverrides = $tcaFieldDefinition->typeOverrides;
+        if ($typeOverrides === null) {
             return $columnTca;
         }
-        if ($tcaFieldDefinition->fieldType->getTcaType() === 'file') {
-            $foreignTable = 'sys_file_reference';
-        } else {
-            $foreignTable = $baseField->getTca()['config']['foreign_table'];
-        }
-        $contentType = ContentType::getByTable($foreignTable);
-        foreach ($columnTca['config']['overrideChildTca']['types'] as $type => $typeConfig) {
-            if (is_array($typeConfig['showitem'] ?? null)) {
-                $showItem = match ($contentType) {
-                    ContentType::FILE_TYPE => $this->getFileTypeStandardShowItem($typeConfig['showitem']),
-                    ContentType::RECORD_TYPE => $this->getRecordTypeStandardShowItem($typeConfig['showitem'], $foreignTable),
-                    ContentType::CONTENT_ELEMENT => $this->processShowItem($typeConfig['showitem']),
-                    ContentType::PAGE_TYPE => $this->getPageTypeStandardShowItem($typeConfig['showitem']),
-                };
-                $columnTca['config']['overrideChildTca']['types'][$type]['showitem'] = $showItem;
-            }
+        foreach ($typeOverrides as $typeOverride) {
+            $contentType = ContentType::getByTable($typeOverride->getTable());
+            $showItem = match ($contentType) {
+                ContentType::FILE_TYPE => $this->getFileTypeStandardShowItem($typeOverride->getShowItems()),
+                ContentType::RECORD_TYPE => $this->getRecordTypeStandardShowItem($typeOverride->getShowItems(), $typeOverride->getTable()),
+                ContentType::CONTENT_ELEMENT => $this->processShowItem($typeOverride->getShowItems()),
+                ContentType::PAGE_TYPE => $this->getPageTypeStandardShowItem($typeOverride->getShowItems()),
+            };
+            $columnTca['config']['overrideChildTca']['types'][$typeOverride->getTypeName()]['showitem'] = $showItem;
         }
         return $columnTca;
     }

@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
@@ -34,7 +35,18 @@ class TcaFieldFactory
         $arguments['useExistingField'] = $array['config']['useExistingField'] ?? false;
         /** @var FieldTypeInterface $fieldType */
         $fieldType = $array['type'];
-        $arguments['fieldType'] = $fieldType->createFromArray($array['config']);
+        $fieldTypeHydrated = $fieldType->createFromArray($array['config']);
+        $arguments['fieldType'] = $fieldTypeHydrated;
+        $tcaType = $fieldType->getTcaType();
+        $typeDefinitions = $array['config']['typeOverrides'] ?? [];
+        if ($typeDefinitions !== [] && ($tcaType === 'file' || $tcaType === 'inline')) {
+            $table = match ($tcaType) {
+                'file' => 'sys_file_reference',
+                'inline' => $fieldTypeHydrated->getTca()['config']['foreign_table'],
+            };
+            $typeDefinitionCollection = ContentTypeDefinitionCollection::createFromArray($typeDefinitions, $table);
+            $arguments['typeOverrides'] = $typeDefinitionCollection;
+        }
         $tcaFieldDefinition = new TcaFieldDefinition(...$arguments);
         return $tcaFieldDefinition;
     }

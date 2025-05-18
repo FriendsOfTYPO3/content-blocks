@@ -3322,6 +3322,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'columnsOverrides' => [
                                 'myvendor_myelement_file' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.label',
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.description',
                                     'config' => [
                                         'overrideChildTca' => [
                                             'types' => [
@@ -3331,7 +3332,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                             ],
                                         ],
                                     ],
-                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.description',
                                 ],
                             ],
                         ],
@@ -3559,6 +3559,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'columnsOverrides' => [
                                 'myvendor_myelement_my_collection' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.description',
                                     'config' => [
                                         'overrideChildTca' => [
                                             'types' => [
@@ -3571,7 +3572,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                             'useSortable' => true,
                                         ],
                                     ],
-                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.description',
                                 ],
                             ],
                         ],
@@ -3826,6 +3826,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'columnsOverrides' => [
                                 'myvendor_myelement_my_collection' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
+                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.description',
                                     'config' => [
                                         'overrideChildTca' => [
                                             'types' => [
@@ -3838,7 +3839,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                             'useSortable' => true,
                                         ],
                                     ],
-                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.description',
                                 ],
                             ],
                         ],
