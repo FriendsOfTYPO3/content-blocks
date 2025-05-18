@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition;
 
+use TYPO3\CMS\ContentBlocks\Definition\Factory\TcaFieldFactory;
+
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -28,8 +30,8 @@ final class TcaFieldDefinitionCollection implements \IteratorAggregate, \Countab
 
     public function addField(TcaFieldDefinition $definition): void
     {
-        if (!$this->hasField($definition->getUniqueIdentifier())) {
-            $this->definitions[$definition->getUniqueIdentifier()] = $definition;
+        if (!$this->hasField($definition->uniqueIdentifier)) {
+            $this->definitions[$definition->uniqueIdentifier] = $definition;
         }
     }
 
@@ -57,7 +59,7 @@ final class TcaFieldDefinitionCollection implements \IteratorAggregate, \Countab
         $tcaDefinition = new self();
         $tcaDefinition->table = $table;
         foreach ($tca as $definition) {
-            $tcaDefinition->addField(TcaFieldDefinition::createFromArray($definition));
+            $tcaDefinition->addField(TcaFieldFactory::create($definition));
         }
         return $tcaDefinition;
     }

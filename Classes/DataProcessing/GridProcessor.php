@@ -53,7 +53,7 @@ class GridProcessor
         if (!is_iterable($resolvedField)) {
             $resolvedField = [$resolvedField];
         }
-        $gridLabel = $tcaFieldDefinition->getLabelPath();
+        $gridLabel = $tcaFieldDefinition->labelPath;
         $grid = $this->gridFactory->build(
             $context,
             $gridLabel,

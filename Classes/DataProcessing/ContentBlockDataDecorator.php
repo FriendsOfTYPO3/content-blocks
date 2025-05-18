@@ -82,15 +82,15 @@ final class ContentBlockDataDecorator
         $grids = [];
         foreach ($contentTypeDefinition->getColumns() as $column) {
             $tcaFieldDefinition = $tableDefinition->tcaFieldDefinitionCollection->getField($column);
-            $fieldType = $tcaFieldDefinition->getFieldType();
+            $fieldType = $tcaFieldDefinition->fieldType;
             if (SpecialFieldType::tryFrom($fieldType->getName()) !== null) {
                 continue;
             }
             // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
             if ($fieldType->getTcaType() === 'passthrough') {
-                $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->getUniqueIdentifier());
+                $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->uniqueIdentifier);
             } else {
-                $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->getUniqueIdentifier());
+                $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->uniqueIdentifier);
             }
             if ($this->isRelationField($resolvedField)) {
                 $resolvedField = $this->handleRelation(
@@ -100,7 +100,7 @@ final class ContentBlockDataDecorator
                 );
                 $grids = $this->handleGrids($grids, $context, $resolvedField, $tcaFieldDefinition);
             }
-            $processedContentBlockData[$tcaFieldDefinition->getIdentifier()] = $resolvedField;
+            $processedContentBlockData[$tcaFieldDefinition->identifier] = $resolvedField;
         }
         $resolvedRelation->resolved = $processedContentBlockData;
         $contentBlockDataObject = $this->buildContentBlockDataObject(
@@ -128,7 +128,7 @@ final class ContentBlockDataDecorator
             }
             foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
                 $renderedGridItem = new RenderedGridItem();
-                $grids[$tcaFieldDefinition->getIdentifier()][] = $renderedGridItem;
+                $grids[$tcaFieldDefinition->identifier][] = $renderedGridItem;
                 $callback = function () use ($contentBlockDataObject, $renderedGridItem): void {
                     $this->contentObjectProcessor->processContentObject(
                         $contentBlockDataObject,
@@ -140,9 +140,9 @@ final class ContentBlockDataDecorator
         }
         if ($context !== null) {
             $relationGrid = new RelationGrid();
-            $grids[$tcaFieldDefinition->getIdentifier()] = $relationGrid;
+            $grids[$tcaFieldDefinition->identifier] = $relationGrid;
             $callback = function () use ($grids, $tcaFieldDefinition, $resolvedField, $context): void {
-                $relationGrid = $grids[$tcaFieldDefinition->getIdentifier()];
+                $relationGrid = $grids[$tcaFieldDefinition->identifier];
                 $this->gridProcessor->processGrid(
                     $relationGrid,
                     $context,

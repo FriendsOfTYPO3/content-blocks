@@ -109,10 +109,7 @@ final class TableDefinitionCollectionFactory
     {
         // If root Content Type is a Content Element, allow the external table to be put in standard pages.
         foreach ($parentReferences as $reference) {
-            if (
-                $reference->getParentContentType() === ContentType::CONTENT_ELEMENT
-                || $reference->getParentContentType() === ContentType::PAGE_TYPE
-            ) {
+            if (in_array($reference->parentContentType, [ContentType::CONTENT_ELEMENT, ContentType::PAGE_TYPE], true)) {
                 $capability = $capability->withIgnorePageTypeRestriction(true);
             }
         }

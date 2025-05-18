@@ -143,7 +143,7 @@ readonly class TcaGenerator
         $currentPalettesTca = $tca['palettes'] ?? [];
         $tca['palettes'] = $currentPalettesTca + $this->generatePalettesTca($tableDefinition);
         foreach ($tableDefinition->tcaFieldDefinitionCollection as $column) {
-            $fieldType = $column->getFieldType();
+            $fieldType = $column->fieldType;
             if ($fieldType instanceof FlexFormFieldType) {
                 $dataStructure = [];
                 foreach ($fieldType->getFlexFormDefinitions() as $flexFormDefinition) {
@@ -152,19 +152,19 @@ readonly class TcaGenerator
                 $fieldType->setDataStructure($dataStructure);
             }
             if ($tableDefinition->hasTypeField() || $tableDefinition->contentType === ContentType::FILE_TYPE) {
-                $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column, $baseTca);
+                $tca['columns'][$column->uniqueIdentifier] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column, $baseTca);
                 // Ensure label exists for the standard column definition. This is used e.g. in the List module.
-                if (!$column->useExistingField()) {
-                    $tca['columns'][$column->getUniqueIdentifier()]['label'] ??= $column->getIdentifier();
+                if (!$column->useExistingField) {
+                    $tca['columns'][$column->uniqueIdentifier]['label'] ??= $column->identifier;
                 }
             } else {
-                $tca['columns'][$column->getUniqueIdentifier()] = $this->getColumnTcaForTableWithoutTypeField($tableDefinition, $column);
+                $tca['columns'][$column->uniqueIdentifier] = $this->getColumnTcaForTableWithoutTypeField($tableDefinition, $column);
             }
         }
         foreach ($tableDefinition->contentTypeDefinitionCollection ?? [] as $typeDefinition) {
             foreach ($typeDefinition->getOverrideColumns() as $column) {
-                $columnTca = $tca['columns'][$column->getUniqueIdentifier()];
-                $tca['columns'][$column->getUniqueIdentifier()] = $this->determineItemsLabel($typeDefinition, $column, $columnTca);
+                $columnTca = $tca['columns'][$column->uniqueIdentifier];
+                $tca['columns'][$column->uniqueIdentifier] = $this->determineItemsLabel($typeDefinition, $column, $columnTca);
             }
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
@@ -445,7 +445,7 @@ readonly class TcaGenerator
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
             $overrideTca = $overrideColumn->getTca();
-            $fieldType = $overrideColumn->getFieldType();
+            $fieldType = $overrideColumn->fieldType;
             $nonOverridableOptions = self::getNonOverridableOptions($fieldType);
             foreach ($nonOverridableOptions as $option) {
                 $optionKey = $this->getOptionKey($option, $overrideColumn);
@@ -453,7 +453,7 @@ readonly class TcaGenerator
                     continue;
                 }
                 // Backwards compatibility for reusing select fields with different items.
-                if ($optionKey === 'items' && $overrideColumn->useExistingField()) {
+                if ($optionKey === 'items' && $overrideColumn->useExistingField) {
                     continue;
                 }
                 $configKey = 'config.' . $optionKey;
@@ -470,7 +470,7 @@ readonly class TcaGenerator
                 $overrideTca,
             );
             $overrideColumnArray = $this->processOverrideChildTca($overrideColumn, $overrideColumnArray, $tableDefinition);
-            $columnsOverrides[$overrideColumn->getUniqueIdentifier()] = $overrideColumnArray;
+            $columnsOverrides[$overrideColumn->uniqueIdentifier] = $overrideColumnArray;
         }
         return $columnsOverrides;
     }
@@ -480,12 +480,12 @@ readonly class TcaGenerator
      */
     protected function addUseSortableIfEnabled(TcaFieldDefinition $overrideColumn, TableDefinition $tableDefinition, array $overrideTca): array
     {
-        $fieldType = $overrideColumn->getFieldType();
+        $fieldType = $overrideColumn->fieldType;
         if ($fieldType->getTcaType() !== 'inline') {
             return $overrideTca;
         }
         $tcaFieldDefinition = $tableDefinition->tcaFieldDefinitionCollection
-            ->getField($overrideColumn->getUniqueIdentifier());
+            ->getField($overrideColumn->uniqueIdentifier);
         $foreignTable = $tcaFieldDefinition->getTca()['config']['foreign_table'];
         if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
             return $overrideTca;
@@ -520,8 +520,8 @@ readonly class TcaGenerator
         // FlexForm "ds" can be extended without columnsOverrides.
         $extensibleOptions = ['ds'];
         $columnTca = [];
-        $fieldType = $column->getFieldType();
-        $iterateOptions = $column->useExistingField() ? $extensibleOptions : self::getNonOverridableOptions($fieldType);
+        $fieldType = $column->fieldType;
+        $iterateOptions = $column->useExistingField ? $extensibleOptions : self::getNonOverridableOptions($fieldType);
         foreach ($iterateOptions as $option) {
             $optionKey = $this->getOptionKey($option, $column);
             if ($optionKey === null) {
@@ -533,7 +533,7 @@ readonly class TcaGenerator
                 $configuration = ArrayUtility::getValueByPath($fullConfiguration, $configKey, '.');
                 // Support for existing flexForm fields.
                 if ($optionKey === 'ds') {
-                    if ($column->useExistingField()) {
+                    if ($column->useExistingField) {
                         $configuration = $this->processExistingFlexForm($column, $tableDefinition, $baseTca);
                         if ($configuration === null) {
                             continue;
@@ -551,7 +551,7 @@ readonly class TcaGenerator
             }
         }
         // Add TCA for automatically added typeField.
-        if ($tableDefinition->typeField === $column->getIdentifier()) {
+        if ($tableDefinition->typeField === $column->identifier) {
             $columnTca = $column->getTca();
         }
         return $columnTca;
@@ -559,11 +559,11 @@ readonly class TcaGenerator
 
     protected function processOverrideChildTca(TcaFieldDefinition $tcaFieldDefinition, array $columnTca, TableDefinition $tableDefinition): array
     {
-        $baseField = $tableDefinition->tcaFieldDefinitionCollection->getField($tcaFieldDefinition->getUniqueIdentifier());
+        $baseField = $tableDefinition->tcaFieldDefinitionCollection->getField($tcaFieldDefinition->uniqueIdentifier);
         if (($columnTca['config']['overrideChildTca']['types'] ?? []) === []) {
             return $columnTca;
         }
-        if ($tcaFieldDefinition->getFieldType()->getTcaType() === 'file') {
+        if ($tcaFieldDefinition->fieldType->getTcaType() === 'file') {
             $foreignTable = 'sys_file_reference';
         } else {
             $foreignTable = $baseField->getTca()['config']['foreign_table'];
@@ -615,7 +615,7 @@ readonly class TcaGenerator
         if (is_string($option)) {
             return $option;
         }
-        $fieldType = $tcaFieldDefinition->getFieldType();
+        $fieldType = $tcaFieldDefinition->fieldType;
         $fieldTypeName = $fieldType->getName();
         if ($fieldTypeName === $option['type']) {
             return $option['option'];
@@ -647,16 +647,16 @@ readonly class TcaGenerator
      */
     protected function determineLabelAndDescription(ContentTypeInterface $typeDefinition, TcaFieldDefinition $overrideColumn, array $column): array
     {
-        $fieldType = $overrideColumn->getFieldType();
+        $fieldType = $overrideColumn->fieldType;
         if ($fieldType->getTcaType() === 'passthrough') {
             return $column;
         }
         $name = $typeDefinition->getName();
-        $labelPath = $overrideColumn->getLabelPath();
+        $labelPath = $overrideColumn->labelPath;
         if ($this->languageFileRegistry->isset($name, $labelPath)) {
             $column['label'] = $labelPath;
         }
-        $descriptionPath = $overrideColumn->getDescriptionPath();
+        $descriptionPath = $overrideColumn->descriptionPath;
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $column['description'] = $descriptionPath;
         }
@@ -667,7 +667,7 @@ readonly class TcaGenerator
     protected function determineItemsLabel(ContentTypeInterface $typeDefinition, TcaFieldDefinition $tcaFieldDefinition, array $column): array
     {
         $name = $typeDefinition->getName();
-        $fieldType = $tcaFieldDefinition->getFieldType();
+        $fieldType = $tcaFieldDefinition->fieldType;
         $itemsFieldTypes = ['select', 'radio', 'check'];
         if (!in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
             return $column;
@@ -716,7 +716,7 @@ readonly class TcaGenerator
     protected function processExistingFlexForm(TcaFieldDefinition $column, TableDefinition $tableDefinition, array $baseTca): ?array
     {
         $baseTcaColumns = $baseTca[$tableDefinition->table]['columns'];
-        $existingDsPointerField = $baseTcaColumns[$column->getUniqueIdentifier()]['config']['ds_pointerField'] ?? null;
+        $existingDsPointerField = $baseTcaColumns[$column->uniqueIdentifier]['config']['ds_pointerField'] ?? null;
         if ($existingDsPointerField === null) {
             return null;
         }
@@ -768,7 +768,7 @@ readonly class TcaGenerator
             $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
             $tcaFieldDefinitionCollection = $tableDefinition->getDefaultTypeDefinition()->getOverrideColumns();
             foreach ($tcaFieldDefinitionCollection as $columnFieldDefinition) {
-                $fieldType = $columnFieldDefinition->getFieldType();
+                $fieldType = $columnFieldDefinition->fieldType;
                 if (in_array($fieldType->getTcaType(), $preferredLabelTypes, true)) {
                     $labelField = $columnFieldDefinition;
                     break;
@@ -777,7 +777,7 @@ readonly class TcaGenerator
             }
             $labelField ??= $labelFieldCandidate;
         }
-        return $labelField?->getUniqueIdentifier();
+        return $labelField?->uniqueIdentifier;
     }
 
     protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
@@ -932,9 +932,9 @@ readonly class TcaGenerator
         $searchFieldsString = $baseTca[$tableDefinition->table]['ctrl']['searchFields'] ?? '';
         $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
         foreach ($tableDefinition->tcaFieldDefinitionCollection as $field) {
-            $fieldType = $field->getFieldType();
-            if ($fieldType->isSearchable() && !in_array($field->getUniqueIdentifier(), $searchFields, true)) {
-                $searchFields[] = $field->getUniqueIdentifier();
+            $fieldType = $field->fieldType;
+            if ($fieldType->isSearchable() && !in_array($field->uniqueIdentifier, $searchFields, true)) {
+                $searchFields[] = $field->uniqueIdentifier;
             }
         }
         if ($searchFields === []) {

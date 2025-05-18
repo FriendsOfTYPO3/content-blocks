@@ -68,7 +68,11 @@ readonly class FlexFormGenerator
                 SectionDefinition::class => $this->processSection($tcaFieldOrSection, $flexFormDefinition),
                 TcaFieldDefinition::class => $this->processTcaField($tcaFieldOrSection, $flexFormDefinition),
             };
-            $fields[$tcaFieldOrSection->getIdentifier()] = $field;
+            $identifier = match ($tcaFieldOrSection::class) {
+                SectionDefinition::class => $tcaFieldOrSection->getIdentifier(),
+                TcaFieldDefinition::class => $tcaFieldOrSection->identifier,
+            };
+            $fields[$identifier] = $field;
         }
         return $fields;
     }
@@ -90,7 +94,7 @@ readonly class FlexFormGenerator
             ];
             $processedContainerFields = [];
             foreach ($container as $containerField) {
-                $processedContainerFields[$containerField->getIdentifier()] = $this->processTcaField($containerField, $flexFormDefinition);
+                $processedContainerFields[$containerField->identifier] = $this->processTcaField($containerField, $flexFormDefinition);
             }
             $containerResult['el'] = $processedContainerFields;
             $processedContainers[$container->getIdentifier()] = $containerResult;
@@ -106,15 +110,15 @@ readonly class FlexFormGenerator
         // FlexForm child fields can't be excluded.
         unset($flexFormTca['exclude']);
 
-        $labelPath = $flexFormTcaDefinition->getLabelPath();
+        $labelPath = $flexFormTcaDefinition->labelPath;
         if ($this->languageFileRegistry->isset($name, $labelPath)) {
             $flexFormTca['label'] = $labelPath;
         }
-        $descriptionPath = $flexFormTcaDefinition->getDescriptionPath();
+        $descriptionPath = $flexFormTcaDefinition->descriptionPath;
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $flexFormTca['description'] = $descriptionPath;
         }
-        $fieldType = $flexFormTcaDefinition->getFieldType();
+        $fieldType = $flexFormTcaDefinition->fieldType;
         $itemsFieldTypes = ['select', 'radio', 'check'];
         if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {
             $items = $flexFormTca['config']['items'] ?? [];
