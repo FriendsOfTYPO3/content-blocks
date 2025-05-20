@@ -256,3 +256,24 @@ Now, whenever you run this command, these options will be set by default. This
 does not mean, the questions for these options will be skipped, only that they
 are the default value, if you just press `Enter` without any input. They will
 be visible in brackets at the very right `[default value]`.
+
+.. versionadded:: 1.3
+
+The content-blocks.yaml file supports arbitrary default values for the generated
+config.yaml file.
+
+Add a :yaml:`config` key followed by a Content Type identifier. In this case,
+we set default values for Content Elements, so we use :yaml:`content-element`.
+You can also set default values for `page-type`, `record-type` or `file-type`.
+Values defined in here override the generated configuration by the command.
+
+.. code-block:: yaml
+
+    config:
+      content-element:
+        basics:
+          - TYPO3/Appearance
+          - TYPO3/Links
+        group: my_group
+        prefixFields: true
+        prefixType: vendor

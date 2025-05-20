@@ -26,7 +26,7 @@ referring Content Element.
     :html:`be:link.editRecord` is still valid.
 
 Example 1: Content Element
---------------------------
+__________________________
 
 Here the bodytext of the Content Element is linked.
 
@@ -55,7 +55,7 @@ Here the bodytext of the Content Element is linked.
     </html>
 
 Example 2: Linking Collections
-------------------------------
+______________________________
 
 If you have a custom preview for your Collection, you can link the items
 individually, making it easier for editors to edit one specific item quickly.
@@ -90,7 +90,7 @@ this way.
     </html>
 
 Migration
----------
+_________
 
 If you already used the :html:`be:link.editRecord` ViewHelper, just make a quick
 search and replace: `<be:link.editRecord` -> `<cb:link.editRecord` and
@@ -98,3 +98,30 @@ search and replace: `<be:link.editRecord` -> `<cb:link.editRecord` and
 remove the namespace import in case you didn't use any other ViewHelper in the
 `be` namespace. Importing the `cb` namespace it optional as it is registered
 globally.
+
+Default config
+--------------
+
+The content-blocks.yaml file has been extended to support arbitrary default
+values for the generated config.yaml file from the make:content-block command.
+
+Example
+_______
+
+To use this new feature, create a content-blocks.yaml file in the root directory
+of your project. Then, add a :yaml:`config` key followed by a Content Type
+identifier. In this case, we set default values for Content Elements, so we use
+:yaml:`content-element`. You can also set default values for `page-type`,
+`record-type` or `file-type`. Values defined in here override the generated
+configuration by the command.
+
+.. code-block:: yaml
+
+    config:
+      content-element:
+        basics:
+          - TYPO3/Appearance
+          - TYPO3/Links
+        group: my_group
+        prefixFields: true
+        prefixType: vendor

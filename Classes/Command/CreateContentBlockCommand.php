@@ -25,12 +25,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\ContentBlocks\Builder\ConfigBuilder;
 use TYPO3\CMS\ContentBlocks\Builder\ContentBlockBuilder;
+use TYPO3\CMS\ContentBlocks\Builder\DefaultsLoader;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
-use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Service\PackageResolver;
@@ -63,6 +62,8 @@ class CreateContentBlockCommand extends Command
         protected readonly PackageResolver $packageResolver,
         protected readonly ContentBlockRegistry $contentBlockRegistry,
         protected readonly CacheManager $cacheManager,
+        protected readonly ConfigBuilder $configBuilder,
+        protected readonly DefaultsLoader $defaultsLoader,
     ) {
         parent::__construct();
     }
@@ -128,7 +129,7 @@ class CreateContentBlockCommand extends Command
             throw new \RuntimeException('No packages were found in which to store the Content Block.', 1678699706);
         }
         $configPath = $input->getOption('config-path');
-        $defaults = $this->loadDefaultsFromContentBlocksConfig($configPath, $output);
+        $defaults = $this->defaultsLoader->loadDefaultsFromContentBlocksConfig($configPath);
 
         if ($input->getOption('content-type')) {
             $contentTypeFromInput = $input->getOption('content-type');
@@ -213,12 +214,8 @@ class CreateContentBlockCommand extends Command
             $title = $io->askQuestion($question);
         }
 
-        $yamlConfiguration = match ($contentType) {
-            ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $title, $typeName),
-            ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $title, $typeName),
-            ContentType::RECORD_TYPE => $this->createContentBlockRecordTypeConfiguration($vendor, $name, $title, $typeName),
-            ContentType::FILE_TYPE => $this->createContentBlockFileTypeConfiguration($vendor, $name, $typeName),
-        };
+        $defaultConfig = $defaults['config'][$contentType->value] ?? [];
+        $yamlConfiguration = $this->configBuilder->build($contentType, $vendor, $name, $title, $typeName, $defaultConfig);
 
         if ($input->getOption('extension')) {
             $extension = $input->getOption('extension');
@@ -315,176 +312,5 @@ class CreateContentBlockCommand extends Command
             ContentType::RECORD_TYPE => $base . ContentBlockPathUtility::getRelativeRecordTypesPath(),
             ContentType::FILE_TYPE => $base . ContentBlockPathUtility::getRelativeFileTypesPath(),
         };
-    }
-
-    /**
-     * @return array{
-     *     content-type: string,
-     *     vendor: ?string,
-     *     skeleton-path: string,
-     *     extension: ?string
-     * }
-     */
-    private function loadDefaultsFromContentBlocksConfig(?string $configPath, OutputInterface $output): array
-    {
-        $config = [
-            'content-type' => 'content-element',
-            'vendor' => null,
-            'skeleton-path' => 'content-blocks-skeleton',
-            'extension' => null,
-        ];
-        $currentDirectory = getcwd();
-        if ($currentDirectory === false) {
-            return $config;
-        }
-        $configFile = $configPath ?? 'content-blocks.yaml';
-        $path = $currentDirectory . '/' . $configFile;
-        $path = GeneralUtility::fixWindowsFilePath($path);
-        if (!file_exists($path)) {
-            return $config;
-        }
-        try {
-            $yaml = Yaml::parseFile($path);
-        } catch (ParseException $e) {
-            $output->writeln('<bg=yellow;options=bold>Warning: Error occurred parsing default config in "' . $configFile . '".</>');
-            $output->writeln('<bg=yellow;options=bold>Message: ' . $e->getMessage() . '</>');
-            return $config;
-        }
-        if (!is_array($yaml)) {
-            $output->writeln('<bg=yellow;options=bold>Warning: Expected default config to be array in "' . $configFile . '".</>');
-        }
-        foreach (array_keys($config) as $key) {
-            $config[$key] = $yaml[$key] ?? $config[$key];
-        }
-        return $config;
-    }
-
-    private function createContentBlockContentElementConfiguration(string $vendor, string $name, string $title, ?string $typeName = ''): array
-    {
-        $fullName = $vendor . '/' . $name;
-        $description = 'Description for ' . ContentType::CONTENT_ELEMENT->getHumanReadable() . ' ' . $fullName;
-        $configuration = [
-            'table' => 'tt_content',
-            'typeField' => 'CType',
-            'name' => $fullName,
-            'typeName' => UniqueIdentifierCreator::createContentTypeIdentifier($fullName),
-            'title' => $title,
-            'description' => $description,
-            'group' => 'default',
-            'prefixFields' => true,
-            'prefixType' => 'full',
-        ];
-        if ($typeName !== '' && $typeName !== null) {
-            $configuration['typeName'] = $typeName;
-        }
-        $configuration['fields'] = [
-            [
-                'identifier' => 'header',
-                'useExistingField' => true,
-            ],
-        ];
-        return $configuration;
-    }
-
-    private function createContentBlockPageTypeConfiguration(string $vendor, string $name, string $title, int $typeName): array
-    {
-        $fullName = $vendor . '/' . $name;
-        return [
-            'table' => 'pages',
-            'typeField' => 'doktype',
-            'name' => $fullName,
-            'title' => $title,
-            'typeName' => $typeName,
-            'prefixFields' => true,
-            'prefixType' => 'full',
-        ];
-    }
-
-    private function createContentBlockRecordTypeConfiguration(string $vendor, string $name, string $title, ?string $typeName = ''): array
-    {
-        $fullName = $vendor . '/' . $name;
-        $vendorWithoutSeparator = str_replace('-', '', $vendor);
-        $nameWithoutSeparator = str_replace('-', '', $name);
-        // "tx_" is prepended per default for better grouping in the New Record view.
-        // Otherwise, this would be listed in "System Records".
-        $table = 'tx_' . $vendorWithoutSeparator . '_' . $nameWithoutSeparator;
-        $labelField = 'title';
-        $configuration = [
-            'name' => $fullName,
-            'table' => $table,
-            'title' => $title,
-            'prefixFields' => false,
-            'labelField' => $labelField,
-            'security' => [
-                'ignorePageTypeRestriction' => true,
-            ],
-        ];
-        if ($typeName !== '' && $typeName !== null) {
-            $configuration['typeName'] = $typeName;
-        }
-        $configuration['fields'] = [
-            [
-                'identifier' => $labelField,
-                'type' => 'Text',
-                'label' => 'Title',
-            ],
-        ];
-        return $configuration;
-    }
-
-    private function createContentBlockFileTypeConfiguration(string $vendor, string $name, ?string $typeName = ''): array
-    {
-        $fullName = $vendor . '/' . $name;
-        $configuration = [
-            'name' => $fullName,
-            'table' => 'sys_file_reference',
-        ];
-        if ($typeName !== '' && $typeName !== null) {
-            $configuration['typeName'] = $typeName;
-        }
-        $configuration['fields'] = [
-            [
-                'identifier' => 'image_overlay_palette',
-                'type' => 'Palette',
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette',
-                'fields' => [
-                    [
-                        'identifier' => 'alternative',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'identifier' => 'description',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'type' => 'Linebreak',
-                    ],
-                    [
-                        'identifier' => 'link',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'identifier' => 'title',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'type' => 'Linebreak',
-                    ],
-                    [
-                        'identifier' => 'example_custom_field',
-                        'type' => 'Text',
-                        'label' => 'My custom Field',
-                    ],
-                    [
-                        'type' => 'Linebreak',
-                    ],
-                    [
-                        'identifier' => 'crop',
-                        'useExistingField' => true,
-                    ],
-                ],
-            ],
-        ];
-        return $configuration;
     }
 }
