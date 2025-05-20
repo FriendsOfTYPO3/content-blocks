@@ -55,7 +55,7 @@ Frontend template
 =================
 
 There is no default frontend template for Page Types, as this depends heavily
-on your setup. Typically the sitepackage extension of your site defines the
+on your setup. Typically the site package extension of your site defines the
 page templates depending on the selected page layout.
 
 Read more about :ref:`Page Type / template mapping <page-types-template>`.

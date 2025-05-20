@@ -47,14 +47,13 @@ class HtmlTemplateCodeGenerator
             $defaultContent[] = '</html>';
         } else {
             $defaultContent[] = '<html';
-            $defaultContent[] = '    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"';
             $defaultContent[] = '    data-namespace-typo3-fluid="true"';
             $defaultContent[] = '>';
             $defaultContent[] = '';
             $defaultContent[] = '<f:layout name="Preview"/>';
             $defaultContent[] = '';
             $defaultContent[] = '<f:section name="Header">';
-            $defaultContent[] = '    <be:link.editRecord uid="{data.uid}" table="{data.mainType}">{data.header}</be:link.editRecord>';
+            $defaultContent[] = '    <cb:link.editRecord uid="{data.uid}" table="{data.mainType}">{data.header}</cb:link.editRecord>';
             $defaultContent[] = '</f:section>';
             $defaultContent[] = '';
             $defaultContent[] = '<f:section name="Content">';
@@ -67,7 +66,7 @@ class HtmlTemplateCodeGenerator
             $defaultContent[] = '    My custom Footer';
             $defaultContent[] = '</f:section>';
             $defaultContent[] = '</f:comment>';
-            $defaultContent[] = '';
+            $defaultContent[] = '</html>';
         }
 
         $defaultContentString = implode("\n", $defaultContent);
