@@ -12,7 +12,7 @@
     <f:asset.css identifier="cbCtaCssBackend" href="{cb:assetPath()}/preview.css"/>
     <div class="cb-cta">
         <h2>{data.header}</h2>
-        <cb:link.editRecord uid="{data.uid}" table="{data.mainType}">
+        <cb:link.editRecord record="{data}">
             <f:format.raw>{data.bodytext}</f:format.raw>
         </cb:link.editRecord>
     </div>

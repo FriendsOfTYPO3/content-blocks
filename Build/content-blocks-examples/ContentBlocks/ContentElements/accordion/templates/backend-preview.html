@@ -10,7 +10,7 @@
     <f:asset.css identifier="cbAccordionCssBackend" href="{cb:assetPath()}/preview.css"/>
     <div class="cb-accordion">
         <f:for each="{data.accordion_item}" as="item">
-            <cb:link.editRecord uid="{item.uid}" table="{item.mainType}">
+            <cb:link.editRecord record="{item}">
                 <div id="element-{item.mainType}-{item.uid}" class="accordion-item">
                     {item.text}
                 </div>

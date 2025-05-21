@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\ViewHelpers\Link;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Domain\RecordInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
@@ -35,7 +36,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
  *
  * Link to the record-edit action passed to FormEngine::
  *
- *    <be:link.editRecord uid="42" table="a_table" returnUrl="foo/bar" />
+ *    <cb:link.editRecord uid="42" table="a_table" returnUrl="foo/bar" />
  *
  * Output::
  *
@@ -45,13 +46,13 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
  *
  * Link to edit page uid=3 and then return back to the BE module "web_MyextensionList"::
  *
- *    <be:link.editRecord uid="3" table="pages" returnUrl="{f:be.uri(route: 'web_MyextensionList')}">
+ *    <cb:link.editRecord uid="3" table="pages" returnUrl="{f:be.uri(route: 'web_MyextensionList')}">
  *
  * Link to edit only the fields title and subtitle of page uid=42 and return to foo/bar::
  *
- *    <be:link.editRecord uid="42" table="pages" fields="title,subtitle" returnUrl="foo/bar">
+ *    <cb:link.editRecord uid="42" table="pages" fields="title,subtitle" returnUrl="foo/bar">
  *        Edit record
- *    </be:link.editRecord>
+ *    </cb:link.editRecord>
  *
  * Output::
  *
@@ -65,14 +66,21 @@ final class EditRecordViewHelper extends AbstractTagBasedViewHelper
      * @var string
      */
     protected $tagName = 'a';
+    protected UriBuilder $uriBuilder;
+
+    public function injectUriBuilder(UriBuilder $uriBuilder): void
+    {
+        $this->uriBuilder = $uriBuilder;
+    }
 
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('uid', 'int', 'uid of record to be edited', true);
-        $this->registerArgument('table', 'string', 'target database table', true);
+        $this->registerArgument('uid', 'int', 'uid of record to be edited');
+        $this->registerArgument('table', 'string', 'target database table');
         $this->registerArgument('fields', 'string', 'Edit only these fields (comma separated list)');
         $this->registerArgument('returnUrl', 'string', 'return to this URL after closing the edit dialog', false, '');
+        $this->registerArgument('record', 'object', 'The Record Object can be used instead of uid and table', false, '');
     }
 
     /**
@@ -81,17 +89,29 @@ final class EditRecordViewHelper extends AbstractTagBasedViewHelper
      */
     public function render(): string
     {
+        if (($this->arguments['record'] ?? null) instanceof RecordInterface) {
+            $this->arguments['uid'] = $this->arguments['record']->getUid();
+            $this->arguments['table'] = $this->arguments['record']->getMainType();
+        }
         if ($this->arguments['uid'] < 1) {
             throw new \InvalidArgumentException('Uid must be a positive integer, ' . $this->arguments['uid'] . ' given.', 1526127158);
         }
-        if (empty($this->arguments['returnUrl'])
-            && $this->renderingContext->hasAttribute(ServerRequestInterface::class)
-        ) {
-            // @todo: We may want to deprecate fetching returnUrl from request
+        if (empty($this->arguments['returnUrl']) && $this->renderingContext->hasAttribute(ServerRequestInterface::class)) {
             $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
             $this->arguments['returnUrl'] = $request->getAttribute('normalizedParams')->getRequestUri();
         }
+        $uri = $this->buildUri();
+        $this->tag->addAttribute('href', $uri);
+        $this->tag->setContent((string)$this->renderChildren());
+        $this->tag->forceClosingTag(true);
+        return $this->tag->render();
+    }
 
+    /**
+     * @throws RouteNotFoundException
+     */
+    protected function buildUri(): string
+    {
         $fragment = '#element-' . $this->arguments['table'] . '-' . $this->arguments['uid'];
         $returnUrl = $this->arguments['returnUrl'] . $fragment;
         $params = [
@@ -103,11 +123,7 @@ final class EditRecordViewHelper extends AbstractTagBasedViewHelper
                 $this->arguments['table'] => GeneralUtility::trimExplode(',', $this->arguments['fields'], true),
             ];
         }
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uri = (string)$uriBuilder->buildUriFromRoute('record_edit', $params);
-        $this->tag->addAttribute('href', $uri);
-        $this->tag->setContent((string)$this->renderChildren());
-        $this->tag->forceClosingTag(true);
-        return $this->tag->render();
+        $uri = (string)$this->uriBuilder->buildUriFromRoute('record_edit', $params);
+        return $uri;
     }
 }

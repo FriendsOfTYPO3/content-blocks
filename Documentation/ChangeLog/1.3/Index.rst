@@ -46,7 +46,7 @@ Here the bodytext of the Content Element is linked.
         <f:asset.css identifier="cbCtaCssBackend" href="{cb:assetPath()}/preview.css"/>
         <div class="cb-cta">
             <h2>{data.header}</h2>
-            <cb:link.editRecord uid="{data.uid}" table="{data.mainType}">
+            <cb:link.editRecord record="{data}">
                 <f:format.raw>{data.bodytext}</f:format.raw>
             </cb:link.editRecord>
         </div>
@@ -78,7 +78,7 @@ this way.
         <f:asset.css identifier="cbAccordionCssBackend" href="{cb:assetPath()}/preview.css"/>
         <div class="cb-accordion">
             <f:for each="{data.accordion_item}" as="item">
-                <cb:link.editRecord uid="{item.uid}" table="{item.mainType}">
+                <cb:link.editRecord record="{item}">
                     <div id="element-{item.mainType}-{item.uid}" class="accordion-item">
                         {item.text}
                     </div>
@@ -94,10 +94,10 @@ _________
 
 If you already used the :html:`be:link.editRecord` ViewHelper, just make a quick
 search and replace: `<be:link.editRecord` -> `<cb:link.editRecord` and
-`</be:link.editRecord>` -> `</cb:link.editRecord>`. After that, you can also
-remove the namespace import in case you didn't use any other ViewHelper in the
-`be` namespace. Importing the `cb` namespace it optional as it is registered
-globally.
+`</be:link.editRecord>` -> `</cb:link.editRecord>`. The old parameters `uid` and
+`table` still work as a fallback. After that, you can also remove the namespace
+import in case you didn't use any other ViewHelper in the `be` namespace.
+Importing the `cb` namespace it optional as it is registered globally.
 
 Default config
 --------------
