@@ -156,12 +156,11 @@ readonly class FlexFormGenerator
     protected function resolveLabel(FlexFormDefinition $flexFormDefinition, SheetDefinition|SectionDefinition|ContainerDefinition $definition): string
     {
         if ($this->languageFileRegistry->isset($flexFormDefinition->getContentBlockName(), $definition->getLanguagePathLabel())) {
-            $label = $definition->getLanguagePathLabel();
-        } elseif ($definition->hasLabel()) {
-            $label = $definition->getLabel();
-        } else {
-            $label = $definition->getIdentifier();
+            return $definition->getLanguagePathLabel();
         }
-        return $label;
+        if ($definition->hasLabel()) {
+            return $definition->getLabel();
+        }
+        return $definition->getIdentifier();
     }
 }
