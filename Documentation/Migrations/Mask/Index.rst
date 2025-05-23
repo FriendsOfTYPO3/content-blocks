@@ -47,7 +47,7 @@ into the same extension, where your Mask elements are currently loaded.
 
 .. code-block:: shell
 
-    bin/typo3 mask-to-content-blocks:migrate
+    vendor/bin/typo3 mask-to-content-blocks:migrate
 
 Next, remove Mask and this extension:
 
