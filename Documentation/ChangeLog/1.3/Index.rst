@@ -125,3 +125,41 @@ configuration by the command.
         group: my_group
         prefixFields: true
         prefixType: vendor
+
+Support for PAGEVIEW
+--------------------
+
+The Content Blocks Data Processor is now able to resolve the Page Record for
+page templates based on :typoscript:`PAGEVIEW`.
+
+Example
+_______
+
+This will add the variable :html:`data` to your page template which contains the
+resolved page record. This also works for Page Types not defined by Content
+Blocks like the default Page Type "1".
+
+.. code-block:: typoscript
+
+    page = PAGE
+    page.10 = PAGEVIEW
+    page.10 {
+      paths.10 = EXT:content_blocks_examples/Resources/Private/Templates
+      dataProcessing {
+        10 = page-content
+        20 = content-blocks
+      }
+    }
+
+Core Types resolved to Record Objects
+-------------------------------------
+
+Cre Types are now also transformed to Record Objects by the Content Blocks Data
+Processor. This unifies the experience for users who has both Core defined and
+Content Blocks defined Types in their installation.
+
+.. note::
+
+    Before Content Blocks 1.3 the Content Blocks Data Processor returned the
+    raw array for Types not defined by Content Blocks. Check your templates
+    whether they can be simplified now.
