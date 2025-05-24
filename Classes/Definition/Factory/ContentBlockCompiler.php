@@ -390,6 +390,10 @@ final class ContentBlockCompiler
         return $yamlFields;
     }
 
+    /**
+     * This palette is the same as TYPO3 Core's `title` palette, but without `subtitle`,
+     * which we consider as an optional field.
+     */
     private function prependPagesTitlePalette(array $yamlFields): array
     {
         $titlePalette = [
