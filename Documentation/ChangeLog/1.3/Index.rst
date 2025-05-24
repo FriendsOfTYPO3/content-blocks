@@ -10,6 +10,38 @@
 Features
 ========
 
+Restrict Collection child types
+-------------------------------
+
+It is now possible to set specific record types, which should be available for
+the type selector of Collection items. The most common use case is probably some
+kind of accordion or tab element, which should only have a few allowed Content
+Elements as children.
+
+Example
+_______
+
+In this example only the Core types `text` and `images` are allowed in
+:yaml:`allowedRecordTypes` inside the Collection field.
+
+.. code-block:: yaml
+
+    name: example/tabs
+    fields:
+      - identifier: header
+        useExistingField: true
+      - identifier: tabs_item
+        type: Collection
+        minitems: 1
+        foreign_table: tt_content
+        allowedRecordTypes:
+          - text
+          - images
+
+If you've used Mask before, you know this feature. The Content Blocks
+implementation is based on the FormDataProvider API in contrast to Mask, which
+used itemsProcFunc.
+
 Link EditRecord ViewHelper
 --------------------------
 

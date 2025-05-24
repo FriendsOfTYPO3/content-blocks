@@ -209,6 +209,22 @@ Settings
    This will create a new field called :sql:`fieldname`. It corresponds to the
    TCA option :ref:`foreign_match_fields <t3tca:columns-inline-properties-foreign-match-fields>`.
 
+.. confval:: allowedRecordTypes
+   :name: collection-allowedRecordTypes
+   :required: false
+   :type: array
+   :default: []
+
+   This option allows you to restrict possible record types for the type
+   selector of the child record. The order of definition is used to sort the
+   items. The first item in the list will always be the default type.
+
+   .. code-block:: yaml
+
+      allowedRecordTypes:
+        - text
+        - images
+
 .. confval:: overrideType
    :name: collection-overrideType
    :required: false

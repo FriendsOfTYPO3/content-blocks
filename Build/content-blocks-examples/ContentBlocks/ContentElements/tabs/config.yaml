@@ -6,11 +6,5 @@ fields:
     type: Collection
     minitems: 1
     foreign_table: tt_content
-    overrideChildTca:
-      columns:
-        CType:
-          config:
-            default: example_text
-            readOnly: true
-    foreign_match_fields:
-      CType: example_text
+    allowedRecordTypes:
+      - example_text

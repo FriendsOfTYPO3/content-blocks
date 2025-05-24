@@ -51,6 +51,8 @@ final class CollectionFieldType extends AbstractFieldType
     private string $symmetric_label = '';
     private string $symmetric_sortby = '';
     private string $relationship = '';
+    /** @var string[] */
+    private array $allowedRecordTypes = [];
 
     public function createFromArray(array $settings): CollectionFieldType
     {
@@ -82,6 +84,7 @@ final class CollectionFieldType extends AbstractFieldType
         $self->symmetric_label = (string)($settings['symmetric_label'] ?? $self->symmetric_label);
         $self->symmetric_sortby = (string)($settings['symmetric_sortby'] ?? $self->symmetric_sortby);
         $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
+        $self->allowedRecordTypes = (array)($settings['allowedRecordTypes'] ?? $self->allowedRecordTypes);
         return $self;
     }
 
@@ -169,5 +172,10 @@ final class CollectionFieldType extends AbstractFieldType
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
+    }
+
+    public function getAllowedRecordTypes(): array
+    {
+        return $this->allowedRecordTypes;
     }
 }

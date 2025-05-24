@@ -227,29 +227,11 @@ to add some more config.
         foreign_table_field: tx_mask_content_tablenames
         foreign_match_fields:
           tx_mask_content_role: tx_mask_content
+        allowedRecordTypes:
+          - text
+          - images
 
-The limitation is, that you can't add constraints to the available CTypes in the
-child field. However, you can set a default value.
-
-.. code-block:: yaml
-   :caption: EXT:site_package/ContentBlocks/ContentElements/nested-content/config.yaml
-
-    name: tx-mask/nested-content
-    typeName: mask_nested_content
-    prefixFields: false
-    fields:
-      - identifier: tx_mask_content
-        type: Collection
-        foreign_table: tt_content
-        foreign_field: tx_mask_content_parent_uid
-        foreign_table_field: tx_mask_content_tablenames
-        foreign_match_fields:
-          tx_mask_content_role: tx_mask_content
-        overrideChildTca:
-          columns:
-            CType:
-              config:
-                default: text
+The allowed CTypes should be added in :yaml:`allowedRecordTypes`.
 
 Disable Content Elements
 ------------------------
