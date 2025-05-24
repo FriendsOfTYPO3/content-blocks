@@ -1,0 +1,6 @@
+name: example/example-page-type
+typeName: 942
+prefixFields: false
+fields:
+  - identifier: additional_field
+    type: Text

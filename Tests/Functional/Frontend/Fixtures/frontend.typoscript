@@ -1,2 +1,9 @@
 page = PAGE
-page.10 < styles.content.get
+page.10 = PAGEVIEW
+page.10 {
+  paths.10 = EXT:test_content_blocks_b/Resources/Private/Templates
+  dataProcessing {
+    10 = page-content
+    20 = content-blocks
+  }
+}

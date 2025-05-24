@@ -1,3 +1,4 @@
 "pages"
-,"uid","pid","title","doktype"
-,1,0,"ContentBlockFrontendTest",1
+,"uid","pid","title","doktype","additional_field"
+,1,0,"ContentBlockFrontendTest",1,""
+,999,1,"BlogPage",942,"Text from additional field"

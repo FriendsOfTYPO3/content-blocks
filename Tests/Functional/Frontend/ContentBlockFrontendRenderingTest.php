@@ -326,4 +326,35 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
 
         self::assertStringContainsString('pass: MyPassValue', $html);
     }
+
+    #[Test]
+    public function corePagesTypeIsResolved(): void
+    {
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Page Title: ContentBlockFrontendTest', $html);
+    }
+
+    #[Test]
+    public function customPageTypeIsResolved(): void
+    {
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(999));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Page Title: BlogPage', $html);
+        self::assertStringContainsString('Blog Additional field: Text from additional field', $html);
+    }
 }

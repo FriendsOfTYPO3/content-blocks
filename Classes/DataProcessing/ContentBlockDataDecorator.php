@@ -51,13 +51,16 @@ final class ContentBlockDataDecorator
 
     public function decorate(RecordInterface $resolvedRecord, ?PageLayoutContext $context = null): ContentBlockData
     {
-        $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRecord->getMainType());
         $contentTypeDefinition = $this->contentTypeResolver->resolve($resolvedRecord);
-        $identifier = $this->getRecordIdentifier($resolvedRecord);
-        $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
         $resolvedContentBlockDataRelation = new ResolvedContentBlockDataRelation();
         $resolvedContentBlockDataRelation->record = $resolvedRecord;
         $resolvedContentBlockDataRelation->resolved = $resolvedRecord->toArray();
+        if ($contentTypeDefinition === null) {
+            return $this->buildFakeContentBlockDataObject($resolvedContentBlockDataRelation);
+        }
+        $identifier = $this->getRecordIdentifier($resolvedRecord);
+        $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
+        $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRecord->getMainType());
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
             $tableDefinition,
@@ -299,11 +302,9 @@ final class ContentBlockDataDecorator
     private function getRecordIdentifier(RecordInterface $record): string
     {
         $identifier = $record->getMainType();
-
         if ($record instanceof Record) {
             $identifier .= '-' . $record->getOverlaidUid();
         }
-
         return $identifier;
     }
 }

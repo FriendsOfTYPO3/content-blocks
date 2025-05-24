@@ -1,0 +1,6 @@
+<f:for each="{content.main.records}" as="record">
+    <f:cObject typoscriptObjectPath="{record.mainType}" table="{record.mainType}" data="{record}"/>
+</f:for>
+
+Page Title: {data.title}
+Blog Additional field: {data.additional_field}

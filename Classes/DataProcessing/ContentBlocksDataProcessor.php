@@ -45,19 +45,14 @@ readonly class ContentBlocksDataProcessor implements DataProcessorInterface
         $request = $cObj->getRequest();
         $this->contentBlockDataDecorator->setRequest($request);
         $table = $cObj->getCurrentTable();
-        if (!$this->tableDefinitionCollection->hasTable($table)) {
+        // Fall back to ContentObjectRenderer->data if the key "data" is not populated.
+        // This is the case, for example, for PAGEVIEW.
+        $data = $processedData['data'] ?? $cObj->data;
+        if ($data === []) {
             return $processedData;
         }
-        $resolveRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow(
-            $table,
-            $processedData['data'],
-        );
-        $contentTypeDefinition = $this->contentTypeResolver->resolve($resolveRecord);
-        if ($contentTypeDefinition === null) {
-            $processedData['data'] = $resolveRecord;
-            return $processedData;
-        }
-        $processedData['data'] = $this->contentBlockDataDecorator->decorate($resolveRecord);
+        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $data);
+        $processedData['data'] = $this->contentBlockDataDecorator->decorate($resolvedRecord);
         return $processedData;
     }
 }
