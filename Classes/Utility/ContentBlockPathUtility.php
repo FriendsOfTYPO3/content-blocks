@@ -91,6 +91,17 @@ class ContentBlockPathUtility
         return self::getAssetsFolder() . '/' . self::getIconHideInMenuNameWithoutFileExtension();
     }
 
+    public static function getRelativeContentTypePath(ContentType $contentType): string
+    {
+        $folder = match ($contentType) {
+            ContentType::CONTENT_ELEMENT => self::getContentElementsFolder(),
+            ContentType::PAGE_TYPE => self::getPageTypesFolder(),
+            ContentType::RECORD_TYPE => self::getRecordTypesFolder(),
+            ContentType::FILE_TYPE => self::getFileTypesFolder(),
+        };
+        return self::getSubDirectoryName() . '/' . $folder;
+    }
+
     public static function getRelativeContentElementsPath(): string
     {
         return self::getSubDirectoryName() . '/' . self::getContentElementsFolder();

@@ -33,6 +33,7 @@ use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Resource\FileType;
 
@@ -98,23 +99,7 @@ class ContentBlockLoader
     {
         $loadedContentBlocks = [];
         foreach ($this->packageManager->getActivePackages() as $package) {
-            $extensionKey = $package->getPackageKey();
-            $contentElementsFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeContentElementsPath();
-            if (is_dir($contentElementsFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($contentElementsFolder, $extensionKey, ContentType::CONTENT_ELEMENT);
-            }
-            $pageTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativePageTypesPath();
-            if (is_dir($pageTypesFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($pageTypesFolder, $extensionKey, ContentType::PAGE_TYPE);
-            }
-            $recordTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeRecordTypesPath();
-            if (is_dir($recordTypesFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($recordTypesFolder, $extensionKey, ContentType::RECORD_TYPE);
-            }
-            $fileTypesFolder = $package->getPackagePath() . ContentBlockPathUtility::getRelativeFileTypesPath();
-            if (is_dir($fileTypesFolder)) {
-                $loadedContentBlocks[] = $this->loadContentBlocksInExtension($fileTypesFolder, $extensionKey, ContentType::FILE_TYPE);
-            }
+            $loadedContentBlocks[] = $this->loadContentBlocks($package);
         }
         $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
         $sortByPriority = fn(LoadedContentBlock $a, LoadedContentBlock $b): int => (int)($b->getYaml()['priority'] ?? 0) <=> (int)($a->getYaml()['priority'] ?? 0);
@@ -142,8 +127,26 @@ class ContentBlockLoader
     /**
      * @return LoadedContentBlock[]
      */
-    protected function loadContentBlocksInExtension(string $path, string $extensionKey, ContentType $contentType): array
+    protected function loadContentBlocks(PackageInterface $package): array
     {
+        $loadedContentBlocks[] = $this->loadContentType($package, ContentType::CONTENT_ELEMENT);
+        $loadedContentBlocks[] = $this->loadContentType($package, ContentType::PAGE_TYPE);
+        $loadedContentBlocks[] = $this->loadContentType($package, ContentType::RECORD_TYPE);
+        $loadedContentBlocks[] = $this->loadContentType($package, ContentType::FILE_TYPE);
+        $loadedContentBlocks = array_merge([], ...$loadedContentBlocks);
+        return $loadedContentBlocks;
+    }
+
+    /**
+     * @return LoadedContentBlock[]
+     */
+    protected function loadContentType(PackageInterface $package, ContentType $contentType): array
+    {
+        $path = $package->getPackagePath() . ContentBlockPathUtility::getRelativeContentTypePath($contentType);
+        if (!is_dir($path)) {
+            return [];
+        }
+        $extensionKey = $package->getPackageKey();
         $result = [];
         $finder = new Finder();
         $finder->directories()->depth(0)->in($path);
