@@ -163,3 +163,12 @@ Content Blocks defined Types in their installation.
     Before Content Blocks 1.3 the Content Blocks Data Processor returned the
     raw array for Types not defined by Content Blocks. Check your templates
     whether they can be simplified now.
+
+Publish Assets Command
+----------------------
+
+The command :bash:`content-blocks:assets:publish` publishes your public Content
+Block `assets` into the Resources/Public folder of the host extension. Normally,
+this is performed automatically every time Content Blocks is compiled. In some
+deployment scenarios this command could be performed in the CI pipeline to
+publish assets without the requirement for a database connection.

@@ -15,3 +15,4 @@ available commands.
     Make/Index
     List/Index
     LanguageGenerate/Index
+    PublishAssets/Index
