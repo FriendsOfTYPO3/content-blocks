@@ -18,8 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
@@ -37,7 +35,6 @@ use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Resource\FileType;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Main bootstrap loader for Content Blocks. This class finds registered
@@ -79,6 +76,7 @@ class ContentBlockLoader
         protected readonly BasicsLoader $basicsLoader,
         protected readonly PackageManager $packageManager,
         protected readonly IconProcessor $iconProcessor,
+        protected readonly AssetPublisher $assetPublisher,
     ) {}
 
     public function load(): ContentBlockRegistry
@@ -123,7 +121,7 @@ class ContentBlockLoader
         usort($loadedContentBlocks, $sortByPriority);
         $contentBlockRegistry = $this->fillContentBlockRegistry($loadedContentBlocks);
 
-        $this->publishAssets($loadedContentBlocks);
+        $this->assetPublisher->publishAssets($loadedContentBlocks);
         $this->iconProcessor->process();
 
         return $contentBlockRegistry;
@@ -315,44 +313,6 @@ class ContentBlockLoader
         $pageIconInput->withFallback = false;
         $this->iconProcessor->addInstruction($pageIcon, $pageIconInput);
         return $pageIcon;
-    }
-
-    /**
-     * @param LoadedContentBlock[] $loadedContentBlocks
-     */
-    protected function publishAssets(array $loadedContentBlocks): void
-    {
-        $fileSystem = new Filesystem();
-        foreach ($loadedContentBlocks as $loadedContentBlock) {
-            $hostExtension = $loadedContentBlock->getHostExtension();
-            $contentBlockExtPublicPath = $loadedContentBlock->getExtPath() . '/' . ContentBlockPathUtility::getAssetsFolder();
-            $contentBlockAbsolutePublicPath = GeneralUtility::getFileAbsFileName($contentBlockExtPublicPath);
-            // If the Content Block does not have an Assets folder, nothing to publish here.
-            if (!file_exists($contentBlockAbsolutePublicPath)) {
-                continue;
-            }
-            $hostAbsolutePublicContentBlockBasePath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockBasePath($hostExtension);
-            // Prevent symlinks from being added to git index.
-            $gitIgnorePath = $hostAbsolutePublicContentBlockBasePath . '/.gitignore';
-            if (!file_exists($gitIgnorePath)) {
-                GeneralUtility::mkdir_deep($hostAbsolutePublicContentBlockBasePath);
-                file_put_contents($gitIgnorePath, '*');
-            }
-            $hostAbsolutePublicContentBlockBasePathWithVendor = $hostAbsolutePublicContentBlockBasePath . '/' . $loadedContentBlock->getVendor();
-            $contentBlockRelativePublicPath = $fileSystem->makePathRelative(
-                $contentBlockAbsolutePublicPath,
-                $hostAbsolutePublicContentBlockBasePathWithVendor
-            );
-            $hostAbsolutePublicContentBlockPath = ContentBlockPathUtility::getHostAbsolutePublicContentBlockPath(
-                $hostExtension,
-                $loadedContentBlock->getName(),
-            );
-            try {
-                $fileSystem->symlink($contentBlockRelativePublicPath, $hostAbsolutePublicContentBlockPath);
-            } catch (IOException) {
-                $fileSystem->mirror($contentBlockAbsolutePublicPath, $hostAbsolutePublicContentBlockPath);
-            }
-        }
     }
 
     protected function getFromCache(): false|array
