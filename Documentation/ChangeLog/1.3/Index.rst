@@ -186,9 +186,9 @@ Blocks like the default Page Type "1".
 Core Types resolved to Record Objects
 -------------------------------------
 
-Cre Types are now also transformed to Record Objects by the Content Blocks Data
-Processor. This unifies the experience for users who has both Core defined and
-Content Blocks defined Types in their installation.
+Core Types are now also transformed to Record Objects by the Content Blocks Data
+Processor. This unifies the experience for users who have both Core defined and
+Content Blocks defined types in their installation.
 
 .. note::
 
