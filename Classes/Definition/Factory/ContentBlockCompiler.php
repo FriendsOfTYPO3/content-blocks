@@ -309,25 +309,30 @@ final class ContentBlockCompiler
         if (!in_array($tcaFieldType, $itemsFieldTypes, true)) {
             return $field;
         }
+        $currentPath = $input->languagePath->getCurrentPath();
         $items = $field['items'] ?? [];
         foreach ($items as $index => $item) {
             $label = (string)($item['label'] ?? '');
-            $currentPath = $input->languagePath->getCurrentPath();
-            if ($tcaFieldType === 'check') {
-                $labelPath = $currentPath . '.items.' . $index . '.label';
-            } else {
-                $value = (string)($item['value'] ?? '');
-                if ($value === '') {
-                    $labelPath = $currentPath . '.items.label';
-                } else {
-                    $labelPath = $currentPath . '.items.' . $value . '.label';
-                }
-            }
+            $itemLabelPath = $this->resolveItemLabelPath($tcaFieldType, $index, $item);
+            $labelPath = $currentPath . '.' . $itemLabelPath;
             $field['items'][$index]['labelPath'] = $labelPath;
             $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
         }
         return $field;
+    }
+
+    private function resolveItemLabelPath(string $tcaFieldType, int $index, array $item): string
+    {
+        $base = 'items.';
+        if ($tcaFieldType === 'check') {
+            return $base . $index . '.label';
+        }
+        $value = (string)($item['value'] ?? '');
+        if ($value === '') {
+            return $base . 'label';
+        }
+        return $base . $value . '.label';
     }
 
     private function buildTcaFieldDefinitionArray(
