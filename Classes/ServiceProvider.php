@@ -109,25 +109,31 @@ class ServiceProvider extends AbstractServiceProvider
             /** @var ContentTypeInterface $typeDefinition */
             foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
                 $icon = $typeDefinition->getTypeIcon();
-                $iconConfig = [
-                    $icon->iconIdentifier => [
-                        'source' => $icon->iconPath,
-                        'provider' => $icon->iconProvider,
-                    ],
-                ];
+                $iconConfig = [];
+                if ($icon->initialized) {
+                    $iconConfig = [
+                        $icon->iconIdentifier => [
+                            'source' => $icon->iconPath,
+                            'provider' => $icon->iconProvider,
+                        ],
+                    ];
+                }
                 if ($typeDefinition instanceof PageTypeDefinition) {
-                    if ($typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier !== '') {
+                    if ($typeDefinition->getPageIconSet()->iconHideInMenu->initialized) {
                         $hideInMenuIcon = $typeDefinition->getPageIconSet()->iconHideInMenu;
                         $iconConfig[$hideInMenuIcon->iconIdentifier] = [
                             'source' => $hideInMenuIcon->iconPath,
                         ];
                     }
-                    if ($typeDefinition->getPageIconSet()->iconRoot->iconIdentifier !== '') {
+                    if ($typeDefinition->getPageIconSet()->iconRoot->initialized) {
                         $rootIcon = $typeDefinition->getPageIconSet()->iconRoot;
                         $iconConfig[$rootIcon->iconIdentifier] = [
                             'source' => $rootIcon->iconPath,
                         ];
                     }
+                }
+                if ($iconConfig === []) {
+                    continue;
                 }
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }

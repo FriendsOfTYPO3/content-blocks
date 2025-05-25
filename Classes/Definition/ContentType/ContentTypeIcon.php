@@ -33,7 +33,7 @@ final class ContentTypeIcon
         $self->iconPath = $array['iconPath'] ?? '';
         $self->iconProvider = $array['iconProvider'] ?? '';
         $self->iconIdentifier = $array['iconIdentifier'] ?? '';
-        if ($self->iconPath !== '' && $self->iconIdentifier !== '') {
+        if (($array['initialized'] ?? false) || ($self->iconPath !== '' && $self->iconIdentifier !== '')) {
             $self->initialized = true;
         }
         return $self;
@@ -45,6 +45,7 @@ final class ContentTypeIcon
             'iconPath' => $this->iconPath,
             'iconProvider' => $this->iconProvider,
             'iconIdentifier' => $this->iconIdentifier,
+            'initialized' => $this->initialized,
         ];
     }
 }

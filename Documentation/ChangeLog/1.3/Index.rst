@@ -131,6 +131,49 @@ search and replace: `<be:link.editRecord` -> `<cb:link.editRecord` and
 import in case you didn't use any other ViewHelper in the `be` namespace.
 Importing the `cb` namespace it optional as it is registered globally.
 
+Re-definition of Core Page Types
+--------------------------------
+
+It is now possible to re-define the Core Pages Types of TYPO3:
+
+*  Standard (1)
+*  Link to External URL (3)
+*  Shortcut (4)
+*  Backend User Section (6)
+*  Mount Point (7)
+
+This is especially useful if you need custom fields for Core Page Types, but
+it's not possible to use a custom Page Type like for Shortcuts or External
+Links. This feature should not be used in third-party extensions, as this would
+make it impossible for users to define the Page Type themselves.
+
+Examples
+________
+
+Override Page Type "External URL":
+
+.. code-block:: yaml
+
+    name: vendor/external-page
+    typeName: 3
+    fields:
+      - identifier: additional_field
+        type: Text
+      - identifier: TYPO3/External
+        type: Basic
+
+Override Page Type "Shortcut":
+
+.. code-block:: yaml
+
+    name: vendor/shortcut-page
+    typeName: 4
+    fields:
+      - identifier: additional_field
+        type: Text
+      - identifier: TYPO3/Shortcut
+        type: Basic
+
 Default config
 --------------
 

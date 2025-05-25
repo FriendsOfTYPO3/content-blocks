@@ -1,0 +1,9 @@
+identifier: TYPO3/External
+fields:
+  - identifier: palette_external
+    type: Palette
+    fields:
+      - identifier: url
+        useExistingField: true
+      - identifier: target
+        useExistingField: true

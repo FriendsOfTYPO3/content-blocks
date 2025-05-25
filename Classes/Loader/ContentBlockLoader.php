@@ -246,6 +246,13 @@ class ContentBlockLoader
         $yaml = $this->basicsService->applyBasics($basicsRegistry, $yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
         $contentBlockIcon = new ContentTypeIcon();
+        $withFallback = true;
+        if ($contentType === ContentType::FILE_TYPE) {
+            $withFallback = false;
+        }
+        if ($contentType === ContentType::PAGE_TYPE && PageTypeNameValidator::isExistingPageType($typeName)) {
+            $withFallback = false;
+        }
         $baseIconInput = new ContentTypeIconResolverInput(
             name: $name,
             absolutePath: $absolutePath,
@@ -253,7 +260,8 @@ class ContentBlockLoader
             identifier: $iconIdentifier,
             contentType: $contentType,
             table: $table,
-            typeName: $typeName
+            typeName: $typeName,
+            withFallback: $withFallback,
         );
         $this->iconProcessor->addInstruction($contentBlockIcon, $baseIconInput);
         $pageIconSet = null;

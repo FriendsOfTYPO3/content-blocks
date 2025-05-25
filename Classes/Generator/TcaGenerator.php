@@ -37,6 +37,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
+use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -165,7 +166,9 @@ readonly class TcaGenerator
             }
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
             if ($tableDefinition->hasTypeField()) {
-                $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
+                if ($typeDefinition->getTypeIcon()->initialized) {
+                    $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
+                }
                 if ($typeDefinition instanceof PageTypeDefinition) {
                     if ($typeDefinition->getPageIconSet()->iconHideInMenu->initialized) {
                         $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName() . '-hideinmenu'] = $typeDefinition->getPageIconSet()->iconHideInMenu->iconIdentifier;
@@ -176,7 +179,7 @@ readonly class TcaGenerator
                 }
             }
             if ($tableDefinition->contentType === ContentType::RECORD_TYPE) {
-                if ($isNewTable || !isset($baseTca[$tableDefinition->table]['ctrl']['typeicon_classes']['default'])) {
+                if ($typeDefinition->getTypeIcon()->initialized && ($isNewTable || !isset($baseTca[$tableDefinition->table]['ctrl']['typeicon_classes']['default']))) {
                     $tca['ctrl']['typeicon_classes']['default'] ??= $typeDefinition->getTypeIcon()->iconIdentifier;
                 }
                 if ($tableDefinition->hasTypeField()) {
@@ -262,6 +265,10 @@ readonly class TcaGenerator
                 continue;
             }
             foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
+                $typeName = $typeDefinition->getTypeName();
+                if ($tableDefinition->contentType === ContentType::PAGE_TYPE && PageTypeNameValidator::isExistingPageType($typeName)) {
+                    continue;
+                }
                 $languagePathTitle = $typeDefinition->getLanguagePathTitle();
                 if ($this->languageFileRegistry->isset($typeDefinition->getName(), $languagePathTitle)) {
                     $label = $languagePathTitle;
@@ -274,13 +281,14 @@ readonly class TcaGenerator
                 } else {
                     $description = $typeDefinition->getDescription();
                 }
+                $icon = $typeDefinition->getTypeIcon();
                 ExtensionManagementUtility::addTcaSelectItem(
                     $typeDefinition->getTable(),
                     $tableDefinition->typeField,
                     [
                         'label' => $label,
-                        'value' => $typeDefinition->getTypeName(),
-                        'icon' => $typeDefinition->getTypeIcon()->iconIdentifier,
+                        'value' => $typeName,
+                        'icon' => $icon->initialized ? $icon->iconIdentifier : null,
                         'group' => $typeDefinition->getGroup(),
                         'description' => $description,
                     ]

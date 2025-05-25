@@ -50,6 +50,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -252,6 +253,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_testblock',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -868,7 +870,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
-
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -929,6 +931,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -970,6 +973,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/Assets/icon.svg',
                         'iconProvider' => SvgIconProvider::class,
                         'iconIdentifier' => 'foobar-1',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'foobar',
@@ -1051,6 +1055,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'foobar-1',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'foobar',
@@ -1166,6 +1171,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'foobar-1',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'foobar',
@@ -1276,6 +1282,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'foobar-example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'foobar',
@@ -1298,6 +1305,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'foobar-example2',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'foobar',
@@ -1423,6 +1431,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -1664,11 +1673,13 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'pages-1700156757',
+                        'initialized' => true,
                     ],
                     'iconHideInMenu' => [
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'pages-1700156757-hide-in-menu',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'pages',
@@ -1683,6 +1694,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'ctrl' => [
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
+                            '1700156757-hideinmenu' => 'pages-1700156757-hide-in-menu',
                         ],
                         'searchFields' => 'title,slug,nav_title',
                     ],
@@ -1726,6 +1738,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'pages-1700156757',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'pages',
@@ -1841,6 +1854,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'icon' => [
                 'iconPath' => '',
                 'iconProvider' => '',
+                'initialized' => true,
             ],
             'yaml' => [
                 'table' => 'my_custom_table',
@@ -1885,6 +1899,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -1916,6 +1931,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_testblock',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -2061,6 +2077,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -2091,6 +2108,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example2',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -2121,6 +2139,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example3',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -2330,6 +2349,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -2496,6 +2516,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => '',
                         'iconProvider' => '',
                         'iconIdentifier' => 'tt_content-t3ce_example',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -2793,6 +2814,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'extPath' => 'EXT:my_extension/ContentBlocks/RecordType/record',
                 'icon' => [
                     'iconIdentifier' => 'existing_record-type_2',
+                    'initialized' => true,
                 ],
                 'yaml' => [
                     'table' => 'existing_record',
@@ -2972,6 +2994,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'extPath' => 'EXT:my_extension/ContentBlocks/RecordType/record',
                 'icon' => [
                     'iconIdentifier' => 'existing_record-type_2',
+                    'initialized' => true,
                 ],
                 'yaml' => [
                     'table' => 'existing_record',
@@ -3131,9 +3154,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'name' => 'my-vendor/my-file-reference',
                 'hostExtension' => 'my_extension',
                 'extPath' => 'EXT:my_extension/ContentBlocks/FileTypes/my-file-reference',
-                'icon' => [
-                    'iconIdentifier' => 'my_file_reference',
-                ],
+                'icon' => [],
                 'yaml' => [
                     'table' => 'sys_file_reference',
                     'typeName' => 2,
@@ -3224,6 +3245,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 'extPath' => 'EXT:my_extension/ContentBlocks/ContentElements/my-element',
                 'icon' => [
                     'iconIdentifier' => 'my_element',
+                    'initialized' => true,
                 ],
                 'yaml' => [
                     'table' => 'tt_content',
@@ -3448,6 +3470,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/Assets/icon.svg',
                         'iconProvider' => SvgIconProvider::class,
                         'iconIdentifier' => 'foobar-1',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'foobar',
@@ -3466,6 +3489,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'extPath' => 'EXT:my_extension/ContentBlocks/ContentElements/my-element',
                     'icon' => [
                         'iconIdentifier' => 'my_element',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',
@@ -3668,6 +3692,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/assets/icon.svg',
                         'iconProvider' => SvgIconProvider::class,
                         'iconIdentifier' => 'employee-programmer',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'employee',
@@ -3689,6 +3714,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'iconPath' => 'EXT:foo/ContentBlocks/RecordTypes/example/assets/icon.svg',
                         'iconProvider' => SvgIconProvider::class,
                         'iconIdentifier' => 'employee-designer',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'employee',
@@ -3709,6 +3735,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'extPath' => 'EXT:my_extension/ContentBlocks/ContentElements/my-element',
                     'icon' => [
                         'iconIdentifier' => 'my_element',
+                        'initialized' => true,
                     ],
                     'yaml' => [
                         'table' => 'tt_content',

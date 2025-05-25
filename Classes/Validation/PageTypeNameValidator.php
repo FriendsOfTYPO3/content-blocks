@@ -35,13 +35,27 @@ class PageTypeNameValidator
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
+    /** @var list<int> $nonOverridablePageTypes */
+    protected static array $nonOverridablePageTypes = [
+        PageRepository::DOKTYPE_SPACER,
+        PageRepository::DOKTYPE_SYSFOLDER,
+    ];
+
+    public static function isExistingPageType(string|int $typeName): bool
+    {
+        $integerTypeName = (int)$typeName;
+        $isExistingPageType = in_array($integerTypeName, self::$reservedPageTypes, true);
+        return $isExistingPageType;
+    }
+
     public static function validate(string|int $typeName, string $contentBlockName): void
     {
         $integerTypeName = (int)$typeName;
-        if (!MathUtility::canBeInterpretedAsInteger($typeName) || $integerTypeName < 0 || in_array($integerTypeName, self::$reservedPageTypes, true)) {
+        if (!MathUtility::canBeInterpretedAsInteger($typeName) || $integerTypeName < 0 || in_array($integerTypeName, self::$nonOverridablePageTypes, true)) {
             throw new \InvalidArgumentException(
-                'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' . $contentBlockName . '". Value must be a positive integer and not one of the reserved page types: '
-                . implode(', ', self::$reservedPageTypes),
+                'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' .
+                $contentBlockName . '". Value must be a positive integer and not one of the non-overridable page types: '
+                . implode(', ', self::$nonOverridablePageTypes),
                 1689287031
             );
         }
