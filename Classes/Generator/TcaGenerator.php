@@ -337,7 +337,7 @@ readonly class TcaGenerator
     protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
         $typeDefinitionArray = [
-            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems()),
+            'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems(), $typeDefinition->getTypeName()),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
@@ -577,7 +577,7 @@ readonly class TcaGenerator
                 ContentType::FILE_TYPE => $this->getFileTypeStandardShowItem($typeOverride->getShowItems()),
                 ContentType::RECORD_TYPE => $this->getRecordTypeStandardShowItem($typeOverride->getShowItems(), $typeOverride->getTable()),
                 ContentType::CONTENT_ELEMENT => $this->processShowItem($typeOverride->getShowItems()),
-                ContentType::PAGE_TYPE => $this->getPageTypeStandardShowItem($typeOverride->getShowItems()),
+                ContentType::PAGE_TYPE => $this->getPageTypeStandardShowItem($typeOverride->getShowItems(), $typeOverride->getTypeName()),
             };
             $columnTca['config']['overrideChildTca']['types'][$typeOverride->getTypeName()]['showitem'] = $showItem;
             $columnTca['config']['overrideChildTca']['types'][$typeOverride->getTypeName()]['columnsOverrides'] = $this->getColumnsOverrides($typeOverride);
@@ -868,7 +868,7 @@ readonly class TcaGenerator
     /**
      * @param array<string|PaletteDefinition|TabDefinition> $showItemArray
      */
-    protected function getPageTypeStandardShowItem(array $showItemArray): string
+    protected function getPageTypeStandardShowItem(array $showItemArray, string|int $typeName): string
     {
         $general = [
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
@@ -917,7 +917,10 @@ readonly class TcaGenerator
             $parts[] = [$showItem];
         }
         $parts[] = $metaTab;
-        if ($this->systemExtensionAvailability->isAvailable('seo')) {
+        if (
+            $this->systemExtensionAvailability->isAvailable('seo')
+            && !PageTypeNameValidator::isExistingPageType($typeName)
+        ) {
             $parts[] = $seoTab;
         }
         $parts[] = $systemTabs;
