@@ -61,7 +61,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -177,7 +177,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();

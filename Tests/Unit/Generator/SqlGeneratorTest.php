@@ -164,7 +164,7 @@ final class SqlGeneratorTest extends UnitTestCase
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
