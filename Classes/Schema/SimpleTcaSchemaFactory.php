@@ -17,12 +17,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema;
 
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldCollection;
 use TYPO3\CMS\ContentBlocks\Schema\Field\TcaField;
-use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -30,27 +27,21 @@ use TYPO3\CMS\Core\SingletonInterface;
  */
 class SimpleTcaSchemaFactory implements SingletonInterface
 {
-    /** @var SimpleTcaSchema[] */
     protected array $schemas = [];
-    protected array $tca = [];
+    protected array $tca;
 
     public function __construct(
-        #[Autowire(service: 'cache.core')]
-        protected readonly PhpFrontend $cache,
-        protected readonly FieldTypeResolver $typeResolver,
-    ) {}
+        protected FieldTypeResolver $typeResolver,
+    ) {
+        $this->initialize($GLOBALS['TCA'] ?? []);
+    }
 
     public function initialize(array $tca): void
     {
         $this->tca = $tca;
-        if (($schemas = $this->getFromCache()) !== false) {
-            $this->schemas = $schemas;
-            return;
-        }
         foreach (array_keys($this->tca) as $table) {
             $this->schemas[$table] = $this->build($table);
         }
-        $this->setCache();
     }
 
     public function get(string $schemaName): SimpleTcaSchema
@@ -88,16 +79,5 @@ class SimpleTcaSchemaFactory implements SingletonInterface
         }
         $schema = new SimpleTcaSchema($schemaName, $allFields, $systemFields, $schemaDefinition['ctrl'] ?? []);
         return $schema;
-    }
-
-    protected function getFromCache(): false|array
-    {
-        return $this->cache->require('ContentBlocks_SimpleTcaSchema');
-    }
-
-    protected function setCache(): void
-    {
-        $data = 'return ' . VarExporter::export($this->schemas) . ';';
-        $this->cache->set('ContentBlocks_SimpleTcaSchema', $data);
     }
 }
