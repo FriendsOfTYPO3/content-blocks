@@ -31,3 +31,8 @@ services:
     factory:
       - '@TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistryFactory'
       - 'create'
+
+  TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistry:
+    factory:
+      - '@TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory'
+      - 'create'

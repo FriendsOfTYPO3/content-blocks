@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -67,7 +68,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -90,7 +92,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     public function nonExistingTableThrowsException(): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -129,7 +132,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -200,7 +204,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
     public function saveAndCloseIsAdded(array $contentBlocks, string $typeName, bool $expected): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
@@ -271,7 +276,8 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {

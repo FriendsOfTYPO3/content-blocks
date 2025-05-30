@@ -22,6 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory;
 use TYPO3\CMS\ContentBlocks\Generator\FlexFormGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
@@ -1634,7 +1635,8 @@ final class TcaGeneratorTest extends UnitTestCase
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -1813,7 +1815,8 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -1862,7 +1865,8 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlock = LoadedContentBlock::fromArray($yaml);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -2652,7 +2656,8 @@ final class TcaGeneratorTest extends UnitTestCase
         $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -2709,7 +2714,8 @@ final class TcaGeneratorTest extends UnitTestCase
         $expected = 'FIELD:bar_foo_bField:=:aValue';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -3119,7 +3125,8 @@ final class TcaGeneratorTest extends UnitTestCase
     public function existingTablesCanBeExtendedWithAdditionalType(array $baseTca, array $contentBlockArray, array $expected): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -3208,7 +3215,8 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
         ];
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -3433,7 +3441,8 @@ final class TcaGeneratorTest extends UnitTestCase
         ];
         $baseTca['tt_content']['ctrl']['type'] = 'CType';
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlockRegistry = new ContentBlockRegistry();
@@ -3653,7 +3662,8 @@ final class TcaGeneratorTest extends UnitTestCase
     {
         $baseTca['tt_content']['ctrl']['type'] = 'CType';
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
@@ -3940,7 +3950,8 @@ final class TcaGeneratorTest extends UnitTestCase
     {
         $baseTca['tt_content']['ctrl']['type'] = 'CType';
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);

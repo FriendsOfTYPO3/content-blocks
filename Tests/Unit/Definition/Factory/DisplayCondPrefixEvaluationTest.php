@@ -22,6 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\PrefixType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -60,7 +61,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         $expected = 'FIELD:bar_foo_bField:=:aValue';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);
@@ -176,7 +178,8 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         ]);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         $contentBlockRegistry->register($contentBlock);

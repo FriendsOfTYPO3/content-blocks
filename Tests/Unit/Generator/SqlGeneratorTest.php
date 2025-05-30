@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\ContentBlockCompiler;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory;
 use TYPO3\CMS\ContentBlocks\Generator\SqlGenerator;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
@@ -163,7 +164,8 @@ final class SqlGeneratorTest extends UnitTestCase
     public function generateReturnsExpectedSqlStatements(array $contentBlocks, array $expected): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldTypeResolver = new FieldTypeResolver($fieldTypeRegistry);
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
