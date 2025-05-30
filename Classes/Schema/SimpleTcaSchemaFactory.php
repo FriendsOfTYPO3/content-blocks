@@ -28,7 +28,6 @@ use TYPO3\CMS\Core\SingletonInterface;
 class SimpleTcaSchemaFactory implements SingletonInterface
 {
     protected array $schemas = [];
-    protected array $tca;
 
     public function __construct(
         protected FieldTypeResolver $typeResolver,
@@ -38,9 +37,8 @@ class SimpleTcaSchemaFactory implements SingletonInterface
 
     public function initialize(array $tca): void
     {
-        $this->tca = $tca;
-        foreach (array_keys($this->tca) as $table) {
-            $this->schemas[$table] = $this->build($table);
+        foreach ($tca as $table => $schemaDefinition) {
+            $this->schemas[$table] = $this->build($table, $schemaDefinition);
         }
     }
 
@@ -54,14 +52,13 @@ class SimpleTcaSchemaFactory implements SingletonInterface
 
     public function has(string $schemaName): bool
     {
-        return isset($this->tca[$schemaName]);
+        return isset($this->schemas[$schemaName]);
     }
 
-    protected function build(string $schemaName): SimpleTcaSchema
+    protected function build(string $schemaName, array $schemaDefinition): SimpleTcaSchema
     {
         $allFields = new FieldCollection();
         $systemFields = new FieldCollection();
-        $schemaDefinition = $this->tca[$schemaName];
         foreach ($schemaDefinition['columns'] ?? [] as $columnName => $columnConfig) {
             try {
                 $fieldType = $this->typeResolver->resolve($columnConfig);
