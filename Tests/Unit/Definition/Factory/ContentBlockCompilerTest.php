@@ -79,7 +79,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -146,7 +146,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -219,7 +219,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -273,7 +273,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -333,7 +333,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -404,7 +404,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -481,7 +481,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -536,7 +536,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -597,7 +597,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -650,7 +650,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -709,7 +709,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -772,7 +772,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -832,7 +832,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -901,7 +901,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -951,7 +951,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -997,7 +997,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1053,7 +1053,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1122,7 +1122,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1249,7 +1249,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1315,7 +1315,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1387,7 +1387,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1464,7 +1464,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
@@ -1521,7 +1521,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
         $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
-        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory($fieldTypeResolver);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver);
         $contentBlockRegistry = new ContentBlockRegistry();
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));

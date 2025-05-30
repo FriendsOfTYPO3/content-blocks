@@ -17,29 +17,49 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Schema;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldCollection;
 use TYPO3\CMS\ContentBlocks\Schema\Field\TcaField;
-use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
 /**
+ * @todo This class is a factory and Root Schema at the same time.
+ * @todo Not good, but not bad either.
+ *
  * @internal Not part of TYPO3's public API.
  */
-class SimpleTcaSchemaFactory implements SingletonInterface
+#[Autoconfigure(public: true)]
+class SimpleTcaSchemaFactory
 {
     protected array $schemas = [];
 
     public function __construct(
+        #[Autowire(service: 'cache.core')]
+        protected readonly PhpFrontend $cache,
         protected FieldTypeResolver $typeResolver,
     ) {
-        $this->initialize($GLOBALS['TCA'] ?? []);
+        // The schema must only be hydrated from previous caches,
+        // which were built in BeforeTcaOverridesEvent.
+        if (($schemas = $this->getFromCache()) !== false) {
+            $this->schemas = $schemas;
+        }
     }
 
+    /**
+     * This method should only be called in BeforeTcaOverridesEvent
+     * with base TCA as argument.
+     *
+     * @param array<string, array> $tca
+     */
     public function initialize(array $tca): void
     {
         foreach ($tca as $table => $schemaDefinition) {
             $this->schemas[$table] = $this->build($table, $schemaDefinition);
         }
+        $this->setCache();
     }
 
     public function get(string $schemaName): SimpleTcaSchema
@@ -76,5 +96,16 @@ class SimpleTcaSchemaFactory implements SingletonInterface
         }
         $schema = new SimpleTcaSchema($schemaName, $allFields, $systemFields, $schemaDefinition['ctrl'] ?? []);
         return $schema;
+    }
+
+    protected function getFromCache(): false|array
+    {
+        return $this->cache->require('ContentBlocks_SimpleTcaSchema');
+    }
+
+    protected function setCache(): void
+    {
+        $data = 'return ' . VarExporter::export($this->schemas) . ';';
+        $this->cache->set('ContentBlocks_SimpleTcaSchema', $data);
     }
 }
