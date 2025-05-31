@@ -102,7 +102,15 @@ class ServiceProvider extends AbstractServiceProvider
 
     public static function getContentBlockIcons(ContainerInterface $container): \ArrayObject
     {
+        // @todo Extend IconFactory in TYPO3 v14 again and remove BootCompletedEvent hook.
+        // @todo See commit: 1db5b5c8
         $arrayObject = new \ArrayObject();
+        $cache = $container->get('cache.core');
+        $iconsFromCache = $cache->require('ContentBlocks_Icons');
+        if ($iconsFromCache !== false) {
+            $arrayObject->exchangeArray($iconsFromCache);
+            return $arrayObject;
+        }
         /** @var TableDefinitionCollection $tableDefinitionCollection */
         $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
         foreach ($tableDefinitionCollection as $tableDefinition) {
@@ -138,6 +146,7 @@ class ServiceProvider extends AbstractServiceProvider
                 $arrayObject->exchangeArray(array_merge($arrayObject->getArrayCopy(), $iconConfig));
             }
         }
+        $cache->set('ContentBlocks_Icons', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
     }
 
