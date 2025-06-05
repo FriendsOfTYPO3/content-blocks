@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -13,7 +14,8 @@ declare(strict_types=1);
  *
  * The TYPO3 project - inspiring people to share!
  */
-namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Frontend;
+
+namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Command;
 
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -26,7 +28,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class ContentBlockCommandTest extends FunctionalTestCase
 {
-
     use SiteBasedTestTrait;
 
     protected array $testExtensionsToLoad = [
@@ -63,9 +64,9 @@ final class ContentBlockCommandTest extends FunctionalTestCase
             ]
         );
         $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
-        $html = (string) $response->getBody();
+        $html = (string)$response->getBody();
         self::assertStringContainsString('HeaderSimple', $html);
-        #echo $html;
+
         // Run extension:setup
         Bootstrap::initializeBackendUser(CommandLineUserAuthentication::class);
 
