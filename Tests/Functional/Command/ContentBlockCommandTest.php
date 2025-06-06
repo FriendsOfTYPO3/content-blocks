@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Frontend;
+namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Command;
 
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -32,11 +32,6 @@ final class ContentBlockCommandTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
     ];
-
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
 
     #[Test]
     public function extensionSetupCacheTest(): void
