@@ -89,6 +89,9 @@ final class FileFieldType extends AbstractFieldType
         if ($this->maxitems > 0) {
             $config['maxitems'] = $this->maxitems;
         }
+        if ($this->maxitems === 1) {
+            $config['appearance']['useSortable'] ??= false;
+        }
         if ($this->overrideChildTca !== []) {
             $config['overrideChildTca'] = $this->overrideChildTca;
         }

@@ -498,13 +498,17 @@ readonly class TcaGenerator
         if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
             return $overrideTca;
         }
-        $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
-        if (
-            $foreignTableDefinition->capability->isSortable()
-            && $foreignTableDefinition->capability->hasSortField() === false
-        ) {
-            $overrideTca['config']['appearance']['useSortable'] ??= true;
+        if (($tcaFieldDefinition->getTca()['config']['maxitems'] ?? 0) === 1) {
+            return $overrideTca;
         }
+        $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+        if ($foreignTableDefinition->capability->isSortable() === false) {
+            return $overrideTca;
+        }
+        if ($foreignTableDefinition->capability->hasSortField()) {
+            return $overrideTca;
+        }
+        $overrideTca['config']['appearance']['useSortable'] ??= true;
         return $overrideTca;
     }
 

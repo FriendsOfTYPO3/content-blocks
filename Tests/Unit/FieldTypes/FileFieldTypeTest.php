@@ -53,7 +53,7 @@ final class FileFieldTypeTest extends UnitTestCase
                 ],
                 'readOnly' => 1,
                 'minitems' => 1,
-                'maxitems' => 1,
+                'maxitems' => 2,
                 'cropVariants' => [
                     'foo' => [
                         'allowedAspectRatios' => [
@@ -111,7 +111,7 @@ final class FileFieldTypeTest extends UnitTestCase
                     ],
                     'readOnly' => true,
                     'minitems' => 1,
-                    'maxitems' => 1,
+                    'maxitems' => 2,
                     'overrideChildTca' => [
                         'foo' => 'bar',
                         'columns' => [
@@ -195,6 +195,22 @@ final class FileFieldTypeTest extends UnitTestCase
                                 'showitem' => '--palette--;;basicoverlayPalette,--palette--;;filePalette',
                             ],
                         ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'maxitem == 1 set useSortable to disabled' => [
+            'config' => [
+                'maxitems' => 1,
+            ],
+            'expectedTca' => [
+                'exclude' => true,
+                'config' => [
+                    'type' => 'file',
+                    'maxitems' => 1,
+                    'appearance' => [
+                        'useSortable' => false,
                     ],
                 ],
             ],
