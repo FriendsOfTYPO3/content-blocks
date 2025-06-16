@@ -39,6 +39,7 @@ use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -884,25 +885,7 @@ readonly class TcaGenerator
             '--palette--;;metatags',
         ];
 
-        $systemTabs = [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
-            '--palette--;;backend_layout',
-            '--palette--;;replace',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
-            '--palette--;;links',
-            '--palette--;;caching',
-            '--palette--;;miscellaneous',
-            '--palette--;;module',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
-            '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
-            '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
-            '--palette--;;visibility',
-            '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
-            'rowDescription',
-        ];
+        $systemTabs = $this->getPageTypeSystemTabs($typeName);
 
         $seoTab = [
             '--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo',
@@ -931,6 +914,92 @@ readonly class TcaGenerator
 
         $showItem = implode(',', array_merge([], ...$parts));
         return $showItem;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getPageTypeSystemTabs(string|int $typeName): array
+    {
+        return match ((int)$typeName) {
+            PageRepository::DOKTYPE_LINK => $this->getPageTypeExternalShowItemSystemTabs(),
+            PageRepository::DOKTYPE_SHORTCUT => $this->getPageTypeShortcutShowItemSystemTabs(),
+            default => $this->getPageTypeStandardShowItemSystemTabs(),
+        };
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getPageTypeStandardShowItemSystemTabs(): array
+    {
+        return [
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--palette--;;backend_layout',
+            '--palette--;;replace',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--palette--;;links',
+            '--palette--;;caching',
+            '--palette--;;miscellaneous',
+            '--palette--;;module',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--palette--;;config',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--palette--;;language',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--palette--;;visibility',
+            '--palette--;;access',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            'rowDescription',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getPageTypeExternalShowItemSystemTabs(): array
+    {
+        return [
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--palette--;;layout',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--palette--;;miscellaneous',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--palette--;;config',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--palette--;;language',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--palette--;;visibility',
+            '--palette--;;access',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            'rowDescription',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getPageTypeShortcutShowItemSystemTabs(): array
+    {
+        return [
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--palette--;;layout',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--palette--;;links',
+            '--palette--;;miscellaneous',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--palette--;;config',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--palette--;;language',
+            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--palette--;;visibility',
+            '--palette--;;access',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            'rowDescription',
+            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+        ];
     }
 
     /**
