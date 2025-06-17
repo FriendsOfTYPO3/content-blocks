@@ -1,31 +1,31 @@
 .. include:: /Includes.rst.txt
 .. _create-extbase-plugin:
 
-==========
+======================
 Create Extbase Plugins
-==========
+======================
 
 This guide demonstrates how to create Extbase plugins using Content Blocks.
 
 Create a new Content Block
-===================================
+==========================
 
 .. code-block:: yaml
-   :caption: EXT:site_package/ContentBlocks/ContentElements/Artists/config.yaml
+   :caption: EXT:site_package/ContentBlocks/ContentElements/artists/config.yaml
 
     name: vendor/artists-list
     group: plugins
 
 
 .. code-block:: html
-   :caption: EXT:site_package/ContentBlocks/ContentElements/Artists/templates/frontend.html
+   :caption: EXT:site_package/ContentBlocks/ContentElements/artists/templates/frontend.html
 
     <f:cObject typoscriptObjectPath="{data.mainType}.{data.recordType}.20" table="{data.mainType}" data="{data:data}"/>
 
 Add TypoScript
-===================================
+==============
 
-For `extensionName` and `pluginName` use the names as configured in the next setp.
+For `extensionName` and `pluginName` use the names as configured in the next step.
 
 .. code-block:: typoscript
    :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
@@ -36,12 +36,12 @@ For `extensionName` and `pluginName` use the names as configured in the next set
         pluginName = MyPlugin
         # If your controller returns a HTML response, set the template path like this:
         view {
-            templateRootPaths.0 = EXT:site_package/ContentBlocks/ContentElements/Artists/templates
+            templateRootPaths.0 = EXT:site_package/ContentBlocks/ContentElements/artists/templates
         }
     }
 
 Register Controller Actions
-===================================
+===========================
 
 .. code-block:: php
    :caption: EXT:site_package/ext_localconf.php
