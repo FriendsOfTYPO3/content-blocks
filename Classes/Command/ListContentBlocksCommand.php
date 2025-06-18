@@ -65,10 +65,13 @@ class ListContentBlocksCommand extends Command
         }
 
         usort($availableContentBlocks, function (array $a, array $b) use ($order): int {
-            if ($order === 'content-type') {
+            if ($order === 'name') {
                 return $a[$order] <=> $b[$order];
             }
-            return [$a[$order], $a['content-type']] <=> [$b[$order], $b['content-type']];
+            if ($order === 'content-type') {
+                return [$a[$order], $a['name']] <=> [$b[$order], $b['name']];
+            }
+            return [$a[$order], $a['content-type'], $a['name']] <=> [$b[$order], $b['content-type'], $a['name']];
         });
         $table = new Table($output);
         $table->setHeaders($headers);
