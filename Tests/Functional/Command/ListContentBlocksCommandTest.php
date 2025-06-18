@@ -34,7 +34,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithDefaultOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([]);
 
@@ -48,7 +47,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithVendorOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([
             '--order' => 'vendor',
@@ -64,7 +62,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithNameOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([
             '--order' => 'name',
@@ -80,7 +77,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithTableOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([
             '--order' => 'table',
@@ -96,7 +92,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithTypeNameOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([
             '--order' => 'type-name',
@@ -112,7 +107,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithContentTypeOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([
             '--order' => 'content-type',
@@ -128,7 +122,6 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
     #[Test]
     public function listWithExtensionOrder(): void
     {
-        // Create content element
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([
             '--order' => 'extension',

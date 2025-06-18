@@ -74,7 +74,7 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
         // Verify page type directory does not already exists
         self::assertFileDoesNotExist($basePath, 'Page type directory already exists before running create command');
 
-        // Create content element
+        // Create page type
         $commandTester = new CommandTester($this->get(CreateContentBlockCommand::class));
         $commandTester->execute(
             [
@@ -108,7 +108,7 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
         // Verify record type directory does not already exists
         self::assertFileDoesNotExist($basePath, 'Record type directory already exists before running create command');
 
-        // Create content element
+        // Create record type
         $commandTester = new CommandTester($this->get(CreateContentBlockCommand::class));
         $commandTester->execute(
             [
