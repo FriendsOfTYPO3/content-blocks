@@ -22,48 +22,55 @@ use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\CMS\ContentBlocks\Command\CreateContentBlockCommand;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\Core\Authentication\CommandLineUserAuthentication;
-use TYPO3\CMS\Core\Command\CacheFlushCommand;
-use TYPO3\CMS\Core\Command\CacheWarmupCommand;
-use TYPO3\CMS\Core\Command\SetupExtensionsCommand;
-use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class ContentBlockCommandTest extends FunctionalTestCase
+final class CreateContentBlockCommandTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
-        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks/Tests/Functional/Command/Fixtures/Extensions/command_test',
         'typo3conf/ext/content_blocks',
     ];
 
     #[Test]
-    public function extensionSetupCacheTest(): void
+    public function createContentElement(): void
     {
-        // Warmup the cache to reproduce cache issue
-        $commandTesterCacheWarmup = new CommandTester($this->get(CacheWarmupCommand::class));
-        $commandTesterCacheWarmup->execute([]);
+        $basePath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-1';
 
-        self::assertEquals(0, $commandTesterCacheWarmup->getStatusCode());
+        // Verify content element direcotry does not already exists
+        self::assertFileDoesNotExist($basePath, 'Content element directory already exists before running create command');
 
-        $this->setUp();
+        // Create content element
+        $commandTester = new CommandTester($this->get(CreateContentBlockCommand::class));
+        $commandTester->execute(
+            [
+                '--content-type' => 'content-element',
+                '--vendor' => 'typo3tests',
+                '--name' => 'command-test-1',
+                '--title' => 'Test 1',
+                '--extension' => 'command_test',
+            ],
+            [
+                'interactive' => false,
+            ]
+        );
 
-        // Run extension:setup
-        Bootstrap::initializeBackendUser(CommandLineUserAuthentication::class);
-        $commandTesterSetupExtension = new CommandTester($this->get(SetupExtensionsCommand::class));
-        $commandTesterSetupExtension->execute([]);
+        self::assertEquals(0, $commandTester->getStatusCode());
 
-        self::assertEquals(0, $commandTesterSetupExtension->getStatusCode());
+        // Verify all files exists now
+        self::assertFileExists($basePath, 'Content element directory does not exists');
+        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exists');
+        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exists');
+        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exists');
+        self::assertFileExists($basePath . '/templates/frontend.html', 'Templates frontend.html does not exists');
     }
 
     #[Test]
-    public function createContentBlockTitleSpecialCharsTest(): void
+    public function invalidXmlCharactersAreEscaped(): void
     {
-        // Create content block with '&' in title
-        $commandTesterCreateContentBlock = new CommandTester($this->get(CreateContentBlockCommand::class));
-        $commandTesterCreateContentBlock->execute(
+        // Create content block with invalid xml character '&' in title
+        $commandTester = new CommandTester($this->get(CreateContentBlockCommand::class));
+        $commandTester->execute(
             [
                 '--content-type' => 'content-element',
                 '--vendor' => 'typo3tests',
@@ -76,11 +83,7 @@ final class ContentBlockCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTesterCreateContentBlock->getStatusCode());
-
-        // Flush cache
-        $commandTesterCacheWarmup = new CommandTester($this->get(CacheFlushCommand::class));
-        $commandTesterCacheWarmup->execute([]);
+        self::assertEquals(0, $commandTester->getStatusCode());
 
         // Verify labels.xlf
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
