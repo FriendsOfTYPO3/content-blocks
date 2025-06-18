@@ -71,7 +71,7 @@ class ListContentBlocksCommand extends Command
             if ($order === 'content-type') {
                 return [$a[$order], $a['name']] <=> [$b[$order], $b['name']];
             }
-            return [$a[$order], $a['content-type'], $a['name']] <=> [$b[$order], $b['content-type'], $a['name']];
+            return [$a[$order], $a['content-type'], $a['name']] <=> [$b[$order], $b['content-type'], $b['name']];
         });
         $table = new Table($output);
         $table->setHeaders($headers);
