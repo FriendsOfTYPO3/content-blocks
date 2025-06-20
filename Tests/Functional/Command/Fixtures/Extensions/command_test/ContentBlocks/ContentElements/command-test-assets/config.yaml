@@ -1,0 +1,10 @@
+name: typo3tests/command-test-assets
+typeName: typo3tests_commandtestassets
+group: default
+prefixFields: true
+prefixType: full
+basics:
+  - TYPO3/Appearance
+fields:
+  - identifier: header
+    useExistingField: true

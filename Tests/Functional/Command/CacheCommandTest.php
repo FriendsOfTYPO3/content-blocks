@@ -25,11 +25,12 @@ use TYPO3\CMS\Core\Command\SetupExtensionsCommand;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class ContentBlockCommandTest extends FunctionalTestCase
+final class CacheCommandTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_b',
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
+        'typo3conf/ext/content_blocks/Tests/Functional/Command/Fixtures/Extensions/command_test',
         'typo3conf/ext/content_blocks',
     ];
 

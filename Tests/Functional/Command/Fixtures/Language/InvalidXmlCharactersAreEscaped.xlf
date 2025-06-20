@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="labels.xlf" source-language="en" date="" product-name="typo3tests/command-test-invalid-characters-are-escaped">
+		<header/>
+		<body>
+			<trans-unit id="title">
+				<source>Test Invalid Characters &amp; Description</source>
+			</trans-unit>
+			<trans-unit id="description">
+				<source>Description for Content Element typo3tests/command-test-invalid-characters-are-escaped</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

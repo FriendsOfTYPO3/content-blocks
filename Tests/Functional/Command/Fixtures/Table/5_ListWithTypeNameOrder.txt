@@ -1,0 +1,15 @@
++----------------+-------------------+---------------+----------------------------+-----------------+-----------------------+
+| vendor         | name              | table         | type-name                  | content-type    | extension             |
++----------------+-------------------+---------------+----------------------------+-----------------+-----------------------+
+| typo3tests     | test-record       | test_record   | 1                          | Record Type     | test_content_blocks_b |
+| example        | example-page-type | pages         | 942                        | Page Type       | test_content_blocks_b |
+| my-vendor      | simple-vendor     | tt_content    | myvendor_simplevendor      | Content Element | test_content_blocks_c |
+| content-blocks | record1           | custom_record | record1                    | Record Type     | test_content_blocks_c |
+| content-blocks | record2           | custom_record | record2                    | Record Type     | test_content_blocks_c |
+| simple         | basics            | tt_content    | simple_basics              | Content Element | test_content_blocks_c |
+| simple         | simple            | tt_content    | simple_simple              | Content Element | test_content_blocks_c |
+| simple         | simple2           | tt_content    | simple_simple2             | Content Element | test_content_blocks_c |
+| simple         | simple-relation   | tt_content    | simple_simplerelation      | Content Element | test_content_blocks_c |
+| typo3tests     | content-element-a | tt_content    | typo3tests_contentelementa | Content Element | test_content_blocks_a |
+| typo3tests     | content-element-b | tt_content    | typo3tests_contentelementb | Content Element | test_content_blocks_b |
++----------------+-------------------+---------------+----------------------------+-----------------+-----------------------+
