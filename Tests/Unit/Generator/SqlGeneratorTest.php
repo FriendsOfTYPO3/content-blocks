@@ -74,7 +74,7 @@ final class SqlGeneratorTest extends UnitTestCase
             ],
             'expected' => [
                 "CREATE TABLE `foobar` (`fieldname` varchar(255) DEFAULT '' NOT NULL);",
-                'CREATE TABLE `foobar` (KEY parent_uid (foreign_table_parent_uid, tablenames, fieldname));',
+                'CREATE TABLE `foobar` (KEY parent_uid (tablenames, fieldname, foreign_table_parent_uid));',
             ],
         ];
 
