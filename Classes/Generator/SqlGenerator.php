@@ -70,24 +70,49 @@ readonly class SqlGenerator
 
     protected function handleParentReferences(TableDefinition $tableDefinition): array
     {
-        $sql = [];
+        $indexes = [];
+        $fields = [];
+        $table = $tableDefinition->table;
         foreach ($tableDefinition->parentReferences as $parentReference) {
+            $index = [];
             $parentTcaConfig = $parentReference->getTca()['config'];
-            // Generate indexes for the parent uid field for better performance.
-            if (isset($parentTcaConfig['foreign_field'])) {
-                $foreignField = $parentTcaConfig['foreign_field'];
-                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->table . '` (KEY parent_uid (' . $foreignField . '));';
-                if (!in_array($sqlStatement, $sql, true)) {
-                    $sql[] = $sqlStatement;
-                }
+            if (isset($parentTcaConfig['foreign_table_field'])) {
+                $foreignTableName = $parentTcaConfig['foreign_table_field'];
+                $index[] = $foreignTableName;
             }
             // The foreign_match_fields fields are automatically added, so that feature "shareAcrossFields" works.
             foreach ($parentTcaConfig['foreign_match_fields'] ?? [] as $foreignMatchField => $foreignMatchValue) {
-                $sqlStatement = 'CREATE TABLE `' . $tableDefinition->table . '` (`' . $foreignMatchField . '` varchar(255) DEFAULT \'\' NOT NULL);';
-                if (!in_array($sqlStatement, $sql, true)) {
-                    $sql[] = $sqlStatement;
-                }
+                $index[] = $foreignMatchField;
+                $fields[] = $foreignMatchField;
             }
+            // Generate indexes for the parent uid field for better performance.
+            if (isset($parentTcaConfig['foreign_field'])) {
+                $foreignField = $parentTcaConfig['foreign_field'];
+                $index[] = $foreignField;
+            }
+            $indexes[] = $index;
+        }
+        $sql = [];
+        foreach ($fields as $fieldName) {
+            $sqlStatement = 'CREATE TABLE `' . $table . '` (`' . $fieldName . '` varchar(255) DEFAULT \'\' NOT NULL);';
+            if (!in_array($sqlStatement, $sql, true)) {
+                $sql[] = $sqlStatement;
+            }
+        }
+        $uniqueIndexStatements = [];
+        foreach ($indexes as $index) {
+            $sqlStatement = 'CREATE TABLE `' . $table . '` (KEY ' . '###KEY###' . ' (' . implode(', ', $index) . '));';
+            if (!in_array($sqlStatement, $uniqueIndexStatements, true)) {
+                $uniqueIndexStatements[] = $sqlStatement;
+            }
+        }
+        foreach ($uniqueIndexStatements as $counter => $sqlStatement) {
+            $key = 'parent_uid';
+            if ($counter > 0) {
+                $key .= '_' . ($counter + 1);
+            }
+            $sqlStatement = str_replace('###KEY###', $key, $sqlStatement);
+            $sql[] = $sqlStatement;
         }
         return $sql;
     }

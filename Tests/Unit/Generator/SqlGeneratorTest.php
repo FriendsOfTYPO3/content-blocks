@@ -73,8 +73,67 @@ final class SqlGeneratorTest extends UnitTestCase
                 ],
             ],
             'expected' => [
-                'CREATE TABLE `foobar` (KEY parent_uid (foreign_table_parent_uid));',
                 "CREATE TABLE `foobar` (`fieldname` varchar(255) DEFAULT '' NOT NULL);",
+                'CREATE TABLE `foobar` (KEY parent_uid (tablenames, fieldname, foreign_table_parent_uid));',
+            ],
+        ];
+
+        yield 'two fields in custom foobar table with parent reference' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'foo/parent',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeName' => 'foo_parent',
+                        'fields' => [
+                            [
+                                'identifier' => 'collection',
+                                'type' => 'Collection',
+                                'foreign_table' => 'foobar',
+                                'shareAcrossTables' => true,
+                                'shareAcrossFields' => true,
+                            ],
+                            [
+                                'identifier' => 'collection2',
+                                'type' => 'Collection',
+                                'foreign_table' => 'foobar',
+                                'foreign_field' => 'alternative_foreign_field',
+                                'foreign_table_field' => 'alternative_foreign_table_field',
+                                'shareAcrossTables' => true,
+                                'shareAcrossFields' => true,
+                            ],
+                            [
+                                'identifier' => 'collection3',
+                                'type' => 'Collection',
+                                'foreign_table' => 'foobar',
+                                'shareAcrossTables' => true,
+                                'shareAcrossFields' => true,
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 'foo/bar',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'typeName' => 'foo_bar',
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                "CREATE TABLE `foobar` (`fieldname` varchar(255) DEFAULT '' NOT NULL);",
+                'CREATE TABLE `foobar` (KEY parent_uid (tablenames, fieldname, foreign_table_parent_uid));',
+                'CREATE TABLE `foobar` (KEY parent_uid_2 (alternative_foreign_table_field, fieldname, alternative_foreign_field));',
             ],
         ];
 
