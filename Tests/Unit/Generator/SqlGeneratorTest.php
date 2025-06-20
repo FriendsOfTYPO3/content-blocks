@@ -78,7 +78,63 @@ final class SqlGeneratorTest extends UnitTestCase
             ],
         ];
 
-        yield 'two fields in custom foobar table with parent reference' => [
+        yield 'two different parents with different parent reference field names' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'foo/parent',
+                    'yaml' => [
+                        'table' => 'table1',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'collection',
+                                'type' => 'Collection',
+                                'foreign_table' => 'foobar',
+                                'foreign_field' => 'foreign_field_1',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 'foo/parent2',
+                    'yaml' => [
+                        'table' => 'table2',
+                        'prefixFields' => false,
+                        'fields' => [
+                            [
+                                'identifier' => 'collection',
+                                'type' => 'Collection',
+                                'foreign_table' => 'foobar',
+                                'foreign_field' => 'foreign_field_2',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 'foo/bar',
+                    'yaml' => [
+                        'table' => 'foobar',
+                        'typeName' => 'foo_bar',
+                        'fields' => [
+                            [
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'number',
+                                'type' => 'Number',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'CREATE TABLE `foobar` (KEY parent_uid (foreign_field_1));',
+                'CREATE TABLE `foobar` (KEY parent_uid_2 (foreign_field_2));',
+            ],
+        ];
+
+        yield 'three fields in custom foobar table with parent reference' => [
             'contentBlocks' => [
                 [
                     'name' => 'foo/parent',

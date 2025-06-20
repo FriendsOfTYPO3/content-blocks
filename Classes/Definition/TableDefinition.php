@@ -36,7 +36,10 @@ final readonly class TableDefinition
         public SqlColumnDefinitionCollection $sqlColumnDefinitionCollection,
         public TcaFieldDefinitionCollection $tcaFieldDefinitionCollection,
         public PaletteDefinitionCollection $paletteDefinitionCollection,
-        public TcaFieldDefinitionCollection $parentReferences,
+        /**
+         * @var TcaFieldDefinition[]
+         */
+        public array $parentReferences,
     ) {
         if ($table === '') {
             throw new \InvalidArgumentException('The name of the table must not be empty.', 1628672227);
@@ -61,6 +64,6 @@ final readonly class TableDefinition
 
     public function hasParentReferences(): bool
     {
-        return $this->parentReferences->count() > 0;
+        return count($this->parentReferences) > 0;
     }
 }

@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\SqlColumnDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
@@ -95,7 +96,10 @@ final class TableDefinitionCollectionFactory
             $arguments['contentTypeDefinitionCollection'] = $typeDefinitionCollection;
             $capability = TableDefinitionCapability::createFromArray($tableDefinition['raw'] ?? []);
             $references = $compilationResult->getParentReferences()[$table] ?? [];
-            $parentReferences = TcaFieldDefinitionCollection::createFromArray($references, $table);
+            $parentReferences = [];
+            foreach ($references as $reference) {
+                $parentReferences[] = TcaFieldFactory::create($reference);
+            }
             $arguments['parentReferences'] = $parentReferences;
             $capability = $this->extendCapability($parentReferences, $capability);
             $arguments['capability'] = $capability;
@@ -105,7 +109,10 @@ final class TableDefinitionCollectionFactory
         return $tableDefinitionCollection;
     }
 
-    private function extendCapability(TcaFieldDefinitionCollection $parentReferences, TableDefinitionCapability $capability): TableDefinitionCapability
+    /**
+     * @param TcaFieldDefinition[] $parentReferences
+     */
+    private function extendCapability(array $parentReferences, TableDefinitionCapability $capability): TableDefinitionCapability
     {
         // If root Content Type is a Content Element, allow the external table to be put in standard pages.
         foreach ($parentReferences as $reference) {
