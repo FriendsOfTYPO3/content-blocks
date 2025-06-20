@@ -99,15 +99,20 @@ readonly class SqlGenerator
                 $sql[] = $sqlStatement;
             }
         }
-        foreach ($indexes as $counter => $index) {
+        $uniqueIndexStatements = [];
+        foreach ($indexes as $index) {
+            $sqlStatement = 'CREATE TABLE `' . $table . '` (KEY ' . '###KEY###' . ' (' . implode(', ', $index) . '));';
+            if (!in_array($sqlStatement, $uniqueIndexStatements, true)) {
+                $uniqueIndexStatements[] = $sqlStatement;
+            }
+        }
+        foreach ($uniqueIndexStatements as $counter => $sqlStatement) {
             $key = 'parent_uid';
             if ($counter > 0) {
                 $key .= '_' . ($counter + 1);
             }
-            $sqlStatement = 'CREATE TABLE `' . $table . '` (KEY ' . $key . ' (' . implode(', ', $index) . '));';
-            if (!in_array($sqlStatement, $sql, true)) {
-                $sql[] = $sqlStatement;
-            }
+            $sqlStatement = str_replace('###KEY###', $key, $sqlStatement);
+            $sql[] = $sqlStatement;
         }
         return $sql;
     }
