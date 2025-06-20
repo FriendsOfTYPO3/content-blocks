@@ -30,35 +30,36 @@ final class PublishAssetsCommandTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
+    protected function tearDown(): void
+    {
+        $this->deleteAllPublishedAssets();
+        parent::tearDown();
+    }
+
     #[Test]
     public function publishAssets(): void
     {
-        // Delete all published assets
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests', true);
-        }
+        $this->deleteAllPublishedAssets();
 
-        $iconPath = $this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests/command-test-assets/icon.svg';
+        $extensionPath = $this->instancePath . '/typo3conf/ext/command_test';
+        $iconPath = $extensionPath . '/Resources/Public/ContentBlocks/typo3tests/command-test-assets/icon.svg';
 
-        // Verify icon.svg does not already exists
+        // Verify icon.svg does not already exist
         self::assertFileDoesNotExist($iconPath, 'icon.svg already exists before running publish assets command');
 
         // Publish assets
         $commandTester = new CommandTester($this->get(PublishAssetsCommand::class));
         $commandTester->execute([]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify icon.svg now exists
-        self::assertFileExists($iconPath, 'icon.svg does not exists');
+        self::assertFileExists($iconPath, 'icon.svg does not exist');
     }
 
-    protected function tearDown(): void
+    protected function deleteAllPublishedAssets(): void
     {
-        // Delete all published assets
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests', true);
-        }
-        parent::tearDown();
+        $extensionPath = $this->instancePath . '/typo3conf/ext/command_test';
+        GeneralUtility::rmdir($extensionPath . '/Resources/Public/ContentBlocks/typo3tests', true);
     }
 }

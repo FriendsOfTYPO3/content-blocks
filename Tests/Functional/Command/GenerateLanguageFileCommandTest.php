@@ -32,12 +32,21 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
+    protected function tearDown(): void
+    {
+        $contentElementsPath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements';
+        GeneralUtility::rmdir($contentElementsPath . '/command-test-language-1/language', true);
+        GeneralUtility::rmdir($contentElementsPath . '/command-test-language-2/language', true);
+        GeneralUtility::rmdir($contentElementsPath . '/command-test-assets/language', true);
+        parent::tearDown();
+    }
+
     #[Test]
     public function generateWithContentBlock(): void
     {
         $labelPath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-1/language/labels.xlf';
 
-        // Verify labels.xlf does not already exists
+        // Verify labels.xlf does not already exist
         self::assertFileDoesNotExist($labelPath, 'label.xlf already exists before running create command');
 
         // Generate label.xlf
@@ -48,10 +57,10 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify labels.xlf now exists
-        self::assertFileExists($labelPath, 'label.xlf does not exists');
+        self::assertFileExists($labelPath, 'label.xlf does not exist');
 
         // Verify label.xlf
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -65,11 +74,11 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function generateWithExension(): void
+    public function generateWithExtension(): void
     {
         $labelPath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-2/language/labels.xlf';
 
-        // Verify labels.xlf does not already exists
+        // Verify labels.xlf does not already exist
         self::assertFileDoesNotExist($labelPath, 'label.xlf already exists before running create command');
 
         // Generate label.xlf
@@ -80,10 +89,10 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify labels.xlf now exists
-        self::assertFileExists($labelPath, 'label.xlf does not exists');
+        self::assertFileExists($labelPath, 'label.xlf does not exist');
 
         // Verify label.xlf
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -108,7 +117,7 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $result = $commandTester->getDisplay();
 
@@ -118,16 +127,5 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
         $expected = file_get_contents(__DIR__ . '/Fixtures/Language/3_GenerateLanguageFilePrintWithContentBlock.xlf');
 
         self::assertSame($expected, $resultForCompare);
-    }
-
-    protected function tearDown(): void
-    {
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-1/language')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-1/language', true);
-        }
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-2/language')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-2/language', true);
-        }
-        parent::tearDown();
     }
 }

@@ -37,11 +37,11 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
         $commandTester = new CommandTester($this->get(ListContentBlocksCommand::class));
         $commandTester->execute([]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/1_ListWithDefaultOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 
     #[Test]
@@ -52,11 +52,11 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
             '--order' => 'vendor',
         ]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/2_ListWithVendorOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 
     #[Test]
@@ -67,11 +67,11 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
             '--order' => 'name',
         ]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/3_ListWithNameOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 
     #[Test]
@@ -82,11 +82,11 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
             '--order' => 'table',
         ]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/4_ListWithTableOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 
     #[Test]
@@ -97,11 +97,11 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
             '--order' => 'type-name',
         ]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/5_ListWithTypeNameOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 
     #[Test]
@@ -112,11 +112,11 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
             '--order' => 'content-type',
         ]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/6_ListWithContentTypeOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 
     #[Test]
@@ -127,10 +127,10 @@ final class ListContentBlocksCommandTest extends FunctionalTestCase
             '--order' => 'extension',
         ]);
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         $expected = file_get_contents(__DIR__ . '/Fixtures/Table/7_ListWithExtensionOrder.txt');
 
-        self::assertEquals($expected, $commandTester->getDisplay());
+        self::assertSame($expected, $commandTester->getDisplay());
     }
 }

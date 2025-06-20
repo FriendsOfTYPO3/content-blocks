@@ -52,5 +52,4 @@ final class CacheCommandTest extends FunctionalTestCase
 
         self::assertEquals(0, $commandTesterSetupExtension->getStatusCode());
     }
-
 }

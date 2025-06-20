@@ -32,12 +32,24 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks',
     ];
 
+    protected function tearDown(): void
+    {
+        $contentBlocksPath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks';
+        GeneralUtility::rmdir($contentBlocksPath . '/ContentElements/command-test-content-element', true);
+        GeneralUtility::rmdir($contentBlocksPath . '/ContentElements/command-test-invalid-characters-are-escaped', true);
+        GeneralUtility::rmdir($contentBlocksPath . '/PageTypes/command-test-page-type', true);
+        GeneralUtility::rmdir($contentBlocksPath . '/RecordTypes/command-test-record-type', true);
+        // Delete all published assets
+        GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests', true);
+        parent::tearDown();
+    }
+
     #[Test]
     public function createContentElement(): void
     {
         $basePath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-content-element';
 
-        // Verify content element directory does not already exists
+        // Verify content element directory does not already exist
         self::assertFileDoesNotExist($basePath, 'Content element directory already exists before running create command');
 
         // Create content element
@@ -55,15 +67,15 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify all files exists now
-        self::assertFileExists($basePath, 'Content element directory does not exists');
-        self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exists');
-        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exists');
-        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exists');
-        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exists');
-        self::assertFileExists($basePath . '/templates/frontend.html', 'Templates frontend.html does not exists');
+        self::assertFileExists($basePath, 'Content element directory does not exist');
+        self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exist');
+        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exist');
+        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exist');
+        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exist');
+        self::assertFileExists($basePath . '/templates/frontend.html', 'Templates frontend.html does not exist');
     }
 
     #[Test]
@@ -71,7 +83,7 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
     {
         $basePath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/PageTypes/command-test-page-type';
 
-        // Verify page type directory does not already exists
+        // Verify page type directory does not already exist
         self::assertFileDoesNotExist($basePath, 'Page type directory already exists before running create command');
 
         // Create page type
@@ -89,15 +101,15 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify all files exists now
-        self::assertFileExists($basePath, 'Page type directory does not exists');
-        self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exists');
-        self::assertFileExists($basePath . '/assets/icon-hide-in-menu.svg', 'Assets icon-hide-in-menu.svg does not exists');
-        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exists');
-        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exists');
-        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exists');
+        self::assertFileExists($basePath, 'Page type directory does not exist');
+        self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exist');
+        self::assertFileExists($basePath . '/assets/icon-hide-in-menu.svg', 'Assets icon-hide-in-menu.svg does not exist');
+        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exist');
+        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exist');
+        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exist');
     }
 
     #[Test]
@@ -105,7 +117,7 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
     {
         $basePath = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/RecordTypes/command-test-record-type';
 
-        // Verify record type directory does not already exists
+        // Verify record type directory does not already exist
         self::assertFileDoesNotExist($basePath, 'Record type directory already exists before running create command');
 
         // Create record type
@@ -123,13 +135,13 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify all files exists now
-        self::assertFileExists($basePath, 'Page type directory does not exists');
-        self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exists');
-        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exists');
-        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exists');
+        self::assertFileExists($basePath, 'Page type directory does not exist');
+        self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exist');
+        self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exist');
+        self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exist');
     }
 
     #[Test]
@@ -150,7 +162,7 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
             ]
         );
 
-        self::assertEquals(0, $commandTester->getStatusCode());
+        self::assertSame(0, $commandTester->getStatusCode());
 
         // Verify labels.xlf
         $languageFileGenerator = $this->get(LanguageFileGenerator::class);
@@ -161,26 +173,5 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
         $expected = file_get_contents(__DIR__ . '/Fixtures/Language/InvalidXmlCharactersAreEscaped.xlf');
 
         self::assertSame($expected, $result);
-    }
-
-    protected function tearDown(): void
-    {
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-content-element')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-content-element', true);
-        }
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-invalid-characters-are-escaped')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-invalid-characters-are-escaped', true);
-        }
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/PageTypes/command-test-page-type')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/PageTypes/command-test-page-type', true);
-        }
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/RecordTypes/command-test-record-type')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/RecordTypes/command-test-record-type', true);
-        }
-        // Delete all published assets
-        if (is_dir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests')) {
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/ext/command_test/Resources/Public/ContentBlocks/typo3tests', true);
-        }
-        parent::tearDown();
     }
 }
