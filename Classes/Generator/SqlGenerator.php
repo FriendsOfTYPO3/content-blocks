@@ -74,21 +74,23 @@ readonly class SqlGenerator
         $fields = [];
         $table = $tableDefinition->table;
         foreach ($tableDefinition->parentReferences as $parentReference) {
+            $index = [];
             $parentTcaConfig = $parentReference->getTca()['config'];
             if (isset($parentTcaConfig['foreign_table_field'])) {
                 $foreignTableName = $parentTcaConfig['foreign_table_field'];
-                $indexes[] = $foreignTableName;
+                $index[] = $foreignTableName;
             }
             // The foreign_match_fields fields are automatically added, so that feature "shareAcrossFields" works.
             foreach ($parentTcaConfig['foreign_match_fields'] ?? [] as $foreignMatchField => $foreignMatchValue) {
-                $indexes[] = $foreignMatchField;
+                $index[] = $foreignMatchField;
                 $fields[] = $foreignMatchField;
             }
             // Generate indexes for the parent uid field for better performance.
             if (isset($parentTcaConfig['foreign_field'])) {
                 $foreignField = $parentTcaConfig['foreign_field'];
-                $indexes[] = $foreignField;
+                $index[] = $foreignField;
             }
+            $indexes[] = $index;
         }
         $sql = [];
         foreach ($fields as $fieldName) {
@@ -97,8 +99,12 @@ readonly class SqlGenerator
                 $sql[] = $sqlStatement;
             }
         }
-        if ($indexes !== []) {
-            $sqlStatement = 'CREATE TABLE `' . $table . '` (KEY parent_uid (' . implode(', ', $indexes) . '));';
+        foreach ($indexes as $counter => $index) {
+            $key = 'parent_uid';
+            if ($counter > 0) {
+                $key .= '_' . ($counter + 1);
+            }
+            $sqlStatement = 'CREATE TABLE `' . $table . '` (KEY ' . $key . ' (' . implode(', ', $index) . '));';
             if (!in_array($sqlStatement, $sql, true)) {
                 $sql[] = $sqlStatement;
             }
