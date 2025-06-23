@@ -96,7 +96,7 @@ This controller simply passes the data from your Content Block to the Fluid temp
             $contentObject = $this->request->getAttribute('currentContentObject');
             $dataFromTypoScript = $contentObject->data;
 
-            $this->view->assign('data', $dataFromTypoScript['data']);
+            $this->view->assign('data', $dataFromTypoScript);
 
             return $this->htmlResponse();
         }
