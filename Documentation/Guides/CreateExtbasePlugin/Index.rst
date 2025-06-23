@@ -20,7 +20,7 @@ Create a new Content Block
 .. code-block:: html
    :caption: EXT:site_package/ContentBlocks/ContentElements/artists/templates/frontend.html
 
-    <f:cObject typoscriptObjectPath="{data.mainType}.{data.recordType}.20" table="{data.mainType}" data="{data:data}"/>
+    <f:cObject typoscriptObjectPath="{data.mainType}.{data.recordType}.20" table="{data.mainType}" data="{data}"/>
 
 Add TypoScript
 ==============
@@ -96,7 +96,7 @@ This controller simply passes the data from your Content Block to the Fluid temp
             $contentObject = $this->request->getAttribute('currentContentObject');
             $dataFromTypoScript = $contentObject->data;
 
-            $this->view->assign('data', $dataFromTypoScript['data']);
+            $this->view->assign('data', $dataFromTypoScript);
 
             return $this->htmlResponse();
         }
