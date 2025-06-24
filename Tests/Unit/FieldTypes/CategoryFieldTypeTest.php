@@ -36,6 +36,7 @@ final class CategoryFieldTypeTest extends UnitTestCase
                 'maxitems' => 1,
                 'minitems' => 1,
                 'exclusiveKeys' => 'key',
+                'foreign_table_where' => 'foo',
                 'treeConfig' => [
                     'foo' => 'bar',
                 ],
@@ -68,6 +69,7 @@ final class CategoryFieldTypeTest extends UnitTestCase
                         'foo' => 'bar',
                     ],
                     'relationship' => 'foo',
+                    'foreign_table_where' => 'foo',
                 ],
             ],
         ];
@@ -89,6 +91,7 @@ final class CategoryFieldTypeTest extends UnitTestCase
                 'l10n_display' => '',
                 'l10n_mode' => '',
                 'onChange' => '',
+                'foreign_table_where' => '',
             ],
             'expectedTca' => [
                 'config' => [

@@ -33,6 +33,7 @@ final class CategoryFieldType extends AbstractFieldType
     private string $exclusiveKeys = '';
     private array $treeConfig = [];
     private string $relationship = '';
+    private string $foreign_table_where = '';
 
     public function createFromArray(array $settings): CategoryFieldType
     {
@@ -49,6 +50,7 @@ final class CategoryFieldType extends AbstractFieldType
         $self->exclusiveKeys = (string)($settings['exclusiveKeys'] ?? $self->exclusiveKeys);
         $self->treeConfig = (array)($settings['treeConfig'] ?? $self->treeConfig);
         $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
+        $self->foreign_table_where = (string)($settings['foreign_table_where'] ?? $self->foreign_table_where);
 
         return $self;
     }
@@ -80,6 +82,9 @@ final class CategoryFieldType extends AbstractFieldType
         }
         if ($this->relationship !== '') {
             $config['relationship'] = $this->relationship;
+        }
+        if ($this->foreign_table_where !== '') {
+            $config['foreign_table_where'] = $this->foreign_table_where;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
