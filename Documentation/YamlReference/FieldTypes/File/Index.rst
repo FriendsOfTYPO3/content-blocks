@@ -97,6 +97,14 @@ Settings
             title: Landscape
             value: 4 / 3
 
+   Use the new crop variant in your frontend template:
+
+   .. code-block:: html
+
+    <f:for each="{data.image}" as="image">
+        <f:image image="{image}" cropVariant="teaser" width="800" />
+    </f:for>
+
 .. confval:: overrideType
    :name: file-overrideType
    :required: false
