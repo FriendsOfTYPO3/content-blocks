@@ -79,6 +79,7 @@ final class CheckboxFieldType extends AbstractFieldType
         }
         if ($this->invertStateDisplay) {
             $config['items'][0]['invertStateDisplay'] = true;
+            $config['items'][0]['label'] ??= '';
         }
         $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);

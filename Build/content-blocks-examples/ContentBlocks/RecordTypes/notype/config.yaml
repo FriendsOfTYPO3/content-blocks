@@ -12,3 +12,6 @@ fields:
     extendedPalette: false
   - identifier: text3
     type: Textarea
+  - identifier: check
+    type: Checkbox
+    invertStateDisplay: true

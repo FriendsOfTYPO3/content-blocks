@@ -122,7 +122,7 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'config' => [
                     'type' => 'check',
                     'items' => [
-                        ['invertStateDisplay' => true],
+                        ['invertStateDisplay' => true, 'label' => ''],
                     ],
                 ],
             ],
@@ -132,7 +132,7 @@ final class CheckboxFieldTypeTest extends UnitTestCase
             'config' => [
                 'invertStateDisplay' => 1,
                 'items' => [
-                    ['Item1'],
+                    ['label' => 'Item1'],
                 ],
             ],
             'expectedTca' => [
@@ -140,7 +140,7 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'config' => [
                     'type' => 'check',
                     'items' => [
-                        [0 => 'Item1', 'invertStateDisplay' => true],
+                        ['label' => 'Item1', 'invertStateDisplay' => true],
                     ],
                 ],
             ],
