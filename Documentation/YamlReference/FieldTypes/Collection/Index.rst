@@ -30,6 +30,11 @@ or gif files. These should be 64x64px.
 Settings
 ========
 
+.. tip::
+
+    All options from :ref:`Record Types <yaml_reference_record_type_options>`
+    can be used here as well.
+
 ..  confval-menu::
     :name: confval-collection-options
     :display: table

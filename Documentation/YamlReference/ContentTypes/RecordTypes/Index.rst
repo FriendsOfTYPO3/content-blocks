@@ -19,6 +19,8 @@ Folder: `ContentBlocks/RecordTypes`
 
 Learn more about :ref:`Record Types <cb_guides_record_types>`.
 
+.. _yaml_reference_record_type_options:
+
 Options
 =======
 
