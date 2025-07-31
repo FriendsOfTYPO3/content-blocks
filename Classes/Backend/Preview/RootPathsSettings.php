@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -30,8 +31,12 @@ class RootPathsSettings
     public function getContentBlocksPartialRootPaths(int $pageUid): array
     {
         $partialRootPaths = [];
-        foreach ($this->getContentBlocksPageTsPartialRootPaths($pageUid) as $rootPath) {
-            $partialRootPaths[] = $rootPath;
+        foreach ($this->getContentBlocksPageTsPartialRootPaths($pageUid) as $key => $rootPath) {
+            if (MathUtility::canBeInterpretedAsInteger($key)) {
+                $partialRootPaths[(int) $key] = $rootPath;
+            } else {
+                $partialRootPaths[] = $rootPath;
+            }
         }
         return $partialRootPaths;
     }
@@ -42,8 +47,12 @@ class RootPathsSettings
     public function getContentBlocksLayoutRootPaths(int $pageUid): array
     {
         $layoutRootPaths = [];
-        foreach ($this->getContentBlocksPageTsLayoutRootPaths($pageUid) as $rootPath) {
-            $layoutRootPaths[] = $rootPath;
+        foreach ($this->getContentBlocksPageTsLayoutRootPaths($pageUid) as $key => $rootPath) {
+            if (MathUtility::canBeInterpretedAsInteger($key)) {
+                $layoutRootPaths[(int) $key] = $rootPath;
+            } else {
+                $layoutRootPaths[] = $rootPath;
+            }
         }
         return $layoutRootPaths;
     }
