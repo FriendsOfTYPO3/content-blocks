@@ -33,7 +33,7 @@ class RootPathsSettings
         $partialRootPaths = [];
         foreach ($this->getContentBlocksPageTsPartialRootPaths($pageUid) as $key => $rootPath) {
             if (MathUtility::canBeInterpretedAsInteger($key)) {
-                $partialRootPaths[(int) $key] = $rootPath;
+                $partialRootPaths[(int)$key] = $rootPath;
             } else {
                 $partialRootPaths[] = $rootPath;
             }
@@ -49,7 +49,7 @@ class RootPathsSettings
         $layoutRootPaths = [];
         foreach ($this->getContentBlocksPageTsLayoutRootPaths($pageUid) as $key => $rootPath) {
             if (MathUtility::canBeInterpretedAsInteger($key)) {
-                $layoutRootPaths[(int) $key] = $rootPath;
+                $layoutRootPaths[(int)$key] = $rootPath;
             } else {
                 $layoutRootPaths[] = $rootPath;
             }
