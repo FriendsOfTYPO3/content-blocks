@@ -24,9 +24,7 @@ class ConfigBuilder
 {
     public function build(ContentType $contentType, string $vendor, string $name, ?string $title, null|string|int $typeName, array $defaultConfig): array
     {
-        if ($title === null) {
-            $title = $vendor . '/' . $name;
-        }
+        $title ??= $vendor . '/' . $name;
         $yamlConfiguration = match ($contentType) {
             ContentType::CONTENT_ELEMENT => $this->createContentBlockContentElementConfiguration($vendor, $name, $title, $typeName, $defaultConfig),
             ContentType::PAGE_TYPE => $this->createContentBlockPageTypeConfiguration($vendor, $name, $title, $typeName, $defaultConfig),
