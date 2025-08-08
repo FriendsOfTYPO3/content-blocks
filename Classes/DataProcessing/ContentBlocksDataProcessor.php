@@ -51,6 +51,16 @@ readonly class ContentBlocksDataProcessor implements DataProcessorInterface
         if ($data === []) {
             return $processedData;
         }
+        if (!empty($data['_computed'])) {
+            // We have a raw-record as input and can get the necessary localization properties
+            // from the _computed array to fetch the correct translation.
+            // Basically do the reverse of RecordFactory::extractComputedProperties()
+            // @see \TYPO3\CMS\Core\Domain\RecordFactory::extractComputedProperties()
+            $data['_ORIG_uid'] = $data['_computed']['versionedUid'] ?? null;
+            $data['_LOCALIZED_UID'] = $data['_computed']['localizedUid'] ?? null;
+            $data['_REQUESTED_OVERLAY_LANGUAGE'] = $data['_computed']['requestedOverlayLanguageId'] ?? null;
+            $data['_TRANSLATION_SOURCE'] = $data['_computed']['translationSource'] ?? null;
+        }
         $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $data);
         $processedData['data'] = $this->contentBlockDataDecorator->decorate($resolvedRecord);
         return $processedData;
