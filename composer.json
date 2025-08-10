@@ -36,10 +36,10 @@
 	},
 	"require": {
 		"symfony/var-exporter": "^7.0",
-		"typo3/cms-backend": "^13.4.5",
-		"typo3/cms-core": "^13.4.5",
-		"typo3/cms-fluid": "^13.4.5",
-		"typo3/cms-frontend": "^13.4.5"
+		"typo3/cms-backend": "^13.4.5 || dev-main",
+		"typo3/cms-core": "^13.4.5 || dev-main",
+		"typo3/cms-fluid": "^13.4.5 || dev-main",
+		"typo3/cms-frontend": "^13.4.5 || dev-main"
 	},
 	"replace": {
 		"contentblocks/content-blocks": "*"
