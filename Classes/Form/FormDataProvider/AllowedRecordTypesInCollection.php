@@ -39,7 +39,9 @@ final readonly class AllowedRecordTypesInCollection implements FormDataProviderI
             return $result;
         }
         $tcaSchema = $this->tcaSchemaFactory->get($childTable);
-        $typeField = $tcaSchema->getSubSchemaDivisorField();
+        $typeField = method_exists($tcaSchema, 'getSubSchemaDivisorField')
+            ? $tcaSchema->getSubSchemaDivisorField()
+            : ($tcaSchema->supportsSubSchema() ? $tcaSchema->getSubSchemaTypeInformation() : '');
         if ($typeField === null) {
             return $result;
         }
