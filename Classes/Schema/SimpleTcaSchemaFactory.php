@@ -80,6 +80,12 @@ class SimpleTcaSchemaFactory
         $allFields = new FieldCollection();
         $systemFields = new FieldCollection();
         foreach ($schemaDefinition['columns'] ?? [] as $columnName => $columnConfig) {
+            if (is_array($columnConfig) === false) {
+                throw new \InvalidArgumentException(
+                    'Column configuration of field "' . $columnName . '" of type "' . $schemaName . '" must be an array, ' . gettype($columnConfig) . ' given.',
+                    1755100263
+                );
+            }
             try {
                 $fieldType = $this->typeResolver->resolve($columnConfig);
             } catch (\InvalidArgumentException) {
