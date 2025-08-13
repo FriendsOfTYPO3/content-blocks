@@ -63,7 +63,7 @@ final readonly class AllowedRecordTypesInCollection implements FormDataProviderI
         if ($allowedRecordTypes === []) {
             return $result;
         }
-        $typeFieldName = $typeField->getName();
+        $typeFieldName = method_exists($typeField, 'getName') ? $typeField->getName() : $typeField->getFieldName();
         $items = $result['processedTca']['columns'][$typeFieldName]['config']['items'] ?? [];
         if ($items === []) {
             return $result;
