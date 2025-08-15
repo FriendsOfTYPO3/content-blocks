@@ -36,16 +36,13 @@ relation to another table. In our case :sql:`tt_content`.
         type: Collection
         minitems: 1
         foreign_table: tt_content
-        overrideChildTca:
-          columns:
-            CType:
-              config:
-                default: example_text
+        allowedRecordTypes:
+          - example_text
 
 This config creates a field, where you can create new Content Elements within
-your root Content Element. For better usability the default CType can be
-overridden with :yaml:`overrideChildTca`. Right now, it is not possible to
-restrict certain CTypes.
+your root Content Element. With the option
+:ref:`allowedRecordTypes <confval-collection-allowedRecordTypes>` it is possible
+to restrict certain Content Types.
 
 ..  _cb_nested_elements_frontend:
 
