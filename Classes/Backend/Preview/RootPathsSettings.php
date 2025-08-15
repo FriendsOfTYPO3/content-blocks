@@ -29,10 +29,8 @@ class RootPathsSettings
      */
     public function getContentBlocksPartialRootPaths(int $pageUid): array
     {
-        $partialRootPaths = [];
-        foreach ($this->getContentBlocksPageTsPartialRootPaths($pageUid) as $rootPath) {
-            $partialRootPaths[] = $rootPath;
-        }
+        $partialRootPaths = $this->getContentBlocksPageTsPartialRootPaths($pageUid);
+        $partialRootPaths = $this->sortRootPaths($partialRootPaths);
         return $partialRootPaths;
     }
 
@@ -41,15 +39,13 @@ class RootPathsSettings
      */
     public function getContentBlocksLayoutRootPaths(int $pageUid): array
     {
-        $layoutRootPaths = [];
-        foreach ($this->getContentBlocksPageTsLayoutRootPaths($pageUid) as $rootPath) {
-            $layoutRootPaths[] = $rootPath;
-        }
+        $layoutRootPaths = $this->getContentBlocksPageTsLayoutRootPaths($pageUid);
+        $layoutRootPaths = $this->sortRootPaths($layoutRootPaths);
         return $layoutRootPaths;
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     protected function getContentBlocksPageTsPartialRootPaths(int $pageUid): array
     {
@@ -59,7 +55,7 @@ class RootPathsSettings
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     protected function getContentBlocksPageTsLayoutRootPaths(int $pageUid): array
     {
@@ -73,5 +69,15 @@ class RootPathsSettings
         $pageTsConfig = BackendUtility::getPagesTSconfig($pageUid);
         $contentBlocksConfig = $pageTsConfig['tx_content_blocks.'] ?? [];
         return $contentBlocksConfig;
+    }
+
+    /**
+     * @param array<int, string> $rootPaths
+     * @return array<int, string>
+     */
+    protected function sortRootPaths(array $rootPaths): array
+    {
+        ksort($rootPaths);
+        return $rootPaths;
     }
 }
