@@ -27,7 +27,6 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Generator\TcaGenerator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
-use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
@@ -74,7 +73,6 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
             'content-blocks.hide-content-element-children-page-content-fetching' => static::hideContentElementChildrenPageContentFetching(...),
             'content-blocks.record-summary-for-localization' => static::recordSummaryForLocalization(...),
-            'content-blocks.base-simple-tca-schema' => static::baseSimpleTcaSchema(...),
             'content-blocks.tca' => static::tca(...),
         ];
     }
@@ -281,14 +279,6 @@ HEREDOC;
         };
     }
 
-    public static function baseSimpleTcaSchema(ContainerInterface $container): \Closure
-    {
-        return static function (BeforeTcaOverridesEvent $event) use ($container) {
-            $simpleTcaSchemaFactory = $container->get(SimpleTcaSchemaFactory::class);
-            $simpleTcaSchemaFactory->initialize($event->getTca());
-        };
-    }
-
     public static function tca(ContainerInterface $container): \Closure
     {
         return static function (BeforeTcaOverridesEvent $event) use ($container) {
@@ -425,7 +415,6 @@ HEREDOC;
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         $listenerProvider->addListener(AfterContentHasBeenFetchedEvent::class, 'content-blocks.hide-content-element-children-page-content-fetching');
         $listenerProvider->addListener(AfterRecordSummaryForLocalizationEvent::class, 'content-blocks.record-summary-for-localization');
-        $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.base-simple-tca-schema');
         $listenerProvider->addListener(BeforeTcaOverridesEvent::class, 'content-blocks.tca');
         return $listenerProvider;
     }

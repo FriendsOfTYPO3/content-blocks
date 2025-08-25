@@ -19,11 +19,13 @@ namespace TYPO3\CMS\ContentBlocks\Schema;
 
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\VarExporter\VarExporter;
 use TYPO3\CMS\ContentBlocks\Schema\Exception\UndefinedSchemaException;
 use TYPO3\CMS\ContentBlocks\Schema\Field\FieldCollection;
 use TYPO3\CMS\ContentBlocks\Schema\Field\TcaField;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Package\PackageManager;
 
 /**
  * @todo This class is a factory and Root Schema at the same time.
@@ -40,12 +42,14 @@ class SimpleTcaSchemaFactory
         #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
         protected FieldTypeResolver $typeResolver,
+        protected PackageManager $packageManager,
     ) {
-        // The schema must only be hydrated from previous caches,
-        // which were built in BeforeTcaOverridesEvent.
         if (($schemas = $this->getFromCache()) !== false) {
             $this->schemas = $schemas;
+            return;
         }
+        $baseTca = $this->loadConfigurationTcaFiles();
+        $this->initialize($baseTca);
     }
 
     /**
@@ -102,6 +106,52 @@ class SimpleTcaSchemaFactory
         }
         $schema = new SimpleTcaSchema($schemaName, $allFields, $systemFields, $schemaDefinition['ctrl'] ?? []);
         return $schema;
+    }
+
+    /**
+     * @todo You may wonder, why we copy this code from the Core TcaFactory.
+     * @todo We used to fill this schema by using the BeforeTcaOverridesEvent.
+     * @todo The reason we removed this dependency was that many deployment
+     * @todo processes use `typo3 cache:flush` in their pipeline. This works
+     * @todo well in local / staging environments, but in frequently visited
+     * @todo production environments a concurrent hit can happen, which may
+     * @todo produce a compiled Content Blocks cache entry, while the flush
+     * @todo command erased the SimpleTcaSchema cache entry at the same time.
+     * @todo The problem is, this cache can't recover itself, if TCA is
+     * @todo already cached and the event won't fire again, leaving the system
+     * @todo in a broken state.
+     * @todo Example: "The field "pages" is missing the required "type" in Content Block".
+     * @todo To circumvent this error, the functionality to create base TCA
+     * @todo is added to this class. Now, the cache can rebuild itself.
+     */
+    private function loadConfigurationTcaFiles(): array
+    {
+        // To require TCA in a safe scoped environment avoiding local variable clashes.
+        // Note: Return type 'mixed' is intended, otherwise broken TCA files with missing "return [];" statement would
+        //       emit a "return value must be of type array, int returned" PHP TypeError. This is mitigated by an array
+        //       check below.
+        $scopedReturnRequire = static function (string $filename): mixed {
+            return require $filename;
+        };
+        // First load "full table" files from Configuration/TCA
+        $tca = [];
+        $activePackages = $this->packageManager->getActivePackages();
+        foreach ($activePackages as $package) {
+            try {
+                $finder = Finder::create()->files()->sortByName()->depth(0)->name('*.php')->in($package->getPackagePath() . 'Configuration/TCA');
+            } catch (\InvalidArgumentException) {
+                // No such directory in this package
+                continue;
+            }
+            foreach ($finder as $fileInfo) {
+                $tcaOfTable = $scopedReturnRequire($fileInfo->getPathname());
+                if (is_array($tcaOfTable)) {
+                    $tcaTableName = substr($fileInfo->getBasename(), 0, -4);
+                    $tca[$tcaTableName] = $tcaOfTable;
+                }
+            }
+        }
+        return $tca;
     }
 
     protected function getFromCache(): false|array
