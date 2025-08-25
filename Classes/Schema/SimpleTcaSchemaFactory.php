@@ -133,8 +133,10 @@ class SimpleTcaSchemaFactory
         $scopedReturnRequire = static function (string $filename): mixed {
             return require $filename;
         };
+        // Backup the original TCA in case it is already set.
+        $backupTca = $GLOBALS['TCA'] ?? null;
         // First load "full table" files from Configuration/TCA
-        $tca = [];
+        $GLOBALS['TCA'] = [];
         $activePackages = $this->packageManager->getActivePackages();
         foreach ($activePackages as $package) {
             try {
@@ -147,9 +149,15 @@ class SimpleTcaSchemaFactory
                 $tcaOfTable = $scopedReturnRequire($fileInfo->getPathname());
                 if (is_array($tcaOfTable)) {
                     $tcaTableName = substr($fileInfo->getBasename(), 0, -4);
-                    $tca[$tcaTableName] = $tcaOfTable;
+                    $GLOBALS['TCA'][$tcaTableName] = $tcaOfTable;
                 }
             }
+        }
+        $tca = $GLOBALS['TCA'];
+        if ($backupTca) {
+            $GLOBALS['TCA'] = $backupTca;
+        } else {
+            unset($GLOBALS['TCA']);
         }
         return $tca;
     }
