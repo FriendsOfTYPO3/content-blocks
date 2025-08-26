@@ -201,13 +201,13 @@ final class ContentBlockDataDecorator
                 $depth,
                 $context,
             );
-        } else {
-            $processedField = $this->transformMultipleRelation(
-                $processedField,
-                $depth,
-                $context,
-            );
+            return $processedField;
         }
+        $processedField = $this->transformMultipleRelation(
+            $processedField,
+            $depth,
+            $context,
+        );
         return $processedField;
     }
 
