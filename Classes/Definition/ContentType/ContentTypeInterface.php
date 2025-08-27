@@ -37,6 +37,7 @@ interface ContentTypeInterface
     public function getOverrideColumns(): array;
     public function getShowItems(): array;
     public function hasColumn(string $column): bool;
+    /** @return string[] */
     public function getColumns(): array;
     public function getTypeIcon(): ContentTypeIcon;
     public function getLanguagePathTitle(): string;
