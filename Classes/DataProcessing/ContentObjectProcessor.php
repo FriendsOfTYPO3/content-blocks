@@ -27,7 +27,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 class ContentObjectProcessor
 {
     private ServerRequestInterface $request;
-    private array $processingInstructions = [];
 
     public function __construct(
         protected readonly ContentObjectRenderer $contentObjectRenderer,
@@ -38,18 +37,6 @@ class ContentObjectProcessor
     {
         $this->request = $request;
         $this->contentObjectRenderer->setRequest($request);
-    }
-
-    public function addInstruction(callable $instruction): void
-    {
-        $this->processingInstructions[] = $instruction;
-    }
-
-    public function process(): void
-    {
-        while ($instruction = array_shift($this->processingInstructions)) {
-            $instruction();
-        }
     }
 
     public function processContentObject(ContentBlockData $contentBlockData, RenderedGridItem &$renderedGridItem): void

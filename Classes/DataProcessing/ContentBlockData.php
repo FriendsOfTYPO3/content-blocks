@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 
+use TYPO3\CMS\Core\Domain\Exception\RecordPropertyException;
 use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
@@ -24,6 +25,7 @@ use TYPO3\CMS\Core\Domain\Record\LanguageInfo;
 use TYPO3\CMS\Core\Domain\Record\SystemProperties;
 use TYPO3\CMS\Core\Domain\Record\VersionInfo;
 use TYPO3\CMS\Core\Domain\RecordInterface;
+use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 
 /**
  * This class represents the `data` object inside the Fluid template for Content Blocks.
@@ -56,8 +58,7 @@ final class ContentBlockData implements RecordInterface
     public function __construct(
         protected ?Record $_record = null,
         protected string $_name = '',
-        /** @var array<string, RelationGrid>|array<string, RenderedGridItem[]> */
-        protected array $_grids = [],
+        protected ?ContentBlockGridData $_grids = null,
         protected array $_processed = [],
     ) {}
 
@@ -114,7 +115,12 @@ final class ContentBlockData implements RecordInterface
             return $this->_grids;
         }
         if (array_key_exists($id, $this->_processed)) {
-            return $this->_processed[$id];
+            $property = $this->_processed[$id];
+            if ($property instanceof RecordPropertyClosure) {
+                $property = $this->readPropertyClosure($id, $property);
+                $this->_processed[$id] = $property;
+            }
+            return $property;
         }
         return $this->_record->get($id);
     }
@@ -159,7 +165,7 @@ final class ContentBlockData implements RecordInterface
         return $this->_name;
     }
 
-    public function get_Grids(): array
+    public function get_Grids(): ContentBlockGridData
     {
         return $this->_grids;
     }
@@ -170,5 +176,20 @@ final class ContentBlockData implements RecordInterface
         $this->_name = $contentBlockData->_name;
         $this->_grids = $contentBlockData->_grids;
         $this->_processed = $contentBlockData->_processed;
+    }
+
+    private function readPropertyClosure(string $id, RecordPropertyClosure $closure): mixed
+    {
+        try {
+            $property = $closure->instantiate();
+        } catch (\Exception $exception) {
+            // Consumers of this method can rely on catching ContainerExceptionInterface
+            throw new RecordPropertyException(
+                'An exception occurred while instantiating record property "' . $id . '"',
+                1756308141,
+                $exception
+            );
+        }
+        return $property;
     }
 }

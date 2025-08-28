@@ -26,30 +26,16 @@ use TYPO3\CMS\Core\Collection\LazyRecordCollection;
  */
 class GridProcessor
 {
-    private array $processingInstructions = [];
-
     public function __construct(
         protected readonly GridFactory $gridFactory,
     ) {}
 
-    public function addInstruction(callable $instruction): void
-    {
-        $this->processingInstructions[] = $instruction;
-    }
-
-    public function process(): void
-    {
-        while ($instruction = array_shift($this->processingInstructions)) {
-            $instruction();
-        }
-    }
-
     public function processGrid(
-        RelationGrid $relationGrid,
         PageLayoutContext $context,
         TcaFieldDefinition $tcaFieldDefinition,
         ContentBlockData|LazyRecordCollection $resolvedField,
-    ): void {
+    ): RelationGrid {
+        $relationGrid = new RelationGrid();
         if (!is_iterable($resolvedField)) {
             $resolvedField = [$resolvedField];
         }
@@ -61,5 +47,6 @@ class GridProcessor
         );
         $relationGrid->grid = $grid;
         $relationGrid->label = $gridLabel;
+        return $relationGrid;
     }
 }

@@ -27,6 +27,8 @@ use TYPO3\CMS\ContentBlocks\FieldType\SpecialFieldType;
 use TYPO3\CMS\Core\Collection\LazyRecordCollection;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\RecordInterface;
+use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
+use TYPO3\CMS\Core\Resource\Collection\LazyFileReferenceCollection;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -46,7 +48,6 @@ final class ContentBlockDataDecorator
     public function setRequest(ServerRequestInterface $request): void
     {
         $this->request = $request;
-        $this->contentObjectProcessor->setRequest($request);
     }
 
     public function decorate(RecordInterface $resolvedRecord, ?PageLayoutContext $context = null): ContentBlockData
@@ -69,8 +70,6 @@ final class ContentBlockDataDecorator
             $context,
         );
         $this->contentBlockDataDecoratorSession->setContentBlockData($identifier, $contentBlockData);
-        $this->gridProcessor->process();
-        $this->contentObjectProcessor->process();
         return $contentBlockData;
     }
 
@@ -89,89 +88,127 @@ final class ContentBlockDataDecorator
             if (SpecialFieldType::tryFrom($fieldType->getName()) !== null) {
                 continue;
             }
-            // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
-            if ($fieldType->getTcaType() === 'passthrough') {
-                $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->uniqueIdentifier);
-            } else {
-                $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->uniqueIdentifier);
+            $loadedField = $this->loadField($resolvedRelation, $tcaFieldDefinition, $depth, $context);
+            $processedContentBlockData[$tcaFieldDefinition->identifier] = $loadedField;
+            // Exclude file relations from grids.
+            if ($loadedField instanceof RecordPropertyClosure && $fieldType->getTcaType() !== 'file') {
+                $grids[$tcaFieldDefinition->identifier] = $this->handleGrids($context, $loadedField, $tcaFieldDefinition);
             }
-            if ($this->isRelationField($resolvedField)) {
+        }
+        $resolvedRelation->resolved = $processedContentBlockData;
+        $gridData = new ContentBlockGridData($grids);
+        $contentBlockDataObject = $this->buildContentBlockDataObject(
+            $resolvedRelation,
+            $contentTypeDefinition->getName(),
+            $gridData,
+        );
+        return $contentBlockDataObject;
+    }
+
+    private function loadField(
+        ResolvedContentBlockDataRelation $resolvedRelation,
+        TcaFieldDefinition $tcaFieldDefinition,
+        int $depth,
+        ?PageLayoutContext $context
+    ): mixed {
+        $fieldType = $tcaFieldDefinition->fieldType;
+        // TCA type "passthrough" is not available in the record, and it won't fall back to raw record value.
+        if ($fieldType->getTcaType() === 'passthrough') {
+            $resolvedField = $resolvedRelation->record->getRawRecord()->get($tcaFieldDefinition->uniqueIdentifier);
+            return $resolvedField;
+        }
+        // Simple field type, load eagerly.
+        if ($this->isRelationField($tcaFieldDefinition) === false) {
+            $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->uniqueIdentifier);
+            return $resolvedField;
+        }
+        // Relation field type, load lazily.
+        $recordPropertyClosure = new RecordPropertyClosure(
+            function () use ($resolvedRelation, $tcaFieldDefinition, $depth, $context): ContentBlockData|LazyRecordCollection|LazyFileReferenceCollection|null {
+                $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->uniqueIdentifier);
                 $resolvedField = $this->handleRelation(
                     $resolvedField,
                     $depth,
                     $context,
                 );
-                $grids = $this->handleGrids($grids, $context, $resolvedField, $tcaFieldDefinition);
+                return $resolvedField;
             }
-            $processedContentBlockData[$tcaFieldDefinition->identifier] = $resolvedField;
-        }
-        $resolvedRelation->resolved = $processedContentBlockData;
-        $contentBlockDataObject = $this->buildContentBlockDataObject(
-            $resolvedRelation,
-            $contentTypeDefinition->getName(),
-            $grids,
         );
-        return $contentBlockDataObject;
+        return $recordPropertyClosure;
     }
 
     /**
-     * @param array<string, RelationGrid>|array<string, RenderedGridItem[]> $grids
-     * @return array<string, RelationGrid>|array<string, RenderedGridItem[]>
+     * @return LazyRecordCollection<RenderedGridItem>|RecordPropertyClosure
      */
     private function handleGrids(
-        array $grids,
         ?PageLayoutContext $context,
-        mixed $resolvedField,
+        RecordPropertyClosure $recordPropertyClosure,
         TcaFieldDefinition $tcaFieldDefinition
-    ): array {
-        if ($context === null && $this->request !== null) {
-            $renderedGridItemDataObjects = $resolvedField;
-            if (!is_iterable($renderedGridItemDataObjects)) {
-                $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
+    ): LazyRecordCollection|RecordPropertyClosure {
+        if ($context === null) {
+            if ($this->request === null) {
+                throw new \InvalidArgumentException(
+                    'ContentBlockDataDecorator is missing the request object.',
+                    1756397952
+                );
             }
-            foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
-                $renderedGridItem = new RenderedGridItem();
-                $grids[$tcaFieldDefinition->identifier][] = $renderedGridItem;
-                $callback = function () use ($contentBlockDataObject, $renderedGridItem): void {
+            $this->contentObjectProcessor->setRequest($this->request);
+            $initialization = function () use ($recordPropertyClosure): array {
+                $renderedGridItems = [];
+                $renderedGridItemDataObjects = $recordPropertyClosure->instantiate();
+                if (!is_iterable($renderedGridItemDataObjects)) {
+                    $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
+                }
+                foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
+                    $renderedGridItem = new RenderedGridItem();
+                    $renderedGridItems[] = $renderedGridItem;
                     $this->contentObjectProcessor->processContentObject(
                         $contentBlockDataObject,
                         $renderedGridItem
                     );
-                };
-                $this->contentObjectProcessor->addInstruction($callback);
-            }
-        }
-        if ($context !== null) {
-            $relationGrid = new RelationGrid();
-            $grids[$tcaFieldDefinition->identifier] = $relationGrid;
-            $callback = function () use ($grids, $tcaFieldDefinition, $resolvedField, $context): void {
-                $relationGrid = $grids[$tcaFieldDefinition->identifier];
-                $this->gridProcessor->processGrid(
-                    $relationGrid,
-                    $context,
-                    $tcaFieldDefinition,
-                    $resolvedField
-                );
+                }
+                return $renderedGridItems;
             };
-            $this->gridProcessor->addInstruction($callback);
+            return new LazyRecordCollection('', $initialization);
         }
-        return $grids;
+        $initialization = function () use ($tcaFieldDefinition, $recordPropertyClosure, $context): ?RelationGrid {
+            $resolvedField = $recordPropertyClosure->instantiate();
+            if ($resolvedField === null) {
+                return null;
+            }
+            $relationGrid = $this->gridProcessor->processGrid(
+                $context,
+                $tcaFieldDefinition,
+                $resolvedField
+            );
+            return $relationGrid;
+        };
+        return new RecordPropertyClosure($initialization);
     }
 
     private function handleRelation(
-        RecordInterface|LazyRecordCollection $resolvedField,
+        RecordInterface|LazyRecordCollection|LazyFileReferenceCollection|null $resolvedField,
         int $depth,
         ?PageLayoutContext $context = null,
-    ): ContentBlockData|LazyRecordCollection {
-        if ($resolvedField instanceof LazyRecordCollection) {
-            $resolvedField = $this->transformMultipleRelation(
-                $resolvedField,
-                $depth,
-                $context,
-            );
+    ): ContentBlockData|LazyRecordCollection|LazyFileReferenceCollection|null {
+        if ($resolvedField === null) {
+            return null;
+        }
+        if ($resolvedField instanceof LazyFileReferenceCollection) {
             return $resolvedField;
         }
-        $resolvedField = $this->transformSelectRelation(
+        if ($resolvedField instanceof LazyRecordCollection) {
+            $initialization = function () use ($resolvedField, $depth, $context): array {
+                $resolvedField = $this->transformMultipleRelation(
+                    $resolvedField,
+                    $depth,
+                    $context,
+                );
+                return $resolvedField;
+            };
+            return new LazyRecordCollection((string)$resolvedField, $initialization);
+        }
+        $resolvedField = $this->transformSingleRelation(
             $resolvedField,
             $depth,
             $context,
@@ -179,54 +216,41 @@ final class ContentBlockDataDecorator
         return $resolvedField;
     }
 
-    private function isRelationField(mixed $resolvedField): bool
+    private function isRelationField(TcaFieldDefinition $tcaFieldDefinition): bool
     {
-        if ($resolvedField instanceof Record) {
+        $tcaType = $tcaFieldDefinition->fieldType->getTcaType();
+        $fieldConfig = $tcaFieldDefinition->getTca()['config'] ?? [];
+        if (in_array($tcaType, ['category', 'inline', 'file'])) {
             return true;
         }
-        if ($resolvedField instanceof LazyRecordCollection) {
+        $allowed = $fieldConfig['allowed'] ?? '';
+        if ($tcaType === 'group' && $allowed !== '') {
+            return true;
+        }
+        $foreignTable = $fieldConfig['foreign_table'] ?? '';
+        if ($tcaType === 'select' && $foreignTable !== '') {
             return true;
         }
         return false;
     }
 
-    private function transformSelectRelation(
-        LazyRecordCollection|RecordInterface $processedField,
-        int $depth,
-        ?PageLayoutContext $context = null,
-    ): LazyRecordCollection|ContentBlockData {
-        if ($processedField instanceof Record) {
-            $processedField = $this->transformSingleRelation(
-                $processedField,
-                $depth,
-                $context,
-            );
-            return $processedField;
-        }
-        $processedField = $this->transformMultipleRelation(
-            $processedField,
-            $depth,
-            $context,
-        );
-        return $processedField;
-    }
-
     /**
-     * @return LazyRecordCollection<ContentBlockData>
+     * @return array<ContentBlockData>
      */
     private function transformMultipleRelation(
         LazyRecordCollection $processedField,
         int $depth,
         ?PageLayoutContext $context = null,
-    ): LazyRecordCollection {
+    ): array {
+        $items = [];
         foreach ($processedField as $key => $processedFieldItem) {
-            $processedField[$key] = $this->transformSingleRelation(
+            $items[$key] = $this->transformSingleRelation(
                 $processedFieldItem,
                 $depth,
                 $context,
             );
         }
-        return $processedField;
+        return $items;
     }
 
     private function transformSingleRelation(
@@ -268,19 +292,16 @@ final class ContentBlockDataDecorator
         return $contentBlockData;
     }
 
-    /**
-     * @param array<string, RelationGrid>|array<string, RenderedGridItem[]> $grids
-     */
     private function buildContentBlockDataObject(
         ResolvedContentBlockDataRelation $resolvedRelation,
         string $name = '',
-        array $grids = [],
+        ?ContentBlockGridData $gridData = null,
     ): ContentBlockData {
         $resolvedData = $resolvedRelation->resolved;
         if ($resolvedRelation->record instanceof Record === false) {
             throw new \RuntimeException('Resolved record is not a record instance', 1728587332);
         }
-        $contentBlockData = new ContentBlockData($resolvedRelation->record, $name, $grids, $resolvedData);
+        $contentBlockData = new ContentBlockData($resolvedRelation->record, $name, $gridData, $resolvedData);
         return $contentBlockData;
     }
 
