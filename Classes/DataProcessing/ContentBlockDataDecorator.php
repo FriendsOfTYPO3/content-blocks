@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\RecordInterface;
 use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 use TYPO3\CMS\Core\Resource\Collection\LazyFileReferenceCollection;
+use TYPO3\CMS\Core\Resource\FileReference;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -124,7 +125,7 @@ final class ContentBlockDataDecorator
         }
         // Relation field type, load lazily.
         $recordPropertyClosure = new RecordPropertyClosure(
-            function () use ($resolvedRelation, $tcaFieldDefinition, $depth, $context): ContentBlockData|LazyRecordCollection|LazyFileReferenceCollection|null {
+            function () use ($resolvedRelation, $tcaFieldDefinition, $depth, $context): ContentBlockData|LazyRecordCollection|LazyFileReferenceCollection|FileReference|null {
                 $resolvedField = $resolvedRelation->record->get($tcaFieldDefinition->uniqueIdentifier);
                 $resolvedField = $this->handleRelation(
                     $resolvedField,
@@ -187,14 +188,17 @@ final class ContentBlockDataDecorator
     }
 
     private function handleRelation(
-        RecordInterface|LazyRecordCollection|LazyFileReferenceCollection|null $resolvedField,
+        RecordInterface|LazyRecordCollection|LazyFileReferenceCollection|FileReference|null $resolvedField,
         int $depth,
         ?PageLayoutContext $context = null,
-    ): ContentBlockData|LazyRecordCollection|LazyFileReferenceCollection|null {
+    ): ContentBlockData|LazyRecordCollection|LazyFileReferenceCollection|FileReference|null {
         if ($resolvedField === null) {
             return null;
         }
         if ($resolvedField instanceof LazyFileReferenceCollection) {
+            return $resolvedField;
+        }
+        if ($resolvedField instanceof FileReference) {
             return $resolvedField;
         }
         if ($resolvedField instanceof LazyRecordCollection) {
