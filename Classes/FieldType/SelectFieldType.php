@@ -51,6 +51,9 @@ final class SelectFieldType extends AbstractFieldType
     private array $items = [];
     private array $sortItems = [];
 
+    // Only for renderType="selectMultipleSideBySide"
+    private bool $multiple = false;
+
     // Only for renderType="selectCheckBox"
     private array $appearance = [];
 
@@ -90,6 +93,7 @@ final class SelectFieldType extends AbstractFieldType
         $self->itemGroups = (array)($settings['itemGroups'] ?? $self->itemGroups);
         $self->items = (array)($settings['items'] ?? $self->items);
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
+        $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
         $self->treeConfig = (array)($settings['treeConfig'] ?? $self->treeConfig);
         $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
@@ -179,6 +183,9 @@ final class SelectFieldType extends AbstractFieldType
         $config['items'] = $this->items;
         if ($this->sortItems !== []) {
             $config['sortItems'] = $this->sortItems;
+        }
+        if ($this->multiple) {
+            $config['multiple'] = true;
         }
         if ($this->appearance !== []) {
             $config['appearance'] = $this->appearance;
