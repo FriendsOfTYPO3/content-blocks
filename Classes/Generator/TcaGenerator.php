@@ -440,6 +440,7 @@ readonly class TcaGenerator
             'l10n_mode',
             'dbFieldLength',
             'items',
+            'multiple',
         ];
         $fieldNonOverridableOptions = [];
         // @todo experimental. Could be added as interface method later.

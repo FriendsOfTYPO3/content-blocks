@@ -73,6 +73,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'sortItems' => [
                     'foo' => 'bar',
                 ],
+                'multiple' => 1,
                 'appearance' => [
                     'foo' => 'bar',
                 ],
@@ -131,6 +132,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'sortItems' => [
                         'foo' => 'bar',
                     ],
+                    'multiple' => true,
                     'appearance' => [
                         'foo' => 'bar',
                     ],
@@ -180,6 +182,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'itemGroups' => [],
                 'items' => [],
                 'sortItems' => [],
+                'multiple' => 0,
                 'appearance' => [],
                 'treeConfig' => [],
                 'dbFieldLength' => 0,
