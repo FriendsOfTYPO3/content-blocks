@@ -29,7 +29,9 @@
 <f:for each="{data.image}" as="image">
     image:{image.name}
 </f:for>
-
+<f:if condition="{data.image_one_to_one}">
+    image_one_to_one:{data.image_one_to_one.name}
+</f:if>
 <f:if condition="{data.pass}">
     pass: {data.pass}
 </f:if>

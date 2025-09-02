@@ -149,6 +149,7 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         $html = (string)$response->getBody();
 
         self::assertStringContainsString('image:kasper-skarhoj1.jpg', $html);
+        self::assertStringContainsString('image_one_to_one:kasper-skarhoj1.jpg', $html);
     }
 
     #[Test]

@@ -3,6 +3,9 @@ name: typo3tests/content-element-b
 fields:
   - identifier: image
     useExistingField: true
+  - identifier: image_one_to_one
+    type: File
+    relationship: oneToOne
   - identifier: collection
     type: Collection
     fields:
