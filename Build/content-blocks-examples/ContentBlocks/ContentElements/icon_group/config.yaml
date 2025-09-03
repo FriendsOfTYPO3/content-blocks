@@ -38,7 +38,7 @@ fields:
         type: Text
       - identifier: icon
         type: File
-        maxitems: 1
+        relationship: oneToOne
         allowed: png,svg,gif
       - identifier: bodytext
         type: Textarea

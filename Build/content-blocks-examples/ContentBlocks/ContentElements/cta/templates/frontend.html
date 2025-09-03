@@ -8,7 +8,7 @@
 
 <div class="cb-cta">
     <f:if condition="{data.background_image}">
-        <f:variable name="backgroundUrl">{f:uri.image(image: data.background_image.0)}</f:variable>
+        <f:variable name="backgroundUrl">{f:uri.image(image: data.background_image)}</f:variable>
         <f:variable name="elementBgId">cb-cta-bg-{data.uid}</f:variable>
         <f:variable name="backgroundImageStyles">{elementBgId} { background-image: url({backgroundUrl});}</f:variable>
         <f:asset.css identifier="cb-cta-bg-{data.uid}">

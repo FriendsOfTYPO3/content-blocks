@@ -21,6 +21,6 @@ fields:
     required: true
   - identifier: background_image
     type: File
-    maxitems: 1
+    relationship: oneToOne
     minitems: 1
     allowed: common-image-types
