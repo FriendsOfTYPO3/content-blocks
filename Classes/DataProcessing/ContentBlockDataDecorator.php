@@ -23,6 +23,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\SpecialFieldType;
 use TYPO3\CMS\Core\Collection\LazyRecordCollection;
 use TYPO3\CMS\Core\Domain\Record;
@@ -92,7 +93,7 @@ final class ContentBlockDataDecorator
             $loadedField = $this->loadField($resolvedRelation, $tcaFieldDefinition, $depth, $context);
             $processedContentBlockData[$tcaFieldDefinition->identifier] = $loadedField;
             // Exclude file relations from grids.
-            if ($loadedField instanceof RecordPropertyClosure && $fieldType->getTcaType() !== 'file') {
+            if ($this->canHandleGrid($loadedField, $fieldType, $context)) {
                 $grids[$tcaFieldDefinition->identifier] = $this->handleGrids($context, $loadedField, $tcaFieldDefinition);
             }
         }
@@ -188,6 +189,20 @@ final class ContentBlockDataDecorator
             return $relationGrid;
         };
         return new RecordPropertyClosure($initialization);
+    }
+
+    private function canHandleGrid(mixed $loadedField, FieldTypeInterface $fieldType, ?PageLayoutContext $context): bool
+    {
+        if ($loadedField instanceof RecordPropertyClosure === false) {
+            return false;
+        }
+        if ($fieldType->getTcaType() === 'file') {
+            return false;
+        }
+        if ($context === null && $this->request === null) {
+            return false;
+        }
+        return true;
     }
 
     private function handleRelation(

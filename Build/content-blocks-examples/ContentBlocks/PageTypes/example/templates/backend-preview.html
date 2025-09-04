@@ -1,0 +1,15 @@
+<html xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">
+    <div class="card card-size-medium">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Title:</dt>
+                <dd class="col-sm-9">
+                   {data.title}
+                </dd>
+            </dl>
+            <be:link.editRecord uid="{data.uid}" table="{data.mainType}" fields="title">
+               Edit page properties
+            </be:link.editRecord>
+        </div>
+    </div>
+</html>
