@@ -155,11 +155,14 @@ final class ContentBlockDataDecorator
             }
             $this->contentObjectProcessor->setRequest($this->request);
             $initialization = function () use ($recordPropertyClosure): array {
-                $renderedGridItems = [];
                 $renderedGridItemDataObjects = $recordPropertyClosure->instantiate();
+                if ($this->isRecordObject($renderedGridItemDataObjects) === false) {
+                    return [];
+                }
                 if (!is_iterable($renderedGridItemDataObjects)) {
                     $renderedGridItemDataObjects = [$renderedGridItemDataObjects];
                 }
+                $renderedGridItems = [];
                 foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
                     $renderedGridItem = new RenderedGridItem();
                     $renderedGridItems[] = $renderedGridItem;
@@ -233,6 +236,17 @@ final class ContentBlockDataDecorator
         }
         $foreignTable = $fieldConfig['foreign_table'] ?? '';
         if ($tcaType === 'select' && $foreignTable !== '') {
+            return true;
+        }
+        return false;
+    }
+
+    private function isRecordObject(mixed $resolvedField): bool
+    {
+        if ($resolvedField instanceof Record) {
+            return true;
+        }
+        if ($resolvedField instanceof LazyRecordCollection) {
             return true;
         }
         return false;
