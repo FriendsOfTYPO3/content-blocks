@@ -35,7 +35,12 @@
 		}
 	},
 	"require": {
-		"symfony/var-exporter": "^7.0",
+		"symfony/console": "^7.2",
+		"symfony/dependency-injection": "^7.2",
+		"symfony/filesystem": "^7.2",
+		"symfony/finder": "^7.2",
+		"symfony/var-exporter": "^7.2",
+		"symfony/yaml": "^7.2",
 		"typo3/cms-backend": "^13.4.5",
 		"typo3/cms-core": "^13.4.5",
 		"typo3/cms-fluid": "^13.4.5",
