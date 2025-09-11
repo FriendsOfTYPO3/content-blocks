@@ -258,7 +258,7 @@ final class ContentBlockDataDecorator
 
     private function isRecordObject(mixed $resolvedField): bool
     {
-        if ($resolvedField instanceof Record) {
+        if ($resolvedField instanceof RecordInterface) {
             return true;
         }
         if ($resolvedField instanceof LazyRecordCollection) {
