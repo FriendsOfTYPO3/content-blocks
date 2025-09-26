@@ -14,7 +14,7 @@ eventually this will become a Core feature in TYPO3 v14 LTS.
 | **Documentation:** | https://docs.typo3.org/p/friendsoftypo3/content-blocks/main/en-us/                       |
 | **TER:**           | https://extensions.typo3.org/extension/content_blocks                                    |
 | **Packagist:**     | https://packagist.org/packages/friendsoftypo3/content-blocks                             |
-| **Examples:**      | https://github.com/friendsoftypo3/content-blocks/tree/main/Build/content-blocks-examples |
+| **Examples:**      | https://github.com/friendsoftypo3/content-blocks/tree/main/Build/content_blocks_examples |
 
 ## Installation
 

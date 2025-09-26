@@ -90,7 +90,7 @@
 	"scripts": {
 		"pre-update-cmd": [
 			"[ -d \"packages\" ] || mkdir packages",
-			"[ -L \"packages/content-blocks-examples\" ] || ln -s ../Build/content-blocks-examples -t packages"
+			"[ -L \"packages/content_blocks_examples\" ] || ln -s ../Build/content_blocks_examples -t packages"
 		],
 		"pre-autoload-dump": [
 			"[ -d \"config\" ] || cp -a ./Build/config.example ./config"
