@@ -46,3 +46,5 @@ the :php:`coordinates` field for the custom :php:`maps` content type.
             }
         }
     }
+
+A more extensive example can be found in the `examples extension <https://github.com/friendsoftypo3/content-blocks/tree/main/Build/content_blocks_examples/Classes/EventListener/RecordCreationEventListener.php>`__.

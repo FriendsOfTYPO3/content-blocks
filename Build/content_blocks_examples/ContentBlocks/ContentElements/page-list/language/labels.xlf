@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file datatype="plaintext" original="labels.xlf" source-language="en" product-name="example/page-list">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title">
+				<source>Page list</source>
+			</trans-unit>
+			<trans-unit id="description" resname="description">
+				<source>Element that displays a list of subpages whose parent pages have been configured.</source>
+			</trans-unit>
+			<trans-unit id="tx_sitepackage_page.label" resname="tx_sitepackage_page.label">
+				<source>Parent pages</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

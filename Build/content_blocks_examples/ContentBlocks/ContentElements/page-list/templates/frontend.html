@@ -1,0 +1,27 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<section id="c{data.uid}">
+    <h2>{data.header}</h2>
+
+    <f:if condition="{data.bodytext}">
+        {data.bodytext -> f:format.html()}
+    </f:if>
+
+    <f:if condition="{data.pageItems}">
+        <f:for each="{data.pageItems}" as="pageItem">
+            <div>
+                <h3>{pageItem.title}</h3>
+
+                <f:if condition="{pageItem.categories}">
+                    <ul>
+                        <f:for each="{pageItem.categories}" as="category">
+                            <li>{category.title}</li>
+                        </f:for>
+                    </ul>
+                </f:if>
+            </div>
+        </f:for>
+    </f:if>
+</section>
+
+</html>
