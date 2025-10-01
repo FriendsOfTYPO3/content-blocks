@@ -47,6 +47,12 @@ Options
    :required: true
    :type: string
 
+   .. note::
+
+      If you use the step-by-step process to navigate through the creation,
+      only locally installed extensions will be displayed. In case you have
+      a package installed via vcs, you have to provide it via CLI option.
+
    The host extension, where to store your new Content Block.
 
 .. confval:: title
