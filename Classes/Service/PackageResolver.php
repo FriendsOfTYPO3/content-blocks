@@ -38,6 +38,16 @@ class PackageResolver
     {
         $packages = $this->packageManager->getAvailablePackages();
         $packages = $this->removeFrameworkExtensions($packages);
+        return $packages;
+    }
+
+    /**
+     * @return array<string, PackageInterface>
+     */
+    public function getAvailablePackagesForDisplay(): array
+    {
+        $packages = $this->packageManager->getAvailablePackages();
+        $packages = $this->removeFrameworkExtensions($packages);
         if (Environment::isComposerMode()) {
             return $this->filterNonLocalComposerPackages($packages);
         }

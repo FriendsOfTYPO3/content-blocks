@@ -226,7 +226,14 @@ class CreateContentBlockCommand extends Command
                 );
             }
         } else {
-            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $this->getPackageTitles($availablePackages), $defaults['extension']));
+            $availablePackagesForDisplay = $this->packageResolver->getAvailablePackagesForDisplay();
+            if ($availablePackagesForDisplay === []) {
+                $output->writeln('<comment>No local extensions found. Displaying all installed extensions instead.</comment>');
+                $output->writeln('<comment>Maybe you forgot to install a site package?</comment>');
+                $availablePackagesForDisplay = $availablePackages;
+            }
+            $availablePackageTitles = $this->getPackageTitles($availablePackagesForDisplay);
+            $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $availablePackageTitles, $defaults['extension']));
         }
 
         $contentBlockConfiguration = new LoadedContentBlock(
