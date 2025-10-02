@@ -121,6 +121,75 @@ to render.
 This preview is limited to control buttons like edit, delete and hide. No
 support for drag and drop or creation of new child elements is given.
 
+..  _cb_share_options_explanation:
+
+`shareAcrossFields` and `shareAcrossTables`
+===========================================
+
+There are two options :ref:`shareAcrossFields <confval-collection-shareAcrossFields>` and
+:ref:`shareAcrossTables <confval-collection-shareAcrossTables>`, which you might need when working
+with Nested Content Elements.
+
+.. warning::
+
+   If you forgot to set these options when it would be necessary, the nested elements will
+   appear twice in the backend. If you are unsure, always enable these options. In worst
+   case you will have redundant information in the database.
+
+First, `shareAcrossFields` is needed, if you have two or more Collections with a
+**shared** `foreign_table` inside the **same** Content Block. In this case `tt_content`.
+So for example you have a field :yaml:`nested_elements_a` and :yaml:`nested_elements_b`
+inside the same Content Element. In order to distinguish them, a new database column
+will be created to track the field name of the corresponding Collection.
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/ContentBlocks/ContentElements/nested-content/config.yaml
+
+    name: example/nested-content
+    fields:
+      - identifier: header
+        useExistingField: true
+      - identifier: nested_elements_a
+        type: Collection
+        foreign_table: tt_content # This table is used twice here.
+        shareAcrossFields: true   # That's why shareAcrossFields must be enabled.
+      - identifier: nested_elements_b
+        type: Collection
+        foreign_table: tt_content # This table is used twice here
+        shareAcrossFields: true   # That's why shareAcrossFields must be enabled.
+
+The option `shareAcrossTables` on the other hand is only necessary, if the same
+`foreign_table` is **shared** across multiple tables. So for example you use
+nested Content Elements in a Content Element and a second time in a custom
+Record Type like `news`.
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/ContentBlocks/ContentElements/nested-content/config.yaml
+
+    name: example/nested-content
+    fields:
+      - identifier: header
+        useExistingField: true
+      - identifier: nested_elements
+        type: Collection
+        foreign_table: tt_content # This table is also used in news
+        shareAcrossTables: true   # That's why shareAcrossTables must be enabled.
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/ContentBlocks/RecordTypes/news/config.yaml
+
+    name: example/news
+    table: my_news_table
+    fields:
+      - identifier: title
+        type: Text
+      - identifier: nested_elements
+        type: Collection
+        foreign_table: tt_content # This table is also used in nested-content
+        shareAcrossTables: true   # That's why shareAcrossTables must be enabled.
+
+Of course, if both cases are true, both options must be enabled.
+
 ..  _cb_nested_vs_container:
 
 When to use nested Content Elements vs. container extensions

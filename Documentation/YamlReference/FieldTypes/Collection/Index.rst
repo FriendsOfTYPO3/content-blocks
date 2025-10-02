@@ -193,11 +193,13 @@ Settings
    :confval:`foreign_table <collection-foreign-table>`
    is used.
 
-   Make sure to add this to **every** Collection, which shares the table.
+   Make sure to add this to **every** Collection, which shares the `foreign_table`.
 
    This will create a new field called :sql:`tablenames`. It corresponds to the
    TCA option :ref:`foreign_table_field <t3tca:columns-inline-properties-foreign-table-field>`.
    The field name can be overridden by defining :yaml:`foreign_table_field` explicitly.
+
+   For examples visit this :ref:`section <cb_share_options_explanation>`
 
 .. confval:: shareAcrossFields
    :name: collection-shareAcrossFields
@@ -209,10 +211,12 @@ Settings
    :confval:`foreign_table <collection-foreign-table>`
    is used.
 
-   Make sure to add this to **every** Collection, which shares the table.
+   Make sure to add this to **every** Collection, which shares the `foreign_table`.
 
    This will create a new field called :sql:`fieldname`. It corresponds to the
    TCA option :ref:`foreign_match_fields <t3tca:columns-inline-properties-foreign-match-fields>`.
+
+   For examples visit this :ref:`section <cb_share_options_explanation>`
 
 .. confval:: allowedRecordTypes
    :name: collection-allowedRecordTypes
