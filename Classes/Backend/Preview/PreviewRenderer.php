@@ -103,9 +103,11 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $record = $item->getRecord();
         $table = $item->getTable();
         $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $record);
-        $data = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
+        $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
+        $settings['_content_block_name'] = $contentBlockData->get('_name');
         $view = $this->createView($request, $item, $section);
-        $view->assign('data', $data);
+        $view->assign('data', $contentBlockData);
+        $view->assign('settings', $settings);
         $result = $view->render();
         $result = trim($result);
         return $result;

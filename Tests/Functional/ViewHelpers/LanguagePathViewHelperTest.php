@@ -57,7 +57,7 @@ final class LanguagePathViewHelperTest extends FunctionalTestCase
         $context = $this->get(RenderingContextFactory::class)->create();
         $context->getTemplatePaths()->setTemplateSource($template);
         $view = new TemplateView($context);
-        $view->assign('data', ['_name' => 'typo3tests/content-element-b']);
+        $view->assign('settings', ['_content_block_name' => 'typo3tests/content-element-b']);
         self::assertSame($expected, $view->render());
     }
 

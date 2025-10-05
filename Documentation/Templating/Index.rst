@@ -131,10 +131,7 @@ the current Content Block in the template.
     <f:comment><!-- Include the assets/frontend.js script --></f:comment>
     <f:asset.script identifier="myJavascriptIdentifier" src="{cb:assetPath()}/frontend.js"/>
 
-The information of the current Content Block is stored in :html:`{data}`. This
-means if you use an asset ViewHelper in a partial, you have to provide
-:html:`{data}` as an argument to that partial. Alternatively, you can set
-:html:`name` by hand:
+Alternatively, you can set :html:`name` manually.
 
 .. code-block:: html
 
@@ -153,9 +150,7 @@ the labels.xlf file of the current Content Block.
 
     <f:translate key="{cb:languagePath()}:header"/>
 
-As described above in the asset ViewHelper, the :html:`{data}` variable is
-required to resolve the Content Block automatically. You can also set
-:html:`name` by hand:
+You can also set :html:`name` manually:
 
 .. code-block:: html
 
@@ -172,13 +167,6 @@ your partials there.
 This part is automatically added, but you can also
 :ref:`extend or overwrite <cb_extension_partials>` this TypoScript configuration
 in your sitepackage.
-
-Remember, that you should ship the :html:`{data}` variable to the partial if you
-want to make use of automatic detection of the current Content Block.
-
-.. code-block:: html
-
-   <f:render partial="Component" arguments="{data: data, foo: 'bar'}"/>
 
 See also:
 

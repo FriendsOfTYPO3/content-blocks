@@ -80,8 +80,10 @@ readonly class PageLayout
             return;
         }
         $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord);
+        $settings['_content_block_name'] = $contentBlockData->get('_name');
         $view = $this->createView($contentTypeDefinition, $pageUid, $request);
         $view->assign('data', $contentBlockData);
+        $view->assign('settings', $settings);
         $renderedView = $view->render();
         $event->addHeaderContent($renderedView);
     }

@@ -42,7 +42,9 @@ class AssetPathViewHelper extends AbstractViewHelper
 
     public function render(): string
     {
-        $name = (string)($this->arguments['name'] ?? $this->renderingContext->getVariableProvider()->get('data._name'));
+        $name = (string)($this->arguments['name']
+            ?? $this->renderingContext->getVariableProvider()->get('data._name')
+            ?? $this->renderingContext->getVariableProvider()->get('settings._content_block_name'));
         if ($name === '') {
             throw new Exception(__CLASS__ . ' seemingly called outside Content Blocks context.', 1701198923);
         }
