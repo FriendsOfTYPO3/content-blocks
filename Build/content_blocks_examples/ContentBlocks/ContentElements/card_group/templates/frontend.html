@@ -52,17 +52,4 @@
     </f:if>
 </div>
 
-<f:section name="LinkWrap">
-
-    <f:if condition="{link}">
-        <f:then>
-            <f:link.typolink parameter="{link}" title="{link_title}">{content -> f:format.raw()}</f:link.typolink>
-        </f:then>
-        <f:else>
-            {content -> f:format.raw()}
-        </f:else>
-    </f:if>
-
-</f:section>
-
 </html>
