@@ -30,7 +30,7 @@ class HtmlTemplateCodeGenerator
         $defaultContent = [];
 
         if ($contentBlockConfiguration->getContentType() === ContentType::PAGE_TYPE) {
-            $defaultContent[] = '<html xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">';
+            $defaultContent[] = '<html xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">';
             $defaultContent[] = '    <div class="card card-size-medium">';
             $defaultContent[] = '        <div class="card-body">';
             $defaultContent[] = '            <dl class="row">';
@@ -47,6 +47,8 @@ class HtmlTemplateCodeGenerator
             $defaultContent[] = '</html>';
         } else {
             $defaultContent[] = '<html';
+            $defaultContent[] = '    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"';
+            $defaultContent[] = '    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"';
             $defaultContent[] = '    data-namespace-typo3-fluid="true"';
             $defaultContent[] = '>';
             $defaultContent[] = '';
@@ -76,8 +78,15 @@ class HtmlTemplateCodeGenerator
 
     public function generateFrontendTemplate(LoadedContentBlock $contentBlockConfiguration): string
     {
+        $frontendTemplate[] = '<html';
+        $frontendTemplate[] = '    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"';
+        $frontendTemplate[] = '    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"';
+        $frontendTemplate[] = '    data-namespace-typo3-fluid="true"';
+        $frontendTemplate[] = '>';
+        $frontendTemplate[] = '';
         $frontendTemplate[] = 'Frontend template for Content Block: ' . $contentBlockConfiguration->getName() . '<br>';
         $frontendTemplate[] = 'Header: {data.header}';
+        $frontendTemplate[] = '</html>';
         $frontendTemplateString = implode("\n", $frontendTemplate);
 
         return $frontendTemplateString;
