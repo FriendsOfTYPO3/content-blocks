@@ -165,12 +165,8 @@ final class ContentBlockDataDecorator
                 }
                 $renderedGridItems = [];
                 foreach ($renderedGridItemDataObjects as $contentBlockDataObject) {
-                    $renderedGridItem = new RenderedGridItem();
+                    $renderedGridItem = $this->contentObjectProcessor->processContentObject($contentBlockDataObject);
                     $renderedGridItems[] = $renderedGridItem;
-                    $this->contentObjectProcessor->processContentObject(
-                        $contentBlockDataObject,
-                        $renderedGridItem
-                    );
                 }
                 return $renderedGridItems;
             };

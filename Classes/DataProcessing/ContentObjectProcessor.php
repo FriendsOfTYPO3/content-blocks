@@ -39,13 +39,12 @@ class ContentObjectProcessor
         $this->contentObjectRenderer->setRequest($request);
     }
 
-    public function processContentObject(ContentBlockData $contentBlockData, RenderedGridItem &$renderedGridItem): void
+    public function processContentObject(ContentBlockData $contentBlockData): RenderedGridItem
     {
         if ($this->session->hasRenderedGrid($contentBlockData)) {
-            $renderedGridItemFromSession = $this->session->getRenderedGrid($contentBlockData);
-            $renderedGridItem = $renderedGridItemFromSession;
-            return;
+            return $this->session->getRenderedGrid($contentBlockData);
         }
+        $renderedGridItem = new RenderedGridItem();
         $this->session->addRenderedGrid($contentBlockData, new RenderedGridItem());
         $frontendTypoScript = $this->request->getAttribute('frontend.typoscript');
         $setup = $frontendTypoScript->getSetupArray();
@@ -57,12 +56,12 @@ class ContentObjectProcessor
         $lastSegment = (string)array_pop($pathSegments);
         foreach ($pathSegments as $segment) {
             if (!array_key_exists($segment . '.', $setup)) {
-                return;
+                return $renderedGridItem;
             }
             $setup = $setup[$segment . '.'];
         }
         if (!isset($setup[$lastSegment])) {
-            return;
+            return $renderedGridItem;
         }
         $name = $setup[$lastSegment];
         $conf = $setup[$lastSegment . '.'] ?? [];
@@ -70,5 +69,6 @@ class ContentObjectProcessor
         $renderedGridItem->content = $content;
         $renderedGridItem->data = $contentBlockData;
         $this->session->setRenderedGrid($contentBlockData, $renderedGridItem);
+        return $renderedGridItem;
     }
 }
