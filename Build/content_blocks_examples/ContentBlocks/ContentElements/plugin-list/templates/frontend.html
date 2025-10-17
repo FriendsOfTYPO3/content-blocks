@@ -1,0 +1,7 @@
+<h1>{data.header}</h1>
+
+<f:for each="{listView}" as="item">
+    <f:link.page pageUid="{data.detail_page_select.uid}" additionalParams="{tx_example_plugin: {record: item.data.uid}}">
+        <h2>{item.data.title}</h2>
+    </f:link.page>
+</f:for>

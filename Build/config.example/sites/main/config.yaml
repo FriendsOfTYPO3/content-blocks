@@ -11,3 +11,15 @@ languages:
     flag: us
 rootPageId: 1
 routes: {  }
+routeEnhancers:
+  Example:
+    type: Plugin
+    namespace: 'tx_example_plugin'
+    routePath: '/{record}'
+    requirements:
+      record: '^[a-zA-Z0-9].*$'
+    aspects:
+      record:
+        type: PersistedAliasMapper
+        tableName: 'tx_hov_domain_model_notype'
+        routeFieldName: 'slug'

@@ -1,0 +1,23 @@
+name: example/plugin-list
+typeName: example_plugin_list
+prefixFields: true
+prefixType: vendor
+vendorPrefix: example
+group: plugins
+basics:
+  - TYPO3/Appearance
+  - TYPO3/Links
+fields:
+  -
+    identifier: TYPO3/Header
+    type: Basic
+  -
+    identifier: page_select
+    type: Relation
+    allowed: 'pages'
+    relationship: manyToOne
+  -
+    identifier: detail_page_select
+    type: Relation
+    allowed: 'pages'
+    relationship: manyToOne

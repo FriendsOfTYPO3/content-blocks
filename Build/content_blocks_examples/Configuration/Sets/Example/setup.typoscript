@@ -7,3 +7,35 @@ page.10 {
     20 = content-blocks
   }
 }
+
+tt_content {
+  example_plugin_list {
+    dataProcessing {
+      100 = database-query
+      100 {
+        table = tx_hov_domain_model_notype
+        orderBy = title ASC
+        pidInList.field = example_page_select
+        as = listView
+        dataProcessing {
+          10 = content-blocks
+        }
+      }
+    }
+  }
+  example_plugin_detail {
+    dataProcessing {
+      100 = database-query
+      100 {
+        if.isTrue.data = GP:tx_example_plugin|record
+        table = tx_hov_domain_model_notype
+        pidInList.field = example_page_select
+        uidInList.data = GP:tx_example_plugin|record
+        as = detailView
+        dataProcessing {
+          10 = content-blocks
+        }
+      }
+    }
+  }
+}
