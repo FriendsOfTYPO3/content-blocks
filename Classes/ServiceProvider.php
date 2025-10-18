@@ -187,6 +187,13 @@ class ServiceProvider extends AbstractServiceProvider
                     if (!file_exists($absolutePath)) {
                         continue;
                     }
+
+                    $importStatement = '';
+                    if (file_exists(GeneralUtility::getFileAbsFileName($extPath . '/setup.typoscript'))) {
+                        $importStatement = '@import "' . $extPath . '/setup.typoscript"';
+                    }
+
+
                     $typoScript = <<<HEREDOC
 tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
 tt_content.{$typeDefinition->getTypeName()} {
@@ -198,6 +205,7 @@ tt_content.{$typeDefinition->getTypeName()} {
         20 = $extPrivatePath/layouts/
     }
 }
+$importStatement
 HEREDOC;
                     $arrayObject->append($typoScript);
                 }
