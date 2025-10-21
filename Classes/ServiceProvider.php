@@ -197,6 +197,7 @@ tt_content.{$typeDefinition->getTypeName()} {
     layoutRootPaths {
         20 = $extPrivatePath/layouts/
     }
+    settings._content_block_name = {$typeDefinition->getName()}
 }
 HEREDOC;
                     $arrayObject->append($typoScript);

@@ -54,7 +54,6 @@ readonly class ContentBlocksDataProcessor implements DataProcessorInterface
         $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $data);
         $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord);
         $processedData['data'] = $contentBlockData;
-        $processedData['settings']['_content_block_name'] = $contentBlockData->get('_name');
         return $processedData;
     }
 }
