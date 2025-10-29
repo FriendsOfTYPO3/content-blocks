@@ -1,0 +1,14 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Preview"/>
+
+<f:section name="Content">
+    <cb:link.editRecord record="{data}">
+        {data.bodytext -> f:format.stripTags(allowedTags: '<ul><li>') -> f:transform.html()}
+    </cb:link.editRecord>
+</f:section>
+
+</html>
