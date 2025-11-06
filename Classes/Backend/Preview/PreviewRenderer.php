@@ -25,7 +25,6 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
@@ -43,7 +42,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 {
     public function __construct(
         protected TableDefinitionCollection $tableDefinitionCollection,
-        protected RecordFactory $recordFactory,
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected RootPathsSettings $rootPathsSettings,
@@ -101,9 +99,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         /** @var ServerRequestInterface $request */
         $request = $GLOBALS['TYPO3_REQUEST'];
         $record = $item->getRecord();
-        $table = $item->getTable();
-        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $record);
-        $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
+        $contentBlockData = $this->contentBlockDataDecorator->decorate($record, $item->getContext());
         $settings['_content_block_name'] = $contentBlockData->get('_name');
         $view = $this->createView($request, $item, $section);
         $view->assign('data', $contentBlockData);
