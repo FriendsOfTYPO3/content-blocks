@@ -56,6 +56,7 @@ final class TextFieldTypeTest extends UnitTestCase
                     ],
                 ],
                 'eval' => ['trim', 'lower'],
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -116,9 +117,11 @@ final class TextFieldTypeTest extends UnitTestCase
                     'items' => [],
                 ],
                 'eval' => [],
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'input',
                     'default' => '',
                     'autocomplete' => false,

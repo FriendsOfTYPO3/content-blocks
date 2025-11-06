@@ -53,6 +53,7 @@ final class ColorFieldTypeTest extends UnitTestCase
                     ],
                 ],
                 'opacity' => true,
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -107,9 +108,11 @@ final class ColorFieldTypeTest extends UnitTestCase
                     'items' => [],
                 ],
                 'opacity' => false,
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'color',
                     'default' => '',
                     'autocomplete' => false,

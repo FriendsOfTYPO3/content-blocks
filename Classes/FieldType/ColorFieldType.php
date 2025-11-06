@@ -20,11 +20,12 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'Color', tcaType: 'color', searchable: true)]
+#[FieldType(name: 'Color', tcaType: 'color')]
 final class ColorFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithNullableProperty;
+    use WithSearchableProperty;
 
     private bool $readOnly = false;
     private int $size = 0;
@@ -41,6 +42,7 @@ final class ColorFieldType extends AbstractFieldType
         $self = clone $this;
         $self->setCommonProperties($settings);
         $self->setNullableAndDefault($settings, 'string');
+        $self->setSearchable($settings);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->required = (bool)(($settings['required'] ?? $self->required));
@@ -58,6 +60,7 @@ final class ColorFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
+        $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

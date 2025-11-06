@@ -89,7 +89,6 @@ class FieldTypeRegistryTestFactory
             $fieldTypeAttribute = $attributes[0]->newInstance();
             $fieldType->setName($fieldTypeAttribute->name);
             $fieldType->setTcaType($fieldTypeAttribute->tcaType);
-            $fieldType->setSearchable($fieldTypeAttribute->searchable);
             $keyedFieldTypes[$fieldType->getName()] = fn(): FieldTypeInterface => $fieldType;
         }
         $serviceLocator = new ServiceLocator($keyedFieldTypes);

@@ -33,6 +33,14 @@ Settings
 
    If set, the field will become mandatory.
 
+.. confval:: searchable
+   :name: color-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: opacity
    :name: color-opacity
    :required: false

@@ -58,6 +58,7 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'appearance' => [
                     'foo',
                 ],
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -116,9 +117,11 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'valuePicker' => [],
                 'allowedTypes' => [],
                 'appearance' => [],
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'link',
                     'default' => '',
                     'autocomplete' => false,

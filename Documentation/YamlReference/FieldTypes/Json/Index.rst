@@ -41,6 +41,14 @@ Settings
 
    If set, the Json textarea needs to be filled.
 
+.. confval:: searchable
+   :name: json-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: readOnly
    :name: json-readOnly
    :required: false

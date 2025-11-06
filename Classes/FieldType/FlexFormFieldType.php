@@ -22,10 +22,11 @@ use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'FlexForm', tcaType: 'flex', searchable: true)]
+#[FieldType(name: 'FlexForm', tcaType: 'flex')]
 final class FlexFormFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+    use WithSearchableProperty;
 
     /** @var FlexFormDefinition[] */
     private array $flexFormDefinitions = [];
@@ -36,6 +37,7 @@ final class FlexFormFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
+        $self->setSearchable($settings);
         $self->ds_pointerField = (string)($settings['ds_pointerField'] ?? $self->ds_pointerField);
         $self->ds = (array)($settings['ds'] ?? $self->ds);
         $self->flexFormDefinitions = $settings['flexFormDefinitions'] ?? [];
@@ -45,6 +47,7 @@ final class FlexFormFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
+        $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
         if ($this->ds_pointerField !== '') {
             $config['ds_pointerField'] = $this->ds_pointerField;

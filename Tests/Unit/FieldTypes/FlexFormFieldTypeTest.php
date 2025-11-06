@@ -40,6 +40,7 @@ final class FlexFormFieldTypeTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'ds_pointerField' => 'foobar',
                 'ds' => ['foo' => 'bar'],
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -52,6 +53,7 @@ final class FlexFormFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'searchable' => false,
                     'type' => 'flex',
                     'ds_pointerField' => 'foobar',
                     'ds' => ['foo' => 'bar'],
