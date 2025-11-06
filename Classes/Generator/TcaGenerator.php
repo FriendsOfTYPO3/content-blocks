@@ -195,7 +195,6 @@ readonly class TcaGenerator
                 }
             }
         }
-        $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition, $baseTca);
         $tca = $this->cleanTableTca($tca);
         return $tca;
     }
@@ -1001,26 +1000,6 @@ readonly class TcaGenerator
             'rowDescription',
             '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
         ];
-    }
-
-    /**
-     * Generate search fields in order to find content elements in global backend search.
-     */
-    public function generateSearchFields(TableDefinition $tableDefinition, array $baseTca): string
-    {
-        $searchFieldsString = $baseTca[$tableDefinition->table]['ctrl']['searchFields'] ?? '';
-        $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
-        foreach ($tableDefinition->tcaFieldDefinitionCollection as $field) {
-            $fieldType = $field->fieldType;
-            if ($fieldType->isSearchable() && !in_array($field->uniqueIdentifier, $searchFields, true)) {
-                $searchFields[] = $field->uniqueIdentifier;
-            }
-        }
-        if ($searchFields === []) {
-            return '';
-        }
-        $searchFieldsCommaSeparated = implode(',', $searchFields);
-        return $searchFieldsCommaSeparated;
     }
 
     protected function generateBaseTableTca(TableDefinition $tableDefinition): array
