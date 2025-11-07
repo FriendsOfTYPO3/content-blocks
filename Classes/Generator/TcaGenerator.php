@@ -1049,7 +1049,7 @@ readonly class TcaGenerator
         if ($capability->shallTrackUpdateDate()) {
             $ctrl['tstamp'] = 'tstamp';
         }
-        if ($capability->isWorkspaceAware() && $this->systemExtensionAvailability->isAvailable('workspaces')) {
+        if ($this->isTableWorkspaceAware($tableDefinition)) {
             $ctrl['versioningWS'] = true;
         }
         if ($capability->hasInternalDescription()) {
@@ -1130,6 +1130,23 @@ readonly class TcaGenerator
             'palettes' => $palettes,
             'columns' => $columns,
         ];
+    }
+
+    protected function isTableWorkspaceAware(TableDefinition $tableDefinition): bool
+    {
+        if (
+            $tableDefinition->capability->isWorkspaceAware()
+            && $this->systemExtensionAvailability->isAvailable('workspaces')
+        ) {
+            return true;
+        }
+        foreach ($tableDefinition->parentReferences as $parentReference) {
+            $parentTableDefinition = $this->tableDefinitionCollection->getTable($parentReference->parentTable);
+            if ($parentTableDefinition->capability->isWorkspaceAware()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected function cleanTableTca(array $tca): array

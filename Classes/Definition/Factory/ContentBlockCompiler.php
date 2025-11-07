@@ -558,7 +558,7 @@ final class ContentBlockCompiler
         foreach ($result->tableDefinition->fields as $uniqueIdentifier => $tcaFieldDefinition) {
             $isTypeField = $uniqueIdentifier === $result->tableDefinition->typeField;
             if (!$isTypeField) {
-                $overrideColumn = TcaFieldFactory::create($tcaFieldDefinition);
+                $overrideColumn = TcaFieldFactory::create($tcaFieldDefinition, $result->contentType->table);
                 $result->contentType->overrideColumns[] = $overrideColumn;
             }
         }
@@ -790,7 +790,7 @@ final class ContentBlockCompiler
             'descriptionPath' => $descriptionPath,
         ];
         $input->languagePath->popSegment();
-        $flexFormTcaDefinition = TcaFieldFactory::create($flexFormFieldArray);
+        $flexFormTcaDefinition = TcaFieldFactory::create($flexFormFieldArray, $input->table);
         return $flexFormTcaDefinition;
     }
 

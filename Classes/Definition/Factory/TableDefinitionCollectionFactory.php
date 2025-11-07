@@ -98,7 +98,7 @@ final class TableDefinitionCollectionFactory
             $references = $compilationResult->getParentReferences()[$table] ?? [];
             $parentReferences = [];
             foreach ($references as $reference) {
-                $parentReferences[] = TcaFieldFactory::create($reference);
+                $parentReferences[] = TcaFieldFactory::create($reference, $table);
             }
             $arguments['parentReferences'] = $parentReferences;
             $capability = $this->extendCapability($parentReferences, $capability);

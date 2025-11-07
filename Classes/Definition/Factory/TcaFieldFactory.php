@@ -24,9 +24,10 @@ use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
 class TcaFieldFactory
 {
-    public static function create(array $array): TcaFieldDefinition
+    public static function create(array $array, string $parentTable): TcaFieldDefinition
     {
         $arguments = [];
+        $arguments['parentTable'] = $parentTable;
         $arguments['uniqueIdentifier'] = (string)($array['uniqueIdentifier'] ?? '');
         $arguments['parentContentType'] = ContentType::getByTable($array['parentTable'] ?? '');
         $arguments['identifier'] = $array['config']['identifier'];
