@@ -726,7 +726,7 @@ readonly class TcaGenerator
     protected function getRecordTypeStandardShowItem(array $showItemArray, string $table): string
     {
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
-        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        $generalTab = '--div--;core.form.tabs:general';
         if ($firstItemIsTab) {
             $tabDefinition = array_shift($showItemArray);
             $generalTab = $this->processShowItem([$tabDefinition]);
@@ -756,7 +756,7 @@ readonly class TcaGenerator
     protected function getFileTypeStandardShowItem(array $showItemArray): string
     {
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
-        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        $generalTab = '--div--;core.form.tabs:general';
         if ($firstItemIsTab) {
             $tabDefinition = array_shift($showItemArray);
             $generalTab = $this->processShowItem([$tabDefinition]);
@@ -777,11 +777,11 @@ readonly class TcaGenerator
     {
         $parts = [];
         if ($capability->isLanguageAware()) {
-            $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
+            $parts[] = '--div--;core.form.tabs:language';
             $parts[] = '--palette--;;language';
         }
         if ($capability->hasDisabledRestriction() || $capability->hasAccessPalette()) {
-            $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access';
+            $parts[] = '--div--;core.form.tabs:access';
             if ($capability->hasDisabledRestriction()) {
                 $parts[] = '--palette--;;hidden';
             }
@@ -801,7 +801,7 @@ readonly class TcaGenerator
     protected function getPageTypeStandardShowItem(array $showItemArray, string|int $typeName): string
     {
         $general = [
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+            '--div--;core.form.tabs:general',
             '--palette--;;standard',
         ];
 
