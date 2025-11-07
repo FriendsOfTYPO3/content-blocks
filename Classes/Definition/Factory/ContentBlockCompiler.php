@@ -745,9 +745,6 @@ final class ContentBlockCompiler
             }
         }
 
-        if ($input->getTypeField() !== null) {
-            $field['ds_pointerField'] = $input->getTypeField();
-        }
         $field['flexFormDefinitions'][$flexFormDefinition->getTypeName()] = $flexFormDefinition;
         return $field;
     }

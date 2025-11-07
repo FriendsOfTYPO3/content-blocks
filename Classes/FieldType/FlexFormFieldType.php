@@ -30,16 +30,14 @@ final class FlexFormFieldType extends AbstractFieldType
 
     /** @var FlexFormDefinition[] */
     private array $flexFormDefinitions = [];
-    private string $ds_pointerField = '';
-    private array $ds = [];
+    private string $ds = '';
 
     public function createFromArray(array $settings): FlexFormFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
         $self->setSearchable($settings);
-        $self->ds_pointerField = (string)($settings['ds_pointerField'] ?? $self->ds_pointerField);
-        $self->ds = (array)($settings['ds'] ?? $self->ds);
+        $self->ds = (string)($settings['ds'] ?? $self->ds);
         $self->flexFormDefinitions = $settings['flexFormDefinitions'] ?? [];
         return $self;
     }
@@ -49,9 +47,6 @@ final class FlexFormFieldType extends AbstractFieldType
         $tca = $this->toTca();
         $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
-        if ($this->ds_pointerField !== '') {
-            $config['ds_pointerField'] = $this->ds_pointerField;
-        }
         $config['ds'] = $this->ds;
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
@@ -65,7 +60,7 @@ final class FlexFormFieldType extends AbstractFieldType
         return $this->flexFormDefinitions;
     }
 
-    public function setDataStructure(array $dataStructure): void
+    public function setDataStructure(string $dataStructure): void
     {
         $this->ds = $dataStructure;
     }

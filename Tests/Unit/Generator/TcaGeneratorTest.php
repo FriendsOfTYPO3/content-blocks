@@ -1969,42 +1969,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                        't3ce_testblock' => [
-                            'showitem' => 'flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-                            'previewRenderer' => PreviewRenderer::class,
-                            'columnsOverrides' => [
-                                'flex' => [
-                                    'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.label',
-                                    'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'flex' => [
-                            'label' => 'flex',
-                            'config' => [
-                                'type' => 'flex',
-                                'ds_pointerField' => 'CType',
-                                'ds' => [
-                                    'default' => '<T3DataStructure>
-  <ROOT>
-    <type>array</type>
-    <el>
-      <xmlTitle>
-        <label>The Title:</label>
-        <config>
-            <type>input</type>
-            <size>48</size>
-        </config>
-      </xmlTitle>
-    </el>
-  </ROOT>
-</T3DataStructure>',
-                                    't3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2029,7 +1995,19 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
-                                    't3ce_testblock' => '<T3FlexForms>
+                                    ],
+                                ],
+                            ],
+                        ],
+                        't3ce_testblock' => [
+                            'showitem' => 'flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'flex' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.description',
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2054,7 +2032,30 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                             ],
                             'exclude' => true,
                         ],
@@ -2196,35 +2197,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'pi_flexform' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:pi_flexform.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:pi_flexform.description',
-                                ],
-                            ],
-                        ],
-                        't3ce_example2' => [
-                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-                            'previewRenderer' => PreviewRenderer::class,
-                            'columnsOverrides' => [
-                                'pi_flexform' => [
-                                    'label' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.label',
-                                    'description' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.description',
-                                ],
-                            ],
-                        ],
-                        't3ce_example3' => [
-                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-                            'previewRenderer' => PreviewRenderer::class,
-                            'columnsOverrides' => [
-                                'pi_flexform' => [
-                                    'label' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.label',
-                                    'description' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'pi_flexform' => [
-                            'config' => [
-                                'ds' => [
-                                    '*,t3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2249,7 +2223,19 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
-                                    '*,t3ce_example2' => '<T3FlexForms>
+                                    ],
+                                ],
+                            ],
+                        ],
+                        't3ce_example2' => [
+                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'pi_flexform' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.description',
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2274,7 +2260,19 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
-                                    '*,t3ce_example3' => '<T3FlexForms>
+                                    ],
+                                ],
+                            ],
+                        ],
+                        't3ce_example3' => [
+                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'pi_flexform' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.description',
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sheet1 type="array">
             <ROOT type="array">
@@ -2326,10 +2324,12 @@ final class TcaGeneratorTest extends UnitTestCase
         </sheet2>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
                             ],
                         ],
                     ],
+                    'columns' => [],
                 ],
             ],
         ];
@@ -2408,32 +2408,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'flex' => [
-                            'label' => 'flex',
-                            'config' => [
-                                'type' => 'flex',
-                                'ds_pointerField' => 'CType',
-                                'ds' => [
-                                    'default' => '<T3DataStructure>
-  <ROOT>
-    <type>array</type>
-    <el>
-      <xmlTitle>
-        <label>The Title:</label>
-        <config>
-            <type>input</type>
-            <size>48</size>
-        </config>
-      </xmlTitle>
-    </el>
-  </ROOT>
-</T3DataStructure>',
-                                    't3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2491,7 +2467,30 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                             ],
                             'exclude' => true,
                         ],
@@ -2558,32 +2557,8 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'flex' => [
-                            'label' => 'flex',
-                            'config' => [
-                                'type' => 'flex',
-                                'ds_pointerField' => 'CType',
-                                'ds' => [
-                                    'default' => '<T3DataStructure>
-  <ROOT>
-    <type>array</type>
-    <el>
-      <xmlTitle>
-        <label>The Title:</label>
-        <config>
-            <type>input</type>
-            <size>48</size>
-        </config>
-      </xmlTitle>
-    </el>
-  </ROOT>
-</T3DataStructure>',
-                                    't3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2616,7 +2591,30 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                             ],
                             'exclude' => true,
                         ],
@@ -2635,10 +2633,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'label' => 'FlexForm',
             'config' => [
                 'type' => 'flex',
-                'ds_pointerField' => 'list_type,CType',
-                'ds' => [
-                    'default' => '<T3DataStructure><!-- example --></T3DataStructure>',
-                ],
+                'ds' => '<T3DataStructure><!-- example --></T3DataStructure>',
             ],
         ];
 
