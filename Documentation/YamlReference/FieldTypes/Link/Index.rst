@@ -93,8 +93,10 @@ Advanced / use case
         required: true
         valuePicker:
           items:
-            - [ 'TYPO3 CMS', 'https://www.typo3.org' ]
-            - [ 'TYPO3 GmbH', 'https://www.typo3.com' ]
+            - label: 'TYPO3 CMS'
+              value: 'https://www.typo3.org'
+            - label: 'TYPO3 GmbH'
+              value: 'https://www.typo3.com'
 
 
 Usage in Fluid

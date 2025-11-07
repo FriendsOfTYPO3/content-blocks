@@ -51,8 +51,8 @@ final class TextFieldTypeTest extends UnitTestCase
                 'is_in' => 'abc',
                 'valuePicker' => [
                     'items' => [
-                        ['One', '1'],
-                        ['Two', '2'],
+                        ['label' => 'One', 'value' => '1'],
+                        ['label' => 'Two', 'value' => '2'],
                     ],
                 ],
                 'eval' => ['trim', 'lower'],
@@ -84,8 +84,8 @@ final class TextFieldTypeTest extends UnitTestCase
                     'autocomplete' => true,
                     'valuePicker' => [
                         'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
+                            ['label' => 'One', 'value' => '1'],
+                            ['label' => 'Two', 'value' => '2'],
                         ],
                     ],
                 ],

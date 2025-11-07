@@ -92,8 +92,10 @@ Settings
 
       valuePicker:
         items:
-          - [ 'Want to join our team? Take the initiative!', 'Job offer general' ]
-          - [ 'We are looking for ...', 'Job offer specific' ]
+          - label: 'Job offer general'
+            value: 'Want to join our team? Take the initiative!'
+          - label: 'Job offer specific'
+            value: 'We are looking for ...'
 
 Examples
 ========

@@ -48,8 +48,8 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'mode' => 'useOrOverridePlaceholder',
                 'valuePicker' => [
                     'items' => [
-                        ['One', '1'],
-                        ['Two', '2'],
+                        ['label' => 'One', 'value' => '1'],
+                        ['label' => 'Two', 'value' => '2'],
                     ],
                 ],
                 'allowedTypes' => [
@@ -82,8 +82,8 @@ final class LinkFieldTypeTest extends UnitTestCase
                     'autocomplete' => true,
                     'valuePicker' => [
                         'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
+                            ['label' => 'One', 'value' => '1'],
+                            ['label' => 'Two', 'value' => '2'],
                         ],
                     ],
                     'allowedTypes' => [

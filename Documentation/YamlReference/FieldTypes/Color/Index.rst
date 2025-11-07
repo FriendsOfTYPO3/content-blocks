@@ -68,9 +68,12 @@ Settings
 
       valuePicker:
         items:
-          - [ 'Red', '#FF0000' ]
-          - [ 'Green', '#008000' ]
-          - [ 'Blue', '#0000FF' ]
+          - label: 'Red'
+            value: #FF0000
+          - label: 'Green'
+            value: #008000
+          - label: 'Blue'
+            value: #0000FF
 
 Example
 =======
@@ -98,6 +101,9 @@ Advanced / use case
         default: '#0000FF'
         valuePicker:
           items:
-            - [ 'Red', '#FF0000' ]
-            - [ 'Green', '#008000' ]
-            - [ 'Blue', '#0000FF' ]
+            - label: 'Red'
+              value: #FF0000
+            - label: 'Green'
+              value: #008000
+            - label: 'Blue'
+              value: #0000FF
