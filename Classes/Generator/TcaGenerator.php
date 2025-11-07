@@ -715,7 +715,7 @@ readonly class TcaGenerator
     protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
     {
         $showItemArray = $typeDefinition->getShowItems();
-        $showItemArray[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended';
+        $showItemArray[] = '--div--;core.form.tabs:extended';
         $showItem = $this->processShowItem($showItemArray);
         return $showItem;
     }
@@ -859,24 +859,24 @@ readonly class TcaGenerator
     protected function getPageTypeStandardShowItemSystemTabs(): array
     {
         return [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--div--;core.form.tabs:appearance',
             '--palette--;;backend_layout',
             '--palette--;;replace',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--div--;core.form.tabs:behaviour',
             '--palette--;;links',
             '--palette--;;caching',
             '--palette--;;miscellaneous',
             '--palette--;;module',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--div--;core.form.tabs:resources',
             '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--div--;core.form.tabs:language',
             '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--div--;core.form.tabs:access',
             '--palette--;;visibility',
             '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            '--div--;core.form.tabs:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;core.form.tabs:extended',
         ];
     }
 
@@ -886,20 +886,20 @@ readonly class TcaGenerator
     protected function getPageTypeExternalShowItemSystemTabs(): array
     {
         return [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--div--;core.form.tabs:appearance',
             '--palette--;;layout',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--div--;core.form.tabs:behaviour',
             '--palette--;;miscellaneous',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--div--;core.form.tabs:resources',
             '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--div--;core.form.tabs:language',
             '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--div--;core.form.tabs:access',
             '--palette--;;visibility',
             '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            '--div--;core.form.tabs:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;core.form.tabs:extended',
         ];
     }
 
@@ -909,21 +909,21 @@ readonly class TcaGenerator
     protected function getPageTypeShortcutShowItemSystemTabs(): array
     {
         return [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--div--;core.form.tabs:appearance',
             '--palette--;;layout',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--div--;core.form.tabs:behaviour',
             '--palette--;;links',
             '--palette--;;miscellaneous',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--div--;core.form.tabs:resources',
             '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--div--;core.form.tabs:language',
             '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--div--;core.form.tabs:access',
             '--palette--;;visibility',
             '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            '--div--;core.form.tabs:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;core.form.tabs:extended',
         ];
     }
 
