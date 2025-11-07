@@ -118,7 +118,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
     public function basicsAreAppendedToTheEndFromTopLevelBasicsArray(): void
     {
         self::assertStringContainsString(
-            '--palette--;;simple_basics_palette,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,--palette--;;simple_basics_frames_palette,--palette--;;simple_basics_links_palette,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,categories',
+            '--palette--;;simple_basics_palette,--div--;core.form.tabs:appearance,--palette--;;simple_basics_frames_palette,--palette--;;simple_basics_links_palette,--div--;core.form.tabs:categories,categories',
             $GLOBALS['TCA']['tt_content']['types']['simple_basics']['showitem']
         );
     }
