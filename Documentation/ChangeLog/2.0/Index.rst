@@ -9,6 +9,28 @@ Content Blocks version 2.0 adds support for TYPO3 v14.
 
 ..  contents::
 
+Feature
+=======
+
+Field Type Country
+------------------
+
+A new Field Type :ref:`Country <field_type_country>` is added. This type provides a list of countries for selection.
+
+.. code-block:: yaml
+
+    name: example/country
+    fields:
+      - identifier: country
+        type: Country
+        required: true
+        default: 'DE'
+        labelField: 'localizedName'
+        prioritizedCountries:
+          - DE
+          - AT
+          - CH
+
 Breaking
 ========
 
