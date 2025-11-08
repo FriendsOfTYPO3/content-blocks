@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\CategoryFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\CheckboxFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\ColorFieldType;
+use TYPO3\CMS\ContentBlocks\FieldType\CountryFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\DateTimeFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\EmailFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
@@ -81,6 +82,7 @@ class FieldTypeRegistryTestFactory
             new UuidFieldType(),
             new PassFieldType(),
             new SelectNumberFieldType(),
+            new CountryFieldType(),
         ];
         $keyedFieldTypes = [];
         foreach ($fieldTypes as $fieldType) {
