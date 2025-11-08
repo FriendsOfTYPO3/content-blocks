@@ -5,7 +5,7 @@
 2.0
 ===
 
-Content Blocks version 2.0 adds support for TYPO3 v14.
+Content Blocks version 2.0 adds support for TYPO3 v14 and removes support for TYPO3 v13.
 
 ..  contents::
 
