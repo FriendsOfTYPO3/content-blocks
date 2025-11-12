@@ -17,7 +17,6 @@ return static function (ContainerConfigurator $container, ContainerBuilder $cont
             $definition->addTag(FieldType::TAG_NAME, [
                 'name' => $attribute->name,
                 'tcaType' => $attribute->tcaType,
-                'searchable' => $attribute->searchable,
             ]);
         }
     );

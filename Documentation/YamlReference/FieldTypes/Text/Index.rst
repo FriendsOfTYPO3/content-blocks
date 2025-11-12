@@ -58,6 +58,14 @@ Settings
 
    If set, the field becomes mandatory.
 
+.. confval:: searchable
+   :name: text-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: size
    :name: text-size
    :required: false
@@ -84,8 +92,10 @@ Settings
 
       valuePicker:
         items:
-          - [ 'Want to join our team? Take the initiative!', 'Job offer general' ]
-          - [ 'We are looking for ...', 'Job offer specific' ]
+          - label: 'Job offer general'
+            value: 'Want to join our team? Take the initiative!'
+          - label: 'Job offer specific'
+            value: 'We are looking for ...'
 
 Examples
 ========

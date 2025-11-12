@@ -46,6 +46,7 @@ final class EmailFieldTypeTest extends UnitTestCase
                 'nullable' => 1,
                 'mode' => 'useOrOverridePlaceholder',
                 'eval' => ['trim', 'lower'],
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -90,9 +91,11 @@ final class EmailFieldTypeTest extends UnitTestCase
                 'nullable' => 0,
                 'mode' => '',
                 'eval' => [],
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'email',
                     'default' => '',
                     'autocomplete' => false,

@@ -35,7 +35,7 @@ the Core implementations to get a feeling on how to implement them. You may
 extend :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType` for easier
 usage. The registration itself happens through the PHP attribute
 :php:`TYPO3\CMS\ContentBlocks\FieldType\FieldType`, which expects the
-:php:`name`, :php:`tcaType` and :php:`searchable` arguments.
+:php:`name` and :php:`tcaType` arguments.
 
 .. note::
 
@@ -48,10 +48,8 @@ usage. The registration itself happens through the PHP attribute
     {
         public function getName(): string;
         public function getTcaType(): string;
-        public function isSearchable(): bool;
         public function setName(string $name): void;
         public function setTcaType(string $tcaType): void;
-        public function setSearchable(bool $searchable): void;
         public function createFromArray(array $settings): FieldTypeInterface;
         public function getTca(): array;
         public function getSql(string $column): string;
@@ -93,12 +91,6 @@ setTcaType/getTcaType
 The TCA type, the new Content Blocks type is based on.
 Defined by :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType`.
 
-setSearchable/isSearchable
---------------------------
-
-Whether the field contents should be searchable in global search.
-Defined by :php:`TYPO3\CMS\ContentBlocks\FieldType\AbstractFieldType`.
-
 Example
 =======
 
@@ -116,7 +108,7 @@ Example for a field type "Money".
     use TYPO3\CMS\ContentBlocks\FieldType\FieldType;
     use TYPO3\CMS\ContentBlocks\FieldType\WithCommonProperties;
 
-    #[FieldType(name: 'Money', tcaType: 'number', searchable: false)]
+    #[FieldType(name: 'Money', tcaType: 'number')]
     final class MoneyFieldType extends AbstractFieldType
     {
         use WithCommonProperties;
@@ -127,7 +119,7 @@ Example for a field type "Money".
 
         public function createFromArray(array $settings): self
         {
-            // Clone the service instance, so that state for name, tcaType and searchable is carried over.
+            // Clone the service instance, so that state for name and tcaType is carried over.
             $self = clone $this;
             $self->setCommonProperties($settings);
             $default = $settings['default'] ?? $self->default;

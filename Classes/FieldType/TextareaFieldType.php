@@ -20,11 +20,12 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'Textarea', tcaType: 'text', searchable: true)]
+#[FieldType(name: 'Textarea', tcaType: 'text')]
 final class TextareaFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithNullableProperty;
+    use WithSearchableProperty;
 
     private bool $readOnly = false;
     private bool $required = false;
@@ -47,6 +48,7 @@ final class TextareaFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
+        $self->setSearchable($settings);
         $self->setNullableAndDefault($settings, 'string');
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->required = (bool)($settings['required'] ?? $self->required);
@@ -71,6 +73,7 @@ final class TextareaFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
+        $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
         if ($this->hasDefault) {
             $config['default'] = $this->default;

@@ -28,6 +28,7 @@ final readonly class TcaFieldDefinition
 {
     public function __construct(
         public ContentType $parentContentType,
+        public string $parentTable,
         public string $identifier,
         public string $uniqueIdentifier,
         public string $labelPath,

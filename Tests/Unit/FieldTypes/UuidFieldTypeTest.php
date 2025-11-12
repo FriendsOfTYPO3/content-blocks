@@ -40,6 +40,7 @@ final class UuidFieldTypeTest extends UnitTestCase
                 'size' => 30,
                 'version' => 4,
                 'enableCopyToClipboard' => true,
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,9 +72,11 @@ final class UuidFieldTypeTest extends UnitTestCase
                 'non_available_field' => 'foo',
                 'size' => 0,
                 'enableCopyToClipboard' => false,
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'uuid',
                     'enableCopyToClipboard' => false,
                 ],

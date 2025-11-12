@@ -17,13 +17,20 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\FieldType;
 
-interface FieldTypeInterface
+trait WithSearchableProperty
 {
-    public function getName(): string;
-    public function getTcaType(): string;
-    public function setName(string $name): void;
-    public function setTcaType(string $tcaType): void;
-    public function createFromArray(array $settings): FieldTypeInterface;
-    public function getTca(): array;
-    public function getSql(string $column): string;
+    private bool $searchable = true;
+
+    protected function setSearchable(array $settings): void
+    {
+        $this->searchable = (bool)($settings['searchable'] ?? true);
+    }
+
+    protected function searchableToTca(array $tca = []): array
+    {
+        if ($this->searchable === false) {
+            $tca['config']['searchable'] = false;
+        }
+        return $tca;
+    }
 }

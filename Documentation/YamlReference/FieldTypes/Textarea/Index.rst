@@ -48,6 +48,14 @@ Settings
 
    If set, the field will become mandatory.
 
+.. confval:: searchable
+   :name: textarea-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: enableRichtext
    :name: textarea-enableRichtext
    :required: false

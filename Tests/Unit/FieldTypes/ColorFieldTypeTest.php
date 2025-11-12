@@ -48,11 +48,12 @@ final class ColorFieldTypeTest extends UnitTestCase
                 'mode' => 'useOrOverridePlaceholder',
                 'valuePicker' => [
                     'items' => [
-                        ['One', '1'],
-                        ['Two', '2'],
+                        ['label' => 'One', 'value' => '1'],
+                        ['label' => 'Two', 'value' => '2'],
                     ],
                 ],
                 'opacity' => true,
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -76,8 +77,8 @@ final class ColorFieldTypeTest extends UnitTestCase
                     'autocomplete' => true,
                     'valuePicker' => [
                         'items' => [
-                            ['One', '1'],
-                            ['Two', '2'],
+                            ['label' => 'One', 'value' => '1'],
+                            ['label' => 'Two', 'value' => '2'],
                         ],
                     ],
                     'opacity' => true,
@@ -107,9 +108,11 @@ final class ColorFieldTypeTest extends UnitTestCase
                     'items' => [],
                 ],
                 'opacity' => false,
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'color',
                     'default' => '',
                     'autocomplete' => false,

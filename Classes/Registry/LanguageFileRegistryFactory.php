@@ -17,9 +17,10 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
+use Symfony\Component\Translation\MessageCatalogue;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Localization\Parser\LocalizationParserInterface;
+use TYPO3\CMS\Core\Localization\Loader\XliffLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -29,29 +30,28 @@ readonly class LanguageFileRegistryFactory
 {
     public function __construct(
         protected ContentBlockRegistry $contentBlockRegistry,
-        protected LocalizationParserInterface $localizationParser,
+        protected XliffLoader $xliffLoader,
     ) {}
 
     public function create(): LanguageFileRegistry
     {
         $languageFileRegistry = new LanguageFileRegistry();
         foreach ($this->contentBlockRegistry->getAll() as $contentBlock) {
-            $defaultData = $this->parseDefaultLanguageFile($contentBlock);
-            if ($defaultData !== null) {
-                $languageFileRegistry->register($contentBlock, $defaultData);
+            $messageCatalogue = $this->parseDefaultLanguageFile($contentBlock);
+            if ($messageCatalogue !== null) {
+                $languageFileRegistry->register($contentBlock, $messageCatalogue);
             }
         }
         return $languageFileRegistry;
     }
 
-    protected function parseDefaultLanguageFile(LoadedContentBlock $contentBlock): ?array
+    protected function parseDefaultLanguageFile(LoadedContentBlock $contentBlock): ?MessageCatalogue
     {
         $languagePath = $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
         $absoluteLanguagePath = GeneralUtility::getFileAbsFileName($languagePath);
         if (file_exists($absoluteLanguagePath)) {
-            $parsedData = $this->localizationParser->getParsedData($absoluteLanguagePath, 'default');
-            $defaultData = $parsedData['default'];
-            return $defaultData;
+            $messageCatalogue = $this->xliffLoader->load($absoluteLanguagePath, 'en');
+            return $messageCatalogue;
         }
         return null;
     }

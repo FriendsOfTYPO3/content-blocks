@@ -26,6 +26,7 @@ Simple Field Types:
 
 *  :ref:`Checkbox <field_type_checkbox>`
 *  :ref:`Color <field_type_color>`
+*  :ref:`Country <field_type_country>`
 *  :ref:`DateTime <field_type_datetime>`
 *  :ref:`Email <field_type_email>`
 *  :ref:`Link <field_type_link>`

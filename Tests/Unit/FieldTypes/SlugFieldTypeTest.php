@@ -48,6 +48,7 @@ final class SlugFieldTypeTest extends UnitTestCase
                     'foo' => 'bar',
                 ],
                 'prependSlash' => true,
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -92,9 +93,11 @@ final class SlugFieldTypeTest extends UnitTestCase
                 'fallbackCharacter' => '',
                 'generatorOptions' => [],
                 'prependSlash' => false,
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'slug',
                 ],
             ],

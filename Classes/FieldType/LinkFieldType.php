@@ -20,11 +20,12 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'Link', tcaType: 'link', searchable: true)]
+#[FieldType(name: 'Link', tcaType: 'link')]
 final class LinkFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithNullableProperty;
+    use WithSearchableProperty;
 
     private bool $readOnly = false;
     private int $size = 0;
@@ -40,6 +41,7 @@ final class LinkFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
+        $self->setSearchable($settings);
         $self->setNullableAndDefault($settings, 'string');
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
@@ -59,6 +61,7 @@ final class LinkFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
+        $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

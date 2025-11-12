@@ -34,7 +34,6 @@ final class FieldTypeCompilerPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $definition->addMethodCall('setName', [$attributes['name']]);
                 $definition->addMethodCall('setTcaType', [$attributes['tcaType']]);
-                $definition->addMethodCall('setSearchable', [$attributes['searchable']]);
             }
         }
     }

@@ -20,10 +20,11 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'Uuid', tcaType: 'uuid', searchable: true)]
+#[FieldType(name: 'Uuid', tcaType: 'uuid')]
 final class UuidFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+    use WithSearchableProperty;
 
     private int $size = 0;
     private bool $enableCopyToClipboard = true;
@@ -33,6 +34,7 @@ final class UuidFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
+        $self->setSearchable($settings);
         $self->size = (int)($settings['size'] ?? $self->size);
         if (array_key_exists('version', $settings)) {
             $self->version = (int)$settings['version'];
@@ -45,6 +47,7 @@ final class UuidFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
+        $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;

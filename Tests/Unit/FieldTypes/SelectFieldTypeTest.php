@@ -55,6 +55,11 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'minitems' => 1,
                 'foreign_table' => 'foo',
                 'itemsProcFunc' => 'foo',
+                'itemsProcessors' => [
+                    100 => [
+                        'class' => 'Foobar',
+                    ],
+                ],
                 'allowNonIdValues' => 1,
                 'authMode' => 'foo',
                 'disableNoMatchingValueElement' => 1,
@@ -114,6 +119,11 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'minitems' => 1,
                     'foreign_table' => 'foo',
                     'itemsProcFunc' => 'foo',
+                    'itemsProcessors' => [
+                        100 => [
+                            'class' => 'Foobar',
+                        ],
+                    ],
                     'allowNonIdValues' => true,
                     'authMode' => 'foo',
                     'disableNoMatchingValueElement' => true,
@@ -172,6 +182,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'minitems' => 0,
                 'foreign_table' => '',
                 'itemsProcFunc' => '',
+                'itemsProcessors' => [],
                 'allowNonIdValues' => 0,
                 'authMode' => '',
                 'disableNoMatchingValueElement' => 0,

@@ -21,6 +21,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageKeysRegistry;
 use TYPO3\CMS\ContentBlocks\Registry\AutomaticLanguageSource;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
+use TYPO3\CMS\Core\Localization\TranslationDomainMapper;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -30,6 +31,7 @@ class LanguageFileGenerator
     public function __construct(
         protected AutomaticLanguageKeysRegistry $automaticLanguageKeysRegistry,
         protected readonly LanguageFileRegistry $languageFileRegistry,
+        protected readonly TranslationDomainMapper $translationDomainMapper,
     ) {}
 
     public function generate(LoadedContentBlock $contentBlock, ?string $date = null): string
@@ -45,6 +47,15 @@ class LanguageFileGenerator
             }
             if ($source->value === '') {
                 continue;
+            }
+            if (str_contains($source->value, ':')) {
+                [$possibleDomain] = explode(':', $source->value, 2);
+                if (
+                    $this->translationDomainMapper->isValidDomainName($possibleDomain)
+                    && $this->translationDomainMapper->mapDomainToFileName($possibleDomain) !== $possibleDomain
+                ) {
+                    continue;
+                }
             }
             $automaticKeys[] = $source->key;
             $items[] = $this->generateTransUnitFromSource($source);

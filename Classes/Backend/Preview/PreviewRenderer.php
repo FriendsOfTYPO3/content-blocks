@@ -25,7 +25,6 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Domain\RecordFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
@@ -43,7 +42,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 {
     public function __construct(
         protected TableDefinitionCollection $tableDefinitionCollection,
-        protected RecordFactory $recordFactory,
         protected ContentBlockRegistry $contentBlockRegistry,
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected RootPathsSettings $rootPathsSettings,
@@ -52,9 +50,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 
     public function renderPageModulePreviewHeader(GridColumnItem $item): string
     {
-        if (!$this->hasPreviewLayout($item)) {
-            return parent::renderPageModulePreviewHeader($item);
-        }
         try {
             $preview = $this->renderPreview($item, 'Header');
         } catch (InvalidSectionException|InvalidTemplateResourceException) {
@@ -68,13 +63,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         if (!$this->hasPreviewHtml($item)) {
             return parent::renderPageModulePreviewContent($item);
         }
-        if (!$this->hasPreviewLayout($item)) {
-            $template = $this->getContentBlockTemplatePath($item) . '/' . ContentBlockPathUtility::getBackendPreviewFileName();
-            trigger_error(
-                'The Content Blocks preview template "' . $template . '" should be migrated to use the Preview layout.',
-                E_USER_DEPRECATED
-            );
-        }
         try {
             $preview = $this->renderPreview($item, 'Content');
         } catch (InvalidSectionException|InvalidTemplateResourceException) {
@@ -85,9 +73,6 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 
     public function renderPageModulePreviewFooter(GridColumnItem $item): string
     {
-        if (!$this->hasPreviewLayout($item)) {
-            return parent::renderPageModulePreviewFooter($item);
-        }
         try {
             $preview = $this->renderPreview($item, 'Footer');
         } catch (InvalidSectionException|InvalidTemplateResourceException) {
@@ -101,9 +86,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         /** @var ServerRequestInterface $request */
         $request = $GLOBALS['TYPO3_REQUEST'];
         $record = $item->getRecord();
-        $table = $item->getTable();
-        $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow($table, $record);
-        $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord, $item->getContext());
+        $contentBlockData = $this->contentBlockDataDecorator->decorate($record, $item->getContext());
         $settings['_content_block_name'] = $contentBlockData->get('_name');
         $view = $this->createView($request, $item, $section);
         $view->assign('data', $contentBlockData);
@@ -192,18 +175,5 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     {
         $absoluteTemplatePath = $this->getAbsolutePreviewHtmlTemplatePath($item);
         return file_exists($absoluteTemplatePath);
-    }
-
-    /**
-     * @deprecated Remove in Content Blocks v2.0
-     */
-    protected function hasPreviewLayout(GridColumnItem $item): bool
-    {
-        $absoluteTemplatePath = $this->getAbsolutePreviewHtmlTemplatePath($item);
-        if (!file_exists($absoluteTemplatePath)) {
-            return false;
-        }
-        $contents = file_get_contents($absoluteTemplatePath);
-        return str_contains($contents, '<f:layout name="Preview"');
     }
 }

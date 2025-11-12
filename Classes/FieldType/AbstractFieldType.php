@@ -21,7 +21,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
 {
     protected string $name;
     protected string $tcaType;
-    protected bool $searchable;
 
     public function setName(string $name): void
     {
@@ -41,16 +40,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function getTcaType(): string
     {
         return $this->tcaType;
-    }
-
-    public function setSearchable(bool $searchable): void
-    {
-        $this->searchable = $searchable;
-    }
-
-    public function isSearchable(): bool
-    {
-        return $this->searchable;
     }
 
     public function getSql(string $column): string

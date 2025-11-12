@@ -121,6 +121,9 @@ Advanced / use case
           width: 100
         valuePicker:
           items:
-            - [ '100', 100 ]
-            - [ '250', 250 ]
-            - [ '500', 500 ]
+            - label: '100'
+              value: 100
+            - label: '250'
+              value: 250
+            - label: '500'
+              value: 500

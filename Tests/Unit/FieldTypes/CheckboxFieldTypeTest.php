@@ -37,6 +37,11 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'readOnly' => 1,
                 'eval' => 'foo',
                 'itemsProcFunc' => 'foo->bar',
+                'itemsProcessors' => [
+                    100 => [
+                        'class' => 'Foobar',
+                    ],
+                ],
                 'cols' => 5,
                 'validation' => [
                     'foo' => 'bar',
@@ -71,6 +76,11 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                     'default' => 1,
                     'readOnly' => true,
                     'itemsProcFunc' => 'foo->bar',
+                    'itemsProcessors' => [
+                        100 => [
+                            'class' => 'Foobar',
+                        ],
+                    ],
                     'cols' => 5,
                     'eval' => 'foo',
                     'validation' => [
@@ -98,6 +108,7 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'readOnly' => 0,
                 'eval' => '',
                 'itemsProcFunc' => '',
+                'itemsProcessors' => [],
                 'cols' => '',
                 'validation' => [],
                 'items' => [],

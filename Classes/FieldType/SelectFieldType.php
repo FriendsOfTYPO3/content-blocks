@@ -40,6 +40,7 @@ final class SelectFieldType extends AbstractFieldType
     private int $minitems = 0;
     private string $foreign_table = '';
     private string $itemsProcFunc = '';
+    private array $itemsProcessors = [];
     private bool $allowNonIdValues = false;
     private string $authMode = '';
     private bool $disableNoMatchingValueElement = false;
@@ -83,6 +84,7 @@ final class SelectFieldType extends AbstractFieldType
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
         $self->foreign_table = (string)($settings['foreign_table'] ?? $self->foreign_table);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
+        $self->itemsProcessors = (array)($settings['itemsProcessors'] ?? $self->itemsProcessors);
         $self->allowNonIdValues = (bool)($settings['allowNonIdValues'] ?? $self->allowNonIdValues);
         $self->authMode = (string)($settings['authMode'] ?? $self->authMode);
         $self->disableNoMatchingValueElement = (bool)($settings['disableNoMatchingValueElement'] ?? $self->disableNoMatchingValueElement);
@@ -155,6 +157,9 @@ final class SelectFieldType extends AbstractFieldType
         }
         if ($this->itemsProcFunc !== '') {
             $config['itemsProcFunc'] = $this->itemsProcFunc;
+        }
+        if ($this->itemsProcessors !== []) {
+            $config['itemsProcessors'] = $this->itemsProcessors;
         }
         if ($this->allowNonIdValues) {
             $config['allowNonIdValues'] = true;

@@ -25,6 +25,14 @@ Settings
 
    Size for the input field. Min value is 10 and max value is 50.
 
+.. confval:: searchable
+   :name: uuid-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: version
    :name: uuid-version
    :required: false

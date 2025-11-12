@@ -281,6 +281,6 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
 
     public function buildInternalDescriptionShowItemTca(): string
     {
-        return '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,internal_description';
+        return '--div--;core.form.tabs:notes,internal_description';
     }
 }
