@@ -47,7 +47,7 @@ jobs:
         run: Build/Scripts/runTests.sh -p 8.2 -s cglHeader -n
 
   unit_tests:
-    name: Unit Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
+    name: Unit Tests TYPO3 v14 PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -79,7 +79,7 @@ jobs:
         run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
 
   functional_tests:
-    name: Functional Tests TYPO3 ${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
+    name: Functional Tests TYPO3 v14 PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -111,7 +111,7 @@ jobs:
         run: Build/Scripts/runTests.sh -s functional -d sqlite -p ${{ matrix.php }}
 
   PHPStan:
-    name: PHPStan TYPO3 v13 PHP 8.4
+    name: PHPStan TYPO3 v14 PHP 8.4
     runs-on: ubuntu-latest
 
     steps:
