@@ -30,6 +30,7 @@ final class CheckboxFieldType extends AbstractFieldType
     private bool $readOnly = false;
     private bool $invertStateDisplay = false;
     private string $itemsProcFunc = '';
+    private array $itemsProcessors = [];
     private int|string $cols = 0;
     private string $eval = '';
     private array $validation = [];
@@ -42,6 +43,7 @@ final class CheckboxFieldType extends AbstractFieldType
         $self->default = (int)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
+        $self->itemsProcessors = (array)($settings['itemsProcessors'] ?? $self->itemsProcessors);
         $self->cols = $settings['cols'] ?? $self->cols;
         $self->eval = (string)($settings['eval'] ?? $self->eval);
         $self->validation = (array)($settings['validation'] ?? $self->validation);
@@ -64,6 +66,9 @@ final class CheckboxFieldType extends AbstractFieldType
         }
         if ($this->itemsProcFunc !== '') {
             $config['itemsProcFunc'] = $this->itemsProcFunc;
+        }
+        if ($this->itemsProcessors !== []) {
+            $config['itemsProcessors'] = $this->itemsProcessors;
         }
         if ($this->cols !== 0 && $this->cols !== '') {
             $config['cols'] = $this->cols;

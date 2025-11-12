@@ -29,6 +29,7 @@ final class RadioFieldType extends AbstractFieldType
     private string|int $default = '';
     private bool $readOnly = false;
     private string $itemsProcFunc = '';
+    private array $itemsProcessors = [];
     private array $items = [];
 
     public function createFromArray(array $settings): RadioFieldType
@@ -41,6 +42,7 @@ final class RadioFieldType extends AbstractFieldType
         }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->itemsProcFunc = (string)($settings['itemsProcFunc'] ?? $self->itemsProcFunc);
+        $self->itemsProcessors = (array)($settings['itemsProcessors'] ?? $self->itemsProcessors);
         $self->items = (array)($settings['items'] ?? $self->items);
         $self->setCustomProperties($settings);
 
@@ -59,6 +61,9 @@ final class RadioFieldType extends AbstractFieldType
         }
         if ($this->itemsProcFunc !== '') {
             $config['itemsProcFunc'] = $this->itemsProcFunc;
+        }
+        if ($this->itemsProcessors !== []) {
+            $config['itemsProcessors'] = $this->itemsProcessors;
         }
         if ($this->items !== []) {
             $config['items'] = $this->items;
