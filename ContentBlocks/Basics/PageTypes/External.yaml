@@ -3,7 +3,5 @@ fields:
   - identifier: palette_external
     type: Palette
     fields:
-      - identifier: url
-        useExistingField: true
-      - identifier: target
+      - identifier: link
         useExistingField: true
