@@ -54,6 +54,9 @@ final class ContentBlockDataDecorator
 
     public function decorate(RecordInterface $resolvedRecord, ?PageLayoutContext $context = null): ContentBlockData
     {
+        if ($resolvedRecord instanceof ContentBlockData) {
+            return $resolvedRecord;
+        }
         $contentTypeDefinition = $this->contentTypeResolver->resolve($resolvedRecord);
         $resolvedContentBlockDataRelation = new ResolvedContentBlockDataRelation();
         $resolvedContentBlockDataRelation->record = $resolvedRecord;
