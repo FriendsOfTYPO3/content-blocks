@@ -58,3 +58,8 @@ After
     #[FieldType(name: 'Money', tcaType: 'number')]
     final class MoneyFieldType extends AbstractFieldType
     {}
+
+Backend Previews without sections
+---------------------------------
+
+It is now mandatory to provide proper Layouts and Sections for :ref:`backend previews <api_backend_preview_content_elements>`.
