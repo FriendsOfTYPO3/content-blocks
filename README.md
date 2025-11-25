@@ -5,8 +5,8 @@
 
 This is the standalone repository for the TYPO3 Content Blocks project. Content
 Blocks provides a new API to create custom Content Types like Content Elements,
-Page Types or generic Record Types. Use it now in your TYPO3 v12/v13 project and
-eventually this will become a Core feature in TYPO3 v14 LTS.
+Page Types or generic Record Types. Use it now in your TYPO3 v13/v14 project and
+eventually this will become a Core feature in TYPO3 v15 LTS.
 
 |                    | URL                                                                                      |
 |--------------------|------------------------------------------------------------------------------------------|
