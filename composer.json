@@ -51,9 +51,6 @@
 		"contentblocks/content-blocks": "*"
 	},
 	"extra": {
-		"branch-alias": {
-			"dev-main": "14.0.x-dev"
-		},
 		"typo3/cms": {
 			"web-dir": ".Build/public",
 			"extension-key": "content_blocks",
