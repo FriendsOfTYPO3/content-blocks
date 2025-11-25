@@ -41,6 +41,11 @@ final class RadioFieldTypeTest extends UnitTestCase
                 'default' => 1,
                 'readOnly' => 1,
                 'itemsProcFunc' => 'foo',
+                'itemsProcessors' => [
+                    100 => [
+                        'class' => 'Foobar',
+                    ],
+                ],
                 'items' => [
                     'foo',
                 ],
@@ -63,6 +68,11 @@ final class RadioFieldTypeTest extends UnitTestCase
                     'default' => 1,
                     'readOnly' => true,
                     'itemsProcFunc' => 'foo',
+                    'itemsProcessors' => [
+                        100 => [
+                            'class' => 'Foobar',
+                        ],
+                    ],
                     'items' => [
                         'foo',
                     ],
@@ -86,6 +96,7 @@ final class RadioFieldTypeTest extends UnitTestCase
                 'default' => '',
                 'readOnly' => 0,
                 'itemsProcFunc' => '',
+                'itemsProcessors' => [],
                 'items' => [],
             ],
             'expectedTca' => [

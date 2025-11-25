@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class LinkFieldTypeTest extends UnitTestCase
+final class CountryFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -37,28 +37,20 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
                 'exclude' => true,
-                'non_available_field' => 'foo',
-                'default' => 'Default value',
-                'placeholder' => 'Placeholder text',
+                'default' => 'DE',
                 'size' => 20,
-                'autocomplete' => 1,
                 'required' => 1,
                 'readOnly' => 1,
-                'nullable' => 1,
-                'mode' => 'useOrOverridePlaceholder',
-                'valuePicker' => [
-                    'items' => [
-                        ['label' => 'One', 'value' => '1'],
-                        ['label' => 'Two', 'value' => '2'],
-                    ],
+                'filter' => [
+                    'foo' => 'bar',
                 ],
-                'allowedTypes' => [
-                    'foo',
+                'labelField' => 'iso2',
+                'prioritizedCountries' => [
+                    'DE',
                 ],
-                'appearance' => [
-                    'foo',
+                'sortItems' => [
+                    'label' => 'asc',
                 ],
-                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,26 +63,20 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
-                    'type' => 'link',
-                    'size' => 20,
-                    'default' => 'Default value',
+                    'type' => 'country',
+                    'default' => 'DE',
                     'readOnly' => true,
                     'required' => true,
-                    'nullable' => true,
-                    'mode' => 'useOrOverridePlaceholder',
-                    'placeholder' => 'Placeholder text',
-                    'autocomplete' => true,
-                    'valuePicker' => [
-                        'items' => [
-                            ['label' => 'One', 'value' => '1'],
-                            ['label' => 'Two', 'value' => '2'],
-                        ],
+                    'size' => 20,
+                    'filter' => [
+                        'foo' => 'bar',
                     ],
-                    'allowedTypes' => [
-                        'foo',
+                    'labelField' => 'iso2',
+                    'prioritizedCountries' => [
+                        'DE',
                     ],
-                    'appearance' => [
-                        'foo',
+                    'sortItems' => [
+                        'label' => 'asc',
                     ],
                 ],
             ],
@@ -105,52 +91,18 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'l10n_mode' => '',
                 'onChange' => '',
                 'exclude' => false,
-                'non_available_field' => 'foo',
                 'default' => '',
-                'placeholder' => '',
                 'size' => 0,
-                'autocomplete' => 0,
                 'required' => 0,
                 'readOnly' => 0,
-                'nullable' => 0,
-                'mode' => '',
-                'valuePicker' => [],
-                'allowedTypes' => [],
-                'appearance' => [],
-                'searchable' => false,
+                'filter' => [],
+                'labelField' => '',
+                'prioritizedCountries' => [],
+                'sortItems' => [],
             ],
             'expectedTca' => [
                 'config' => [
-                    'searchable' => false,
-                    'type' => 'link',
-                    'default' => '',
-                    'autocomplete' => false,
-                ],
-            ],
-        ];
-
-        yield 'default value null for nullable' => [
-            'config' => [
-                'nullable' => true,
-            ],
-            'expectedTca' => [
-                'exclude' => true,
-                'config' => [
-                    'type' => 'link',
-                    'default' => null,
-                    'nullable' => true,
-                ],
-            ],
-        ];
-
-        yield 'no default value set' => [
-            'config' => [
-                'nullable' => false,
-            ],
-            'expectedTca' => [
-                'exclude' => true,
-                'config' => [
-                    'type' => 'link',
+                    'type' => 'country',
                 ],
             ],
         ];
@@ -161,7 +113,7 @@ final class LinkFieldTypeTest extends UnitTestCase
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldType = $fieldTypeRegistry->get('Link');
+        $fieldType = $fieldTypeRegistry->get('Country');
         $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());

@@ -25,6 +25,14 @@ Settings
 
    :yaml:`unique`, :yaml:`uniqueInSite` or :yaml:`uniqueInPid`.
 
+.. confval:: searchable
+   :name: slug-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: generatorOptions
    :name: slug-generatorOptions
    :required: false

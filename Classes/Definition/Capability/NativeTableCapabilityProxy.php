@@ -126,7 +126,7 @@ final readonly class NativeTableCapabilityProxy implements SystemFieldPalettesIn
         }
         /** @var FieldCapability $internalDescriptionFieldCapability */
         $internalDescriptionFieldCapability = $this->tcaSchema->getCapability('internalDescription');
-        $showItem = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,' . $internalDescriptionFieldCapability->getFieldName();
+        $showItem = '--div--;core.form.tabs:notes,' . $internalDescriptionFieldCapability->getFieldName();
         return $showItem;
     }
 }

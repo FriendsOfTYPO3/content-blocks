@@ -293,11 +293,10 @@ final class TcaGeneratorTest extends UnitTestCase
                             't3ce_example' => 'tt_content-t3ce_example',
                             't3ce_testblock' => 'tt_content-t3ce_testblock',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_testblock_text,t3ce_example_text,t3ce_example_textarea,t3ce_example_email,t3ce_example_color,t3ce_example_link,t3ce_example_uuid',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => 'bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,assets,pages,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_relation,t3ce_example_password,t3ce_example_uuid,t3ce_example_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'bodytext,t3ce_example_text,--palette--;;t3ce_example_palette_1,t3ce_example_email,t3ce_example_check,t3ce_example_color,t3ce_example_file,assets,pages,t3ce_example_category,t3ce_example_datetime,--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:tabs.tab_1,t3ce_example_select,t3ce_example_link,t3ce_example_radio,t3ce_example_relation,t3ce_example_password,t3ce_example_uuid,t3ce_example_collection,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'creationOptions' => [
                                 'saveAndClose' => true,
@@ -402,7 +401,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         't3ce_testblock' => [
-                            'showitem' => 'bodytext,t3ce_testblock_text,header_layout,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'bodytext,t3ce_testblock_text,header_layout,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 't3ce_testblock_text' => [
@@ -635,7 +634,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 't3ce_example_collection-1',
                         ],
-                        'searchFields' => 'text,text2,palette_field1,palette_field2',
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
@@ -643,7 +641,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.tabs.tab_1,text2,--palette--;;palette_inline,collection2,collection_mm,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,text,--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.tabs.tab_1,text2,--palette--;;palette_inline,collection2,collection_mm,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -747,7 +745,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'collection2-1',
                         ],
-                        'searchFields' => 'text,text2',
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
@@ -755,7 +752,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,text,text2,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -817,7 +814,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'collection_mm-1',
                         ],
-                        'searchFields' => 'text,text2',
                         'security' => [
                             'ignorePageTypeRestriction' => true,
                         ],
@@ -825,7 +821,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,text,text2,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -897,11 +893,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,t3ce_example_text',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:tabs.tab_1,t3ce_example_text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:tabs.tab_1,t3ce_example_text,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 't3ce_example_text' => [
@@ -954,11 +949,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => '--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:tabs.tab_1,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:tabs.tab_1,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                         ],
                     ],
@@ -1013,12 +1007,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'foobar-1',
                         ],
-                        'searchFields' => '',
                         'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,t3ce_example_number,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1128,12 +1121,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'prependAtCopy' => 'banana',
                         'default_sortby' => 't3ce_example_text',
                         'descriptionColumn' => 'internal_description',
-                        'searchFields' => 't3ce_example_text,t3ce_example_text2',
                         'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,internal_description',
+                            'showitem' => '--div--;core.form.tabs:general,t3ce_example_text,t3ce_example_text2,--div--;core.form.tabs:access,--palette--;;access,--div--;core.form.tabs:notes,internal_description',
                         ],
                     ],
                     'palettes' => [
@@ -1235,12 +1227,11 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'foobar-1',
                         ],
-                        'searchFields' => 't3ce_example_text,t3ce_example_text2',
                         'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_text,t3ce_example_text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,t3ce_example_text,t3ce_example_text2,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1354,12 +1345,11 @@ final class TcaGeneratorTest extends UnitTestCase
                             'example2' => 'foobar-example2',
                             'default' => 'foobar-example',
                         ],
-                        'searchFields' => 'text,text2',
                         'previewRenderer' => PreviewRenderer::class,
                     ],
                     'types' => [
                         'example' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,type,text,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                             'columnsOverrides' => [
                                 'text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:text.label',
@@ -1368,7 +1358,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         'example2' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,text,text2,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,type,text,text2,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                             'columnsOverrides' => [
                                 'text' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/language/labels.xlf:text.label',
@@ -1475,11 +1465,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,text,color',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => 'text,--palette--;;palette,collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'text,--palette--;;palette,collection,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'text' => [
@@ -1558,7 +1547,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'collection-1',
                         ],
-                        'searchFields' => 'text',
                         'previewRenderer' => PreviewRenderer::class,
                         'security' => [
                             'ignorePageTypeRestriction' => true,
@@ -1566,7 +1554,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,text,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,text,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -1633,7 +1621,6 @@ final class TcaGeneratorTest extends UnitTestCase
                 'renderType' => 'selectSingle',
             ],
         ];
-        $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
@@ -1701,11 +1688,10 @@ final class TcaGeneratorTest extends UnitTestCase
                             '1700156757' => 'pages-1700156757',
                             '1700156757-hideinmenu' => 'pages-1700156757-hide-in-menu',
                         ],
-                        'searchFields' => 'title,slug,nav_title',
                     ],
                     'types' => [
                         '1700156757' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;core.form.tabs:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;core.form.tabs:appearance,--palette--;;backend_layout,--palette--;;replace,--div--;core.form.tabs:behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;core.form.tabs:resources,--palette--;;config,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;visibility,--palette--;;access,--div--;core.form.tabs:notes,rowDescription,--div--;core.form.tabs:extended',
                             'columnsOverrides' => [
                                 'title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.label',
@@ -1759,11 +1745,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             '1700156757' => 'pages-1700156757',
                         ],
-                        'searchFields' => 'title,slug,nav_title',
                     ],
                     'types' => [
                         '1700156757' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo,--palette--;;seo,--palette--;;robots,--palette--;;canonical,--palette--;;sitemap,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.socialmedia,--palette--;;opengraph,--palette--;;twittercards,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance,--palette--;;backend_layout,--palette--;;replace,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources,--palette--;;config,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,--palette--;;visibility,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,rowDescription,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => '--div--;core.form.tabs:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.seo,--palette--;;seo,--palette--;;robots,--palette--;;canonical,--palette--;;sitemap,--div--;LLL:EXT:seo/Resources/Private/Language/locallang_tca.xlf:pages.tabs.socialmedia,--palette--;;opengraph,--palette--;;twittercards,--div--;core.form.tabs:appearance,--palette--;;backend_layout,--palette--;;replace,--div--;core.form.tabs:behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;core.form.tabs:resources,--palette--;;config,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;visibility,--palette--;;access,--div--;core.form.tabs:notes,rowDescription,--div--;core.form.tabs:extended',
                             'columnsOverrides' => [
                                 'title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.label',
@@ -1975,52 +1960,17 @@ final class TcaGeneratorTest extends UnitTestCase
                             't3ce_example' => 'tt_content-t3ce_example',
                             't3ce_testblock' => 'tt_content-t3ce_testblock',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,flex',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => 'flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'flex,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                        't3ce_testblock' => [
-                            'showitem' => 'flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-                            'previewRenderer' => PreviewRenderer::class,
-                            'columnsOverrides' => [
-                                'flex' => [
-                                    'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.label',
-                                    'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'flex' => [
-                            'label' => 'flex',
-                            'config' => [
-                                'type' => 'flex',
-                                'ds_pointerField' => 'CType',
-                                'ds' => [
-                                    'default' => '<T3DataStructure>
-  <ROOT>
-    <type>array</type>
-    <el>
-      <xmlTitle>
-        <label>The Title:</label>
-        <config>
-            <type>input</type>
-            <size>48</size>
-        </config>
-      </xmlTitle>
-    </el>
-  </ROOT>
-</T3DataStructure>',
-                                    't3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2045,7 +1995,19 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
-                                    't3ce_testblock' => '<T3FlexForms>
+                                    ],
+                                ],
+                            ],
+                        ],
+                        't3ce_testblock' => [
+                            'showitem' => 'flex,--div--;core.form.tabs:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'flex' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/testblock/language/labels.xlf:flex.description',
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2070,7 +2032,30 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                             ],
                             'exclude' => true,
                         ],
@@ -2203,45 +2188,17 @@ final class TcaGeneratorTest extends UnitTestCase
                             't3ce_example2' => 'tt_content-t3ce_example2',
                             't3ce_example3' => 'tt_content-t3ce_example3',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'pi_flexform,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'pi_flexform' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:pi_flexform.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:pi_flexform.description',
-                                ],
-                            ],
-                        ],
-                        't3ce_example2' => [
-                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-                            'previewRenderer' => PreviewRenderer::class,
-                            'columnsOverrides' => [
-                                'pi_flexform' => [
-                                    'label' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.label',
-                                    'description' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.description',
-                                ],
-                            ],
-                        ],
-                        't3ce_example3' => [
-                            'showitem' => 'pi_flexform,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
-                            'previewRenderer' => PreviewRenderer::class,
-                            'columnsOverrides' => [
-                                'pi_flexform' => [
-                                    'label' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.label',
-                                    'description' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'pi_flexform' => [
-                            'config' => [
-                                'ds' => [
-                                    '*,t3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2266,7 +2223,19 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
-                                    '*,t3ce_example2' => '<T3FlexForms>
+                                    ],
+                                ],
+                            ],
+                        ],
+                        't3ce_example2' => [
+                            'showitem' => 'pi_flexform,--div--;core.form.tabs:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'pi_flexform' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example2/language/labels.xlf:pi_flexform.description',
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2291,7 +2260,19 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
-                                    '*,t3ce_example3' => '<T3FlexForms>
+                                    ],
+                                ],
+                            ],
+                        ],
+                        't3ce_example3' => [
+                            'showitem' => 'pi_flexform,--div--;core.form.tabs:extended',
+                            'previewRenderer' => PreviewRenderer::class,
+                            'columnsOverrides' => [
+                                'pi_flexform' => [
+                                    'label' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.label',
+                                    'description' => 'LLL:EXT:foo/ContentBlocks/example3/language/labels.xlf:pi_flexform.description',
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sheet1 type="array">
             <ROOT type="array">
@@ -2343,10 +2324,12 @@ final class TcaGeneratorTest extends UnitTestCase
         </sheet2>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
                             ],
                         ],
                     ],
+                    'columns' => [],
                 ],
             ],
         ];
@@ -2416,42 +2399,17 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,flex',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => 'flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'flex,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'flex' => [
-                            'label' => 'flex',
-                            'config' => [
-                                'type' => 'flex',
-                                'ds_pointerField' => 'CType',
-                                'ds' => [
-                                    'default' => '<T3DataStructure>
-  <ROOT>
-    <type>array</type>
-    <el>
-      <xmlTitle>
-        <label>The Title:</label>
-        <config>
-            <type>input</type>
-            <size>48</size>
-        </config>
-      </xmlTitle>
-    </el>
-  </ROOT>
-</T3DataStructure>',
-                                    't3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2509,7 +2467,30 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                             ],
                             'exclude' => true,
                         ],
@@ -2567,42 +2548,17 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             't3ce_example' => 'tt_content-t3ce_example',
                         ],
-                        'searchFields' => 'header,header_link,subheader,bodytext,pi_flexform,flex',
                     ],
                     'types' => [
                         't3ce_example' => [
-                            'showitem' => 'flex,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'flex,--div--;core.form.tabs:extended',
                             'previewRenderer' => PreviewRenderer::class,
                             'columnsOverrides' => [
                                 'flex' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.label',
                                     'description' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:flex.description',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'columns' => [
-                        'flex' => [
-                            'label' => 'flex',
-                            'config' => [
-                                'type' => 'flex',
-                                'ds_pointerField' => 'CType',
-                                'ds' => [
-                                    'default' => '<T3DataStructure>
-  <ROOT>
-    <type>array</type>
-    <el>
-      <xmlTitle>
-        <label>The Title:</label>
-        <config>
-            <type>input</type>
-            <size>48</size>
-        </config>
-      </xmlTitle>
-    </el>
-  </ROOT>
-</T3DataStructure>',
-                                    't3ce_example' => '<T3FlexForms>
+                                    'config' => [
+                                        'ds' => '<T3FlexForms>
     <sheets type="array">
         <sDEF type="array">
             <ROOT type="array">
@@ -2635,7 +2591,30 @@ final class TcaGeneratorTest extends UnitTestCase
         </sDEF>
     </sheets>
 </T3FlexForms>',
+                                    ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [
+                        'flex' => [
+                            'label' => 'flex',
+                            'config' => [
+                                'type' => 'flex',
+                                'ds' => '<T3DataStructure>
+  <ROOT>
+    <type>array</type>
+    <el>
+      <xmlTitle>
+        <label>The Title:</label>
+        <config>
+            <type>input</type>
+            <size>48</size>
+        </config>
+      </xmlTitle>
+    </el>
+  </ROOT>
+</T3DataStructure>',
                             ],
                             'exclude' => true,
                         ],
@@ -2654,13 +2633,9 @@ final class TcaGeneratorTest extends UnitTestCase
             'label' => 'FlexForm',
             'config' => [
                 'type' => 'flex',
-                'ds_pointerField' => 'list_type,CType',
-                'ds' => [
-                    'default' => '<T3DataStructure><!-- example --></T3DataStructure>',
-                ],
+                'ds' => '<T3DataStructure><!-- example --></T3DataStructure>',
             ],
         ];
-        $baseTca['tt_content']['ctrl']['searchFields'] = 'header,header_link,subheader,bodytext,pi_flexform';
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
@@ -2774,7 +2749,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         'type_1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                            'showitem' => '--div--;core.form.tabs:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
                         ],
                     ],
                     'columns' => [
@@ -2862,14 +2837,13 @@ final class TcaGeneratorTest extends UnitTestCase
                             'type_2' => 'existing_record-type_2',
                         ],
                         'typeicon_column' => 'record_type',
-                        'searchFields' => 'a_field',
                     ],
                     'types' => [
                         'type_1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                            'showitem' => '--div--;core.form.tabs:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
                         ],
                         'type_2' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,a_description_column',
+                            'showitem' => '--div--;core.form.tabs:general,record_type,a_field,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access,--div--;core.form.tabs:notes,a_description_column',
                             'columnsOverrides' => [
                                 'a_field' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/language/labels.xlf:a_field.label',
@@ -2967,7 +2941,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '0' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                            'showitem' => '--div--;core.form.tabs:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
                         ],
                     ],
                     'columns' => [
@@ -3042,14 +3016,13 @@ final class TcaGeneratorTest extends UnitTestCase
                         ],
                         'type' => 'record_type',
                         'typeicon_column' => 'record_type',
-                        'searchFields' => 'a_field',
                     ],
                     'types' => [
                         '0' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
+                            'showitem' => '--div--;core.form.tabs:general,record_type,a_hidden_field,a_endtime_field,a_starttime_field,a_fe_group_field,a_description_column',
                         ],
                         'type_2' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,record_type,a_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,a_description_column',
+                            'showitem' => '--div--;core.form.tabs:general,record_type,a_field,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access,--div--;core.form.tabs:notes,a_description_column',
                             'columnsOverrides' => [
                                 'a_field' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/RecordType/record/language/labels.xlf:a_field.label',
@@ -3201,7 +3174,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         2 => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,myvendor_myfilereference_my-field,--palette--;;filePalette',
+                            'showitem' => '--div--;core.form.tabs:general,myvendor_myfilereference_my-field,--palette--;;filePalette',
                             'columnsOverrides' => [
                                 'myvendor_myfilereference_my-field' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/FileTypes/my-file-reference/language/labels.xlf:my-field.label',
@@ -3209,9 +3182,6 @@ final class TcaGeneratorTest extends UnitTestCase
                                 ],
                             ],
                         ],
-                    ],
-                    'ctrl' => [
-                        'searchFields' => 'myvendor_myfilereference_my-field',
                     ],
                 ],
             ],
@@ -3346,9 +3316,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'label' => 'example_custom_field',
                         ],
                     ],
-                    'ctrl' => [
-                        'searchFields' => 'alternative,description,link,title,example_custom_field',
-                    ],
                 ],
                 'tt_content' => [
                     'columns' => [
@@ -3363,7 +3330,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'types' => [
                         'my_element' => [
                             'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
-                            'showitem' => 'myvendor_myelement_file,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'myvendor_myelement_file,--div--;core.form.tabs:extended',
                             'columnsOverrides' => [
                                 'myvendor_myelement_file' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.label',
@@ -3372,7 +3339,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'overrideChildTca' => [
                                             'types' => [
                                                 2 => [
-                                                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;my_file_palette,--palette--;;filePalette',
+                                                    'showitem' => '--div--;core.form.tabs:general,--palette--;;my_file_palette,--palette--;;filePalette',
                                                     'columnsOverrides' => [
                                                         'alternative' => [
                                                             'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.alternative.label',
@@ -3411,7 +3378,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'my_element' => 'my_element',
                         ],
-                        'searchFields' => '',
                     ],
                 ],
             ],
@@ -3568,7 +3534,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'default' => 'foobar-1',
                         ],
-                        'searchFields' => 'example_custom_field',
                         'previewRenderer' => PreviewRenderer::class,
                         'security' => [
                             'ignorePageTypeRestriction' => true,
@@ -3576,7 +3541,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,t3ce_example_number,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                         ],
                     ],
                     'palettes' => [
@@ -3631,7 +3596,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'types' => [
                         'my_element' => [
                             'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
-                            'showitem' => 'myvendor_myelement_my_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'myvendor_myelement_my_collection,--div--;core.form.tabs:extended',
                             'columnsOverrides' => [
                                 'myvendor_myelement_my_collection' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
@@ -3640,7 +3605,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'overrideChildTca' => [
                                             'types' => [
                                                 '1' => [
-                                                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,t3ce_example_number,example_custom_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                                                    'showitem' => '--div--;core.form.tabs:general,t3ce_example_number,example_custom_field,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                                                     'columnsOverrides' => [
                                                         't3ce_example_number' => [
                                                             'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.t3ce_example_number.label',
@@ -3666,7 +3631,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'my_element' => 'my_element',
                         ],
-                        'searchFields' => '',
                     ],
                 ],
             ],
@@ -3826,7 +3790,6 @@ final class TcaGeneratorTest extends UnitTestCase
                             'designer' => 'employee-designer',
                             'default' => 'employee-programmer',
                         ],
-                        'searchFields' => 'example_custom_field',
                         'previewRenderer' => PreviewRenderer::class,
                         'security' => [
                             'ignorePageTypeRestriction' => true,
@@ -3836,7 +3799,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         'programmer' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,type,number,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                             'columnsOverrides' => [
                                 'number' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.label',
@@ -3845,7 +3808,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                         ],
                         'designer' => [
-                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                            'showitem' => '--div--;core.form.tabs:general,type,number,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                             'columnsOverrides' => [
                                 'number' => [
                                     'label' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example/language/labels.xlf:number.label',
@@ -3914,7 +3877,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     'types' => [
                         'my_element' => [
                             'previewRenderer' => 'TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer',
-                            'showitem' => 'myvendor_myelement_my_collection,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+                            'showitem' => 'myvendor_myelement_my_collection,--div--;core.form.tabs:extended',
                             'columnsOverrides' => [
                                 'myvendor_myelement_my_collection' => [
                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.label',
@@ -3923,7 +3886,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                         'overrideChildTca' => [
                                             'types' => [
                                                 'programmer' => [
-                                                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,type,number,example_custom_field,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access',
+                                                    'showitem' => '--div--;core.form.tabs:general,type,number,example_custom_field,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;hidden,--palette--;;access',
                                                     'columnsOverrides' => [
                                                         'type' => [
                                                             'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:my_collection.type.label',
@@ -3956,7 +3919,6 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeicon_classes' => [
                             'my_element' => 'my_element',
                         ],
-                        'searchFields' => '',
                     ],
                 ],
             ],

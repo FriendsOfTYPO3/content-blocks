@@ -42,6 +42,7 @@ final class JsonFieldTypeTest extends UnitTestCase
                 'required' => 1,
                 'readOnly' => 1,
                 'enableCodeEditor' => true,
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -78,9 +79,11 @@ final class JsonFieldTypeTest extends UnitTestCase
                 'required' => 0,
                 'readOnly' => 0,
                 'enableCodeEditor' => false,
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'json',
                     'enableCodeEditor' => false,
                 ],

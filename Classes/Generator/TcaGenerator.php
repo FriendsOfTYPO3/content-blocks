@@ -42,7 +42,6 @@ use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * TCA generation based on Content Block definition.
@@ -142,16 +141,8 @@ readonly class TcaGenerator
         $currentPalettesTca = $tca['palettes'] ?? [];
         $tca['palettes'] = $currentPalettesTca + $this->generatePalettesTca($tableDefinition);
         foreach ($tableDefinition->tcaFieldDefinitionCollection as $column) {
-            $fieldType = $column->fieldType;
-            if ($fieldType instanceof FlexFormFieldType) {
-                $dataStructure = [];
-                foreach ($fieldType->getFlexFormDefinitions() as $flexFormDefinition) {
-                    $dataStructure[$flexFormDefinition->getTypeName()] = $this->flexFormGenerator->generate($flexFormDefinition);
-                }
-                $fieldType->setDataStructure($dataStructure);
-            }
             if ($tableDefinition->hasTypeField() || $tableDefinition->contentType === ContentType::FILE_TYPE) {
-                $tca['columns'][$column->uniqueIdentifier] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column, $baseTca);
+                $tca['columns'][$column->uniqueIdentifier] = $this->getColumnTcaForTableWithTypeField($tableDefinition, $column);
                 // Ensure label exists for the standard column definition. This is used e.g. in the List module.
                 if (!$column->useExistingField) {
                     $tca['columns'][$column->uniqueIdentifier]['label'] ??= $column->identifier;
@@ -195,7 +186,6 @@ readonly class TcaGenerator
                 }
             }
         }
-        $tca['ctrl']['searchFields'] = $this->generateSearchFields($tableDefinition, $baseTca);
         $tca = $this->cleanTableTca($tca);
         return $tca;
     }
@@ -427,8 +417,6 @@ readonly class TcaGenerator
             'foreign_default_sortby',
             'symmetric_field',
             'symmetric_sortby',
-            'ds',
-            'ds_pointerField',
             'exclude',
             // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
             'generatorOptions',
@@ -455,8 +443,11 @@ readonly class TcaGenerator
     {
         $columnsOverrides = [];
         foreach ($typeDefinition->getOverrideColumns() as $overrideColumn) {
-            $overrideTca = $overrideColumn->getTca();
             $fieldType = $overrideColumn->fieldType;
+            if ($fieldType instanceof FlexFormFieldType) {
+                $this->applyFlexFormDataStructure($fieldType, $typeDefinition->getTypeName());
+            }
+            $overrideTca = $overrideColumn->getTca();
             $nonOverridableOptions = self::getNonOverridableOptions($fieldType);
             foreach ($nonOverridableOptions as $option) {
                 $optionKey = $this->getOptionKey($option, $overrideColumn);
@@ -519,8 +510,12 @@ readonly class TcaGenerator
      */
     protected function getColumnTcaForTableWithoutTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
     {
+        if ($column->fieldType instanceof FlexFormFieldType) {
+            $this->applyFlexFormDataStructure($column->fieldType, 'default');
+        }
         $standardTypeDefinition = $tableDefinition->getDefaultTypeDefinition();
-        $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $column->getTca());
+        $columnTca = $column->getTca();
+        $columnTca = $this->determineLabelAndDescription($standardTypeDefinition, $column, $columnTca);
         $columnTca = $this->processOverrideChildTca($column, $columnTca);
         return $columnTca;
     }
@@ -529,13 +524,11 @@ readonly class TcaGenerator
      * Content Elements, Page Types and Record Types with defined typeField only get minimal (non-shareable) TCA in
      * their columns section. The actual config goes into columnsOverrides for the related type.
      */
-    protected function getColumnTcaForTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column, array $baseTca): array
+    protected function getColumnTcaForTableWithTypeField(TableDefinition $tableDefinition, TcaFieldDefinition $column): array
     {
-        // FlexForm "ds" can be extended without columnsOverrides.
-        $extensibleOptions = ['ds'];
         $columnTca = [];
         $fieldType = $column->fieldType;
-        $iterateOptions = $column->useExistingField ? $extensibleOptions : self::getNonOverridableOptions($fieldType);
+        $iterateOptions = $column->useExistingField ? [] : self::getNonOverridableOptions($fieldType);
         foreach ($iterateOptions as $option) {
             $optionKey = $this->getOptionKey($option, $column);
             if ($optionKey === null) {
@@ -545,24 +538,16 @@ readonly class TcaGenerator
             $configKey = 'config.' . $optionKey;
             if (ArrayUtility::isValidPath($fullConfiguration, $configKey, '.')) {
                 $configuration = ArrayUtility::getValueByPath($fullConfiguration, $configKey, '.');
-                // Support for existing flexForm fields.
-                if ($optionKey === 'ds') {
-                    if ($column->useExistingField) {
-                        $configuration = $this->processExistingFlexForm($column, $tableDefinition, $baseTca);
-                        if ($configuration === null) {
-                            continue;
-                        }
-                    } else {
-                        // Add default FlexForm definition. This is needed for translation purposes, as special FlexForm
-                        // handling is performed even on elements, which didn't define this field in their show items.
-                        $configuration['default'] = $this->getDefaultFlexFormDefinition();
-                    }
-                }
                 $columnTca = ArrayUtility::setValueByPath($columnTca, $configKey, $configuration, '.');
             }
             if (array_key_exists($optionKey, $column->getTca())) {
                 $columnTca[$optionKey] = $column->getTca()[$optionKey];
             }
+        }
+        if ($column->fieldType instanceof FlexFormFieldType && $column->useExistingField === false) {
+            // Add default FlexForm definition. This is needed for translation purposes, as special FlexForm
+            // handling is performed even on elements, which didn't define this field in their show items.
+            $columnTca['config']['ds'] = $this->getDefaultFlexFormDefinition();
         }
         // Add TCA for automatically added typeField.
         if ($tableDefinition->typeField === $column->identifier) {
@@ -695,67 +680,6 @@ readonly class TcaGenerator
         return $column;
     }
 
-    /**
-     * To be compatible with existing FlexForm fields, the type field has to be present inside `ds_pointerField`.
-     * If this is not the case, the flexForm field cannot be reused.
-     *
-     * An exception is a FlexForm field which only defines `default`. In such a case the whole configuration is
-     * reused. It's not possible to add a custom set of fields.
-     *
-     * Furthermore, this method handles the adjustment for multiple pointer fields. The most prominent example would be
-     * `pi_flexform`, which points to `list_type` and `CType`. Content Blocks only uses CType by default for Content
-     * Elements. Hence, the identifier needs to be prepended by '*,' to match any `list_type`.
-     *
-     * Example:
-     *
-     *     // Default only one pointer field
-     *     'ds' => [
-     *         'example_flexfield' => '...'
-     *     ]
-     *
-     *     // Core config for pi_flexform with CType at the second position
-     *     'ds_pointerField' => 'list_type,CType'
-     *
-     *     // "*," prepended to match anything at position 1
-     *     'ds' => [
-     *         '*,example_flexfield' => '...'
-     *     ]
-     */
-    protected function processExistingFlexForm(TcaFieldDefinition $column, TableDefinition $tableDefinition, array $baseTca): ?array
-    {
-        $baseTcaColumns = $baseTca[$tableDefinition->table]['columns'];
-        $existingDsPointerField = $baseTcaColumns[$column->uniqueIdentifier]['config']['ds_pointerField'] ?? null;
-        if ($existingDsPointerField === null) {
-            return null;
-        }
-        $existingDsPointerFieldArray = GeneralUtility::trimExplode(',', $existingDsPointerField);
-        $dsConfiguration = $column->getTca()['config']['ds'];
-        $typeSwitchField = $tableDefinition->typeField;
-        $fieldPositionInDsPointerFields = array_search($typeSwitchField, $existingDsPointerFieldArray);
-        // type field is not compatible.
-        if ($fieldPositionInDsPointerFields === false) {
-            return null;
-        }
-        $pointerFieldsCount = count($existingDsPointerFieldArray);
-        // If only one valid field exists, no need to add wildcards.
-        if ($pointerFieldsCount === 1) {
-            return $dsConfiguration;
-        }
-        $newDsConfiguration = [];
-        foreach (array_keys($dsConfiguration) as $dsKey) {
-            $dsKeys = [];
-            foreach (range(0, $pointerFieldsCount - 1) as $index) {
-                if ($index === $fieldPositionInDsPointerFields) {
-                    $dsKeys[] = $dsKey;
-                    continue;
-                }
-                $dsKeys[] = '*';
-            }
-            $newDsConfiguration[implode(',', $dsKeys)] = $dsConfiguration[$dsKey];
-        }
-        return $newDsConfiguration;
-    }
-
     protected function resolveLabelField(TableDefinition $tableDefinition): ?string
     {
         $labelCapability = $tableDefinition->capability->getLabelCapability();
@@ -791,7 +715,7 @@ readonly class TcaGenerator
     protected function getContentElementStandardShowItem(ContentTypeInterface $typeDefinition): string
     {
         $showItemArray = $typeDefinition->getShowItems();
-        $showItemArray[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended';
+        $showItemArray[] = '--div--;core.form.tabs:extended';
         $showItem = $this->processShowItem($showItemArray);
         return $showItem;
     }
@@ -802,7 +726,7 @@ readonly class TcaGenerator
     protected function getRecordTypeStandardShowItem(array $showItemArray, string $table): string
     {
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
-        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        $generalTab = '--div--;core.form.tabs:general';
         if ($firstItemIsTab) {
             $tabDefinition = array_shift($showItemArray);
             $generalTab = $this->processShowItem([$tabDefinition]);
@@ -832,7 +756,7 @@ readonly class TcaGenerator
     protected function getFileTypeStandardShowItem(array $showItemArray): string
     {
         $firstItemIsTab = ($showItemArray[0] ?? null) instanceof TabDefinition;
-        $generalTab = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general';
+        $generalTab = '--div--;core.form.tabs:general';
         if ($firstItemIsTab) {
             $tabDefinition = array_shift($showItemArray);
             $generalTab = $this->processShowItem([$tabDefinition]);
@@ -853,11 +777,11 @@ readonly class TcaGenerator
     {
         $parts = [];
         if ($capability->isLanguageAware()) {
-            $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language';
+            $parts[] = '--div--;core.form.tabs:language';
             $parts[] = '--palette--;;language';
         }
         if ($capability->hasDisabledRestriction() || $capability->hasAccessPalette()) {
-            $parts[] = '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access';
+            $parts[] = '--div--;core.form.tabs:access';
             if ($capability->hasDisabledRestriction()) {
                 $parts[] = '--palette--;;hidden';
             }
@@ -877,7 +801,7 @@ readonly class TcaGenerator
     protected function getPageTypeStandardShowItem(array $showItemArray, string|int $typeName): string
     {
         $general = [
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general',
+            '--div--;core.form.tabs:general',
             '--palette--;;standard',
         ];
 
@@ -935,24 +859,24 @@ readonly class TcaGenerator
     protected function getPageTypeStandardShowItemSystemTabs(): array
     {
         return [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--div--;core.form.tabs:appearance',
             '--palette--;;backend_layout',
             '--palette--;;replace',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--div--;core.form.tabs:behaviour',
             '--palette--;;links',
             '--palette--;;caching',
             '--palette--;;miscellaneous',
             '--palette--;;module',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--div--;core.form.tabs:resources',
             '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--div--;core.form.tabs:language',
             '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--div--;core.form.tabs:access',
             '--palette--;;visibility',
             '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            '--div--;core.form.tabs:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;core.form.tabs:extended',
         ];
     }
 
@@ -962,20 +886,20 @@ readonly class TcaGenerator
     protected function getPageTypeExternalShowItemSystemTabs(): array
     {
         return [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--div--;core.form.tabs:appearance',
             '--palette--;;layout',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--div--;core.form.tabs:behaviour',
             '--palette--;;miscellaneous',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--div--;core.form.tabs:resources',
             '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--div--;core.form.tabs:language',
             '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--div--;core.form.tabs:access',
             '--palette--;;visibility',
             '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            '--div--;core.form.tabs:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;core.form.tabs:extended',
         ];
     }
 
@@ -985,42 +909,22 @@ readonly class TcaGenerator
     protected function getPageTypeShortcutShowItemSystemTabs(): array
     {
         return [
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.appearance',
+            '--div--;core.form.tabs:appearance',
             '--palette--;;layout',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.behaviour',
+            '--div--;core.form.tabs:behaviour',
             '--palette--;;links',
             '--palette--;;miscellaneous',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.resources',
+            '--div--;core.form.tabs:resources',
             '--palette--;;config',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language',
+            '--div--;core.form.tabs:language',
             '--palette--;;language',
-            '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access',
+            '--div--;core.form.tabs:access',
             '--palette--;;visibility',
             '--palette--;;access',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes',
+            '--div--;core.form.tabs:notes',
             'rowDescription',
-            '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended',
+            '--div--;core.form.tabs:extended',
         ];
-    }
-
-    /**
-     * Generate search fields in order to find content elements in global backend search.
-     */
-    public function generateSearchFields(TableDefinition $tableDefinition, array $baseTca): string
-    {
-        $searchFieldsString = $baseTca[$tableDefinition->table]['ctrl']['searchFields'] ?? '';
-        $searchFields = GeneralUtility::trimExplode(',', $searchFieldsString, true);
-        foreach ($tableDefinition->tcaFieldDefinitionCollection as $field) {
-            $fieldType = $field->fieldType;
-            if ($fieldType->isSearchable() && !in_array($field->uniqueIdentifier, $searchFields, true)) {
-                $searchFields[] = $field->uniqueIdentifier;
-            }
-        }
-        if ($searchFields === []) {
-            return '';
-        }
-        $searchFieldsCommaSeparated = implode(',', $searchFields);
-        return $searchFieldsCommaSeparated;
     }
 
     protected function generateBaseTableTca(TableDefinition $tableDefinition): array
@@ -1070,7 +974,7 @@ readonly class TcaGenerator
         if ($capability->shallTrackUpdateDate()) {
             $ctrl['tstamp'] = 'tstamp';
         }
-        if ($capability->isWorkspaceAware() && $this->systemExtensionAvailability->isAvailable('workspaces')) {
+        if ($this->isTableWorkspaceAware($tableDefinition)) {
             $ctrl['versioningWS'] = true;
         }
         if ($capability->hasInternalDescription()) {
@@ -1153,6 +1057,23 @@ readonly class TcaGenerator
         ];
     }
 
+    protected function isTableWorkspaceAware(TableDefinition $tableDefinition): bool
+    {
+        if (
+            $tableDefinition->capability->isWorkspaceAware()
+            && $this->systemExtensionAvailability->isAvailable('workspaces')
+        ) {
+            return true;
+        }
+        foreach ($tableDefinition->parentReferences as $parentReference) {
+            $parentTableDefinition = $this->tableDefinitionCollection->getTable($parentReference->parentTable);
+            if ($parentTableDefinition->capability->isWorkspaceAware()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function cleanTableTca(array $tca): array
     {
         if (isset($tca['palettes']) && $tca['palettes'] === []) {
@@ -1191,5 +1112,18 @@ readonly class TcaGenerator
             ];
         }
         return $palettes;
+    }
+
+    public function applyFlexFormDataStructure(FlexFormFieldType $fieldType, string $typeName): void
+    {
+        $dataStructure = '';
+        foreach ($fieldType->getFlexFormDefinitions() as $flexFormDefinition) {
+            if ($flexFormDefinition->getTypeName() !== $typeName) {
+                continue;
+            }
+            $dataStructure = $this->flexFormGenerator->generate($flexFormDefinition);
+            break;
+        }
+        $fieldType->setDataStructure($dataStructure);
     }
 }

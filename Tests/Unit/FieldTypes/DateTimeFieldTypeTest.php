@@ -51,6 +51,7 @@ final class DateTimeFieldTypeTest extends UnitTestCase
                 'dbType' => 'foo',
                 'disableAgeDisplay' => 1,
                 'format' => 'foo',
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -102,9 +103,11 @@ final class DateTimeFieldTypeTest extends UnitTestCase
                 'dbType' => '',
                 'disableAgeDisplay' => 0,
                 'format' => '',
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'datetime',
                 ],
             ],

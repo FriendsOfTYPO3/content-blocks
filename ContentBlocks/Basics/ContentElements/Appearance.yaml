@@ -4,11 +4,11 @@ fields:
   -
     identifier: appearance_tab
     type: Tab
-    label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance
+    label: core.form.tabs:appearance
   -
     identifier: frames_palette
     type: Palette
-    label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.frames
+    label: core.form.palettes:content_layout
     fields:
       -
         identifier: layout

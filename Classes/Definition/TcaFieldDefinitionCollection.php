@@ -59,7 +59,7 @@ final class TcaFieldDefinitionCollection implements \IteratorAggregate, \Countab
         $tcaDefinition = new self();
         $tcaDefinition->table = $table;
         foreach ($tca as $definition) {
-            $tcaDefinition->addField(TcaFieldFactory::create($definition));
+            $tcaDefinition->addField(TcaFieldFactory::create($definition, $table));
         }
         return $tcaDefinition;
     }

@@ -20,10 +20,11 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'Json', tcaType: 'json', searchable: true)]
+#[FieldType(name: 'Json', tcaType: 'json')]
 final class JsonFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+    use WithSearchableProperty;
 
     private string $default = '';
     private int $cols = 0;
@@ -37,6 +38,7 @@ final class JsonFieldType extends AbstractFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
+        $self->setSearchable($settings);
         $self->default = (string)($settings['default'] ?? $self->default);
         $self->required = (bool)($settings['required'] ?? $self->required);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -51,6 +53,7 @@ final class JsonFieldType extends AbstractFieldType
     public function getTca(): array
     {
         $tca = $this->toTca();
+        $tca = $this->searchableToTca($tca);
         $config['type'] = $this->getTcaType();
         if ($this->default !== '') {
             $config['default'] = $this->default;

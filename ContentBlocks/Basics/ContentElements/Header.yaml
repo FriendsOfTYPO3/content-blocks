@@ -4,7 +4,7 @@ fields:
   -
     identifier: header_palette
     type: Palette
-    label: LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.header
+    label: core.form.palettes:header
     fields:
       -
         identifier: header

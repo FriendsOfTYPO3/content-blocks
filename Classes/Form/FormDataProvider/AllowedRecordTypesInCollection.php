@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Form\FormDataProvider;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
+use TYPO3\CMS\Core\Schema\Exception\InvalidSchemaTypeException;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 
 final readonly class AllowedRecordTypesInCollection implements FormDataProviderInterface
@@ -39,8 +40,9 @@ final readonly class AllowedRecordTypesInCollection implements FormDataProviderI
             return $result;
         }
         $tcaSchema = $this->tcaSchemaFactory->get($childTable);
-        $typeField = $tcaSchema->getSubSchemaDivisorField();
-        if ($typeField === null) {
+        try {
+            $schemaTypeInformation = $tcaSchema->getSubSchemaTypeInformation();
+        } catch (InvalidSchemaTypeException) {
             return $result;
         }
         if ($inlineParentTableName === '') {
@@ -61,7 +63,7 @@ final readonly class AllowedRecordTypesInCollection implements FormDataProviderI
         if ($allowedRecordTypes === []) {
             return $result;
         }
-        $typeFieldName = $typeField->getName();
+        $typeFieldName = $schemaTypeInformation->getFieldName();
         $items = $result['processedTca']['columns'][$typeFieldName]['config']['items'] ?? [];
         if ($items === []) {
             return $result;

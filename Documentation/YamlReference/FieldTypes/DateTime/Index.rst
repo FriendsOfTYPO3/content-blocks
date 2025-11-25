@@ -85,6 +85,14 @@ Settings
 
    If set, the field becomes mandatory.
 
+.. confval:: searchable
+   :name: datetime-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 Examples
 ========
 

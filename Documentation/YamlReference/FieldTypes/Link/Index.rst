@@ -35,6 +35,14 @@ Settings
 
    If set, the field becomes mandatory.
 
+.. confval:: searchable
+   :name: link-searchable
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set to false, the field will not be considered in backend search.
+
 .. confval:: nullable
    :name: link-nullable
    :required: false
@@ -85,8 +93,10 @@ Advanced / use case
         required: true
         valuePicker:
           items:
-            - [ 'TYPO3 CMS', 'https://www.typo3.org' ]
-            - [ 'TYPO3 GmbH', 'https://www.typo3.com' ]
+            - label: 'TYPO3 CMS'
+              value: 'https://www.typo3.org'
+            - label: 'TYPO3 GmbH'
+              value: 'https://www.typo3.com'
 
 
 Usage in Fluid

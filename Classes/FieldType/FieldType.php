@@ -28,6 +28,5 @@ readonly class FieldType
     public function __construct(
         public string $name,
         public string $tcaType,
-        public bool $searchable = false,
     ) {}
 }

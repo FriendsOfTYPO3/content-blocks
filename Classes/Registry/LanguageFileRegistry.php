@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
+use Symfony\Component\Translation\MessageCatalogue;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\LocalLangPathUtility;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -26,17 +27,23 @@ use TYPO3\CMS\Core\SingletonInterface;
  */
 class LanguageFileRegistry implements SingletonInterface
 {
+    /**
+     * @var array<string, MessageCatalogue>
+     */
     protected array $parsedLanguageFiles = [];
 
-    public function register(LoadedContentBlock $contentBlock, array $defaultData): void
+    public function register(LoadedContentBlock $contentBlock, MessageCatalogue $messageCatalogue): void
     {
-        $this->parsedLanguageFiles[$contentBlock->getName()] = $defaultData;
+        $this->parsedLanguageFiles[$contentBlock->getName()] = $messageCatalogue;
     }
 
     public function isset(string $name, string $key): bool
     {
         $key = LocalLangPathUtility::extractKeyFromLLLPath($key);
-        return isset($this->parsedLanguageFiles[$name][$key][0]['source']);
+        if ($this->hasLanguageFile($name) === false) {
+            return false;
+        }
+        return $this->parsedLanguageFiles[$name]->has($key);
     }
 
     public function get(string $name, string $key): string
@@ -48,7 +55,7 @@ class LanguageFileRegistry implements SingletonInterface
                 1701533837,
             );
         }
-        return $this->parsedLanguageFiles[$name][$key][0]['source'];
+        return $this->parsedLanguageFiles[$name]->get($key);
     }
 
     /**
@@ -59,8 +66,8 @@ class LanguageFileRegistry implements SingletonInterface
         if (!$this->hasLanguageFile($name)) {
             return [];
         }
-        $languageFile = $this->getLanguageFile($name);
-        $allKeys = array_keys($languageFile);
+        $allTranslations = $this->getAllTranslations($name);
+        $allKeys = array_keys($allTranslations);
         return $allKeys;
     }
 
@@ -69,13 +76,16 @@ class LanguageFileRegistry implements SingletonInterface
         return $this->parsedLanguageFiles;
     }
 
-    public function getLanguageFile(string $name): array
+    public function getAllTranslations(string $name): array
     {
-        return $this->parsedLanguageFiles[$name];
+        if ($this->hasLanguageFile($name) === false) {
+            return [];
+        }
+        return $this->parsedLanguageFiles[$name]->all('messages');
     }
 
     public function hasLanguageFile(string $name): bool
     {
-        return isset($this->parsedLanguageFiles[$name]);
+        return array_key_exists($name, $this->parsedLanguageFiles);
     }
 }

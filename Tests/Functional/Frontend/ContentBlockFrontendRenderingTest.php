@@ -329,6 +329,22 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function countryFieldIsResolved(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/DataSet/country.csv');
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_ID,
+            [
+                'EXT:content_blocks/Tests/Functional/Frontend/Fixtures/frontend.typoscript',
+            ]
+        );
+        $response = $this->executeFrontendSubRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_ID));
+        $html = (string)$response->getBody();
+
+        self::assertStringContainsString('Country code: DEU', $html);
+    }
+
+    #[Test]
     public function corePagesTypeIsResolved(): void
     {
         $this->setUpFrontendRootPage(

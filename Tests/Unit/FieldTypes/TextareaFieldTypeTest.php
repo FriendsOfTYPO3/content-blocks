@@ -59,6 +59,7 @@ final class TextareaFieldTypeTest extends UnitTestCase
                 'richtextConfiguration' => 'default',
                 'renderType' => 'foo',
                 'format' => 'foo',
+                'searchable' => true,
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -129,9 +130,11 @@ final class TextareaFieldTypeTest extends UnitTestCase
                 'richtextConfiguration' => '',
                 'renderType' => '',
                 'format' => '',
+                'searchable' => false,
             ],
             'expectedTca' => [
                 'config' => [
+                    'searchable' => false,
                     'type' => 'text',
                     'default' => '',
                 ],
