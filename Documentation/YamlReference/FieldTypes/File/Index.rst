@@ -96,6 +96,11 @@ Settings
           landscape:
             title: Landscape
             value: 4 / 3
+        coverAreas:
+          - x: 0.25
+            y: 0.3
+            width: 0.5
+            height: 0.4
 
 .. confval:: overrideType
    :name: file-overrideType
