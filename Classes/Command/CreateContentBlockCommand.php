@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\MissingInputException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -170,6 +171,9 @@ class CreateContentBlockCommand extends Command
                 $output->writeln('<error>Your Content Block name does not match the requirement.</error>');
             }
         }
+        if ($name === null) {
+            throw new MissingInputException('Aborted.', 1764341182);
+        }
         $name = strtolower($name);
         if ($contentType === ContentType::PAGE_TYPE) {
             if ($typeName === null) {
@@ -234,6 +238,9 @@ class CreateContentBlockCommand extends Command
             }
             $availablePackageTitles = $this->getPackageTitles($availablePackagesForDisplay);
             $extension = $io->askQuestion(new ChoiceQuestion('Choose an extension in which the Content Block should be stored', $availablePackageTitles, $defaults['extension']));
+            if ($extension === null) {
+                throw new MissingInputException('Aborted.', 1764341183);
+            }
         }
 
         $contentBlockConfiguration = new LoadedContentBlock(
