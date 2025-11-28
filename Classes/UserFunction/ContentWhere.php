@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\UserFunction;
 
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use TYPO3\CMS\Core\Attribute\AsAllowedCallable;
 
 /**
  * @internal
@@ -29,6 +30,7 @@ readonly class ContentWhere
         protected array $parentFieldNames
     ) {}
 
+    #[AsAllowedCallable]
     public function extend(string $where): string
     {
         $columns = array_map(
