@@ -56,7 +56,8 @@ readonly class PageLayout
         $request = $event->getRequest();
         /** @var ModuleData $moduleData */
         $moduleData = $request->getAttribute('moduleData');
-        if ((int)$moduleData->get('viewMode') !== PageViewMode::LayoutView->value) {
+        $viewMode = PageViewMode::LayoutView::tryFrom((int)$moduleData->get('viewMode'));
+        if ($viewMode !== PageViewMode::LayoutView) {
             return;
         }
         $pageTypeTable = 'pages';
