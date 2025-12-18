@@ -69,7 +69,6 @@ class ServiceProvider extends AbstractServiceProvider
             'content-blocks.parent-field-names' => static::getContentBlockParentFieldNames(...),
             'content-blocks.add-typoscript' => static::addTypoScript(...),
             'content-blocks.add-user-tsconfig' => static::addUserTsConfig(...),
-            'content-blocks.register-icons' => static::configureIconRegistry(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
             'content-blocks.hide-content-element-children-page-content-fetching' => static::hideContentElementChildrenPageContentFetching(...),
             'content-blocks.record-summary-for-localization' => static::recordSummaryForLocalization(...),
@@ -80,6 +79,7 @@ class ServiceProvider extends AbstractServiceProvider
     public function getExtensions(): array
     {
         return [
+            IconRegistry::class => static::configureIconRegistry(...),
             PageDoktypeRegistry::class => static::configurePageTypes(...),
             ListenerProvider::class => static::addEventListeners(...),
         ] + parent::getExtensions();
@@ -373,24 +373,22 @@ HEREDOC;
         };
     }
 
-    public static function configureIconRegistry(ContainerInterface $container): \Closure
+    public static function configureIconRegistry(ContainerInterface $container, IconRegistry $iconRegistry): IconRegistry
     {
-        return static function (BootCompletedEvent $event) use ($container) {
-            $iconRegistry = $container->get(IconRegistry::class);
-            $iconsFromPackages = $container->get('content-blocks.icons');
-            foreach ($iconsFromPackages as $icon => $options) {
-                $provider = $options['provider'] ?? null;
-                unset($options['provider']);
-                $options ??= [];
-                if ($provider === null && ($options['source'] ?? false)) {
-                    $provider = $iconRegistry->detectIconProvider($options['source']);
-                }
-                if ($provider === null) {
-                    continue;
-                }
-                $iconRegistry->registerIcon($icon, $provider, $options);
+        $iconsFromPackages = $container->get('content-blocks.icons');
+        foreach ($iconsFromPackages as $icon => $options) {
+            $provider = $options['provider'] ?? null;
+            unset($options['provider']);
+            $options ??= [];
+            if ($provider === null && ($options['source'] ?? false)) {
+                $provider = $iconRegistry->detectIconProvider($options['source']);
             }
-        };
+            if ($provider === null) {
+                continue;
+            }
+            $iconRegistry->registerIcon($icon, $provider, $options);
+        }
+        return $iconRegistry;
     }
 
     public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
@@ -411,7 +409,6 @@ HEREDOC;
     public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider
     {
         $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-typoscript');
-        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.register-icons');
         $listenerProvider->addListener(BeforeLoadedUserTsConfigEvent::class, 'content-blocks.add-user-tsconfig');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         $listenerProvider->addListener(AfterContentHasBeenFetchedEvent::class, 'content-blocks.hide-content-element-children-page-content-fetching');
