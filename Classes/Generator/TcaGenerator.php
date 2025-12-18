@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\NativeTableCapabilityProxy;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
@@ -38,6 +37,7 @@ use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\SystemExtensionAvailability;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Configuration\Event\BeforeTcaOverridesEvent;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -98,7 +98,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @internal Not part of TYPO3's public API.
  */
-#[Autoconfigure(public: true)]
 readonly class TcaGenerator
 {
     public function __construct(
@@ -109,6 +108,7 @@ readonly class TcaGenerator
         protected FlexFormGenerator $flexFormGenerator,
     ) {}
 
+    #[AsEventListener(identifier: 'content-blocks-tca')]
     public function __invoke(BeforeTcaOverridesEvent $event): void
     {
         $event->setTca(array_replace_recursive($event->getTca(), $this->generate($event->getTca())));
