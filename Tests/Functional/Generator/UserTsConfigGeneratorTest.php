@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Generator;
 
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Generator\UserTsConfigGenerator;
-use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\BeforeLoadedUserTsConfigEvent;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class UserTsConfigGeneratorTest extends FunctionalTestCase
@@ -32,13 +31,10 @@ class UserTsConfigGeneratorTest extends FunctionalTestCase
     #[Test]
     public function userTsConfigIsGenerated(): void
     {
+        /** @var UserTsConfigGenerator $userTsConfigGenerator */
         $userTsConfigGenerator = $this->get(UserTsConfigGenerator::class);
-        $beforeLoadedUserTsConfigEvent = new BeforeLoadedUserTsConfigEvent();
-
-        $userTsConfigGenerator->__invoke($beforeLoadedUserTsConfigEvent);
-
-        $expected = ['options.pageTree.doktypesToShowInNewPageDragArea := addToList(942)'];
-        $result = $beforeLoadedUserTsConfigEvent->getTsConfig();
+        $result = $userTsConfigGenerator->generate();
+        $expected = 'options.pageTree.doktypesToShowInNewPageDragArea := addToList(942)';
         self::assertSame($expected, $result);
     }
 }

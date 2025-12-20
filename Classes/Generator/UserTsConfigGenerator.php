@@ -17,41 +17,19 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\Core\Attribute\AsEventListener;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
-use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\BeforeLoadedUserTsConfigEvent;
 
+/**
+ * @internal Not part of TYPO3's public API.
+ */
 readonly class UserTsConfigGenerator
 {
     public function __construct(
-        /** @var PhpFrontend */
-        #[Autowire(service: 'cache.core')]
-        protected FrontendInterface $cache,
         protected TableDefinitionCollection $tableDefinitionCollection,
     ) {}
 
-    #[AsEventListener(identifier: 'content-blocks-user-ts-config')]
-    public function __invoke(BeforeLoadedUserTsConfigEvent $event): void
-    {
-        $userTsConfig = $this->create();
-        $concatenatedTypoScript = implode(LF, $userTsConfig);
-        $event->addTsConfig($concatenatedTypoScript);
-    }
-
-    protected function create(): array
-    {
-        $typoScriptFromCache = $this->cache->require('ContentBlocks_UserTsConfig');
-        if ($typoScriptFromCache !== false) {
-            return $typoScriptFromCache;
-        }
-        return $this->createUncached();
-    }
-
-    protected function createUncached(): array
+    public function generate(): string
     {
         $userTsConfig = [];
         foreach ($this->tableDefinitionCollection as $tableDefinition) {
@@ -62,7 +40,7 @@ readonly class UserTsConfigGenerator
                 }
             }
         }
-        $this->cache->set('ContentBlocks_UserTsConfig', 'return ' . var_export($userTsConfig, true) . ';');
-        return $userTsConfig;
+        $concatenatedTypoScript = implode(LF, $userTsConfig);
+        return $concatenatedTypoScript;
     }
 }
