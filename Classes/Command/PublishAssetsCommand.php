@@ -17,22 +17,19 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Loader\AssetPublisher;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
-#[Autoconfigure(tags: [
-    [
-        'name' => 'console.command',
-        'command' => 'content-blocks:assets:publish',
-        'description' => 'Publish Content Blocks assets into Resources/Public folder of the host extension.',
-        'schedulable' => false,
-    ],
-])]
-
+#[AsCommand(
+    'content-blocks:assets:publish',
+    'Publish Content Blocks assets into Resources/Public folder of the host extension.',
+)]
+#[AsNonSchedulableCommand]
 class PublishAssetsCommand extends Command
 {
     public function __construct(

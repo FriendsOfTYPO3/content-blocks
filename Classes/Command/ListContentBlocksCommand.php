@@ -17,23 +17,21 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
-#[Autoconfigure(tags: [
-    [
-        'name' => 'console.command',
-        'command' => 'content-blocks:list',
-        'description' => 'List available Content Blocks',
-        'schedulable' => false,
-    ],
-])]
+#[AsCommand(
+    'content-blocks:list',
+    'List available Content Blocks',
+)]
+#[AsNonSchedulableCommand]
 class ListContentBlocksCommand extends Command
 {
     public function __construct(
