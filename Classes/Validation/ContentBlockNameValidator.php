@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Validation;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentBlockNameValidator
+readonly class ContentBlockNameValidator
 {
     public static function isValid(string $name): bool
     {

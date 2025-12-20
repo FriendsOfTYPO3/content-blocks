@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class FieldTypeResolver
+readonly class FieldTypeResolver
 {
     public function __construct(
         protected BaseFieldTypeRegistry $baseFieldTypeRegistry,

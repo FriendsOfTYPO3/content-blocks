@@ -27,7 +27,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentTypeIconResolver
+readonly class ContentTypeIconResolver
 {
     public static function resolve(ContentTypeIconResolverInput $input): ?ContentTypeIcon
     {

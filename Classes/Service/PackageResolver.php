@@ -27,7 +27,7 @@ use TYPO3\CMS\Core\Package\PackageManager;
  *
  * @internal Not part of TYPO3's public API.
  */
-class PackageResolver
+readonly class PackageResolver
 {
     public function __construct(protected PackageManager $packageManager) {}
 

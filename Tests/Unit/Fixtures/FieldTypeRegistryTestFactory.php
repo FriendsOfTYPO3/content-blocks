@@ -49,7 +49,7 @@ use TYPO3\CMS\ContentBlocks\FieldType\TextareaFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\TextFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\UuidFieldType;
 
-class FieldTypeRegistryTestFactory
+readonly class FieldTypeRegistryTestFactory
 {
     public static function create(): FieldTypeRegistry
     {

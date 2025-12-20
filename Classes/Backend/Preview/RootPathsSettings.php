@@ -22,7 +22,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class RootPathsSettings
+readonly class RootPathsSettings
 {
     /**
      * @return array<int, string>

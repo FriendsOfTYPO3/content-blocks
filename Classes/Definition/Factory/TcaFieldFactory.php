@@ -22,7 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeDefinitionCollecti
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 
-class TcaFieldFactory
+readonly class TcaFieldFactory
 {
     public static function create(array $array): TcaFieldDefinition
     {
