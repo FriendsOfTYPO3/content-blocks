@@ -18,9 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Update;
 
 use Symfony\Component\Finder\Finder;
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Package\PackageManager;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 
 #[UpgradeWizard('contentBlocksFolderStructureMigration')]
 readonly class ContentBlockFolderStructureMigration implements UpgradeWizardInterface
