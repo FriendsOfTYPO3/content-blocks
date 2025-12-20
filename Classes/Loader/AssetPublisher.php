@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class AssetPublisher
+readonly class AssetPublisher
 {
     /**
      * @param LoadedContentBlock[] $loadedContentBlocks

@@ -22,7 +22,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class UniqueIdentifierCreator
+readonly class UniqueIdentifierCreator
 {
     public static function createContentTypeIdentifier(string $name): string
     {

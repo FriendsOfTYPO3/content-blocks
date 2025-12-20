@@ -24,10 +24,10 @@ use TYPO3\CMS\Core\Collection\LazyRecordCollection;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class GridProcessor
+readonly class GridProcessor
 {
     public function __construct(
-        protected readonly GridFactory $gridFactory,
+        protected GridFactory $gridFactory,
     ) {}
 
     public function processGrid(

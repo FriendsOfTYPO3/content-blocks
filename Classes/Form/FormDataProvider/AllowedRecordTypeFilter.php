@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 /**
  * @internal
  */
-class AllowedRecordTypeFilter
+readonly class AllowedRecordTypeFilter
 {
     /**
      * @param array<array|SelectItem> $items

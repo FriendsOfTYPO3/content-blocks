@@ -21,7 +21,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class DefaultsLoader
+readonly class DefaultsLoader
 {
     /**
      * @return array{

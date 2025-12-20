@@ -27,7 +27,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class GridFactory
+readonly class GridFactory
 {
     /**
      * @param array<ContentBlockData> $records

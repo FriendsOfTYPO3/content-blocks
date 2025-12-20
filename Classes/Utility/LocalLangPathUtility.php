@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Utility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class LocalLangPathUtility
+readonly class LocalLangPathUtility
 {
     public static function extractKeyFromLLLPath(string $key): string
     {

@@ -23,7 +23,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class HtmlTemplateCodeGenerator
+readonly class HtmlTemplateCodeGenerator
 {
     public function generateEditorPreviewTemplate(LoadedContentBlock $contentBlockConfiguration): string
     {

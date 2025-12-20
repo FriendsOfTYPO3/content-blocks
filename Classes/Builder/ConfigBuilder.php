@@ -20,7 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 
-class ConfigBuilder
+readonly class ConfigBuilder
 {
     public function build(ContentType $contentType, string $vendor, string $name, ?string $title, null|string|int $typeName, array $defaultConfig): array
     {

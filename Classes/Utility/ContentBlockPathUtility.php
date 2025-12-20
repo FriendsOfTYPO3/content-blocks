@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @internal Not part of TYPO3's public API.
  */
-class ContentBlockPathUtility
+readonly class ContentBlockPathUtility
 {
     public static function getContentBlockExtPath(string $extensionKey, string $contentBlockFolderName, ContentType $contentType): string
     {
