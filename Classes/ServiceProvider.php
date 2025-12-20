@@ -25,10 +25,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
-use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
-use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Core\Event\BootCompletedEvent;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -36,7 +33,6 @@ use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Event\AfterContentHasBeenFetchedEvent;
 
@@ -61,9 +57,7 @@ class ServiceProvider extends AbstractServiceProvider
             ContentWhere::class => static::getContentWhere(...),
             'content-blocks.icons' => static::getContentBlockIcons(...),
             'content-blocks.page-types' => static::getContentBlockPageTypes(...),
-            'content-blocks.typoscript' => static::getContentBlockTypoScript(...),
             'content-blocks.parent-field-names' => static::getContentBlockParentFieldNames(...),
-            'content-blocks.add-typoscript' => static::addTypoScript(...),
             'content-blocks.hide-content-element-children' => static::hideContentElementChildren(...),
             'content-blocks.hide-content-element-children-page-content-fetching' => static::hideContentElementChildrenPageContentFetching(...),
             'content-blocks.record-summary-for-localization' => static::recordSummaryForLocalization(...),
@@ -155,51 +149,6 @@ class ServiceProvider extends AbstractServiceProvider
         return $arrayObject;
     }
 
-    public static function getContentBlockTypoScript(ContainerInterface $container): \ArrayObject
-    {
-        $arrayObject = new \ArrayObject();
-        $cache = $container->get('cache.core');
-        $typoScriptFromCache = $cache->require('ContentBlocks_Typoscript');
-        if ($typoScriptFromCache !== false) {
-            $arrayObject->exchangeArray($typoScriptFromCache);
-            return $arrayObject;
-        }
-
-        $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
-        /** @var TableDefinitionCollection $tableDefinitionCollection */
-        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
-        foreach ($tableDefinitionCollection as $tableDefinition) {
-            foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
-                if ($tableDefinition->contentType === ContentType::CONTENT_ELEMENT) {
-                    $extPath = $contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName());
-                    $extPrivatePath = $extPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
-                    $templateFileName = ContentBlockPathUtility::getFrontendTemplateFileName();
-                    $extFilePath = $extPrivatePath . '/' . $templateFileName;
-                    $absolutePath = GeneralUtility::getFileAbsFileName($extFilePath);
-                    if (!file_exists($absolutePath)) {
-                        continue;
-                    }
-                    $typoScript = <<<HEREDOC
-tt_content.{$typeDefinition->getTypeName()} =< lib.contentBlock
-tt_content.{$typeDefinition->getTypeName()} {
-    file = $extFilePath
-    partialRootPaths {
-        20 = $extPrivatePath/partials/
-    }
-    layoutRootPaths {
-        20 = $extPrivatePath/layouts/
-    }
-    settings._content_block_name = {$typeDefinition->getName()}
-}
-HEREDOC;
-                    $arrayObject->append($typoScript);
-                }
-            }
-        }
-        $cache->set('ContentBlocks_Typoscript', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
-        return $arrayObject;
-    }
-
     public static function getContentBlockParentFieldNames(ContainerInterface $container): \ArrayObject
     {
         $arrayObject = new \ArrayObject();
@@ -227,15 +176,6 @@ HEREDOC;
         }
         $cache->set('ContentBlocks_ParentFieldNames', 'return ' . var_export($arrayObject->getArrayCopy(), true) . ';');
         return $arrayObject;
-    }
-
-    public static function addTypoScript(ContainerInterface $container): \Closure
-    {
-        return static function (BootCompletedEvent $event) use ($container) {
-            $arrayObject = $container->get('content-blocks.typoscript');
-            $concatenatedTypoScript = implode(LF, $arrayObject->getArrayCopy());
-            ExtensionManagementUtility::addTypoScriptSetup($concatenatedTypoScript);
-        };
     }
 
     public static function hideContentElementChildren(ContainerInterface $container): \Closure
@@ -358,7 +298,6 @@ HEREDOC;
 
     public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider
     {
-        $listenerProvider->addListener(BootCompletedEvent::class, 'content-blocks.add-typoscript');
         $listenerProvider->addListener(ModifyDatabaseQueryForContentEvent::class, 'content-blocks.hide-content-element-children');
         $listenerProvider->addListener(AfterContentHasBeenFetchedEvent::class, 'content-blocks.hide-content-element-children-page-content-fetching');
         $listenerProvider->addListener(AfterRecordSummaryForLocalizationEvent::class, 'content-blocks.record-summary-for-localization');
