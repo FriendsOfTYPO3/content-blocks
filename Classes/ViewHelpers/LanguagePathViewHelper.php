@@ -33,7 +33,7 @@ use TYPO3Fluid\Fluid\Exception;
  *
  * <f:translate key="{cb:languagePath()}:header" />
  */
-class LanguagePathViewHelper extends AbstractViewHelper
+final class LanguagePathViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
     {

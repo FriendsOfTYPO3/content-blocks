@@ -33,7 +33,7 @@ use TYPO3Fluid\Fluid\Exception;
  *
  * <f:asset.css identifier="my-css" href="{cb:assetPath()}/style.css" />
  */
-class AssetPathViewHelper extends AbstractViewHelper
+final class AssetPathViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
     {
