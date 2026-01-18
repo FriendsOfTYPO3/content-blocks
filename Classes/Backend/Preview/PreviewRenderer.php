@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 use TYPO3Fluid\Fluid\View\Exception\InvalidSectionException;
 use TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException;
 
@@ -91,7 +92,16 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view = $this->createView($request, $item, $section);
         $view->assign('data', $contentBlockData);
         $view->assign('settings', $settings);
-        $result = $view->render();
+        try {
+            $result = $view->render();
+        } catch (Exception $exception) {
+            $result = '<div class="callout callout-danger">
+    <div class="callout-content">
+        <div class="callout-title">#' . $exception->getCode() . '</div>
+        <div class="callout-body">' . $exception->getMessage() . '</div>
+    </div>
+</div>';
+        }
         $result = trim($result);
         return $result;
     }
