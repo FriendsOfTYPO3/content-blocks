@@ -33,6 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -84,7 +85,16 @@ readonly class PageLayout
         $view = $this->createView($contentTypeDefinition, $pageUid, $request);
         $view->assign('data', $contentBlockData);
         $view->assign('settings', $settings);
-        $renderedView = $view->render();
+        try {
+            $renderedView = $view->render();
+        } catch (Exception $exception) {
+            $renderedView = '<div class="callout callout-danger">
+    <div class="callout-content">
+        <div class="callout-title">#' . $exception->getCode() . '</div>
+        <div class="callout-body">' . $exception->getMessage() . '</div>
+    </div>
+</div>';
+        }
         $event->addHeaderContent($renderedView);
     }
 
