@@ -31,6 +31,7 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\LinebreakDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
+use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
 use TYPO3\CMS\ContentBlocks\FieldType\FlexFormFieldType;
 use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
@@ -548,6 +549,16 @@ readonly class TcaGenerator
             // Add default FlexForm definition. This is needed for translation purposes, as special FlexForm
             // handling is performed even on elements, which didn't define this field in their show items.
             $columnTca['config']['ds'] = $this->getDefaultFlexFormDefinition();
+        }
+        // Set the default allowed record for Collections.
+        if (
+            $column->fieldType instanceof CollectionFieldType
+            && $column->fieldType->getAllowedRecordTypes() !== []
+            && $tableDefinition->typeField !== null
+        ) {
+            $allowedRecordTypes = $column->fieldType->getAllowedRecordTypes();
+            $defaultAllowedRecordType = $allowedRecordTypes[0];
+            $columnTca['config']['overrideChildTca']['columns'][$tableDefinition->typeField]['config']['default'] = $defaultAllowedRecordType;
         }
         // Add TCA for automatically added typeField.
         if ($tableDefinition->typeField === $column->identifier) {
