@@ -10,16 +10,16 @@ directory structure of extensions, this would be the **Resources/Private**
 folder. There is a limited set of directories and files, which you can place
 here.
 
-backend-preview.html
-====================
+backend-preview.fluid.html
+==========================
 
-The **backend-preview.html** can be added to customize the backend preview for
+The **backend-preview.fluid.html** can be added to customize the backend preview for
 your editors.
 
 Learn more about :ref:`backend previews <api_backend_preview>`.
 
-frontend.html
-=============
+frontend.fluid.html
+===================
 
 This is the default frontend rendering definition for :ref:`Content Elements <yaml_reference_content_element>`.
 You can access your fields by the variable :html:`{data}`.
@@ -29,7 +29,7 @@ Learn more about :ref:`templating <cb_templating>`.
 partials
 ========
 
-For larger Content Elements, you can divide your **frontend.html** template into
+For larger Content Elements, you can divide your **frontend.fluid.html** template into
 smaller chunks by creating separate partials here.
 
 Partials are included as you normally would in any Fluid template.

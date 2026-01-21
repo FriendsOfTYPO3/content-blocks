@@ -63,7 +63,7 @@ Read more about :ref:`Page Type / template mapping <page-types-template>`.
 Backend preview
 ===============
 
-Just like for Content Elements, you can define an **backend-preview.html** file
+Just like for Content Elements, you can define an **backend-preview.fluid.html** file
 to create a preview of your Page Type. This can be used to preview custom
 properties and to link directly to them. To make them prettier it is advised to
 utilise CSS bootstrap classes like `card`.

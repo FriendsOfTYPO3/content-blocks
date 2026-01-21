@@ -10,7 +10,7 @@ backend. Previews are a very important part when creating custom content types
 for your editors. They are the only way to help them navigate through the
 jungle fo elements in the page module.
 
-A preview can be defined by creating a file `templates/backend-preview.html`
+A preview can be defined by creating a file `templates/backend-preview.fluid.html`
 inside your Content Block. This file is already created for you, if you use the
 kickstart command.
 
@@ -30,7 +30,7 @@ preview for custom Content Elements.
     any of the sections :html:`Header`, :html:`Content` or :html:`Footer`.
 
 ..  code-block:: html
-    :caption: EXT:my_package/ContentBlocks/ContentElements/my-element/templates/backend-preview.html
+    :caption: EXT:my_package/ContentBlocks/ContentElements/my-element/templates/backend-preview.fluid.html
 
     <f:layout name="Preview"/>
 

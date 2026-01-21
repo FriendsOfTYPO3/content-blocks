@@ -46,9 +46,19 @@ readonly class ContentBlockPathUtility
         return 'backend-preview.html';
     }
 
+    public static function getBackendPreviewFileNameDotFluid(): string
+    {
+        return 'backend-preview.fluid.html';
+    }
+
     public static function getBackendPreviewPath(): string
     {
         return self::getTemplatesFolder() . '/' . self::getBackendPreviewFileName();
+    }
+
+    public static function getBackendPreviewPathDotFluid(): string
+    {
+        return self::getTemplatesFolder() . '/' . self::getBackendPreviewFileNameDotFluid();
     }
 
     public static function getFrontendTemplateFileName(): string
@@ -56,9 +66,19 @@ readonly class ContentBlockPathUtility
         return 'frontend.html';
     }
 
+    public static function getFrontendTemplateFileNameDotFluid(): string
+    {
+        return 'frontend.fluid.html';
+    }
+
     public static function getFrontendTemplatePath(): string
     {
         return self::getTemplatesFolder() . '/' . self::getFrontendTemplateFileName();
+    }
+
+    public static function getFrontendTemplatePathDotFluid(): string
+    {
+        return self::getTemplatesFolder() . '/' . self::getFrontendTemplateFileNameDotFluid();
     }
 
     public static function getLanguageFilePath(): string

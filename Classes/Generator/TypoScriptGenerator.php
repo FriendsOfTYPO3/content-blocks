@@ -43,18 +43,20 @@ readonly class TypoScriptGenerator
             foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
                 $extPath = $this->contentBlockRegistry->getContentBlockExtPath($typeDefinition->getName());
                 $extPrivatePath = $extPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
-                $templateFileName = ContentBlockPathUtility::getFrontendTemplateFileName();
-                $extFilePath = $extPrivatePath . '/' . $templateFileName;
-                $absolutePath = GeneralUtility::getFileAbsFileName($extFilePath);
-                if (!file_exists($absolutePath)) {
-                    continue;
+                $htmlFileName = ContentBlockPathUtility::getFrontendTemplateFileName();
+                $dotFluidFileName = ContentBlockPathUtility::getFrontendTemplateFileNameDotFluid();
+                foreach ([$dotFluidFileName, $htmlFileName] as $templateFileName) {
+                    $extFilePath = $extPrivatePath . '/' . $templateFileName;
+                    $absolutePath = GeneralUtility::getFileAbsFileName($extFilePath);
+                    if (file_exists($absolutePath)) {
+                        $typoScriptArray[] = $this->generateSingle(
+                            $typeDefinition->getName(),
+                            $typeDefinition->getTypeName(),
+                            $extPrivatePath,
+                        );
+                        break;
+                    }
                 }
-                $typoScriptArray[] = $this->generateSingle(
-                    $typeDefinition->getName(),
-                    $typeDefinition->getTypeName(),
-                    $extFilePath,
-                    $extPrivatePath
-                );
             }
         }
         $concatenatedTypoScript = implode(LF, $typoScriptArray);
@@ -64,13 +66,15 @@ readonly class TypoScriptGenerator
     protected function generateSingle(
         string $name,
         string $typeName,
-        string $extFilePath,
         string $extPrivatePath,
     ): string {
         $typoScript = <<<HEREDOC
 tt_content.$typeName =< lib.contentBlock
 tt_content.$typeName {
-    file = $extFilePath
+    templateName = frontend
+    templateRootPaths {
+        20 = $extPrivatePath/
+    }
     partialRootPaths {
         20 = $extPrivatePath/partials/
     }

@@ -61,7 +61,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
-        if (!$this->hasPreviewHtml($item)) {
+        if ($this->hasPreviewTemplate($item) === false) {
             return parent::renderPageModulePreviewContent($item);
         }
         try {
@@ -93,7 +93,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $view->assign('data', $contentBlockData);
         $view->assign('settings', $settings);
         try {
-            $result = $view->render();
+            $result = $view->render('backend-preview');
         } catch (Exception $exception) {
             $result = '<div class="callout callout-danger">
     <div class="callout-content">
@@ -116,9 +116,9 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         $partialRootPaths = $this->getContentBlocksPartialRootPaths($templatePath, $pageUid);
         $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($templatePath, $pageUid, $section);
         $viewFactoryData = new ViewFactoryData(
+            templateRootPaths: [$templatePath],
             partialRootPaths: $partialRootPaths,
             layoutRootPaths: $layoutRootPaths,
-            templatePathAndFilename: $templatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName(),
             request: $request
         );
         return $this->viewFactory->create($viewFactoryData);
@@ -173,17 +173,24 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         return $contentBlockPrivatePath;
     }
 
-    protected function getAbsolutePreviewHtmlTemplatePath(GridColumnItem $item): string
+    protected function getAbsolutePreviewHtmlTemplatePath(GridColumnItem $item, string $fileName): string
     {
         $templatePath = $this->getContentBlockTemplatePath($item);
-        $templatePathAndFilename = $templatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName();
+        $templatePathAndFilename = $templatePath . '/' . $fileName;
         $absoluteTemplatePath = GeneralUtility::getFileAbsFileName($templatePathAndFilename);
         return $absoluteTemplatePath;
     }
 
-    protected function hasPreviewHtml(GridColumnItem $item): bool
+    protected function hasPreviewTemplate(GridColumnItem $item): bool
     {
-        $absoluteTemplatePath = $this->getAbsolutePreviewHtmlTemplatePath($item);
-        return file_exists($absoluteTemplatePath);
+        $fileNameHtml = ContentBlockPathUtility::getBackendPreviewFileName();
+        $fileNameDotFluid = ContentBlockPathUtility::getBackendPreviewFileNameDotFluid();
+        foreach ([$fileNameDotFluid, $fileNameHtml] as $fileNameHtml) {
+            $absoluteTemplatePath = $this->getAbsolutePreviewHtmlTemplatePath($item, $fileNameHtml);
+            if (file_exists($absoluteTemplatePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

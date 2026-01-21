@@ -74,8 +74,8 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
         self::assertFileExists($basePath . '/config.yaml', 'config.yaml does not exist');
         self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exist');
         self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exist');
-        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exist');
-        self::assertFileExists($basePath . '/templates/frontend.html', 'Templates frontend.html does not exist');
+        self::assertFileExists($basePath . '/templates/backend-preview.fluid.html', 'Templates backend-preview.fluid.html does not exist');
+        self::assertFileExists($basePath . '/templates/frontend.fluid.html', 'Templates frontend.fluid.html does not exist');
     }
 
     #[Test]
@@ -109,7 +109,7 @@ final class CreateContentBlockCommandTest extends FunctionalTestCase
         self::assertFileExists($basePath . '/assets/icon-hide-in-menu.svg', 'Assets icon-hide-in-menu.svg does not exist');
         self::assertFileExists($basePath . '/assets/icon.svg', 'Assets icon.svg does not exist');
         self::assertFileExists($basePath . '/language/labels.xlf', 'Language labels.xlf does not exist');
-        self::assertFileExists($basePath . '/templates/backend-preview.html', 'Templates backend-preview.html does not exist');
+        self::assertFileExists($basePath . '/templates/backend-preview.fluid.html', 'Templates backend-preview.fluid.html does not exist');
     }
 
     #[Test]

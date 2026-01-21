@@ -12,7 +12,7 @@ additional features like own variables and ViewHelpers with it.
 Accessing variables
 ===================
 
-Inside your `frontend.html` or `backend-preview.html` file you can access the
+Inside your `frontend.fluid.html` or `backend-preview.fluid.html` file you can access the
 properties of your Content Element as usual by the :html:`{data}` variable.
 This variable, however, is special. It has real superpowers!
 
@@ -112,8 +112,8 @@ experience for the editors. With this feature, there is the possibility to
 provide nearly the same layout in the frontend and the backend, so the editors
 easily find the element they want to edit.
 
-The frontend template is located in **templates/frontend.html** and the backend
-template in **templates/backend-preview.html**.
+The frontend template is located in **templates/frontend.fluid.html** and the backend
+template in **templates/backend-preview.fluid.html**.
 
 .. _asset_view_helpers:
 

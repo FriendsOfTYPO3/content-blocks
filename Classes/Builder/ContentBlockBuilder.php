@@ -142,7 +142,7 @@ readonly class ContentBlockBuilder
 
     protected function createBackendPreviewHtml(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        $filePath = $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
+        $filePath = $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPathDotFluid();
         if (file_exists($filePath)) {
             return;
         }
@@ -152,7 +152,7 @@ readonly class ContentBlockBuilder
 
     protected function createFrontendHtml(LoadedContentBlock $contentBlock, string $basePath): void
     {
-        $filePath = $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath();
+        $filePath = $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePathDotFluid();
         if (file_exists($filePath)) {
             return;
         }

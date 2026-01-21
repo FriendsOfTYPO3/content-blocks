@@ -38,7 +38,10 @@ class TypoScriptGeneratorTest extends FunctionalTestCase
         $expected = <<<HEREDOC
 tt_content.typo3tests_contentelementb =< lib.contentBlock
 tt_content.typo3tests_contentelementb {
-    file = EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/templates/frontend.html
+    templateName = frontend
+    templateRootPaths {
+        20 = EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/templates/
+    }
     partialRootPaths {
         20 = EXT:test_content_blocks_b/ContentBlocks/ContentElements/content-element-b/templates/partials/
     }

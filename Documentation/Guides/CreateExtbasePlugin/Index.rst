@@ -18,7 +18,7 @@ Create a new Content Block
 
 
 .. code-block:: html
-   :caption: EXT:site_package/ContentBlocks/ContentElements/artists/templates/frontend.html
+   :caption: EXT:site_package/ContentBlocks/ContentElements/artists/templates/frontend.fluid.html
 
     <f:cObject typoscriptObjectPath="{data.mainType}.{data.recordType}.20" table="{data.mainType}" data="{data}"/>
 

@@ -65,10 +65,10 @@ your config.yaml file. These are already shipped by Content Blocks.
         type: Basic
 
 Now the setup is complete and all what's left to do is to use the newly
-available layout in your frontend.html templates.
+available layout in your frontend.fluid.html templates.
 
 .. code-block:: html
-   :caption: EXT:your_extension/ContentBlocks/ContentElements/fsc-test/templates/frontend.html
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/fsc-test/templates/frontend.fluid.html
 
    <f:layout/>
 

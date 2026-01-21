@@ -31,8 +31,8 @@ named **assets**, **templates** and **language**.
 
                         *   :file:`MyPartial.html`
 
-                    *   :file:`backend-preview.html`
-                    *   :file:`frontend.html`
+                    *   :file:`backend-preview.fluid.html`
+                    *   :file:`frontend.fluid.html`
 
                 *   :file:`config.yaml`(:ref:`details <cb_definition_editor_interface>`)
 

@@ -63,8 +63,8 @@ easily copy-pasted into other projects.
 
                 *   :path:`templates`
 
-                    *   :file:`backend-preview.html`
-                    *   :file:`frontend.html`
+                    *   :file:`backend-preview.fluid.html`
+                    *   :file:`frontend.fluid.html`
 
                 *   :file:`config.yaml`
 

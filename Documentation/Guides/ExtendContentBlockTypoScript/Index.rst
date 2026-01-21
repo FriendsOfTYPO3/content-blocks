@@ -43,7 +43,7 @@ Example:
 
     tt_content {
         myvendor_mycontentblockname {
-            file = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/frontend.html
+            file = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/frontend.fluid.html
             layoutRootPaths {
                 20 = EXT:site_package/ContentBlocks/ContentElements/content-element-name/templates/layouts/
             }

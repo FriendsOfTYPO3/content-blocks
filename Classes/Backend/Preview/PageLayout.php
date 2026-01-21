@@ -78,7 +78,7 @@ readonly class PageLayout
         if ($contentTypeDefinition === null) {
             return;
         }
-        if ($this->getEditorPreviewExtPath($contentTypeDefinition) === null) {
+        if ($this->hasPreviewTemplate($contentTypeDefinition) === false) {
             return;
         }
         $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord);
@@ -87,7 +87,7 @@ readonly class PageLayout
         $view->assign('data', $contentBlockData);
         $view->assign('settings', $settings);
         try {
-            $renderedView = $view->render();
+            $renderedView = $view->render('backend-preview');
         } catch (Exception $exception) {
             $renderedView = '<div class="callout callout-danger">
     <div class="callout-content">
@@ -101,13 +101,14 @@ readonly class PageLayout
 
     protected function createView(ContentTypeInterface $contentTypeDefinition, int $pageUid, ServerRequestInterface $request): ViewInterface
     {
-        $contentBlockPrivatePath = $this->getContentBlockPrivatePath($contentTypeDefinition);
-        $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($contentBlockPrivatePath, $pageUid);
-        $partialRootPaths = $this->getContentBlocksPartialRootPaths($contentBlockPrivatePath, $pageUid);
+        $contentBlockExtPath = $this->getContentBlocksExtPath($contentTypeDefinition);
+        $contentBlockTemplatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
+        $layoutRootPaths = $this->getContentBlocksLayoutRootPaths($contentBlockTemplatePath, $pageUid);
+        $partialRootPaths = $this->getContentBlocksPartialRootPaths($contentBlockTemplatePath, $pageUid);
         $viewData = new ViewFactoryData(
+            templateRootPaths: [$contentBlockTemplatePath],
             partialRootPaths: $partialRootPaths,
             layoutRootPaths: $layoutRootPaths,
-            templatePathAndFilename: $contentBlockPrivatePath . '/' . ContentBlockPathUtility::getBackendPreviewFileName(),
             request: $request,
         );
         return $this->viewFactory->create($viewData);
@@ -116,38 +117,41 @@ readonly class PageLayout
     /**
      * @return array<int, string>
      */
-    protected function getContentBlocksPartialRootPaths(string $contentBlockPrivatePath, int $pageUid): array
+    protected function getContentBlocksPartialRootPaths(string $contentBlockTemplatePath, int $pageUid): array
     {
         $partialRootPaths = $this->rootPathsSettings->getContentBlocksPartialRootPaths($pageUid);
-        $partialRootPaths[] = $contentBlockPrivatePath . '/partials/';
+        $partialRootPaths[] = $contentBlockTemplatePath . '/partials/';
         return $partialRootPaths;
     }
 
     /**
      * @return array<int, string>
      */
-    protected function getContentBlocksLayoutRootPaths(string $contentBlockPrivatePath, int $pageUid): array
+    protected function getContentBlocksLayoutRootPaths(string $contentBlockTemplatePath, int $pageUid): array
     {
         $layoutRootPaths = $this->rootPathsSettings->getContentBlocksLayoutRootPaths($pageUid);
-        $layoutRootPaths[] = $contentBlockPrivatePath . '/layouts/';
+        $layoutRootPaths[] = $contentBlockTemplatePath . '/layouts/';
         return $layoutRootPaths;
     }
 
-    protected function getContentBlockPrivatePath(ContentTypeInterface $contentTypeDefinition): string
+    protected function hasPreviewTemplate(ContentTypeInterface $contentTypeDefinition): bool
     {
-        $contentBlockExtPath = $this->getEditorPreviewExtPath($contentTypeDefinition);
-        $contentBlockPrivatePath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getTemplatesFolder();
-        return $contentBlockPrivatePath;
+        $contentBlockExtPath = $this->getContentBlocksExtPath($contentTypeDefinition);
+        $backendPreviewPathHtml = ContentBlockPathUtility::getBackendPreviewPath();
+        $backendPreviewPathDotFluid = ContentBlockPathUtility::getBackendPreviewPathDotFluid();
+        foreach ([$backendPreviewPathDotFluid, $backendPreviewPathHtml] as $backendPreviewPath) {
+            $editorPreviewExtPath = $contentBlockExtPath . '/' . $backendPreviewPath;
+            $editorPreviewAbsPath = GeneralUtility::getFileAbsFileName($editorPreviewExtPath);
+            if (file_exists($editorPreviewAbsPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    protected function getEditorPreviewExtPath(ContentTypeInterface $contentTypeDefinition): ?string
+    protected function getContentBlocksExtPath(ContentTypeInterface $contentTypeDefinition): string
     {
         $contentBlockExtPath = $this->contentBlockRegistry->getContentBlockExtPath($contentTypeDefinition->getName());
-        $editorPreviewExtPath = $contentBlockExtPath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
-        $editorPreviewAbsPath = GeneralUtility::getFileAbsFileName($editorPreviewExtPath);
-        if (!file_exists($editorPreviewAbsPath)) {
-            return null;
-        }
         return $contentBlockExtPath;
     }
 }

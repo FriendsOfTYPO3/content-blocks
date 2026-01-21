@@ -100,8 +100,8 @@ Options
 
                     *   :path:`templates`
 
-                        *   :file:`backend-preview.html`
-                        *   :file:`frontend.html`
+                        *   :file:`backend-preview.fluid.html`
+                        *   :file:`frontend.fluid.html`
 
                 *   :path:`page-type`
 
@@ -212,8 +212,8 @@ generated based on your arguments.
 
                 *   :path:`templates`
 
-                    *   :file:`backend-preview.html`
-                    *   :file:`frontend.html`
+                    *   :file:`backend-preview.fluid.html`
+                    *   :file:`frontend.fluid.html`
 
             *   :path:`page-type`
 
