@@ -96,9 +96,9 @@ class LanguageFileGenerator
         $key = $automaticLanguageSource->key;
         $value = htmlspecialchars($automaticLanguageSource->value);
         $sourceContent = <<<HEREDOC
-			<trans-unit id="$key">
-				<source>$value</source>
-			</trans-unit>
+      <trans-unit id="$key">
+        <source>$value</source>
+      </trans-unit>
 HEREDOC;
         return $sourceContent;
     }
@@ -108,12 +108,12 @@ HEREDOC;
         $xliffContent = <<<HEREDOC
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
-		<header/>
-		<body>
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="$date" product-name="$vendor/$name">
+    <header/>
+    <body>
 $content
-		</body>
-	</file>
+    </body>
+  </file>
 </xliff>
 HEREDOC;
         return $xliffContent;

@@ -1,176 +1,176 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="labels.xlf" source-language="en" date="" product-name="typo3tests/command-test-language-2">
-		<header/>
-		<body>
-			<trans-unit id="title">
-				<source>typo3tests/command-test-language-2</source>
-			</trans-unit>
-			<trans-unit id="text.label">
-				<source>text</source>
-			</trans-unit>
-			<trans-unit id="my_collection.label">
-				<source>my_collection</source>
-			</trans-unit>
-			<trans-unit id="my_collection.text.label">
-				<source>text</source>
-			</trans-unit>
-			<trans-unit id="my_collection.my_collection.label">
-				<source>my_collection</source>
-			</trans-unit>
-			<trans-unit id="my_collection.my_collection.text.label">
-				<source>text</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.label">
-				<source>my_flexform</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sheets.sheet1.label">
-				<source>sheet1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.link1.label">
-				<source>link1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.title">
-				<source>section1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.title">
-				<source>container1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.container_field.label">
-				<source>container_field</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.select.label">
-				<source>select</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.select.items.label">
-				<source>Default</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.select.items.select_1.label">
-				<source>Select1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.select.items.select_2.label">
-				<source>Select2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.radio.label">
-				<source>radio</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.radio.items.0.label">
-				<source>Radio1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.radio.items.1.label">
-				<source>Radio1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.check.label">
-				<source>check</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.check.items.0.label">
-				<source>Check1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container1.check.items.1.label">
-				<source>Check2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container2.title">
-				<source>container2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sections.section1.container.container2.container_field2.label">
-				<source>container_field2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.sheets.sheet2.label">
-				<source>sheet2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.header2.label">
-				<source>header2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.textarea2.label">
-				<source>textarea2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform.header1.label">
-				<source>header1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.label">
-				<source>my_flexform2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.header.label">
-				<source>header</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.textarea.label">
-				<source>textarea</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.select.label">
-				<source>select</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.select.items.label">
-				<source>Default</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.select.items.select_1.label">
-				<source>Select1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.select.items.select_2.label">
-				<source>Select2</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.radio.label">
-				<source>radio</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.radio.items.0.label">
-				<source>Radio1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.radio.items.1.label">
-				<source>Radio1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.check.label">
-				<source>check</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.check.items.0.label">
-				<source>Check1</source>
-			</trans-unit>
-			<trans-unit id="my_flexform2.check.items.1.label">
-				<source>Check2</source>
-			</trans-unit>
-			<trans-unit id="palette_field_1.label">
-				<source>palette_field_1</source>
-			</trans-unit>
-			<trans-unit id="tabs.tab_1">
-				<source>tab_1</source>
-			</trans-unit>
-			<trans-unit id="field_after_tab.label">
-				<source>field_after_tab</source>
-			</trans-unit>
-			<trans-unit id="select.label">
-				<source>select</source>
-			</trans-unit>
-			<trans-unit id="select.items.label">
-				<source>Default</source>
-			</trans-unit>
-			<trans-unit id="select.items.select_1.label">
-				<source>Select1</source>
-			</trans-unit>
-			<trans-unit id="select.items.select_2.label">
-				<source>Select2</source>
-			</trans-unit>
-			<trans-unit id="radio.label">
-				<source>radio</source>
-			</trans-unit>
-			<trans-unit id="radio.items.0.label">
-				<source>Radio1</source>
-			</trans-unit>
-			<trans-unit id="radio.items.1.label">
-				<source>Radio1</source>
-			</trans-unit>
-			<trans-unit id="check.label">
-				<source>check</source>
-			</trans-unit>
-			<trans-unit id="check.items.0.label">
-				<source>Check1</source>
-			</trans-unit>
-			<trans-unit id="check.items.1.label">
-				<source>Check2</source>
-			</trans-unit>
-			<trans-unit id="uuid.label">
-				<source>uuid</source>
-			</trans-unit>
-			<trans-unit id="language.label">
-				<source>language</source>
-			</trans-unit>
-		</body>
-	</file>
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="" product-name="typo3tests/command-test-language-2">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>typo3tests/command-test-language-2</source>
+      </trans-unit>
+      <trans-unit id="text.label">
+        <source>text</source>
+      </trans-unit>
+      <trans-unit id="my_collection.label">
+        <source>my_collection</source>
+      </trans-unit>
+      <trans-unit id="my_collection.text.label">
+        <source>text</source>
+      </trans-unit>
+      <trans-unit id="my_collection.my_collection.label">
+        <source>my_collection</source>
+      </trans-unit>
+      <trans-unit id="my_collection.my_collection.text.label">
+        <source>text</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.label">
+        <source>my_flexform</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sheets.sheet1.label">
+        <source>sheet1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.link1.label">
+        <source>link1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.title">
+        <source>section1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.title">
+        <source>container1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.container_field.label">
+        <source>container_field</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.select.label">
+        <source>select</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.select.items.label">
+        <source>Default</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.select.items.select_1.label">
+        <source>Select1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.select.items.select_2.label">
+        <source>Select2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.radio.label">
+        <source>radio</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.radio.items.0.label">
+        <source>Radio1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.radio.items.1.label">
+        <source>Radio1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.check.label">
+        <source>check</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.check.items.0.label">
+        <source>Check1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container1.check.items.1.label">
+        <source>Check2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container2.title">
+        <source>container2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sections.section1.container.container2.container_field2.label">
+        <source>container_field2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.sheets.sheet2.label">
+        <source>sheet2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.header2.label">
+        <source>header2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.textarea2.label">
+        <source>textarea2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform.header1.label">
+        <source>header1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.label">
+        <source>my_flexform2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.header.label">
+        <source>header</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.textarea.label">
+        <source>textarea</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.select.label">
+        <source>select</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.select.items.label">
+        <source>Default</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.select.items.select_1.label">
+        <source>Select1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.select.items.select_2.label">
+        <source>Select2</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.radio.label">
+        <source>radio</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.radio.items.0.label">
+        <source>Radio1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.radio.items.1.label">
+        <source>Radio1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.check.label">
+        <source>check</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.check.items.0.label">
+        <source>Check1</source>
+      </trans-unit>
+      <trans-unit id="my_flexform2.check.items.1.label">
+        <source>Check2</source>
+      </trans-unit>
+      <trans-unit id="palette_field_1.label">
+        <source>palette_field_1</source>
+      </trans-unit>
+      <trans-unit id="tabs.tab_1">
+        <source>tab_1</source>
+      </trans-unit>
+      <trans-unit id="field_after_tab.label">
+        <source>field_after_tab</source>
+      </trans-unit>
+      <trans-unit id="select.label">
+        <source>select</source>
+      </trans-unit>
+      <trans-unit id="select.items.label">
+        <source>Default</source>
+      </trans-unit>
+      <trans-unit id="select.items.select_1.label">
+        <source>Select1</source>
+      </trans-unit>
+      <trans-unit id="select.items.select_2.label">
+        <source>Select2</source>
+      </trans-unit>
+      <trans-unit id="radio.label">
+        <source>radio</source>
+      </trans-unit>
+      <trans-unit id="radio.items.0.label">
+        <source>Radio1</source>
+      </trans-unit>
+      <trans-unit id="radio.items.1.label">
+        <source>Radio1</source>
+      </trans-unit>
+      <trans-unit id="check.label">
+        <source>check</source>
+      </trans-unit>
+      <trans-unit id="check.items.0.label">
+        <source>Check1</source>
+      </trans-unit>
+      <trans-unit id="check.items.1.label">
+        <source>Check2</source>
+      </trans-unit>
+      <trans-unit id="uuid.label">
+        <source>uuid</source>
+      </trans-unit>
+      <trans-unit id="language.label">
+        <source>language</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

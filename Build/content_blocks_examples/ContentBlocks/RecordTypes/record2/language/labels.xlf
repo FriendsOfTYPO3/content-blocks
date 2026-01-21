@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="hov/record2">
-		<header/>
-		<body>
-			<trans-unit id="title">
-				<source>Record 2</source>
-			</trans-unit>
-			<trans-unit id="description">
-				<source>This is your content block description</source>
-			</trans-unit>
-			<trans-unit id="title.label">
-				<source>Custom title 2</source>
-			</trans-unit>
-			<trans-unit id="text.label">
-				<source>Text</source>
-			</trans-unit>
-			<trans-unit id="text3.label">
-				<source>Textarea</source>
-			</trans-unit>
-		</body>
-	</file>
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="hov/record2">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>Record 2</source>
+      </trans-unit>
+      <trans-unit id="description">
+        <source>This is your content block description</source>
+      </trans-unit>
+      <trans-unit id="title.label">
+        <source>Custom title 2</source>
+      </trans-unit>
+      <trans-unit id="text.label">
+        <source>Text</source>
+      </trans-unit>
+      <trans-unit id="text3.label">
+        <source>Textarea</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

@@ -1,68 +1,68 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-12-13T08:48:22+00:00" product-name="example/card-group">
-		<header/>
-		<body>
-			<trans-unit id="title">
-				<source>Card Group</source>
-			</trans-unit>
-			<trans-unit id="description">
-				<source>Add a group with several cards</source>
-			</trans-unit>
-			<trans-unit id="header.label">
-				<source>Header</source>
-			</trans-unit>
-			<trans-unit id="row_items.label">
-				<source>Items per row</source>
-			</trans-unit>
-			<trans-unit id="row_items.items.1.label">
-				<source>1</source>
-			</trans-unit>
-			<trans-unit id="row_items.items.2.label">
-				<source>2</source>
-			</trans-unit>
-			<trans-unit id="row_items.items.3.label">
-				<source>3</source>
-			</trans-unit>
-			<trans-unit id="row_items.items.4.label">
-				<source>4</source>
-			</trans-unit>
-			<trans-unit id="settings.label">
-				<source>Settings</source>
-			</trans-unit>
-			<trans-unit id="settings.alignment.label">
-				<source>Alignment</source>
-			</trans-unit>
-			<trans-unit id="settings.alignment.items.left.label">
-				<source>Left</source>
-			</trans-unit>
-			<trans-unit id="settings.alignment.items.center.label">
-				<source>Center</source>
-			</trans-unit>
-			<trans-unit id="settings.alignment.items.right.label">
-				<source>Right</source>
-			</trans-unit>
-			<trans-unit id="card_group_item.label">
-				<source>Card group items</source>
-			</trans-unit>
-			<trans-unit id="card_group_item.image.label">
-				<source>Image</source>
-			</trans-unit>
-			<trans-unit id="card_group_item.title.label">
-				<source>Title</source>
-			</trans-unit>
-			<trans-unit id="card_group_item.bodytext.label">
-				<source>Bodytext</source>
-			</trans-unit>
-			<trans-unit id="card_group_item.link.label">
-				<source>Link</source>
-			</trans-unit>
-			<trans-unit id="card_group_item.link_title.label">
-				<source>Link title</source>
-			</trans-unit>
-			<trans-unit id="readmore">
-				<source>Read more</source>
-			</trans-unit>
-		</body>
-	</file>
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-12-13T08:48:22+00:00" product-name="example/card-group">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>Card Group</source>
+      </trans-unit>
+      <trans-unit id="description">
+        <source>Add a group with several cards</source>
+      </trans-unit>
+      <trans-unit id="header.label">
+        <source>Header</source>
+      </trans-unit>
+      <trans-unit id="row_items.label">
+        <source>Items per row</source>
+      </trans-unit>
+      <trans-unit id="row_items.items.1.label">
+        <source>1</source>
+      </trans-unit>
+      <trans-unit id="row_items.items.2.label">
+        <source>2</source>
+      </trans-unit>
+      <trans-unit id="row_items.items.3.label">
+        <source>3</source>
+      </trans-unit>
+      <trans-unit id="row_items.items.4.label">
+        <source>4</source>
+      </trans-unit>
+      <trans-unit id="settings.label">
+        <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="settings.alignment.label">
+        <source>Alignment</source>
+      </trans-unit>
+      <trans-unit id="settings.alignment.items.left.label">
+        <source>Left</source>
+      </trans-unit>
+      <trans-unit id="settings.alignment.items.center.label">
+        <source>Center</source>
+      </trans-unit>
+      <trans-unit id="settings.alignment.items.right.label">
+        <source>Right</source>
+      </trans-unit>
+      <trans-unit id="card_group_item.label">
+        <source>Card group items</source>
+      </trans-unit>
+      <trans-unit id="card_group_item.image.label">
+        <source>Image</source>
+      </trans-unit>
+      <trans-unit id="card_group_item.title.label">
+        <source>Title</source>
+      </trans-unit>
+      <trans-unit id="card_group_item.bodytext.label">
+        <source>Bodytext</source>
+      </trans-unit>
+      <trans-unit id="card_group_item.link.label">
+        <source>Link</source>
+      </trans-unit>
+      <trans-unit id="card_group_item.link_title.label">
+        <source>Link title</source>
+      </trans-unit>
+      <trans-unit id="readmore">
+        <source>Read more</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>
