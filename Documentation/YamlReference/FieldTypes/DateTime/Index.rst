@@ -34,7 +34,7 @@ Settings
    :default: ''
 
    Defines how the date should be formatted in the backend. Possible values are
-   `datetime`, `date` or `time` and `timesec`.
+   `datetime`, `date`, `datetimesec`, `time` and `timesec`.
 
 .. confval:: dbType
    :name: datetime-dbType
