@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="labels.xlf" source-language="en" date="2025-05-18T09:53:29+00:00" product-name="example/imageslider">
-		<header/>
-		<body>
-			<trans-unit id="title">
-				<source>Imageslider</source>
-			</trans-unit>
-			<trans-unit id="description">
-				<source>Add an imageslider based on Swiffy Slider</source>
-			</trans-unit>
-			<trans-unit id="header.label">
-				<source>Header</source>
-			</trans-unit>
-			<trans-unit id="assets.label">
-				<source>Assets</source>
-			</trans-unit>
-			<trans-unit id="assets.my_text_field_test.label">
-				<source>My custom text field</source>
-			</trans-unit>
-		</body>
-	</file>
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2025-05-18T09:53:29+00:00" product-name="example/imageslider">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>Imageslider</source>
+      </trans-unit>
+      <trans-unit id="description">
+        <source>Add an imageslider based on Swiffy Slider</source>
+      </trans-unit>
+      <trans-unit id="header.label">
+        <source>Header</source>
+      </trans-unit>
+      <trans-unit id="assets.label">
+        <source>Assets</source>
+      </trans-unit>
+      <trans-unit id="assets.my_text_field_test.label">
+        <source>My custom text field</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

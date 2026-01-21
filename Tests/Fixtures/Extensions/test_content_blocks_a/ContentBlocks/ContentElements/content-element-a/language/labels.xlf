@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file datatype="plaintext" original="messages" source-language="en" product-name="example">
-		<header/>
-		<body>
-			<trans-unit id="title" xml:space="preserve">
-				<source>Content Block title</source>
-			</trans-unit>
-			<trans-unit id="description" xml:space="preserve">
-				<source>This is your content block description</source>
-			</trans-unit>
-		</body>
-	</file>
+  <file datatype="plaintext" original="messages" source-language="en" product-name="example">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>Content Block title</source>
+      </trans-unit>
+      <trans-unit id="description">
+        <source>This is your content block description</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>
