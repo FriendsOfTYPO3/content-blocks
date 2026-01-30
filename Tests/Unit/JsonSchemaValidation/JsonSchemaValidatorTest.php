@@ -77,7 +77,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
         yield 'invalid properties' => [
             'data' => (object)[
                 'name' => 'json/schema-test',
-                'burger' => 'royale'
+                'burger' => 'royale',
             ],
             'expectedHasError' => true,
         ];
