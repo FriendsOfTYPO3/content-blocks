@@ -1,0 +1,268 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/field-type.json",
+	"title": "Field Type",
+	"description": "TYPO3 CMS Content Blocks Field Type",
+	"type": "object",
+	"$defs": {
+		"valuePicker": {
+			"type": "object",
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": ["label", "value"],
+						"properties": {
+							"label": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"required": ["items"]
+		}
+	},
+	"properties": {
+		"identifier": {
+			"type": "string",
+			"description": "The identifier for the field.",
+			"pattern": "^[a-zA-Z0-9_]+$"
+		},
+		"label": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"useExistingField": {
+			"type": "boolean",
+			"description": "Enables extending of existing fields defined by TCA.",
+			"default": false
+		},
+		"prefixField": {
+			"type": "boolean",
+			"description": "Enables prefixing of field identifiers",
+			"default": true
+		},
+		"prefixType": {
+			"description": "Determines how to prefix the field if prefixField is enabled.",
+			"type": "string",
+			"enum": [
+				"full",
+				"vendor"
+			]
+		},
+		"displayCond": {
+			"description": "Can be used to display the field only under certain conditions.",
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "object",
+					"properties": {
+						"AND": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					},
+					"additionalProperties": false
+				}
+			]
+		},
+		"onChange": {
+			"type": "string",
+			"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
+			"enum": [
+				"reload"
+			]
+		},
+		"type": {
+			"type": "string",
+			"description": "Type of the field.",
+			"enum": [
+				"Basic",
+				"Category",
+				"Checkbox",
+				"Collection",
+				"Color",
+				"Country",
+				"DateTime",
+				"Email",
+				"File",
+				"FlexForm",
+				"Folder",
+				"Json",
+				"Language",
+				"Linebreak",
+				"Link",
+				"Number",
+				"Palette",
+				"Pass",
+				"Password",
+				"Radio",
+				"Relation",
+				"Select",
+				"Slug",
+				"Tab",
+				"Text",
+				"Textarea",
+				"Uuid"
+			]
+		}
+	},
+	"allOf": [
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Text"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"behaviour": {
+						"type": "object",
+						"properties": {
+							"allowLanguageSynchronization": {
+								"type": "boolean",
+								"description": "Allows to select if localization uses custom or default language value",
+								"default": false
+							}
+						}
+					},
+					"cols": {
+						"type": "integer",
+						"description": "Abstract value for the width of the field",
+						"minimum": 10,
+						"maximum": 50,
+						"default": 30
+					},
+					"default": {
+						"type": "string",
+						"description": "Default value set if a new record is created."
+					},
+					"enableRichtext": {
+						"type": "boolean",
+						"description": "Enables richtext editing for the field.",
+						"default": false
+					},
+					"enableTabulator": {
+						"type": "boolean",
+						"description": "Enabling this allows to use tabs in a text field",
+						"default": false
+					},
+					"eval": {
+						"type": "string",
+						"description": "Configuration of field evaluation",
+						"examples": ["trim"]
+					},
+					"fieldControl": {
+						"type": "object"
+					},
+					"fieldInformation": {
+						"type": "object"
+					},
+					"fieldWizard": {
+						"type": "object",
+						"properties": {
+							"defaultLanguageDifferences": {
+								"type": "object"
+							},
+							"localizationStateSelector": {
+								"type": "object"
+							},
+							"otherLanguageContent": {
+								"type": "object"
+							}
+						}
+					},
+					"fixedFont": {
+						"type": "boolean",
+						"description": "Enables a fixed-width font (monospace) for the text field"
+					},
+					"is_in": {
+						"type": "string",
+						"description": "Evaluates whether the text contains this value"
+					},
+					"max": {
+						"type": "integer",
+						"description": "Maximum number of characters allowed."
+					},
+					"min": {
+						"type": "integer",
+						"description": "Minimum number of characters required."
+					},
+					"nullable": {
+						"type": "boolean",
+						"description": "Allows database null values for the field",
+						"default": false
+					},
+					"placeholder": {
+						"type": "string",
+						"description": "Placeholder text for the field."
+					},
+					"readOnly": {
+						"type": "boolean",
+						"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+						"default": false
+					},
+					"renderType": {
+						"type": "string",
+						"enum": [
+							"codeEditor",
+							"textTable",
+							"belayoutwizard"
+						]
+					},
+					"required": {
+						"type": "boolean",
+						"description": "If set, the field becomes mandatory.",
+						"default": false
+					},
+					"richtextConfiguration": {
+						"type": "string",
+						"description": "Configuration for the richtext editor, if enabled."
+					},
+					"rows": {
+						"type": "integer",
+						"description": "Number of rows for the textarea field",
+						"minimum": 1,
+						"maximum": 20,
+						"default": 5
+					},
+					"searchable": {
+						"type": "boolean",
+						"description": "Enables search functionality for the field",
+						"default": true
+					},
+					"softref": {
+						"type": "string",
+						"description": "Used to attach soft reference parsers"
+					},
+					"valuePicker": {
+						"$ref": "#/$defs/valuePicker"
+					},
+					"wrap": {
+						"type": "string",
+						"description": "Wrapping mode for the field",
+						"enum": [
+							"virtual",
+							"off"
+						],
+						"default": "virtual"
+					}
+				}
+			}
+		}
+	]
+}
