@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/Defs/value-picker.json",
+	"title": "Content Type",
+	"description": "TYPO3 CMS Content Blocks Property Value Picker",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"items": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["label", "value"],
+				"properties": {
+					"label": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"required": ["items"]
+}
