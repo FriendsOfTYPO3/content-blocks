@@ -67,34 +67,6 @@
             "title": "Field Type",
             "description": "TYPO3 CMS Content Blocks Field Type",
             "type": "object",
-            "$defs": {
-              "valuePicker": {
-                "type": "object",
-                "properties": {
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "label",
-                        "value"
-                      ],
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "required": [
-                  "items"
-                ]
-              }
-            },
             "properties": {
               "identifier": {
                 "type": "string",
@@ -133,6 +105,7 @@
                   },
                   {
                     "type": "object",
+                    "additionalProperties": false,
                     "properties": {
                       "AND": {
                         "type": "array",
@@ -140,8 +113,7 @@
                           "type": "string"
                         }
                       }
-                    },
-                    "additionalProperties": false
+                    }
                   }
                 ]
               },
@@ -199,9 +171,16 @@
                   ]
                 },
                 "then": {
+                  "$schema": "http://json-schema.org/draft-07/schema",
+                  "$id": "http://typo3.org/FieldTypes/text.json",
+                  "title": "Content Type",
+                  "description": "TYPO3 CMS Content Blocks Field Type Text",
+                  "type": "object",
+                  "additionalProperties": false,
                   "properties": {
                     "behaviour": {
                       "type": "object",
+                      "additionalProperties": false,
                       "properties": {
                         "allowLanguageSynchronization": {
                           "type": "boolean",
@@ -322,7 +301,36 @@
                       "description": "Used to attach soft reference parsers"
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/0/properties/fields/items/$defs/valuePicker"
+                      "$schema": "http://json-schema.org/draft-07/schema",
+                      "$id": "http://typo3.org/Defs/value-picker.json",
+                      "title": "Content Type",
+                      "description": "TYPO3 CMS Content Blocks Property Value Picker",
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "label",
+                              "value"
+                            ],
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "items"
+                      ]
                     },
                     "wrap": {
                       "type": "string",
