@@ -1,0 +1,113 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/field-type.json",
+	"title": "Field Type",
+	"description": "TYPO3 CMS Content Blocks Field Type",
+	"type": "object",
+	"properties": {
+		"identifier": {
+			"type": "string",
+			"description": "The identifier for the field.",
+			"pattern": "^[a-zA-Z0-9_]+$"
+		},
+		"label": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"useExistingField": {
+			"type": "boolean",
+			"description": "Enables extending of existing fields defined by TCA.",
+			"default": false
+		},
+		"prefixField": {
+			"type": "boolean",
+			"description": "Enables prefixing of field identifiers",
+			"default": true
+		},
+		"prefixType": {
+			"description": "Determines how to prefix the field if prefixField is enabled.",
+			"type": "string",
+			"enum": [
+				"full",
+				"vendor"
+			]
+		},
+		"displayCond": {
+			"description": "Can be used to display the field only under certain conditions.",
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"AND": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			]
+		},
+		"onChange": {
+			"type": "string",
+			"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
+			"enum": [
+				"reload"
+			]
+		},
+		"type": {
+			"type": "string",
+			"description": "Type of the field.",
+			"enum": [
+				"Basic",
+				"Category",
+				"Checkbox",
+				"Collection",
+				"Color",
+				"Country",
+				"DateTime",
+				"Email",
+				"File",
+				"FlexForm",
+				"Folder",
+				"Json",
+				"Language",
+				"Linebreak",
+				"Link",
+				"Number",
+				"Palette",
+				"Pass",
+				"Password",
+				"Radio",
+				"Relation",
+				"Select",
+				"Slug",
+				"Tab",
+				"Text",
+				"Textarea",
+				"Uuid"
+			]
+		}
+	},
+	"allOf": [
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Text"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/text.json"
+			}
+		}
+	]
+}

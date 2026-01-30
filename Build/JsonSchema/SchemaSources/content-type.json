@@ -1,0 +1,58 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/content-type.json",
+	"title": "Content Type",
+	"description": "TYPO3 CMS Content Blocks Content Type",
+	"required": ["name"],
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"description": "Unique identifier for the Content Block in the format vendor/content-block-name",
+			"type": "string",
+			"examples": ["acme/slider"],
+			"pattern": "^[a-z0-9_-]+/[a-z0-9_-]+$"
+		},
+		"title": {
+			"description": "The title of the Content Block",
+			"type": "string"
+		},
+		"prefixFields": {
+			"description": "Field identifiers will be prefixed with the Content Block name.",
+			"type": "boolean",
+			"default": true
+		},
+		"prefixType": {
+			"description": "Determines how to prefix the field if prefixFields is enabled.",
+			"type": "string",
+			"enum": ["full", "vendor"],
+			"default": "full"
+		},
+		"vendorPrefix": {
+			"description": "Will be used instead of the vendor part of name",
+			"type": "string",
+			"minLength": 1
+		},
+		"priority": {
+			"description": "The priority is used to prioritize certain Content Blocks in the loading order.",
+			"type": "integer",
+			"default": 0,
+			"minimum": 0
+		},
+		"basics": {
+			"type": "array",
+			"description": "Basics which are appended after the fields definition.",
+			"items": {
+				"type": "string",
+				"uniqueItems": true
+			}
+		},
+		"fields": {
+			"description": "The root fields definition of the Content Block. Define your field types here.",
+			"type": "array",
+			"items": {
+				"$ref": "field-type.json"
+			}
+		}
+	}
+}
