@@ -1,0 +1,43 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/content-element.json",
+	"title": "Content Element",
+	"description": "TYPO3 CMS Content Blocks Content Element",
+	"allOf": [
+		{
+			"$ref": "content-type.json"
+		},
+		{
+			"type": "object",
+			"properties": {
+				"description": {
+					"description": "The description of the Content Block",
+					"type": "string"
+				},
+				"group": {
+					"description": "Group name the Content Block should be displayed in",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "string",
+							"enum": ["default", "lists", "menu", "forms", "special", "plugins"]
+						}
+					],
+					"default": "default"
+				},
+				"typeName": {
+					"description": "Unqique type identifier for this Content Block",
+					"type": "string",
+					"examples": ["my_accordion"]
+				},
+				"saveAndClose": {
+					"description": "New Content Elements will skip the edit view.",
+					"type": "boolean",
+					"default": false
+				}
+			}
+		}
+	]
+}
