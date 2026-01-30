@@ -12,3 +12,4 @@ packages
 /Tests/Fixtures/Extensions/*/Resources/Public/ContentBlocks
 content-blocks.yaml
 .php-cs-fixer.cache
+node_modules
