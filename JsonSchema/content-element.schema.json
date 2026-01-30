@@ -43,12 +43,14 @@
         },
         "vendorPrefix": {
           "description": "Will be used instead of the vendor part of name",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "priority": {
           "description": "The priority is used to prioritize certain Content Blocks in the loading order.",
           "type": "integer",
-          "default": 0
+          "default": 0,
+          "minimum": 0
         },
         "basics": {
           "type": "array",
