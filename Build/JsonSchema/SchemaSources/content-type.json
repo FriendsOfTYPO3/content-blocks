@@ -44,6 +44,13 @@
 				"type": "string",
 				"uniqueItems": true
 			}
+		},
+		"fields": {
+			"description": "The root fields definition of the Content Block. Define your field types here.",
+			"type": "array",
+			"items": {
+				"$ref": "field-type.json"
+			}
 		}
 	}
 }
