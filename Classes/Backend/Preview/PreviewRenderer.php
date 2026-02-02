@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use TYPO3\CMS\Backend\Preview\PreviewRendererInterface;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
@@ -39,7 +40,7 @@ use TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException;
  * @internal Not part of TYPO3's public API.
  */
 #[Autoconfigure(public: true)]
-class PreviewRenderer extends StandardContentPreviewRenderer
+class PreviewRenderer implements PreviewRendererInterface
 {
     public function __construct(
         protected TableDefinitionCollection $tableDefinitionCollection,
@@ -47,6 +48,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         protected ContentBlockDataDecorator $contentBlockDataDecorator,
         protected RootPathsSettings $rootPathsSettings,
         protected ViewFactoryInterface $viewFactory,
+        protected StandardContentPreviewRenderer $standardContentPreviewRenderer,
     ) {}
 
     public function renderPageModulePreviewHeader(GridColumnItem $item): string
@@ -54,7 +56,7 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         try {
             $preview = $this->renderPreview($item, 'Header');
         } catch (InvalidSectionException|InvalidTemplateResourceException) {
-            return parent::renderPageModulePreviewHeader($item);
+            return $this->standardContentPreviewRenderer->renderPageModulePreviewHeader($item);
         }
         return $preview;
     }
@@ -62,12 +64,12 @@ class PreviewRenderer extends StandardContentPreviewRenderer
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
         if ($this->hasPreviewTemplate($item) === false) {
-            return parent::renderPageModulePreviewContent($item);
+            return $this->standardContentPreviewRenderer->renderPageModulePreviewContent($item);
         }
         try {
             $preview = $this->renderPreview($item, 'Content');
         } catch (InvalidSectionException|InvalidTemplateResourceException) {
-            return parent::renderPageModulePreviewContent($item);
+            return $this->standardContentPreviewRenderer->renderPageModulePreviewContent($item);
         }
         return $preview;
     }
@@ -77,9 +79,14 @@ class PreviewRenderer extends StandardContentPreviewRenderer
         try {
             $preview = $this->renderPreview($item, 'Footer');
         } catch (InvalidSectionException|InvalidTemplateResourceException) {
-            return parent::renderPageModulePreviewFooter($item);
+            return $this->standardContentPreviewRenderer->renderPageModulePreviewFooter($item);
         }
         return $preview;
+    }
+
+    public function wrapPageModulePreview(string $previewHeader, string $previewContent, GridColumnItem $item): string
+    {
+        return $this->standardContentPreviewRenderer->wrapPageModulePreview($previewHeader, $previewContent, $item);
     }
 
     protected function renderPreview(GridColumnItem $item, string $section): string
