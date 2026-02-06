@@ -84,7 +84,7 @@ final class TextareaFieldSchemaTest extends UnitTestCase
                                     'label' => 'Label',
                                     'value' => 'Value',
                                 ],
-                            ]
+                            ],
                         ],
                         'wrap' => 'virtual',
                     ],
