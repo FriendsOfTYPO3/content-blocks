@@ -24,7 +24,7 @@ use Opis\JsonSchema\Validator;
  */
 readonly class JsonSchemaValidator
 {
-    public function validate(object $data, string $schemaIdentifier): bool
+    public function validateContentElement(object $data, string $schemaIdentifier): bool
     {
         $validator = new Validator();
         $pathToSchemaFile = __DIR__ . '/../../JsonSchema/content-element.schema.json';
