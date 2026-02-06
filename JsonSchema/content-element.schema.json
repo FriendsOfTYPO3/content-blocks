@@ -220,7 +220,7 @@
                 "if": {
                   "properties": {
                     "type": {
-                      "const": "Text"
+                      "const": "Textarea"
                     }
                   },
                   "required": [
@@ -235,6 +235,15 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,

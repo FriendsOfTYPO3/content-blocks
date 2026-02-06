@@ -57,7 +57,7 @@ final class ContentElementSchemaTest extends UnitTestCase
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
-        $validationResult = $jsonSchemaValidator->validate($data, 'http://typo3.org/content-element.json');
+        $validationResult = $jsonSchemaValidator->validateContentElement($data, 'http://typo3.org/content-element.json');
 
         self::assertSame($valid, $validationResult);
     }

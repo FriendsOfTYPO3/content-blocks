@@ -100,13 +100,13 @@
 			"if": {
 				"properties": {
 					"type": {
-						"const": "Text"
+						"const": "Textarea"
 					}
 				},
 				"required": ["type"]
 			},
 			"then": {
-				"$ref": "FieldTypes/text.json"
+				"$ref": "FieldTypes/textarea.json"
 			}
 		}
 	]
