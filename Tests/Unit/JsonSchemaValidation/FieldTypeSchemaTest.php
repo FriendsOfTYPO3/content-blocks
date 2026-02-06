@@ -84,8 +84,7 @@ final class FieldTypeSchemaTest extends UnitTestCase
                     ],
                 ],
             ],
-            // @todo We need to allow custom Field Types
-            'valid' => false,
+            'valid' => true,
         ];
     }
 

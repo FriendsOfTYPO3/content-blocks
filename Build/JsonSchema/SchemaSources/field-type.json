@@ -58,36 +58,43 @@
 			]
 		},
 		"type": {
-			"type": "string",
 			"description": "Type of the field.",
-			"enum": [
-				"Basic",
-				"Category",
-				"Checkbox",
-				"Collection",
-				"Color",
-				"Country",
-				"DateTime",
-				"Email",
-				"File",
-				"FlexForm",
-				"Folder",
-				"Json",
-				"Language",
-				"Linebreak",
-				"Link",
-				"Number",
-				"Palette",
-				"Pass",
-				"Password",
-				"Radio",
-				"Relation",
-				"Select",
-				"Slug",
-				"Tab",
-				"Text",
-				"Textarea",
-				"Uuid"
+			"anyOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "string",
+					"enum": [
+						"Basic",
+						"Category",
+						"Checkbox",
+						"Collection",
+						"Color",
+						"Country",
+						"DateTime",
+						"Email",
+						"File",
+						"FlexForm",
+						"Folder",
+						"Json",
+						"Language",
+						"Linebreak",
+						"Link",
+						"Number",
+						"Palette",
+						"Pass",
+						"Password",
+						"Radio",
+						"Relation",
+						"Select",
+						"Slug",
+						"Tab",
+						"Text",
+						"Textarea",
+						"Uuid"
+					]
+				}
 			]
 		}
 	},
