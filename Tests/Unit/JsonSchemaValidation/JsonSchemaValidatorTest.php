@@ -28,63 +28,63 @@ final class JsonSchemaValidatorTest extends UnitTestCase
     {
         yield 'empty definition' => [
             'data' => (object)[],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'only name' => [
             'data' => (object)[
                 'name' => 'json/schema-test',
             ],
-            'expectedHasError' => false,
+            'valid' => true,
         ];
 
         yield 'invalid name empty' => [
             'data' => (object)[
                 'name' => '',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'invalid name one word' => [
             'data' => (object)[
                 'name' => 'json',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'invalid name empty second part' => [
             'data' => (object)[
                 'name' => 'json/',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'invalid name only slash' => [
             'data' => (object)[
                 'name' => '/',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'invalid name missing vendor' => [
             'data' => (object)[
                 'name' => '/schema',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'invalid name uppercase not allowed' => [
             'data' => (object)[
                 'name' => 'JSON/schema',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'minimal name' => [
             'data' => (object)[
                 'name' => 'a/b',
             ],
-            'expectedHasError' => false,
+            'valid' => true,
         ];
 
         yield 'invalid properties' => [
@@ -92,7 +92,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'burger' => 'royale',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'All root properties' => [
@@ -109,7 +109,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 ],
                 'fields' => [],
             ],
-            'expectedHasError' => false,
+            'valid' => true,
         ];
 
         yield 'Invalid prefixFields type' => [
@@ -117,7 +117,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'prefixFields' => 'false',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'Invalid prefixType' => [
@@ -125,7 +125,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'prefixType' => 'unknown',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'empty vendorPrefix is invalid' => [
@@ -133,7 +133,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'vendorPrefix' => '',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'Negative priority is invalid' => [
@@ -141,7 +141,7 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'priority' => -1,
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
 
         yield 'basics not an array' => [
@@ -149,18 +149,18 @@ final class JsonSchemaValidatorTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'basics' => 'Basic 1',
             ],
-            'expectedHasError' => true,
+            'valid' => false,
         ];
     }
 
     #[Test]
     #[DataProvider('contentTypeSchemaIsValidDataProvider')]
-    public function contentTypeSchemaValidationWorksAsExpected(object $data, bool $expectedHasError): void
+    public function contentTypeSchemaValidationWorksAsExpected(object $data, bool $valid): void
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
-        $hasError = $jsonSchemaValidator->validate($data, 'http://typo3.org/content-element.json');
+        $validationResult = $jsonSchemaValidator->validate($data, 'http://typo3.org/content-element.json');
 
-        self::assertSame($expectedHasError, $hasError);
+        self::assertSame($valid, $validationResult);
     }
 }

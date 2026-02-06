@@ -33,6 +33,6 @@ readonly class JsonSchemaValidator
             $pathToSchemaFile
         );
         $result = $validator->validate($data, $schemaIdentifier);
-        return $result->hasError();
+        return !$result->hasError();
     }
 }
