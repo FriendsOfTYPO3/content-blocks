@@ -1,10 +1,6 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema",
-	"$id": "http://typo3.org/content-type.json",
-	"title": "Content Type",
-	"description": "TYPO3 CMS Content Blocks Content Type",
-	"required": ["name"],
 	"type": "object",
+	"required": ["name"],
 	"properties": {
 		"name": {
 			"description": "Unique identifier for the Content Block in the format vendor/content-block-name",

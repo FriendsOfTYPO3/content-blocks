@@ -61,14 +61,10 @@
       }
     },
     {
-      "$schema": "http://json-schema.org/draft-07/schema",
-      "$id": "http://typo3.org/content-type.json",
-      "title": "Content Type",
-      "description": "TYPO3 CMS Content Blocks Content Type",
+      "type": "object",
       "required": [
         "name"
       ],
-      "type": "object",
       "properties": {
         "name": {
           "description": "Unique identifier for the Content Block in the format vendor/content-block-name",
@@ -119,10 +115,6 @@
           "description": "The root fields definition of the Content Block. Define your field types here.",
           "type": "array",
           "items": {
-            "$schema": "http://json-schema.org/draft-07/schema",
-            "$id": "http://typo3.org/field-type.json",
-            "title": "Field Type",
-            "description": "TYPO3 CMS Content Blocks Field Type",
             "type": "object",
             "properties": {
               "identifier": {
@@ -228,10 +220,6 @@
                   ]
                 },
                 "then": {
-                  "$schema": "http://json-schema.org/draft-07/schema",
-                  "$id": "http://typo3.org/FieldTypes/textarea.json",
-                  "title": "Content Type",
-                  "description": "TYPO3 CMS Content Blocks Field Type Textarea",
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
@@ -363,10 +351,6 @@
                       "default": true
                     },
                     "valuePicker": {
-                      "$schema": "http://json-schema.org/draft-07/schema",
-                      "$id": "http://typo3.org/Defs/value-picker.json",
-                      "title": "Content Type",
-                      "description": "TYPO3 CMS Content Blocks Property Value Picker",
                       "type": "object",
                       "additionalProperties": false,
                       "properties": {
@@ -418,10 +402,6 @@
                   ]
                 },
                 "then": {
-                  "$schema": "http://json-schema.org/draft-07/schema",
-                  "$id": "http://typo3.org/FieldTypes/text.json",
-                  "title": "Content Type",
-                  "description": "TYPO3 CMS Content Blocks Field Type Text",
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {

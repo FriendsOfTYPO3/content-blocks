@@ -1,8 +1,4 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema",
-	"$id": "http://typo3.org/field-type.json",
-	"title": "Field Type",
-	"description": "TYPO3 CMS Content Blocks Field Type",
 	"type": "object",
 	"properties": {
 		"identifier": {
