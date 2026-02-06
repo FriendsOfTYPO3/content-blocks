@@ -3,10 +3,22 @@
 	"$id": "http://typo3.org/content-element.json",
 	"title": "Content Element",
 	"description": "TYPO3 CMS Content Blocks Content Element",
+	"additionalProperties": false,
+	"properties": {
+		"description": {},
+		"group": {},
+		"typeName": {},
+		"saveAndClose": {},
+		"name": {},
+		"title": {},
+		"prefixFields": {},
+		"prefixType": {},
+		"vendorPrefix": {},
+		"priority": {},
+		"basics": {},
+		"fields": {}
+	},
 	"allOf": [
-		{
-			"$ref": "content-type.json"
-		},
 		{
 			"type": "object",
 			"properties": {
@@ -38,6 +50,9 @@
 					"default": false
 				}
 			}
+		},
+		{
+			"$ref": "content-type.json"
 		}
 	]
 }

@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaValidator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class JsonSchemaValidatorTest extends UnitTestCase
+final class ContentElementSchema extends UnitTestCase
 {
     public static function contentTypeSchemaIsValidDataProvider(): iterable
     {
@@ -156,6 +156,44 @@ final class JsonSchemaValidatorTest extends UnitTestCase
     #[Test]
     #[DataProvider('contentTypeSchemaIsValidDataProvider')]
     public function contentTypeSchemaValidationWorksAsExpected(object $data, bool $valid): void
+    {
+        $jsonSchemaValidator = new JsonSchemaValidator();
+
+        $validationResult = $jsonSchemaValidator->validate($data, 'http://typo3.org/content-element.json');
+
+        self::assertSame($valid, $validationResult);
+    }
+
+    public static function contentElementSchemaIsValidDataProvider(): iterable
+    {
+        yield 'all fields' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'title' => 'My Element',
+                'description' => 'My Element Description',
+                'group' => 'my_group',
+                'typeName' => 'my_type',
+                'saveAndClose' => false,
+            ],
+            'valid' => true,
+        ];
+
+        yield 'Invalid Content Element typeName' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'title' => 'My Element',
+                'description' => 'My Element Description',
+                'group' => 'my_group',
+                'typeName' => 123,
+                'saveAndClose' => false,
+            ],
+            'valid' => false,
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('contentElementSchemaIsValidDataProvider')]
+    public function contentElementSchemaValidationWorksAsExpected(object $data, bool $valid): void
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
