@@ -78,7 +78,6 @@ final class TextareaFieldSchemaTest extends UnitTestCase
                         'required' => false,
                         'rows' => 10,
                         'searchable' => false,
-                        'softref' => 'softref',
                         'valuePicker' => (object)[
                             'items' => [
                                 (object)[

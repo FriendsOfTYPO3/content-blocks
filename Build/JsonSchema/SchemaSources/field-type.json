@@ -108,6 +108,19 @@
 			"then": {
 				"$ref": "FieldTypes/textarea.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Text"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/text.json"
+			}
 		}
 	]
 }
