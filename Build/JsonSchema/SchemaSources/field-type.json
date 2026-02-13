@@ -189,6 +189,19 @@
 			"then": {
 				"$ref": "FieldTypes/country.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "DateTime"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/datetime.json"
+			}
 		}
 	]
 }

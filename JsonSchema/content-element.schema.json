@@ -1203,6 +1203,139 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "DateTime"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "dbType": {
+                      "type": "string",
+                      "description": "If set, the date or time will not be stored as timestamp, but as native date, time or datetime field in the database.",
+                      "enum": [
+                        "date",
+                        "datetime",
+                        "time"
+                      ]
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default value set if a new record is created."
+                    },
+                    "fieldControl": {
+                      "type": "object"
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Sets the output format if the field is set to readOnly.",
+                      "enum": [
+                        "date",
+                        "datetime",
+                        "time",
+                        "timesec",
+                        "datetimesec"
+                      ]
+                    },
+                    "mode": {
+                      "type": "string",
+                      "description": "This property is related to the placeholder property. When defined, a checkbox will appear above the field.",
+                      "enum": [
+                        "useOrOverridePlaceholder"
+                      ]
+                    },
+                    "nullable": {
+                      "type": "boolean",
+                      "description": "Allows database null values for the field",
+                      "default": false
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "description": "Placeholder text for the field."
+                    },
+                    "range": {
+                      "type": "object",
+                      "description": "Defines a range within the date must be",
+                      "properties": {
+                        "lower": {
+                          "type": [
+                            "string",
+                            "integer"
+                          ],
+                          "description": "Defines the earliest date. Can be of format Y-m-d or timestamp."
+                        },
+                        "upper": {
+                          "type": [
+                            "string",
+                            "integer"
+                          ],
+                          "description": "Defines the latest date. Can be of format Y-m-d or timestamp."
+                        }
+                      }
+                    },
+                    "readOnly": {
+                      "type": "boolean",
+                      "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                      "default": false
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "If set, the field becomes mandatory.",
+                      "default": false
+                    },
+                    "searchable": {
+                      "type": "boolean",
+                      "description": "Enables search functionality for the field",
+                      "default": true
+                    }
+                  }
+                }
               }
             ]
           }
