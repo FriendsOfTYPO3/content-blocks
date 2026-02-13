@@ -228,6 +228,19 @@
 			"then": {
 				"$ref": "FieldTypes/uuid.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Select"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/select.json"
+			}
 		}
 	]
 }
