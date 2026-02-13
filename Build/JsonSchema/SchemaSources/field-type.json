@@ -215,6 +215,19 @@
 			"then": {
 				"$ref": "FieldTypes/json.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Uuid"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/uuid.json"
+			}
 		}
 	]
 }

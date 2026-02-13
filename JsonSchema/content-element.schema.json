@@ -1436,6 +1436,96 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Uuid"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "enableCopyToClipboard": {
+                      "type": "boolean",
+                      "description": "Allows to copy the UUID to the clipboard of the operating system.",
+                      "default": true
+                    },
+                    "fieldControl": {
+                      "type": "object"
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "If set, the field becomes mandatory.",
+                      "default": false
+                    },
+                    "searchable": {
+                      "type": "boolean",
+                      "description": "Enables search functionality for the field",
+                      "default": true
+                    },
+                    "size": {
+                      "type": "integer",
+                      "description": "Abstract value for the width of the field",
+                      "minimum": 10,
+                      "maximum": 50,
+                      "default": 30
+                    },
+                    "version": {
+                      "type": "integer",
+                      "description": "Defines the UUID version to be used",
+                      "enum": [
+                        4,
+                        6,
+                        7
+                      ],
+                      "default": 4
+                    }
+                  }
+                }
               }
             ]
           }
