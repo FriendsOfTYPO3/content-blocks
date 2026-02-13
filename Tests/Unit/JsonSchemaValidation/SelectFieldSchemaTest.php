@@ -103,6 +103,7 @@ final class SelectFieldSchemaTest extends UnitTestCase
                             ],
                         ],
                         'itemsProcFunc' => 'My\\Class->myMethod',
+                        'itemsProcConfig' => (object)['foo' => 'bar'],
                         'localizeReferencesAtParentLocalization' => true,
                         'maxitems' => 10,
                         'minitems' => 1,

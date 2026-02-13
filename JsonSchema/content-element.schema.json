@@ -1760,6 +1760,9 @@
                       "type": "string",
                       "description": "(Deprecated: Use itemsProcessors instead) PHP method which is called to fill or manipulate the items array"
                     },
+                    "itemsProcConfig": {
+                      "type": "object"
+                    },
                     "localizeReferencesAtParentLocalization": {
                       "type": "boolean",
                       "description": "Defines whether referenced records should be localized when the current record gets localized. This only applies if references are not stored using MM tables."
