@@ -254,6 +254,19 @@
 			"then": {
 				"$ref": "FieldTypes/select-number.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Checkbox"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/checkbox.json"
+			}
 		}
 	]
 }
