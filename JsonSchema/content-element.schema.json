@@ -1083,6 +1083,126 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Country"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default value set if a new record is created."
+                    },
+                    "filter": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "onlyCountries": {
+                          "type": "array",
+                          "description": "Restrict the displayed countries (ISO2 or ISO3 codes) to the ones listed.",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "excludeCountries": {
+                          "type": "array",
+                          "description": "Exclude the countries (ISO2 or ISO3 codes) in this list from being displayed in the selector.",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "labelField": {
+                      "type": "string",
+                      "description": "The field to be used for displaying the label of the country.",
+                      "enum": [
+                        "localizedName",
+                        "name",
+                        "iso2",
+                        "iso3",
+                        "officialName",
+                        "localizedOfficialName"
+                      ],
+                      "default": "name"
+                    },
+                    "prioritizedCountries": {
+                      "type": "array",
+                      "description": "Countries (ISO2 or ISO3 codes) which are listed before all others countries.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "fieldControl": {
+                      "type": "object"
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "readOnly": {
+                      "type": "boolean",
+                      "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                      "default": false
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "If set, the field becomes mandatory.",
+                      "default": false
+                    },
+                    "size": {
+                      "type": "integer",
+                      "description": "Size of the select box",
+                      "minimum": 1
+                    },
+                    "valuePicker": {
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                    }
+                  }
+                }
               }
             ]
           }

@@ -176,6 +176,19 @@
 			"then": {
 				"$ref": "FieldTypes/link.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Country"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/country.json"
+			}
 		}
 	]
 }
