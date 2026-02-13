@@ -202,6 +202,19 @@
 			"then": {
 				"$ref": "FieldTypes/datetime.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Json"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/json.json"
+			}
 		}
 	]
 }
