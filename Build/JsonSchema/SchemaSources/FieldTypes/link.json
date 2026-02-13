@@ -1,0 +1,162 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"allowedTypes": {
+			"type": "array",
+			"description": "List of allowed link types. If empty, all types are allowed.",
+			"items": {
+				"anyOf": [
+					{
+						"type": "string"
+					},
+					{
+						"type": "string",
+						"enum": ["page", "url", "file", "folder", "email", "telephone", "record", "*"]
+					}
+				]
+			}
+		},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"appearance": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowedOptions": {
+					"type": "array",
+					"description": "Display certain options in the link browser. To allow all options, skip this configuration. To deny all options, set this configuration to [] (empty array).",
+					"items": {
+						"type": "string",
+						"enum": ["class", "params", "target", "title", "rel", "body", "cc", "bcc", "subject", "*"]
+					}
+				},
+				"allowedFileExtensions": {
+					"type": "array",
+					"description": "List of allowed file extensions. If empty, all extensions are allowed.",
+					"items": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "string",
+								"enum": [
+									"gif",
+									"jpg",
+									"jpeg",
+									"tif",
+									"tiff",
+									"bmp",
+									"pcx",
+									"tga",
+									"png",
+									"pdf",
+									"ai",
+									"svg",
+									"webp",
+									"avif",
+									"*"
+								]
+							}
+						]
+					}
+				},
+				"browserTitle": {
+					"type": "string",
+					"description": "Allows to set a different title attribute for the Link Browser icon, defaults to Link."
+				},
+				"enableBrowser": {
+					"type": "boolean",
+					"description": "To disable the Link Browser, set this option to false.",
+					"default": true
+				}
+			}
+		},
+		"autocomplete": {
+			"type": "boolean",
+			"description": "Browser autocompletion"
+		},
+		"default": {
+			"type": "string",
+			"description": "Default value set if a new record is created."
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"mode": {
+			"type": "string",
+			"description": "This property is related to the placeholder property. When defined, a checkbox will appear above the field.",
+			"enum": ["useOrOverridePlaceholder"]
+		},
+		"nullable": {
+			"type": "boolean",
+			"description": "Allows database null values for the field",
+			"default": false
+		},
+		"placeholder": {
+			"type": "string",
+			"description": "Placeholder text for the field."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"required": {
+			"type": "boolean",
+			"description": "If set, the field becomes mandatory.",
+			"default": false
+		},
+		"searchable": {
+			"type": "boolean",
+			"description": "Enables search functionality for the field",
+			"default": true
+		},
+		"size": {
+			"type": "integer",
+			"description": "Abstract value for the width of the field",
+			"minimum": 10,
+			"maximum": 50,
+			"default": 30
+		},
+		"valuePicker": {
+			"$ref": "../Properties/value-picker.json"
+		}
+	}
+}

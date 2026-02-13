@@ -163,6 +163,19 @@
 			"then": {
 				"$ref": "FieldTypes/number.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Link"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/link.json"
+			}
 		}
 	]
 }

@@ -22,17 +22,17 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaValidator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class NumberFieldSchemaTest extends UnitTestCase
+final class LinkFieldSchemaTest extends UnitTestCase
 {
-    public static function numberFieldSchemaValidationWorksAsExpectedDataProvider(): iterable
+    public static function linkFieldSchemaValidationWorksAsExpectedDataProvider(): iterable
     {
         yield 'Only type' => [
             'data' => (object)[
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
+                        'identifier' => 'link',
+                        'type' => 'Link',
                     ],
                 ],
             ],
@@ -44,41 +44,34 @@ final class NumberFieldSchemaTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
+                        'identifier' => 'link',
+                        'type' => 'Link',
+                        'allowedTypes' => ['page', 'url', 'file', 'folder', 'email', 'telephone', 'record', '*'],
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,
                         ],
+                        'appearance' => (object)[
+                            'allowedOptions' => ['class', 'params', 'target', 'title', 'rel', 'body', 'cc', 'bcc', 'subject', '*'],
+                            'allowedFileExtensions' => ['gif', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp', 'pcx', 'tga', 'png', 'pdf', 'ai', 'svg', 'webp', 'avif', '*'],
+                            'browserTitle' => 'Browser Title',
+                            'enableBrowser' => true,
+                        ],
                         'autocomplete' => true,
-                        'default' => '10',
+                        'default' => 't3://page?uid=1',
                         'fieldControl' => (object)['foo' => 'bar'],
                         'fieldInformation' => (object)['foo' => 'bar'],
                         'fieldWizard' => (object)[
-                            'defaultLanguageDifferences' => (object)[
-                                'disabled' => false,
-                            ],
-                            'localizationStateSelector' => (object)[
-                                'disabled' => false,
-                            ],
-                            'otherLanguageContent' => (object)[
-                                'disabled' => false,
-                            ],
+                            'defaultLanguageDifferences' => (object)['disabled' => false],
+                            'localizationStateSelector' => (object)['disabled' => false],
+                            'otherLanguageContent' => (object)['disabled' => false],
                         ],
-                        'format' => 'decimal',
                         'mode' => 'useOrOverridePlaceholder',
                         'nullable' => true,
                         'placeholder' => 'placeholder',
-                        'range' => (object)[
-                            'lower' => -10,
-                            'upper' => 100,
-                        ],
                         'readOnly' => false,
                         'required' => false,
+                        'searchable' => true,
                         'size' => 30,
-                        'slider' => (object)[
-                            'step' => 0.5,
-                            'width' => 500,
-                        ],
                         'valuePicker' => (object)[
                             'items' => [
                                 (object)[
@@ -98,9 +91,25 @@ final class NumberFieldSchemaTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
+                        'identifier' => 'link',
+                        'type' => 'Link',
                         'unknown' => 'unknown',
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'invalid appearance allowedOptions' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'link',
+                        'type' => 'Link',
+                        'appearance' => (object)[
+                            'allowedOptions' => ['invalid'],
+                        ],
                     ],
                 ],
             ],
@@ -112,8 +121,8 @@ final class NumberFieldSchemaTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
+                        'identifier' => 'link',
+                        'type' => 'Link',
                         'size' => 9,
                     ],
                 ],
@@ -126,23 +135,9 @@ final class NumberFieldSchemaTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
+                        'identifier' => 'link',
+                        'type' => 'Link',
                         'size' => 51,
-                    ],
-                ],
-            ],
-            'valid' => false,
-        ];
-
-        yield 'invalid format' => [
-            'data' => (object)[
-                'name' => 'json/schema-test',
-                'fields' => [
-                    (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
-                        'format' => 'invalid',
                     ],
                 ],
             ],
@@ -154,41 +149,9 @@ final class NumberFieldSchemaTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
+                        'identifier' => 'link',
+                        'type' => 'Link',
                         'mode' => 'invalid',
-                    ],
-                ],
-            ],
-            'valid' => false,
-        ];
-
-        yield 'range lower not aa number' => [
-            'data' => (object)[
-                'name' => 'json/schema-test',
-                'fields' => [
-                    (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
-                        'range' => (object)[
-                            'lower' => '10.5',
-                        ],
-                    ],
-                ],
-            ],
-            'valid' => false,
-        ];
-
-        yield 'slider step not a number' => [
-            'data' => (object)[
-                'name' => 'json/schema-test',
-                'fields' => [
-                    (object)[
-                        'identifier' => 'number',
-                        'type' => 'Number',
-                        'slider' => (object)[
-                            'step' => 'one',
-                        ],
                     ],
                 ],
             ],
@@ -197,8 +160,8 @@ final class NumberFieldSchemaTest extends UnitTestCase
     }
 
     #[Test]
-    #[DataProvider('numberFieldSchemaValidationWorksAsExpectedDataProvider')]
-    public function numberFieldSchemaValidationWorksAsExpected(object $data, bool $valid): void
+    #[DataProvider('linkFieldSchemaValidationWorksAsExpectedDataProvider')]
+    public function linkFieldSchemaValidationWorksAsExpected(object $data, bool $valid): void
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
