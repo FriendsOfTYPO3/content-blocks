@@ -137,6 +137,19 @@
 			"then": {
 				"$ref": "FieldTypes/email.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Color"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/color.json"
+			}
 		}
 	]
 }

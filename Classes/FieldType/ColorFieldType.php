@@ -34,7 +34,6 @@ final class ColorFieldType extends AbstractFieldType
     private string $mode = '';
     private string $placeholder = '';
     private array $valuePicker = [];
-    private ?bool $autocomplete = null;
     private bool $opacity = false;
 
     public function createFromArray(array $settings): ColorFieldType
@@ -48,9 +47,6 @@ final class ColorFieldType extends AbstractFieldType
         $self->required = (bool)(($settings['required'] ?? $self->required));
         $self->mode = (string)($settings['mode'] ?? $self->mode);
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
-        if (isset($settings['autocomplete'])) {
-            $self->autocomplete = (bool)$settings['autocomplete'];
-        }
         $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
         $self->opacity = (bool)(($settings['opacity'] ?? $self->opacity));
 
@@ -82,9 +78,6 @@ final class ColorFieldType extends AbstractFieldType
         }
         if ($this->required) {
             $config['required'] = true;
-        }
-        if (isset($this->autocomplete)) {
-            $config['autocomplete'] = $this->autocomplete;
         }
         if (($this->valuePicker['items'] ?? []) !== []) {
             $config['valuePicker'] = $this->valuePicker;
