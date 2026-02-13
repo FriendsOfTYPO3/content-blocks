@@ -1,0 +1,133 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["items"],
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"authMode": {
+			"type": "string",
+			"description": "Authorization mode for the selector box",
+			"enum": ["explicitAllow"]
+		},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"default": {
+			"type": "integer",
+			"description": "Default value set if a new record is created."
+		},
+		"disableNoMatchingValueElement": {
+			"type": "boolean",
+			"description": "If set, then no element is inserted if the current value does not match any of the existing elements."
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"itemGroups": {
+			"type": "object",
+			"description": "Contains an array of key-value pairs. The key contains the identifier, the value contains the label",
+			"patternProperties": {
+				".*": {
+					"type": "string"
+				}
+			}
+		},
+		"items": {
+			"type": "array",
+			"description": "Contains the elements for the selector box",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"label": {
+						"type": "string",
+						"description": "The displayed title."
+					},
+					"value": {
+						"description": "The value stored in the database",
+						"type": "integer"
+					},
+					"icon": {
+						"type": "string",
+						"description": "Icon to be displayed next to the label"
+					},
+					"group": {
+						"type": "string",
+						"description": "The key of the item group"
+					}
+				},
+				"required": [
+					"value"
+				]
+			}
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"size": {
+			"type": "integer",
+			"description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
+			"minimum": 1,
+			"default": 1
+		},
+		"sortItems": {
+			"type": "object",
+			"anyOf": [
+				{
+					"properties": {
+						"label": {
+							"type": "string",
+							"enum": ["asc", "desc"]
+						},
+						"value": {
+							"type": "string",
+							"enum": ["asc", "desc"]
+						}
+					}
+				},
+				{
+					"patternProperties": {
+						".*": {
+							"type": "string"
+						}
+					}
+				}
+			]
+		}
+	}
+}

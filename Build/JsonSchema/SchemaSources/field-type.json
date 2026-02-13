@@ -241,6 +241,19 @@
 			"then": {
 				"$ref": "FieldTypes/select.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "SelectNumber"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/select-number.json"
+			}
 		}
 	]
 }
