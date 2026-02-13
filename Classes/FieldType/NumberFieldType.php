@@ -25,6 +25,7 @@ final class NumberFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
     use WithNullableProperty;
+
     private bool $readOnly = false;
     private int $size = 0;
     private bool $required = false;

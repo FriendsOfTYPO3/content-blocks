@@ -150,6 +150,19 @@
 			"then": {
 				"$ref": "FieldTypes/color.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Number"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/number.json"
+			}
 		}
 	]
 }
