@@ -1848,13 +1848,6 @@
                               ]
                             }
                           }
-                        },
-                        {
-                          "patternProperties": {
-                            ".*": {
-                              "type": "string"
-                            }
-                          }
                         }
                       ]
                     },
@@ -2040,34 +2033,7 @@
                       "default": 1
                     },
                     "sortItems": {
-                      "type": "object",
-                      "anyOf": [
-                        {
-                          "properties": {
-                            "label": {
-                              "type": "string",
-                              "enum": [
-                                "asc",
-                                "desc"
-                              ]
-                            },
-                            "value": {
-                              "type": "string",
-                              "enum": [
-                                "asc",
-                                "desc"
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "patternProperties": {
-                            ".*": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      ]
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/10/then/properties/sortItems"
                     }
                   }
                 }

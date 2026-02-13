@@ -280,28 +280,7 @@
 			"default": 1
 		},
 		"sortItems": {
-			"type": "object",
-			"anyOf": [
-				{
-					"properties": {
-						"label": {
-							"type": "string",
-							"enum": ["asc", "desc"]
-						},
-						"value": {
-							"type": "string",
-							"enum": ["asc", "desc"]
-						}
-					}
-				},
-				{
-					"patternProperties": {
-						".*": {
-							"type": "string"
-						}
-					}
-				}
-			]
+			"$ref": "../Properties/sort-items.json"
 		},
 		"treeConfig": {
 			"type": "object",
