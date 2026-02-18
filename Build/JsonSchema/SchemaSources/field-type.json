@@ -267,6 +267,19 @@
 			"then": {
 				"$ref": "FieldTypes/checkbox.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Category"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/category.json"
+			}
 		}
 	]
 }
