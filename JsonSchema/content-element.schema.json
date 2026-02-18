@@ -119,8 +119,7 @@
             "properties": {
               "identifier": {
                 "type": "string",
-                "description": "The identifier for the field.",
-                "pattern": "^[a-zA-Z0-9_]+$"
+                "description": "The identifier for the field."
               },
               "label": {
                 "type": "string"
@@ -215,6 +214,28 @@
               }
             },
             "allOf": [
+              {
+                "if": {
+                  "not": {
+                    "properties": {
+                      "type": {
+                        "const": "Basic"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9_]+$"
+                    }
+                  }
+                }
+              },
               {
                 "if": {
                   "properties": {
@@ -518,7 +539,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
                     }
                   }
                 }
@@ -632,7 +653,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
                     }
                   }
                 }
@@ -740,7 +761,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
                     }
                   }
                 }
@@ -883,7 +904,7 @@
                       }
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
                     }
                   }
                 }
@@ -1079,7 +1100,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
                     }
                   }
                 }
@@ -1199,7 +1220,7 @@
                       "minimum": 1
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/0/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
                     }
                   }
                 }
@@ -2043,7 +2064,7 @@
                       "default": 1
                     },
                     "sortItems": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/10/then/properties/sortItems"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/11/then/properties/sortItems"
                     }
                   }
                 }
@@ -2356,6 +2377,26 @@
                         }
                       }
                     }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Basic"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "type": {}
                   }
                 }
               }

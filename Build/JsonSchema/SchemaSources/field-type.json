@@ -3,8 +3,7 @@
 	"properties": {
 		"identifier": {
 			"type": "string",
-			"description": "The identifier for the field.",
-			"pattern": "^[a-zA-Z0-9_]+$"
+			"description": "The identifier for the field."
 		},
 		"label": {
 			"type": "string"
@@ -99,6 +98,24 @@
 		}
 	},
 	"allOf": [
+		{
+			"if": {
+				"not": {
+					"properties": {
+						"type": { "const": "Basic" }
+					},
+					"required": ["type"]
+				}
+			},
+			"then": {
+				"properties": {
+					"identifier": {
+						"type": "string",
+						"pattern": "^[a-zA-Z0-9_]+$"
+					}
+				}
+			}
+		},
 		{
 			"if": {
 				"properties": {
@@ -279,6 +296,19 @@
 			},
 			"then": {
 				"$ref": "FieldTypes/category.json"
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Basic"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/basic.json"
 			}
 		}
 	]
