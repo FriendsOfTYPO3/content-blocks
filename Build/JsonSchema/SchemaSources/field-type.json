@@ -414,6 +414,19 @@
 			"then": {
 				"$ref": "FieldTypes/slug.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Tab"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/tab.json"
+			}
 		}
 	]
 }

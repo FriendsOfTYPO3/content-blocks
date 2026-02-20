@@ -3540,6 +3540,7 @@
                       "properties": {
                         "fields": {
                           "type": "array",
+                          "description": "Insert several field names (of type string) that will be considered during slug construction.",
                           "items": {
                             "anyOf": [
                               {
@@ -3610,6 +3611,26 @@
                       "maximum": 50,
                       "default": 30
                     }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Tab"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "type": {}
                   }
                 }
               }
