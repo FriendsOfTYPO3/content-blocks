@@ -117,14 +117,14 @@ final class FileFieldSchemaTest extends UnitTestCase
                                         'x' => 0.25,
                                         'y' => 0.3,
                                         'width' => 100,
-                                        'height' => 100
-                                    ]
+                                        'height' => 100,
+                                    ],
                                 ],
                                 'focusArea' => (object)[
                                     'x' => 1,
                                     'y' => 1,
                                     'width' => 100,
-                                    'height' => 100
+                                    'height' => 100,
                                 ],
                             ],
                         ],
