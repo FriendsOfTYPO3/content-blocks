@@ -105,11 +105,6 @@
 						}
 					}
 				},
-				"extendedPalette": {
-					"type": "boolean",
-					"description": "Disable this option, if you don't need additional fields 'crop', 'alternative' or 'link'.",
-					"default": true
-				},
 				"headerThumbnail": {
 					"type": "object",
 					"additionalProperties": false,
@@ -159,6 +154,84 @@
 				}
 			}
 		},
+		"cropVariants": {
+			"type": "object",
+			"patternProperties": {
+				".*": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"title": {
+							"type": "string"
+						},
+						"allowedAspectRatios": {
+							"type": "object",
+							"patternProperties": {
+								".*": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"title": {
+											"type": "string"
+										},
+										"value": {
+											"anyOf": [
+												{
+													"type": "string",
+													"pattern": "^[0-9]+\\s*\\/\\s*[0-9]+$"
+												},
+												{
+													"type": "number"
+												}
+											]
+										}
+									},
+									"required": ["value"]
+								}
+							}
+						},
+						"coverAreas": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"x": {
+										"type": "number"
+									},
+									"y": {
+										"type": "number"
+									},
+									"width": {
+										"type": "number"
+									},
+									"height": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"focusArea": {
+							"type": "object",
+							"properties": {
+								"x": {
+									"type": "number"
+								},
+								"y": {
+									"type": "number"
+								},
+								"width": {
+									"type": "number"
+								},
+								"height": {
+									"type": "number"
+								}
+							}
+						}
+					},
+					"required": ["title", "allowedAspectRatios"]
+				}
+			}
+		},
 		"disallowed": {
 			"description": "An array of file extensions that are not allowed even though they are listed in the property allowed",
 			"anyOf": [
@@ -176,6 +249,11 @@
 					}
 				}
 			]
+		},
+		"extendedPalette": {
+			"type": "boolean",
+			"description": "Disable this option, if you don't need additional fields 'crop', 'alternative' or 'link'.",
+			"default": true
 		},
 		"fieldInformation": {
 			"type": "object"

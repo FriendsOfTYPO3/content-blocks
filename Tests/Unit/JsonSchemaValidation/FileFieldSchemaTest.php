@@ -74,7 +74,6 @@ final class FileFieldSchemaTest extends UnitTestCase
                                 'delete' => true,
                                 'localize' => true,
                             ],
-                            'extendedPalette' => true,
                             'headerThumbnail' => (object)[
                                 'width' => 100,
                                 'height' => '100',
@@ -99,6 +98,36 @@ final class FileFieldSchemaTest extends UnitTestCase
                         'overrideChildTca' => (object)[],
                         'readOnly' => false,
                         'relationship' => 'oneToMany',
+                        'extendedPalette' => false,
+                        'cropVariants' => (object)[
+                            'default' => (object)[
+                                'title' => 'Teaser',
+                                'allowedAspectRatios' => (object)[
+                                    '16/9' => (object)[
+                                        'title' => '16:9',
+                                        'value' => '16 / 9',
+                                    ],
+                                    'landscape' => (object)[
+                                        'title' => 'Landscape',
+                                        'value' => 1.333,
+                                    ],
+                                ],
+                                'coverAreas' => [
+                                    (object)[
+                                        'x' => 0.25,
+                                        'y' => 0.3,
+                                        'width' => 100,
+                                        'height' => 100
+                                    ]
+                                ],
+                                'focusArea' => (object)[
+                                    'x' => 1,
+                                    'y' => 1,
+                                    'width' => 100,
+                                    'height' => 100
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
