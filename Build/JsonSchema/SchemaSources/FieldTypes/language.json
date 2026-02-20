@@ -3,6 +3,13 @@
 	"additionalProperties": false,
 	"properties": {
 		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
 		"type": {}
 	}
 }

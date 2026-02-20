@@ -375,6 +375,19 @@
 			"then": {
 				"$ref": "FieldTypes/pass.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Password"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/password.json"
+			}
 		}
 	]
 }
