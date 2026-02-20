@@ -22,17 +22,17 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaValidator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class BasicFieldSchemaTest extends UnitTestCase
+final class LanguageFieldSchemaTest extends UnitTestCase
 {
-    public static function basicFieldSchemaValidationWorksAsExpectedDataProvider(): iterable
+    public static function languageFieldSchemaValidationWorksAsExpectedDataProvider(): iterable
     {
         yield 'Only type' => [
             'data' => (object)[
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'TYPO3/Header',
-                        'type' => 'Basic',
+                        'identifier' => 'language',
+                        'type' => 'Language',
                     ],
                 ],
             ],
@@ -44,8 +44,8 @@ final class BasicFieldSchemaTest extends UnitTestCase
                 'name' => 'json/schema-test',
                 'fields' => [
                     (object)[
-                        'identifier' => 'TYPO3/Header',
-                        'type' => 'Basic',
+                        'identifier' => 'language',
+                        'type' => 'Language',
                         'unknown' => 'unknown',
                     ],
                 ],
@@ -55,8 +55,8 @@ final class BasicFieldSchemaTest extends UnitTestCase
     }
 
     #[Test]
-    #[DataProvider('basicFieldSchemaValidationWorksAsExpectedDataProvider')]
-    public function basicFieldSchemaValidationWorksAsExpected(object $data, bool $valid): void
+    #[DataProvider('languageFieldSchemaValidationWorksAsExpectedDataProvider')]
+    public function languageFieldSchemaValidationWorksAsExpected(object $data, bool $valid): void
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 

@@ -349,6 +349,19 @@
 			"then": {
 				"$ref": "FieldTypes/folder.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Language"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/language.json"
+			}
 		}
 	]
 }
