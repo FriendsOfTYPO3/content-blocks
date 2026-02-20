@@ -401,6 +401,19 @@
 			"then": {
 				"$ref": "FieldTypes/relation.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Slug"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/slug.json"
+			}
 		}
 	]
 }

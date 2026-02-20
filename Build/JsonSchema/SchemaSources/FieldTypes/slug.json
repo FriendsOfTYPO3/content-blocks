@@ -1,0 +1,153 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"appearance": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"prefix": {
+					"type": "string",
+					"description": "userFunction: Provides a string that is displayed in front of the input field."
+				}
+			}
+		},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"default": {
+			"type": "string",
+			"description": "Default value set if a new record is created."
+		},
+		"eval": {
+			"description": "Configuration of field evaluation",
+			"anyOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "string",
+					"enum": ["unique", "uniqueInSite", "uniqueInPid"]
+				}
+			]
+		},
+		"fallbackCharacter": {
+			"type": "string",
+			"description": "Character that represents the separator of slug sections, that contain the fieldSeparator."
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"generatorOptions": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"fields": {
+					"type": "array",
+					"description": "Insert several field names (of type string) that will be considered during slug construction.",
+					"items": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "array",
+								"items": {
+									"$ref": "#/properties/generatorOptions/properties/fields/items"
+								}
+							}
+						]
+					}
+				},
+				"fieldSeparator": {
+					"type": "string",
+					"description": "This value will divide the slug parts. If a section value contains this very value, it will be replaced by the value given in fallbackCharacter."
+				},
+				"prefixParentPageSlug": {
+					"type": "boolean",
+					"description": "The slugs of parent pages will be prefixed to the slug for the page its (This option is exclusively for page records. It won't have an effect on any other records.)"
+				},
+				"regexReplacements": {
+					"type": "object",
+					"description": "Provide regex based definitions for string replacement. Case-insensitive and wildcard replacement is possible.",
+					"patternProperties": {
+						".*": {
+							"type": "string"
+						}
+					}
+				},
+				"replacements": {
+					"type": "object",
+					"description": "It allows to replace strings of a slug part.",
+					"patternProperties": {
+						".*": {
+							"type": "string"
+						}
+					}
+				},
+				"postModifiers": {
+					"type": "array",
+					"description": "Hook into the generation of a slug via custom TCA generation options.",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"prependSlash": {
+			"type": "boolean",
+			"description": "Defines whether a slug field should contain a prepending slash, for example for nested categories with speaking segments."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"searchable": {
+			"type": "boolean",
+			"description": "Enables search functionality for the field",
+			"default": true
+		},
+		"size": {
+			"type": "integer",
+			"description": "Abstract value for the width of the field",
+			"minimum": 10,
+			"maximum": 50,
+			"default": 30
+		}
+	}
+}
