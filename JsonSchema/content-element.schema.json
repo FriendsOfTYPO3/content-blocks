@@ -3139,6 +3139,311 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Relation"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "allowed": {
+                      "type": "string",
+                      "description": "A comma list of tables"
+                    },
+                    "autoSizeMax": {
+                      "type": "integer",
+                      "description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",
+                      "minimum": 1
+                    },
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "integer"
+                      ],
+                      "description": "Default value set if a new record is created."
+                    },
+                    "dontRemapTablesOnCopy": {
+                      "type": "array",
+                      "description": "A list of tables which should not be remapped to the new element uids if the field holds elements that are copied in the session.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "elementBrowserEntryPoints": {
+                      "type": "object",
+                      "description": "By default, the last selected page is used when opening the element browser. Setting this configuration value changes this behaviour.",
+                      "properties": {
+                        "_default": {
+                          "type": "integer"
+                        },
+                        "patternProperties": {
+                          ".*": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "fieldControl": {
+                      "type": "object",
+                      "properties": {
+                        "addRecord": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "editPopup": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "listModule": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "elementBrowser": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "insertClipboard": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        },
+                        "recordsOverview": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "tableList": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "filter": {
+                      "type": "array",
+                      "description": "Define filters for item values. Doesn't work in combination with a wizard.",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "userFunc": {
+                            "type": "string"
+                          },
+                          "parameters": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    },
+                    "foreign_table": {
+                      "type": "string",
+                      "description": "The item-array will be filled with records from the table defined here"
+                    },
+                    "hideDeleteIcon": {
+                      "type": "boolean",
+                      "description": "Removes the delete icon next to the selector box."
+                    },
+                    "hideMoveIcons": {
+                      "type": "boolean",
+                      "description": "Removes the move icons next to the selector box."
+                    },
+                    "hideSuggest": {
+                      "type": "boolean",
+                      "description": "Setting this property to true disables the suggest wizard."
+                    },
+                    "localizeReferencesAtParentLocalization": {
+                      "type": "boolean",
+                      "description": "Defines whether referenced records should be localized when the current record gets localized. This only applies if references are not stored using MM tables."
+                    },
+                    "maxitems": {
+                      "type": "integer",
+                      "description": "Maximum number of items allowed in the select field",
+                      "minimum": 1
+                    },
+                    "minitems": {
+                      "type": "integer",
+                      "description": "Minimum number of items allowed in the select field",
+                      "minimum": 1
+                    },
+                    "MM": {
+                      "type": "string",
+                      "description": "This value contains the name of the table in which to store a MM relation. It is used together with foreign_table."
+                    },
+                    "MM_match_fields": {
+                      "type": "object",
+                      "description": "Array of field => value pairs to both insert and match against when writing/reading MM relations."
+                    },
+                    "MM_opposite_field": {
+                      "type": "string",
+                      "description": "If you want to make a MM relation editable from the foreign side (bidirectional) of the relation as well, you need to set MM_opposite_field on the foreign side to the field name on the local side."
+                    },
+                    "MM_oppositeUsage": {
+                      "type": "object",
+                      "description": "In a MM bidirectional relation using match fields the opposite side needs to know about the match fields for certain operations"
+                    },
+                    "MM_table_where": {
+                      "type": "string",
+                      "description": "Additional where clause used when reading MM relations."
+                    },
+                    "multiple": {
+                      "type": "boolean",
+                      "description": "Allows the same item more than once in a list.",
+                      "default": false
+                    },
+                    "prepend_tname": {
+                      "type": "boolean",
+                      "description": "Will prepend the table name to the stored relations"
+                    },
+                    "readOnly": {
+                      "type": "boolean",
+                      "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                      "default": false
+                    },
+                    "relationship": {
+                      "type": "string",
+                      "enum": [
+                        "manyToOne",
+                        "oneToMany"
+                      ]
+                    },
+                    "size": {
+                      "type": "integer",
+                      "description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
+                      "minimum": 1,
+                      "default": 1
+                    },
+                    "suggestOptions": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "additionalSearchFields": {
+                          "type": "string",
+                          "description": "Comma-separated list of fields the suggest wizard should also search in"
+                        },
+                        "addWhere": {
+                          "type": "string",
+                          "description": "Allows to define an additional where clause for the searchquery."
+                        },
+                        "cssClass": {
+                          "type": "string",
+                          "description": "Add a CSS class to every list item of the result list."
+                        },
+                        "maxItemsInResultList": {
+                          "type": "integer",
+                          "description": "Maximum number of results to display.",
+                          "default": 10
+                        },
+                        "maxPathTitleLength": {
+                          "type": "integer",
+                          "description": "Maximum number of characters to display when a path element is too long."
+                        },
+                        "minimumCharacters": {
+                          "type": "integer",
+                          "description": "Minimum number of characters needed to start the search."
+                        },
+                        "orderBy": {
+                          "type": "string",
+                          "description": "Allows to add an ORDER BY part to the search query."
+                        },
+                        "pidList": {
+                          "type": "string",
+                          "description": "Limit the search to certain pages (and their sub pages)."
+                        },
+                        "pidDepth": {
+                          "type": "integer",
+                          "description": "Expand pidList by this number of levels. Has an effect only if pidList has a value."
+                        },
+                        "receiverClass": {
+                          "type": "string",
+                          "description": "PHP class alternative receiver class"
+                        },
+                        "renderFunc": {
+                          "type": "string",
+                          "description": "User function to manipulate the displayed records in the results."
+                        },
+                        "searchCondition": {
+                          "type": "string",
+                          "description": "Additional WHERE clause (not prepended with AND)."
+                        },
+                        "searchWholePhrase": {
+                          "type": "boolean",
+                          "description": "Searches for the whole phrase, not only the beginning of the word."
+                        }
+                      }
+                    }
+                  }
+                }
               }
             ]
           }

@@ -388,6 +388,19 @@
 			"then": {
 				"$ref": "FieldTypes/password.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Relation"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/relation.json"
+			}
 		}
 	]
 }
