@@ -1,0 +1,221 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"allowed": {
+			"description": "List of allowed file types",
+			"anyOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "string",
+					"enum": ["common-image-types", "common-text-types", "common-media-types"]
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			]
+		},
+		"appearance": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"collapseAll": {
+					"type": "boolean",
+					"description": "Show all child-records collapsed (if false, all are expanded)"
+				},
+				"expandSingle": {
+					"type": "boolean",
+					"description": "Show only one child-record expanded each time. If a collapsed record is clicked, the currently open one collapses and the clicked one expands."
+				},
+				"createNewRelationLinkTitle": {
+					"type": "string",
+					"description": "Overrides the link text and title of the \"Create new relation\" button with a localized string. Only useful, if the element browser is enabled."
+				},
+				"addMediaLinkTitle": {
+					"type": "string",
+					"description": "Overrides the link text and title of the \"Add media by URL\" button with a localized string. Only useful, if the element browser is enabled."
+				},
+				"uploadFilesLinkTitle": {
+					"type": "string",
+					"description": "Overrides the link text and title of the \"Select & upload files\" button with a localized string. Only useful, if the element browser is enabled."
+				},
+				"useSortable": {
+					"type": "boolean",
+					"description": "Activate drag & drop.",
+					"default": true
+				},
+				"showPossibleLocalizationRecords": {
+					"type": "boolean",
+					"description": "Show unlocalized files which are in the original language, but not yet localized."
+				},
+				"showAllLocalizationLink": {
+					"type": "boolean",
+					"description": "Defines whether to show the \"localize all records\" link to fetch untranslated records from the original language."
+				},
+				"showSynchronizationLink": {
+					"type": "boolean",
+					"description": "Defines whether to show a \"synchronize\" link to update to a 1:1 translation with the original language."
+				},
+				"enabledControls": {
+					"type": "object",
+					"additionalProperties": false,
+					"description": "Enabled or disable certain controls",
+					"properties": {
+						"edit": {
+							"type": "boolean",
+							"default": true
+						},
+						"info": {
+							"type": "boolean",
+							"default": true
+						},
+						"dragdrop": {
+							"type": "boolean",
+							"default": true
+						},
+						"sort": {
+							"type": "boolean",
+							"default": false
+						},
+						"hide": {
+							"type": "boolean",
+							"default": true
+						},
+						"delete": {
+							"type": "boolean",
+							"default": true
+						},
+						"localize": {
+							"type": "boolean",
+							"default": true
+						}
+					}
+				},
+				"extendedPalette": {
+					"type": "boolean",
+					"description": "Disable this option, if you don't need additional fields 'crop', 'alternative' or 'link'.",
+					"default": true
+				},
+				"headerThumbnail": {
+					"type": "object",
+					"additionalProperties": false,
+					"description": "Defines the width and height of the preview thumbnail",
+					"properties": {
+						"width": {
+							"type": ["string", "integer"]
+						},
+						"height": {
+							"type": ["string", "integer"]
+						}
+					}
+				},
+				"fileUploadAllowed": {
+					"type": "boolean",
+					"description": "Defines whether the button \"Select & upload file\" should be rendered.",
+					"default": true
+				},
+				"fileByUrlAllowed": {
+					"type": "boolean",
+					"description": "Defines whether the button \"Add media by URL\" should be rendered. This button is used to include media URLs from, for example, Vimeo or YouTube."
+				},
+				"elementBrowserEnabled": {
+					"type": "boolean",
+					"description": "Hides or displays the element browser button in inline records"
+				}
+			}
+		},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				},
+				"disableMovingChildrenWithParent": {
+					"type": "boolean",
+					"description": "Disables that child records get moved along with their parent records.",
+					"default": false
+				},
+				"enableCascadingDelete": {
+					"type": "boolean",
+					"description": "Usually when the parent record is deleted all attached sys_file_references are deleted. This default behaviour can be disabled here.",
+					"default": true
+				}
+			}
+		},
+		"disallowed": {
+			"description": "An array of file extensions that are not allowed even though they are listed in the property allowed",
+			"anyOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "string",
+					"enum": ["common-image-types", "common-text-types", "common-media-types"]
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			]
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"maxitems": {
+			"type": "integer",
+			"description": "Maximum number of files that can be attached",
+			"minimum": 1
+		},
+		"minitems": {
+			"type": "integer",
+			"description": "Minimum number of attached files.",
+			"minimum": 1
+		},
+		"overrideChildTca": {
+			"type": "object",
+			"description": "Override the TCA of the sys_file_reference records representing the files attached to this record."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"relationship": {
+			"type": "string",
+			"enum": ["oneToOne", "oneToMany"]
+		}
+	}
+}

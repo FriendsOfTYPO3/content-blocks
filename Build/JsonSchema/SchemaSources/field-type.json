@@ -310,6 +310,19 @@
 			"then": {
 				"$ref": "FieldTypes/basic.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "File"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/file.json"
+			}
 		}
 	]
 }
