@@ -116,6 +116,9 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": [
+              "identifier"
+            ],
             "properties": {
               "identifier": {
                 "type": "string",
@@ -220,6 +223,23 @@
               }
             },
             "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "useExistingField": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "useExistingField"
+                  ]
+                },
+                "else": {
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
               {
                 "if": {
                   "not": {
@@ -545,7 +565,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/2/then/properties/valuePicker"
                     }
                   }
                 }
@@ -659,7 +679,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/2/then/properties/valuePicker"
                     }
                   }
                 }
@@ -767,7 +787,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/2/then/properties/valuePicker"
                     }
                   }
                 }
@@ -910,7 +930,7 @@
                       }
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/2/then/properties/valuePicker"
                     }
                   }
                 }
@@ -1106,7 +1126,7 @@
                       "default": 30
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/2/then/properties/valuePicker"
                     }
                   }
                 }
@@ -1226,7 +1246,7 @@
                       "minimum": 1
                     },
                     "valuePicker": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/1/then/properties/valuePicker"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/2/then/properties/valuePicker"
                     }
                   }
                 }
@@ -2070,7 +2090,7 @@
                       "default": 1
                     },
                     "sortItems": {
-                      "$ref": "#/allOf/1/properties/fields/items/allOf/11/then/properties/sortItems"
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/12/then/properties/sortItems"
                     }
                   }
                 }
@@ -3555,7 +3575,7 @@
                               {
                                 "type": "array",
                                 "items": {
-                                  "$ref": "#/allOf/1/properties/fields/items/allOf/23/then/properties/generatorOptions/properties/fields/items"
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/24/then/properties/generatorOptions/properties/fields/items"
                                 }
                               }
                             ]
@@ -3762,6 +3782,23 @@
                         "allOf": [
                           {
                             "if": {
+                              "properties": {
+                                "useExistingField": {
+                                  "const": true
+                                }
+                              },
+                              "required": [
+                                "useExistingField"
+                              ]
+                            },
+                            "else": {
+                              "required": [
+                                "type"
+                              ]
+                            }
+                          },
+                          {
+                            "if": {
                               "not": {
                                 "properties": {
                                   "type": {
@@ -3794,7 +3831,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/1/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/2/then"
                             }
                           },
                           {
@@ -3809,7 +3846,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/2/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/3/then"
                             }
                           },
                           {
@@ -3824,7 +3861,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/3/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/4/then"
                             }
                           },
                           {
@@ -3839,7 +3876,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/4/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/5/then"
                             }
                           },
                           {
@@ -3854,7 +3891,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/5/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/6/then"
                             }
                           },
                           {
@@ -3869,7 +3906,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/6/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/7/then"
                             }
                           },
                           {
@@ -3884,7 +3921,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/7/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/8/then"
                             }
                           },
                           {
@@ -3899,7 +3936,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/8/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/9/then"
                             }
                           },
                           {
@@ -3914,7 +3951,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/9/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/10/then"
                             }
                           },
                           {
@@ -3929,7 +3966,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/10/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/11/then"
                             }
                           },
                           {
@@ -3944,7 +3981,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/11/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/12/then"
                             }
                           },
                           {
@@ -3959,7 +3996,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/12/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/13/then"
                             }
                           },
                           {
@@ -3974,7 +4011,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/13/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/14/then"
                             }
                           },
                           {
@@ -3989,7 +4026,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/14/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/15/then"
                             }
                           },
                           {
@@ -4004,7 +4041,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/15/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/16/then"
                             }
                           },
                           {
@@ -4019,7 +4056,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/16/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/17/then"
                             }
                           },
                           {
@@ -4034,7 +4071,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/17/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/18/then"
                             }
                           },
                           {
@@ -4049,7 +4086,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/18/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/19/then"
                             }
                           },
                           {
@@ -4064,7 +4101,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/19/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/20/then"
                             }
                           },
                           {
@@ -4079,7 +4116,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/20/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/21/then"
                             }
                           },
                           {
@@ -4094,7 +4131,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/21/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/22/then"
                             }
                           },
                           {
@@ -4109,7 +4146,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/22/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/23/then"
                             }
                           },
                           {
@@ -4124,7 +4161,7 @@
                               ]
                             },
                             "then": {
-                              "$ref": "#/allOf/1/properties/fields/items/allOf/23/then"
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/24/then"
                             }
                           },
                           {
@@ -4144,6 +4181,11 @@
                               "properties": {
                                 "type": {}
                               }
+                            },
+                            "else": {
+                              "required": [
+                                "identifier"
+                              ]
                             }
                           }
                         ]

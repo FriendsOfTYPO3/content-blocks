@@ -86,6 +86,31 @@ final class FieldTypeSchemaTest extends UnitTestCase
             ],
             'valid' => true,
         ];
+
+        yield 'type is required' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'foo',
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'type is not required with useExistingField' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'foo',
+                        'useExistingField' => true,
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
     }
 
     #[Test]

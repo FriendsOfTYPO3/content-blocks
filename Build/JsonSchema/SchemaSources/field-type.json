@@ -1,5 +1,6 @@
 {
 	"type": "object",
+	"required": ["identifier"],
 	"properties": {
 		"identifier": {
 			"type": "string",
@@ -104,6 +105,19 @@
 		}
 	},
 	"allOf": [
+		{
+			"if": {
+				"properties": {
+					"useExistingField": {
+						"const": true
+					}
+				},
+				"required": ["useExistingField"]
+			},
+			"else": {
+				"required": ["type"]
+			}
+		},
 		{
 			"if": {
 				"not": {

@@ -109,6 +109,19 @@
 				"allOf": [
 					{
 						"if": {
+							"properties": {
+								"useExistingField": {
+									"const": true
+								}
+							},
+							"required": ["useExistingField"]
+						},
+						"else": {
+							"required": ["type"]
+						}
+					},
+					{
+						"if": {
 							"not": {
 								"properties": {
 									"type": { "const": "Basic" }
@@ -435,6 +448,9 @@
 						},
 						"then": {
 							"$ref": "linebreak.json"
+						},
+						"else": {
+							"required": ["identifier"]
 						}
 					}
 				]
