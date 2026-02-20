@@ -460,6 +460,19 @@
 			"then": {
 				"$ref": "FieldTypes/palette.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Collection"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/collection.json"
+			}
 		}
 	]
 }

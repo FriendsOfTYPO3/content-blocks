@@ -1,0 +1,332 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"labelField": {
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			]
+		},
+		"fallbackLabelFields": {
+			"type": "array",
+			"description": "Defines which fields should be used as fallback, if labelField is not filled. The first filled field which is found will be used. Can only be used if there is only one labelField field defined.",
+			"items": {
+				"type": "string"
+			}
+		},
+		"table": {
+			"type": "string",
+			"description": "Alternative table name for the Collection. Default is identifier with prefix if enabled."
+		},
+		"shareAcrossTables": {
+			"type": "boolean",
+			"description": "Allows to reference a Record Type across multiple tables, if foreign_table is used."
+		},
+		"shareAcrossFields": {
+			"type": "boolean",
+			"description": "Allows to reference a Record Type across multiple fields, if foreign_table is used."
+		},
+		"allowedRecordTypes": {
+			"type": "array",
+			"description": "This option allows you to restrict possible record types for the type selector of the child record. The order of definition is used to sort the items. The first item in the list will always be the default type.",
+			"items": {
+				"type": "string"
+			}
+		},
+		"appearance": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"collapseAll": {
+					"type": "boolean",
+					"description": "Show all child-records collapsed (if false, all are expanded)"
+				},
+				"expandSingle": {
+					"type": "boolean",
+					"description": "Show only one child-record expanded each time. If a collapsed record is clicked, the currently open one collapses and the clicked one expands."
+				},
+				"showNewRecordLink": {
+					"type": "boolean",
+					"description": "Show the New record link",
+					"default": true
+				},
+				"newRecordLinkAddTitle": {
+					"type": "boolean",
+					"description": "Adds the title of the foreign_table to the \"New record\" link."
+				},
+				"newRecordLinkTitle": {
+					"type": "string",
+					"description": "Overrides the title of the \"New record\" link with a localized string. This will work only if newRecordLinkAddTitle is not set to true."
+				},
+				"createNewRelationLinkTitle": {
+					"type": "string",
+					"description": "Overrides the link text and title of the \"Create new relation\" button with a localized string. Only useful, if the element browser is enabled."
+				},
+				"levelLinksPosition": {
+					"type": "string",
+					"description": "Defines where to show the \"New record\" link in relation to the child records.",
+					"enum": [
+						"top",
+						"bottom",
+						"both"
+					],
+					"default": "top"
+				},
+				"useCombination": {
+					"type": "boolean",
+					"description": "This is only useful on bidirectional relations using an intermediate table with attributes. In a \"combination\" it is possible to edit the attributes AND the related child record itself. If using a foreign_selector, the foreign_unique property must be set to the same field as the foreign_selector.",
+					"default": false
+				},
+				"suppressCombinationWarning": {
+					"type": "boolean",
+					"description": "Suppresses the warning flash message that will be displayed when using useCombination.",
+					"default": false
+				},
+				"useSortable": {
+					"type": "boolean",
+					"description": "Activate drag & drop.",
+					"default": true
+				},
+				"showPossibleLocalizationRecords": {
+					"type": "boolean",
+					"description": "Show unlocalized files which are in the original language, but not yet localized."
+				},
+				"showAllLocalizationLink": {
+					"type": "boolean",
+					"description": "Defines whether to show the \"localize all records\" link to fetch untranslated records from the original language."
+				},
+				"showSynchronizationLink": {
+					"type": "boolean",
+					"description": "Defines whether to show a \"synchronize\" link to update to a 1:1 translation with the original language."
+				},
+				"enabledControls": {
+					"type": "object",
+					"additionalProperties": false,
+					"description": "Enabled or disable certain controls",
+					"properties": {
+						"info": {
+							"type": "boolean",
+							"default": true
+						},
+						"new": {
+							"type": "boolean",
+							"default": true
+						},
+						"dragdrop": {
+							"type": "boolean",
+							"default": true
+						},
+						"sort": {
+							"type": "boolean",
+							"default": false
+						},
+						"hide": {
+							"type": "boolean",
+							"default": true
+						},
+						"delete": {
+							"type": "boolean",
+							"default": true
+						},
+						"localize": {
+							"type": "boolean",
+							"default": true
+						}
+					}
+				},
+				"showPossibleRecordsSelector": {
+					"type": "boolean",
+					"description": "Can be used to hide the foreign record selector from the interface, even if you have a foreign_selector configured. This can be used to keep the technical functionality of the foreign_selector but is useful if you want to replace it with your own implementation using a custom control, see customControls."
+				},
+				"elementBrowserEnabled": {
+					"type": "boolean",
+					"description": "Hides or displays the element browser button in inline records"
+				}
+			}
+		},
+		"autoSizeMax": {
+			"type": "integer",
+			"description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",
+			"minimum": 1
+		},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				},
+				"disableMovingChildrenWithParent": {
+					"type": "boolean",
+					"description": "Disables that child records get moved along with their parent records.",
+					"default": false
+				},
+				"enableCascadingDelete": {
+					"type": "boolean",
+					"description": "Usually when the parent record is deleted all attached sys_file_references are deleted. This default behaviour can be disabled here.",
+					"default": true
+				}
+			}
+		},
+		"customControls": {
+			"type": "array",
+			"description": "A list of custom controls (userFuncs) that can be used to extend the functionality of the collection field.",
+			"items": {
+				"type": "object",
+				"properties": {
+					"userFunc": {
+						"type": "string"
+					}
+				},
+				"required": ["userFunc"]
+			}
+		},
+		"filter": {
+			"type": "array",
+			"description": "Define filters for item values. Doesn't work in combination with a wizard.",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"userFunc": {
+						"type": "string"
+					},
+					"parameters": {
+						"type": "object"
+					}
+				}
+			}
+		},
+		"foreign_default_sortby": {
+			"type": "string",
+			"description": "If a field name for foreign_sortby is defined, then this is ignored. Otherwise, this is used as the \"ORDER BY\" statement to sort the records in the table when listed."
+		},
+		"foreign_field": {
+			"type": "string",
+			"description": "The foreign_field is the field of the child record pointing to the parent record. This defines where to store the uid of the parent record."
+		},
+		"foreign_label": {
+			"type": "string",
+			"description": "Insert the fieldname of the inline element, that you want to have as the title of the inline element."
+		},
+		"foreign_match_fields": {
+			"type": "object",
+			"description": "Array of field-value pairs to both insert and match against when writing/reading IRRE relations. Using the match fields, it is possible to re-use the same child table in more than one field of the parent table by using a match field with different values for each of the use cases."
+		},
+		"foreign_selector": {
+			"type": "string",
+			"description": "A selector is used to show all possible child records that could be used to create a relation with the parent record."
+		},
+		"foreign_sortby": {
+			"type": "string",
+			"description": "Define a field on the child record that stores the manual sorting information."
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"foreign_table": {
+			"type": "string",
+			"description": "The item-array will be filled with records from the table defined here"
+		},
+		"foreign_table_field": {
+			"type": "string",
+			"description": "The field of the child record pointing to the parent record."
+		},
+		"foreign_unique": {
+			"type": "string",
+			"description": "Field which must be unique for all children of a parent record."
+		},
+		"maxitems": {
+			"type": "integer",
+			"description": "Maximum number of items allowed in the select field",
+			"minimum": 1
+		},
+		"minitems": {
+			"type": "integer",
+			"description": "Minimum number of items allowed in the select field",
+			"minimum": 1
+		},
+		"MM": {
+			"type": "string",
+			"description": "This value contains the name of the table in which to store a MM relation. It is used together with foreign_table."
+		},
+		"MM_opposite_field": {
+			"type": "string",
+			"description": "If you want to make a MM relation editable from the foreign side (bidirectional) of the relation as well, you need to set MM_opposite_field on the foreign side to the field name on the local side."
+		},
+		"overrideChildTca": {
+			"type": "object",
+			"description": "Override the TCA of the sys_file_reference records representing the files attached to this record."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"relationship": {
+			"type": "string",
+			"enum": ["oneToOne", "manyToOne", "oneToMany"]
+		},
+		"size": {
+			"type": "integer",
+			"description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
+			"minimum": 1,
+			"default": 1
+		},
+		"symmetric_field": {
+			"type": "string",
+			"description": "This works like foreign_field, but in case of using bidirectional symmetric relations. symmetric_field defines in which field on the foreign_table the uid of the \"other\" parent is stored."
+		},
+		"symmetric_label": {
+			"type": "string",
+			"description": "If set, it overrides the label set in labelField for the inline-view and only if looking to a symmetric relation from the \"other\" side."
+		},
+		"symmetric_sortby": {
+			"type": "string",
+			"description": "This works like foreign_sortby, but in case of using bidirectional symmetric relations."
+		},
+		"fields": {
+			"description": "The root fields definition of the Collection.",
+			"type": "array",
+			"items": {
+				"$ref": "../field-type.json"
+			}
+		}
+	}
+}
