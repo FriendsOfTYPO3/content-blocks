@@ -2854,6 +2854,134 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Folder"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "autoSizeMax": {
+                      "type": "integer",
+                      "description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",
+                      "minimum": 1
+                    },
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default value set if a new record is created."
+                    },
+                    "elementBrowserEntryPoints": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "_default": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "fieldControl": {
+                      "type": "object",
+                      "properties": {
+                        "elementBrowser": {
+                          "type": "object",
+                          "properties": {
+                            "disabled": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "hideDeleteIcon": {
+                      "type": "boolean",
+                      "description": "Removes the delete icon next to the selector box."
+                    },
+                    "hideMoveIcons": {
+                      "type": "boolean",
+                      "description": "Removes the move icons next to the selector box."
+                    },
+                    "maxitems": {
+                      "type": "integer",
+                      "description": "Maximum number of items allowed in the select field",
+                      "minimum": 1
+                    },
+                    "minitems": {
+                      "type": "integer",
+                      "description": "Minimum number of items allowed in the select field",
+                      "minimum": 1
+                    },
+                    "multiple": {
+                      "type": "boolean",
+                      "description": "Allows the same item more than once in a list.",
+                      "default": false
+                    },
+                    "readOnly": {
+                      "type": "boolean",
+                      "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                      "default": false
+                    },
+                    "relationship": {
+                      "type": "string",
+                      "enum": [
+                        "manyToOne",
+                        "oneToMany"
+                      ],
+                      "default": "oneToMany"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
+                      "minimum": 1,
+                      "default": 1
+                    }
+                  }
+                }
               }
             ]
           }

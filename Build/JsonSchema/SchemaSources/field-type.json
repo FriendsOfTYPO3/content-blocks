@@ -336,6 +336,19 @@
 			"then": {
 				"$ref": "FieldTypes/radio.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Folder"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/folder.json"
+			}
 		}
 	]
 }
