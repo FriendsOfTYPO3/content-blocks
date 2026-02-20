@@ -1,0 +1,431 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"type": {},
+		"fields": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"identifier": {
+						"type": "string",
+						"description": "The identifier for the field."
+					},
+					"label": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"useExistingField": {
+						"type": "boolean",
+						"description": "Enables extending of existing fields defined by TCA.",
+						"default": false
+					},
+					"prefixField": {
+						"type": "boolean",
+						"description": "Enables prefixing of field identifiers",
+						"default": true
+					},
+					"prefixType": {
+						"description": "Determines how to prefix the field if prefixField is enabled.",
+						"type": "string",
+						"enum": [
+							"full",
+							"vendor"
+						]
+					},
+					"displayCond": {
+						"description": "Can be used to display the field only under certain conditions.",
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"AND": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						]
+					},
+					"onChange": {
+						"type": "string",
+						"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
+						"enum": [
+							"reload"
+						]
+					},
+					"type": {
+						"description": "Type of the field.",
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "string",
+								"enum": [
+									"Basic",
+									"Category",
+									"Checkbox",
+									"Collection",
+									"Color",
+									"Country",
+									"DateTime",
+									"Email",
+									"File",
+									"FlexForm",
+									"Folder",
+									"Json",
+									"Language",
+									"Linebreak",
+									"Link",
+									"Number",
+									"Pass",
+									"Password",
+									"Radio",
+									"Relation",
+									"Select",
+									"SelectNumber",
+									"Slug",
+									"Text",
+									"Textarea",
+									"Uuid"
+								]
+							}
+						]
+					}
+				},
+				"allOf": [
+					{
+						"if": {
+							"not": {
+								"properties": {
+									"type": { "const": "Basic" }
+								},
+								"required": ["type"]
+							}
+						},
+						"then": {
+							"properties": {
+								"identifier": {
+									"type": "string",
+									"pattern": "^[a-zA-Z0-9_]+$"
+								}
+							}
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Textarea"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "textarea.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Text"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "text.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Email"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "email.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Color"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "color.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Number"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "number.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Link"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "link.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Country"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "country.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "DateTime"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "datetime.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Json"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "json.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Uuid"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "uuid.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Select"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "select.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "SelectNumber"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "select-number.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Checkbox"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "checkbox.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Category"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "category.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Basic"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "basic.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "File"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "file.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Radio"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "radio.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Folder"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "folder.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Language"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "language.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Pass"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "pass.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Password"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "password.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Relation"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "relation.json"
+						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Slug"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "slug.json"
+						}
+					}
+				]
+			}
+		}
+	}
+}

@@ -78,7 +78,6 @@
 						"Folder",
 						"Json",
 						"Language",
-						"Linebreak",
 						"Link",
 						"Number",
 						"Palette",
@@ -87,6 +86,7 @@
 						"Radio",
 						"Relation",
 						"Select",
+						"SelectNumber",
 						"Slug",
 						"Tab",
 						"Text",
@@ -426,6 +426,19 @@
 			},
 			"then": {
 				"$ref": "FieldTypes/tab.json"
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Palette"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/palette.json"
 			}
 		}
 	]
