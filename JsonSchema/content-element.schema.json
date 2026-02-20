@@ -2732,6 +2732,128 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "Radio"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "integer"
+                      ],
+                      "description": "Default value set if a new record is created."
+                    },
+                    "fieldControl": {
+                      "type": "object"
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "description": "Contains the elements for the selector box",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "description": "The displayed title."
+                          },
+                          "value": {
+                            "description": "The value stored in the database",
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ]
+                      }
+                    },
+                    "itemsProcessors": {
+                      "type": "object",
+                      "patternProperties": {
+                        "^[0-9]+$": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": {
+                            "class": {
+                              "type": "string"
+                            },
+                            "parameters": {
+                              "type": "object"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "itemsProcFunc": {
+                      "type": "string",
+                      "description": "(Deprecated: Use itemsProcessors instead) PHP method which is called to fill or manipulate the items array"
+                    },
+                    "itemsProcConfig": {
+                      "type": "object"
+                    },
+                    "readOnly": {
+                      "type": "boolean",
+                      "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                      "default": false
+                    }
+                  }
+                }
               }
             ]
           }
