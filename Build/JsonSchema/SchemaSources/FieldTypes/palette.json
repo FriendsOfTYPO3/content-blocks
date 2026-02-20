@@ -423,6 +423,19 @@
 						"then": {
 							"$ref": "slug.json"
 						}
+					},
+					{
+						"if": {
+							"properties": {
+								"type": {
+									"const": "Linebreak"
+								}
+							},
+							"required": ["type"]
+						},
+						"then": {
+							"$ref": "linebreak.json"
+						}
 					}
 				]
 			}

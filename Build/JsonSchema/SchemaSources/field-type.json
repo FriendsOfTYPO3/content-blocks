@@ -58,6 +58,12 @@
 		},
 		"type": {
 			"description": "Type of the field.",
+			"not": {
+				"type": "string",
+				"enum": [
+					"Linebreak"
+				]
+			},
 			"anyOf": [
 				{
 					"type": "string"
