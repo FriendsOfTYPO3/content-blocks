@@ -362,6 +362,19 @@
 			"then": {
 				"$ref": "FieldTypes/language.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "Pass"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/pass.json"
+			}
 		}
 	]
 }
