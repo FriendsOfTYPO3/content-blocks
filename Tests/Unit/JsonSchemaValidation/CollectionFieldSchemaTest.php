@@ -235,6 +235,46 @@ final class CollectionFieldSchemaTest extends UnitTestCase
             ],
             'valid' => false,
         ];
+
+        yield 'overrideType as object' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'overrideType' => (object)[
+                            'type1' => [
+                                (object)[
+                                    'identifier' => 'text',
+                                    'type' => 'Text',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'overrideType as array' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'overrideType' => [
+                            (object)[
+                                'identifier' => 'text',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
     }
 
     #[Test]

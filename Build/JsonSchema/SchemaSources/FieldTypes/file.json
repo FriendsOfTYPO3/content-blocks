@@ -294,6 +294,18 @@
 		"relationship": {
 			"type": "string",
 			"enum": ["oneToOne", "oneToMany"]
+		},
+		"overrideType": {
+			"type": "object",
+			"additionalProperties": false,
+			"patternProperties": {
+				"image|text|video|audio|application": {
+					"type": "array",
+					"items": {
+						"$ref": "../field-type.json"
+					}
+				}
+			}
 		}
 	}
 }

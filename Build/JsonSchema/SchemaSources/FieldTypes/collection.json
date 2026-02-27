@@ -327,6 +327,27 @@
 			"items": {
 				"$ref": "../field-type.json"
 			}
+		},
+		"overrideType": {
+			"oneOf": [
+				{
+					"type": "object",
+					"patternProperties": {
+						".*": {
+							"type": "array",
+							"items": {
+								"$ref": "../field-type.json"
+							}
+						}
+					}
+				},
+				{
+					"type": "array",
+					"items": {
+						"$ref": "../field-type.json"
+					}
+				}
+			]
 		}
 	}
 }

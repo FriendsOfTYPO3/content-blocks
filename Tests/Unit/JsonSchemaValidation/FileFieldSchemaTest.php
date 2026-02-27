@@ -307,6 +307,54 @@ final class FileFieldSchemaTest extends UnitTestCase
             ],
             'valid' => false,
         ];
+
+        yield 'overrideType valid' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'file',
+                        'type' => 'File',
+                        'overrideType' => (object)[
+                            'image' => [
+                                (object)[
+                                    'identifier' => 'text',
+                                    'type' => 'Text',
+                                ],
+                            ],
+                            'video' => [
+                                (object)[
+                                    'identifier' => 'text',
+                                    'type' => 'Text',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'overrideType invalid key' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'file',
+                        'type' => 'File',
+                        'overrideType' => (object)[
+                            'invalid' => [
+                                (object)[
+                                    'identifier' => 'text',
+                                    'type' => 'Text',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
     }
 
     #[Test]

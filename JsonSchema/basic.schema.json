@@ -2657,6 +2657,18 @@
                     "oneToOne",
                     "oneToMany"
                   ]
+                },
+                "overrideType": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "patternProperties": {
+                    "image|text|video|audio|application": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/properties/fields/items"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -4442,6 +4454,27 @@
                   "items": {
                     "$ref": "#/properties/fields/items"
                   }
+                },
+                "overrideType": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "patternProperties": {
+                        ".*": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/properties/fields/items"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/properties/fields/items"
+                      }
+                    }
+                  ]
                 }
               }
             }
