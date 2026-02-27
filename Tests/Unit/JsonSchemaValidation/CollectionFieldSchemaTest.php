@@ -220,6 +220,127 @@ final class CollectionFieldSchemaTest extends UnitTestCase
             'valid' => false,
         ];
 
+        yield 'additional fields from Record Type' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'group' => 'My Group',
+                        'typeName' => 'myType',
+                        'typeField' => 'record_type',
+                        'languageAware' => true,
+                        'workspaceAware' => true,
+                        'editLocking' => false,
+                        'restriction' => (object)[
+                            'disabled' => true,
+                            'startTime' => true,
+                            'endTime' => true,
+                            'userGroup' => false,
+                        ],
+                        'softDelete' => true,
+                        'trackCreationDate' => true,
+                        'trackUpdateDate' => true,
+                        'sortable' => true,
+                        'sortField' => 'sorting',
+                        'internalDescription' => false,
+                        'rootLevelType' => 'both',
+                        'security' => (object)[
+                            'ignoreWebMountRestriction' => false,
+                            'ignoreRootLevelRestriction' => true,
+                            'ignorePageTypeRestriction' => false,
+                        ],
+                        'adminOnly' => false,
+                        'hideAtCopy' => true,
+                        'appendLabelAtCopy' => ' (copy)',
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'sortField as array with order objects valid' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'sortField' => [
+                            (object)['identifier' => 'title', 'order' => 'asc'],
+                            (object)['identifier' => 'created_at', 'order' => 'desc'],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'sortField invalid order value' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'sortField' => [
+                            (object)['identifier' => 'title', 'order' => 'ascending'],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'restriction unknown property invalid' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'restriction' => (object)[
+                            'disabled' => true,
+                            'unknown' => true,
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'security unknown property invalid' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'security' => (object)[
+                            'ignoreWebMountRestriction' => true,
+                            'unknown' => false,
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'rootLevelType invalid' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'rootLevelType' => 'invalid',
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
         yield 'customControls userFunc missing' => [
             'data' => (object)[
                 'name' => 'json/schema-test',

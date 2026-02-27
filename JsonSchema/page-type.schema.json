@@ -4217,7 +4217,20 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "table": {
+                      "type": "string",
+                      "description": "The custom table name to be used for the new Record Type."
+                    },
+                    "group": {
+                      "type": "string",
+                      "description": "Group name the Content Block should be displayed in"
+                    },
+                    "typeName": {
+                      "description": "Unqique type identifier for this Content Block",
+                      "type": "string"
+                    },
                     "labelField": {
+                      "description": "Defines which field should be used as the title of the record.",
                       "oneOf": [
                         {
                           "type": "string"
@@ -4231,15 +4244,144 @@
                       ]
                     },
                     "fallbackLabelFields": {
+                      "description": "Defines which fields should be used as fallback, if labelField is not filled.",
                       "type": "array",
-                      "description": "Defines which fields should be used as fallback, if labelField is not filled. The first filled field which is found will be used. Can only be used if there is only one labelField field defined.",
                       "items": {
                         "type": "string"
                       }
                     },
-                    "table": {
+                    "typeField": {
+                      "description": "The field identifier to use as the type switch.",
+                      "type": "string"
+                    },
+                    "languageAware": {
+                      "description": "Whether the record type should be language-aware.",
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "workspaceAware": {
+                      "description": "Whether the record type should be workspace-aware.",
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "editLocking": {
+                      "description": "Whether the edit-locking functionality should be available",
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "restriction": {
+                      "type": "object",
+                      "description": "There are several restrictions in TYPO3, which filter records by certain constraints.",
+                      "additionalProperties": false,
+                      "properties": {
+                        "disabled": {
+                          "type": "boolean",
+                          "default": true
+                        },
+                        "startTime": {
+                          "type": "boolean",
+                          "default": true
+                        },
+                        "endTime": {
+                          "type": "boolean",
+                          "default": true
+                        },
+                        "userGroup": {
+                          "type": "boolean",
+                          "default": true
+                        }
+                      }
+                    },
+                    "softDelete": {
+                      "type": "boolean",
+                      "description": "When deleting records in the TYPO3 backend, they are not really deleted in the database.",
+                      "default": true
+                    },
+                    "trackCreationDate": {
+                      "type": "boolean",
+                      "description": "Tracks the timestamp of the creation date.",
+                      "default": true
+                    },
+                    "trackUpdateDate": {
+                      "type": "boolean",
+                      "description": "Tracks the timestamp of the last update.",
+                      "default": true
+                    },
+                    "sortable": {
+                      "type": "boolean",
+                      "description": "Tracks the order of records.",
+                      "default": true
+                    },
+                    "sortField": {
+                      "description": "The field identifier to use for sorting records.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                              "identifier": {
+                                "type": "string"
+                              },
+                              "order": {
+                                "type": "string",
+                                "enum": [
+                                  "asc",
+                                  "desc"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "internalDescription": {
+                      "type": "boolean",
+                      "description": "Adds a new tab Notes with a description field.",
+                      "default": false
+                    },
+                    "rootLevelType": {
                       "type": "string",
-                      "description": "Alternative table name for the Collection. Default is identifier with prefix if enabled."
+                      "description": "Restricts the place, where the record can be created.",
+                      "enum": [
+                        "onlyOnPages",
+                        "onlyOnRootLevel",
+                        "both"
+                      ],
+                      "default": "onlyOnPages"
+                    },
+                    "security": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "ignoreWebMountRestriction": {
+                          "type": "boolean"
+                        },
+                        "ignoreRootLevelRestriction": {
+                          "type": "boolean"
+                        },
+                        "ignorePageTypeRestriction": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "adminOnly": {
+                      "type": "boolean",
+                      "description": "If enabled, only admins can edit the record.",
+                      "default": false
+                    },
+                    "hideAtCopy": {
+                      "type": "boolean",
+                      "description": "If enabled, the record will be disabled, when copied. Only works, if restriction.disabled is set to true.",
+                      "default": false
+                    },
+                    "appendLabelAtCopy": {
+                      "type": "string",
+                      "description": "If set, the label field labelField will be appended with this string, when copied."
                     },
                     "shareAcrossTables": {
                       "type": "boolean",
