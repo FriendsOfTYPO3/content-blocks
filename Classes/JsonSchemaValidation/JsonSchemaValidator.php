@@ -27,10 +27,13 @@ readonly class JsonSchemaValidator
     public function validateContentElement(object $data, string $schemaIdentifier): bool
     {
         $validator = new Validator();
-        $pathToSchemaFile = __DIR__ . '/../../JsonSchema/content-element.schema.json';
         $validator->resolver()->registerFile(
             'http://typo3.org/content-element.json',
-            $pathToSchemaFile
+            __DIR__ . '/../../JsonSchema/content-element.schema.json'
+        );
+        $validator->resolver()->registerFile(
+            'http://typo3.org/page-type.json',
+            __DIR__ . '/../../JsonSchema/page-type.schema.json'
         );
         $result = $validator->validate($data, $schemaIdentifier);
         return !$result->hasError();
