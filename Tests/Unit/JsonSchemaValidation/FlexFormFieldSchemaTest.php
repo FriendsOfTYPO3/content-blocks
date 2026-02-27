@@ -72,6 +72,45 @@ final class FlexFormFieldSchemaTest extends UnitTestCase
             'valid' => true,
         ];
 
+        yield 'Cannot mix Sheets and non-Sheets' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'settings',
+                        'type' => 'FlexForm',
+                        'searchable' => true,
+                        'fields' => [
+                            (object)[
+                                'identifier' => 'alignment',
+                                'type' => 'Select',
+                                'renderType' => 'selectSingle',
+                                'items' => [
+                                    (object)[
+                                        'label' => 'Left',
+                                        'value' => 'left',
+                                    ],
+                                ],
+                            ],
+                            (object)[
+                                'identifier' => 'title',
+                                'type' => 'Sheet',
+                                'label' => 'Title',
+                                'description' => 'A description',
+                                'fields' => [
+                                    (object)[
+                                        'identifier' => 'field1',
+                                        'type' => 'Text',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
         yield 'unknown property' => [
             'data' => (object)[
                 'name' => 'json/schema-test',
@@ -80,6 +119,95 @@ final class FlexFormFieldSchemaTest extends UnitTestCase
                         'identifier' => 'settings',
                         'type' => 'FlexForm',
                         'unknown' => 'unknown',
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'Valid sheets' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'settings',
+                        'type' => 'FlexForm',
+                        'fields' => [
+                            (object)[
+                                'identifier' => 'sheet1',
+                                'type' => 'Sheet',
+                                'label' => 'Sheet 1',
+                                'description' => 'Description 1',
+                                'linkTitle' => 'Link Title 1',
+                                'fields' => [
+                                    (object)[
+                                        'identifier' => 'field1',
+                                        'type' => 'Text',
+                                    ],
+                                ],
+                            ],
+                            (object)[
+                                'identifier' => 'sheet2',
+                                'type' => 'Sheet',
+                                'fields' => [
+                                    (object)[
+                                        'identifier' => 'field2',
+                                        'type' => 'Select',
+                                        'renderType' => 'selectSingle',
+                                        'items' => [
+                                            (object)['label' => 'V', 'value' => 'v'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'Invalid sheet property' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'settings',
+                        'type' => 'FlexForm',
+                        'fields' => [
+                            (object)[
+                                'identifier' => 'sheet1',
+                                'type' => 'Sheet',
+                                'unknown' => 'property',
+                                'fields' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'Sheet cannot be inside Sheet' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'settings',
+                        'type' => 'FlexForm',
+                        'fields' => [
+                            (object)[
+                                'identifier' => 'sheet1',
+                                'type' => 'Sheet',
+                                'fields' => [
+                                    (object)[
+                                        'identifier' => 'nested_sheet',
+                                        'type' => 'Sheet',
+                                        'fields' => [],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
