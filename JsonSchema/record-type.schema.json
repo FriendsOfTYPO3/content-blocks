@@ -259,9 +259,9 @@
         "basics": {
           "type": "array",
           "description": "Basics which are appended after the fields definition.",
+          "uniqueItems": true,
           "items": {
-            "type": "string",
-            "uniqueItems": true
+            "type": "string"
           }
         },
         "fields": {
