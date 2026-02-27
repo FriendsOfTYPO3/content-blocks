@@ -2243,6 +2243,10 @@
                           "type": "integer"
                         }
                       }
+                    },
+                    "invertStateDisplay": {
+                      "type": "boolean",
+                      "description": "A checkbox is marked checked if the database bit is not set and vice versa."
                     }
                   }
                 }
