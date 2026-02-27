@@ -473,6 +473,19 @@
 			"then": {
 				"$ref": "FieldTypes/collection.json"
 			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "FlexForm"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/flex-form.json"
+			}
 		}
 	]
 }

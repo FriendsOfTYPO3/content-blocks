@@ -4543,6 +4543,428 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "FlexForm"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {},
+                    "searchable": {},
+                    "type": {},
+                    "fields": {
+                      "oneOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "identifier": {
+                                "type": "string",
+                                "description": "The identifier for the field."
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "displayCond": {
+                                "description": "Can be used to display the field only under certain conditions.",
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "AND": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "onChange": {
+                                "type": "string",
+                                "description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
+                                "enum": [
+                                  "reload"
+                                ]
+                              },
+                              "type": {
+                                "description": "Type of the field.",
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "Category",
+                                      "Checkbox",
+                                      "Collection",
+                                      "Color",
+                                      "Country",
+                                      "DateTime",
+                                      "Email",
+                                      "File",
+                                      "Folder",
+                                      "Json",
+                                      "Language",
+                                      "Link",
+                                      "Number",
+                                      "Password",
+                                      "Radio",
+                                      "Relation",
+                                      "Select",
+                                      "SelectNumber",
+                                      "Slug",
+                                      "Text",
+                                      "Textarea",
+                                      "Uuid"
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            "allOf": [
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Textarea"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/2/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Text"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/3/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Email"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/4/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Color"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/5/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Number"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/6/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Link"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/7/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Country"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/8/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "DateTime"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/9/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Json"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/10/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Uuid"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/11/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Select"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/12/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "SelectNumber"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/13/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Checkbox"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/14/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Category"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/15/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "File"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/17/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Radio"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/18/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Folder"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/19/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Language"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/20/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Password"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/22/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Relation"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/23/then"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "type": {
+                                      "const": "Slug"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                "then": {
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/24/then"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
               }
             ]
           }
