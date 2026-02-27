@@ -35,6 +35,10 @@ readonly class JsonSchemaValidator
             'http://typo3.org/page-type.json',
             __DIR__ . '/../../JsonSchema/page-type.schema.json'
         );
+        $validator->resolver()->registerFile(
+            'http://typo3.org/record-type.json',
+            __DIR__ . '/../../JsonSchema/record-type.schema.json'
+        );
         $result = $validator->validate($data, $schemaIdentifier);
         return !$result->hasError();
     }
