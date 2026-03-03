@@ -78,6 +78,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'sortItems' => [
                     'foo' => 'bar',
                 ],
+                'foreign_table_item_group' => 'foo',
                 'multiple' => 1,
                 'appearance' => [
                     'foo' => 'bar',
@@ -148,6 +149,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'sortItems' => [
                         'foo' => 'bar',
                     ],
+                    'foreign_table_item_group' => 'foo',
                     'multiple' => true,
                     'appearance' => [
                         'foo' => 'bar',
@@ -199,6 +201,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'itemGroups' => [],
                 'items' => [],
                 'sortItems' => [],
+                'foreign_table_item_group' => '',
                 'multiple' => 0,
                 'appearance' => [],
                 'treeConfig' => [],

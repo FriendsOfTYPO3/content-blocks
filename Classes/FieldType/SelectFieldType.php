@@ -51,6 +51,7 @@ final class SelectFieldType extends AbstractFieldType
     private array $itemGroups = [];
     private array $items = [];
     private array $sortItems = [];
+    private string $foreign_table_item_group = '';
 
     // Only for renderType="selectMultipleSideBySide"
     private bool $multiple = false;
@@ -95,6 +96,7 @@ final class SelectFieldType extends AbstractFieldType
         $self->itemGroups = (array)($settings['itemGroups'] ?? $self->itemGroups);
         $self->items = (array)($settings['items'] ?? $self->items);
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
+        $self->foreign_table_item_group = (string)($settings['foreign_table_item_group'] ?? $self->foreign_table_item_group);
         $self->multiple = (bool)($settings['multiple'] ?? $self->multiple);
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
         $self->treeConfig = (array)($settings['treeConfig'] ?? $self->treeConfig);
@@ -188,6 +190,9 @@ final class SelectFieldType extends AbstractFieldType
         $config['items'] = $this->items;
         if ($this->sortItems !== []) {
             $config['sortItems'] = $this->sortItems;
+        }
+        if ($this->foreign_table_item_group !== '') {
+            $config['foreign_table_item_group'] = $this->foreign_table_item_group;
         }
         if ($this->multiple) {
             $config['multiple'] = true;

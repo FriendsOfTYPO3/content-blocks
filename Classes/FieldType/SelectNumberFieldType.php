@@ -33,6 +33,7 @@ final class SelectNumberFieldType extends AbstractFieldType
     private array $itemGroups = [];
     private array $items = [];
     private array $sortItems = [];
+    private string $foreign_table_item_group = '';
 
     public function createFromArray(array $settings): SelectNumberFieldType
     {
@@ -58,6 +59,7 @@ final class SelectNumberFieldType extends AbstractFieldType
             }
         }
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
+        $self->foreign_table_item_group = (string)($settings['foreign_table_item_group'] ?? $self->foreign_table_item_group);
 
         return $self;
     }
@@ -88,6 +90,9 @@ final class SelectNumberFieldType extends AbstractFieldType
         $config['items'] = $this->items;
         if ($this->sortItems !== []) {
             $config['sortItems'] = $this->sortItems;
+        }
+        if ($this->foreign_table_item_group !== '') {
+            $config['foreign_table_item_group'] = $this->foreign_table_item_group;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
