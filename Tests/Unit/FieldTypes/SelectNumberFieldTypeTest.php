@@ -52,6 +52,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                 'sortItems' => [
                     'foo' => 'bar',
                 ],
+                'foreign_table_item_group' => 'foo',
                 'dbFieldLength' => 10,
                 'behaviour' => [
                     'foo' => 'bar',
@@ -87,6 +88,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                     'sortItems' => [
                         'foo' => 'bar',
                     ],
+                    'foreign_table_item_group' => 'foo',
                 ],
             ],
         ];
@@ -110,6 +112,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                 'itemGroups' => [],
                 'items' => [],
                 'sortItems' => [],
+                'foreign_table_item_group' => '',
                 'behaviour' => [],
             ],
             'expectedTca' => [
