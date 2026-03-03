@@ -3056,7 +3056,19 @@
                   "description": "Default value set if a new record is created."
                 },
                 "fieldControl": {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "passwordGenerator": {
+                      "type": "object",
+                      "properties": {
+                        "renderType": {
+                          "type": "string",
+                          "description": "The control renders a button next to the password field allowing the user to generate a random password based on defined rules.",
+                          "const": "passwordGenerator"
+                        }
+                      }
+                    }
+                  }
                 },
                 "fieldInformation": {
                   "type": "object"
@@ -3090,10 +3102,6 @@
                   "type": "boolean",
                   "description": "Allows database null values for the field",
                   "default": false
-                },
-                "passwordGenerator": {
-                  "type": "boolean",
-                  "description": "The control renders a button next to the password field allowing the user to generate a random password based on defined rules."
                 },
                 "passwordPolicy": {
                   "type": "string",

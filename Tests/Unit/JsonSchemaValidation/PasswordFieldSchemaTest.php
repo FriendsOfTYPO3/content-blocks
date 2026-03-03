@@ -51,7 +51,7 @@ final class PasswordFieldSchemaTest extends UnitTestCase
                             'allowLanguageSynchronization' => true,
                         ],
                         'default' => 'default_value',
-                        'fieldControl' => (object)['foo' => 'bar'],
+                        'fieldControl' => (object)['passwordGenerator' => (object)['renderType' => 'passwordGenerator']],
                         'fieldInformation' => (object)['foo' => 'bar'],
                         'fieldWizard' => (object)[
                             'defaultLanguageDifferences' => (object)['foo' => 'bar'],
@@ -61,7 +61,6 @@ final class PasswordFieldSchemaTest extends UnitTestCase
                         'hashed' => true,
                         'mode' => 'useOrOverridePlaceholder',
                         'nullable' => true,
-                        'passwordGenerator' => true,
                         'passwordPolicy' => 'defaultPolicy',
                         'placeholder' => 'Enter password',
                         'readOnly' => false,
