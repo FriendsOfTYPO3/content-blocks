@@ -58,6 +58,9 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'appearance' => [
                     'foo',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -70,6 +73,9 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'link',
                     'size' => 20,
                     'default' => 'Default value',
@@ -116,6 +122,7 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'valuePicker' => [],
                 'allowedTypes' => [],
                 'appearance' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

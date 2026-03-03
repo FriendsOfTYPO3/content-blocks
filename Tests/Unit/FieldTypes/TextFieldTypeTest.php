@@ -56,6 +56,9 @@ final class TextFieldTypeTest extends UnitTestCase
                     ],
                 ],
                 'eval' => ['trim', 'lower'],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -68,6 +71,9 @@ final class TextFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'input',
                     'size' => 20,
                     'default' => 'Default value',
@@ -116,6 +122,7 @@ final class TextFieldTypeTest extends UnitTestCase
                     'items' => [],
                 ],
                 'eval' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

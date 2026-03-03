@@ -59,6 +59,9 @@ final class NumberFieldTypeTest extends UnitTestCase
                 'slider' => [
                     'step' => 1,
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,6 +74,9 @@ final class NumberFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'number',
                     'size' => 20,
                     'default' => 10,
@@ -121,6 +127,7 @@ final class NumberFieldTypeTest extends UnitTestCase
                 ],
                 'range' => [],
                 'slider' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

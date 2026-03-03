@@ -53,6 +53,9 @@ final class ColorFieldTypeTest extends UnitTestCase
                     ],
                 ],
                 'opacity' => true,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -65,6 +68,9 @@ final class ColorFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'color',
                     'size' => 20,
                     'default' => '#000000',
@@ -107,6 +113,7 @@ final class ColorFieldTypeTest extends UnitTestCase
                     'items' => [],
                 ],
                 'opacity' => false,
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

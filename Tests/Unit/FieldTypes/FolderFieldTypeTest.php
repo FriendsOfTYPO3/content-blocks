@@ -50,6 +50,9 @@ final class FolderFieldTypeTest extends UnitTestCase
                 'elementBrowserEntryPoints' => [
                     'foo' => 'bar',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -62,6 +65,9 @@ final class FolderFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'folder',
                     'default' => '1',
                     'readOnly' => true,
@@ -100,6 +106,7 @@ final class FolderFieldTypeTest extends UnitTestCase
                 'hideDeleteIcon' => 0,
                 'elementBrowserEntryPoints' => [],
                 'foo' => '',
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

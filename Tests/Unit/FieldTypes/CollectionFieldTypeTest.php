@@ -87,6 +87,9 @@ final class CollectionFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'inline',
                     'readOnly' => true,
                     'size' => 1,
@@ -101,9 +104,6 @@ final class CollectionFieldTypeTest extends UnitTestCase
                         'foo' => 'bar',
                     ],
                     'appearance' => [
-                        'foo' => 'bar',
-                    ],
-                    'behaviour' => [
                         'foo' => 'bar',
                     ],
                     'customControls' => [

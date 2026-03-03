@@ -84,6 +84,9 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'foo' => 'bar',
                 ],
                 'dbFieldLength' => 10,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -97,6 +100,9 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'renderType' => 'selectCheckbox',
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'select',
                     'default' => 1,
                     'readOnly' => true,
@@ -186,6 +192,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'appearance' => [],
                 'treeConfig' => [],
                 'dbFieldLength' => 0,
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

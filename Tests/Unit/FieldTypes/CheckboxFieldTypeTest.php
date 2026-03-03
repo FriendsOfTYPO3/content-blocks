@@ -54,6 +54,9 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'itemsProcConfig' => [
                     'foo' => 'bar',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -67,6 +70,9 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'renderType' => 'checkboxToggle',
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'check',
                     'default' => 1,
                     'readOnly' => true,
@@ -105,6 +111,7 @@ final class CheckboxFieldTypeTest extends UnitTestCase
                 'l10n_display' => '',
                 'l10n_mode' => '',
                 'onChange' => '',
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

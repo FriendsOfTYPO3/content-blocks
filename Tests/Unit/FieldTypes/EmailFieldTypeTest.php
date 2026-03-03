@@ -46,6 +46,9 @@ final class EmailFieldTypeTest extends UnitTestCase
                 'nullable' => 1,
                 'mode' => 'useOrOverridePlaceholder',
                 'eval' => ['trim', 'lower'],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -58,6 +61,9 @@ final class EmailFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'email',
                     'default' => 'Default value',
                     'readOnly' => true,
@@ -90,6 +96,7 @@ final class EmailFieldTypeTest extends UnitTestCase
                 'nullable' => 0,
                 'mode' => '',
                 'eval' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [
