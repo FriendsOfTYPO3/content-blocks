@@ -100,13 +100,13 @@ final class FileFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'file',
                     'allowed' => 'common-image-types',
                     'disallowed' => 'png',
                     'appearance' => [
-                        'foo' => 'bar',
-                    ],
-                    'behaviour' => [
                         'foo' => 'bar',
                     ],
                     'readOnly' => true,

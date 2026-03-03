@@ -31,7 +31,6 @@ final class FileFieldType extends AbstractFieldType
     private array|string $allowed = [];
     private array|string $disallowed = [];
     private array $appearance = [];
-    private array $behaviour = [];
     private bool $readOnly = false;
     private int $minitems = 0;
     private int $maxitems = 0;
@@ -53,7 +52,6 @@ final class FileFieldType extends AbstractFieldType
             $self->disallowed = $disallowed;
         }
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
-        $self->behaviour = (array)($settings['behaviour'] ?? $self->behaviour);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
         $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
@@ -76,9 +74,6 @@ final class FileFieldType extends AbstractFieldType
         }
         if ($this->appearance !== []) {
             $config['appearance'] = $this->appearance;
-        }
-        if ($this->behaviour !== []) {
-            $config['behaviour'] = $this->behaviour;
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;

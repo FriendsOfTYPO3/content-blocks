@@ -38,6 +38,9 @@ final class LanguageFieldTypeTest extends UnitTestCase
                 'readOnly' => true,
                 'size' => 30,
                 'default' => 1,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -47,6 +50,9 @@ final class LanguageFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'language',
                     'default' => 1,
                     'required' => true,
@@ -65,6 +71,7 @@ final class LanguageFieldTypeTest extends UnitTestCase
                 'exclude' => false,
                 'non_available_field' => '',
                 'default' => '',
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

@@ -52,6 +52,9 @@ final class DateTimeFieldTypeTest extends UnitTestCase
                 'disableAgeDisplay' => 1,
                 'format' => 'foo',
                 'searchable' => true,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -64,6 +67,9 @@ final class DateTimeFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'datetime',
                     'default' => 1,
                     'readOnly' => true,
@@ -104,6 +110,7 @@ final class DateTimeFieldTypeTest extends UnitTestCase
                 'disableAgeDisplay' => 0,
                 'format' => '',
                 'searchable' => false,
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

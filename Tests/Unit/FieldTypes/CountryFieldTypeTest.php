@@ -51,6 +51,9 @@ final class CountryFieldTypeTest extends UnitTestCase
                 'sortItems' => [
                     'label' => 'asc',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -63,6 +66,9 @@ final class CountryFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'country',
                     'default' => 'DE',
                     'readOnly' => true,
@@ -99,6 +105,7 @@ final class CountryFieldTypeTest extends UnitTestCase
                 'labelField' => '',
                 'prioritizedCountries' => [],
                 'sortItems' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

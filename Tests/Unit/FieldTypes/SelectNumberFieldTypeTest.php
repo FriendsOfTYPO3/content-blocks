@@ -53,6 +53,9 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                     'foo' => 'bar',
                 ],
                 'dbFieldLength' => 10,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -65,6 +68,9 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'select',
                     'renderType' => 'selectSingle',
                     'default' => 1,
@@ -104,6 +110,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                 'itemGroups' => [],
                 'items' => [],
                 'sortItems' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

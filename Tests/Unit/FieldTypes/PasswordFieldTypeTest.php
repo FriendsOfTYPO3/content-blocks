@@ -48,6 +48,9 @@ final class PasswordFieldTypeTest extends UnitTestCase
                 'mode' => 'useOrOverridePlaceholder',
                 'hashed' => true,
                 'passwordPolicy' => 'foo',
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -60,6 +63,9 @@ final class PasswordFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'password',
                     'size' => 20,
                     'default' => 'Default value',
@@ -94,6 +100,7 @@ final class PasswordFieldTypeTest extends UnitTestCase
                 'mode' => '',
                 'hashed' => false,
                 'passwordPolicy' => '',
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

@@ -36,7 +36,6 @@ final class CollectionFieldType extends AbstractFieldType
     private int $autoSizeMax = 0;
     private array $filter = [];
     private array $appearance = [];
-    private array $behaviour = [];
     private array $customControls = [];
     private string $foreign_default_sortby = '';
     private string $foreign_field = '';
@@ -69,7 +68,6 @@ final class CollectionFieldType extends AbstractFieldType
         $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
         $self->filter = (array)($settings['filter'] ?? $self->filter);
         $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
-        $self->behaviour = (array)($settings['behaviour'] ?? $self->behaviour);
         $self->customControls = (array)($settings['customControls'] ?? $self->customControls);
         $self->foreign_default_sortby = (string)($settings['foreign_default_sortby'] ?? $self->foreign_default_sortby);
         $self->foreign_field = (string)($settings['foreign_field'] ?? $self->foreign_field);
@@ -124,9 +122,6 @@ final class CollectionFieldType extends AbstractFieldType
         }
         if ($this->appearance !== []) {
             $config['appearance'] = $this->appearance;
-        }
-        if ($this->behaviour !== []) {
-            $config['behaviour'] = $this->behaviour;
         }
         if ($this->customControls !== []) {
             $config['customControls'] = $this->customControls;

@@ -52,6 +52,9 @@ final class RadioFieldTypeTest extends UnitTestCase
                 'itemsProcConfig' => [
                     'foo' => 'bar',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -64,6 +67,9 @@ final class RadioFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'radio',
                     'default' => 1,
                     'readOnly' => true,
@@ -98,6 +104,7 @@ final class RadioFieldTypeTest extends UnitTestCase
                 'itemsProcFunc' => '',
                 'itemsProcessors' => [],
                 'items' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

@@ -81,6 +81,9 @@ final class RelationFieldTypeTest extends UnitTestCase
                 'appearance' => [
                     'foo' => 'bar',
                 ],
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -100,6 +103,9 @@ final class RelationFieldTypeTest extends UnitTestCase
                         'foo' => 'bar',
                     ],
                     'fieldInformation' => [
+                        'foo' => 'bar',
+                    ],
+                    'behaviour' => [
                         'foo' => 'bar',
                     ],
                     'type' => 'group',
@@ -179,6 +185,7 @@ final class RelationFieldTypeTest extends UnitTestCase
                 'fieldWizard' => [],
                 'fieldControl' => [],
                 'fieldInformation' => [],
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

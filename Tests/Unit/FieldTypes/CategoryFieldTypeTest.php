@@ -47,6 +47,9 @@ final class CategoryFieldTypeTest extends UnitTestCase
                 'l10n_display' => 'foo',
                 'l10n_mode' => 'foo',
                 'onChange' => 'foo',
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -59,6 +62,9 @@ final class CategoryFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'category',
                     'default' => 1,
                     'readOnly' => true,
@@ -92,6 +98,7 @@ final class CategoryFieldTypeTest extends UnitTestCase
                 'l10n_mode' => '',
                 'onChange' => '',
                 'foreign_table_where' => '',
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

@@ -59,6 +59,9 @@ final class LinkFieldTypeTest extends UnitTestCase
                     'foo',
                 ],
                 'searchable' => true,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -71,6 +74,9 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'link',
                     'size' => 20,
                     'default' => 'Default value',
@@ -118,6 +124,7 @@ final class LinkFieldTypeTest extends UnitTestCase
                 'allowedTypes' => [],
                 'appearance' => [],
                 'searchable' => false,
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

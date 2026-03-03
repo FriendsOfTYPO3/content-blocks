@@ -60,6 +60,9 @@ final class TextareaFieldTypeTest extends UnitTestCase
                 'renderType' => 'foo',
                 'format' => 'foo',
                 'searchable' => true,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -73,6 +76,9 @@ final class TextareaFieldTypeTest extends UnitTestCase
                 'exclude' => true,
                 'config' => [
                     'renderType' => 'foo',
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'text',
                     'default' => 'Default value',
                     'readOnly' => true,
@@ -131,6 +137,7 @@ final class TextareaFieldTypeTest extends UnitTestCase
                 'renderType' => '',
                 'format' => '',
                 'searchable' => false,
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [

@@ -41,6 +41,9 @@ final class UuidFieldTypeTest extends UnitTestCase
                 'version' => 4,
                 'enableCopyToClipboard' => true,
                 'searchable' => true,
+                'behaviour' => [
+                    'foo' => 'bar',
+                ],
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -53,6 +56,9 @@ final class UuidFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'config' => [
+                    'behaviour' => [
+                        'foo' => 'bar',
+                    ],
                     'type' => 'uuid',
                     'size' => 30,
                     'version' => 4,
@@ -73,6 +79,7 @@ final class UuidFieldTypeTest extends UnitTestCase
                 'size' => 0,
                 'enableCopyToClipboard' => false,
                 'searchable' => false,
+                'behaviour' => [],
             ],
             'expectedTca' => [
                 'config' => [
