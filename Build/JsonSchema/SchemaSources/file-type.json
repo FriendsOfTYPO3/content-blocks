@@ -1,0 +1,55 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/file-type.json",
+	"title": "File Type",
+	"description": "TYPO3 CMS Content Blocks File Type",
+	"additionalProperties": false,
+	"properties": {
+		"table": {
+			"type": "string",
+			"const": "sys_file_reference"
+		},
+		"name": {
+			"description": "Unique identifier for the Content Block in the format vendor/content-block-name",
+			"type": "string",
+			"examples": ["acme/slider"],
+			"pattern": "^[a-z0-9_-]+/[a-z0-9_-]+$"
+		},
+		"prefixFields": {
+			"description": "Field identifiers will be prefixed with the Content Block name.",
+			"type": "boolean",
+			"default": true
+		},
+		"prefixType": {
+			"description": "Determines how to prefix the field if prefixFields is enabled.",
+			"type": "string",
+			"enum": ["full", "vendor"],
+			"default": "full"
+		},
+		"vendorPrefix": {
+			"description": "Will be used instead of the vendor part of name",
+			"type": "string",
+			"minLength": 1
+		},
+		"typeName": {
+			"description": "The typeName has to be one of these keywords",
+			"type": "string",
+			"enum": ["text", "image", "audio", "video", "application", "0", "1", "2", "3", "4", "5"]
+		},
+		"basics": {
+			"type": "array",
+			"description": "Basics which are appended after the fields definition.",
+			"uniqueItems": true,
+			"items": {
+				"type": "string"
+			}
+		},
+		"fields": {
+			"description": "Define your field types here.",
+			"type": "array",
+			"items": {
+				"$ref": "field-type.json"
+			}
+		}
+	}
+}

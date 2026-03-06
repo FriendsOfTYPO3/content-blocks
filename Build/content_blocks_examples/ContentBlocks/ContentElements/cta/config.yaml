@@ -14,7 +14,6 @@ fields:
       - page
       - url
       - file
-    max: 150
     required: true
   - identifier: link_title
     type: Text
