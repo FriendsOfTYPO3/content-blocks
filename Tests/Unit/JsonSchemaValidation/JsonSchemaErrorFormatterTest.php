@@ -50,7 +50,7 @@ final class JsonSchemaErrorFormatterTest extends UnitTestCase
                     'The data (integer) must match the type: string',
                 ],
                 '/saveAndClose' => [
-                    'The data (string) must match the type: boolean'
+                    'The data (string) must match the type: boolean',
                 ],
             ],
         ];
