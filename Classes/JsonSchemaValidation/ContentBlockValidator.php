@@ -25,8 +25,7 @@ readonly class ContentBlockValidator
 {
     public function __construct(
         protected JsonSchemaValidator $jsonSchemaValidator
-    ) {
-    }
+    ) {}
 
     public function validate(LoadedContentBlock $contentBlock): ValidationResult
     {
