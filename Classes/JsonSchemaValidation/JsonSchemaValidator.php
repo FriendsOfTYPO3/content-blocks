@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\JsonSchemaValidation;
 
+use Opis\JsonSchema\ValidationResult;
 use Opis\JsonSchema\Validator;
 
 /**
@@ -24,37 +25,63 @@ use Opis\JsonSchema\Validator;
  */
 readonly class JsonSchemaValidator
 {
-    public function isValidContentElement(object $data): bool
+    public function validateContentElement(object $data): ValidationResult
     {
         $validator = $this->createValidatorForContentElement();
         $result = $validator->validate($data, 'http://typo3.org/content-element.json');
+        return $result;
+    }
+
+    public function validatePageType(object $data): ValidationResult
+    {
+        $validator = $this->createValidatorForPageType();
+        $result = $validator->validate($data, 'http://typo3.org/page-type.json');
+        return $result;
+    }
+
+    public function validateRecordType(object $data): ValidationResult
+    {
+        $validator = $this->createValidatorForRecordType();
+        $result = $validator->validate($data, 'http://typo3.org/record-type.json');
+        return $result;
+    }
+
+    public function validateFileType(object $data): ValidationResult
+    {
+        $validator = $this->createValidatorForFileType();
+        $result = $validator->validate($data, 'http://typo3.org/file-type.json');
+        return $result;
+    }
+
+    public function isValidContentElement(object $data): bool
+    {
+        $result = $this->validateContentElement($data);
         return !$result->hasError();
     }
 
     public function isValidPageType(object $data): bool
     {
-        $validator = $this->createValidatorForPageType();
-        $result = $validator->validate($data, 'http://typo3.org/page-type.json');
+        $result = $this->validatePageType($data);
         return !$result->hasError();
     }
 
     public function isValidRecordType(object $data): bool
     {
-        $validator = $this->createValidatorForRecordType();
-        $result = $validator->validate($data, 'http://typo3.org/record-type.json');
+        $result = $this->validateRecordType($data);
         return !$result->hasError();
     }
 
     public function isValidFileType(object $data): bool
     {
-        $validator = $this->createValidatorForFileType();
-        $result = $validator->validate($data, 'http://typo3.org/file-type.json');
+        $result = $this->validateFileType($data);
         return !$result->hasError();
     }
 
     protected function createValidatorForContentElement(): Validator
     {
-        $validator = new Validator();
+        $validator = (new Validator())
+            ->setStopAtFirstError(false)
+            ->setMaxErrors(100);
         $validator->resolver()->registerFile(
             'http://typo3.org/content-element.json',
             __DIR__ . '/../../JsonSchema/content-element.schema.json'
@@ -64,7 +91,7 @@ readonly class JsonSchemaValidator
 
     protected function createValidatorForPageType(): Validator
     {
-        $validator = new Validator();
+        $validator = $this->createValidator();
         $validator->resolver()->registerFile(
             'http://typo3.org/page-type.json',
             __DIR__ . '/../../JsonSchema/page-type.schema.json'
@@ -74,7 +101,7 @@ readonly class JsonSchemaValidator
 
     protected function createValidatorForRecordType(): Validator
     {
-        $validator = new Validator();
+        $validator = $this->createValidator();
         $validator->resolver()->registerFile(
             'http://typo3.org/record-type.json',
             __DIR__ . '/../../JsonSchema/record-type.schema.json'
@@ -84,11 +111,17 @@ readonly class JsonSchemaValidator
 
     protected function createValidatorForFileType(): Validator
     {
-        $validator = new Validator();
+        $validator = $this->createValidator();
         $validator->resolver()->registerFile(
             'http://typo3.org/file-type.json',
             __DIR__ . '/../../JsonSchema/file-type.schema.json'
         );
+        return $validator;
+    }
+
+    protected function createValidator(): Validator
+    {
+        $validator = new Validator();
         return $validator;
     }
 }
