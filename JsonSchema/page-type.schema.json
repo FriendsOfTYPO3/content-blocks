@@ -3681,7 +3681,10 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
-                    "type": {}
+                    "type": {},
+                    "label": {
+                      "type": "string"
+                    }
                   }
                 }
               },
