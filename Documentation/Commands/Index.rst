@@ -16,3 +16,4 @@ available commands.
     List/Index
     LanguageGenerate/Index
     PublishAssets/Index
+    Lint/Index
