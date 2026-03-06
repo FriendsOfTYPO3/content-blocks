@@ -47,7 +47,7 @@ jobs:
         run: Build/Scripts/runTests.sh -p 8.2 -s cglHeader -n
 
       - name: Content Blocks Lint
-        run: vendor/bin/typo3 content-blocks:lint
+        run: .Build/vendor/bin/typo3 content-blocks:lint
 
   unit_tests:
     name: Unit Tests TYPO3 v14 PHP ${{ matrix.php }}
