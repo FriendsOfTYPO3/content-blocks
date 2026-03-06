@@ -11,6 +11,8 @@
 		"displayCond": {},
 		"onChange": {},
 		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
 		"behaviour": {
 			"type": "object",
 			"additionalProperties": false,
@@ -30,6 +32,11 @@
 		"default": {
 			"type": "string",
 			"description": "Default value set if a new record is created."
+		},
+		"disableAgeDisplay": {
+			"type": "boolean",
+			"description": "Disable the display of the age",
+			"default": false
 		},
 		"fieldControl": {
 			"type": "object"

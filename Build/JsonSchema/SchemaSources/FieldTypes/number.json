@@ -11,6 +11,8 @@
 		"displayCond": {},
 		"onChange": {},
 		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
 		"behaviour": {
 			"type": "object",
 			"additionalProperties": false,
@@ -27,7 +29,7 @@
 			"description": "Browser autocompletion"
 		},
 		"default": {
-			"type": "string",
+			"type": "number",
 			"description": "Default value set if a new record is created."
 		},
 		"fieldControl": {

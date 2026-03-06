@@ -11,6 +11,8 @@
 		"displayCond": {},
 		"onChange": {},
 		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
 		"table": {
 			"type": "string",
 			"description": "The custom table name to be used for the new Record Type."

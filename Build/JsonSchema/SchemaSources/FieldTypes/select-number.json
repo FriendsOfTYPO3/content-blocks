@@ -12,6 +12,8 @@
 		"displayCond": {},
 		"onChange": {},
 		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
 		"authMode": {
 			"type": "string",
 			"description": "Authorization mode for the selector box",

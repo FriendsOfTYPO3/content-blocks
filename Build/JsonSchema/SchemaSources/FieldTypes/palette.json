@@ -6,6 +6,11 @@
 		"label": {},
 		"description": {},
 		"type": {},
+		"prefixField": {
+			"type": "boolean",
+			"description": "Enables prefixing of field identifiers",
+			"default": true
+		},
 		"fields": {
 			"type": "array",
 			"items": {
@@ -40,24 +45,7 @@
 						]
 					},
 					"displayCond": {
-						"description": "Can be used to display the field only under certain conditions.",
-						"oneOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "object",
-								"additionalProperties": false,
-								"properties": {
-									"AND": {
-										"type": "array",
-										"items": {
-											"type": "string"
-										}
-									}
-								}
-							}
-						]
+						"$ref": "../Properties/display-cond.json"
 					},
 					"onChange": {
 						"type": "string",

@@ -173,6 +173,12 @@
                         "items": {
                           "type": "string"
                         }
+                      },
+                      "OR": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       }
                     }
                   }
@@ -183,6 +189,20 @@
                 "description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
                 "enum": [
                   "reload"
+                ]
+              },
+              "l10n_mode": {
+                "type": "string",
+                "enum": [
+                  "exclude",
+                  "prefixLangTitle"
+                ]
+              },
+              "l10n_display": {
+                "type": "string",
+                "enum": [
+                  "hideDiff",
+                  "defaultAsReadonly"
                 ]
               },
               "type": {
@@ -296,6 +316,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -478,6 +500,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -604,6 +628,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -718,6 +744,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -826,6 +854,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -842,7 +872,7 @@
                       "description": "Browser autocompletion"
                     },
                     "default": {
-                      "type": "string",
+                      "type": "number",
                       "description": "Default value set if a new record is created."
                     },
                     "fieldControl": {
@@ -969,6 +999,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "allowedTypes": {
                       "type": "array",
                       "description": "List of allowed link types. If empty, all types are allowed.",
@@ -1165,6 +1197,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1285,6 +1319,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1308,6 +1344,11 @@
                     "default": {
                       "type": "string",
                       "description": "Default value set if a new record is created."
+                    },
+                    "disableAgeDisplay": {
+                      "type": "boolean",
+                      "description": "Disable the display of the age",
+                      "default": false
                     },
                     "fieldControl": {
                       "type": "object"
@@ -1418,6 +1459,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1518,6 +1561,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1608,6 +1653,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "allowNonIdValues": {
                       "type": "boolean",
                       "description": "Only useful if foreign_table is enabled. If set, then values which are not integer ids will be allowed.",
@@ -2004,6 +2051,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "authMode": {
                       "type": "string",
                       "description": "Authorization mode for the selector box",
@@ -2129,6 +2178,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -2302,6 +2353,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -2464,6 +2517,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "allowed": {
                       "description": "List of allowed file types",
                       "anyOf": [
@@ -2809,6 +2864,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -2931,6 +2988,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "autoSizeMax": {
                       "type": "integer",
                       "description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",
@@ -3058,7 +3117,9 @@
                     "prefixType": {},
                     "displayCond": {},
                     "onChange": {},
-                    "type": {}
+                    "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {}
                   }
                 }
               },
@@ -3106,6 +3167,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "autocomplete": {
                       "type": "boolean",
                       "description": "Browser autocompletion"
@@ -3224,6 +3287,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "allowed": {
                       "type": "string",
                       "description": "A comma list of tables"
@@ -3529,6 +3594,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "appearance": {
                       "type": "object",
                       "additionalProperties": false,
@@ -3716,6 +3783,11 @@
                     "label": {},
                     "description": {},
                     "type": {},
+                    "prefixField": {
+                      "type": "boolean",
+                      "description": "Enables prefixing of field identifiers",
+                      "default": true
+                    },
                     "fields": {
                       "type": "array",
                       "items": {
@@ -3750,24 +3822,7 @@
                             ]
                           },
                           "displayCond": {
-                            "description": "Can be used to display the field only under certain conditions.",
-                            "oneOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "object",
-                                "additionalProperties": false,
-                                "properties": {
-                                  "AND": {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "string"
-                                    }
-                                  }
-                                }
-                              }
-                            ]
+                            "$ref": "#/allOf/1/properties/fields/items/properties/displayCond"
                           },
                           "onChange": {
                             "type": "string",
@@ -4255,6 +4310,8 @@
                     "displayCond": {},
                     "onChange": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "table": {
                       "type": "string",
                       "description": "The custom table name to be used for the new Record Type."
@@ -4760,8 +4817,17 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
                     "searchable": {},
                     "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
                     "fields": {
                       "oneOf": [
                         {
@@ -4822,24 +4888,7 @@
                           "type": "string"
                         },
                         "displayCond": {
-                          "description": "Can be used to display the field only under certain conditions.",
-                          "oneOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "object",
-                              "additionalProperties": false,
-                              "properties": {
-                                "AND": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            }
-                          ]
+                          "$ref": "#/allOf/1/properties/fields/items/properties/displayCond"
                         },
                         "onChange": {
                           "type": "string",

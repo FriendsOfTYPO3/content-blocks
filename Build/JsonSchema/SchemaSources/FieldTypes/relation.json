@@ -11,6 +11,8 @@
 		"displayCond": {},
 		"onChange": {},
 		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
 		"allowed": {
 			"type": "string",
 			"description": "A comma list of tables"

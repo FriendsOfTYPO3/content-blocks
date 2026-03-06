@@ -46,6 +46,31 @@ final class FieldTypeSchemaTest extends UnitTestCase
             'valid' => true,
         ];
 
+        yield 'Display Cond array' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'bodytext',
+                        'type' => 'Textarea',
+                        'label' => 'Text',
+                        'description' => 'My Description',
+                        'useExistingField' => false,
+                        'prefixField' => false,
+                        'prefixType' => 'vendor',
+                        'displayCond' => (object)[
+                            'OR' => [
+                                'FIELD:header:=:Headline',
+                                'FIELD:header:=:Subheadline',
+                            ],
+                        ],
+                        'onChange' => 'reload',
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
         yield 'Wrong value for prefixType' => [
             'data' => (object)[
                 'name' => 'json/schema-test',

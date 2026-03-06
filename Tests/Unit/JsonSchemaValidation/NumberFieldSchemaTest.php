@@ -50,7 +50,7 @@ final class NumberFieldSchemaTest extends UnitTestCase
                             'allowLanguageSynchronization' => true,
                         ],
                         'autocomplete' => true,
-                        'default' => '10',
+                        'default' => 10,
                         'fieldControl' => (object)['foo' => 'bar'],
                         'fieldInformation' => (object)['foo' => 'bar'],
                         'fieldWizard' => (object)[

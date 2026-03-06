@@ -11,6 +11,8 @@
 		"displayCond": {},
 		"onChange": {},
 		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
 		"autoSizeMax": {
 			"type": "integer",
 			"description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",

@@ -10,6 +10,8 @@
 		"prefixType": {},
 		"displayCond": {},
 		"onChange": {},
-		"type": {}
+		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {}
 	}
 }

@@ -31,30 +31,27 @@
 			]
 		},
 		"displayCond": {
-			"description": "Can be used to display the field only under certain conditions.",
-			"oneOf": [
-				{
-					"type": "string"
-				},
-				{
-					"type": "object",
-					"additionalProperties": false,
-					"properties": {
-						"AND": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							}
-						}
-					}
-				}
-			]
+			"$ref": "Properties/display-cond.json"
 		},
 		"onChange": {
 			"type": "string",
 			"description": "Can be used to trigger a reload of the Content Type when this specific field is changed.",
 			"enum": [
 				"reload"
+			]
+		},
+		"l10n_mode": {
+			"type": "string",
+			"enum": [
+				"exclude",
+				"prefixLangTitle"
+			]
+		},
+		"l10n_display": {
+			"type": "string",
+			"enum": [
+				"hideDiff",
+				"defaultAsReadonly"
 			]
 		},
 		"type": {
