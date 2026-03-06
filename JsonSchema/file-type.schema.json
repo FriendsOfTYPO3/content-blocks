@@ -5,6 +5,10 @@
   "description": "TYPO3 CMS Content Blocks File Type",
   "additionalProperties": false,
   "properties": {
+    "table": {
+      "type": "string",
+      "const": "sys_file_reference"
+    },
     "name": {
       "description": "Unique identifier for the Content Block in the format vendor/content-block-name",
       "type": "string",
@@ -40,7 +44,13 @@
         "image",
         "audio",
         "video",
-        "application"
+        "application",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
       ]
     },
     "basics": {

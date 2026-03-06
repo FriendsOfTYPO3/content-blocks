@@ -16,12 +16,22 @@
     "vendorPrefix": {},
     "priority": {},
     "basics": {},
-    "fields": {}
+    "fields": {},
+    "table": {},
+    "typeField": {}
   },
   "allOf": [
     {
       "type": "object",
       "properties": {
+        "table": {
+          "type": "string",
+          "const": "tt_content"
+        },
+        "typeField": {
+          "type": "string",
+          "const": "CType"
+        },
         "description": {
           "description": "The description of the Content Block",
           "type": "string"

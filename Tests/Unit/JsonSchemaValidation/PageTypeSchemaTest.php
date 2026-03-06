@@ -73,7 +73,7 @@ final class PageTypeSchemaTest extends UnitTestCase
         yield 'Invalid typeName: string' => [
             'data' => (object)[
                 'name' => 'json/page-test',
-                'typeName' => '123',
+                'typeName' => 'abc',
             ],
             'valid' => false,
         ];

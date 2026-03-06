@@ -14,10 +14,20 @@
 		"vendorPrefix": {},
 		"priority": {},
 		"basics": {},
-		"fields": {}
+		"fields": {},
+		"table": {},
+		"typeField": {}
 	},
 	"allOf": [
 		{
+			"table": {
+				"type": "string",
+				"const": "pages"
+			},
+			"typeField": {
+				"type": "string",
+				"const": "doktype"
+			},
 			"type": "object",
 			"properties": {
 				"group": {
@@ -35,7 +45,15 @@
 				},
 				"typeName": {
 					"description": "Unqique type identifier for this Content Block",
-					"type": "integer"
+					"oneOf": [
+						{
+							"type": "integer"
+						},
+						{
+							"type": "string",
+							"pattern": "^[0-9]+$"
+						}
+					]
 				}
 			}
 		},
