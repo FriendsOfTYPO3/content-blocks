@@ -27,6 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
 #[AsCommand(
@@ -54,31 +55,53 @@ class LintContentBlocksCommand extends Command
                 continue;
             }
             $numberOfErrors++;
-            $flatArray = $this->gatherErrors($validationResult);
-            $header = $contentBlock->getName() . ' | EXT:' . $contentBlock->getHostExtension();
-            $table = new Table($output);
-            $table->setHeaders(['Path', $header]);
-            $table->setRows($flatArray);
-            $table->render();
+            $this->renderError($validationResult, $contentBlock, $output);
         }
+        $this->renderEndResult($symfonyStyle, $numberOfErrors);
         if ($numberOfErrors > 0) {
-            $symfonyStyle->error('Found ' . $numberOfErrors . ' errors');
-        } else {
-            $symfonyStyle->success('No errors found');
+            return Command::FAILURE;
         }
-        return $numberOfErrors > 0 ? Command::FAILURE : Command::SUCCESS;
+        return Command::SUCCESS;
     }
 
+    protected function renderEndResult(SymfonyStyle $symfonyStyle, int $numberOfErrors): void
+    {
+        if ($numberOfErrors > 0) {
+            $symfonyStyle->error('Found ' . $numberOfErrors . ' errors');
+            return;
+        }
+        $symfonyStyle->success('No errors found');
+    }
+
+    protected function renderError(ValidationResult $validationResult, LoadedContentBlock $contentBlock, OutputInterface $output): void
+    {
+        $flatArray = $this->gatherErrors($validationResult);
+        $header = $contentBlock->getName() . ' | EXT:' . $contentBlock->getHostExtension();
+        $table = new Table($output);
+        $table->setHeaders(['Path', $header]);
+        $table->setRows($flatArray);
+        $table->render();
+    }
+
+    /**
+     * @return array<array{0: string, 1: string}>
+     */
     protected function gatherErrors(ValidationResult $validationResult): array
     {
-        $formattedErrorJson = $this->errorFormatter->format($validationResult);
-        $errorArray = json_decode($formattedErrorJson, true);
+        $errors = $this->errorFormatter->format($validationResult);
         $flatArray = [];
-        foreach ($errorArray as $path => $errorItem) {
+        foreach ($errors as $path => $errorItem) {
             foreach ($errorItem as $errorItemError) {
-                $flatArray[] = [$path, $errorItemError];
+                foreach (array_keys($flatArray) as $key) {
+                    // Ignore false positives: https://github.com/opis/json-schema/issues/148
+                    if (str_starts_with($key, $path)) {
+                        continue 2;
+                    }
+                }
+                $flatArray[$path] = [$path, $errorItemError];
             }
         }
+        $flatArray = array_values($flatArray);
         return $flatArray;
     }
 }

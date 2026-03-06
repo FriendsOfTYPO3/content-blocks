@@ -45,22 +45,20 @@ final class JsonSchemaErrorFormatterTest extends UnitTestCase
                     ],
                 ],
             ],
-            'expected' => <<<HEREDOC
-{
-    "/typeName": [
-        "The data (integer) must match the type: string"
-    ],
-    "/saveAndClose": [
-        "The data (string) must match the type: boolean"
-    ]
-}
-HEREDOC
+            'expected' => [
+                '/typeName' => [
+                    'The data (integer) must match the type: string',
+                ],
+                '/saveAndClose' => [
+                    'The data (string) must match the type: boolean'
+                ],
+            ],
         ];
     }
 
     #[DataProvider('errorIsFormattedCorrectlyDataProvider')]
     #[Test]
-    public function errorIsFormattedCorrectly(object $data, string $expected): void
+    public function errorIsFormattedCorrectly(object $data, array $expected): void
     {
         $errorFormatter = new JsonSchemaErrorFormatter();
         $validator = new JsonSchemaValidator();

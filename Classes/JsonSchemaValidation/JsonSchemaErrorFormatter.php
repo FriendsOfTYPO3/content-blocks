@@ -22,18 +22,14 @@ use Opis\JsonSchema\ValidationResult;
 
 readonly class JsonSchemaErrorFormatter
 {
-    public function format(ValidationResult $validationResult, ?ErrorFormatterInterface $errorFormatter = null): string
+    public function format(ValidationResult $validationResult): array
     {
         $error = $validationResult->error();
         if ($error === null) {
-            return '';
+            return [];
         }
         $formatter = new ErrorFormatter();
         $errorArray = $formatter->format($error);
-        if ($errorFormatter === null) {
-            $errorFormatter = new JsonErrorFormatter();
-        }
-        $formattedError = $errorFormatter->format($errorArray);
-        return $formattedError;
+        return $errorArray;
     }
 }
