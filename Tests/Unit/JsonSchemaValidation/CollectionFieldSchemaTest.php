@@ -404,7 +404,7 @@ final class CollectionFieldSchemaTest extends UnitTestCase
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
-        $validationResult = $jsonSchemaValidator->validateContentElement($data, 'http://typo3.org/content-element.json');
+        $validationResult = $jsonSchemaValidator->isValidContentElement($data);
 
         self::assertSame($valid, $validationResult);
     }

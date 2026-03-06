@@ -108,7 +108,7 @@ final class PageTypeSchemaTest extends UnitTestCase
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
-        $validationResult = $jsonSchemaValidator->validateContentElement($data, 'http://typo3.org/page-type.json');
+        $validationResult = $jsonSchemaValidator->isValidPageType($data);
 
         self::assertSame($valid, $validationResult);
     }

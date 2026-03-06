@@ -24,26 +24,71 @@ use Opis\JsonSchema\Validator;
  */
 readonly class JsonSchemaValidator
 {
-    public function validateContentElement(object $data, string $schemaIdentifier): bool
+    public function isValidContentElement(object $data): bool
+    {
+        $validator = $this->createValidatorForContentElement();
+        $result = $validator->validate($data, 'http://typo3.org/content-element.json');
+        return !$result->hasError();
+    }
+
+    public function isValidPageType(object $data): bool
+    {
+        $validator = $this->createValidatorForPageType();
+        $result = $validator->validate($data, 'http://typo3.org/page-type.json');
+        return !$result->hasError();
+    }
+
+    public function isValidRecordType(object $data): bool
+    {
+        $validator = $this->createValidatorForRecordType();
+        $result = $validator->validate($data, 'http://typo3.org/record-type.json');
+        return !$result->hasError();
+    }
+
+    public function isValidFileType(object $data): bool
+    {
+        $validator = $this->createValidatorForFileType();
+        $result = $validator->validate($data, 'http://typo3.org/file-type.json');
+        return !$result->hasError();
+    }
+
+    protected function createValidatorForContentElement(): Validator
     {
         $validator = new Validator();
         $validator->resolver()->registerFile(
             'http://typo3.org/content-element.json',
             __DIR__ . '/../../JsonSchema/content-element.schema.json'
         );
+        return $validator;
+    }
+
+    protected function createValidatorForPageType(): Validator
+    {
+        $validator = new Validator();
         $validator->resolver()->registerFile(
             'http://typo3.org/page-type.json',
             __DIR__ . '/../../JsonSchema/page-type.schema.json'
         );
+        return $validator;
+    }
+
+    protected function createValidatorForRecordType(): Validator
+    {
+        $validator = new Validator();
         $validator->resolver()->registerFile(
             'http://typo3.org/record-type.json',
             __DIR__ . '/../../JsonSchema/record-type.schema.json'
         );
+        return $validator;
+    }
+
+    protected function createValidatorForFileType(): Validator
+    {
+        $validator = new Validator();
         $validator->resolver()->registerFile(
             'http://typo3.org/file-type.json',
             __DIR__ . '/../../JsonSchema/file-type.schema.json'
         );
-        $result = $validator->validate($data, $schemaIdentifier);
-        return !$result->hasError();
+        return $validator;
     }
 }

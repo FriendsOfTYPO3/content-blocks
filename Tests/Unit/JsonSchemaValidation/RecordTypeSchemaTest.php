@@ -247,7 +247,7 @@ final class RecordTypeSchemaTest extends UnitTestCase
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
-        $validationResult = $jsonSchemaValidator->validateContentElement($data, 'http://typo3.org/record-type.json');
+        $validationResult = $jsonSchemaValidator->isValidRecordType($data);
 
         self::assertSame($valid, $validationResult);
     }

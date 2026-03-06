@@ -175,7 +175,7 @@ final class FileTypeSchemaTest extends UnitTestCase
     {
         $jsonSchemaValidator = new JsonSchemaValidator();
 
-        $validationResult = $jsonSchemaValidator->validateContentElement($data, 'http://typo3.org/file-type.json');
+        $validationResult = $jsonSchemaValidator->isValidFileType($data);
 
         self::assertSame($valid, $validationResult);
     }
