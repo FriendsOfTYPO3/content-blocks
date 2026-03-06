@@ -53,6 +53,13 @@ readonly class JsonSchemaValidator
         return $result;
     }
 
+    public function validateBasic(object $data): ValidationResult
+    {
+        $validator = $this->createValidatorForBasic();
+        $result = $validator->validate($data, 'http://typo3.org/basic.json');
+        return $result;
+    }
+
     public function isValidContentElement(object $data): bool
     {
         $result = $this->validateContentElement($data);
@@ -115,6 +122,18 @@ readonly class JsonSchemaValidator
         $validator->resolver()->registerFile(
             'http://typo3.org/file-type.json',
             __DIR__ . '/../../JsonSchema/file-type.schema.json'
+        );
+        return $validator;
+    }
+
+    protected function createValidatorForBasic(): Validator
+    {
+        $validator = (new Validator())
+            ->setStopAtFirstError(false)
+            ->setMaxErrors(100);
+        $validator->resolver()->registerFile(
+            'http://typo3.org/basic.json',
+            __DIR__ . '/../../JsonSchema/basic.schema.json'
         );
         return $validator;
     }

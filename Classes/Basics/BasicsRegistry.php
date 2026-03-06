@@ -55,6 +55,9 @@ final class BasicsRegistry
         return $this->basics[$identifier];
     }
 
+    /**
+     * @return array<LoadedBasic>
+     */
     public function getAllBasics(): array
     {
         return $this->basics;

@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\JsonSchemaValidation;
 
 use Opis\JsonSchema\ValidationResult;
+use TYPO3\CMS\ContentBlocks\Basics\LoadedBasic;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
@@ -27,7 +28,7 @@ readonly class ContentBlockValidator
         protected JsonSchemaValidator $jsonSchemaValidator
     ) {}
 
-    public function validate(LoadedContentBlock $contentBlock): ValidationResult
+    public function validateContentBlock(LoadedContentBlock $contentBlock): ValidationResult
     {
         $data = $contentBlock->getYaml();
         $dataJson = json_encode($data);
@@ -38,6 +39,18 @@ readonly class ContentBlockValidator
             ContentType::RECORD_TYPE => $this->jsonSchemaValidator->validateRecordType($dataObject),
             ContentType::FILE_TYPE => $this->jsonSchemaValidator->validateFileType($dataObject),
         };
+        return $validationResult;
+    }
+
+    public function validateBasic(LoadedBasic $basic): ValidationResult
+    {
+        $data = [
+            'identifier' => $basic->getIdentifier(),
+            'fields' => $basic->getFields(),
+        ];
+        $dataJson = json_encode($data);
+        $dataObject = json_decode($dataJson);
+        $validationResult = $this->jsonSchemaValidator->validateBasic($dataObject);
         return $validationResult;
     }
 }

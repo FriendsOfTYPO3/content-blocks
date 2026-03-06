@@ -50,7 +50,7 @@ class ContentBlockValidatorTest extends FunctionalTestCase
         $contentBlockValidator = new ContentBlockValidator(new JsonSchemaValidator());
 
         $testContentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
-        $result = $contentBlockValidator->validate($testContentBlock);
+        $result = $contentBlockValidator->validateContentBlock($testContentBlock);
 
         self::assertFalse($result->hasError());
     }

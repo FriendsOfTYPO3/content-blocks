@@ -24,10 +24,10 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
-use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
 #[AsCommand(
@@ -41,6 +41,7 @@ class LintContentBlocksCommand extends Command
         protected readonly ContentBlockLoader $contentBlockLoader,
         protected readonly ContentBlockValidator $contentBlockValidator,
         protected readonly JsonSchemaErrorFormatter $errorFormatter,
+        protected readonly BasicsLoader $basicsLoader,
     ) {
         parent::__construct();
     }
@@ -48,20 +49,43 @@ class LintContentBlocksCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
-        $numberOfErrors = 0;
-        foreach ($this->contentBlockLoader->loadUncached()->getAll() as $contentBlock) {
-            $validationResult = $this->contentBlockValidator->validate($contentBlock);
-            if ($validationResult->hasError() === false) {
-                continue;
-            }
-            $numberOfErrors++;
-            $this->renderError($validationResult, $contentBlock, $output);
+        $numberOfErrors = $this->validateBasics($output);
+        if ($numberOfErrors === 0) {
+            $numberOfErrors = $this->validateContentBlocks($output);
         }
         $this->renderEndResult($symfonyStyle, $numberOfErrors);
         if ($numberOfErrors > 0) {
             return Command::FAILURE;
         }
         return Command::SUCCESS;
+    }
+
+    protected function validateBasics(OutputInterface $output): int
+    {
+        $numberOfErrors = 0;
+        foreach ($this->basicsLoader->loadUncached()->getAllBasics() as $basic) {
+            $validationResult = $this->contentBlockValidator->validateBasic($basic);
+            if ($validationResult->hasError() === false) {
+                continue;
+            }
+            $numberOfErrors++;
+            $this->renderError($validationResult, $basic->getIdentifier(), $basic->getHostExtension(), $output);
+        }
+        return $numberOfErrors;
+    }
+
+    protected function validateContentBlocks(OutputInterface $output): int
+    {
+        $numberOfErrors = 0;
+        foreach ($this->contentBlockLoader->loadUncached()->getAll() as $contentBlock) {
+            $validationResult = $this->contentBlockValidator->validateContentBlock($contentBlock);
+            if ($validationResult->hasError() === false) {
+                continue;
+            }
+            $numberOfErrors++;
+            $this->renderError($validationResult, $contentBlock->getName(), $contentBlock->getHostExtension(), $output);
+        }
+        return $numberOfErrors;
     }
 
     protected function renderEndResult(SymfonyStyle $symfonyStyle, int $numberOfErrors): void
@@ -73,10 +97,10 @@ class LintContentBlocksCommand extends Command
         $symfonyStyle->success('No errors found');
     }
 
-    protected function renderError(ValidationResult $validationResult, LoadedContentBlock $contentBlock, OutputInterface $output): void
+    protected function renderError(ValidationResult $validationResult, string $name, string $extension, OutputInterface $output): void
     {
         $flatArray = $this->gatherErrors($validationResult);
-        $header = $contentBlock->getName() . ' | EXT:' . $contentBlock->getHostExtension();
+        $header = $name . ' | EXT:' . $extension;
         $table = new Table($output);
         $table->setHeaders(['Path', $header]);
         $table->setRows($flatArray);

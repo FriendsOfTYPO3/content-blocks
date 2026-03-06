@@ -54,6 +54,34 @@ final class JsonSchemaErrorFormatterTest extends UnitTestCase
                 ],
             ],
         ];
+
+        yield 'Invalid fields' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'title' => 'My Element',
+                'description' => 'My Element Description',
+                'group' => 'my_group',
+                'typeName' => '123',
+                'prefixFields' => true,
+                'prefixType' => 'invalid',
+                'saveAndClose' => false,
+                'fields' => [
+                    (object)[
+                        'identifier' => 'bodytext',
+                        'type' => 'Textarea',
+                        'prefixType' => 'wrong',
+                    ],
+                ],
+            ],
+            'expected' => [
+                '/prefixType' => [
+                    'The data should match one item from enum',
+                ],
+                '/fields/0/prefixType' => [
+                    'The data should match one item from enum',
+                ],
+            ],
+        ];
     }
 
     #[DataProvider('errorIsFormattedCorrectlyDataProvider')]
