@@ -3050,7 +3050,8 @@
               "additionalProperties": false,
               "properties": {
                 "identifier": {},
-                "type": {}
+                "type": {},
+                "useExistingField": {}
               }
             }
           },
