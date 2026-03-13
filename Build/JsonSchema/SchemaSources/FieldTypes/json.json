@@ -1,0 +1,90 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"cols": {
+			"type": "integer",
+			"description": "Abstract value for the width of the field",
+			"minimum": 10,
+			"maximum": 50,
+			"default": 30
+		},
+		"default": {
+			"type": "string",
+			"description": "Default value set if a new record is created."
+		},
+		"enableCodeEditor": {
+			"type": "boolean",
+			"description": "The JSON value is rendered in a code editor.",
+			"default": true
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"placeholder": {
+			"type": "string",
+			"description": "Placeholder text for the field."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"required": {
+			"type": "boolean",
+			"description": "If set, the field becomes mandatory.",
+			"default": false
+		},
+		"rows": {
+			"type": "integer",
+			"description": "Number of rows for the JSON editor",
+			"minimum": 1,
+			"maximum": 20,
+			"default": 5
+		},
+		"searchable": {
+			"type": "boolean",
+			"description": "Enables search functionality for the field",
+			"default": true
+		}
+	}
+}

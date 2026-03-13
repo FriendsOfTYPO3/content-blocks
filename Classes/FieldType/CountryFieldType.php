@@ -24,6 +24,7 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 final class CountryFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+
     private string $default = '';
     private bool $readOnly = false;
     private bool $required = false;

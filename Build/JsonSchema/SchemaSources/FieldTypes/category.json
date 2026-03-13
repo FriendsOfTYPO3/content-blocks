@@ -1,0 +1,125 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"default": {
+			"type": ["string", "integer"],
+			"description": "Default value set if a new record is created."
+		},
+		"exclusiveKeys": {
+			"type": "string",
+			"description": "List of keys that exclude any other keys in a select box where multiple items could be selected."
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"foreign_table_where": {
+			"type": "string",
+			"description": "The items from foreign_table are selected with this WHERE clause."
+		},
+		"maxitems": {
+			"type": "integer",
+			"description": "Maximum number of items allowed in the select field",
+			"minimum": 1,
+			"maximum": 99999
+		},
+		"minitems": {
+			"type": "integer",
+			"description": "Minimum number of items allowed in the select field",
+			"minimum": 1
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"relationship": {
+			"type": "string",
+			"enum": ["oneToOne", "oneToMany", "manyToMany"]
+		},
+		"size": {
+			"type": "integer",
+			"description": "Maximal number of elements to be displayed in the tree by default",
+			"minimum": 5,
+			"default": 20
+		},
+		"treeConfig": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"dataProvider": {
+					"type": "string",
+					"description": "Allows to define a custom data provider class for use cases where special data preparation is necessary."
+				},
+				"startingPoints": {
+					"type": "string",
+					"description": "Allows to set multiple records as roots for tree records."
+				},
+				"appearance": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"showHeader": {
+							"type": "boolean",
+							"description": "Whether to show the header of the tree that contains a field to filter the records and allows to expand or collapse all nodes.",
+							"default": true
+						},
+						"expandAll": {
+							"type": "boolean",
+							"description": "All select groups are initially expanded.",
+							"default": true
+						},
+						"maxLevels": {
+							"type": "integer",
+							"description": "The maximal amount of levels to be rendered (can be used to stop possible recursions)",
+							"default": 99
+						},
+						"nonSelectableLevels": {
+							"type": "string",
+							"description": "Comma-separated list of levels that will not be selectable, by default the root node (which is \"0\") cannot be selected"
+						}
+					}
+				}
+			}
+		}
+	}
+}

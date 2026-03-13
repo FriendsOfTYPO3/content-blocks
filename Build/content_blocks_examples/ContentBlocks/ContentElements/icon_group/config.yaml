@@ -53,6 +53,5 @@ fields:
               - page
               - url
               - file
-            max: 150
           - identifier: link_title
             type: Text
