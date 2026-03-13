@@ -2676,119 +2676,105 @@
                       "type": "object",
                       "patternProperties": {
                         ".*": {
-                          "oneOf": [
-                            {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            },
+                            "allowedAspectRatios": {
                               "type": "object",
-                              "additionalProperties": false,
-                              "properties": {
-                                "disabled": {
-                                  "type": "boolean",
-                                  "const": true
+                              "patternProperties": {
+                                ".*": {
+                                  "type": "object",
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string",
+                                          "pattern": "^[0-9]+\\s*\\/\\s*[0-9]+$"
+                                        },
+                                        {
+                                          "type": "number"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ]
                                 }
                               }
                             },
-                            {
-                              "type": "object",
-                              "additionalProperties": false,
-                              "properties": {
-                                "title": {
-                                  "type": "string"
-                                },
-                                "allowedAspectRatios": {
-                                  "type": "object",
-                                  "patternProperties": {
-                                    ".*": {
-                                      "type": "object",
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "title": {
-                                          "type": "string"
-                                        },
-                                        "value": {
-                                          "anyOf": [
-                                            {
-                                              "type": "string",
-                                              "pattern": "^[0-9]+\\s*\\/\\s*[0-9]+$"
-                                            },
-                                            {
-                                              "type": "number"
-                                            }
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "value"
-                                      ]
-                                    }
+                            "coverAreas": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "x": {
+                                    "type": "number"
+                                  },
+                                  "y": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "height": {
+                                    "type": "number"
                                   }
-                                },
-                                "coverAreas": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "x": {
-                                        "type": "number"
-                                      },
-                                      "y": {
-                                        "type": "number"
-                                      },
-                                      "width": {
-                                        "type": "number"
-                                      },
-                                      "height": {
-                                        "type": "number"
-                                      }
-                                    }
-                                  }
-                                },
-                                "focusArea": {
-                                  "type": "object",
-                                  "properties": {
-                                    "x": {
-                                      "type": "number"
-                                    },
-                                    "y": {
-                                      "type": "number"
-                                    },
-                                    "width": {
-                                      "type": "number"
-                                    },
-                                    "height": {
-                                      "type": "number"
-                                    }
-                                  }
-                                },
-                                "cropArea": {
-                                  "type": "object",
-                                  "properties": {
-                                    "x": {
-                                      "type": "number"
-                                    },
-                                    "y": {
-                                      "type": "number"
-                                    },
-                                    "width": {
-                                      "type": "number"
-                                    },
-                                    "height": {
-                                      "type": "number"
-                                    }
-                                  }
-                                },
-                                "selectedRatio": {
-                                  "type": "string"
-                                },
-                                "excludeFromSync": {
-                                  "type": "boolean"
                                 }
-                              },
-                              "required": [
-                                "title",
-                                "allowedAspectRatios"
-                              ]
+                              }
+                            },
+                            "focusArea": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "type": "number"
+                                },
+                                "width": {
+                                  "type": "number"
+                                },
+                                "height": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "cropArea": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "type": "number"
+                                },
+                                "width": {
+                                  "type": "number"
+                                },
+                                "height": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "selectedRatio": {
+                              "type": "string"
+                            },
+                            "excludeFromSync": {
+                              "type": "boolean"
+                            },
+                            "disabled": {
+                              "type": "boolean",
+                              "const": true
                             }
-                          ]
+                          }
                         }
                       }
                     },
