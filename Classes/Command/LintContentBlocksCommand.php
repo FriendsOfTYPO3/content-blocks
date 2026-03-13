@@ -18,23 +18,25 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Command;
 
 use Opis\JsonSchema\ValidationResult;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
-use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
-#[AsCommand(
-    'content-blocks:lint',
-    'Lint all Content Blocks against JSON Schema',
-)]
-#[AsNonSchedulableCommand]
+#[Autoconfigure(tags: [
+    [
+        'name' => 'console.command',
+        'command' => 'content-blocks:lint',
+        'description' => 'Lint all Content Blocks against JSON Schema',
+        'schedulable' => false,
+    ],
+])]
 class LintContentBlocksCommand extends Command
 {
     public function __construct(
