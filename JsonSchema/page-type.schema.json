@@ -2769,6 +2769,9 @@
                                 },
                                 "selectedRatio": {
                                   "type": "string"
+                                },
+                                "excludeFromSync": {
+                                  "type": "boolean"
                                 }
                               },
                               "required": [

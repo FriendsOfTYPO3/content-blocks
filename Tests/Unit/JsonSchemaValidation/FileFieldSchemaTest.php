@@ -132,10 +132,11 @@ final class FileFieldSchemaTest extends UnitTestCase
                                     'width' => 0.7,
                                     'height' => 0.6,
                                 ],
-                                "selectedRatio" => "landscape",
+                                'selectedRatio' => 'landscape',
+                                'excludeFromSync' => true,
                             ],
-                            "other" => (object)[
-                                "disabled" => true
+                            'other' => (object)[
+                                'disabled' => true,
                             ],
                         ],
                     ],

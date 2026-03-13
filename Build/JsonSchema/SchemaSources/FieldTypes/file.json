@@ -260,7 +260,10 @@
 								},
 								"selectedRatio": {
 									"type": "string"
-								}
+								},
+								"excludeFromSync": {
+									"type": "boolean"
+								},
 							},
 							"required": ["title", "allowedAspectRatios"]
 						}
