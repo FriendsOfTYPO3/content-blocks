@@ -64,11 +64,10 @@ Settings
    :default: oneToMany
 
    The relationship defines the cardinality between the relations. Possible
-   values are :yaml:`oneToMany` (default), :yaml:`manyToOne` and
-   :yaml:`oneToOne`. In case of a [x]toOne relation, the processed field will
-   be filled directly with the file reference instead of a collection of file
-   references. In addition, :yaml:`maxitems` will be automatically set to
-   :yaml:`1`.
+   values are :yaml:`oneToMany` (default), or :yaml:`oneToOne`. In case of a
+   oneToOne relation, the processed field will be filled directly with the file
+   reference instead of a collection of file references. In addition,
+   :yaml:`maxitems` will be automatically set to :yaml:`1`.
 
 .. confval:: cropVariants
    :name: file-cropVariants
