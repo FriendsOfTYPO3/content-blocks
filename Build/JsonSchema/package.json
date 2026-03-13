@@ -1,0 +1,9 @@
+{
+	"type": "module",
+	"dependencies": {
+		"@apidevtools/json-schema-ref-parser": "^15.2.2"
+	},
+	"scripts": {
+		"bundle": "node json-schema-bundler.js"
+	}
+}

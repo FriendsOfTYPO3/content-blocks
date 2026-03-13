@@ -95,6 +95,7 @@ way to register and use content types as sub-resources inside extensions.
     API/Index
     Guides/Index
     DeveloperCorner/Index
+    JsonSchema/Index
     ChangeLog/Index
     Migrations/Index
     FAQ/Index

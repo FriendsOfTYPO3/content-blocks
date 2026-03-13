@@ -1,0 +1,64 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/page-type.json",
+	"title": "Page Type",
+	"description": "TYPO3 CMS Content Blocks Page Type",
+	"additionalProperties": false,
+	"properties": {
+		"group": {},
+		"typeName": {},
+		"name": {},
+		"title": {},
+		"prefixFields": {},
+		"prefixType": {},
+		"vendorPrefix": {},
+		"priority": {},
+		"basics": {},
+		"fields": {},
+		"table": {},
+		"typeField": {}
+	},
+	"allOf": [
+		{
+			"table": {
+				"type": "string",
+				"const": "pages"
+			},
+			"typeField": {
+				"type": "string",
+				"const": "doktype"
+			},
+			"type": "object",
+			"properties": {
+				"group": {
+					"description": "Group name the Content Block should be displayed in",
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "string",
+							"enum": ["default", "links", "special"]
+						}
+					],
+					"default": "default"
+				},
+				"typeName": {
+					"description": "Unqique type identifier for this Content Block",
+					"oneOf": [
+						{
+							"type": "integer"
+						},
+						{
+							"type": "string",
+							"pattern": "^[0-9]+$"
+						}
+					]
+				}
+			}
+		},
+		{
+			"$ref": "content-type.json"
+		}
+	]
+}

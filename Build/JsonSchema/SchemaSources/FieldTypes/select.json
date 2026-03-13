@@ -1,0 +1,326 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
+		"allowNonIdValues": {
+			"type": "boolean",
+			"description": "Only useful if foreign_table is enabled. If set, then values which are not integer ids will be allowed.",
+			"default": false
+		},
+		"appearance": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"expandAll": {
+					"type": "boolean",
+					"description": "All select groups are initially expanded."
+				}
+			}
+		},
+		"authMode": {
+			"type": "string",
+			"description": "Authorization mode for the selector box",
+			"enum": ["explicitAllow"]
+		},
+		"autoSizeMax": {
+			"type": "integer",
+			"description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",
+			"minimum": 1
+		},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"dbFieldLength": {
+			"type": "integer",
+			"description": "Defines the length of the database field.",
+			"minimum": 1
+		},
+		"dontRemapTablesOnCopy": {
+			"type": "array",
+			"description": "A list of tables which should not be remapped to the new element uids if the field holds elements that are copied in the session.",
+			"items": {
+				"type": "string"
+			}
+		},
+		"default": {
+			"type": ["string", "integer"],
+			"description": "Default value set if a new record is created."
+		},
+		"disableNoMatchingValueElement": {
+			"type": "boolean",
+			"description": "If set, then no element is inserted if the current value does not match any of the existing elements."
+		},
+		"exclusiveKeys": {
+			"type": "string",
+			"description": "List of keys that exclude any other keys in a select box where multiple items could be selected."
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"fileFolderConfig": {
+			"type": "object",
+			"description": "Configuration for file folder selection",
+			"additionalProperties": false,
+			"properties": {
+				"allowedExtensions": {
+					"type": "string",
+					"description": "List of file extensions to select. If blank, all files are selected."
+				},
+				"depth": {
+					"type": "integer",
+					"description": "Depth of directory recursions.",
+					"minimum": 0,
+					"maximum": 99,
+					"default": 99
+				},
+				"folder": {
+					"type": "string",
+					"description": "Specifying a folder from where files are added to the item array."
+				}
+			}
+		},
+		"foreign_table": {
+			"type": "string",
+			"description": "The item-array will be filled with records from the table defined here"
+		},
+		"foreign_table_item_group": {
+			"type": "string",
+			"description": "References a specific field in the foreign table, which holds an item group identifier."
+		},
+		"foreign_table_prefix": {
+			"type": "string",
+			"description": "Label prefix to the title of the records from the foreign-table."
+		},
+		"foreign_table_where": {
+			"type": "string",
+			"description": "The items from foreign_table are selected with this WHERE clause."
+		},
+		"itemGroups": {
+			"type": "object",
+			"description": "Contains an array of key-value pairs. The key contains the identifier, the value contains the label",
+			"patternProperties": {
+				".*": {
+					"type": "string"
+				}
+			}
+		},
+		"items": {
+			"type": "array",
+			"description": "Contains the elements for the selector box",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"label": {
+						"type": "string",
+						"description": "The displayed title."
+					},
+					"value": {
+						"description": "The value stored in the database",
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "integer"
+							}
+						]
+					},
+					"icon": {
+						"type": "string",
+						"description": "Icon to be displayed next to the label"
+					},
+					"group": {
+						"type": "string",
+						"description": "The key of the item group"
+					},
+					"description": {
+						"description": "Display a help text",
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									}
+								}
+							}
+						]
+					}
+				},
+				"required": [
+					"value"
+				]
+			}
+		},
+		"itemsProcFunc": {
+			"type": "string",
+			"description": "PHP method which is called to fill or manipulate the items array"
+		},
+		"itemsProcConfig": {
+			"type": "object"
+		},
+		"localizeReferencesAtParentLocalization": {
+			"type": "boolean",
+			"description": "Defines whether referenced records should be localized when the current record gets localized. This only applies if references are not stored using MM tables."
+		},
+		"maxitems": {
+			"type": "integer",
+			"description": "Maximum number of items allowed in the select field",
+			"minimum": 1
+		},
+		"minitems": {
+			"type": "integer",
+			"description": "Minimum number of items allowed in the select field",
+			"minimum": 1
+		},
+		"MM": {
+			"type": "string",
+			"description": "This value contains the name of the table in which to store a MM relation. It is used together with foreign_table."
+		},
+		"MM_match_fields": {
+			"type": "object",
+			"description": "Array of field => value pairs to both insert and match against when writing/reading MM relations."
+		},
+		"MM_opposite_field": {
+			"type": "string",
+			"description": "If you want to make a MM relation editable from the foreign side (bidirectional) of the relation as well, you need to set MM_opposite_field on the foreign side to the field name on the local side."
+		},
+		"MM_oppositeUsage": {
+			"type": "object",
+			"description": "In a MM bidirectional relation using match fields the opposite side needs to know about the match fields for certain operations"
+		},
+		"MM_table_where": {
+			"type": "string",
+			"description": "Additional where clause used when reading MM relations."
+		},
+		"multiple": {
+			"type": "boolean",
+			"description": "Allows the same item more than once in a list.",
+			"default": false
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"relationship": {
+			"type": "string",
+			"enum": ["oneToOne", "manyToOne", "oneToMany"]
+		},
+		"renderType": {
+			"type": "string",
+			"enum": [
+				"selectSingle",
+				"selectCheckBox",
+				"selectSingleBox",
+				"selectTree",
+				"selectMultipleSideBySide"
+			]
+		},
+		"size": {
+			"type": "integer",
+			"description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
+			"minimum": 1,
+			"default": 1
+		},
+		"sortItems": {
+			"$ref": "../Properties/sort-items.json"
+		},
+		"treeConfig": {
+			"type": "object",
+			"additionalProperties": false,
+			"oneOf": [
+				{
+					"required": ["childrenField"]
+				},
+				{
+					"required": ["parentField"]
+				}
+			],
+			"properties": {
+				"dataProvider": {
+					"type": "string",
+					"description": "Allows to define a custom data provider class for use cases where special data preparation is necessary."
+				},
+				"childrenField": {
+					"type": "string",
+					"description": "Field name of the foreign_table that references the uid of the child records."
+				},
+				"parentField": {
+					"type": "string",
+					"description": "Field name of the foreign_table that references the uid of the parent record"
+				},
+				"startingPoints": {
+					"type": "string",
+					"description": "Allows to set multiple records as roots for tree records."
+				},
+				"appearance": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"showHeader": {
+							"type": "boolean",
+							"description": "Whether to show the header of the tree that contains a field to filter the records and allows to expand or collapse all nodes."
+						},
+						"expandAll": {
+							"type": "boolean",
+							"description": "All select groups are initially expanded."
+						},
+						"maxLevels": {
+							"type": "integer",
+							"description": "The maximal amount of levels to be rendered (can be used to stop possible recursions)"
+						},
+						"nonSelectableLevels": {
+							"type": "string",
+							"description": "Comma-separated list of levels that will not be selectable, by default the root node (which is \"0\") cannot be selected"
+						}
+					}
+				}
+			}
+		}
+	}
+}

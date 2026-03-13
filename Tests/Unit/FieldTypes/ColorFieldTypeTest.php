@@ -41,7 +41,6 @@ final class ColorFieldTypeTest extends UnitTestCase
                 'default' => '#000000',
                 'placeholder' => 'Placeholder text',
                 'size' => 20,
-                'autocomplete' => 1,
                 'required' => 1,
                 'readOnly' => 1,
                 'nullable' => 1,
@@ -79,7 +78,6 @@ final class ColorFieldTypeTest extends UnitTestCase
                     'mode' => 'useOrOverridePlaceholder',
                     'placeholder' => 'Placeholder text',
                     'required' => true,
-                    'autocomplete' => true,
                     'valuePicker' => [
                         'items' => [
                             ['One', '1'],
@@ -104,7 +102,6 @@ final class ColorFieldTypeTest extends UnitTestCase
                 'default' => '',
                 'placeholder' => '',
                 'size' => 0,
-                'autocomplete' => 0,
                 'required' => 0,
                 'readOnly' => 0,
                 'nullable' => 0,
@@ -119,7 +116,6 @@ final class ColorFieldTypeTest extends UnitTestCase
                 'config' => [
                     'type' => 'color',
                     'default' => '',
-                    'autocomplete' => false,
                 ],
             ],
         ];

@@ -1,0 +1,26 @@
+{
+	"description": "Can be used to display the field only under certain conditions.",
+	"oneOf": [
+		{
+			"type": "string"
+		},
+		{
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"AND": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"OR": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	]
+}

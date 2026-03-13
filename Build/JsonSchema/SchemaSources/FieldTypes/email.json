@@ -1,0 +1,95 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"autocomplete": {
+			"type": "boolean",
+			"description": "Browser autocompletion"
+		},
+		"default": {
+			"type": "string",
+			"description": "Default value set if a new record is created."
+		},
+		"eval": {
+			"type": "string",
+			"description": "Configuration of field evaluation",
+			"examples": ["trim"]
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"mode": {
+			"type": "string",
+			"description": "This property is related to the placeholder property. When defined, a checkbox will appear above the field.",
+			"enum": ["useOrOverridePlaceholder"]
+		},
+		"nullable": {
+			"type": "boolean",
+			"description": "Allows database null values for the field",
+			"default": false
+		},
+		"placeholder": {
+			"type": "string",
+			"description": "Placeholder text for the field."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"required": {
+			"type": "boolean",
+			"description": "If set, the field becomes mandatory.",
+			"default": false
+		},
+		"size": {
+			"type": "integer",
+			"description": "Abstract value for the width of the field",
+			"minimum": 10,
+			"maximum": 50,
+			"default": 30
+		},
+		"valuePicker": {
+			"$ref": "../Properties/value-picker.json"
+		}
+	}
+}

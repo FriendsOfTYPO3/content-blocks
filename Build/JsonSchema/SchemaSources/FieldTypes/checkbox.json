@@ -1,0 +1,140 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"label": {},
+		"description": {},
+		"useExistingField": {},
+		"prefixField": {},
+		"prefixType": {},
+		"displayCond": {},
+		"onChange": {},
+		"type": {},
+		"l10n_mode": {},
+		"l10n_display": {},
+		"behaviour": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowLanguageSynchronization": {
+					"type": "boolean",
+					"description": "Allows to select if localization uses custom or default language value",
+					"default": false
+				}
+			}
+		},
+		"cols": {
+			"description": "In how many columns the checkboxes will be shown. Makes sense only if the 'items' property is defining multiple checkboxes.",
+			"oneOf": [
+				{
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 31
+				},
+				{
+					"type": "string",
+					"enum": ["inline"]
+				}
+			]
+		},
+		"default": {
+			"type": "integer",
+			"description": "Default value set if a new record is created. Attention: Bit value!"
+		},
+		"eval": {
+			"type": "string",
+			"description": "Configuration of field evaluation.",
+			"enum": ["maximumRecordsChecked", "maximumRecordsCheckedInPid", "maximumRecordsChecked,maximumRecordsCheckedInPid"]
+		},
+		"fieldControl": {
+			"type": "object"
+		},
+		"fieldInformation": {
+			"type": "object"
+		},
+		"fieldWizard": {
+			"type": "object",
+			"properties": {
+				"defaultLanguageDifferences": {
+					"type": "object"
+				},
+				"localizationStateSelector": {
+					"type": "object"
+				},
+				"otherLanguageContent": {
+					"type": "object"
+				}
+			}
+		},
+		"items": {
+			"type": "array",
+			"description": "Contains the elements for the selector box",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"label": {
+						"type": "string",
+						"description": "The displayed title."
+					},
+					"invertStateDisplay": {
+						"type": "boolean",
+						"description": "A checkbox is marked checked if the database bit is not set and vice versa."
+					},
+					"iconIdentifierChecked": {
+						"type": "string",
+						"description": "An optional icon shown is selected / on. If not set, a check mark icon is used."
+					},
+					"iconIdentifierUnchecked": {
+						"type": "string",
+						"description": "An optional icon shown selected / on. If not set, no icon is show (check mark icon not displayed)."
+					},
+					"labelChecked": {
+						"type": "string",
+						"description": "Text shown if element is selected / on."
+					},
+					"labelUnchecked": {
+						"type": "string",
+						"description": "Text shown if element is not selected."
+					}
+				}
+			}
+		},
+		"itemsProcFunc": {
+			"type": "string",
+			"description": "PHP method which is called to fill or manipulate the items array"
+		},
+		"itemsProcConfig": {
+			"type": "object"
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"renderType": {
+			"type": "string",
+			"enum": [
+				"checkboxToggle",
+				"checkboxLabeledToggle"
+			]
+		},
+		"validation": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"maximumRecordsChecked": {
+					"type": "integer"
+				},
+				"maximumRecordsCheckedInPid": {
+					"type": "integer"
+				}
+			}
+		},
+		"invertStateDisplay": {
+			"type": "boolean",
+			"description": "A checkbox is marked checked if the database bit is not set and vice versa."
+		}
+	}
+}

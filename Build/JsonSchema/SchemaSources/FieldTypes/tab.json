@@ -1,0 +1,11 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"identifier": {},
+		"type": {},
+		"label": {
+			"type": "string"
+		}
+	}
+}
