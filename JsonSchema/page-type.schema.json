@@ -2462,81 +2462,115 @@
                       "type": "object",
                       "patternProperties": {
                         ".*": {
-                          "type": "object",
-                          "additionalProperties": false,
-                          "properties": {
-                            "title": {
-                              "type": "string"
-                            },
-                            "allowedAspectRatios": {
+                          "oneOf": [
+                            {
                               "type": "object",
-                              "patternProperties": {
-                                ".*": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "disabled": {
+                                  "type": "boolean",
+                                  "const": true
+                                }
+                              }
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "title": {
+                                  "type": "string"
+                                },
+                                "allowedAspectRatios": {
                                   "type": "object",
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "title": {
-                                      "type": "string"
-                                    },
-                                    "value": {
-                                      "anyOf": [
-                                        {
-                                          "type": "string",
-                                          "pattern": "^[0-9]+\\s*\\/\\s*[0-9]+$"
+                                  "patternProperties": {
+                                    ".*": {
+                                      "type": "object",
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "title": {
+                                          "type": "string"
                                         },
-                                        {
-                                          "type": "number"
+                                        "value": {
+                                          "anyOf": [
+                                            {
+                                              "type": "string",
+                                              "pattern": "^[0-9]+\\s*\\/\\s*[0-9]+$"
+                                            },
+                                            {
+                                              "type": "number"
+                                            }
+                                          ]
                                         }
+                                      },
+                                      "required": [
+                                        "value"
                                       ]
                                     }
-                                  },
-                                  "required": [
-                                    "value"
-                                  ]
-                                }
-                              }
-                            },
-                            "coverAreas": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "type": "number"
-                                  },
-                                  "y": {
-                                    "type": "number"
-                                  },
-                                  "width": {
-                                    "type": "number"
-                                  },
-                                  "height": {
-                                    "type": "number"
                                   }
+                                },
+                                "coverAreas": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "x": {
+                                        "type": "number"
+                                      },
+                                      "y": {
+                                        "type": "number"
+                                      },
+                                      "width": {
+                                        "type": "number"
+                                      },
+                                      "height": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  }
+                                },
+                                "focusArea": {
+                                  "type": "object",
+                                  "properties": {
+                                    "x": {
+                                      "type": "number"
+                                    },
+                                    "y": {
+                                      "type": "number"
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "cropArea": {
+                                  "type": "object",
+                                  "properties": {
+                                    "x": {
+                                      "type": "number"
+                                    },
+                                    "y": {
+                                      "type": "number"
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "selectedRatio": {
+                                  "type": "string"
                                 }
-                              }
-                            },
-                            "focusArea": {
-                              "type": "object",
-                              "properties": {
-                                "x": {
-                                  "type": "number"
-                                },
-                                "y": {
-                                  "type": "number"
-                                },
-                                "width": {
-                                  "type": "number"
-                                },
-                                "height": {
-                                  "type": "number"
-                                }
-                              }
+                              },
+                              "required": [
+                                "title",
+                                "allowedAspectRatios"
+                              ]
                             }
-                          },
-                          "required": [
-                            "title",
-                            "allowedAspectRatios"
                           ]
                         }
                       }
