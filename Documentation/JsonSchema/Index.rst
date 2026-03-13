@@ -59,6 +59,8 @@ configuration.
 
    This command only works in composer-mode.
 
+.. _json-schema-ide:
+
 IDE Integration
 ---------------
 
