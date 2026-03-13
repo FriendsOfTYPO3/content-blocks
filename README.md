@@ -41,7 +41,7 @@ will help you, if you have any problems.
 
 ## JSON Schema
 
-Enable validation and auto-completion with [JSON schema](https://github.com/nhovratov/content-blocks-json-schema)
+Enable validation and auto-completion with [JSON schema](https://github.com/FriendsOfTYPO3/content-blocks/tree/main/JsonSchema)
 
 ## Developing
 
