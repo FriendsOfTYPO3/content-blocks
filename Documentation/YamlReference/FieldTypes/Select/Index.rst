@@ -123,9 +123,9 @@ Settings
    :required: false
    :type: integer
 
-   Minimum number of child items. Defaults to 0. JavaScript record validation
+   Minimum number of items. Default is no minimum. JavaScript record validation
    prevents the record from being saved if the limit is not satisfied.
-   The field can be set as required by setting `minitems` to at least 1.
+   The field can be set as required by setting :yaml:`minitems` to at least 1.
 
 .. confval:: relationship
    :name: select-relationship
