@@ -3315,60 +3315,65 @@
                     },
                     "suggestOptions": {
                       "type": "object",
-                      "additionalProperties": false,
-                      "properties": {
-                        "additionalSearchFields": {
-                          "type": "string",
-                          "description": "Comma-separated list of fields the suggest wizard should also search in"
-                        },
-                        "addWhere": {
-                          "type": "string",
-                          "description": "Allows to define an additional where clause for the searchquery."
-                        },
-                        "cssClass": {
-                          "type": "string",
-                          "description": "Add a CSS class to every list item of the result list."
-                        },
-                        "maxItemsInResultList": {
-                          "type": "integer",
-                          "description": "Maximum number of results to display.",
-                          "default": 10
-                        },
-                        "maxPathTitleLength": {
-                          "type": "integer",
-                          "description": "Maximum number of characters to display when a path element is too long."
-                        },
-                        "minimumCharacters": {
-                          "type": "integer",
-                          "description": "Minimum number of characters needed to start the search."
-                        },
-                        "orderBy": {
-                          "type": "string",
-                          "description": "Allows to add an ORDER BY part to the search query."
-                        },
-                        "pidList": {
-                          "type": "string",
-                          "description": "Limit the search to certain pages (and their sub pages)."
-                        },
-                        "pidDepth": {
-                          "type": "integer",
-                          "description": "Expand pidList by this number of levels. Has an effect only if pidList has a value."
-                        },
-                        "receiverClass": {
-                          "type": "string",
-                          "description": "PHP class alternative receiver class"
-                        },
-                        "renderFunc": {
-                          "type": "string",
-                          "description": "User function to manipulate the displayed records in the results."
-                        },
-                        "searchCondition": {
-                          "type": "string",
-                          "description": "Additional WHERE clause (not prepended with AND)."
-                        },
-                        "searchWholePhrase": {
-                          "type": "boolean",
-                          "description": "Searches for the whole phrase, not only the beginning of the word."
+                      "patternProperties": {
+                        ".*": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": {
+                            "additionalSearchFields": {
+                              "type": "string",
+                              "description": "Comma-separated list of fields the suggest wizard should also search in"
+                            },
+                            "addWhere": {
+                              "type": "string",
+                              "description": "Allows to define an additional where clause for the searchquery."
+                            },
+                            "cssClass": {
+                              "type": "string",
+                              "description": "Add a CSS class to every list item of the result list."
+                            },
+                            "maxItemsInResultList": {
+                              "type": "integer",
+                              "description": "Maximum number of results to display.",
+                              "default": 10
+                            },
+                            "maxPathTitleLength": {
+                              "type": "integer",
+                              "description": "Maximum number of characters to display when a path element is too long."
+                            },
+                            "minimumCharacters": {
+                              "type": "integer",
+                              "description": "Minimum number of characters needed to start the search."
+                            },
+                            "orderBy": {
+                              "type": "string",
+                              "description": "Allows to add an ORDER BY part to the search query."
+                            },
+                            "pidList": {
+                              "type": "string",
+                              "description": "Limit the search to certain pages (and their sub pages)."
+                            },
+                            "pidDepth": {
+                              "type": "integer",
+                              "description": "Expand pidList by this number of levels. Has an effect only if pidList has a value."
+                            },
+                            "receiverClass": {
+                              "type": "string",
+                              "description": "PHP class alternative receiver class"
+                            },
+                            "renderFunc": {
+                              "type": "string",
+                              "description": "User function to manipulate the displayed records in the results."
+                            },
+                            "searchCondition": {
+                              "type": "string",
+                              "description": "Additional WHERE clause (not prepended with AND)."
+                            },
+                            "searchWholePhrase": {
+                              "type": "boolean",
+                              "description": "Searches for the whole phrase, not only the beginning of the word."
+                            }
+                          }
                         }
                       }
                     }
