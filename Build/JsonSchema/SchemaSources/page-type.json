@@ -16,7 +16,8 @@
 		"basics": {},
 		"fields": {},
 		"table": {},
-		"typeField": {}
+		"typeField": {},
+		"allowedRecordTypes": {}
 	},
 	"allOf": [
 		{
@@ -54,6 +55,13 @@
 							"pattern": "^[0-9]+$"
 						}
 					]
+				},
+				"allowedRecordTypes": {
+					"description": "List of allowed records, which may be created on this Page",
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
 				}
 			}
 		},

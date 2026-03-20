@@ -1,5 +1,7 @@
 name: example/example-page-type
 typeName: 942
+allowedRecordTypes:
+  - tx_hov_domain_model_notype
 fields:
   - identifier: additional_field
     type: Text

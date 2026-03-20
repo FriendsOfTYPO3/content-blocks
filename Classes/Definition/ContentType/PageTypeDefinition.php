@@ -48,6 +48,8 @@ final readonly class PageTypeDefinition implements ContentTypeInterface
         public string $languagePathDescription,
         public ?string $group,
         public PageIconSet $pageIconSet,
+        /** @var string[] */
+        public array $allowedRecordTypes,
     ) {}
 
     public function getPageIconSet(): PageIconSet

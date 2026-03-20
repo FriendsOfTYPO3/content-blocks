@@ -328,11 +328,20 @@ readonly class TcaGenerator
 
     protected function processPageType(ContentTypeInterface $typeDefinition, array $columnsOverrides): array
     {
+        if (!$typeDefinition instanceof PageTypeDefinition) {
+            throw new \InvalidArgumentException(
+                'Expected PageTypeDefinition, got ' . get_class($typeDefinition),
+                1774000611
+            );
+        }
         $typeDefinitionArray = [
             'showitem' => $this->getPageTypeStandardShowItem($typeDefinition->getShowItems(), $typeDefinition->getTypeName()),
         ];
         if ($columnsOverrides !== []) {
             $typeDefinitionArray['columnsOverrides'] = $columnsOverrides;
+        }
+        if ($typeDefinition->allowedRecordTypes !== []) {
+            $typeDefinitionArray['allowedRecordTypes'] = $typeDefinition->allowedRecordTypes;
         }
         return $typeDefinitionArray;
     }

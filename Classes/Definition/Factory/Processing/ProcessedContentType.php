@@ -86,6 +86,9 @@ final class ProcessedContentType
         if ($this->contentBlock->getContentType() === ContentType::CONTENT_ELEMENT) {
             $contentType['saveAndClose'] = (bool)($yaml['saveAndClose'] ?? false);
         }
+        if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
+            $contentType['allowedRecordTypes'] = $this->contentBlock->getYaml()['allowedRecordTypes'] ?? [];
+        }
         return $contentType;
     }
 }

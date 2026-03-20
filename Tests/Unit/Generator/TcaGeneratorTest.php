@@ -1677,6 +1677,10 @@ final class TcaGeneratorTest extends UnitTestCase
                         'table' => 'pages',
                         'typeField' => 'doktype',
                         'typeName' => 1700156757,
+                        'allowedRecordTypes' => [
+                            'foo',
+                            'bar',
+                        ],
                     ],
                 ],
             ],
@@ -1705,6 +1709,10 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:nav_title.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:nav_title.description',
                                 ],
+                            ],
+                            'allowedRecordTypes' => [
+                                'foo',
+                                'bar',
                             ],
                         ],
                     ],

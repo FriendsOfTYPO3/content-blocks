@@ -72,6 +72,7 @@ final class ContentTypeFactory
         $arguments['table'] = $table;
         $iconHideInMenu = ContentTypeIcon::fromArray($typeDefinition['typeIconHideInMenu'] ?? []);
         $iconRoot = ContentTypeIcon::fromArray($typeDefinition['typeIconRoot'] ?? []);
+        $arguments['allowedRecordTypes'] = $typeDefinition['allowedRecordTypes'] ?? [];
         $pageIconSet = new PageIconSet($iconHideInMenu, $iconRoot);
         $arguments['pageIconSet'] = $pageIconSet;
         $pageTypeDefinition = new PageTypeDefinition(...$arguments);

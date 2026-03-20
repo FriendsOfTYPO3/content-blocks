@@ -31,6 +31,10 @@ final class PageTypeSchemaTest extends UnitTestCase
                 'name' => 'json/page-test',
                 'typeName' => 123,
                 'group' => 'default',
+                'allowedRecordTypes' => [
+                    'foo',
+                    'bar',
+                ],
             ],
             'valid' => true,
         ];

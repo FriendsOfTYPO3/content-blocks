@@ -68,3 +68,41 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    *  `default`
    *  `link`
    *  `special`
+
+.. confval:: allowedRecordTypes
+   :name: page-type-allowedRecordTypes
+   :required: false
+   :type: array<string>
+
+   List of allowed Record Types (tables) for this specific Page Type. If defined,
+   only this list of records can be created on this Page Type. This is also
+   evaluated when switching a Page Type to another one. Per default the tables
+   `pages`, `sys_category`, `sys_file_reference` and `sys_file_collection` are
+   allowed, if not configured otherwise.
+
+   .. hint::
+
+      If a Record Type ignores Page Type restrictions, then you don't need to
+      list it here. It will be allowed regardless of this setting.
+
+      .. code-block:: yaml
+
+       security:
+           ignorePageTypeRestriction: true
+
+   Example: Extending the default allowed values with custom ones.
+
+   .. code-block:: yaml
+
+       allowedRecordTypes:
+         - pages
+         - sys_category
+         - sys_file_reference
+         - my_custom_table
+
+   Example: Allow all records with an asterisk:
+
+   .. code-block:: yaml
+
+       allowedRecordTypes:
+         - *
