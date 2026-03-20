@@ -17,7 +17,9 @@
     "fields": {},
     "table": {},
     "typeField": {},
-    "allowedRecordTypes": {}
+    "allowedRecordTypes": {},
+    "labelField": {},
+    "fallbackLabelFields": {}
   },
   "allOf": [
     {
@@ -62,6 +64,27 @@
         },
         "allowedRecordTypes": {
           "description": "List of allowed records, which may be created on this Page",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "labelField": {
+          "description": "Defines which field should be used as the title of the record.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "fallbackLabelFields": {
+          "description": "Defines which fields should be used as fallback, if labelField is not filled.",
           "type": "array",
           "items": {
             "type": "string"

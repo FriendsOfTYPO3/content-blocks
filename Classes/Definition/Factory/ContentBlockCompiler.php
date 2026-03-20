@@ -586,7 +586,7 @@ final class ContentBlockCompiler
     {
         $isRootTable = $input->isRootTable();
         $identifier = $input->yaml['identifier'] ?? '';
-        $typeDefinition = $result->contentType->toArray($isRootTable, $identifier);
+        $typeDefinition = $result->contentType->toArray($isRootTable, $identifier, $result->tableDefinition->raw);
         return $typeDefinition;
     }
 

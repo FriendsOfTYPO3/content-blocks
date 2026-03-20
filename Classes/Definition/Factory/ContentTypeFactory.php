@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 
+use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentElementDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
@@ -96,6 +97,7 @@ final class ContentTypeFactory
         $arguments['languagePathTitle'] = $typeDefinition['languagePathTitle'] ?? null;
         $arguments['languagePathDescription'] = $typeDefinition['languagePathDescription'] ?? null;
         $arguments['group'] = $typeDefinition['group'];
+        $arguments['labelCapability'] = LabelCapability::createFromArray($typeDefinition);
         return $arguments;
     }
 }

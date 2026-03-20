@@ -59,6 +59,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeField' => 'CType',
                         'typeName' => 't3ce_example',
                         'saveAndClose' => true,
+                        'labelField' => 'email',
                         'fields' => [
                             [
                                 'identifier' => 'bodytext',
@@ -399,6 +400,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                 't3ce_example_pass' => [
                                 ],
                             ],
+                            'label' => 't3ce_example_email',
                         ],
                         't3ce_testblock' => [
                             'showitem' => 'bodytext,t3ce_testblock_text,header_layout,--div--;core.form.tabs:extended',
@@ -1283,6 +1285,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'typeField' => 'type',
                         'typeName' => 'example',
                         'prefixFields' => false,
+                        'labelField' => 'text',
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1304,6 +1307,8 @@ final class TcaGeneratorTest extends UnitTestCase
                         'table' => 'foobar',
                         'typeName' => 'example2',
                         'prefixFields' => false,
+                        'labelField' => 'text',
+                        'fallbackLabelFields' => ['text2'],
                         'fields' => [
                             [
                                 'identifier' => 'text',
@@ -1369,6 +1374,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'description' => 'LLL:EXT:foo/ContentBlocks/RecordTypes/example2/language/labels.xlf:text2.description',
                                 ],
                             ],
+                            'label_alt' => 'text2',
                         ],
                     ],
                     'palettes' => [

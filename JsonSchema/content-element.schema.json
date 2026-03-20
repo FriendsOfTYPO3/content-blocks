@@ -18,7 +18,9 @@
     "basics": {},
     "fields": {},
     "table": {},
-    "typeField": {}
+    "typeField": {},
+    "labelField": {},
+    "fallbackLabelFields": {}
   },
   "allOf": [
     {
@@ -67,6 +69,27 @@
           "description": "New Content Elements will skip the edit view.",
           "type": "boolean",
           "default": false
+        },
+        "labelField": {
+          "description": "Defines which field should be used as the title of the record.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "fallbackLabelFields": {
+          "description": "Defines which fields should be used as fallback, if labelField is not filled.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

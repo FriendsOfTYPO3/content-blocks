@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 
 /**
@@ -43,4 +44,5 @@ interface ContentTypeInterface
     public function getLanguagePathTitle(): string;
     public function getLanguagePathDescription(): string;
     public function getGroup(): ?string;
+    public function getLabelCapability(): LabelCapability;
 }

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
@@ -47,5 +48,6 @@ final readonly class RecordTypeDefinition implements ContentTypeInterface
         public string $languagePathTitle,
         public string $languagePathDescription,
         public ?string $group,
+        public LabelCapability $labelCapability,
     ) {}
 }

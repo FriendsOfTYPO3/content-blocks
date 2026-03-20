@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Generator;
 
 use TYPO3\CMS\ContentBlocks\Backend\Preview\PreviewRenderer;
+use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\NativeTableCapabilityProxy;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\RootLevelType;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\SystemFieldPalettesInterface;
@@ -158,6 +159,11 @@ readonly class TcaGenerator
                 $tca['columns'][$column->uniqueIdentifier] = $this->determineItemsLabel($typeDefinition, $column, $columnTca);
             }
             $tca['types'][$typeDefinition->getTypeName()] = $this->processTypeDefinition($typeDefinition, $tableDefinition);
+            foreach (['label', 'label_alt', 'label_alt_force'] as $labelProperty) {
+                if (($tca['ctrl'][$labelProperty] ?? '') === ($tca['types'][$typeDefinition->getTypeName()][$labelProperty] ?? '')) {
+                    unset($tca['types'][$typeDefinition->getTypeName()][$labelProperty]);
+                }
+            }
             if ($tableDefinition->hasTypeField()) {
                 if ($typeDefinition->getTypeIcon()->initialized) {
                     $tca['ctrl']['typeicon_classes'][$typeDefinition->getTypeName()] = $typeDefinition->getTypeIcon()->iconIdentifier;
@@ -302,6 +308,10 @@ readonly class TcaGenerator
             ContentType::FILE_TYPE => $this->processFileType($typeDefinition, $columnsOverrides),
             ContentType::RECORD_TYPE => $this->processRecordType($typeDefinition, $columnsOverrides, $tableDefinition),
         };
+        $labelCapability = $typeDefinition->getLabelCapability();
+        if ($labelCapability->hasLabelField()) {
+            $tca = $this->configureRecordLabel($tca, $tableDefinition, $labelCapability);
+        }
         return $tca;
     }
 
@@ -700,35 +710,25 @@ readonly class TcaGenerator
         return $column;
     }
 
+    /**
+     * If there is no user-defined label field, look for preferred field type first.
+     * Otherwise, use first field as label regardless of the type.
+     */
     protected function resolveLabelField(TableDefinition $tableDefinition): ?string
     {
-        $labelCapability = $tableDefinition->capability->getLabelCapability();
-        $labelField = null;
-        if ($labelCapability->hasLabelField()) {
-            $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
-            $tableDefinitionCollection = $tableDefinition->tcaFieldDefinitionCollection;
-            if (!$tableDefinitionCollection->hasField($labelFieldIdentifier)) {
-                return null;
+        $labelFieldCandidate = null;
+        // These are preferred, as they most often provide a meaningful preview of the record.
+        $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
+        $tcaFieldDefinitionCollection = $tableDefinition->getDefaultTypeDefinition()->getOverrideColumns();
+        foreach ($tcaFieldDefinitionCollection as $columnFieldDefinition) {
+            $fieldType = $columnFieldDefinition->fieldType;
+            if (in_array($fieldType->getTcaType(), $preferredLabelTypes, true)) {
+                $labelField = $columnFieldDefinition;
+                break;
             }
-            $labelField = $tableDefinitionCollection->getField($labelFieldIdentifier);
+            $labelFieldCandidate ??= $columnFieldDefinition;
         }
-        // If there is no user-defined label field, look for preferred field type first.
-        // Otherwise, use first field as label regardless of the type.
-        if ($labelField === null) {
-            $labelFieldCandidate = null;
-            // These are preferred, as they most often provide a meaningful preview of the record.
-            $preferredLabelTypes = ['input', 'text', 'email', 'uuid'];
-            $tcaFieldDefinitionCollection = $tableDefinition->getDefaultTypeDefinition()->getOverrideColumns();
-            foreach ($tcaFieldDefinitionCollection as $columnFieldDefinition) {
-                $fieldType = $columnFieldDefinition->fieldType;
-                if (in_array($fieldType->getTcaType(), $preferredLabelTypes, true)) {
-                    $labelField = $columnFieldDefinition;
-                    break;
-                }
-                $labelFieldCandidate ??= $columnFieldDefinition;
-            }
-            $labelField ??= $labelFieldCandidate;
-        }
+        $labelField ??= $labelFieldCandidate;
         return $labelField?->uniqueIdentifier;
     }
 
@@ -960,21 +960,16 @@ readonly class TcaGenerator
         }
         $ctrl = [];
         $ctrl['title'] = $title;
-        $labelField = $this->resolveLabelField($tableDefinition);
-        if ($labelField !== null) {
-            $ctrl['label'] = $labelField;
+        $labelCapability = $tableDefinition->capability->getLabelCapability();
+        // If there is a typeField, we can't use the possibly merged label capability.
+        // Instead, the first type definition's label capability is used.
+        if ($tableDefinition->hasTypeField()) {
+            $labelCapability = $defaultTypeDefinition->getLabelCapability();
         }
+        $ctrl = $this->configureRecordLabel($ctrl, $tableDefinition, $labelCapability);
         $ctrl['hideTable'] = $tableDefinition->hasParentReferences();
         $ctrl['enablecolumns'] = $capability->buildRestrictionsTca();
         $ctrl['previewRenderer'] = PreviewRenderer::class;
-        $labelCapability = $tableDefinition->capability->getLabelCapability();
-        if ($labelCapability->hasAdditionalLabelFields()) {
-            $ctrl['label_alt'] = $labelCapability->getAdditionalLabelFieldsAsString();
-            $ctrl['label_alt_force'] = true;
-        }
-        if ($labelCapability->hasFallbackLabelFields()) {
-            $ctrl['label_alt'] = $labelCapability->getFallbackLabelFieldsAsString();
-        }
         if ($tableDefinition->hasTypeField()) {
             $ctrl['type'] = $tableDefinition->typeField;
         }
@@ -1075,6 +1070,34 @@ readonly class TcaGenerator
             'palettes' => $palettes,
             'columns' => $columns,
         ];
+    }
+
+    protected function configureRecordLabel(array $config, TableDefinition $tableDefinition, LabelCapability $labelCapability): array
+    {
+        $labelField = null;
+        if ($labelCapability->hasLabelField()) {
+            $labelFieldIdentifier = $labelCapability->getPrimaryLabelField();
+            $tableDefinitionCollection = $tableDefinition->tcaFieldDefinitionCollection;
+            if (!$tableDefinitionCollection->hasField($labelFieldIdentifier)) {
+                return $config;
+            }
+            $labelField = $tableDefinitionCollection->getField($labelFieldIdentifier)->uniqueIdentifier;
+        }
+        if ($labelField === null) {
+            $labelField = $this->resolveLabelField($tableDefinition);
+        }
+        if ($labelField === null) {
+            return $config;
+        }
+        $config['label'] = $labelField;
+        if ($labelCapability->hasAdditionalLabelFields()) {
+            $config['label_alt'] = $labelCapability->getAdditionalLabelFieldsAsString();
+            $config['label_alt_force'] = true;
+        }
+        if ($labelCapability->hasFallbackLabelFields()) {
+            $config['label_alt'] = $labelCapability->getFallbackLabelFieldsAsString();
+        }
+        return $config;
     }
 
     protected function isTableWorkspaceAware(TableDefinition $tableDefinition): bool

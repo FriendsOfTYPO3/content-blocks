@@ -43,7 +43,7 @@ final class ProcessedContentType
     public string $languagePathTitle = '';
     public string $languagePathDescription = '';
 
-    public function toArray(bool $isRootTable, string $identifier): array
+    public function toArray(bool $isRootTable, string $identifier, array $processedRawYaml): array
     {
         $yaml = $this->contentBlock->getYaml();
         $vendor = $this->contentBlock->getVendor();
@@ -89,6 +89,8 @@ final class ProcessedContentType
         if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
             $contentType['allowedRecordTypes'] = $this->contentBlock->getYaml()['allowedRecordTypes'] ?? [];
         }
+        $contentType['labelField'] = $processedRawYaml['labelField'] ?? null;
+        $contentType['fallbackLabelFields'] = $processedRawYaml['fallbackLabelFields'] ?? [];
         return $contentType;
     }
 }

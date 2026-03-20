@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\ContentType;
 
+use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
@@ -50,6 +51,7 @@ final readonly class PageTypeDefinition implements ContentTypeInterface
         public PageIconSet $pageIconSet,
         /** @var string[] */
         public array $allowedRecordTypes,
+        public LabelCapability $labelCapability,
     ) {}
 
     public function getPageIconSet(): PageIconSet
