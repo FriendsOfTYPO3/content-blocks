@@ -29,7 +29,6 @@ use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
-use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
@@ -68,7 +67,6 @@ class ServiceProvider extends AbstractServiceProvider
     {
         return [
             IconRegistry::class => static::configureIconRegistry(...),
-            PageDoktypeRegistry::class => static::configurePageTypes(...),
             ListenerProvider::class => static::addEventListeners(...),
         ] + parent::getExtensions();
     }
@@ -279,21 +277,6 @@ class ServiceProvider extends AbstractServiceProvider
             $iconRegistry->registerIcon($icon, $provider, $options);
         }
         return $iconRegistry;
-    }
-
-    public static function configurePageTypes(ContainerInterface $container, PageDoktypeRegistry $pageDoktypeRegistry): PageDoktypeRegistry
-    {
-        // Early core cache is required here, as PageDokTypeRegistry is instantiated in ExtensionManagementUtility::loadBaseTca
-        $cache = $container->get('cache.core');
-        $pageTypesFromContentBlocks = $cache->require('ContentBlocks_PageTypes');
-        if ($pageTypesFromContentBlocks === false) {
-            $pageTypesFromContentBlocks = $container->get('content-blocks.page-types')->getArrayCopy();
-            $cache->set('ContentBlocks_PageTypes', 'return ' . var_export($pageTypesFromContentBlocks, true) . ';');
-        }
-        foreach ($pageTypesFromContentBlocks as $pageType) {
-            $pageDoktypeRegistry->add((int)$pageType, []);
-        }
-        return $pageDoktypeRegistry;
     }
 
     public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider

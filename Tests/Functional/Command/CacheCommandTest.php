@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Command;
 
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\CMS\Core\Authentication\CommandLineUserAuthentication;
@@ -35,6 +36,7 @@ final class CacheCommandTest extends FunctionalTestCase
     ];
 
     #[Test]
+    #[IgnoreDeprecations]
     public function extensionSetupCacheTest(): void
     {
         // Warmup the cache to reproduce cache issue
