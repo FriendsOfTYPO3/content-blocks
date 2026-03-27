@@ -143,3 +143,31 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        fallbackLabelFields:
            - text1
            - text2
+
+.. confval:: wizardSteps
+   :name: page-type-wizardSteps
+   :required: false
+   :type: array
+
+   The page creation wizard supports a dynamic configuration for its steps.
+   This allows to define which fields are displayed in which step of the wizard.
+   The steps are sorted, allowing steps to be positioned relative to each other
+   using the after or before keys.
+
+   .. code-block:: yaml
+
+        wizardSteps:
+          setup:
+            title: Setup
+            fields:
+              - title
+              - slug
+              - nav_title
+              - hidden
+              - nav_hide
+          special:
+            title: Special
+            fields:
+              - additional_field
+            after:
+              - setup

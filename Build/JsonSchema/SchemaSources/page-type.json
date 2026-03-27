@@ -19,7 +19,8 @@
 		"typeField": {},
 		"allowedRecordTypes": {},
 		"labelField": {},
-		"fallbackLabelFields": {}
+		"fallbackLabelFields": {},
+		"wizardSteps": {}
 	},
 	"allOf": [
 		{
@@ -84,6 +85,39 @@
 					"type": "array",
 					"items": {
 						"type": "string"
+					}
+				},
+				"wizardSteps": {
+					"description": "Allows to define which fields are displayed in which step of the wizard",
+					"type": "object",
+					"patternProperties": {
+						".*": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"title": {
+									"type": "string"
+								},
+								"fields": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"after": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"before": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							}
+						}
 					}
 				}
 			}

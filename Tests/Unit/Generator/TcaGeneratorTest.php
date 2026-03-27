@@ -1687,6 +1687,23 @@ final class TcaGeneratorTest extends UnitTestCase
                             'foo',
                             'bar',
                         ],
+                        'wizardSteps' => [
+                            'setup' => [
+                                'title' => 'LLL:EXT:backend/Resources/Private/Language/Wizards/page.xlf:step.setup',
+                                'fields' => ['title', 'slug', 'nav_title', 'hidden', 'nav_hide'],
+                            ],
+                            'special' => [
+                                'title' => 'LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:wizard.special_step',
+                                'fields' => ['my_custom_field'],
+                                'after' => ['setup'],
+                            ],
+                        ],
+                        'fields' => [
+                            [
+                                'identifier' => 'my_custom_field',
+                                'type' => 'Text',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -1701,7 +1718,7 @@ final class TcaGeneratorTest extends UnitTestCase
                     ],
                     'types' => [
                         '1700156757' => [
-                            'showitem' => '--div--;core.form.tabs:general,--palette--;;standard,--palette--;;content_blocks_titleonly,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;core.form.tabs:appearance,--palette--;;backend_layout,--palette--;;replace,--div--;core.form.tabs:behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;core.form.tabs:resources,--palette--;;config,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;visibility,--palette--;;access,--div--;core.form.tabs:notes,rowDescription,--div--;core.form.tabs:extended',
+                            'showitem' => '--div--;core.form.tabs:general,--palette--;;standard,--palette--;;content_blocks_titleonly,contentblocks_custompagetype_my_custom_field,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;core.form.tabs:appearance,--palette--;;backend_layout,--palette--;;replace,--div--;core.form.tabs:behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;core.form.tabs:resources,--palette--;;config,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;visibility,--palette--;;access,--div--;core.form.tabs:notes,rowDescription,--div--;core.form.tabs:extended',
                             'columnsOverrides' => [
                                 'title' => [
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.label',
@@ -1715,14 +1732,37 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:nav_title.label',
                                     'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:nav_title.description',
                                 ],
+                                'contentblocks_custompagetype_my_custom_field' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:my_custom_field.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:my_custom_field.description',
+                                ],
                             ],
                             'allowedRecordTypes' => [
                                 'foo',
                                 'bar',
                             ],
+                            'wizardSteps' => [
+                                'setup' => [
+                                    'title' => 'LLL:EXT:backend/Resources/Private/Language/Wizards/page.xlf:step.setup',
+                                    'fields' => ['title', 'slug', 'nav_title', 'hidden', 'nav_hide'],
+                                ],
+                                'special' => [
+                                    'title' => 'LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:wizard.special_step',
+                                    'fields' => ['contentblocks_custompagetype_my_custom_field'],
+                                    'after' => ['setup'],
+                                ],
+                            ],
                         ],
                     ],
-                    'columns' => [],
+                    'columns' => [
+                        'contentblocks_custompagetype_my_custom_field' => [
+                            'config' => [
+                                'type' => 'input',
+                            ],
+                            'label' => 'my_custom_field',
+                            'exclude' => true,
+                        ],
+                    ],
                     'palettes' => [
                         'content_blocks_titleonly' => [
                             'showitem' => 'title,--linebreak--,slug,--linebreak--,nav_title',

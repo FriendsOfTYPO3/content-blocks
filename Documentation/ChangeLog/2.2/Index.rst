@@ -69,3 +69,29 @@ Example: Multi Type Record with different label fields.
    labelField: field_1
    fallbackLabelFields:
      - field_2
+
+Page Creation Wizard Steps
+--------------------------
+
+The page creation wizard supports a dynamic configuration for its steps.
+This allows to define which fields are displayed in which step of the wizard.
+
+Read the correspondig `Core Changelog <https://docs.typo3.org/permalink/changelog:feature-109271-1742217000>`__.
+
+.. code-block:: yaml
+
+    wizardSteps:
+      setup:
+        title: Setup
+        fields:
+          - title
+          - slug
+          - nav_title
+          - hidden
+          - nav_hide
+      special:
+        title: Special
+        fields:
+          - additional_field
+        after:
+          - setup

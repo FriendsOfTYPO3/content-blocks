@@ -367,6 +367,7 @@ final class ContentBlockCompiler
         $this->prefixLabelFieldIfNecessary($input, $result);
         $this->prefixFallbackLabelFieldsIfNecessary($input, $result);
         $this->prefixDisplayCondFieldsIfNecessary($result);
+        $this->prefixWizardItemsIfNecessary($input, $result);
     }
 
     private function prependTypeFieldForRecordType(
@@ -828,6 +829,25 @@ final class ContentBlockCompiler
         }
         $input->languagePath->popSegment();
         return $sectionDefinition;
+    }
+
+    private function prefixWizardItemsIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void
+    {
+        if ($input->contentType !== ContentType::PAGE_TYPE) {
+            return;
+        }
+        $wizardItems = $input->yaml['wizardSteps'] ?? [];
+        if ($wizardItems === []) {
+            return;
+        }
+        foreach ($wizardItems as $step => $configuration) {
+            foreach ($configuration['fields'] ?? [] as $i => $fieldIdentifier) {
+                if (in_array($fieldIdentifier, $result->uniqueFieldIdentifiers, true)) {
+                    $uniqueIdentifier = $result->identifierToUniqueMap[$fieldIdentifier];
+                    $result->tableDefinition->raw['wizardSteps'][$step]['fields'][$i] = $uniqueIdentifier;
+                }
+            }
+        }
     }
 
     private function prefixSortFieldIfNecessary(ProcessingInput $input, ProcessedFieldsResult $result): void

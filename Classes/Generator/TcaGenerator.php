@@ -353,6 +353,9 @@ readonly class TcaGenerator
         if ($typeDefinition->allowedRecordTypes !== []) {
             $typeDefinitionArray['allowedRecordTypes'] = $typeDefinition->allowedRecordTypes;
         }
+        if ($typeDefinition->wizardSteps !== []) {
+            $typeDefinitionArray['wizardSteps'] = $typeDefinition->wizardSteps;
+        }
         return $typeDefinitionArray;
     }
 
