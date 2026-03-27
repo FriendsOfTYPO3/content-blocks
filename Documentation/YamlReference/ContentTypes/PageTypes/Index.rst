@@ -171,3 +171,12 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
               - additional_field
             after:
               - setup
+
+.. confval:: isViewable
+   :name: page-type-isViewable
+   :required: false
+   :type: array
+   :default: true
+
+   Whether a specific page type can be linked to in the page browser and in
+   frontend TypoLink generation.

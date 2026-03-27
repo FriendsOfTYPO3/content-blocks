@@ -95,3 +95,9 @@ Read the correspondig `Core Changelog <https://docs.typo3.org/permalink/changelo
           - additional_field
         after:
           - setup
+
+Page Type isViewable
+--------------------
+
+A new option :yaml:`isViewable` for Page Types is added to configure whether it
+can be linked to in the page browser and in frontend TypoLink generation.

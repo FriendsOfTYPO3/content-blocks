@@ -75,6 +75,7 @@ final class ContentTypeFactory
         $iconRoot = ContentTypeIcon::fromArray($typeDefinition['typeIconRoot'] ?? []);
         $arguments['allowedRecordTypes'] = $typeDefinition['allowedRecordTypes'] ?? [];
         $arguments['wizardSteps'] = $typeDefinition['wizardSteps'] ?? [];
+        $arguments['isViewable'] = $typeDefinition['isViewable'] ?? true;
         $pageIconSet = new PageIconSet($iconHideInMenu, $iconRoot);
         $arguments['pageIconSet'] = $pageIconSet;
         $pageTypeDefinition = new PageTypeDefinition(...$arguments);

@@ -53,6 +53,7 @@ final readonly class PageTypeDefinition implements ContentTypeInterface
         public array $allowedRecordTypes,
         public LabelCapability $labelCapability,
         public array $wizardSteps,
+        public bool $isViewable,
     ) {}
 
     public function getPageIconSet(): PageIconSet

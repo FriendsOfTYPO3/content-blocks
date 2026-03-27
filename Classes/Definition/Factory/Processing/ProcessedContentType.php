@@ -89,6 +89,7 @@ final class ProcessedContentType
         if ($this->contentBlock->getContentType() === ContentType::PAGE_TYPE) {
             $contentType['allowedRecordTypes'] = $this->contentBlock->getYaml()['allowedRecordTypes'] ?? [];
             $contentType['wizardSteps'] = $processedRawYaml['wizardSteps'] ?? [];
+            $contentType['isViewable'] = $processedRawYaml['isViewable'] ?? true;
         }
         $contentType['labelField'] = $processedRawYaml['labelField'] ?? null;
         $contentType['fallbackLabelFields'] = $processedRawYaml['fallbackLabelFields'] ?? [];

@@ -20,7 +20,8 @@
 		"allowedRecordTypes": {},
 		"labelField": {},
 		"fallbackLabelFields": {},
-		"wizardSteps": {}
+		"wizardSteps": {},
+		"isViewable": {}
 	},
 	"allOf": [
 		{
@@ -119,6 +120,10 @@
 							}
 						}
 					}
+				},
+				"isViewable": {
+					"description": "Whether a specific page type can be linked to in the page browser and in frontend TypoLink generation.",
+					"type": "boolean"
 				}
 			}
 		},

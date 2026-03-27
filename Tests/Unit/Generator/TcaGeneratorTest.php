@@ -1698,6 +1698,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                 'after' => ['setup'],
                             ],
                         ],
+                        'isViewable' => false,
                         'fields' => [
                             [
                                 'identifier' => 'my_custom_field',
@@ -1752,6 +1753,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                     'after' => ['setup'],
                                 ],
                             ],
+                            'isViewable' => false,
                         ],
                     ],
                     'columns' => [

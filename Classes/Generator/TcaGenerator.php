@@ -356,6 +356,9 @@ readonly class TcaGenerator
         if ($typeDefinition->wizardSteps !== []) {
             $typeDefinitionArray['wizardSteps'] = $typeDefinition->wizardSteps;
         }
+        if ($typeDefinition->isViewable === false) {
+            $typeDefinitionArray['isViewable'] = false;
+        }
         return $typeDefinitionArray;
     }
 
