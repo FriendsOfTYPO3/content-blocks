@@ -24,6 +24,13 @@ This feature can be used for different purposes:
 For either of those purposes you need to re-define the :yaml:`fields` definition
 for the specified type.
 
+.. warning::
+
+    If you use type overrides to change validation options like :yaml:`required`,
+    :yaml:`max` or :yaml:`eval` of existing fields, this won't have an effect
+    when saving the record. Only the editing interface will reflect the changes,
+    which might lead to inconsistencies.
+
 Example 1: Override Multi Type Record
 =====================================
 
