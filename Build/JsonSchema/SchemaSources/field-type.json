@@ -54,6 +54,11 @@
 				"defaultAsReadonly"
 			]
 		},
+		"exclude": {
+			"type": "boolean",
+			"description": "If set, all backend users are prevented from editing the field unless they are members of a backend user group with this field allowed.",
+			"default": true
+		},
 		"type": {
 			"description": "Type of the field.",
 			"not": {
