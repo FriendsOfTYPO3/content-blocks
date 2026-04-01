@@ -40,6 +40,7 @@ layout and partial root paths.
        layoutRootPaths.0 < lib.contentElement.layoutRootPaths.0
 
        settings < lib.contentElement.settings
+       dataProcessing.5 = record-transformation
    }
 
 By adding the FSC settings, these will also be available in your Content Block
@@ -49,6 +50,13 @@ templates.
 
    We use the key "0" here, so FSC will never override your own layouts and
    partials.
+
+.. hint::
+
+   Since TYPO3 14.2 FSC uses the variable `record` in its layouts. As Content
+   Blocks only provides the `data` variable, we have to add another data
+   processor `record-transformation`. It's important that the key is less than
+   `10`, otherwise Content Blocks will override it with it's own object type.
 
 In order to use the standard FSC fields, you should include them as Basics in
 your config.yaml file. These are already shipped by Content Blocks.
