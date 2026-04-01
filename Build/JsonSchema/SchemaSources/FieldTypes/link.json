@@ -13,6 +13,7 @@
 		"type": {},
 		"l10n_mode": {},
 		"l10n_display": {},
+		"exclude": {},
 		"allowedTypes": {
 			"type": "array",
 			"description": "List of allowed link types. If empty, all types are allowed.",

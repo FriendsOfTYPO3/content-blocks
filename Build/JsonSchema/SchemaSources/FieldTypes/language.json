@@ -12,6 +12,7 @@
 		"onChange": {},
 		"type": {},
 		"l10n_mode": {},
-		"l10n_display": {}
+		"l10n_display": {},
+		"exclude": {}
 	}
 }

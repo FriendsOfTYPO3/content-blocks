@@ -13,6 +13,7 @@
 		"type": {},
 		"l10n_mode": {},
 		"l10n_display": {},
+		"exclude": {},
 		"allowNonIdValues": {
 			"type": "boolean",
 			"description": "Only useful if foreign_table is enabled. If set, then values which are not integer ids will be allowed.",

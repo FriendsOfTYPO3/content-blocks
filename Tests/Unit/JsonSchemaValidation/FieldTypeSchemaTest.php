@@ -40,6 +40,7 @@ final class FieldTypeSchemaTest extends UnitTestCase
                         'prefixType' => 'vendor',
                         'displayCond' => 'FIELD:header:=:Headline',
                         'onChange' => 'reload',
+                        'exclude' => false,
                     ],
                 ],
             ],

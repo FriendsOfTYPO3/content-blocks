@@ -348,6 +348,11 @@
                   "defaultAsReadonly"
                 ]
               },
+              "exclude": {
+                "type": "boolean",
+                "description": "If set, all backend users are prevented from editing the field unless they are members of a backend user group with this field allowed.",
+                "default": true
+              },
               "type": {
                 "description": "Type of the field.",
                 "not": {
@@ -460,6 +465,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -637,6 +643,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -760,6 +767,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -871,6 +879,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -976,6 +985,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1121,6 +1131,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "allowedTypes": {
                       "type": "array",
                       "description": "List of allowed link types. If empty, all types are allowed.",
@@ -1314,6 +1325,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1449,6 +1461,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1546,6 +1559,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -1633,6 +1647,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "allowNonIdValues": {
                       "type": "boolean",
                       "description": "Only useful if foreign_table is enabled. If set, then values which are not integer ids will be allowed.",
@@ -2014,6 +2029,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "authMode": {
                       "type": "string",
                       "description": "Authorization mode for the selector box",
@@ -2141,6 +2157,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -2299,6 +2316,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -2463,6 +2481,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "allowed": {
                       "description": "List of allowed file types",
                       "anyOf": [
@@ -2830,6 +2849,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "behaviour": {
                       "type": "object",
                       "additionalProperties": false,
@@ -2937,6 +2957,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "autoSizeMax": {
                       "type": "integer",
                       "description": "The select field will never be smaller than the specified size and never larger than the value of autoSizeMax.",
@@ -3066,7 +3087,8 @@
                     "onChange": {},
                     "type": {},
                     "l10n_mode": {},
-                    "l10n_display": {}
+                    "l10n_display": {},
+                    "exclude": {}
                   }
                 }
               },
@@ -3117,6 +3139,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "autocomplete": {
                       "type": "boolean",
                       "description": "Browser autocompletion"
@@ -3237,6 +3260,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "allowed": {
                       "type": "string",
                       "description": "A comma list of tables"
@@ -3549,6 +3573,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "appearance": {
                       "type": "object",
                       "additionalProperties": false,
@@ -4244,6 +4269,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "table": {
                       "type": "string",
                       "description": "The custom table name to be used for the new Record Type."
@@ -4759,6 +4785,7 @@
                     "type": {},
                     "l10n_mode": {},
                     "l10n_display": {},
+                    "exclude": {},
                     "fields": {
                       "oneOf": [
                         {
