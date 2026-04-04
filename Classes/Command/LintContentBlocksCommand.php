@@ -69,7 +69,8 @@ class LintContentBlocksCommand extends Command
                 continue;
             }
             $numberOfErrors++;
-            $this->renderError($validationResult, $basic->getIdentifier(), $basic->getHostExtension(), $output);
+            $contentBlockYaml = ['identifier' => $basic->getIdentifier(), 'fields' => $basic->getFields()];
+            $this->renderError($validationResult, $basic->getIdentifier(), $basic->getHostExtension(), $contentBlockYaml, $output);
         }
         return $numberOfErrors;
     }
@@ -83,7 +84,7 @@ class LintContentBlocksCommand extends Command
                 continue;
             }
             $numberOfErrors++;
-            $this->renderError($validationResult, $contentBlock->getName(), $contentBlock->getHostExtension(), $output);
+            $this->renderError($validationResult, $contentBlock->getName(), $contentBlock->getHostExtension(), $contentBlock->getYaml(), $output);
         }
         return $numberOfErrors;
     }
@@ -97,9 +98,9 @@ class LintContentBlocksCommand extends Command
         $symfonyStyle->success('No errors found');
     }
 
-    protected function renderError(ValidationResult $validationResult, string $name, string $extension, OutputInterface $output): void
+    protected function renderError(ValidationResult $validationResult, string $name, string $extension, array $contentBlockYaml, OutputInterface $output): void
     {
-        $flatArray = $this->gatherErrors($validationResult);
+        $flatArray = $this->gatherErrors($validationResult, $contentBlockYaml);
         $header = $name . ' | EXT:' . $extension;
         $table = new Table($output);
         $table->setHeaders(['Path', $header]);
@@ -110,7 +111,7 @@ class LintContentBlocksCommand extends Command
     /**
      * @return array<array{0: string, 1: string}>
      */
-    protected function gatherErrors(ValidationResult $validationResult): array
+    protected function gatherErrors(ValidationResult $validationResult, array $contentBlockYaml): array
     {
         $errors = $this->errorFormatter->format($validationResult);
         $flatArray = [];
@@ -122,10 +123,38 @@ class LintContentBlocksCommand extends Command
                         continue 2;
                     }
                 }
-                $flatArray[$path] = [$path, $errorItemError];
+                $resolvedPath = $this->resolveFieldPath($path, $contentBlockYaml);
+                $flatArray[$path] = [$resolvedPath, $errorItemError];
             }
         }
         $flatArray = array_values($flatArray);
         return $flatArray;
+    }
+
+    /**
+     * Resolves numeric JSON Pointer indices in "fields" arrays to their field identifiers.
+     * Example: "/fields/2/fields/3" becomes "/fields/testimonials/fields/image"
+     */
+    protected function resolveFieldPath(string $jsonPointerPath, array $contentBlockYaml): string
+    {
+        $pathSegments = explode('/', ltrim($jsonPointerPath, '/'));
+        $resolvedSegments = [];
+        $currentNode = $contentBlockYaml;
+        foreach ($pathSegments as $pathSegment) {
+            if (is_array($currentNode) && is_numeric($pathSegment)) {
+                $index = (int)$pathSegment;
+                $fieldDefinition = $currentNode[$index] ?? null;
+                if ($fieldDefinition !== null) {
+                    $resolvedSegments[] = $fieldDefinition['identifier'] ?? $pathSegment;
+                    $currentNode = $fieldDefinition;
+                    continue;
+                }
+            }
+            $resolvedSegments[] = $pathSegment;
+            $currentNode = is_array($currentNode) && array_key_exists($pathSegment, $currentNode)
+                ? $currentNode[$pathSegment]
+                : null;
+        }
+        return '/' . implode('/', $resolvedSegments);
     }
 }
