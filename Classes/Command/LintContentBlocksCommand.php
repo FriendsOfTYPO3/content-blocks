@@ -29,6 +29,8 @@ use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
 use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 #[AsCommand(
     'content-blocks:lint',
@@ -69,7 +71,8 @@ class LintContentBlocksCommand extends Command
                 continue;
             }
             $numberOfErrors++;
-            $this->renderError($validationResult, $basic->getIdentifier(), $basic->getHostExtension(), $output);
+            $contentBlockYaml = ['identifier' => $basic->getIdentifier(), 'fields' => $basic->getFields()];
+            $this->renderError($validationResult, $basic->getIdentifier(), $basic->getHostExtension(), $contentBlockYaml, $output);
         }
         return $numberOfErrors;
     }
@@ -83,7 +86,7 @@ class LintContentBlocksCommand extends Command
                 continue;
             }
             $numberOfErrors++;
-            $this->renderError($validationResult, $contentBlock->getName(), $contentBlock->getHostExtension(), $output);
+            $this->renderError($validationResult, $contentBlock->getName(), $contentBlock->getHostExtension(), $contentBlock->getYaml(), $output);
         }
         return $numberOfErrors;
     }
@@ -97,9 +100,9 @@ class LintContentBlocksCommand extends Command
         $symfonyStyle->success('No errors found');
     }
 
-    protected function renderError(ValidationResult $validationResult, string $name, string $extension, OutputInterface $output): void
+    protected function renderError(ValidationResult $validationResult, string $name, string $extension, array $contentBlockYaml, OutputInterface $output): void
     {
-        $flatArray = $this->gatherErrors($validationResult);
+        $flatArray = $this->gatherErrors($validationResult, $contentBlockYaml);
         $header = $name . ' | EXT:' . $extension;
         $table = new Table($output);
         $table->setHeaders(['Path', $header]);
@@ -110,7 +113,7 @@ class LintContentBlocksCommand extends Command
     /**
      * @return array<array{0: string, 1: string}>
      */
-    protected function gatherErrors(ValidationResult $validationResult): array
+    protected function gatherErrors(ValidationResult $validationResult, array $contentBlockYaml): array
     {
         $errors = $this->errorFormatter->format($validationResult);
         $flatArray = [];
@@ -122,10 +125,32 @@ class LintContentBlocksCommand extends Command
                         continue 2;
                     }
                 }
-                $flatArray[$path] = [$path, $errorItemError];
+                $resolvedPath = $this->resolveFieldPath($path, $contentBlockYaml);
+                $flatArray[$path] = [$resolvedPath, $errorItemError];
             }
         }
         $flatArray = array_values($flatArray);
         return $flatArray;
+    }
+
+    /**
+     * Resolves numeric JSON Pointer indices in "fields" arrays to their field identifiers.
+     * Example: "/fields/2/fields/3" becomes "/fields/testimonials/fields/image"
+     */
+    protected function resolveFieldPath(string $jsonPointerPath, array $contentBlockYaml): string
+    {
+        $pathSegments = GeneralUtility::trimExplode('/', $jsonPointerPath, true);
+        $currentNode = $contentBlockYaml;
+        foreach ($pathSegments as $pathSegmentIndex => $pathSegment) {
+            $pathSegmentOverride = $pathSegment;
+            if (MathUtility::canBeInterpretedAsInteger($pathSegment)) {
+                $fieldDefinition = $currentNode[$pathSegment];
+                $pathSegmentOverride = $fieldDefinition['identifier'] ?? $pathSegment;
+            }
+            $pathSegments[$pathSegmentIndex] = $pathSegmentOverride;
+            $currentNode = $currentNode[$pathSegment];
+        }
+        $resolvedSegments = '/' . implode('/', $pathSegments);
+        return $resolvedSegments;
     }
 }
