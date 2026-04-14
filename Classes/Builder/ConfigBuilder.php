@@ -53,12 +53,14 @@ readonly class ConfigBuilder
             $configuration['typeName'] = $typeName;
         }
         $mergedConfig = $this->mergeDefaultConfig($defaultConfig, $configuration);
-        $mergedConfig['fields'] = [
-            [
-                'identifier' => 'header',
-                'useExistingField' => true,
-            ],
-        ];
+        if (array_key_exists('fields', $mergedConfig) === false) {
+            $mergedConfig['fields'] = [
+                [
+                    'identifier' => 'header',
+                    'useExistingField' => true,
+                ],
+            ];
+        }
         return $mergedConfig;
     }
 
@@ -101,13 +103,15 @@ readonly class ConfigBuilder
             $configuration['typeName'] = $typeName;
         }
         $mergedConfig = $this->mergeDefaultConfig($defaultConfig, $configuration);
-        $mergedConfig['fields'] = [
-            [
-                'identifier' => $labelField,
-                'type' => 'Text',
-                'label' => 'Title',
-            ],
-        ];
+        if (array_key_exists('fields', $mergedConfig) === false) {
+            $mergedConfig['fields'] = [
+                [
+                    'identifier' => $labelField,
+                    'type' => 'Text',
+                    'label' => 'Title',
+                ],
+            ];
+        }
         return $mergedConfig;
     }
 
@@ -122,49 +126,51 @@ readonly class ConfigBuilder
             $configuration['typeName'] = $typeName;
         }
         $mergedConfig = $this->mergeDefaultConfig($defaultConfig, $configuration);
-        $mergedConfig['fields'] = [
-            [
-                'identifier' => 'image_overlay_palette',
-                'type' => 'Palette',
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette',
-                'fields' => [
-                    [
-                        'identifier' => 'alternative',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'identifier' => 'description',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'type' => 'Linebreak',
-                    ],
-                    [
-                        'identifier' => 'link',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'identifier' => 'title',
-                        'useExistingField' => true,
-                    ],
-                    [
-                        'type' => 'Linebreak',
-                    ],
-                    [
-                        'identifier' => 'example_custom_field',
-                        'type' => 'Text',
-                        'label' => 'My custom Field',
-                    ],
-                    [
-                        'type' => 'Linebreak',
-                    ],
-                    [
-                        'identifier' => 'crop',
-                        'useExistingField' => true,
+        if (array_key_exists('fields', $mergedConfig) === false) {
+            $mergedConfig['fields'] = [
+                [
+                    'identifier' => 'image_overlay_palette',
+                    'type' => 'Palette',
+                    'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette',
+                    'fields' => [
+                        [
+                            'identifier' => 'alternative',
+                            'useExistingField' => true,
+                        ],
+                        [
+                            'identifier' => 'description',
+                            'useExistingField' => true,
+                        ],
+                        [
+                            'type' => 'Linebreak',
+                        ],
+                        [
+                            'identifier' => 'link',
+                            'useExistingField' => true,
+                        ],
+                        [
+                            'identifier' => 'title',
+                            'useExistingField' => true,
+                        ],
+                        [
+                            'type' => 'Linebreak',
+                        ],
+                        [
+                            'identifier' => 'example_custom_field',
+                            'type' => 'Text',
+                            'label' => 'My custom Field',
+                        ],
+                        [
+                            'type' => 'Linebreak',
+                        ],
+                        [
+                            'identifier' => 'crop',
+                            'useExistingField' => true,
+                        ],
                     ],
                 ],
-            ],
-        ];
+            ];
+        }
         return $mergedConfig;
     }
 
