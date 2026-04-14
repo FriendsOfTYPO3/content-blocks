@@ -55,6 +55,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'SimpleBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -108,6 +109,7 @@ final class BasicsServiceTest extends UnitTestCase
                             ],
                         ],
                     ],
+                    'PaletteBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -165,6 +167,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'TabBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -216,6 +219,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Basic',
                         ],
                     ],
+                    'TabBasic.yaml',
                 ),
                 new LoadedBasic(
                     'bar',
@@ -230,6 +234,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'FieldBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -287,6 +292,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'SimpleBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -356,6 +362,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'SimpleBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -411,6 +418,7 @@ final class BasicsServiceTest extends UnitTestCase
                             ],
                         ],
                     ],
+                    'PaletteBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -470,6 +478,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'TabBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -523,6 +532,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Basic',
                         ],
                     ],
+                    'TabBasic.yaml',
                 ),
                 new LoadedBasic(
                     'bar',
@@ -537,6 +547,7 @@ final class BasicsServiceTest extends UnitTestCase
                             'type' => 'Textarea',
                         ],
                     ],
+                    'FieldBasic.yaml',
                 ),
             ],
             'expected' => [
@@ -590,7 +601,8 @@ final class BasicsServiceTest extends UnitTestCase
                             'identifier' => 'foo',
                             'type' => 'Text',
                         ],
-                    ]
+                    ],
+                    'Basic1.yaml',
                 ),
                 new LoadedBasic(
                     'foo',
@@ -600,7 +612,8 @@ final class BasicsServiceTest extends UnitTestCase
                             'identifier' => 'bar',
                             'type' => 'Textarea',
                         ],
-                    ]
+                    ],
+                    'Basic2.yaml',
                 ),
             ],
             'expected' => [
@@ -659,7 +672,8 @@ final class BasicsServiceTest extends UnitTestCase
                     'identifier' => 'foo',
                     'type' => 'Text',
                 ],
-            ]
+            ],
+            'Basic1.yaml',
         );
 
         $basic2 = new LoadedBasic(
@@ -670,7 +684,8 @@ final class BasicsServiceTest extends UnitTestCase
                     'identifier' => 'bar',
                     'type' => 'Textarea',
                 ],
-            ]
+            ],
+            'Basic1.yaml',
         );
 
         $basicsRegistry = new BasicsRegistry();
@@ -693,7 +708,8 @@ final class BasicsServiceTest extends UnitTestCase
                     'identifier' => 'Basic2',
                     'type' => 'Basic',
                 ],
-            ]
+            ],
+            'Basic1.yaml',
         );
 
         $basic2 = new LoadedBasic(
@@ -704,7 +720,8 @@ final class BasicsServiceTest extends UnitTestCase
                     'identifier' => 'Basic1',
                     'type' => 'Basic',
                 ],
-            ]
+            ],
+            'Basic1.yaml',
         );
 
         $yaml = [
