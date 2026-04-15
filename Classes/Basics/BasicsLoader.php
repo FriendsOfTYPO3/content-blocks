@@ -65,7 +65,7 @@ class BasicsLoader
         if (is_array($basics = $this->getFromCache())) {
             $this->basicsRegistry = new BasicsRegistry();
             foreach ($basics as $basic) {
-                $loadedBasic = LoadedBasic::fromArray($basic);
+                $loadedBasic = new LoadedBasic(...$basic);
                 $this->basicsRegistry->register($loadedBasic);
             }
             return $this->basicsRegistry;
@@ -90,7 +90,12 @@ class BasicsLoader
                 if (!is_array($yamlContent) || ($yamlContent['identifier'] ?? '') === '') {
                     throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname() . '"' . ': Cannot find an identifier.', 1689095524);
                 }
-                $loadedBasic = LoadedBasic::fromArray($yamlContent, $package->getPackageKey(), $splFileInfo->getFilename());
+                $loadedBasic = new LoadedBasic(
+                    hostExtension: $package->getPackageKey(),
+                    identifier: $yamlContent['identifier'],
+                    fields: $yamlContent['fields'] ?? [],
+                    fileName: $splFileInfo->getFilename()
+                );
                 $basicsRegistry->register($loadedBasic);
             }
         }
