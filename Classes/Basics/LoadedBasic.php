@@ -32,16 +32,6 @@ final readonly class LoadedBasic
         private string $fileName,
     ) {}
 
-    public static function fromArray(array $array, string $hostExtension = '', string $filename = ''): LoadedBasic
-    {
-        return new self(
-            hostExtension: (string)($array['hostExtension'] ?? $hostExtension),
-            identifier: (string)($array['identifier'] ?? ''),
-            fields: (array)($array['fields'] ?? []),
-            fileName: (string)($array['filename'] ?? $filename),
-        );
-    }
-
     public function toArray(): array
     {
         return [
