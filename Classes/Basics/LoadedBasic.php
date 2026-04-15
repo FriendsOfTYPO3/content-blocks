@@ -29,16 +29,8 @@ final readonly class LoadedBasic
         private string $hostExtension,
         private string $identifier,
         private array $fields,
+        private string $fileName,
     ) {}
-
-    public static function fromArray(array $array, string $hostExtension = ''): LoadedBasic
-    {
-        return new self(
-            hostExtension: (string)($array['hostExtension'] ?? $hostExtension),
-            identifier: (string)($array['identifier'] ?? ''),
-            fields: (array)($array['fields'] ?? [])
-        );
-    }
 
     public function toArray(): array
     {
@@ -46,6 +38,7 @@ final readonly class LoadedBasic
             'identifier' => $this->identifier,
             'fields' => $this->fields,
             'hostExtension' => $this->hostExtension,
+            'fileName' => $this->fileName,
         ];
     }
 
@@ -62,5 +55,10 @@ final readonly class LoadedBasic
     public function getHostExtension(): string
     {
         return $this->hostExtension;
+    }
+
+    public function getFileName(): string
+    {
+        return $this->fileName;
     }
 }
