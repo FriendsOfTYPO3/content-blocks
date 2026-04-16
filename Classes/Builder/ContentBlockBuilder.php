@@ -18,6 +18,8 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Builder;
 
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
@@ -42,6 +44,8 @@ readonly class ContentBlockBuilder
         protected FieldTypeRegistry $fieldTypeRegistry,
         protected TableDefinitionCollectionFactory $tableDefinitionCollectionFactory,
         protected SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected BasicsLoader $basicsLoader,
+        protected BasicsService $basicsService,
     ) {}
 
     /**
@@ -95,7 +99,17 @@ readonly class ContentBlockBuilder
 
     protected function initializeRegistries(LoadedContentBlock $contentBlock): void
     {
-        $this->contentBlockRegistry->register($contentBlock);
+        $basicsRegistry = $this->basicsLoader->loadUncached();
+        $yaml = $this->basicsService->applyBasics($basicsRegistry, $contentBlock->getYaml());
+        $expandedContentBlock = new LoadedContentBlock(
+            name: $contentBlock->getName(),
+            yaml: $yaml,
+            icon: $contentBlock->getIcon(),
+            hostExtension: $contentBlock->getHostExtension(),
+            extPath: $contentBlock->getExtPath(),
+            contentType: $contentBlock->getContentType(),
+        );
+        $this->contentBlockRegistry->register($expandedContentBlock);
         $tableDefinitionCollection = $this->tableDefinitionCollectionFactory->createUncached(
             $this->contentBlockRegistry,
             $this->fieldTypeRegistry,
