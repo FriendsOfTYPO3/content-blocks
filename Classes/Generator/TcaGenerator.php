@@ -161,7 +161,7 @@ readonly class TcaGenerator
                 $tca['columns'][$column->uniqueIdentifier] = $this->getColumnTcaForTableWithoutTypeField($tableDefinition, $column);
             }
         }
-        foreach ($tableDefinition->contentTypeDefinitionCollection ?? [] as $typeDefinition) {
+        foreach ($tableDefinition->contentTypeDefinitionCollection as $typeDefinition) {
             foreach ($typeDefinition->getOverrideColumns() as $column) {
                 $columnTca = $tca['columns'][$column->uniqueIdentifier];
                 $tca['columns'][$column->uniqueIdentifier] = $this->determineItemsLabel($typeDefinition, $column, $columnTca);
