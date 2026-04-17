@@ -72,7 +72,7 @@ class ServiceProvider extends AbstractServiceProvider
         return [
             IconRegistry::class => static::configureIconRegistry(...),
             ListenerProvider::class => static::addEventListeners(...),
-            SetCollector::class => static::configureSetCollectorForContentBlocks(...),
+            SetCollector::class => static::configureSetCollectorAll(...),
         ] + parent::getExtensions();
     }
 
@@ -284,6 +284,13 @@ class ServiceProvider extends AbstractServiceProvider
         return $iconRegistry;
     }
 
+    public static function configureSetCollectorAll(ContainerInterface $container, SetCollector $setCollector): SetCollector
+    {
+        $siteCollector = self::configureSetCollectorForContentBlocks($container, $setCollector);
+        $siteCollector = self::configureSetCollectorForContentBlocksInExtension($container, $siteCollector);
+        return $siteCollector;
+    }
+
     public static function configureSetCollectorForContentBlocks(ContainerInterface $container, SetCollector $setCollector): SetCollector
     {
         /** @var ContentBlockRegistry $contentBlockRegistry */
@@ -308,6 +315,34 @@ class ServiceProvider extends AbstractServiceProvider
                 label: $label,
                 typoscript: $contentBlock->getExtPath(),
                 pagets: $contentBlock->getExtPath() . '/page.tsconfig',
+            );
+            $setCollector->add($setDefinition);
+        }
+        return $setCollector;
+    }
+
+    public static function configureSetCollectorForContentBlocksInExtension(ContainerInterface $container, SetCollector $setCollector): SetCollector
+    {
+        /** @var ContentBlockRegistry $contentBlockRegistry */
+        $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
+        $contentBlocksGroupedByExtension = [];
+        foreach ($contentBlockRegistry->getAll() as $contentBlock) {
+            $contentBlocksGroupedByExtension[$contentBlock->getHostExtension()][] = $contentBlock;
+        }
+        foreach ($contentBlocksGroupedByExtension as $extensionName => $contentBlocks) {
+            $extensionNameForConfig = str_replace('_', '', $extensionName);
+            $name = $extensionNameForConfig . '/content-blocks-all';
+            $label = 'All Content Blocks in EXT:' . $extensionName;
+            $dependencies = [];
+            foreach ($contentBlocks as $contentBlock) {
+                $dependencies[] = $contentBlock->getName();
+            }
+            $setDefinition = new SetDefinition(
+                name: $name,
+                label: $label,
+                dependencies: $dependencies,
+                // @todo bug in TYPO3. Remove when fixed, see: https://forge.typo3.org/issues/109634
+                typoscript: '',
             );
             $setCollector->add($setDefinition);
         }
