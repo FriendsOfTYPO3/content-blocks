@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Form\FormDataProvider;
 
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 
 /**
@@ -24,6 +26,10 @@ use TYPO3\CMS\Core\Schema\Struct\SelectItem;
  */
 readonly class AllowedRecordTypeFilter
 {
+    public function __construct(
+        protected ContentBlockRegistry $contentBlockRegistry,
+    ) {}
+
     /**
      * @param array<array|SelectItem> $items
      * @param string[] $allowedRecordTypes
@@ -45,6 +51,35 @@ readonly class AllowedRecordTypeFilter
         }
         ksort($filteredItems);
         $filteredItems = array_values($filteredItems);
+        return $filteredItems;
+    }
+
+    /**
+     * @param array<array|SelectItem> $items
+     * @param LoadedContentBlock[] $allowedContentBlocks
+     * @return SelectItem[]
+     */
+    public function filterByAllowedContentBlocks(array $items, array $allowedContentBlocks, string $tableName): array
+    {
+        $contentBlockTypeNames = array_map(fn(LoadedContentBlock $contentBlock) => $contentBlock->getYaml()['typeName'], $allowedContentBlocks);
+        $filteredItems = [];
+        foreach ($items as $item) {
+            $selectItem = $item;
+            if ($selectItem instanceof SelectItem === false) {
+                $selectItem = SelectItem::fromTcaItemArray($item);
+            }
+            if ($selectItem->isDivider()) {
+                $filteredItems[] = $selectItem;
+                continue;
+            }
+            if ($this->contentBlockRegistry->getByTypeName($tableName, $selectItem->getValue()) === null) {
+                $filteredItems[] = $selectItem;
+                continue;
+            }
+            if (in_array($selectItem->getValue(), $contentBlockTypeNames, true)) {
+                $filteredItems[] = $selectItem;
+            }
+        }
         return $filteredItems;
     }
 }
