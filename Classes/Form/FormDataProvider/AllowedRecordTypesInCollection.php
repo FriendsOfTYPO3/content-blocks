@@ -22,6 +22,9 @@ use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\CollectionFieldType;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 
+/**
+ * @internal
+ */
 final readonly class AllowedRecordTypesInCollection implements FormDataProviderInterface
 {
     public function __construct(

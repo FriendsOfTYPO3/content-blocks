@@ -72,6 +72,11 @@ final class ContentBlockRegistry
         return $this->contentBlocks;
     }
 
+    public function getByTypeName(string $table, string $typeName): ?LoadedContentBlock
+    {
+        return $this->typeNamesByTable[$table]['types'][$typeName] ?? null;
+    }
+
     public function getFromRawRecord(string $table, array $record = []): ?LoadedContentBlock
     {
         if (array_key_exists($table, $this->typeNamesByTable) === false) {
@@ -98,14 +103,17 @@ final class ContentBlockRegistry
         // If typeName is not set explicitly, then it is inferred from the name, which is unique.
         $contentType = $contentBlock->getContentType();
         $yaml = $contentBlock->getYaml();
+        $table = $contentType->getTable() ?? $yaml['table'];
         $typeField = $yaml['typeField'] ?? null;
+        if ($typeField === null && ($this->typeNamesByTable[$table] ?? []) !== []) {
+            $typeField = $this->typeNamesByTable[$table]['typeField'];
+        }
         if ($typeField === null && $contentType !== ContentType::FILE_TYPE) {
             $typeName = '1';
         }
         $typeName ??= (string)$yaml['typeName'];
 
         // The typeName has to be unique per table. Get it from the YAML for Record Types.
-        $table = $contentType->getTable() ?? $yaml['table'];
         if (!isset($this->typeNamesByTable[$table]['types'][$typeName])) {
             $this->typeNamesByTable[$table]['typeField'] ??= $typeField;
             $this->typeNamesByTable[$table]['types'][$typeName] = $contentBlock;
