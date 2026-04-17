@@ -57,6 +57,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $loadedContentBlockA = LoadedContentBlock::fromArray([
             'name' => 'example/a',
             'yaml' => [
+                'typeField' => 'CType',
                 'typeName' => 'example',
                 'table' => 'tt_content',
             ],
@@ -64,6 +65,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $loadedContentBlockB = LoadedContentBlock::fromArray([
             'name' => 'example/b',
             'yaml' => [
+                'typeField' => 'CType',
                 'typeName' => 'example',
                 'table' => 'tt_content',
             ],
@@ -84,6 +86,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $loadedContentBlockA = LoadedContentBlock::fromArray([
             'name' => 'example/a',
             'yaml' => [
+                'typeField' => 'doktype',
                 'typeName' => '123',
                 'table' => 'pages',
             ],
@@ -91,6 +94,7 @@ final class ContentBlockRegistryTest extends UnitTestCase
         $loadedContentBlockB = LoadedContentBlock::fromArray([
             'name' => 'example/b',
             'yaml' => [
+                'typeField' => 'doktype',
                 'typeName' => '123',
                 'table' => 'pages',
             ],
