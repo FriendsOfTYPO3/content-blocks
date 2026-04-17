@@ -25,6 +25,8 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageTypeDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
+use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Registry\LanguageFileRegistry;
 use TYPO3\CMS\ContentBlocks\UserFunction\ContentWhere;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -32,6 +34,8 @@ use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Package\AbstractServiceProvider;
+use TYPO3\CMS\Core\Site\Set\SetCollector;
+use TYPO3\CMS\Core\Site\Set\SetDefinition;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Event\AfterContentHasBeenFetchedEvent;
 
@@ -68,6 +72,7 @@ class ServiceProvider extends AbstractServiceProvider
         return [
             IconRegistry::class => static::configureIconRegistry(...),
             ListenerProvider::class => static::addEventListeners(...),
+            SetCollector::class => static::configureSetCollectorForContentBlocks(...),
         ] + parent::getExtensions();
     }
 
@@ -277,6 +282,36 @@ class ServiceProvider extends AbstractServiceProvider
             $iconRegistry->registerIcon($icon, $provider, $options);
         }
         return $iconRegistry;
+    }
+
+    public static function configureSetCollectorForContentBlocks(ContainerInterface $container, SetCollector $setCollector): SetCollector
+    {
+        /** @var ContentBlockRegistry $contentBlockRegistry */
+        $contentBlockRegistry = $container->get(ContentBlockRegistry::class);
+        /** @var TableDefinitionCollection $tableDefinitionCollection */
+        $tableDefinitionCollection = $container->get(TableDefinitionCollection::class);
+        /** @var LanguageFileRegistry $languageFileRegistry */
+        $languageFileRegistry = $container->get(LanguageFileRegistry::class);
+        foreach ($contentBlockRegistry->getAll() as $contentBlock) {
+            $table = $contentBlock->getYaml()['table'];
+            $tableDefinition = $tableDefinitionCollection->getTable($table);
+            $typeName = $contentBlock->getYaml()['typeName'];
+            $typeDefinition = $tableDefinition->contentTypeDefinitionCollection->getType($typeName);
+            $languagePathTitle = $typeDefinition->getLanguagePathTitle();
+            if ($languageFileRegistry->isset($typeDefinition->getName(), $languagePathTitle)) {
+                $label = $languagePathTitle;
+            } else {
+                $label = $typeDefinition->getTitle();
+            }
+            $setDefinition = new SetDefinition(
+                name: $contentBlock->getName(),
+                label: $label,
+                typoscript: $contentBlock->getExtPath(),
+                pagets: $contentBlock->getExtPath() . '/page.tsconfig',
+            );
+            $setCollector->add($setDefinition);
+        }
+        return $setCollector;
     }
 
     public static function addEventListeners(ContainerInterface $container, ListenerProvider $listenerProvider): ListenerProvider
