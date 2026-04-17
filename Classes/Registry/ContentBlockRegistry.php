@@ -72,6 +72,11 @@ final class ContentBlockRegistry
         return $this->contentBlocks;
     }
 
+    public function getByTypeName(string $table, string $typeName): ?LoadedContentBlock
+    {
+        return $this->typeNamesByTable[$table]['types'][$typeName] ?? null;
+    }
+
     public function getFromRawRecord(string $table, array $record = []): ?LoadedContentBlock
     {
         if (array_key_exists($table, $this->typeNamesByTable) === false) {
