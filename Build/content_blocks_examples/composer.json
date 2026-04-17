@@ -1,7 +1,7 @@
 {
 	"name": "contentblocks/examples",
 	"type": "typo3-cms-extension",
-	"version": "2.2.2",
+	"version": "2.2.3",
 	"description": "TYPO3 CMS Content Blocks examples",
 	"homepage": "https://typo3.org",
 	"license": [
