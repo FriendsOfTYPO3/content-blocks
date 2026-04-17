@@ -2,7 +2,9 @@
 
 defined('TYPO3') or die();
 
+use TYPO3\CMS\Backend\Form\FormDataProvider\SiteResolving;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
+use TYPO3\CMS\ContentBlocks\Form\FormDataProvider\AllowedContentElementsInSite;
 use TYPO3\CMS\ContentBlocks\Form\FormDataProvider\AllowedRecordTypesInCollection;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -21,5 +23,11 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['cb'][] = 'TYPO3\\CMS\
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][AllowedRecordTypesInCollection::class] = [
     'depends' => [
         TcaSelectItems::class,
+    ],
+];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][AllowedContentElementsInSite::class] = [
+    'depends' => [
+        TcaSelectItems::class,
+        SiteResolving::class,
     ],
 ];
