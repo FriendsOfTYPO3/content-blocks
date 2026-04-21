@@ -15,9 +15,9 @@
 		}
 	],
 	"support": {
-		"chat": "https://typo3.org/help",
+		"chat": "https://typo3.community/meet/slack",
 		"docs": "https://docs.typo3.org/p/friendsoftypo3/content-blocks/main/en-us/",
-		"issues": "https://forge.typo3.org",
+		"issues": "https://github.com/FriendsOfTYPO3/content-blocks/issues",
 		"source": "https://github.com/FriendsOfTYPO3/content-blocks"
 	},
 	"repositories": [
