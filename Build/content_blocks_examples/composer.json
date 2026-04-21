@@ -25,7 +25,7 @@
 	"extra": {
 		"typo3/cms": {
 			"extension-key": "content_blocks_examples",
-			"version": "2.2.3",
+			"version": "2.2.4",
 			"Package": {
 				"providesPackages": {}
 			}
