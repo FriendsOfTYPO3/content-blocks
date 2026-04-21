@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 1
 
       - name: Validate composer.json
-        run: composer validate
+        run: composer validate --strict
 
       - name: Get composer cache directory
         id: composer-cache

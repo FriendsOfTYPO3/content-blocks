@@ -1,7 +1,6 @@
 {
 	"name": "friendsoftypo3/content-blocks",
 	"type": "typo3-cms-extension",
-	"version": "2.2.3",
 	"description": "TYPO3 CMS Content Blocks - Content Types API | Define reusable components via YAML",
 	"homepage": "https://typo3.org",
 	"license": [
@@ -48,10 +47,10 @@
 		"symfony/finder": "^7.3",
 		"symfony/var-exporter": "^7.3",
 		"symfony/yaml": "^7.3",
-		"typo3/cms-backend": "^14.2",
-		"typo3/cms-core": "^14.2",
-		"typo3/cms-fluid": "^14.2",
-		"typo3/cms-frontend": "^14.2"
+		"typo3/cms-backend": "^14.3",
+		"typo3/cms-core": "^14.3",
+		"typo3/cms-fluid": "^14.3",
+		"typo3/cms-frontend": "^14.3"
 	},
 	"replace": {
 		"contentblocks/content-blocks": "*"
@@ -59,18 +58,13 @@
 	"extra": {
 		"typo3/cms": {
 			"web-dir": ".Build/public",
+			"version": "2.2.3",
 			"extension-key": "content_blocks",
 			"Package": {
 				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider",
 				"providesPackages": {
-					"php": "",
 					"opis/json-schema": "",
-					"symfony/console": "",
-					"symfony/dependency-injection": "",
-					"symfony/filesystem": "",
-					"symfony/finder": "",
-					"symfony/var-exporter": "",
-					"symfony/yaml": ""
+					"symfony/var-exporter": ""
 				}
 			}
 		}
@@ -92,14 +86,14 @@
 		"friendsofphp/php-cs-fixer": "^3.22",
 		"phpstan/phpstan": "^2.1",
 		"phpstan/phpstan-phpunit": "^2.0",
-		"typo3/cms-extbase": "^14.2",
-		"typo3/cms-extensionmanager": "^14.2",
-		"typo3/cms-filelist": "^14.2",
-		"typo3/cms-install": "^14.2",
-		"typo3/cms-lowlevel": "^14.2",
-		"typo3/cms-rte-ckeditor": "^14.2",
-		"typo3/cms-tstemplate": "^14.2",
-		"typo3/cms-workspaces": "^14.2",
+		"typo3/cms-extbase": "^14.3",
+		"typo3/cms-extensionmanager": "^14.3",
+		"typo3/cms-filelist": "^14.3",
+		"typo3/cms-install": "^14.3",
+		"typo3/cms-lowlevel": "^14.3",
+		"typo3/cms-rte-ckeditor": "^14.3",
+		"typo3/cms-tstemplate": "^14.3",
+		"typo3/cms-workspaces": "^14.3",
 		"typo3/coding-standards": "^0.8",
 		"typo3/testing-framework": "dev-main"
 	},
