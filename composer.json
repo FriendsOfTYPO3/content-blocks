@@ -58,7 +58,7 @@
 	"extra": {
 		"typo3/cms": {
 			"web-dir": ".Build/public",
-			"version": "2.3.0",
+			"version": "2.3.1",
 			"extension-key": "content_blocks",
 			"Package": {
 				"serviceProvider": "TYPO3\\CMS\\ContentBlocks\\ServiceProvider",
