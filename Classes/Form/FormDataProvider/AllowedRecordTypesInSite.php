@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Form\FormDataProvider;
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\ContentBlocks\SiteSet\ContentBlockSiteRegistry;
+use TYPO3\CMS\Core\Schema\Exception\InvalidSchemaTypeException;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Site\Entity\Site;
 
@@ -36,8 +37,8 @@ final readonly class AllowedRecordTypesInSite implements FormDataProviderInterfa
     public function addData(array $result): array
     {
         $tableName = $result['tableName'];
-        $contentElementSchema = $this->tcaSchemaFactory->get($tableName);
-        if ($tableName !== $contentElementSchema->getName()) {
+        $schema = $this->tcaSchemaFactory->get($tableName);
+        if ($tableName !== $schema->getName()) {
             return $result;
         }
         $site = $result['site'];
@@ -49,7 +50,11 @@ final readonly class AllowedRecordTypesInSite implements FormDataProviderInterfa
         if ($contentBlocks === []) {
             return $result;
         }
-        $typeField = $contentElementSchema->getSubSchemaTypeInformation()->getFieldName();
+        try {
+            $typeField = $schema->getSubSchemaTypeInformation()->getFieldName();
+        } catch (InvalidSchemaTypeException) {
+            return $result;
+        }
         $items = $result['processedTca']['columns'][$typeField]['config']['items'] ?? [];
         if ($items === []) {
             return $result;
