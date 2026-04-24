@@ -34,7 +34,6 @@ readonly class RestrictContentBlockInNewRecordView
 
     public function __invoke(ModifyNewRecordCreationLinksEvent $event): void
     {
-        /** @var Site $site */
         $site = $event->request->getAttribute('site');
         if ($site instanceof Site === false) {
             return;
