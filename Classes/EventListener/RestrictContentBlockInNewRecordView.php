@@ -36,6 +36,9 @@ readonly class RestrictContentBlockInNewRecordView
     {
         /** @var Site $site */
         $site = $event->request->getAttribute('site');
+        if ($site instanceof Site === false) {
+            return;
+        }
         foreach ($event->groupedCreationLinks as $groupName => $group) {
             if ($groupName === 'pages' || $groupName === 'content') {
                 continue;
