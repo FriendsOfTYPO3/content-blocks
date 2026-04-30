@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\SiteSet;
 
+use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\Core\Site\Entity\Site;
@@ -35,14 +36,17 @@ readonly class ContentBlockSiteRegistry
     /**
      * @return array<LoadedContentBlock>
      */
-    public function resolveContentBlocksRegisteredAsSiteSet(Site $site, string $table): array
+    public function resolveContentBlocksRegisteredAsSiteSet(Site $site, string|ContentType $restriction): array
     {
         $registeredContentBlocksTypeNames = [];
         $siteSets = $this->setRegistry->getSets(...$site->getSets());
         foreach ($siteSets as $siteSet) {
             if ($this->contentBlockRegistry->hasContentBlock($siteSet->name)) {
                 $contentBlock = $this->contentBlockRegistry->getContentBlock($siteSet->name);
-                if ($contentBlock->getYaml()['table'] !== $table) {
+                if ($restriction instanceof ContentType && $contentBlock->getContentType() !== $restriction) {
+                    continue;
+                }
+                if (is_string($restriction) && $contentBlock->getYaml()['table'] !== $restriction) {
                     continue;
                 }
                 $registeredContentBlocksTypeNames[] = $contentBlock;
