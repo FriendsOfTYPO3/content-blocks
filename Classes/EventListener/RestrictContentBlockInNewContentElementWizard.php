@@ -41,7 +41,7 @@ readonly class RestrictContentBlockInNewContentElementWizard
         /** @var Site $site */
         $site = $event->getRequest()->getAttribute('site');
         $table = ContentType::CONTENT_ELEMENT->getTable();
-        $contentBlocks = $this->contentBlockSiteRegistry->resolveContentBlocksRegisteredAsSiteSet($site, $table);
+        $contentBlocks = $this->contentBlockSiteRegistry->resolveContentBlocksRegisteredAsSiteSet($site, ContentType::CONTENT_ELEMENT);
         // If there is no Content Block registered as Site Set, allow all.
         if ($contentBlocks === []) {
             return;
