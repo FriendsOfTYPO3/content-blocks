@@ -37,6 +37,9 @@ final readonly class AllowedRecordTypesInSite implements FormDataProviderInterfa
     public function addData(array $result): array
     {
         $tableName = $result['tableName'];
+        if (!$this->tcaSchemaFactory->has($tableName)) {
+            return $result;
+        }
         $schema = $this->tcaSchemaFactory->get($tableName);
         if ($tableName !== $schema->getName()) {
             return $result;
