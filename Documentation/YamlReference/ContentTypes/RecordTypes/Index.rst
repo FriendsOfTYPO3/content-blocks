@@ -386,3 +386,18 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    .. code-block:: yaml
 
        appendLabelAtCopy: append me
+
+.. confval:: hideInUi
+   :name: record-type-hideInUi
+   :required: false
+   :type: boolean
+   :default: false
+
+   Hide this type in record listings, especially the Content > Records module.
+   If this record is used as a child item inside a Collection field, then it
+   will be automatically hidden and there is no need to explicitly enable this
+   toggle.
+
+   .. code-block:: yaml
+
+       hideInUi: true

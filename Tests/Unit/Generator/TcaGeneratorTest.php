@@ -1061,6 +1061,7 @@ final class TcaGeneratorTest extends UnitTestCase
                             'text',
                             'text2',
                         ],
+                        'hideInUi' => true,
                         'languageAware' => false,
                         'workspaceAware' => false,
                         'restriction' => [
@@ -1104,7 +1105,7 @@ final class TcaGeneratorTest extends UnitTestCase
                         'label' => 't3ce_example_text',
                         'label_alt' => 't3ce_example_text2',
                         'label_alt_force' => true,
-                        'hideTable' => false,
+                        'hideTable' => true,
                         'enablecolumns' => [
                             'endtime' => 'endtime',
                             'fe_group' => 'fe_group',

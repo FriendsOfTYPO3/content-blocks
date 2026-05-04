@@ -974,7 +974,7 @@ readonly class TcaGenerator
             $labelCapability = $defaultTypeDefinition->getLabelCapability();
         }
         $ctrl = $this->configureRecordLabel($ctrl, $tableDefinition, $labelCapability);
-        $ctrl['hideTable'] = $tableDefinition->hasParentReferences();
+        $ctrl['hideTable'] = $tableDefinition->capability->isHiddenInUi() || $tableDefinition->hasParentReferences();
         $ctrl['enablecolumns'] = $capability->buildRestrictionsTca();
         $ctrl['previewRenderer'] = PreviewRenderer::class;
         if ($tableDefinition->hasTypeField()) {
