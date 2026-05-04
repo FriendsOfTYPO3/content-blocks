@@ -44,6 +44,7 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
     private bool $adminOnly = false;
     private bool $hideAtCopy = false;
     private string $appendLabelAtCopy = '';
+    private bool $hideInUi = false;
 
     public static function createFromArray(array $definition): TableDefinitionCapability
     {
@@ -69,6 +70,7 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
         $capability->appendLabelAtCopy = (string)($definition['appendLabelAtCopy'] ?? $capability->appendLabelAtCopy);
         $capability->rootLevelCapability = RootLevelCapability::createFromArray($definition);
         $capability->labelCapability = LabelCapability::createFromArray($definition);
+        $capability->hideInUi = (bool)($definition['hideInUi'] ?? $capability->hideInUi);
 
         return $capability;
     }
@@ -203,6 +205,11 @@ final class TableDefinitionCapability implements SystemFieldPalettesInterface
     public function getAppendLabelAtCopy(): string
     {
         return $this->appendLabelAtCopy;
+    }
+
+    public function isHiddenInUi(): bool
+    {
+        return $this->hideInUi;
     }
 
     public function withIgnorePageTypeRestriction(bool $ignorePageTypeRestriction): TableDefinitionCapability

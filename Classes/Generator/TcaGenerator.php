@@ -1052,7 +1052,7 @@ readonly class TcaGenerator
         if ($labelField !== null) {
             $ctrl['label'] = $labelField;
         }
-        $ctrl['hideTable'] = $tableDefinition->hasParentReferences();
+        $ctrl['hideTable'] = $tableDefinition->capability->isHiddenInUi() || $tableDefinition->hasParentReferences();
         $ctrl['enablecolumns'] = $capability->buildRestrictionsTca();
         $ctrl['previewRenderer'] = PreviewRenderer::class;
         $labelCapability = $tableDefinition->capability->getLabelCapability();
