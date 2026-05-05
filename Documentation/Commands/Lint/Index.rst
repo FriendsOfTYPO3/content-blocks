@@ -2,7 +2,7 @@
 .. _command_lint:
 
 ============
-Lint command
+Lint Command
 ============
 
 The command :bash:`content-blocks:lint` finds all configuration errors inside

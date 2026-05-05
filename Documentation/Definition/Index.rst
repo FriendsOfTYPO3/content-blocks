@@ -35,6 +35,8 @@ named **assets**, **templates** and **language**.
                     *   :file:`frontend.fluid.html`
 
                 *   :file:`config.yaml`(:ref:`details <cb_definition_editor_interface>`)
+                *   :file:`setup.typoscript`(:ref:`details <api_site_sets>`)
+                *   :file:`page.tsconfig`(:ref:`details <api_site_sets>`)
 
 ..  toctree::
     :titlesonly:

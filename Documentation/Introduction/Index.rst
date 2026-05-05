@@ -67,6 +67,8 @@ easily copy-pasted into other projects.
                     *   :file:`frontend.fluid.html`
 
                 *   :file:`config.yaml`
+                *   :file:`setup.typoscript`
+                *   :file:`page.tsconfig`
 
 *  Learn more about the :ref:`Content Block definition <cb_definition>`
 
