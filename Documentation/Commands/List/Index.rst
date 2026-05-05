@@ -2,7 +2,7 @@
 .. _command_list:
 
 ============
-List command
+List Command
 ============
 
 The command :bash:`content-blocks:list` lists all loaded Content Blocks inside

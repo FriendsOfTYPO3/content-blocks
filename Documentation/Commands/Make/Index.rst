@@ -2,7 +2,7 @@
 .. _cb_skeleton:
 
 =================
-Kickstart command
+Kickstart Command
 =================
 
 The command :bash:`make:content-block` creates a bare-minimum Content Block.

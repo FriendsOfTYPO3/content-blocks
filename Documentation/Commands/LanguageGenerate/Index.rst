@@ -2,7 +2,7 @@
 .. _command_language_generate:
 
 =========================
-Language Generate command
+Language Generate Command
 =========================
 
 The command :bash:`content-blocks:language:generate` updates the labels.xlf
