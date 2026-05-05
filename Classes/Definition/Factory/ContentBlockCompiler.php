@@ -182,6 +182,9 @@ final class ContentBlockCompiler
         $yaml = $this->prepareYaml($result, $yaml);
         $yamlFields = $yaml['fields'] ?? [];
         foreach ($yamlFields as $rootField) {
+            if (is_array($rootField) === false) {
+                continue;
+            }
             $fields = $this->handleRootField($rootField, $input, $result);
             $this->processFields($input, $result, $fields);
         }
@@ -475,6 +478,9 @@ final class ContentBlockCompiler
         $fields = [];
         $paletteItems = [];
         foreach ($rootPalette['fields'] as $paletteField) {
+            if (is_array($paletteField) === false) {
+                continue;
+            }
             $paletteFieldType = $this->resolveType($input, $paletteField);
             $fieldTypeName = $paletteFieldType->getName();
             if (SpecialFieldType::tryFrom($fieldTypeName) === SpecialFieldType::LINEBREAK) {
@@ -708,6 +714,9 @@ final class ContentBlockCompiler
         $fields = $field['fields'] ?? [];
         if ($this->flexFormDefinitionHasDefaultSheet($fields)) {
             foreach ($fields as $flexFormField) {
+                if (is_array($flexFormField) === false) {
+                    continue;
+                }
                 $sheetDefinition->addFieldOrSection($this->resolveFlexFormField($input, $flexFormField));
             }
             $flexFormDefinition->addSheet($sheetDefinition);
@@ -753,6 +762,9 @@ final class ContentBlockCompiler
     private function flexFormDefinitionHasDefaultSheet(array $fields): bool
     {
         foreach ($fields as $flexFormField) {
+            if (is_array($flexFormField) === false) {
+                continue;
+            }
             return FlexFormSubType::tryFrom($flexFormField['type']) !== FlexFormSubType::SHEET;
         }
         return true;
@@ -1166,6 +1178,9 @@ final class ContentBlockCompiler
     private function validateFlexFormHasOnlySheetsOrNoSheet(array $field, LoadedContentBlock $contentBlock): void
     {
         foreach ($field['fields'] ?? [] as $flexField) {
+            if (is_array($flexField) === false) {
+                continue;
+            }
             $flexFormType = FlexFormSubType::tryFrom($flexField['type']);
             if ($flexFormType !== FlexFormSubType::SHEET) {
                 $flexFormType = 'nonSheet';
@@ -1186,6 +1201,9 @@ final class ContentBlockCompiler
     private function validateFlexFormContainsValidFieldTypes(array $field, LoadedContentBlock $contentBlock): void
     {
         foreach ($field['fields'] ?? [] as $flexField) {
+            if (is_array($flexField) === false) {
+                continue;
+            }
             $flexFieldType = $flexField['type'] ?? '';
             if (FlexFormSubType::tryFrom($flexFieldType) === FlexFormSubType::SHEET) {
                 $this->validateFlexFormContainsValidFieldTypes($flexField, $contentBlock);
