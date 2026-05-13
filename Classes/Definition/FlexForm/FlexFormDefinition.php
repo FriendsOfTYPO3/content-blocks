@@ -26,17 +26,17 @@ final class FlexFormDefinition implements \IteratorAggregate
     private string|int $typeName = '';
 
     /**
+     * @var SheetDefinition[]
+     */
+    private array $sheets = [];
+
+    /**
      * @return \Iterator<SheetDefinition>
      */
     public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->sheets);
     }
-
-    /**
-     * @var SheetDefinition[]
-     */
-    private array $sheets = [];
 
     public function addSheet(SheetDefinition $sheet): void
     {

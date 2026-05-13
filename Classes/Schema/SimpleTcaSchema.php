@@ -27,10 +27,10 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 final readonly class SimpleTcaSchema
 {
     public function __construct(
-        protected string $name,
-        protected FieldCollection $fields,
-        protected FieldCollection $systemFields,
-        protected array $schemaConfiguration,
+        private string $name,
+        private FieldCollection $fields,
+        private FieldCollection $systemFields,
+        private array $schemaConfiguration,
     ) {}
 
     public function getName(): string
@@ -91,7 +91,7 @@ final readonly class SimpleTcaSchema
         return $result;
     }
 
-    protected function buildLanguageCapability(): Capability\LanguageAwareSchemaCapability
+    private function buildLanguageCapability(): Capability\LanguageAwareSchemaCapability
     {
         $languageField = $this->fields[$this->schemaConfiguration['languageField']];
         $transOrigPointerField = $this->fields[$this->schemaConfiguration['transOrigPointerField']];

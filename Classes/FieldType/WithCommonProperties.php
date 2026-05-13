@@ -21,7 +21,7 @@ trait WithCommonProperties
 {
     private ?string $label = null;
     private ?string $description = null;
-    private null|string|array $displayCond = null;
+    private string|array|null $displayCond = null;
     private string $l10n_display = '';
     private string $l10n_mode = '';
     private string $onChange = '';

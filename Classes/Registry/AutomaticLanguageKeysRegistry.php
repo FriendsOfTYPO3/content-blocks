@@ -28,7 +28,7 @@ final class AutomaticLanguageKeysRegistry
     /**
      * @var array<string, AutomaticLanguageSource[]>
      */
-    protected array $flatLanguageKeyListByContentBlock = [];
+    private array $flatLanguageKeyListByContentBlock = [];
 
     public function addKey(LoadedContentBlock $contentBlock, AutomaticLanguageSource $automaticLanguageSource): void
     {

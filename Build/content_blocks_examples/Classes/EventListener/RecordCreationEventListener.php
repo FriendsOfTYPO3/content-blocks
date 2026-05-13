@@ -15,8 +15,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 final readonly class RecordCreationEventListener
 {
     public function __construct(
-        protected RecordFactory $recordFactory,
-        protected ConnectionPool $connectionPool,
+        private RecordFactory $recordFactory,
+        private ConnectionPool $connectionPool,
     ) {}
 
     public function __invoke(RecordCreationEvent $event): void

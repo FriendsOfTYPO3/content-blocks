@@ -26,7 +26,7 @@ final class FieldCollection implements \ArrayAccess, \IteratorAggregate, \Counta
         /**
          * @var array<string, TcaFieldTypeInterface> $fieldDefinitions
          */
-        protected array $fieldDefinitions = []
+        private array $fieldDefinitions = []
     ) {}
 
     public function offsetExists(mixed $offset): bool

@@ -37,7 +37,7 @@ use TYPO3\CMS\Core\Resource\FileReference;
  */
 final class ContentBlockDataDecorator
 {
-    protected ?ServerRequestInterface $request = null;
+    private ?ServerRequestInterface $request = null;
 
     public function __construct(
         private readonly TableDefinitionCollection $tableDefinitionCollection,

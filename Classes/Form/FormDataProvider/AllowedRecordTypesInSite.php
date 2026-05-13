@@ -29,9 +29,9 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 final readonly class AllowedRecordTypesInSite implements FormDataProviderInterface
 {
     public function __construct(
-        protected ContentBlockSiteRegistry $contentBlockSiteRegistry,
-        protected TcaSchemaFactory $tcaSchemaFactory,
-        protected AllowedRecordTypeFilter $allowedRecordTypeFilter,
+        private ContentBlockSiteRegistry $contentBlockSiteRegistry,
+        private TcaSchemaFactory $tcaSchemaFactory,
+        private AllowedRecordTypeFilter $allowedRecordTypeFilter,
     ) {}
 
     public function addData(array $result): array

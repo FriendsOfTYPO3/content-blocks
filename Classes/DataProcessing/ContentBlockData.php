@@ -56,10 +56,10 @@ use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 final class ContentBlockData implements RecordInterface
 {
     public function __construct(
-        protected ?Record $_record = null,
-        protected string $_name = '',
-        protected ?ContentBlockGridData $_grids = null,
-        protected array $_processed = [],
+        private ?Record $_record = null,
+        private string $_name = '',
+        private ?ContentBlockGridData $_grids = null,
+        private array $_processed = [],
     ) {}
 
     public function getUid(): int

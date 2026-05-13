@@ -22,7 +22,7 @@ use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 
 readonly class ConfigBuilder
 {
-    public function build(ContentType $contentType, string $vendor, string $name, ?string $title, null|string|int $typeName, array $defaultConfig): array
+    public function build(ContentType $contentType, string $vendor, string $name, ?string $title, string|int|null $typeName, array $defaultConfig): array
     {
         $title ??= $vendor . '/' . $name;
         $yamlConfiguration = match ($contentType) {

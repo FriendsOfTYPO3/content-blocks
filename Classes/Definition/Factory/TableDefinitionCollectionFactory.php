@@ -39,13 +39,13 @@ use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
  */
 final class TableDefinitionCollectionFactory
 {
-    protected TableDefinitionCollection $tableDefinitionCollection;
+    private TableDefinitionCollection $tableDefinitionCollection;
 
     public function __construct(
         #[Autowire(service: 'cache.core')]
-        protected readonly PhpFrontend $cache,
-        protected readonly ContentBlockCompiler $contentBlockCompiler,
-        protected readonly ContentBlockLoader $contentBlockLoader,
+        private readonly PhpFrontend $cache,
+        private readonly ContentBlockCompiler $contentBlockCompiler,
+        private readonly ContentBlockLoader $contentBlockLoader,
     ) {}
 
     public function create(
