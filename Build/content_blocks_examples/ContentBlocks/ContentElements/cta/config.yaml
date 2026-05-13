@@ -3,8 +3,10 @@ fields:
   - identifier: tab_1
     type: Tab
   - identifier: header
+    alias: title
     useExistingField: true
   - identifier: bodytext
+    alias: text
     useExistingField: true
     enableRichtext: true
   - identifier: link
@@ -16,9 +18,11 @@ fields:
       - file
     required: true
   - identifier: link_title
+    alias: linkTitle
     type: Text
     required: true
   - identifier: background_image
+    alias: backgroundImage
     type: File
     relationship: oneToOne
     minitems: 1

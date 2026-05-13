@@ -45,6 +45,7 @@ final class CategoryFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'categories',
+                        'alias' => 'myCategories',
                         'type' => 'Category',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

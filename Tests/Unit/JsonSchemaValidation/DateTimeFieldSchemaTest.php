@@ -45,6 +45,7 @@ final class DateTimeFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'datetime',
+                        'alias' => 'myDatetime',
                         'type' => 'DateTime',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

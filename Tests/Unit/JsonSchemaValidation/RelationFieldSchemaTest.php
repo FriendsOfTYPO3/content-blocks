@@ -45,6 +45,7 @@ final class RelationFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'relation',
+                        'alias' => 'myRelation',
                         'type' => 'Relation',
                         'allowed' => 'pages,tt_content',
                         'autoSizeMax' => 10,

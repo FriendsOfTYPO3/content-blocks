@@ -20,7 +20,6 @@ namespace TYPO3\CMS\ContentBlocks\DataProcessing;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeInterface;
-use TYPO3\CMS\ContentBlocks\Definition\TableDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
@@ -66,10 +65,8 @@ final class ContentBlockDataDecorator
         }
         $identifier = $this->getRecordIdentifier($resolvedRecord);
         $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
-        $tableDefinition = $this->tableDefinitionCollection->getTable($resolvedRecord->getMainType());
         $contentBlockData = $this->buildContentBlockDataObjectRecursive(
             $contentTypeDefinition,
-            $tableDefinition,
             $resolvedContentBlockDataRelation,
             0,
             $context,
@@ -80,24 +77,22 @@ final class ContentBlockDataDecorator
 
     private function buildContentBlockDataObjectRecursive(
         ContentTypeInterface $contentTypeDefinition,
-        TableDefinition $tableDefinition,
         ResolvedContentBlockDataRelation $resolvedRelation,
         int $depth = 0,
         ?PageLayoutContext $context = null,
     ): ContentBlockData {
         $processedContentBlockData = [];
         $grids = [];
-        foreach ($contentTypeDefinition->getColumns() as $column) {
-            $tcaFieldDefinition = $tableDefinition->tcaFieldDefinitionCollection->getField($column);
-            $fieldType = $tcaFieldDefinition->fieldType;
+        foreach ($contentTypeDefinition->getOverrideColumns() as $column) {
+            $fieldType = $column->fieldType;
             if (SpecialFieldType::tryFrom($fieldType->getName()) !== null) {
                 continue;
             }
-            $loadedField = $this->loadField($resolvedRelation, $tcaFieldDefinition, $depth, $context);
-            $processedContentBlockData[$tcaFieldDefinition->identifier] = $loadedField;
+            $loadedField = $this->loadField($resolvedRelation, $column, $depth, $context);
+            $processedContentBlockData[$column->identifier] = $loadedField;
             // Exclude file relations from grids.
             if ($this->canHandleGrid($loadedField, $fieldType, $context)) {
-                $grids[$tcaFieldDefinition->identifier] = $this->handleGrids($context, $loadedField, $tcaFieldDefinition);
+                $grids[$column->identifier] = $this->handleGrids($context, $loadedField, $column);
             }
         }
         $resolvedRelation->resolved = $processedContentBlockData;
@@ -312,7 +307,6 @@ final class ContentBlockDataDecorator
             $this->contentBlockDataDecoratorSession->addContentBlockData($identifier, new ContentBlockData());
             $contentBlockData = $this->buildContentBlockDataObjectRecursive(
                 $typeDefinition,
-                $collectionTableDefinition,
                 $contentBlockRelation,
                 ++$depth,
                 $context,

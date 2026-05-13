@@ -3,6 +3,7 @@ fields:
   - identifier: header
     useExistingField: true
   - identifier: tabs_item
+    alias: items
     type: Collection
     minitems: 1
     foreign_table: tt_content

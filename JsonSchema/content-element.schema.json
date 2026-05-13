@@ -157,6 +157,10 @@
                 "type": "string",
                 "description": "The identifier for the field."
               },
+              "alias": {
+                "type": "string",
+                "description": "An alternative read identifier for usage in Fluid templates or PHP code."
+              },
               "label": {
                 "type": "string"
               },
@@ -336,6 +340,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -524,6 +529,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -653,6 +659,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -770,6 +777,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -881,6 +889,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -1027,6 +1036,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -1226,6 +1236,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -1349,6 +1360,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -1490,6 +1502,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -1593,6 +1606,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -1686,6 +1700,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -2085,6 +2100,7 @@
                   ],
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -2213,6 +2229,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -2389,6 +2406,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -2554,6 +2572,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -2925,6 +2944,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -3050,6 +3070,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -3181,6 +3202,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -3211,6 +3233,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "type": {},
                     "useExistingField": {}
                   }
@@ -3232,6 +3255,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -3353,6 +3377,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -3666,6 +3691,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -4383,6 +4409,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},
@@ -4899,6 +4926,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {},
+                    "alias": {},
                     "label": {},
                     "description": {},
                     "useExistingField": {},

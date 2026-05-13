@@ -45,6 +45,7 @@ final class FlexFormFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'settings',
+                        'alias' => 'mySettings',
                         'type' => 'FlexForm',
                         'searchable' => true,
                         'fields' => [

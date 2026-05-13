@@ -45,6 +45,7 @@ final class SelectFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'select',
+                        'alias' => 'mySelect',
                         'type' => 'Select',
                         'allowNonIdValues' => true,
                         'appearance' => (object)[

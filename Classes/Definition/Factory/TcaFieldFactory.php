@@ -30,7 +30,7 @@ readonly class TcaFieldFactory
         $arguments['parentTable'] = $parentTable;
         $arguments['uniqueIdentifier'] = (string)($array['uniqueIdentifier'] ?? '');
         $arguments['parentContentType'] = ContentType::getByTable($array['parentTable'] ?? '');
-        $arguments['identifier'] = $array['config']['identifier'];
+        $arguments['identifier'] = $array['identifier'] ?? $array['config']['identifier'];
         $arguments['labelPath'] = $array['labelPath'] ?? '';
         $arguments['descriptionPath'] = $array['descriptionPath'] ?? '';
         $arguments['useExistingField'] = $array['config']['useExistingField'] ?? false;

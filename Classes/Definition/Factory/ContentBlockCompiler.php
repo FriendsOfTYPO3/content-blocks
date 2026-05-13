@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory;
 use TYPO3\CMS\ContentBlocks\Definition\Capability\LabelCapability;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedFieldsResult;
+use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessedRootFieldResult;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\Processing\ProcessingInput;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\ContainerDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\FlexForm\FlexFormDefinition;
@@ -198,41 +199,46 @@ final class ContentBlockCompiler
     private function processFields(ProcessingInput $input, ProcessedFieldsResult $result, array $fields): void
     {
         foreach ($fields as $field) {
-            $this->initializeField($input, $result, $field);
-            $input->languagePath->addPathSegment($result->identifier);
-            $tcaType = $result->fieldType->getTcaType();
+            $processedRootField = $this->initializeField($input, $result, $field);
+            $input->languagePath->addPathSegment($processedRootField->identifier);
+            $tcaType = $processedRootField->fieldType->getTcaType();
             if ($tcaType !== 'passthrough') {
-                $field = $this->initializeFieldLabelAndDescription($input, $result, $field);
+                $field = $this->initializeFieldLabelAndDescription($input, $processedRootField, $field);
             }
-            if ($result->fieldType instanceof FlexFormFieldType) {
+            if ($processedRootField->fieldType instanceof FlexFormFieldType) {
                 $field = $this->processFlexForm($input, $field);
             }
             if (in_array($tcaType, ['select', 'radio', 'check'], true)) {
-                $field = $this->collectItemLabels($input, $result->fieldType, $field);
+                $field = $this->collectItemLabels($input, $processedRootField->fieldType, $field);
             }
             if ($tcaType === 'file' || $tcaType === 'inline') {
-                $field['typeOverrides'] = $this->processTypeOverride($input, $result, $field);
+                $field['typeOverrides'] = $this->processTypeOverride($input, $result, $processedRootField, $field);
             }
-            $result->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $result, $field);
+            $processedRootField->tcaFieldDefinition = $this->buildTcaFieldDefinitionArray($input, $processedRootField, $field);
             if ($tcaType === 'inline') {
-                $this->processCollection($input, $result, $field);
+                $this->processCollection($input, $result, $processedRootField, $field);
             }
-            $this->collectProcessedField($result);
+            $this->collectProcessedField($result, $processedRootField);
             $input->languagePath->popSegment();
-            $result->resetTemporaryState();
         }
     }
 
-    private function initializeField(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
+    private function initializeField(ProcessingInput $input, ProcessedFieldsResult $result, array $field): ProcessedRootFieldResult
     {
-        $result->identifier = (string)$field['identifier'];
-        $this->assertUniqueFieldIdentifier($result, $input->contentBlock);
-        $result->uniqueFieldIdentifiers[] = $result->identifier;
-        $result->fieldType = $this->resolveType($input, $field);
-        $result->uniqueIdentifier = $this->chooseIdentifier($input, $field);
-        $result->identifierToUniqueMap[$result->identifier] = $result->uniqueIdentifier;
-        $this->fieldTypePerIdentifier[$input->table][$result->uniqueIdentifier] ??= $result->fieldType->getName();
-        $this->assertUniqueIdentifiersHaveSameFieldType($input, $result);
+        $rootFieldResult = new ProcessedRootFieldResult();
+        $rootFieldResult->identifier = (string)$field['identifier'];
+        $alias = $this->chooseAlias($field);
+        $result->identifierToAliasMap[$rootFieldResult->identifier] = $alias;
+        $this->assertUniqueFieldIdentifier($result, $rootFieldResult->identifier, $input->contentBlock);
+        $this->assertUniqueAliasIdentifier($alias, $result, $input->contentBlock);
+        $result->uniqueFieldIdentifiers[] = $rootFieldResult->identifier;
+        $result->uniqueAliasIdentifiers[] = $alias;
+        $rootFieldResult->fieldType = $this->resolveType($input, $field);
+        $rootFieldResult->uniqueIdentifier = $this->chooseUniqueIdentifier($input, $field);
+        $result->identifierToUniqueMap[$rootFieldResult->identifier] = $rootFieldResult->uniqueIdentifier;
+        $this->fieldTypePerIdentifier[$input->table][$rootFieldResult->uniqueIdentifier] ??= $rootFieldResult->fieldType->getName();
+        $this->assertUniqueIdentifiersHaveSameFieldType($input, $rootFieldResult);
+        return $rootFieldResult;
     }
 
     private function prepareYaml(ProcessedFieldsResult $result, array $yaml): array
@@ -288,7 +294,7 @@ final class ContentBlockCompiler
 
     private function initializeFieldLabelAndDescription(
         ProcessingInput $input,
-        ProcessedFieldsResult $result,
+        ProcessedRootFieldResult $result,
         array $field
     ): array {
         $labelPath = $this->getFieldLabelPath($input->languagePath);
@@ -340,11 +346,12 @@ final class ContentBlockCompiler
 
     private function buildTcaFieldDefinitionArray(
         ProcessingInput $input,
-        ProcessedFieldsResult $result,
+        ProcessedRootFieldResult $result,
         array $field,
     ): array {
         $tcaFieldDefinition = [
             'parentTable' => $input->contentBlock->getContentType()->getTable(),
+            'identifier' => $result->identifier,
             'uniqueIdentifier' => $result->uniqueIdentifier,
             'config' => $field,
             'type' => $result->fieldType,
@@ -462,7 +469,7 @@ final class ContentBlockCompiler
 
     private function handleDefault(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
     {
-        $result->contentType->showItems[] = $this->chooseIdentifier($input, $field);
+        $result->contentType->showItems[] = $this->chooseUniqueIdentifier($input, $field);
         return [$field];
     }
 
@@ -485,22 +492,22 @@ final class ContentBlockCompiler
             $fieldTypeName = $paletteFieldType->getName();
             if (SpecialFieldType::tryFrom($fieldTypeName) === SpecialFieldType::LINEBREAK) {
                 $paletteItems[] = new LinebreakDefinition();
-            } else {
-                $this->assertNoPaletteInPalette(
-                    $fieldTypeName,
-                    $paletteField['identifier'],
-                    $rootPaletteIdentifier,
-                    $input->contentBlock
-                );
-                $this->assertNoTabInPalette(
-                    $fieldTypeName,
-                    $paletteField['identifier'],
-                    $rootPaletteIdentifier,
-                    $input->contentBlock
-                );
-                $fields[] = $paletteField;
-                $paletteItems[] = $this->chooseIdentifier($input, $paletteField);
+                continue;
             }
+            $this->assertNoPaletteInPalette(
+                $fieldTypeName,
+                $paletteField['identifier'],
+                $rootPaletteIdentifier,
+                $input->contentBlock
+            );
+            $this->assertNoTabInPalette(
+                $fieldTypeName,
+                $paletteField['identifier'],
+                $rootPaletteIdentifier,
+                $input->contentBlock
+            );
+            $fields[] = $paletteField;
+            $paletteItems[] = $this->chooseUniqueIdentifier($input, $paletteField);
         }
 
         $input->languagePath->addPathSegment('palettes.' . $rootPaletteIdentifier);
@@ -514,7 +521,7 @@ final class ContentBlockCompiler
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
         $input->languagePath->popSegment();
 
-        $paletteIdentifier = $this->chooseIdentifier($input, $rootPalette);
+        $paletteIdentifier = $this->chooseUniqueIdentifier($input, $rootPalette);
         $palette = [
             'contentBlockName' => $input->contentBlock->getName(),
             'identifier' => $paletteIdentifier,
@@ -554,20 +561,22 @@ final class ContentBlockCompiler
         return [];
     }
 
-    private function collectProcessedField(ProcessedFieldsResult $result): void
+    private function collectProcessedField(ProcessedFieldsResult $result, ProcessedRootFieldResult $rootFieldResult): void
     {
-        $result->tableDefinition->fields[$result->uniqueIdentifier] = $result->tcaFieldDefinition;
-        $result->contentType->columns[] = $result->uniqueIdentifier;
+        $result->tableDefinition->fields[$rootFieldResult->uniqueIdentifier] = $rootFieldResult->tcaFieldDefinition;
+        $result->contentType->columns[] = $rootFieldResult->uniqueIdentifier;
     }
 
     private function collectOverrideColumns(ProcessedFieldsResult $result): void
     {
         foreach ($result->tableDefinition->fields as $uniqueIdentifier => $tcaFieldDefinition) {
-            $isTypeField = $uniqueIdentifier === $result->tableDefinition->typeField;
-            if (!$isTypeField) {
-                $overrideColumn = TcaFieldFactory::create($tcaFieldDefinition, $result->contentType->table);
-                $result->contentType->overrideColumns[] = $overrideColumn;
+            if ($uniqueIdentifier === $result->tableDefinition->typeField) {
+                continue;
             }
+            $identifier = $tcaFieldDefinition['identifier'];
+            $tcaFieldDefinition['identifier'] = $result->identifierToAliasMap[$identifier];
+            $overrideColumn = TcaFieldFactory::create($tcaFieldDefinition, $result->contentType->table);
+            $result->contentType->overrideColumns[] = $overrideColumn;
         }
     }
 
@@ -597,12 +606,12 @@ final class ContentBlockCompiler
         return $typeDefinition;
     }
 
-    private function processCollection(ProcessingInput $input, ProcessedFieldsResult $result, array $field): void
+    private function processCollection(ProcessingInput $input, ProcessedFieldsResult $result, ProcessedRootFieldResult $processedRootField, array $field): void
     {
         $isExternalCollection = array_key_exists('foreign_table', $field);
-        $this->assignRelationConfigToCollectionField($field, $result);
-        $foreignTable = $result->tcaFieldDefinition['config']['foreign_table'];
-        $this->parentReferences[$foreignTable][] = $result->tcaFieldDefinition;
+        $this->assignRelationConfigToCollectionField($field, $processedRootField);
+        $foreignTable = $processedRootField->tcaFieldDefinition['config']['foreign_table'];
+        $this->parentReferences[$foreignTable][] = $processedRootField->tcaFieldDefinition;
         $fields = $field['fields'] ?? [];
         if ($isExternalCollection || $fields === []) {
             return;
@@ -629,12 +638,12 @@ final class ContentBlockCompiler
         $result->tableDefinitionList = $this->processRootFields($newInput);
     }
 
-    private function processTypeOverride(ProcessingInput $input, ProcessedFieldsResult $result, array $field): array
+    private function processTypeOverride(ProcessingInput $input, ProcessedFieldsResult $result, ProcessedRootFieldResult $processedRootField, array $field): array
     {
         if (($field['overrideType'] ?? []) === []) {
             return [];
         }
-        $tcaType = $result->fieldType->getTcaType();
+        $tcaType = $processedRootField->fieldType->getTcaType();
         if ($tcaType === 'file') {
             $foreignTable = 'sys_file_reference';
         } else {
@@ -682,7 +691,7 @@ final class ContentBlockCompiler
         return $overrideChildTca;
     }
 
-    private function assignRelationConfigToCollectionField(array $field, ProcessedFieldsResult $result): void
+    private function assignRelationConfigToCollectionField(array $field, ProcessedRootFieldResult $result): void
     {
         $isMM = (bool)($field['MM'] ?? false);
         $isExternalCollection = array_key_exists('foreign_table', $field);
@@ -1034,7 +1043,7 @@ final class ContentBlockCompiler
         return $fieldType;
     }
 
-    private function chooseIdentifier(ProcessingInput $input, array $field): string
+    private function chooseUniqueIdentifier(ProcessingInput $input, array $field): string
     {
         if (!$input->isRootTable()) {
             return $field['identifier'];
@@ -1050,6 +1059,14 @@ final class ContentBlockCompiler
             $field['identifier']
         );
         return $uniqueIdentifier;
+    }
+
+    private function chooseAlias(array $field): string
+    {
+        if (array_key_exists('alias', $field) === false) {
+            return (string)$field['identifier'];
+        }
+        return (string)$field['alias'];
     }
 
     private function buildBaseLanguagePath(LoadedContentBlock $contentBlock): LanguagePath
@@ -1152,18 +1169,29 @@ final class ContentBlockCompiler
         }
     }
 
-    private function assertUniqueFieldIdentifier(ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
+    private function assertUniqueFieldIdentifier(ProcessedFieldsResult $result, string $identifier, LoadedContentBlock $contentBlock): void
     {
-        if (in_array($result->identifier, $result->uniqueFieldIdentifiers, true)) {
+        if (in_array($identifier, $result->uniqueFieldIdentifiers, true)) {
             throw new \InvalidArgumentException(
-                'The identifier "' . $result->identifier . '" in Content Block "' . $contentBlock->getName()
+                'The identifier "' . $identifier . '" in Content Block "' . $contentBlock->getName()
                 . '" does exist more than once. Please choose unique identifiers.',
                 1677407942
             );
         }
     }
 
-    private function assertUniqueIdentifiersHaveSameFieldType(ProcessingInput $input, ProcessedFieldsResult $result): void
+    private function assertUniqueAliasIdentifier(string $alias, ProcessedFieldsResult $result, LoadedContentBlock $contentBlock): void
+    {
+        if (in_array($alias, $result->uniqueAliasIdentifiers, true)) {
+            throw new \InvalidArgumentException(
+                'The alias "' . $alias . '" in Content Block "' . $contentBlock->getName()
+                . '" does exist more than once. Please choose unique aliases.',
+                1778662531
+            );
+        }
+    }
+
+    private function assertUniqueIdentifiersHaveSameFieldType(ProcessingInput $input, ProcessedRootFieldResult $result): void
     {
         $fieldType1 = $this->fieldTypePerIdentifier[$input->table][$result->uniqueIdentifier];
         $fieldType2 = $result->fieldType->getName();

@@ -45,6 +45,7 @@ final class CheckboxFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'checkbox',
+                        'alias' => 'myCheckbox',
                         'type' => 'Checkbox',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

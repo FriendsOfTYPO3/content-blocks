@@ -45,6 +45,7 @@ final class SlugFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'slug',
+                        'alias' => 'mySlug',
                         'type' => 'Slug',
                         'appearance' => (object)[
                             'prefix' => 'https://example.com/',

@@ -45,6 +45,7 @@ final class TextFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'title',
+                        'alias' => 'name',
                         'type' => 'Text',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

@@ -7,8 +7,8 @@
 <f:asset.css identifier="cbCtaCssFrontend" href="{cb:assetPath()}/frontend.css"/>
 
 <div class="cb-cta">
-    <f:if condition="{data.background_image}">
-        <f:variable name="backgroundUrl">{f:uri.image(image: data.background_image)}</f:variable>
+    <f:if condition="{data.backgroundImage}">
+        <f:variable name="backgroundUrl">{f:uri.image(image: data.backgroundImage)}</f:variable>
         <f:variable name="elementBgId">cb-cta-bg-{data.uid}</f:variable>
         <f:variable name="backgroundImageStyles">{elementBgId} { background-image: url({backgroundUrl});}</f:variable>
         <f:asset.css identifier="cb-cta-bg-{data.uid}">
@@ -17,10 +17,10 @@
         <div class="cb-cta-bg" id="{elementBgId}"></div>
     </f:if>
     <div class="overlay">
-        <h2>{data.header}</h2>
-        <f:format.raw>{data.bodytext}</f:format.raw>
+        <h2>{data.title}</h2>
+        <f:format.raw>{data.text}</f:format.raw>
         <p class="text-center">
-            <f:link.typolink parameter="{data.link}" class="btn-cta">{data.link_title}</f:link.typolink>
+            <f:link.typolink parameter="{data.link}" class="btn-cta">{data.linkTitle}</f:link.typolink>
         </p>
     </div>
 </div>

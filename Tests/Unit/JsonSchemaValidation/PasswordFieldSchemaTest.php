@@ -45,6 +45,7 @@ final class PasswordFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'password',
+                        'alias' => 'myPass',
                         'type' => 'Password',
                         'autocomplete' => true,
                         'behaviour' => (object)[

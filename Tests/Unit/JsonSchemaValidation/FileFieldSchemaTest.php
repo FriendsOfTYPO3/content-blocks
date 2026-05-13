@@ -45,6 +45,7 @@ final class FileFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'file',
+                        'alias' => 'myFile',
                         'type' => 'File',
                         'label' => 'File Label',
                         'description' => 'File Description',

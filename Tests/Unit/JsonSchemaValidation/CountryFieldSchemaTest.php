@@ -45,6 +45,7 @@ final class CountryFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'country',
+                        'alias' => 'myCountry',
                         'type' => 'Country',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,
