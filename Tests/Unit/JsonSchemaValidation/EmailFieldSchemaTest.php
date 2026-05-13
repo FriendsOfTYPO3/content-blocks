@@ -45,6 +45,7 @@ final class EmailFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'email',
+                        'alias' => 'myEmail',
                         'type' => 'Email',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

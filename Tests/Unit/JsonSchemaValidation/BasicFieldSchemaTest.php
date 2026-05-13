@@ -52,6 +52,20 @@ final class BasicFieldSchemaTest extends UnitTestCase
             ],
             'valid' => false,
         ];
+
+        yield 'alias not allowed' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'TYPO3/Header',
+                        'type' => 'Basic',
+                        'alias' => 'myHeader',
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
     }
 
     #[Test]

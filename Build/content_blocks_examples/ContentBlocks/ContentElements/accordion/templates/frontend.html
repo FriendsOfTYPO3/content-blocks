@@ -8,7 +8,7 @@
 <f:asset.script identifier="cbAccordionJsFrontend" src="{cb:assetPath()}/frontend.js"/>
 
 <div class="cb-accordion">
-    <f:for each="{data.accordion_item}" as="item">
+    <f:for each="{data.items}" as="item">
         <button class="accordion-item">
             {item.text}
         </button>

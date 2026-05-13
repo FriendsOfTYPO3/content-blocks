@@ -45,6 +45,7 @@ final class NumberFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'number',
+                        'alias' => 'myNumber',
                         'type' => 'Number',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

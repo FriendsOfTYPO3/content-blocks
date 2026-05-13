@@ -45,6 +45,7 @@ final class FolderFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'folder',
+                        'alias' => 'myFolder',
                         'type' => 'Folder',
                         'autoSizeMax' => 10,
                         'behaviour' => (object)[

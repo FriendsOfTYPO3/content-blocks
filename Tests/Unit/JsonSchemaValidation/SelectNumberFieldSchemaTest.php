@@ -61,6 +61,7 @@ final class SelectNumberFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'select_number',
+                        'alias' => 'selectNumber',
                         'type' => 'SelectNumber',
                         'authMode' => 'explicitAllow',
                         'behaviour' => (object)[

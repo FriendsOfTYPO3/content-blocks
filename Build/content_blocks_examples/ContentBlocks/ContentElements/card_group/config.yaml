@@ -3,6 +3,7 @@ fields:
   - identifier: header
     useExistingField: true
   - identifier: row_items
+    alias: rowItems
     type: Radio
     default: 1
     items:
@@ -10,10 +11,13 @@ fields:
       - value: 2
       - value: 3
       - value: 4
-  - identifier: settings
-    type: FlexForm
+  - identifier: pi_flexform
+    alias: settings
+    useExistingField: true
+    label: Settings
     fields:
       - identifier: alignment
+        label: Alignment
         type: Select
         renderType: selectSingle
         items:
@@ -21,6 +25,7 @@ fields:
           - value: 'center'
           - value: 'right'
   - identifier: card_group_item
+    alias: items
     type: Collection
     labelField: title
     minitems: 1
@@ -28,6 +33,7 @@ fields:
       - identifier: image
         type: File
         allowed: common-image-types
+        relationship: oneToOne
       - identifier: title
         type: Text
       - identifier: bodytext
@@ -43,5 +49,6 @@ fields:
               - url
               - file
           - identifier: link_title
+            alias: linkTitle
             type: Text
             eval: 'trim'

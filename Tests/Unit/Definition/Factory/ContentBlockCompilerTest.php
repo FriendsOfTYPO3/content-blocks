@@ -36,7 +36,7 @@ final class ContentBlockCompilerTest extends UnitTestCase
 {
     public static function notUniqueIdentifiersThrowAnExceptionDataProvider(): iterable
     {
-        yield 'two collections with the same identifier' => [
+        yield 'two fields with the same identifier' => [
             'contentBlocks' => [
                 [
                     'name' => 't3ce/example',
@@ -76,6 +76,102 @@ final class ContentBlockCompilerTest extends UnitTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1677407942);
         $this->expectExceptionMessage('The identifier "foo" in Content Block "t3ce/example" does exist more than once. Please choose unique identifiers.');
+
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
+    }
+
+    public static function notUniqueAliasesThrowAnExceptionDataProvider(): iterable
+    {
+        yield 'two fields with the same alias' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
+                        'fields' => [
+                            [
+                                'identifier' => 'foo',
+                                'alias' => 'banana',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'bar',
+                                'alias' => 'banana',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'foo',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'two fields with the same identifier and alias' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'table' => 'tt_content',
+                        'typeField' => 'CType',
+                        'typeName' => 'foo_bar',
+                        'fields' => [
+                            [
+                                'identifier' => 'foo',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'bar',
+                                'type' => 'Text',
+                            ],
+                            [
+                                'identifier' => 'baz',
+                                'alias' => 'foo',
+                                'type' => 'Text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('notUniqueAliasesThrowAnExceptionDataProvider')]
+    #[Test]
+    public function notUniqueAliasesThrowAnException(array $contentBlocks): void
+    {
+        $this->expectExceptionCode(1778662531);
 
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
         $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);

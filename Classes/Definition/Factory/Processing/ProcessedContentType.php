@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\PaletteDefinition;
 use TYPO3\CMS\ContentBlocks\Definition\TCA\TabDefinition;
+use TYPO3\CMS\ContentBlocks\Definition\TcaFieldDefinition;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolver;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
@@ -38,6 +39,7 @@ final class ProcessedContentType
     public array $columns = [];
     /** @var array<string|PaletteDefinition|TabDefinition> */
     public array $showItems = [];
+    /** @var array<TcaFieldDefinition> */
     public array $overrideColumns = [];
     public string|int $typeName = '';
     public string $languagePathTitle = '';

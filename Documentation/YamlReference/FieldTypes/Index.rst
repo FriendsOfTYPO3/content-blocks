@@ -197,6 +197,25 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
    Read more about :ref:`prefixing <api_prefixing>`.
 
+.. confval:: alias
+   :name: field-types-alias
+   :required: false
+   :type: string
+
+   Defines an alias for the :yaml:`identifier`. This alias is used in Fluid
+   templates and everywhere else you need to access the field value. There is
+   no fallback to the identifier. If set, you have to migrate all existing
+   occurrences to the new alias.
+
+   .. code-block:: yaml
+
+       fields:
+           identifier: my_identifier
+           type: Text
+           alias: myAliasIdentifier
+
+   Read more about :ref:`prefixing <api_prefixing>`.
+
 .. confval:: displayCond
    :name: field-types-displayCond
    :required: false

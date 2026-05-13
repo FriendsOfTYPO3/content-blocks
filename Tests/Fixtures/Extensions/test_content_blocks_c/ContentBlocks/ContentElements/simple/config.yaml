@@ -6,6 +6,7 @@ fields:
     fields:
       - identifier: header
         useExistingField: true
+        alias: title
       - type: Linebreak
       - identifier: bodytext
         useExistingField: true

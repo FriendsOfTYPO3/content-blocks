@@ -45,6 +45,7 @@ final class JsonFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'json_field',
+                        'alias' => 'jsonField',
                         'type' => 'Json',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

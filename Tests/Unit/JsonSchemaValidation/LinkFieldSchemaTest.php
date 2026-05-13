@@ -45,6 +45,7 @@ final class LinkFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'link',
+                        'alias' => 'myLink',
                         'type' => 'Link',
                         'allowedTypes' => ['page', 'url', 'file', 'folder', 'email', 'telephone', 'record', '*'],
                         'behaviour' => (object)[

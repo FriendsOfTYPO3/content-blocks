@@ -3,6 +3,7 @@
 	"additionalProperties": false,
 	"properties": {
 		"identifier": {},
+		"alias": {},
 		"type": {},
 		"useExistingField": {}
 	}

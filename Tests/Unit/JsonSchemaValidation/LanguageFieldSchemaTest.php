@@ -32,6 +32,7 @@ final class LanguageFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'language',
+                        'alias' => 'myLanguage',
                         'type' => 'Language',
                     ],
                 ],

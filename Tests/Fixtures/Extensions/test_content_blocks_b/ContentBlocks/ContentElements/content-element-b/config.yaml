@@ -4,6 +4,7 @@ fields:
   - identifier: image
     useExistingField: true
   - identifier: image_one_to_one
+    alias: imageOneToOne
     type: File
     relationship: oneToOne
   - identifier: collection

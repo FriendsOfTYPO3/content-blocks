@@ -45,6 +45,7 @@ final class TextareaFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'bodytext',
+                        'alias' => 'text',
                         'type' => 'Textarea',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

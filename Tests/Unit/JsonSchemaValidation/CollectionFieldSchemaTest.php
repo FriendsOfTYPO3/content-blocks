@@ -45,6 +45,7 @@ final class CollectionFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'collection',
+                        'alias' => 'myCollection',
                         'type' => 'Collection',
                         'label' => 'Collection Label',
                         'description' => 'Collection Description',

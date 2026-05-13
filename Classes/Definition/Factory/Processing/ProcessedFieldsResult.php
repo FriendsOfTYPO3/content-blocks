@@ -17,8 +17,6 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Definition\Factory\Processing;
 
-use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeInterface;
-
 /**
  * @internal Not part of TYPO3's public API.
  */
@@ -30,17 +28,17 @@ final class ProcessedFieldsResult
     /** @var string[] */
     public array $uniqueFieldIdentifiers = [];
     /** @var string[] */
+    public array $uniqueAliasIdentifiers = [];
+    /** @var string[] */
     public array $uniquePaletteIdentifiers = [];
     /** @var string[] */
     public array $uniqueTabIdentifiers = [];
     /** @var array<string, string> */
     public array $identifierToUniqueMap = [];
-
-    // Below are temporary properties for the scope of a root field.
-    public string $identifier;
-    public string $uniqueIdentifier;
-    public FieldTypeInterface $fieldType;
-    public array $tcaFieldDefinition;
+    /**
+     * @var array<string, string>
+     */
+    public array $identifierToAliasMap;
 
     public function __construct(ProcessingInput $input)
     {
@@ -53,15 +51,5 @@ final class ProcessedFieldsResult
         $this->tableDefinition->typeField = $input->getTypeField();
         $this->tableDefinition->raw = $input->yaml;
         $this->tableDefinition->contentType = $input->contentType;
-    }
-
-    public function resetTemporaryState(): void
-    {
-        unset(
-            $this->identifier,
-            $this->uniqueIdentifier,
-            $this->fieldType,
-            $this->tcaFieldDefinition,
-        );
     }
 }

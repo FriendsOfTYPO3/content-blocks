@@ -3,6 +3,7 @@ fields:
   - identifier: header
     useExistingField: true
   - identifier: row_items
+    alias: rowItems
     type: SelectNumber
     items:
       - value: 1
@@ -10,6 +11,7 @@ fields:
       - value: 3
       - value: 4
   - identifier: pi_flexform
+    alias: settings
     useExistingField: true
     fields:
       - identifier: alignment
@@ -30,6 +32,7 @@ fields:
           - value: right-top
           - value: right-center
   - identifier: icon_group_item
+    alias: items
     type: Collection
     labelField: title
     minitems: 1
@@ -54,4 +57,5 @@ fields:
               - url
               - file
           - identifier: link_title
+            alias: linkTitle
             type: Text

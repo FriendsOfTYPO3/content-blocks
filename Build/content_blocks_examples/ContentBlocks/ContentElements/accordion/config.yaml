@@ -3,6 +3,7 @@ fields:
   - identifier: header
     useExistingField: true
   - identifier: accordion_item
+    alias: items
     type: Collection
     labelField: text
     minitems: 1

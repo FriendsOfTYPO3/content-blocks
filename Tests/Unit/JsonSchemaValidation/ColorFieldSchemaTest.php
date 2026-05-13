@@ -45,6 +45,7 @@ final class ColorFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'color',
+                        'alias' => 'myColor',
                         'type' => 'Color',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

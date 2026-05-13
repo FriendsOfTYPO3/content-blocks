@@ -32,6 +32,7 @@ final class PassFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'pass',
+                        'alias' => 'myPass',
                         'type' => 'Pass',
                         'useExistingField' => true,
                     ],

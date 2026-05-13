@@ -45,6 +45,7 @@ final class UuidFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'uuid_field',
+                        'alias' => 'uuidField',
                         'type' => 'Uuid',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,

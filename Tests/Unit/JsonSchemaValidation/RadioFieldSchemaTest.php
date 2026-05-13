@@ -45,6 +45,7 @@ final class RadioFieldSchemaTest extends UnitTestCase
                 'fields' => [
                     (object)[
                         'identifier' => 'radio',
+                        'alias' => 'myRadio',
                         'type' => 'Radio',
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,
