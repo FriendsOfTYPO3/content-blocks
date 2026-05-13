@@ -25,7 +25,7 @@ use TYPO3\CMS\ContentBlocks\Schema\Field\TcaFieldTypeInterface;
 final readonly class FieldCapability implements SchemaCapabilityInterface
 {
     public function __construct(
-        protected TcaFieldTypeInterface $field
+        private TcaFieldTypeInterface $field
     ) {}
 
     public function getFieldName(): string

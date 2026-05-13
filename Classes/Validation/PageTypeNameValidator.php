@@ -53,8 +53,8 @@ class PageTypeNameValidator
         $integerTypeName = (int)$typeName;
         if (!MathUtility::canBeInterpretedAsInteger($typeName) || $integerTypeName < 0 || in_array($integerTypeName, self::$nonOverridablePageTypes, true)) {
             throw new \InvalidArgumentException(
-                'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "' .
-                $contentBlockName . '". Value must be a positive integer and not one of the non-overridable page types: '
+                'Invalid value "' . $typeName . '" for "typeName" in ContentBlock "'
+                . $contentBlockName . '". Value must be a positive integer and not one of the non-overridable page types: '
                 . implode(', ', self::$nonOverridablePageTypes),
                 1689287031
             );

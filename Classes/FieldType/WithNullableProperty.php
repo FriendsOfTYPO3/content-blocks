@@ -24,7 +24,7 @@ trait WithNullableProperty
 {
     private bool $nullable = false;
     private bool $hasDefault = false;
-    private null|int|float|string $default = null;
+    private int|float|string|null $default = null;
 
     protected function setNullableAndDefault(array $settings, string $defaultCastAsType): void
     {

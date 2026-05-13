@@ -26,6 +26,12 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
 {
     use SiteBasedTestTrait;
 
+    protected const LANGUAGE_PRESETS = [
+        'EN' => ['id' => 0, 'title' => 'English', 'locale' => 'en_US.UTF8'],
+    ];
+
+    protected const ROOT_PAGE_ID = 1;
+
     protected array $coreExtensionsToLoad = [
         'workspaces',
     ];
@@ -35,12 +41,6 @@ final class ContentBlockFrontendRenderingTest extends FunctionalTestCase
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
         'typo3conf/ext/content_blocks',
     ];
-
-    protected const LANGUAGE_PRESETS = [
-        'EN' => ['id' => 0, 'title' => 'English', 'locale' => 'en_US.UTF8'],
-    ];
-
-    protected const ROOT_PAGE_ID = 1;
 
     public function setUp(): void
     {

@@ -29,7 +29,7 @@ final class BasicsRegistry
     /**
      * @var LoadedBasic[]
      */
-    protected array $basics = [];
+    private array $basics = [];
 
     public function register(LoadedBasic $basic): void
     {

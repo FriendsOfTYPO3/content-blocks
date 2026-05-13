@@ -94,7 +94,7 @@
 		"typo3/cms-rte-ckeditor": "^14.3",
 		"typo3/cms-tstemplate": "^14.3",
 		"typo3/cms-workspaces": "^14.3",
-		"typo3/coding-standards": "^0.8",
+		"typo3/coding-standards": "0.8.x-dev",
 		"typo3/testing-framework": "^9.5"
 	},
 	"scripts": {
