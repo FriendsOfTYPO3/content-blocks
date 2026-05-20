@@ -118,6 +118,10 @@ readonly class FlexFormGenerator
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $flexFormTca['description'] = $descriptionPath;
         }
+        $placeholderPath = $flexFormTcaDefinition->placeholderPath;
+        if ($this->languageFileRegistry->isset($name, $placeholderPath)) {
+            $flexFormTca['config']['placeholder'] = $placeholderPath;
+        }
         $fieldType = $flexFormTcaDefinition->fieldType;
         $itemsFieldTypes = ['select', 'radio', 'check'];
         if (in_array($fieldType->getTcaType(), $itemsFieldTypes, true)) {

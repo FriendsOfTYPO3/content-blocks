@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="hov/notype">
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2026-05-20T13:36:02+00:00" product-name="hov/notype">
     <header/>
     <body>
       <trans-unit id="title">
@@ -12,6 +12,9 @@
       <trans-unit id="title.label">
         <source>Title</source>
       </trans-unit>
+      <trans-unit id="slug.label">
+        <source>URL</source>
+      </trans-unit>
       <trans-unit id="text.label">
         <source>Text</source>
       </trans-unit>
@@ -20,6 +23,12 @@
       </trans-unit>
       <trans-unit id="text3.label">
         <source>Textarea</source>
+      </trans-unit>
+      <trans-unit id="check.label">
+        <source>Check</source>
+      </trans-unit>
+      <trans-unit id="country.label">
+        <source>Country</source>
       </trans-unit>
     </body>
   </file>

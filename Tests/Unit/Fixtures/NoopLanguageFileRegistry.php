@@ -23,6 +23,9 @@ class NoopLanguageFileRegistry extends LanguageFileRegistry
 {
     public function isset(string $name, string $key): bool
     {
-        return true;
+        if (str_ends_with($key, '.placeholder') === false) {
+            return true;
+        }
+        return false;
     }
 }

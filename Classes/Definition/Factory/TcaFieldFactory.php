@@ -32,6 +32,7 @@ readonly class TcaFieldFactory
         $arguments['identifier'] = $array['identifier'] ?? $array['config']['identifier'];
         $arguments['labelPath'] = $array['labelPath'] ?? '';
         $arguments['descriptionPath'] = $array['descriptionPath'] ?? '';
+        $arguments['placeholderPath'] = $array['placeholderPath'] ?? '';
         $arguments['useExistingField'] = $array['config']['useExistingField'] ?? false;
         /** @var FieldTypeInterface $fieldType */
         $fieldType = $array['type'];

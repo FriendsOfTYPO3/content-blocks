@@ -56,3 +56,13 @@ New option `hideInUid` for Record Types
 It is now possible to explicitly hide Record Types in the record overview
 by defining :yaml:`hideInUid: true`. This is already done automatically when
 the Record Type is used as a child item in Collections.
+
+New automatic language keys
+---------------------------
+
+New automatic language keys are added, which can now be used in the labels.xlf
+file:
+
+* :yaml:`placeholder` (for types with input field: Text, Textarea, Email, ...)
+
+See :ref:`here <api_automatic_language_keys>` for more information.

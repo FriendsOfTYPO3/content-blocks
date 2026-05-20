@@ -203,7 +203,7 @@ final class ContentBlockCompiler
             $input->languagePath->addPathSegment($processedRootField->identifier);
             $tcaType = $processedRootField->fieldType->getTcaType();
             if ($tcaType !== 'passthrough') {
-                $field = $this->initializeFieldLabelAndDescription($input, $processedRootField, $field);
+                $field = $this->initializeFieldAutomaticLanguageSources($input, $processedRootField, $field);
             }
             if ($processedRootField->fieldType instanceof FlexFormFieldType) {
                 $field = $this->processFlexForm($input, $field);
@@ -292,22 +292,32 @@ final class ContentBlockCompiler
         $result->contentType->languagePathDescription = $languagePathDescription;
     }
 
-    private function initializeFieldLabelAndDescription(
+    private function initializeFieldAutomaticLanguageSources(
         ProcessingInput $input,
         ProcessedRootFieldResult $result,
         array $field
     ): array {
+        // Label
         $labelPath = $this->getFieldLabelPath($input->languagePath);
-        $descriptionPath = $this->getFieldDescriptionPath($input->languagePath);
-        $title = (string)($field['label'] ?? '');
+        $label = (string)($field['label'] ?? '');
         // Never fall back to identifiers for existing fields. They have their standard translation.
-        $title = ($title !== '' || $this->isExistingField($field)) ? $title : $result->identifier;
-        $field['label'] = $title;
-        $description = $field['description'] ?? '';
-        $labelPathSource = new AutomaticLanguageSource($labelPath, $title);
-        $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
+        $label = ($label !== '' || $this->isExistingField($field)) ? $label : $result->identifier;
+        $field['label'] = $label;
+        $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+
+        // Description
+        $descriptionPath = $this->getFieldDescriptionPath($input->languagePath);
+        $description = (string)($field['description'] ?? '');
+        $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+
+        // Placeholder
+        $placeholderPath = $this->getFieldPlaceholderPath($input->languagePath);
+        $placeholder = (string)($field['placeholder'] ?? '');
+        $placeholderPathSource = new AutomaticLanguageSource($placeholderPath, $placeholder);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $placeholderPathSource);
+
         return $field;
     }
 
@@ -357,6 +367,7 @@ final class ContentBlockCompiler
             'type' => $result->fieldType,
             'labelPath' => $this->getFieldLabelPath($input->languagePath),
             'descriptionPath' => $this->getFieldDescriptionPath($input->languagePath),
+            'placeholderPath' => $this->getFieldPlaceholderPath($input->languagePath),
         ];
         return $tcaFieldDefinition;
     }
@@ -369,6 +380,11 @@ final class ContentBlockCompiler
     private function getFieldDescriptionPath(LanguagePath $languagePath): string
     {
         return $languagePath->getCurrentPath() . '.description';
+    }
+
+    private function getFieldPlaceholderPath(LanguagePath $languagePath): string
+    {
+        return $languagePath->getCurrentPath() . '.placeholder';
     }
 
     private function prefixTcaConfigFields(ProcessingInput $input, ProcessedFieldsResult $result): void
@@ -791,16 +807,20 @@ final class ContentBlockCompiler
         $identifier = $flexFormField['identifier'];
 
         $input->languagePath->addPathSegment($identifier);
-        $labelPath = $input->languagePath->getCurrentPath() . '.label';
-        $descriptionPath = $input->languagePath->getCurrentPath() . '.description';
+        $labelPath = $this->getFieldLabelPath($input->languagePath);
+        $descriptionPath = $this->getFieldDescriptionPath($input->languagePath);
+        $placeholderPath = $this->getFieldPlaceholderPath($input->languagePath);
         $label = (string)($flexFormField['label'] ?? '');
         $label = $label !== '' ? $label : $identifier;
         $flexFormField['label'] = $label;
         $description = $flexFormField['description'] ?? '';
+        $placeholder = $flexFormField['placeholder'] ?? '';
         $languagePathSource = new AutomaticLanguageSource($labelPath, $label);
         $descriptionPathSource = new AutomaticLanguageSource($descriptionPath, $description);
+        $placeholderPathSource = new AutomaticLanguageSource($placeholderPath, $placeholder);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
         $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $placeholderPathSource);
         $fieldType = $this->resolveType($input, $flexFormField);
         $flexFormField = $this->collectItemLabels($input, $fieldType, $flexFormField);
         $flexFormFieldArray = [
@@ -809,6 +829,7 @@ final class ContentBlockCompiler
             'type' => $this->fieldTypeRegistry->get($flexFormField['type']),
             'labelPath' => $labelPath,
             'descriptionPath' => $descriptionPath,
+            'placeholderPath' => $placeholderPath,
         ];
         $input->languagePath->popSegment();
         $flexFormTcaDefinition = TcaFieldFactory::create($flexFormFieldArray);

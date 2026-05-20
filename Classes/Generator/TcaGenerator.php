@@ -680,6 +680,10 @@ readonly class TcaGenerator
         if ($this->languageFileRegistry->isset($name, $descriptionPath)) {
             $column['description'] = $descriptionPath;
         }
+        $placeholderPath = $overrideColumn->placeholderPath;
+        if ($this->languageFileRegistry->isset($name, $placeholderPath)) {
+            $column['config']['placeholder'] = $placeholderPath;
+        }
         $column = $this->determineItemsLabel($typeDefinition, $overrideColumn, $column);
         return $column;
     }

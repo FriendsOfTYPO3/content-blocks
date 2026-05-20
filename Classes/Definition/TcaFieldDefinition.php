@@ -32,6 +32,7 @@ final readonly class TcaFieldDefinition
         public string $uniqueIdentifier,
         public string $labelPath,
         public string $descriptionPath,
+        public string $placeholderPath,
         public bool $useExistingField,
         public FieldTypeInterface $fieldType,
         public ?ContentTypeDefinitionCollection $typeOverrides = null,
