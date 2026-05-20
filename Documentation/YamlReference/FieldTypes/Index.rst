@@ -99,7 +99,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
 
 .. confval:: type
@@ -112,7 +112,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
 
 .. confval:: label
@@ -127,7 +127,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
            label: Static label
 
@@ -141,7 +141,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
            description: Static description
 
@@ -158,7 +158,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: bodytext
+         - identifier: bodytext
            useExistingField: true
 
 .. confval:: prefixField
@@ -173,7 +173,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
            prefixField: false
 
@@ -192,7 +192,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
            prefixField: true
            prefixType: vendor
@@ -212,7 +212,7 @@ Field options, which can be defined inside the :yaml:`fields` array.
    .. code-block:: yaml
 
        fields:
-           identifier: my_identifier
+         - identifier: my_identifier
            type: Text
            alias: myAliasIdentifier
 

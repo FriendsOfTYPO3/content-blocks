@@ -14,6 +14,7 @@ This feature is available for the following options (more may come).
 *  :ref:`element description <confval-content-element-description>`
 *  :ref:`Field label <confval-field-types-label>`
 *  :ref:`Field description <confval-field-types-description>`
+*  :ref:`Field placeholder <confval-text-placeholder>`
 *  :ref:`Palette label <field_type_palette>`
 *  :ref:`Palette description <field_type_palette>`
 *  :ref:`Tab <field_type_tab>`
@@ -75,6 +76,9 @@ values defined in :yaml:`identifier`.
                 </trans-unit>
                 <trans-unit id="FIELD_IDENTIFIER.description">
                     <source>This is the backend description for FIELD_IDENTIFIER</source>
+                </trans-unit>
+                <trans-unit id="FIELD_IDENTIFIER.placeholder">
+                    <source>This is the backend placeholder for FIELD_IDENTIFIER</source>
                 </trans-unit>
                 <!-- Collections add another nesting level -->
                 <trans-unit id="COLLECTION_IDENTIFIER.FIELD_IDENTIFIER.label">

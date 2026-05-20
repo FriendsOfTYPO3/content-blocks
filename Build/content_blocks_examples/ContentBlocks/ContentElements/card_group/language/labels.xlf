@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-12-13T08:48:22+00:00" product-name="example/card-group">
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2026-05-20T13:48:59+00:00" product-name="example/card-group">
     <header/>
     <body>
       <trans-unit id="title">
@@ -27,19 +27,19 @@
       <trans-unit id="row_items.items.4.label">
         <source>4</source>
       </trans-unit>
-      <trans-unit id="settings.label">
+      <trans-unit id="pi_flexform.label">
         <source>Settings</source>
       </trans-unit>
-      <trans-unit id="settings.alignment.label">
+      <trans-unit id="pi_flexform.alignment.label">
         <source>Alignment</source>
       </trans-unit>
-      <trans-unit id="settings.alignment.items.left.label">
+      <trans-unit id="pi_flexform.alignment.items.left.label">
         <source>Left</source>
       </trans-unit>
-      <trans-unit id="settings.alignment.items.center.label">
+      <trans-unit id="pi_flexform.alignment.items.center.label">
         <source>Center</source>
       </trans-unit>
-      <trans-unit id="settings.alignment.items.right.label">
+      <trans-unit id="pi_flexform.alignment.items.right.label">
         <source>Right</source>
       </trans-unit>
       <trans-unit id="card_group_item.label">

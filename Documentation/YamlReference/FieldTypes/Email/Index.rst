@@ -33,7 +33,9 @@ Settings
    :type: string
    :default: ''
 
-   Placeholder text for the field.
+   Placeholder text for the field. Can also be used as automatic language key
+   in labels.xlf. See :ref:`here <api_automatic_language_keys>` for more
+   information.
 
 .. confval:: required
    :name: email-required

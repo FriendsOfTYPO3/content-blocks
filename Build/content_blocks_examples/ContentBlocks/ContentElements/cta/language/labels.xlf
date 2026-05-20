@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2024-09-20T23:35:32+00:00" product-name="example/cta">
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="2026-05-20T13:44:53+00:00" product-name="example/cta">
     <header/>
     <body>
       <trans-unit id="title">
@@ -23,6 +23,9 @@
       </trans-unit>
       <trans-unit id="link_title.label">
         <source>Link title</source>
+      </trans-unit>
+      <trans-unit id="link_title.placeholder">
+        <source>Click here</source>
       </trans-unit>
       <trans-unit id="background_image.label">
         <source>Background image</source>
