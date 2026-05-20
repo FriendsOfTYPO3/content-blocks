@@ -59,7 +59,6 @@ final class ContentBlockDataDecorator
         $contentTypeDefinition = $this->contentTypeResolver->resolve($resolvedRecord);
         $resolvedContentBlockDataRelation = new ResolvedContentBlockDataRelation();
         $resolvedContentBlockDataRelation->record = $resolvedRecord;
-        $resolvedContentBlockDataRelation->resolved = $resolvedRecord->toArray();
         if ($contentTypeDefinition === null) {
             return $this->buildFakeContentBlockDataObject($resolvedContentBlockDataRelation);
         }
@@ -288,7 +287,6 @@ final class ContentBlockDataDecorator
         $contentBlockRelation = new ResolvedContentBlockDataRelation();
         $foreignTable = $item->getMainType();
         $contentBlockRelation->record = $item;
-        $contentBlockRelation->resolved = $item->toArray();
         $hasTableDefinition = $this->tableDefinitionCollection->hasTable($foreignTable);
         $collectionTableDefinition = null;
         if ($hasTableDefinition) {
