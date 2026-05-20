@@ -1,6 +1,7 @@
 name: example/example-page-type
 typeName: 942
 allowedRecordTypes:
+  - pages
   - tx_hov_domain_model_notype
 isViewable: true
 wizardSteps:

@@ -18,9 +18,9 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Backend\Preview;
 
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Context\PageContext;
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Module\ModuleData;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\View\PageViewMode;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentTypeResolver;
@@ -65,10 +65,20 @@ readonly class PageLayout
         if (!$this->tableDefinitionCollection->hasTable($pageTypeTable)) {
             return;
         }
-        $pageUid = (int)($request->getQueryParams()['id'] ?? 0);
-        $pageRow = BackendUtility::getRecord($pageTypeTable, $pageUid);
+        $pageContext = $request->getAttribute('pageContext');
+        if ($pageContext instanceof PageContext === false) {
+            return;
+        }
+        $primaryLanguageId = $pageContext->getPrimaryLanguageId();
+        $pageRow = $pageContext->pageRecord;
         if ($pageRow === null) {
             return;
+        }
+        if ($primaryLanguageId > 0) {
+            $translationRecord = $pageContext->languageInformation->getTranslationRecord($primaryLanguageId);
+            if ($translationRecord !== null) {
+                $pageRow = $translationRecord;
+            }
         }
         $resolvedRecord = $this->recordFactory->createResolvedRecordFromDatabaseRow(
             $pageTypeTable,
@@ -83,7 +93,7 @@ readonly class PageLayout
         }
         $contentBlockData = $this->contentBlockDataDecorator->decorate($resolvedRecord);
         $settings['_content_block_name'] = $contentBlockData->get('_name');
-        $view = $this->createView($contentTypeDefinition, $pageUid, $request);
+        $view = $this->createView($contentTypeDefinition, $primaryLanguageId, $request);
         $view->assign('data', $contentBlockData);
         $view->assign('settings', $settings);
         try {
