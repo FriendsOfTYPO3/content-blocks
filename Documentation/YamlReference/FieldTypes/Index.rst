@@ -33,6 +33,7 @@ Simple Field Types:
 *  :ref:`Password <field_type_password>`
 *  :ref:`Radio <field_type_radio>`
 *  :ref:`SelectNumber <field_type_select-number>`
+*  :ref:`SelectText <field_type_select-text>`
 *  :ref:`Slug <field_type_slug>`
 *  :ref:`Text <field_type_text>`
 *  :ref:`Textarea <field_type_textarea>`

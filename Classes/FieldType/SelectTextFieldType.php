@@ -20,12 +20,13 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 /**
  * @internal Not part of TYPO3's public API.
  */
-#[FieldType(name: 'SelectNumber', tcaType: 'select')]
-final class SelectNumberFieldType extends AbstractFieldType
+#[FieldType(name: 'SelectText', tcaType: 'select')]
+final class SelectTextFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
+    use WithCustomProperties;
 
-    private string|int $default = '';
+    private string $default = '';
     private bool $readOnly = false;
     private int $size = 0;
     private string $authMode = '';
@@ -33,13 +34,14 @@ final class SelectNumberFieldType extends AbstractFieldType
     private array $itemGroups = [];
     private array $items = [];
     private array $sortItems = [];
+    private int $dbFieldLength = 0;
 
-    public function createFromArray(array $settings): SelectNumberFieldType
+    public function createFromArray(array $settings): SelectTextFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
         $default = $settings['default'] ?? $self->default;
-        if (is_string($default) || is_int($default)) {
+        if (is_string($default)) {
             $self->default = $default;
         }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
@@ -48,16 +50,9 @@ final class SelectNumberFieldType extends AbstractFieldType
         $self->disableNoMatchingValueElement = (bool)($settings['disableNoMatchingValueElement'] ?? $self->disableNoMatchingValueElement);
         $self->itemGroups = (array)($settings['itemGroups'] ?? $self->itemGroups);
         $self->items = (array)($settings['items'] ?? $self->items);
-        foreach ($self->items as $item) {
-            $value = $item['value'] ?? null;
-            if (!is_int($value)) {
-                throw new \InvalidArgumentException(
-                    'Item values for Content Blocks field type "SelectNumber" must be integers. Got "' . $value . '" (' . gettype($value) . ').',
-                    1733310237
-                );
-            }
-        }
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
+        $self->dbFieldLength = (int)($settings['dbFieldLength'] ?? $self->dbFieldLength);
+        $self->setCustomProperties($settings);
 
         return $self;
     }
@@ -89,6 +84,10 @@ final class SelectNumberFieldType extends AbstractFieldType
         if ($this->sortItems !== []) {
             $config['sortItems'] = $this->sortItems;
         }
+        if ($this->dbFieldLength !== 0) {
+            $config['dbFieldLength'] = $this->dbFieldLength;
+        }
+        $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }

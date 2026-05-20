@@ -113,6 +113,7 @@
 								"Relation",
 								"Select",
 								"SelectNumber",
+								"SelectText",
 								"Slug",
 								"Text",
 								"Textarea",
@@ -265,6 +266,19 @@
 					},
 					"then": {
 						"$ref": "select-number.json"
+					}
+				},
+				{
+					"if": {
+						"properties": {
+							"type": {
+								"const": "SelectText"
+							}
+						},
+						"required": ["type"]
+					},
+					"then": {
+						"$ref": "select-text.json"
 					}
 				},
 				{
@@ -478,6 +492,7 @@
 																	"Radio",
 																	"Select",
 																	"SelectNumber",
+																	"SelectText",
 																	"Slug",
 																	"Text",
 																	"Textarea",
@@ -629,6 +644,19 @@
 														},
 														"then": {
 															"$ref": "select-number.json"
+														}
+													},
+													{
+														"if": {
+															"properties": {
+																"type": {
+																	"const": "SelectText"
+																}
+															},
+															"required": ["type"]
+														},
+														"then": {
+															"$ref": "select-text.json"
 														}
 													},
 													{

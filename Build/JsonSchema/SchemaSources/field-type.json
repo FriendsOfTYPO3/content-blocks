@@ -99,6 +99,7 @@
 						"Relation",
 						"Select",
 						"SelectNumber",
+						"SelectText",
 						"Slug",
 						"Tab",
 						"Text",
@@ -282,6 +283,19 @@
 			},
 			"then": {
 				"$ref": "FieldTypes/select-number.json"
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "SelectText"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"$ref": "FieldTypes/select-text.json"
 			}
 		},
 		{
