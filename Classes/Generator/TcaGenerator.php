@@ -698,15 +698,27 @@ readonly class TcaGenerator
         }
         $items = $column['config']['items'] ?? [];
         foreach ($items as $index => $item) {
-            if (!isset($item['labelPath'])) {
-                continue;
+            if (isset($item['labelPath'])) {
+                $labelPath = $item['labelPath'];
+                unset($column['config']['items'][$index]['labelPath']);
+                if ($this->languageFileRegistry->isset($name, $labelPath)) {
+                    $column['config']['items'][$index]['label'] = $labelPath;
+                }
             }
-            $labelPath = $item['labelPath'];
-            unset($column['config']['items'][$index]['labelPath']);
-            if (!$this->languageFileRegistry->isset($name, $labelPath)) {
-                continue;
+            if (isset($item['labelCheckedPath'])) {
+                $labelCheckedPath = $item['labelCheckedPath'];
+                unset($column['config']['items'][$index]['labelCheckedPath']);
+                if ($this->languageFileRegistry->isset($name, $labelCheckedPath)) {
+                    $column['config']['items'][$index]['labelChecked'] = $labelCheckedPath;
+                }
             }
-            $column['config']['items'][$index]['label'] = $labelPath;
+            if (isset($item['labelUncheckedPath'])) {
+                $labelUncheckedPath = $item['labelUncheckedPath'];
+                unset($column['config']['items'][$index]['labelUncheckedPath']);
+                if ($this->languageFileRegistry->isset($name, $labelUncheckedPath)) {
+                    $column['config']['items'][$index]['labelUnchecked'] = $labelUncheckedPath;
+                }
+            }
         }
         return $column;
     }

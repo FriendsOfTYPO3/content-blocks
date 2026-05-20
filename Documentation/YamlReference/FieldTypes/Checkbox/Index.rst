@@ -61,6 +61,29 @@ Settings
             </trans-unit>
         </body>
 
+   The :yaml:`renderType: checkboxLabeledToggle` additionally has :yaml:`labelChecked`
+   and :yaml:`labelUnchecked`.
+
+   .. code-block:: yaml
+      renderType: checkboxLabeledToggle
+      items:
+        - label: 'Normal Label'
+          labelChecked: 'Label for when checked'
+          labelUnchecked: 'Label for when unchecked'
+
+   XLF translation keys for labelChecked/Unchecked have the following convention:
+
+   .. code-block:: xml
+
+        <body>
+            <trans-unit id="FIELD_IDENTIFIER.items.0.labelChecked">
+                <source>Label for when checked</source>
+            </trans-unit>
+            <trans-unit id="FIELD_IDENTIFIER.items.0.labelUnchecked">
+                <source>Label for when unchecked</source>
+            </trans-unit>
+        </body>
+
 .. confval:: renderType
    :name: checkbox-renderType
    :required: false

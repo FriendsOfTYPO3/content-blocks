@@ -332,26 +332,43 @@ final class ContentBlockCompiler
         $items = $field['items'] ?? [];
         foreach ($items as $index => $item) {
             $label = (string)($item['label'] ?? '');
-            $itemLabelPath = $this->resolveItemLabelPath($tcaFieldType, $index, $item);
-            $labelPath = $currentPath . '.' . $itemLabelPath;
+            $itemLabelPath = $this->resolveItemPath($tcaFieldType, $index, $item);
+            $basePath = $currentPath . '.' . $itemLabelPath;
+            $labelPath = $basePath . '.label';
             $field['items'][$index]['labelPath'] = $labelPath;
             $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+            if ($tcaFieldType === 'check') {
+                if (array_key_exists('labelChecked', $item)) {
+                    $labelChecked = (string)($item['labelChecked'] ?? '');
+                    $labelCheckedPath = $basePath . '.labelChecked';
+                    $field['items'][$index]['labelCheckedPath'] = $labelCheckedPath;
+                    $labelPathSource = new AutomaticLanguageSource($labelCheckedPath, $labelChecked);
+                    $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+                }
+                if (array_key_exists('labelUnchecked', $item)) {
+                    $labelUnchecked = (string)($item['labelUnchecked'] ?? '');
+                    $labelUncheckedPath = $basePath . '.labelUnchecked';
+                    $field['items'][$index]['labelUncheckedPath'] = $labelUncheckedPath;
+                    $labelPathSource = new AutomaticLanguageSource($labelUncheckedPath, $labelUnchecked);
+                    $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
+                }
+            }
         }
         return $field;
     }
 
-    private function resolveItemLabelPath(string $tcaFieldType, int $index, array $item): string
+    private function resolveItemPath(string $tcaFieldType, int $index, array $item): string
     {
-        $base = 'items.';
+        $base = 'items';
         if ($tcaFieldType === 'check') {
-            return $base . $index . '.label';
+            return $base . '.' . $index;
         }
         $value = (string)($item['value'] ?? '');
         if ($value === '') {
-            return $base . 'label';
+            return $base;
         }
-        return $base . $value . '.label';
+        return $base . '.' . $value;
     }
 
     private function buildTcaFieldDefinitionArray(
