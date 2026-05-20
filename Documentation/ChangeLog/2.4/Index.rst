@@ -30,6 +30,26 @@ of the :yaml:`identifier` in your Fluid templates. This has two main advantages:
       - identifier: header
         alias: title
 
+Field Type SelectText
+---------------------
+
+A new field type :ref:`SelectText <field_type_select-text>` is added. This
+new type allows to have a select field with exclusively text values. The
+database column will also have type :sql:`varchar(255)`, instead of
+:sql:`longtext`.
+
+..  code-block:: yaml
+
+    name: example/select-text
+    fields:
+      - identifier: select_text
+        type: SelectText
+        items:
+          - label: 'The first'
+            value: 'first'
+          - label: 'The second'
+            value: 'second'
+
 New option `hideInUid` for Record Types
 ---------------------------------------
 

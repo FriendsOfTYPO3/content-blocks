@@ -15,15 +15,13 @@ fields:
     useExistingField: true
     fields:
       - identifier: alignment
-        type: Select
-        renderType: selectSingle
+        type: SelectText
         items:
           - value: 'left'
           - value: 'center'
           - value: 'right'
       - identifier: icon_position
-        type: Select
-        renderType: selectSingle
+        type: SelectText
         items:
           - value: above
           - value: below

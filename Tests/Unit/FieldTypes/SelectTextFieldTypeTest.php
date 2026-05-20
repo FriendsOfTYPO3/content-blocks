@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class SelectNumberFieldTypeTest extends UnitTestCase
+final class SelectTextFieldTypeTest extends UnitTestCase
 {
     public static function getTcaReturnsExpectedTcaDataProvider(): iterable
     {
@@ -38,7 +38,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'non_available_field' => 'foo',
-                'default' => 1,
+                'default' => 'foo',
                 'readOnly' => 1,
                 'size' => 1,
                 'authMode' => 'foo',
@@ -73,7 +73,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                     ],
                     'type' => 'select',
                     'renderType' => 'selectSingle',
-                    'default' => 1,
+                    'default' => 'foo',
                     'readOnly' => true,
                     'size' => 1,
                     'authMode' => 'foo',
@@ -87,6 +87,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
                     'sortItems' => [
                         'foo' => 'bar',
                     ],
+                    'dbFieldLength' => 10,
                 ],
             ],
         ];
@@ -127,7 +128,7 @@ final class SelectNumberFieldTypeTest extends UnitTestCase
     public function getTcaReturnsExpectedTca(array $config, array $expectedTca): void
     {
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
-        $fieldType = $fieldTypeRegistry->get('SelectNumber');
+        $fieldType = $fieldTypeRegistry->get('SelectText');
         $fieldConfiguration = $fieldType->createFromArray($config);
 
         self::assertSame($expectedTca, $fieldConfiguration->getTca());

@@ -312,6 +312,7 @@
                       "Relation",
                       "Select",
                       "SelectNumber",
+                      "SelectText",
                       "Slug",
                       "Tab",
                       "Text",
@@ -2255,6 +2256,143 @@
                 "if": {
                   "properties": {
                     "type": {
+                      "const": "SelectText"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "identifier": {},
+                    "alias": {},
+                    "label": {},
+                    "description": {},
+                    "useExistingField": {},
+                    "prefixField": {},
+                    "prefixType": {},
+                    "displayCond": {},
+                    "onChange": {},
+                    "type": {},
+                    "l10n_mode": {},
+                    "l10n_display": {},
+                    "exclude": {},
+                    "authMode": {
+                      "type": "string",
+                      "description": "Authorization mode for the selector box",
+                      "enum": [
+                        "explicitAllow"
+                      ]
+                    },
+                    "behaviour": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowLanguageSynchronization": {
+                          "type": "boolean",
+                          "description": "Allows to select if localization uses custom or default language value",
+                          "default": false
+                        }
+                      }
+                    },
+                    "dbFieldLength": {
+                      "type": "integer",
+                      "description": "Defines the length of the database field.",
+                      "minimum": 1
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default value set if a new record is created."
+                    },
+                    "disableNoMatchingValueElement": {
+                      "type": "boolean",
+                      "description": "If set, then no element is inserted if the current value does not match any of the existing elements."
+                    },
+                    "fieldControl": {
+                      "type": "object"
+                    },
+                    "fieldInformation": {
+                      "type": "object"
+                    },
+                    "fieldWizard": {
+                      "type": "object",
+                      "properties": {
+                        "defaultLanguageDifferences": {
+                          "type": "object"
+                        },
+                        "localizationStateSelector": {
+                          "type": "object"
+                        },
+                        "otherLanguageContent": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "itemGroups": {
+                      "type": "object",
+                      "description": "Contains an array of key-value pairs. The key contains the identifier, the value contains the label",
+                      "patternProperties": {
+                        ".*": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "description": "Contains the elements for the selector box",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "description": "The displayed title."
+                          },
+                          "value": {
+                            "description": "The value stored in the database",
+                            "type": "string"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "description": "Icon to be displayed next to the label"
+                          },
+                          "group": {
+                            "type": "string",
+                            "description": "The key of the item group"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ]
+                      }
+                    },
+                    "readOnly": {
+                      "type": "boolean",
+                      "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                      "default": false
+                    },
+                    "size": {
+                      "type": "integer",
+                      "description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
+                      "minimum": 1,
+                      "default": 1
+                    },
+                    "sortItems": {
+                      "$ref": "#/allOf/1/properties/fields/items/allOf/12/then/properties/sortItems"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
                       "const": "Checkbox"
                     }
                   },
@@ -3821,7 +3959,7 @@
                               {
                                 "type": "array",
                                 "items": {
-                                  "$ref": "#/allOf/1/properties/fields/items/allOf/24/then/properties/generatorOptions/properties/fields/items"
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/25/then/properties/generatorOptions/properties/fields/items"
                                 }
                               }
                             ]
@@ -4007,6 +4145,7 @@
                                   "Relation",
                                   "Select",
                                   "SelectNumber",
+                                  "SelectText",
                                   "Slug",
                                   "Text",
                                   "Textarea",
@@ -4240,7 +4379,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Checkbox"
+                                  "const": "SelectText"
                                 }
                               },
                               "required": [
@@ -4255,7 +4394,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Category"
+                                  "const": "Checkbox"
                                 }
                               },
                               "required": [
@@ -4270,7 +4409,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Basic"
+                                  "const": "Category"
                                 }
                               },
                               "required": [
@@ -4285,7 +4424,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "File"
+                                  "const": "Basic"
                                 }
                               },
                               "required": [
@@ -4300,7 +4439,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Radio"
+                                  "const": "File"
                                 }
                               },
                               "required": [
@@ -4315,7 +4454,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Folder"
+                                  "const": "Radio"
                                 }
                               },
                               "required": [
@@ -4330,7 +4469,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Language"
+                                  "const": "Folder"
                                 }
                               },
                               "required": [
@@ -4345,7 +4484,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Pass"
+                                  "const": "Language"
                                 }
                               },
                               "required": [
@@ -4360,7 +4499,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Password"
+                                  "const": "Pass"
                                 }
                               },
                               "required": [
@@ -4375,7 +4514,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Relation"
+                                  "const": "Password"
                                 }
                               },
                               "required": [
@@ -4390,7 +4529,7 @@
                             "if": {
                               "properties": {
                                 "type": {
-                                  "const": "Slug"
+                                  "const": "Relation"
                                 }
                               },
                               "required": [
@@ -4399,6 +4538,21 @@
                             },
                             "then": {
                               "$ref": "#/allOf/1/properties/fields/items/allOf/24/then"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "type": {
+                                  "const": "Slug"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            },
+                            "then": {
+                              "$ref": "#/allOf/1/properties/fields/items/allOf/25/then"
                             }
                           },
                           {
@@ -4982,7 +5136,7 @@
                         {
                           "type": "array",
                           "items": {
-                            "$ref": "#/allOf/1/properties/fields/items/allOf/28/then/$defs/fields"
+                            "$ref": "#/allOf/1/properties/fields/items/allOf/29/then/$defs/fields"
                           }
                         },
                         {
@@ -5013,7 +5167,7 @@
                               "fields": {
                                 "type": "array",
                                 "items": {
-                                  "$ref": "#/allOf/1/properties/fields/items/allOf/28/then/$defs/fields"
+                                  "$ref": "#/allOf/1/properties/fields/items/allOf/29/then/$defs/fields"
                                 }
                               }
                             }
@@ -5076,6 +5230,7 @@
                                 "Relation",
                                 "Select",
                                 "SelectNumber",
+                                "SelectText",
                                 "Slug",
                                 "Text",
                                 "Textarea",
@@ -5271,7 +5426,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Checkbox"
+                                "const": "SelectText"
                               }
                             },
                             "required": [
@@ -5286,7 +5441,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Category"
+                                "const": "Checkbox"
                               }
                             },
                             "required": [
@@ -5301,7 +5456,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "File"
+                                "const": "Category"
                               }
                             },
                             "required": [
@@ -5309,14 +5464,14 @@
                             ]
                           },
                           "then": {
-                            "$ref": "#/allOf/1/properties/fields/items/allOf/17/then"
+                            "$ref": "#/allOf/1/properties/fields/items/allOf/16/then"
                           }
                         },
                         {
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Radio"
+                                "const": "File"
                               }
                             },
                             "required": [
@@ -5331,7 +5486,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Folder"
+                                "const": "Radio"
                               }
                             },
                             "required": [
@@ -5346,7 +5501,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Language"
+                                "const": "Folder"
                               }
                             },
                             "required": [
@@ -5361,7 +5516,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Password"
+                                "const": "Language"
                               }
                             },
                             "required": [
@@ -5369,14 +5524,14 @@
                             ]
                           },
                           "then": {
-                            "$ref": "#/allOf/1/properties/fields/items/allOf/22/then"
+                            "$ref": "#/allOf/1/properties/fields/items/allOf/21/then"
                           }
                         },
                         {
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Relation"
+                                "const": "Password"
                               }
                             },
                             "required": [
@@ -5391,7 +5546,7 @@
                           "if": {
                             "properties": {
                               "type": {
-                                "const": "Slug"
+                                "const": "Relation"
                               }
                             },
                             "required": [
@@ -5400,6 +5555,21 @@
                           },
                           "then": {
                             "$ref": "#/allOf/1/properties/fields/items/allOf/24/then"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "type": {
+                                "const": "Slug"
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ]
+                          },
+                          "then": {
+                            "$ref": "#/allOf/1/properties/fields/items/allOf/25/then"
                           }
                         },
                         {
@@ -5501,6 +5671,7 @@
                                                   "Radio",
                                                   "Select",
                                                   "SelectNumber",
+                                                  "SelectText",
                                                   "Slug",
                                                   "Text",
                                                   "Textarea",
@@ -5695,7 +5866,7 @@
                                             "if": {
                                               "properties": {
                                                 "type": {
-                                                  "const": "Checkbox"
+                                                  "const": "SelectText"
                                                 }
                                               },
                                               "required": [
@@ -5710,6 +5881,21 @@
                                             "if": {
                                               "properties": {
                                                 "type": {
+                                                  "const": "Checkbox"
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            "then": {
+                                              "$ref": "#/allOf/1/properties/fields/items/allOf/15/then"
+                                            }
+                                          },
+                                          {
+                                            "if": {
+                                              "properties": {
+                                                "type": {
                                                   "const": "Radio"
                                                 }
                                               },
@@ -5718,7 +5904,7 @@
                                               ]
                                             },
                                             "then": {
-                                              "$ref": "#/allOf/1/properties/fields/items/allOf/18/then"
+                                              "$ref": "#/allOf/1/properties/fields/items/allOf/19/then"
                                             }
                                           },
                                           {
@@ -5733,7 +5919,7 @@
                                               ]
                                             },
                                             "then": {
-                                              "$ref": "#/allOf/1/properties/fields/items/allOf/20/then"
+                                              "$ref": "#/allOf/1/properties/fields/items/allOf/21/then"
                                             }
                                           },
                                           {
@@ -5748,7 +5934,7 @@
                                               ]
                                             },
                                             "then": {
-                                              "$ref": "#/allOf/1/properties/fields/items/allOf/22/then"
+                                              "$ref": "#/allOf/1/properties/fields/items/allOf/23/then"
                                             }
                                           },
                                           {
@@ -5763,7 +5949,7 @@
                                               ]
                                             },
                                             "then": {
-                                              "$ref": "#/allOf/1/properties/fields/items/allOf/24/then"
+                                              "$ref": "#/allOf/1/properties/fields/items/allOf/25/then"
                                             }
                                           }
                                         ]
