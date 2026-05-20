@@ -64,5 +64,7 @@ New automatic language keys are added, which can now be used in the labels.xlf
 file:
 
 * :yaml:`placeholder` (for types with input field: Text, Textarea, Email, ...)
+* :yaml:`labelChecked` (for :ref:`Checkbox <confval-checkbox-items>` with :yaml:`renderType: checkboxLabeledToggle`)
+* :yaml:`labelUnchecked` (for :ref:`Checkbox <confval-checkbox-items>` with :yaml:`renderType: checkboxLabeledToggle`)
 
 See :ref:`here <api_automatic_language_keys>` for more information.

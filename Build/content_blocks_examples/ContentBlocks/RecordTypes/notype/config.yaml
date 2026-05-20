@@ -31,6 +31,14 @@ fields:
     type: Checkbox
     invertStateDisplay: true
   -
+    identifier: check_label
+    type: Checkbox
+    renderType: checkboxLabeledToggle
+    items:
+      - label: Label
+        labelChecked: Label Checked
+        labelUnchecked: Label Un-Checked
+  -
     identifier: country
     type: Country
     labelField: 'localizedName'

@@ -23,7 +23,9 @@ This feature is available for the following options (more may come).
 
 It is also possible to translate the :yaml:`items` option of
 :ref:`Select <field_type_select>`, :ref:`Radio <field_type_radio>`
-and :ref:`Checkbox <field_type_checkbox>` fields.
+and :ref:`Checkbox <field_type_checkbox>` fields. Additionally, Checkboxes can
+have a :yaml:`labelChecked` and :yaml:`labelUnchecked` if the :yaml:`renderType`
+is :yaml:`checkboxLabeledToggle`.
 
 The convention is best explained by examples. Have a look at the example
 beneath.
