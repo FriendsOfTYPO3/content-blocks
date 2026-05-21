@@ -53,6 +53,13 @@ the standard preview rendering of TYPO3. If a section is omitted, the fallback
 rendering from TYPO3 will be used instead. You can also include CSS just like in
 the frontend with :html:`f:asset.css` View Helper.
 
+Variables
+---------
+
+* :html:`data` (The Content Block record)
+* :html:`site` (Site object)
+* :html:`siteSettings` (flat site settings)
+
 ..  _api_backend_preview_page_types:
 
 Page Types

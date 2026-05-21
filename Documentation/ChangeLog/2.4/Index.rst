@@ -68,3 +68,12 @@ file:
 * :yaml:`labelUnchecked` (for :ref:`Checkbox <confval-checkbox-items>` with :yaml:`renderType: checkboxLabeledToggle`)
 
 See :ref:`here <api_automatic_language_keys>` for more information.
+
+Site and Site Settings available in backend previews
+----------------------------------------------------
+
+You have now access to the :html:`site` and :html:`siteSettings` variables in
+your backend-preview.html templates. Having these, you can now display your
+previews depending on the current site and settings. This is especially useful
+if you define special colors in your theme and want to load CSS variables into
+your templates.

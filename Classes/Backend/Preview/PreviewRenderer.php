@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockDataDecorator;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
@@ -93,12 +94,17 @@ class PreviewRenderer implements PreviewRendererInterface
     {
         /** @var ServerRequestInterface $request */
         $request = $GLOBALS['TYPO3_REQUEST'];
+        $site = $item->getContext()->getSite();
         $record = $item->getRecord();
         $contentBlockData = $this->contentBlockDataDecorator->decorate($record, $item->getContext());
         $settings['_content_block_name'] = $contentBlockData->get('_name');
         $view = $this->createView($request, $item, $section);
         $view->assign('data', $contentBlockData);
         $view->assign('settings', $settings);
+        if ($site instanceof Site) {
+            $view->assign('site', $site);
+            $view->assign('siteSettings', $site->getSettings()->getAllFlat());
+        }
         try {
             $result = $view->render('backend-preview');
         } catch (Exception $exception) {
