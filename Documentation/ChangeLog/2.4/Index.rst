@@ -77,3 +77,25 @@ your backend-preview.html templates. Having these, you can now display your
 previews depending on the current site and settings. This is especially useful
 if you define special colors in your theme and want to load CSS variables into
 your templates.
+
+Generate frontend and backend preview templates via CLI
+-------------------------------------------------------
+
+Two new commands allow you to generate starter Fluid templates for a Content
+Block directly from the command line:
+
+* :bash:`content-blocks:generate:frontend` generates
+  :file:`templates/frontend.fluid.html`
+* :bash:`content-blocks:generate:backend-preview` generates
+  :file:`templates/backend-preview.fluid.html`
+
+Both commands require the Content Block name as an argument and will not
+overwrite an existing file unless the :bash:`--force` option is given.
+
+.. code-block:: bash
+
+   vendor/bin/typo3 content-blocks:generate:frontend example/my-block
+   vendor/bin/typo3 content-blocks:generate:backend-preview example/my-block
+
+See :ref:`command_generate_frontend_template` and
+:ref:`command_generate_backend_preview_template` for details.
