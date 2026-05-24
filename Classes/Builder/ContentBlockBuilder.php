@@ -22,6 +22,7 @@ use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
+use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
 use TYPO3\CMS\ContentBlocks\FieldType\FieldTypeRegistry;
 use TYPO3\CMS\ContentBlocks\Generator\HtmlTemplateCodeGenerator;
 use TYPO3\CMS\ContentBlocks\Generator\LanguageFileGenerator;
@@ -68,7 +69,7 @@ readonly class ContentBlockBuilder
         }
 
         $this->copySkeleton($basePath, $skeletonPath);
-        $this->initializeRegistries($contentBlock);
+        $tableDefinitionCollection = $this->initializeRegistries($contentBlock);
 
         // Create base directories for a Content Block.
         $contentType = $contentBlock->getContentType();
@@ -85,19 +86,19 @@ readonly class ContentBlockBuilder
         $this->createConfigYaml($contentBlock, $basePath);
 
         if ($contentType === ContentType::CONTENT_ELEMENT) {
-            $this->createFrontendHtml($contentBlock, $basePath);
-            $this->createBackendPreviewHtml($contentBlock, $basePath);
+            $this->createFrontendHtml($contentBlock, $tableDefinitionCollection, $basePath);
+            $this->createBackendPreviewHtml($contentBlock, $tableDefinitionCollection, $basePath);
         }
         if ($contentType !== ContentType::FILE_TYPE) {
             $this->copyDefaultIcon($contentType, $basePath);
         }
         if ($contentType === ContentType::PAGE_TYPE) {
             $this->copyHideInMenuIcon($basePath);
-            $this->createBackendPreviewHtml($contentBlock, $basePath);
+            $this->createBackendPreviewHtml($contentBlock, $tableDefinitionCollection, $basePath);
         }
     }
 
-    protected function initializeRegistries(LoadedContentBlock $contentBlock): void
+    protected function initializeRegistries(LoadedContentBlock $contentBlock): TableDefinitionCollection
     {
         $basicsRegistry = $this->basicsLoader->loadUncached();
         $yaml = $this->basicsService->applyBasics($basicsRegistry, $contentBlock->getYaml());
@@ -117,6 +118,7 @@ readonly class ContentBlockBuilder
         );
         $automaticLanguageKeysRegistry = $tableDefinitionCollection->getAutomaticLanguageKeysRegistry();
         $this->languageFileGenerator->setAutomaticLanguageKeysRegistry($automaticLanguageKeysRegistry);
+        return $tableDefinitionCollection;
     }
 
     protected function createConfigYaml(LoadedContentBlock $contentBlock, string $basePath): void
@@ -154,23 +156,23 @@ readonly class ContentBlockBuilder
         }
     }
 
-    protected function createBackendPreviewHtml(LoadedContentBlock $contentBlock, string $basePath): void
+    protected function createBackendPreviewHtml(LoadedContentBlock $contentBlock, TableDefinitionCollection $tableDefinitionCollection, string $basePath): void
     {
         $filePath = $basePath . '/' . ContentBlockPathUtility::getBackendPreviewPath();
         if (file_exists($filePath)) {
             return;
         }
-        $backendPreviewHtml = $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlock);
+        $backendPreviewHtml = $this->htmlTemplateCodeGenerator->generateEditorPreviewTemplate($contentBlock, $tableDefinitionCollection);
         GeneralUtility::writeFile($filePath, $backendPreviewHtml);
     }
 
-    protected function createFrontendHtml(LoadedContentBlock $contentBlock, string $basePath): void
+    protected function createFrontendHtml(LoadedContentBlock $contentBlock, TableDefinitionCollection $tableDefinitionCollection, string $basePath): void
     {
         $filePath = $basePath . '/' . ContentBlockPathUtility::getFrontendTemplatePath();
         if (file_exists($filePath)) {
             return;
         }
-        $frontendHtml = $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlock);
+        $frontendHtml = $this->htmlTemplateCodeGenerator->generateFrontendTemplate($contentBlock, $tableDefinitionCollection);
         GeneralUtility::writeFile($filePath, $frontendHtml);
     }
 

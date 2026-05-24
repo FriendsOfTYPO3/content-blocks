@@ -15,5 +15,7 @@ available commands.
     Make/Index
     List/Index
     LanguageGenerate/Index
+    GenerateFrontendTemplate/Index
+    GenerateEditorPreviewTemplate/Index
     PublishAssets/Index
     Lint/Index

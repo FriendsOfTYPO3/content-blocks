@@ -50,11 +50,9 @@ final readonly class TableDefinition
     {
         $typeDefinitionCollection = $this->contentTypeDefinitionCollection;
         if ($typeDefinitionCollection->hasType('1')) {
-            $defaultTypeDefinition = $typeDefinitionCollection->getType('1');
-        } else {
-            $defaultTypeDefinition = $typeDefinitionCollection->getFirst();
+            return $typeDefinitionCollection->getType('1');
         }
-        return $defaultTypeDefinition;
+        return $typeDefinitionCollection->getFirst();
     }
 
     public function hasTypeField(): bool
