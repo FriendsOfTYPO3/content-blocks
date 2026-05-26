@@ -42,6 +42,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'name' => 'bar/foo',
             'yaml' => [
                 'table' => 'tt_content',
+                'typeField' => 'CType',
                 'typeName' => 'bar_foo',
                 'prefixFields' => true,
                 'prefixType' => PrefixType::FULL->value,
@@ -149,6 +150,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
             'name' => 'bar/foo',
             'yaml' => [
                 'table' => 'tt_content',
+                'typeField' => 'CType',
                 'typeName' => 'bar_foo',
                 'prefixFields' => true,
                 'prefixType' => PrefixType::FULL->value,

@@ -76,13 +76,25 @@ final class ProcessingInput
             return null;
         }
         $tcaSchema = $simpleTcaSchemaFactory->get($this->table);
-        $typeField = $tcaSchema->getTypeField();
-        return $typeField?->getName();
+        $type = $tcaSchema->getType();
+        if ($type === null) {
+            return null;
+        }
+        if (str_contains($type, ':')) {
+            return null;
+        }
+        return $type;
     }
 
     private function resolveTypeName(): string|int
     {
         if ($this->typeField === null && $this->contentType !== ContentType::FILE_TYPE) {
+            if ($this->isRootTable() && isset($this->yaml['typeName']) && $this->yaml['typeName'] !== '1') {
+                throw new \InvalidArgumentException(
+                    'Single type record "' . $this->yaml['name'] . '" must not define "typeName".',
+                    1779781599
+                );
+            }
             return '1';
         }
         return $this->yaml['typeName'];

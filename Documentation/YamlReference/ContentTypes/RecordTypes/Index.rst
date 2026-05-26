@@ -132,7 +132,8 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
    :default: automatically generated from :yaml:`name`
 
    The identifier of the new Record Type. It is automatically generated from
-   the name, if not defined manually.
+   the name, if not defined manually. This is only needed, if this Content Block
+   is part of a :ref:`multi-type record <yaml_reference_record_type_multiple_types>`.
 
    .. code-block:: yaml
 

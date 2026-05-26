@@ -112,4 +112,12 @@ final readonly class SimpleTcaSchema
         }
         return null;
     }
+
+    public function getType(): ?string
+    {
+        if (!isset($this->schemaConfiguration['type'])) {
+            return null;
+        }
+        return $this->schemaConfiguration['type'];
+    }
 }
