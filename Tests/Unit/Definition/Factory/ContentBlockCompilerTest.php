@@ -1680,4 +1680,53 @@ final class ContentBlockCompilerTest extends UnitTestCase
 
         self::assertTrue($tableDefinitionCollection->hasTable($expectedTable));
     }
+
+    public static function singleTypeRecordMustNotDefineTypeNameDataProvider(): iterable
+    {
+        yield 'single type record must not define typeName' => [
+            'contentBlocks' => [
+                [
+                    'name' => 't3ce/example',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                    ],
+                    'extPath' => 'EXT:example/ContentBlocks/example',
+                    'yaml' => [
+                        'name' => 't3ce/example',
+                        'table' => 'tx_foo',
+                        'typeName' => 'foo_bar',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('singleTypeRecordMustNotDefineTypeNameDataProvider')]
+    #[Test]
+    public function singleTypeRecordMustNotDefineTypeName(array $contentBlocks): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(1779781599);
+        $this->expectExceptionMessage('Single type record "t3ce/example" must not define "typeName".');
+
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry();
+        foreach ($contentBlocks as $contentBlock) {
+            $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
+        }
+        $contentBlockCompiler = new ContentBlockCompiler();
+        $loader = $this->createMock(ContentBlockLoader::class);
+        $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
+        $tableDefinitionCollectionFactory->createUncached(
+            $contentBlockRegistry,
+            $fieldTypeRegistry,
+            $simpleTcaSchemaFactory
+        );
+    }
 }

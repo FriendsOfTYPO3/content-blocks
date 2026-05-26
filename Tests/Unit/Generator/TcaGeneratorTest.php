@@ -1867,7 +1867,6 @@ final class TcaGeneratorTest extends UnitTestCase
             ],
             'yaml' => [
                 'table' => 'my_custom_table',
-                'typeName' => 'test_test',
             ],
         ];
         $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
@@ -2704,6 +2703,7 @@ final class TcaGeneratorTest extends UnitTestCase
             'name' => 'bar/foo',
             'yaml' => [
                 'table' => 'tt_content',
+                'typeField' => 'CType',
                 'typeName' => 'bar_foo',
                 'prefixFields' => true,
                 'prefixType' => 'full',
@@ -2749,7 +2749,7 @@ final class TcaGeneratorTest extends UnitTestCase
         );
 
         $tca = $tcaGenerator->generate($baseTca);
-        $actual = $tca['tt_content']['types']['1']['columnsOverrides']['bar_foo_aField']['displayCond'];
+        $actual = $tca['tt_content']['types']['bar_foo']['columnsOverrides']['bar_foo_aField']['displayCond'];
 
         self::assertEquals($expected, $actual);
     }
