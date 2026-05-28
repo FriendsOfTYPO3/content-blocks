@@ -51,6 +51,7 @@ readonly class RestrictContentBlockInNewRecordView
             foreach ($group['items'] as $mainType => $item) {
                 if (array_key_exists('types', $item)) {
                     foreach ($item['types'] as $type => $typeItem) {
+                        $type = (string)$type;
                         $isRecordAllowed = $this->isRecordAllowedForSubType($registeredRecordTypes, $mainType, $type);
                         if ($isRecordAllowed === false) {
                             unset($event->groupedCreationLinks[$groupName]['items'][$mainType]['types'][$type]);
