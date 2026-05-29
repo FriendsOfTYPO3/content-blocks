@@ -96,6 +96,6 @@ registration in the Content Block.
 Will there be a GUI (Graphical User Interface) for Content Blocks?
 ==================================================================
 
-Yes, the Content Types Team is working on a GUI for Content Blocks. The
-first steps are already done, and we are looking forward to the first
-beta phase in 2025.
+Yes, the Content Types Team is working on a GUI for Content Blocks. You can
+find the currently ongoing work on `GitHub <https://github.com/friendsOfTYPO3/content-blocks-gui/>`__
+or in `Extension Repository<https://extensions.typo3.org/extension/content_blocks_gui>`__.
