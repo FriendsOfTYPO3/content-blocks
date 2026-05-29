@@ -3442,7 +3442,7 @@ final class TcaGeneratorTest extends UnitTestCase
                                                                 'overrideChildTca' => [
                                                                     'types' => [
                                                                         2 => [
-                                                                            'showitem' => '--div--;core.form.tabs:general,--palette--;;image_overlay_palette_video_poster,--palette--;;filePalette',
+                                                                            'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,--palette--;;image_overlay_palette_video_poster,--palette--;;filePalette',
                                                                             'columnsOverrides' => [
                                                                                 'alternative' => [
                                                                                     'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.alternative.label',
