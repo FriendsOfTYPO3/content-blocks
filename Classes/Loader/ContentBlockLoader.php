@@ -19,7 +19,6 @@ namespace TYPO3\CMS\ContentBlocks\Loader;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
@@ -32,6 +31,7 @@ use TYPO3\CMS\ContentBlocks\Service\Icon\IconProcessor;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
+use TYPO3\CMS\ContentBlocks\Yaml\ContentBlocksYamlParserInterface;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -78,6 +78,7 @@ class ContentBlockLoader
         protected readonly PackageManager $packageManager,
         protected readonly IconProcessor $iconProcessor,
         protected readonly AssetPublisher $assetPublisher,
+        protected readonly ContentBlocksYamlParserInterface $contentBlocksYamlLoader,
     ) {}
 
     public function load(): ContentBlockRegistry
@@ -177,7 +178,7 @@ class ContentBlockLoader
         if (!file_exists($yamlPath)) {
             return null;
         }
-        $config = Yaml::parseFile($yamlPath);
+        $config = $this->contentBlocksYamlLoader->parse($yamlPath);
         if (!is_array($config) || strlen($config['name'] ?? '') < 3 || !str_contains($config['name'], '/')) {
             throw new \RuntimeException(
                 'Invalid config.yaml file in "' . $yamlPath . '"' . ': Cannot find a valid name in format "vendor/name".',
