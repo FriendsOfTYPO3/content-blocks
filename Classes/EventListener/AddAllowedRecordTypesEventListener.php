@@ -55,24 +55,44 @@ readonly class AddAllowedRecordTypesEventListener
     }
 
     /**
+     * @param array<array{string, string}> $collectedTypes
      * @return array<string>
      */
-    protected function findAllowedRecordTypes(TableDefinition $contentElementTableDefinition, string $typeName): array
+    protected function findAllowedRecordTypes(TableDefinition $tableDefinition, string $typeName, array $collectedTypes = []): array
     {
+        $collectionType = [$tableDefinition->table, $typeName];
+        if (in_array($collectionType, $collectedTypes, true)) {
+            return [];
+        }
+        $collectedTypes[] = $collectionType;
         $contentElementTableName = ContentType::CONTENT_ELEMENT->getTable();
-        if (!$contentElementTableDefinition->contentTypeDefinitionCollection->hasType($typeName)) {
+        if (!$tableDefinition->contentTypeDefinitionCollection->hasType($typeName)) {
             return [];
         }
         $allowedChildren = [];
-        $contentType = $contentElementTableDefinition->contentTypeDefinitionCollection->getType($typeName);
+        $contentType = $tableDefinition->contentTypeDefinitionCollection->getType($typeName);
         foreach ($contentType->getOverrideColumns() as $column) {
             if ($column->fieldType instanceof CollectionFieldType === false) {
                 continue;
             }
-            if ($column->getTca()['config']['foreign_table'] !== $contentElementTableName) {
+            $foreignTable = $column->getTca()['config']['foreign_table'];
+            if (!$this->tableDefinitionCollection->hasTable($foreignTable)) {
                 continue;
             }
-            $allowedChildren[] = $column->fieldType->getAllowedRecordTypes();
+            $allowedRecordTypes = $column->fieldType->getAllowedRecordTypes();
+            $foreignTableDefinition = $this->tableDefinitionCollection->getTable($foreignTable);
+            foreach ($foreignTableDefinition->contentTypeDefinitionCollection as $foreignContentType) {
+                $foreignTypeName = $foreignContentType->getTypeName();
+                if ($allowedRecordTypes !== [] && in_array($foreignTypeName, $allowedRecordTypes, true) === false) {
+                    continue;
+                }
+                $foreignTableAllowedRecordTypes = $this->findAllowedRecordTypes($foreignTableDefinition, $foreignTypeName, $collectedTypes);
+                $allowedChildren[] = $foreignTableAllowedRecordTypes;
+            }
+            if ($foreignTable !== $contentElementTableName) {
+                continue;
+            }
+            $allowedChildren[] = $allowedRecordTypes;
         }
         $allowedChildren = array_merge([], ...$allowedChildren);
         return $allowedChildren;
