@@ -718,6 +718,8 @@ final class ContentBlockCompiler
             $typeDefinition['typeName'] = $typeName;
             $overrideChildTca[] = $typeDefinition;
             $overrideTableDefinition = array_pop($tableDefinitionList[$foreignTable]['tableDefinitions']);
+            // Take the processed tableOverrideDefinitions as a recursive call to processTypeOverride might have added new palettes.
+            $result->tableDefinitionList[$foreignTable]['tableOverrideDefinitions'] = $tableDefinitionList[$foreignTable]['tableOverrideDefinitions'] ?? [];
             $result->tableDefinitionList[$foreignTable]['tableOverrideDefinitions'][] = $overrideTableDefinition;
         }
         return $overrideChildTca;
