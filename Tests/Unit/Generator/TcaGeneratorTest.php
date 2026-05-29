@@ -3288,7 +3288,7 @@ final class TcaGeneratorTest extends UnitTestCase
 
     public static function sysFileReferencePaletteIsAddedForOverrideChildDataProvider(): iterable
     {
-        yield 'sys_file_reference palette and overrideChildTca added' => [
+        yield 'sys_file_reference palette and overrideChildTca with recursive overrideChildTca with palette added.' => [
             'contentBlockArray' => [
                 'name' => 'my-vendor/my-element',
                 'hostExtension' => 'my_extension',
@@ -3347,6 +3347,30 @@ final class TcaGeneratorTest extends UnitTestCase
                                                 'identifier' => 'crop',
                                                 'useExistingField' => true,
                                             ],
+                                            [
+                                                'identifier' => 'poster',
+                                                'type' => 'File',
+                                                'label' => 'Poster',
+                                                'overrideType' => [
+                                                    'image' => [
+                                                        [
+                                                            'identifier' => 'image_overlay_palette_video_poster',
+                                                            'type' => 'Palette',
+                                                            'label' => 'Video Poster Palette',
+                                                            'fields' => [
+                                                                [
+                                                                    'identifier' => 'alternative',
+                                                                    'useExistingField' => true,
+                                                                ],
+                                                                [
+                                                                    'identifier' => 'description',
+                                                                    'useExistingField' => true,
+                                                                ],
+                                                            ],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
                                         ],
                                     ],
                                 ],
@@ -3358,8 +3382,13 @@ final class TcaGeneratorTest extends UnitTestCase
             'expected' => [
                 'sys_file_reference' => [
                     'palettes' => [
+                        'image_overlay_palette_video_poster' => [
+                            'showitem' => 'alternative,description',
+                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.palettes.image_overlay_palette_video_poster.label',
+                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.palettes.image_overlay_palette_video_poster.description',
+                        ],
                         'my_file_palette' => [
-                            'showitem' => 'alternative,description,--linebreak--,link,title,--linebreak--,example_custom_field,--linebreak--,crop',
+                            'showitem' => 'alternative,description,--linebreak--,link,title,--linebreak--,example_custom_field,--linebreak--,crop,poster',
                             'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.palettes.my_file_palette.label',
                             'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.palettes.my_file_palette.description',
                         ],
@@ -3371,6 +3400,13 @@ final class TcaGeneratorTest extends UnitTestCase
                             ],
                             'exclude' => true,
                             'label' => 'example_custom_field',
+                        ],
+                        'poster' => [
+                            'config' => [
+                                'type' => 'file',
+                            ],
+                            'exclude' => true,
+                            'label' => 'poster',
                         ],
                     ],
                 ],
@@ -3421,6 +3457,29 @@ final class TcaGeneratorTest extends UnitTestCase
                                                         'crop' => [
                                                             'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.crop.label',
                                                             'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.crop.description',
+                                                        ],
+                                                        'poster' => [
+                                                            'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.label',
+                                                            'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.description',
+                                                            'config' => [
+                                                                'overrideChildTca' => [
+                                                                    'types' => [
+                                                                        2 => [
+                                                                            'showitem' => '--div--;core.form.tabs:general,--palette--;;image_overlay_palette_video_poster,--palette--;;filePalette',
+                                                                            'columnsOverrides' => [
+                                                                                'alternative' => [
+                                                                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.alternative.label',
+                                                                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.alternative.description',
+                                                                                ],
+                                                                                'description' => [
+                                                                                    'label' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.description.label',
+                                                                                    'description' => 'LLL:EXT:my_extension/ContentBlocks/ContentElements/my-element/language/labels.xlf:file.poster.description.description',
+                                                                                ],
+                                                                            ],
+                                                                        ],
+                                                                    ],
+                                                                ],
+                                                            ],
                                                         ],
                                                     ],
                                                 ],
