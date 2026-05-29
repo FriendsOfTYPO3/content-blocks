@@ -19,8 +19,8 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
+use TYPO3\CMS\ContentBlocks\Yaml\ContentBlocksYamlParserInterface;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
 
@@ -55,6 +55,7 @@ class BasicsLoader
         protected readonly PackageManager $packageManager,
         #[Autowire(service: 'cache.core')]
         protected readonly PhpFrontend $cache,
+        protected readonly ContentBlocksYamlParserInterface $contentBlocksYamlLoader,
     ) {}
 
     public function load(): BasicsRegistry
@@ -86,7 +87,7 @@ class BasicsLoader
             $finder = new Finder();
             $finder->files()->name('*.yaml')->in($pathToBasics);
             foreach ($finder as $splFileInfo) {
-                $yamlContent = Yaml::parseFile($splFileInfo->getPathname());
+                $yamlContent = $this->contentBlocksYamlLoader->parse($splFileInfo->getPathname());
                 if (!is_array($yamlContent) || ($yamlContent['identifier'] ?? '') === '') {
                     throw new \RuntimeException('Invalid Basics file in "' . $splFileInfo->getPathname() . '"' . ': Cannot find an identifier.', 1689095524);
                 }
