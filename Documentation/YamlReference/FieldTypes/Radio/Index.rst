@@ -80,6 +80,59 @@ Settings
    option. This option receives an array of those strings. By default, the
    custom option :yaml:`itemsProcConfig` is allowed.
 
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: radio-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: fieldControl
+   :name: radio-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldInformation
+   :name: radio-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: radio-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: itemsProcFunc
+   :name: radio-itemsProcFunc
+   :required: false
+   :type: string
+
+   PHP method which is called to fill or manipulate the items array. See
+   :ref:`TCA itemsProcFunc <t3tca:tca_property_itemsProcFunc>`.
+
+.. confval:: itemsProcConfig
+   :name: radio-itemsProcConfig
+   :required: false
+   :type: object
+
+   Additional configuration passed to :yaml:`itemsProcFunc`. Must be listed in
+   :yaml:`allowedCustomProperties` (included by default).
+
+.. confval:: readOnly
+   :name: radio-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
 Example
 =======
 
