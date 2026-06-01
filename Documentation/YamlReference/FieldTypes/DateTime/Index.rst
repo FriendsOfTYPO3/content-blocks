@@ -93,6 +93,66 @@ Settings
 
    If set to false, the field will not be considered in backend search.
 
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: datetime-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: fieldControl
+   :name: datetime-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldInformation
+   :name: datetime-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: datetime-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: mode
+   :name: datetime-mode
+   :required: false
+   :type: string
+
+   When set to :yaml:`useOrOverridePlaceholder`, a checkbox appears above the
+   field allowing the user to override the placeholder value.
+
+.. confval:: nullable
+   :name: datetime-nullable
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows the database field to store a :sql:`NULL` value.
+
+.. confval:: placeholder
+   :name: datetime-placeholder
+   :required: false
+   :type: string
+
+   Placeholder text displayed inside the field when it is empty.
+
+.. confval:: readOnly
+   :name: datetime-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
 Examples
 ========
 

@@ -91,6 +91,147 @@ Settings
    If this property is not specified for an RTE field, the system will fall back
    to the `default` configuration.
 
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: textarea-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: cols
+   :name: textarea-cols
+   :required: false
+   :type: integer
+   :default: 30
+
+   Abstract width of the textarea field. Minimum :yaml:`10`, maximum :yaml:`50`.
+
+.. confval:: enableTabulator
+   :name: textarea-enableTabulator
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows the use of tab characters inside the textarea.
+
+.. confval:: eval
+   :name: textarea-eval
+   :required: false
+   :type: string
+
+   Configuration of field evaluation. For example :yaml:`trim` to strip
+   whitespace from the value before saving.
+
+.. confval:: fieldControl
+   :name: textarea-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldInformation
+   :name: textarea-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: textarea-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: fixedFont
+   :name: textarea-fixedFont
+   :required: false
+   :type: boolean
+
+   Renders the textarea with a fixed-width (monospace) font.
+
+.. confval:: is_in
+   :name: textarea-is_in
+   :required: false
+   :type: string
+
+   Evaluates whether the entered text contains only characters from this
+   string.
+
+.. confval:: max
+   :name: textarea-max
+   :required: false
+   :type: integer
+
+   Maximum number of characters allowed.
+
+.. confval:: min
+   :name: textarea-min
+   :required: false
+   :type: integer
+
+   Minimum number of characters required. Empty values are still allowed;
+   combine with :yaml:`required` to enforce a non-empty value.
+
+.. confval:: nullable
+   :name: textarea-nullable
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows the database field to store a :sql:`NULL` value.
+
+.. confval:: readOnly
+   :name: textarea-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: renderType
+   :name: textarea-renderType
+   :required: false
+   :type: string
+
+   Selects an alternative rendering for the textarea. Possible values:
+
+   *  :yaml:`codeEditor`
+   *  :yaml:`textTable`
+   *  :yaml:`belayoutwizard`
+
+.. confval:: valuePicker
+   :name: textarea-valuePicker
+   :required: false
+   :type: object
+
+   Renders a select box next to the field from which predefined values can be
+   inserted. Requires an :yaml:`items` array of objects with :yaml:`label` and
+   :yaml:`value` keys.
+
+   Example:
+
+   .. code-block:: yaml
+
+      valuePicker:
+        items:
+          - label: 'Job offer general'
+            value: 'Want to join our team? Take the initiative!'
+          - label: 'Job offer specific'
+            value: 'We are looking for ...'
+
+.. confval:: wrap
+   :name: textarea-wrap
+   :required: false
+   :type: string
+   :default: virtual
+
+   Wrapping mode of the textarea. Possible values:
+
+   *  :yaml:`virtual`
+   *  :yaml:`off`
+
 Examples
 ========
 
