@@ -165,6 +165,341 @@ Settings
    option. This option receives an array of those strings. By default, the
    custom option :yaml:`itemsProcConfig` is allowed.
 
+.. confval:: allowNonIdValues
+   :name: select-allowNonIdValues
+   :required: false
+   :type: boolean
+   :default: false
+
+   Only useful if :yaml:`foreign_table` is set. If enabled, values which are
+   not integer ids will be allowed.
+
+.. confval:: appearance.expandAll
+   :name: select-appearance.expandAll
+   :required: false
+   :type: boolean
+
+   All select groups are initially expanded.
+
+.. confval:: authMode
+   :name: select-authMode
+   :required: false
+   :type: string
+
+   Authorization mode for the selector box. Possible value:
+
+   *  :yaml:`explicitAllow`
+
+.. confval:: autoSizeMax
+   :name: select-autoSizeMax
+   :required: false
+   :type: integer
+
+   The select field will never be smaller than :yaml:`size` and never larger
+   than this value.
+
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: select-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: disableNoMatchingValueElement
+   :name: select-disableNoMatchingValueElement
+   :required: false
+   :type: boolean
+
+   If set, no placeholder element is inserted when the current value does not
+   match any of the existing items.
+
+.. confval:: dontRemapTablesOnCopy
+   :name: select-dontRemapTablesOnCopy
+   :required: false
+   :type: array
+
+   A list of tables which should not be remapped to the new element uids if
+   the field holds elements that are copied in the session.
+
+.. confval:: exclusiveKeys
+   :name: select-exclusiveKeys
+   :required: false
+   :type: string
+
+   Comma-separated list of keys that exclude any other keys in a multi-select
+   box.
+
+.. confval:: fieldControl
+   :name: select-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldInformation
+   :name: select-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: select-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: fileFolderConfig.allowedExtensions
+   :name: select-fileFolderConfig.allowedExtensions
+   :required: false
+   :type: string
+
+   List of file extensions to select. If blank, all files are selected.
+
+.. confval:: fileFolderConfig.depth
+   :name: select-fileFolderConfig.depth
+   :required: false
+   :type: integer
+   :default: 99
+
+   Depth of directory recursion when listing files from
+   :yaml:`fileFolderConfig.folder`.
+
+.. confval:: fileFolderConfig.folder
+   :name: select-fileFolderConfig.folder
+   :required: false
+   :type: string
+
+   Path to the folder from which files are added to the item array.
+
+.. confval:: foreign_table
+   :name: select-foreign_table
+   :required: false
+   :type: string
+
+   The item array will be filled with records from this table.
+
+.. confval:: foreign_table_item_group
+   :name: select-foreign_table_item_group
+   :required: false
+   :type: string
+
+   References a field in the foreign table that holds an item group identifier.
+
+.. confval:: foreign_table_prefix
+   :name: select-foreign_table_prefix
+   :required: false
+   :type: string
+
+   Label prefix applied to the title of records from the foreign table.
+
+.. confval:: foreign_table_where
+   :name: select-foreign_table_where
+   :required: false
+   :type: string
+
+   WHERE clause used when selecting items from :yaml:`foreign_table`.
+
+.. confval:: itemGroups
+   :name: select-itemGroups
+   :required: false
+   :type: object
+
+   Key-value pairs of item group identifiers and their labels. Items can
+   reference a group via the :yaml:`group` key.
+
+.. confval:: itemsProcessors
+   :name: select-itemsProcessors
+   :required: false
+   :type: object
+
+   A list of PHP classes called to fill or manipulate the items array. Each
+   entry is keyed by a numeric index and requires a :yaml:`class` property.
+   An optional :yaml:`parameters` object can be passed to the processor.
+
+   Example:
+
+   .. code-block:: yaml
+
+      itemsProcessors:
+        0:
+          class: 'Vendor\Extension\ItemsProcessor\MyProcessor'
+          parameters:
+            foo: bar
+
+.. confval:: itemsProcFunc
+   :name: select-itemsProcFunc
+   :required: false
+   :type: string
+
+   .. deprecated:: 2.3.0
+
+      Use :yaml:`itemsProcessors` instead.
+
+   PHP method which is called to fill or manipulate the items array. See
+   :ref:`TCA itemsProcFunc <t3tca:tca_property_itemsProcFunc>`.
+
+.. confval:: itemsProcConfig
+   :name: select-itemsProcConfig
+   :required: false
+   :type: object
+
+   Additional configuration passed to :yaml:`itemsProcFunc`. Must be listed in
+   :yaml:`allowedCustomProperties` (included by default).
+
+.. confval:: localizeReferencesAtParentLocalization
+   :name: select-localizeReferencesAtParentLocalization
+   :required: false
+   :type: boolean
+
+   Defines whether referenced records should be localized when the current
+   record gets localized. Only applies if references are not stored using MM
+   tables.
+
+.. confval:: MM
+   :name: select-MM
+   :required: false
+   :type: string
+
+   Table name for storing the MM relation. Used together with
+   :yaml:`foreign_table`.
+
+.. confval:: MM_match_fields
+   :name: select-MM_match_fields
+   :required: false
+   :type: object
+
+   Field-value pairs to both insert and match against when writing/reading MM
+   relations.
+
+.. confval:: MM_opposite_field
+   :name: select-MM_opposite_field
+   :required: false
+   :type: string
+
+   Enables bidirectional MM relations. Set to the field name on the local side
+   when configuring the foreign side.
+
+.. confval:: MM_oppositeUsage
+   :name: select-MM_oppositeUsage
+   :required: false
+   :type: object
+
+   Required on the opposite side of a bidirectional MM relation that uses match
+   fields.
+
+.. confval:: MM_table_where
+   :name: select-MM_table_where
+   :required: false
+   :type: string
+
+   Additional WHERE clause used when reading MM relations.
+
+.. confval:: multiple
+   :name: select-multiple
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows the same item to be selected more than once in a list.
+
+.. confval:: readOnly
+   :name: select-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: size
+   :name: select-size
+   :required: false
+   :type: integer
+   :default: 1
+
+   If set to 1, displays a select drop-down. A higher value renders a select
+   box of the given number of visible rows.
+
+.. confval:: sortItems
+   :name: select-sortItems
+   :required: false
+   :type: object
+
+   Sorts the items by :yaml:`label` or :yaml:`value` in ascending
+   (:yaml:`asc`) or descending (:yaml:`desc`) order.
+
+   Example:
+
+   .. code-block:: yaml
+
+      sortItems:
+        label: asc
+
+.. confval:: treeConfig.childrenField
+   :name: select-treeConfig.childrenField
+   :required: false
+   :type: string
+
+   Field name of the :yaml:`foreign_table` that references the uid of the
+   child records. Required when :yaml:`renderType` is :yaml:`selectTree` and
+   no :yaml:`treeConfig.parentField` is set.
+
+.. confval:: treeConfig.parentField
+   :name: select-treeConfig.parentField
+   :required: false
+   :type: string
+
+   Field name of the :yaml:`foreign_table` that references the uid of the
+   parent record. Required when :yaml:`renderType` is :yaml:`selectTree` and
+   no :yaml:`treeConfig.childrenField` is set.
+
+.. confval:: treeConfig.dataProvider
+   :name: select-treeConfig.dataProvider
+   :required: false
+   :type: string
+
+   Custom data provider class for use cases where special data preparation is
+   necessary.
+
+.. confval:: treeConfig.startingPoints
+   :name: select-treeConfig.startingPoints
+   :required: false
+   :type: string
+
+   Allows setting multiple records as roots for tree records.
+
+.. confval:: treeConfig.appearance.expandAll
+   :name: select-treeConfig.appearance.expandAll
+   :required: false
+   :type: boolean
+
+   All tree nodes are initially expanded.
+
+.. confval:: treeConfig.appearance.maxLevels
+   :name: select-treeConfig.appearance.maxLevels
+   :required: false
+   :type: integer
+
+   The maximum number of levels to render. Can be used to prevent recursion.
+
+.. confval:: treeConfig.appearance.nonSelectableLevels
+   :name: select-treeConfig.appearance.nonSelectableLevels
+   :required: false
+   :type: string
+
+   Comma-separated list of levels that cannot be selected. Defaults to
+   :yaml:`"0"` (the root node).
+
+.. confval:: treeConfig.appearance.showHeader
+   :name: select-treeConfig.appearance.showHeader
+   :required: false
+   :type: boolean
+
+   Whether to show the tree header containing a filter field and
+   expand/collapse-all buttons.
+
 Example
 =======
 

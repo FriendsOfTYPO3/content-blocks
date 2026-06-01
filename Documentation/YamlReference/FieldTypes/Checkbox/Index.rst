@@ -104,6 +104,128 @@ Settings
    option. This option receives an array of those strings. By default, the
    custom option :yaml:`itemsProcConfig` is allowed.
 
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: checkbox-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: cols
+   :name: checkbox-cols
+   :required: false
+   :type: integer|string
+
+   Defines in how many columns the checkboxes are shown. Only meaningful when
+   multiple :yaml:`items` are defined. Accepts an integer between 1 and 31, or
+   the string :yaml:`inline`.
+
+.. confval:: eval
+   :name: checkbox-eval
+   :required: false
+   :type: string
+
+   Configuration of field evaluation. Possible values:
+
+   *  :yaml:`maximumRecordsChecked`
+   *  :yaml:`maximumRecordsCheckedInPid`
+   *  :yaml:`maximumRecordsChecked,maximumRecordsCheckedInPid`
+
+   Use together with :yaml:`validation` to set the maximum.
+
+.. confval:: fieldControl
+   :name: checkbox-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldInformation
+   :name: checkbox-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: checkbox-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: invertStateDisplay
+   :name: checkbox-invertStateDisplay
+   :required: false
+   :type: boolean
+
+   A checkbox is marked checked if the database bit is not set and vice versa.
+   Applies to all checkboxes. Can also be set per item inside :yaml:`items`.
+
+.. confval:: itemsProcessors
+   :name: checkbox-itemsProcessors
+   :required: false
+   :type: object
+
+   A list of PHP classes called to fill or manipulate the items array. Each
+   entry is keyed by a numeric index and requires a :yaml:`class` property.
+   An optional :yaml:`parameters` object can be passed to the processor.
+
+   Example:
+
+   .. code-block:: yaml
+
+      itemsProcessors:
+        0:
+          class: 'Vendor\Extension\ItemsProcessor\MyProcessor'
+          parameters:
+            foo: bar
+
+.. confval:: itemsProcFunc
+   :name: checkbox-itemsProcFunc
+   :required: false
+   :type: string
+
+   .. deprecated:: 2.3.0
+
+      Use :yaml:`itemsProcessors` instead.
+
+   PHP method which is called to fill or manipulate the items array. See
+   :ref:`TCA itemsProcFunc <t3tca:tca_property_itemsProcFunc>`.
+
+.. confval:: itemsProcConfig
+   :name: checkbox-itemsProcConfig
+   :required: false
+   :type: object
+
+   Additional configuration passed to :yaml:`itemsProcFunc`. Must be listed in
+   :yaml:`allowedCustomProperties` (included by default).
+
+.. confval:: readOnly
+   :name: checkbox-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: validation.maximumRecordsChecked
+   :name: checkbox-validation.maximumRecordsChecked
+   :required: false
+   :type: integer
+
+   Maximum number of records that can have this checkbox checked system-wide.
+   Requires :yaml:`eval: maximumRecordsChecked`.
+
+.. confval:: validation.maximumRecordsCheckedInPid
+   :name: checkbox-validation.maximumRecordsCheckedInPid
+   :required: false
+   :type: integer
+
+   Maximum number of records that can have this checkbox checked within a page.
+   Requires :yaml:`eval: maximumRecordsCheckedInPid`.
+
 
 Examples
 ========
