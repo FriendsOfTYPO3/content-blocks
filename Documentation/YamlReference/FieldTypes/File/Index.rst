@@ -130,6 +130,216 @@ Settings
               - identifier: crop
                 useExistingField: true
 
+.. confval:: appearance.collapseAll
+   :name: file-appearance.collapseAll
+   :required: false
+   :type: boolean
+
+   When true, all file records are shown collapsed. When false, all are
+   expanded.
+
+.. confval:: appearance.expandSingle
+   :name: file-appearance.expandSingle
+   :required: false
+   :type: boolean
+
+   When enabled, only one file record is expanded at a time.
+
+.. confval:: appearance.createNewRelationLinkTitle
+   :name: file-appearance.createNewRelationLinkTitle
+   :required: false
+   :type: string
+
+   Overrides the "Create new relation" button label with a localized string.
+
+.. confval:: appearance.addMediaLinkTitle
+   :name: file-appearance.addMediaLinkTitle
+   :required: false
+   :type: string
+
+   Overrides the "Add media by URL" button label with a localized string.
+
+.. confval:: appearance.uploadFilesLinkTitle
+   :name: file-appearance.uploadFilesLinkTitle
+   :required: false
+   :type: string
+
+   Overrides the "Select & upload files" button label with a localized string.
+
+.. confval:: appearance.useSortable
+   :name: file-appearance.useSortable
+   :required: false
+   :type: boolean
+   :default: true
+
+   Activates drag & drop sorting of file records.
+
+.. confval:: appearance.showPossibleLocalizationRecords
+   :name: file-appearance.showPossibleLocalizationRecords
+   :required: false
+   :type: boolean
+
+   Show unlocalized file records that exist in the original language but have
+   not yet been translated.
+
+.. confval:: appearance.showAllLocalizationLink
+   :name: file-appearance.showAllLocalizationLink
+   :required: false
+   :type: boolean
+
+   Show a "Localize all records" link to fetch untranslated records from the
+   original language.
+
+.. confval:: appearance.showSynchronizationLink
+   :name: file-appearance.showSynchronizationLink
+   :required: false
+   :type: boolean
+
+   Show a "Synchronize" link to update to a 1:1 translation with the original
+   language.
+
+.. confval:: appearance.enabledControls
+   :name: file-appearance.enabledControls
+   :required: false
+   :type: object
+
+   Enables or disables individual controls on file records. Available keys
+   with their defaults:
+
+   edit (bool, default true)
+      Show or hide the edit control.
+
+   info (bool, default true)
+      Show or hide the info control.
+
+   dragdrop (bool, default true)
+      Show or hide the drag & drop handle.
+
+   sort (bool, default false)
+      Show or hide the sort arrows.
+
+   hide (bool, default true)
+      Show or hide the hide/show toggle.
+
+   delete (bool, default true)
+      Show or hide the delete control.
+
+   localize (bool, default true)
+      Show or hide the localize control.
+
+   Example:
+
+   .. code-block:: yaml
+
+      appearance:
+        enabledControls:
+          sort: true
+          delete: false
+
+.. confval:: appearance.headerThumbnail
+   :name: file-appearance.headerThumbnail
+   :required: false
+   :type: object
+
+   Defines the dimensions of the preview thumbnail shown in the inline header.
+   Accepts :yaml:`width` and :yaml:`height` as string or integer values.
+
+   Example:
+
+   .. code-block:: yaml
+
+      appearance:
+        headerThumbnail:
+          width: 64
+          height: 64
+
+.. confval:: appearance.fileUploadAllowed
+   :name: file-appearance.fileUploadAllowed
+   :required: false
+   :type: boolean
+   :default: true
+
+   Show or hide the "Select & upload file" button.
+
+.. confval:: appearance.fileByUrlAllowed
+   :name: file-appearance.fileByUrlAllowed
+   :required: false
+   :type: boolean
+
+   Show or hide the "Add media by URL" button, used to embed media from
+   services such as YouTube or Vimeo.
+
+.. confval:: appearance.elementBrowserEnabled
+   :name: file-appearance.elementBrowserEnabled
+   :required: false
+   :type: boolean
+
+   Show or hide the element browser button.
+
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: file-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: behaviour.disableMovingChildrenWithParent
+   :name: file-behaviour.disableMovingChildrenWithParent
+   :required: false
+   :type: boolean
+   :default: false
+
+   Disables automatic moving of file references when the parent record is
+   moved.
+
+.. confval:: behaviour.enableCascadingDelete
+   :name: file-behaviour.enableCascadingDelete
+   :required: false
+   :type: boolean
+   :default: true
+
+   When disabled, attached file references are not deleted when the parent
+   record is deleted.
+
+.. confval:: disallowed
+   :name: file-disallowed
+   :required: false
+   :type: string|array
+
+   File extensions to disallow even if they are listed in :yaml:`allowed`.
+   Accepts the same values as :yaml:`allowed`.
+
+.. confval:: fieldInformation
+   :name: file-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: file-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: overrideChildTca
+   :name: file-overrideChildTca
+   :required: false
+   :type: object
+
+   Overrides TCA configuration of the :sql:`sys_file_reference` records
+   attached to this field.
+
+.. confval:: readOnly
+   :name: file-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
 Example
 =======
 
