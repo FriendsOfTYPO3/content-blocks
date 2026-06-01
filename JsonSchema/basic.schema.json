@@ -5393,7 +5393,16 @@
                                           ]
                                         },
                                         "then": {
-                                          "$ref": "#/properties/fields/items/allOf/11/then"
+                                          "allOf": [
+                                            {
+                                              "$ref": "#/properties/fields/items/allOf/11/then"
+                                            },
+                                            {
+                                              "properties": {
+                                                "foreign_table": false
+                                              }
+                                            }
+                                          ]
                                         }
                                       },
                                       {
