@@ -54,6 +54,90 @@ Settings
    be filled directly with the folder instead of a collection of folders. In
    addition, :yaml:`maxitems` will be automatically set to :yaml:`1`.
 
+.. confval:: autoSizeMax
+   :name: folder-autoSizeMax
+   :required: false
+   :type: integer
+
+   The field will never grow larger than this number of visible rows.
+
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: folder-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: default
+   :name: folder-default
+   :required: false
+   :type: string
+
+   Default value set if a new record is created.
+
+.. confval:: fieldControl
+   :name: folder-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`. The
+   :yaml:`elementBrowser` control can be disabled via
+   :yaml:`fieldControl.elementBrowser.disabled: true`.
+
+.. confval:: fieldInformation
+   :name: folder-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: folder-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: hideDeleteIcon
+   :name: folder-hideDeleteIcon
+   :required: false
+   :type: boolean
+
+   Removes the delete icon next to the selector box.
+
+.. confval:: hideMoveIcons
+   :name: folder-hideMoveIcons
+   :required: false
+   :type: boolean
+
+   Removes the move icons next to the selector box.
+
+.. confval:: multiple
+   :name: folder-multiple
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows the same folder to be selected more than once in the list.
+
+.. confval:: readOnly
+   :name: folder-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: size
+   :name: folder-size
+   :required: false
+   :type: integer
+   :default: 1
+
+   Number of visible rows in the selector box. A value of 1 displays a
+   drop-down.
+
 Examples
 ========
 
