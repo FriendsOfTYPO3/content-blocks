@@ -132,6 +132,43 @@ final class SectionFieldSchemaTest extends UnitTestCase
             'valid' => true,
         ];
 
+        yield 'Select with foreign_table relation not allowed inside container' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'flex',
+                        'type' => 'FlexForm',
+                        'fields' => [
+                            (object)[
+                                'identifier' => 'section1',
+                                'type' => 'Section',
+                                'label' => 'A section',
+                                'container' => [
+                                    (object)[
+                                        'identifier' => 'container1',
+                                        'label' => 'A container',
+                                        'fields' => [
+                                            (object)[
+                                                'identifier' => 'field1',
+                                                'type' => 'Text',
+                                            ],
+                                            (object)[
+                                                'identifier' => 'field2',
+                                                'type' => 'Select',
+                                                'foreign_table' => 'tt_content',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
         yield 'Missing container' => [
             'data' => (object)[
                 'name' => 'json/schema-test',

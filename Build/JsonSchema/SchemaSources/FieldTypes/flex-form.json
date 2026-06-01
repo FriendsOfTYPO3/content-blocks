@@ -659,7 +659,16 @@
 															"required": ["type"]
 														},
 														"then": {
-															"$ref": "select.json"
+															"allOf": [
+																{
+																	"$ref": "select.json"
+																},
+																{
+																	"properties": {
+																		"foreign_table": false
+																	}
+																}
+															]
 														}
 													},
 													{

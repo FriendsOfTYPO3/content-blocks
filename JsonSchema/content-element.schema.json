@@ -5806,7 +5806,16 @@
                                               ]
                                             },
                                             "then": {
-                                              "$ref": "#/allOf/1/properties/fields/items/allOf/12/then"
+                                              "allOf": [
+                                                {
+                                                  "$ref": "#/allOf/1/properties/fields/items/allOf/12/then"
+                                                },
+                                                {
+                                                  "properties": {
+                                                    "foreign_table": false
+                                                  }
+                                                }
+                                              ]
                                             }
                                           },
                                           {

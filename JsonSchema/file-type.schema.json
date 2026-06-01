@@ -5723,7 +5723,16 @@
                                           ]
                                         },
                                         "then": {
-                                          "$ref": "#/properties/fields/items/allOf/12/then"
+                                          "allOf": [
+                                            {
+                                              "$ref": "#/properties/fields/items/allOf/12/then"
+                                            },
+                                            {
+                                              "properties": {
+                                                "foreign_table": false
+                                              }
+                                            }
+                                          ]
                                         }
                                       },
                                       {
