@@ -89,6 +89,82 @@ Settings
           - [ 'Want to join our team? Take the initiative!', 'Job offer general' ]
           - [ 'We are looking for ...', 'Job offer specific' ]
 
+.. confval:: autocomplete
+   :name: text-autocomplete
+   :required: false
+   :type: boolean
+
+   Enables or disables browser autocomplete for the field.
+
+.. confval:: behaviour.allowLanguageSynchronization
+   :name: text-behaviour.allowLanguageSynchronization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows to select if localization uses custom or default language value.
+
+.. confval:: eval
+   :name: text-eval
+   :required: false
+   :type: string
+
+   Configuration of field evaluation. For example :yaml:`trim` to strip
+   whitespace from the value before saving.
+
+.. confval:: fieldControl
+   :name: text-fieldControl
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldInformation
+   :name: text-fieldInformation
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldWizard
+   :name: text-fieldWizard
+   :required: false
+   :type: object
+
+   See :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+.. confval:: is_in
+   :name: text-is_in
+   :required: false
+   :type: string
+
+   Evaluates whether the entered text contains only characters from this
+   string.
+
+.. confval:: mode
+   :name: text-mode
+   :required: false
+   :type: string
+
+   When set to :yaml:`useOrOverridePlaceholder`, a checkbox appears above the
+   field allowing the user to override the placeholder value.
+
+.. confval:: nullable
+   :name: text-nullable
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows the database field to store a :sql:`NULL` value.
+
+.. confval:: readOnly
+   :name: text-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
 Examples
 ========
 
