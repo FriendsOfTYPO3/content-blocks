@@ -56,7 +56,7 @@ use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 final class ContentBlockData implements RecordInterface
 {
     public function __construct(
-        private ?Record $_record = null,
+        private ?RecordInterface $_record = null,
         private string $_name = '',
         private ?ContentBlockGridData $_grids = null,
         private array $_processed = [],
@@ -127,22 +127,34 @@ final class ContentBlockData implements RecordInterface
 
     public function getVersionInfo(): ?VersionInfo
     {
-        return $this->_record->getVersionInfo();
+        if ($this->_record instanceof Record) {
+            return $this->_record->getVersionInfo();
+        }
+        return null;
     }
 
     public function getLanguageInfo(): ?LanguageInfo
     {
-        return $this->_record->getLanguageInfo();
+        if ($this->_record instanceof Record) {
+            return $this->_record->getLanguageInfo();
+        }
+        return null;
     }
 
     public function getLanguageId(): ?int
     {
-        return $this->_record->getLanguageId();
+        if ($this->_record instanceof Record) {
+            return $this->_record->getLanguageId();
+        }
+        return null;
     }
 
     public function getSystemProperties(): ?SystemProperties
     {
-        return $this->_record->getSystemProperties();
+        if ($this->_record instanceof Record) {
+            return $this->_record->getSystemProperties();
+        }
+        return null;
     }
 
     public function getComputedProperties(): ComputedProperties
@@ -157,7 +169,10 @@ final class ContentBlockData implements RecordInterface
 
     public function getOverlaidUid(): int
     {
-        return $this->_record->getOverlaidUid();
+        if ($this->_record instanceof Record) {
+            return $this->_record->getOverlaidUid();
+        }
+        return $this->_record->getUid();
     }
 
     public function get_Name(): string
