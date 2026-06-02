@@ -17,7 +17,7 @@ backend preview rendering.
 Prerequisites
 =============
 
-* EXT:container is installed and configured in your TYPO3 project.
+* EXT:container >=4.0.0 is installed and configured in your TYPO3 project.
 
 Step 1: Define the Content Block
 =================================
@@ -49,6 +49,12 @@ column layout.
    In the future, EXT:container may provide a helper method to simplify this
    registration further.
 
+.. note::
+
+   Prior to EXT:container version 4.0.0 it was needed to override the preview
+   renderer with :php:`ContainerPreviewRenderer`. This line can be removed with
+   the new version.
+
 .. code-block:: php
    :caption: EXT:your_extension/Configuration/TCA/Overrides/tt_content_container.php
 
@@ -69,7 +75,6 @@ column layout.
        ]
    );
    $GLOBALS['TCA']['tt_content']['containerConfiguration'][$containerConfiguration->getCType()] = $containerConfiguration->toArray();
-   $GLOBALS['TCA']['tt_content']['types'][$containerConfiguration->getCType()]['previewRenderer'] = ContainerPreviewRenderer::class;
 
 Step 3: Add the TypoScript Rendering Definition
 ================================================
@@ -84,13 +89,6 @@ Add a TypoScript rendering definition that uses EXT:container's
        100 = B13\Container\DataProcessing\ContainerProcessor
      }
    }
-
-Step 4: Remove the Backend Preview Template
-============================================
-
-Delete the :file:`backend-preview.html` file from your Content Block if it
-exists. This allows EXT:container's :php:`ContainerPreviewRenderer` (registered
-in Step 2) to take over and render the grid in the backend.
 
 Result
 ======
