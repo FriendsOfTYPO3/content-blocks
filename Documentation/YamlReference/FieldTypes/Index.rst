@@ -216,8 +216,6 @@ Field options, which can be defined inside the :yaml:`fields` array.
            type: Text
            alias: myAliasIdentifier
 
-   Read more about :ref:`prefixing <api_prefixing>`.
-
 .. confval:: displayCond
    :name: field-types-displayCond
    :required: false
