@@ -34,9 +34,14 @@ readonly class GridFactory
      */
     public function build(PageLayoutContext $context, string $columnName, iterable $records): Grid
     {
-        $definition = ['name' => $columnName];
-        $column = GeneralUtility::makeInstance(GridColumn::class, $context, $definition);
+        $colPos = 0;
+        $column = null;
         foreach ($records as $record) {
+            if ($record->has('colPos')) {
+                $colPos = $record->get('colPos');
+            }
+            $definition = ['name' => $columnName, 'colPos' => $colPos];
+            $column ??= GeneralUtility::makeInstance(GridColumn::class, $context, $definition);
             $gridColumnItem = GeneralUtility::makeInstance(
                 GridColumnItem::class,
                 $context,
@@ -45,6 +50,10 @@ readonly class GridFactory
                 $record->getMainType(),
             );
             $column->addItem($gridColumnItem);
+        }
+        if ($column === null) {
+            $definition = ['name' => $columnName, 'colPos' => $colPos];
+            $column = GeneralUtility::makeInstance(GridColumn::class, $context, $definition);
         }
         $row = GeneralUtility::makeInstance(GridRow::class, $context);
         $row->addColumn($column);
