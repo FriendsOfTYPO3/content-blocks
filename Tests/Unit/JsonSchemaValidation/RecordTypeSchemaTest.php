@@ -155,6 +155,7 @@ final class RecordTypeSchemaTest extends UnitTestCase
                 'readOnly' => true,
                 'adminOnly' => false,
                 'hideAtCopy' => true,
+                'hideInUi' => true,
             ],
             'valid' => true,
         ];

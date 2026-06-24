@@ -4361,6 +4361,11 @@
                   "type": "string",
                   "description": "If set, the label field labelField will be appended with this string, when copied."
                 },
+                "hideInUi": {
+                  "type": "boolean",
+                  "description": "If enabled, the record will be hidden in the TYPO3 backend.",
+                  "default": false
+                },
                 "shareAcrossTables": {
                   "type": "boolean",
                   "description": "Allows to reference a Record Type across multiple tables, if foreign_table is used."

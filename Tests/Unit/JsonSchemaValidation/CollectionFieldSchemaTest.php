@@ -255,6 +255,7 @@ final class CollectionFieldSchemaTest extends UnitTestCase
                         'adminOnly' => false,
                         'hideAtCopy' => true,
                         'appendLabelAtCopy' => ' (copy)',
+                        'hideInUi' => false,
                     ],
                 ],
             ],

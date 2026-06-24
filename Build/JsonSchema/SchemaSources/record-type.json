@@ -34,7 +34,8 @@
 		"readOnly": {},
 		"adminOnly": {},
 		"hideAtCopy": {},
-		"appendLabelAtCopy": {}
+		"appendLabelAtCopy": {},
+		"hideInUi": {}
 	},
 	"allOf": [
 		{
@@ -203,6 +204,11 @@
 				"appendLabelAtCopy": {
 					"type": "string",
 					"description": "If set, the label field labelField will be appended with this string, when copied."
+				},
+				"hideInUi": {
+					"type": "boolean",
+					"description": "If enabled, the record will be hidden in the TYPO3 backend.",
+					"default": false
 				}
 			}
 		},
