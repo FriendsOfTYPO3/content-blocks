@@ -114,7 +114,7 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
@@ -185,7 +185,7 @@ final class ContentElementParentFieldServiceTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }

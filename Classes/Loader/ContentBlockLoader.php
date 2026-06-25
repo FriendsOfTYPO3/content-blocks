@@ -26,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
 use TYPO3\CMS\ContentBlocks\Service\Icon\IconProcessor;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
@@ -79,6 +80,7 @@ class ContentBlockLoader
         protected readonly IconProcessor $iconProcessor,
         protected readonly AssetPublisher $assetPublisher,
         protected readonly ContentBlocksYamlParserInterface $contentBlocksYamlLoader,
+        protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
     ) {}
 
     public function load(): ContentBlockRegistry
@@ -118,7 +120,7 @@ class ContentBlockLoader
      */
     protected function fillContentBlockRegistry(array $contentBlocks): ContentBlockRegistry
     {
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($this->simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }

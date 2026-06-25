@@ -1,0 +1,6 @@
+name: typo3tests/test-record-extend-1
+table: native_record_with_type
+typeName: test_record_extend_1
+fields:
+  - identifier: title
+    useExistingField: true

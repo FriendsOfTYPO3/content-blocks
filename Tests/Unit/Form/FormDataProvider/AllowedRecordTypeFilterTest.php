@@ -20,9 +20,15 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Form\FormDataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
+use TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory;
 use TYPO3\CMS\ContentBlocks\Form\FormDataProvider\AllowedRecordTypeFilter;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 use TYPO3\TestingFramework\Core\BaseTestCase;
 
@@ -47,7 +53,13 @@ final class AllowedRecordTypeFilterTest extends BaseTestCase
             new SelectItem('select', 'A', 'a'),
             new SelectItem('select', 'C', 'c'),
         ];
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $allowedRecordTypeFilter = new AllowedRecordTypeFilter($contentBlockRegistry);
         $result = $allowedRecordTypeFilter->filterAndSortItems($items, $allowedRecordTypes);
         self::assertEquals($expected, $result);
@@ -92,7 +104,13 @@ final class AllowedRecordTypeFilterTest extends BaseTestCase
             extPath: '',
             contentType: ContentType::CONTENT_ELEMENT
         );
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlockRegistry->register($loadedContentBlockA);
         $contentBlockRegistry->register($loadedContentBlockB);
         $contentBlockRegistry->register($loadedContentBlockC);
