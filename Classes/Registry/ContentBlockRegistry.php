@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Registry;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 
 /**
  * @internal Not part of TYPO3's public API.
@@ -32,6 +33,10 @@ final class ContentBlockRegistry
      */
     private array $contentBlocks = [];
     private array $typeNamesByTable = [];
+
+    public function __construct(
+        private SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+    ) {}
 
     public function register(LoadedContentBlock $contentBlock): void
     {
@@ -104,11 +109,8 @@ final class ContentBlockRegistry
         $contentType = $contentBlock->getContentType();
         $yaml = $contentBlock->getYaml();
         $table = $contentType->getTable() ?? $yaml['table'];
-        $typeField = $yaml['typeField'] ?? null;
-        if ($typeField === null && ($this->typeNamesByTable[$table] ?? []) !== []) {
-            $typeField = $this->typeNamesByTable[$table]['typeField'];
-        }
-        if ($typeField === null && $contentType !== ContentType::FILE_TYPE) {
+        $typeField = $this->getTypeField($contentBlock, $table);
+        if ($this->hasTypeField($contentBlock, $table) === false) {
             $typeName = '1';
         }
         $typeName ??= (string)$yaml['typeName'];
@@ -130,5 +132,48 @@ final class ContentBlockRegistry
             . $tableInfo . ' exists more than once. Please choose another typeName.',
             1701351270
         );
+    }
+
+    private function getTypeField(LoadedContentBlock $contentBlock, string $table): ?string
+    {
+        $yaml = $contentBlock->getYaml();
+        $typeField = $yaml['typeField'] ?? null;
+        if ($typeField === null && ($this->typeNamesByTable[$table] ?? []) !== []) {
+            $typeField = $this->typeNamesByTable[$table]['typeField'];
+        }
+        return $typeField;
+    }
+
+    private function hasTypeField(LoadedContentBlock $contentBlock, string $table): bool
+    {
+        $typeField = $this->getTypeField($contentBlock, $table);
+        if ($typeField !== null) {
+            return true;
+        }
+        $contentType = $contentBlock->getContentType();
+        if ($contentType === ContentType::FILE_TYPE) {
+            return true;
+        }
+        $nativeTypeField = $this->getTypeFieldNative($table);
+        if ($nativeTypeField !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    private function getTypeFieldNative(string $table): ?string
+    {
+        if (!$this->simpleTcaSchemaFactory->has($table)) {
+            return null;
+        }
+        $tcaSchema = $this->simpleTcaSchemaFactory->get($table);
+        $type = $tcaSchema->getType();
+        if ($type === null) {
+            return null;
+        }
+        if (str_contains($type, ':')) {
+            return null;
+        }
+        return $type;
     }
 }

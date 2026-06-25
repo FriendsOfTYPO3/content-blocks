@@ -18,8 +18,14 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Registry;
 
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\ContentBlocks\FieldType\BaseFieldTypeRegistryFactory;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
+use TYPO3\CMS\ContentBlocks\Schema\FieldTypeResolver;
+use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
+use TYPO3\CMS\ContentBlocks\Tests\Unit\Fixtures\FieldTypeRegistryTestFactory;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class ContentBlockRegistryTest extends UnitTestCase
@@ -42,7 +48,13 @@ final class ContentBlockRegistryTest extends UnitTestCase
             ],
         ]);
 
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1678474766);
@@ -71,7 +83,13 @@ final class ContentBlockRegistryTest extends UnitTestCase
             ],
         ]);
 
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1701351270);
@@ -100,7 +118,13 @@ final class ContentBlockRegistryTest extends UnitTestCase
             ],
         ]);
 
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1701351270);
@@ -127,7 +151,13 @@ final class ContentBlockRegistryTest extends UnitTestCase
             ],
         ]);
 
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionCode(1701351270);
@@ -154,7 +184,13 @@ final class ContentBlockRegistryTest extends UnitTestCase
             ],
         ]);
 
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $fieldTypeRegistry = FieldTypeRegistryTestFactory::create();
+        $baseFieldTypeRegistry = new BaseFieldTypeRegistryFactory($fieldTypeRegistry);
+        $fieldTypeResolver = new FieldTypeResolver($baseFieldTypeRegistry->create());
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getActivePackages')->willReturn([]);
+        $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
 
         $contentBlockRegistry->register($loadedContentBlockA);
         $contentBlockRegistry->register($loadedContentBlockB);

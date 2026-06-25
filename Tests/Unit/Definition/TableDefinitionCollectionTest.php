@@ -74,7 +74,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
@@ -100,7 +100,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlockCompiler = new ContentBlockCompiler();
         $loader = $this->createMock(ContentBlockLoader::class);
         $tableDefinitionCollectionFactory = new TableDefinitionCollectionFactory(new NullFrontend('test'), $contentBlockCompiler, $loader);
@@ -142,7 +142,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
@@ -216,7 +216,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
@@ -290,7 +290,7 @@ final class TableDefinitionCollectionTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }

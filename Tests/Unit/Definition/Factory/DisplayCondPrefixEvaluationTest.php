@@ -68,7 +68,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $loader = $this->createMock(ContentBlockLoader::class);
@@ -188,7 +188,7 @@ final class DisplayCondPrefixEvaluationTest extends UnitTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $loader = $this->createMock(ContentBlockLoader::class);

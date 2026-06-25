@@ -1644,7 +1644,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
@@ -1826,7 +1826,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
@@ -1876,7 +1876,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $contentBlock = LoadedContentBlock::fromArray($yaml);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $loader = $this->createMock(ContentBlockLoader::class);
@@ -2669,7 +2669,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register(LoadedContentBlock::fromArray($contentBlock));
         }
@@ -2730,7 +2730,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
         $loader = $this->createMock(ContentBlockLoader::class);
@@ -3143,7 +3143,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -3235,7 +3235,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -3522,7 +3522,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $packageManager->method('getActivePackages')->willReturn([]);
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         $contentBlock = LoadedContentBlock::fromArray($contentBlockArray);
         $contentBlockRegistry->register($contentBlock);
         $contentBlockCompiler = new ContentBlockCompiler();
@@ -3746,7 +3746,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
@@ -4036,7 +4036,7 @@ final class TcaGeneratorTest extends UnitTestCase
         $simpleTcaSchemaFactory = new SimpleTcaSchemaFactory(new NullFrontend('test'), $fieldTypeResolver, $packageManager);
         $simpleTcaSchemaFactory->initialize($baseTca);
         $contentBlocks = array_map(fn(array $contentBlock) => LoadedContentBlock::fromArray($contentBlock), $contentBlocks);
-        $contentBlockRegistry = new ContentBlockRegistry();
+        $contentBlockRegistry = new ContentBlockRegistry($simpleTcaSchemaFactory);
         foreach ($contentBlocks as $contentBlock) {
             $contentBlockRegistry->register($contentBlock);
         }
