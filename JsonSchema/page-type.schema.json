@@ -578,6 +578,10 @@
                       "description": "Renders the field in a way that the user can see the value but cannot edit it.",
                       "default": false
                     },
+                    "renderType": {
+                      "type": "string",
+                      "description": "Defines the rendering type of the field."
+                    },
                     "required": {
                       "type": "boolean",
                       "description": "If set, the field becomes mandatory.",

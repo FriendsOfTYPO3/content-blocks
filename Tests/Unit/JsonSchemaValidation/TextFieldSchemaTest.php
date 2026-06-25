@@ -83,6 +83,7 @@ final class TextFieldSchemaTest extends UnitTestCase
                                 ],
                             ],
                         ],
+                        'renderType' => 'foo',
                     ],
                 ],
             ],
