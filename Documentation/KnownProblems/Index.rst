@@ -31,23 +31,23 @@ default label.
 Missing asset symlink from extension
 ====================================
 
-If your extension does not contain a ``public/`` directory, the asset
+If your extension does not contain a ``Resources/Public/`` directory, the asset
 symlink under ``public/_assets/`` will not be created. This issue most
 commonly occurs in deployment pipelines.
 
 The reason is that Content Blocks generates its assets **after** Composer's
 autoloading step. When the Composer installer creates the asset symlinks,
-the extension's ``public/`` directory does not yet exist, so no symlink is
+the extension's ``Resources/Public/`` directory does not yet exist, so no symlink is
 created.
 
 Solution
 --------
 
-Ensure that your extension always contains a ``public/`` directory. You can
+Ensure that your extension always contains a ``Resourecs/Public/`` directory. You can
 do this, for example, by:
 
 * Adding an extension icon (``Resources/Public/Icons/Extension.svg`` or
   ``.png``).
-* Placing a ``.gitkeep`` file inside the ``public/`` directory.
+* Placing a ``.gitkeep`` file inside the ``Resources/Public/`` directory.
 
 This ensures that the asset symlink is created correctly during installation.
