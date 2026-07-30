@@ -1,4 +1,14 @@
 name: Tests
+
+# Every "runTests.sh" call below passes "-b docker". The script prefers podman
+# whenever it is present and only falls back to docker, which is the right
+# default for it -- but GitHub hosted runners ship both, and their podman/crun
+# combination aborts the first container start of a job with "OCI runtime error:
+# crun: unknown version specified" (exit code 126). It is intermittent and hits
+# any job. Selecting docker here avoids crun entirely and leaves the script
+# default and local runs untouched. Drop the flag once GitHub stops producing
+# the mismatch.
+
 on:
   push:
     branches:
@@ -41,10 +51,10 @@ jobs:
         run: composer update --no-progress
 
       - name: PHP CS Fixer
-        run: Build/Scripts/runTests.sh -p 8.2 -s cgl -n
+        run: Build/Scripts/runTests.sh -b docker -p 8.2 -s cgl -n
 
       - name: PHP CS Fixer Header
-        run: Build/Scripts/runTests.sh -p 8.2 -s cglHeader -n
+        run: Build/Scripts/runTests.sh -b docker -p 8.2 -s cglHeader -n
 
       - name: Content Blocks Lint
         run: .Build/bin/typo3 content-blocks:lint
@@ -79,7 +89,7 @@ jobs:
         run: composer update --prefer-dist --prefer-stable --no-progress
 
       - name: Unit
-        run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
+        run: Build/Scripts/runTests.sh -b docker -s unit -p ${{ matrix.php }}
 
   functional_tests:
     name: Functional Tests TYPO3 ${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
@@ -111,7 +121,7 @@ jobs:
         run: composer update --prefer-stable --no-progress
 
       - name: Functional
-        run: Build/Scripts/runTests.sh -s functional -d sqlite -p ${{ matrix.php }}
+        run: Build/Scripts/runTests.sh -b docker -s functional -d sqlite -p ${{ matrix.php }}
 
   PHPStan:
     name: PHPStan TYPO3 v13 PHP 8.4

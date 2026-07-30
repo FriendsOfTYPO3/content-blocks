@@ -1104,7 +1104,14 @@ case ${TEST_SUITE} in
             sqlite)
                 # create sqlite tmpfs mount typo3temp/var/tests/functional-sqlite-dbs/ to avoid permission issues
                 mkdir -p "${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/"
-                CONTAINERPARAMS="-e typo3DatabaseDriver=pdo_sqlite --tmpfs ${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid"
+                # "mode=1777" is required for docker and harmless for podman: docker runs
+                # the container as "--user $HOST_UID" with group 0, while the tmpfs inherits
+                # the mode of its host mountpoint -- 0755 and owned by root at the umask a
+                # runner uses. The test databases cannot be created then and every test fails
+                # with "unable to open database file". Rootless podman is root inside its
+                # user namespace and passes no "--user", which is why this only shows with
+                # docker.
+                CONTAINERPARAMS="-e typo3DatabaseDriver=pdo_sqlite --tmpfs ${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid,mode=1777"
                 ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name functional-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${CONTAINERPARAMS} ${IMAGE_PHP} "${COMMAND[@]}"
                 SUITE_EXIT_CODE=$?
                 ;;
