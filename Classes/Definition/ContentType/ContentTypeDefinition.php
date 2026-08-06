@@ -106,6 +106,11 @@ trait ContentTypeDefinition
         return $this->typeIcon;
     }
 
+    public function getLanguagePathLabel(): string
+    {
+        return $this->languagePathLabel;
+    }
+
     public function getLanguagePathTitle(): string
     {
         return $this->languagePathTitle;

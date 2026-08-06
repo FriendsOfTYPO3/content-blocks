@@ -41,6 +41,7 @@ interface ContentTypeInterface
     /** @return string[] */
     public function getColumns(): array;
     public function getTypeIcon(): ContentTypeIcon;
+    public function getLanguagePathLabel(): string;
     public function getLanguagePathTitle(): string;
     public function getLanguagePathDescription(): string;
     public function getGroup(): ?string;
