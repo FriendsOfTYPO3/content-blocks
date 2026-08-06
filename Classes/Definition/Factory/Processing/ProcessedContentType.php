@@ -42,6 +42,7 @@ final class ProcessedContentType
     /** @var array<TcaFieldDefinition> */
     public array $overrideColumns = [];
     public string|int $typeName = '';
+    public string $languagePathLabel = '';
     public string $languagePathTitle = '';
     public string $languagePathDescription = '';
 

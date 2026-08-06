@@ -277,17 +277,20 @@ final class ContentBlockCompiler
             $result->contentType->title = $title;
             $result->contentType->description = $description;
             $languagePathTitle = $languagePathTitle . 'title';
+            $languagePathLabel = $languagePathTitle . 'title';
             $languagePathDescription = $languagePathDescription . 'description';
             $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
             $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
         } else {
-            $languagePathTitle = $languagePathTitle . '.label';
+            $languagePathLabel = $languagePathTitle . '.label';
+            $languagePathTitle = $languagePathTitle . '.title';
             $languagePathDescription = $languagePathDescription . '.description';
             $result->contentType->title = $title;
             $result->contentType->description = $description;
         }
+        $result->contentType->languagePathLabel = $languagePathLabel;
         $result->contentType->languagePathTitle = $languagePathTitle;
         $result->contentType->languagePathDescription = $languagePathDescription;
     }
@@ -334,7 +337,8 @@ final class ContentBlockCompiler
             $label = (string)($item['label'] ?? '');
             $itemLabelPath = $this->resolveItemPath($tcaFieldType, $index, $item);
             $basePath = $currentPath . '.' . $itemLabelPath;
-            $labelPath = $basePath . '.label';
+            $labelPath = $basePath . '.label';             // @todo: allow for title of subtable
+
             $field['items'][$index]['labelPath'] = $labelPath;
             $labelPathSource = new AutomaticLanguageSource($labelPath, $label);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $labelPathSource);
@@ -392,6 +396,11 @@ final class ContentBlockCompiler
     private function getFieldLabelPath(LanguagePath $languagePath): string
     {
         return $languagePath->getCurrentPath() . '.label';
+    }
+
+    private function getFieldTitlePath(LanguagePath $languagePath): string
+    {
+        return $languagePath->getCurrentPath() . '.title';
     }
 
     private function getFieldDescriptionPath(LanguagePath $languagePath): string
@@ -546,7 +555,7 @@ final class ContentBlockCompiler
         $input->languagePath->addPathSegment('palettes.' . $rootPaletteIdentifier);
         $label = (string)($rootPalette['label'] ?? '');
         $description = $rootPalette['description'] ?? '';
-        $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';
+        $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';             // @todo: allow for title of subtable
         $languagePathDescription = $input->languagePath->getCurrentPath() . '.description';
         $labelPathSource = new AutomaticLanguageSource($languagePathLabel, $label);
         $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
@@ -771,7 +780,7 @@ final class ContentBlockCompiler
                 $sheetDefinition->setIdentifier($identifier);
 
                 $input->languagePath->addPathSegment('sheets.' . $sheetDefinition->getIdentifier());
-                $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';
+                $languagePathLabel = $input->languagePath->getCurrentPath() . '.label';             // @todo: allow for title of subtable
                 $descriptionPathLabel = $input->languagePath->getCurrentPath() . '.description';
                 $linkTitlePathLabel = $input->languagePath->getCurrentPath() . '.linkTitle';
                 $sheetDefinition->setLanguagePathLabel($languagePathLabel);

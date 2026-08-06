@@ -978,8 +978,11 @@ readonly class TcaGenerator
         $title = $defaultTypeDefinition->getTitle();
         $title = $title !== '' ? $title : $defaultTypeDefinition->getTable();
         $languagePathTitle = $defaultTypeDefinition->getLanguagePathTitle();
+        $languagePathLabel = $defaultTypeDefinition->getLanguagePathLabel();
         if ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathTitle)) {
             $title = $languagePathTitle;
+        } elseif ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathLabel)) {
+            $title = $languagePathLabel;
         }
         $ctrl = [];
         $ctrl['title'] = $title;
