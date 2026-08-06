@@ -75,6 +75,7 @@ final class CollectionFieldTypeTest extends UnitTestCase
                 'symmetric_field' => 'foo',
                 'symmetric_label' => 'foo',
                 'symmetric_sortby' => 'foo',
+                'title' => 'foo',
             ],
             'expectedTca' => [
                 'label' => 'foo',
@@ -125,6 +126,7 @@ final class CollectionFieldTypeTest extends UnitTestCase
                     'symmetric_field' => 'foo',
                     'symmetric_label' => 'foo',
                     'symmetric_sortby' => 'foo',
+                    'title' => 'foo',
                 ],
             ],
         ];
@@ -163,6 +165,7 @@ final class CollectionFieldTypeTest extends UnitTestCase
                 'symmetric_field' => '',
                 'symmetric_label' => '',
                 'symmetric_sortby' => '',
+                'title' => '',
             ],
             'expectedTca' => [
                 'config' => [

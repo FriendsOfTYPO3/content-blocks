@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file datatype="plaintext" original="messages" source-language="en" product-name="example">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>Simple Collection Content Block</source>
+      </trans-unit>
+      <trans-unit id="description">
+        <source>Simple Collection Content Block description</source>
+      </trans-unit>
+      <trans-unit id="collection_without_title.label">
+        <source>Collection without title property</source>
+      </trans-unit>
+      <trans-unit id="collection_with_yaml_title.label">
+        <source>Collection label property in yaml</source>
+      </trans-unit>
+      <trans-unit id="collection_with_yaml_title.title">
+        <source>Collection title property in yaml</source>
+      </trans-unit>
+      <trans-unit id="collection_with_xlf_title.label">
+        <source>Collection label property in language file</source>
+      </trans-unit>
+      <trans-unit id="collection_with_xlf_title.title">
+        <source>Collection title property in language file</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
