@@ -13,6 +13,7 @@ This feature is available for the following options (more may come).
 *  :ref:`element title <confval-root-title>`
 *  :ref:`element description <confval-content-element-description>`
 *  :ref:`Field label <confval-field-types-label>`
+*  :ref:`Collection title <confval-collection-title>`
 *  :ref:`Field description <confval-field-types-description>`
 *  :ref:`Field placeholder <confval-text-placeholder>`
 *  :ref:`Palette label <field_type_palette>`
@@ -81,6 +82,10 @@ values defined in :yaml:`identifier`.
                 </trans-unit>
                 <trans-unit id="FIELD_IDENTIFIER.placeholder">
                     <source>This is the backend placeholder for FIELD_IDENTIFIER</source>
+                </trans-unit>
+                <!-- Collection tiltles for the backend -->
+                <trans-unit id="FIELD_IDENTIFIER.title">
+                    <source>This is the backend title for FIELD_IDENTIFIER</source>
                 </trans-unit>
                 <!-- Collections add another nesting level -->
                 <trans-unit id="COLLECTION_IDENTIFIER.FIELD_IDENTIFIER.label">
