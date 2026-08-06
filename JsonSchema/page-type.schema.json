@@ -4617,6 +4617,10 @@
                     "l10n_mode": {},
                     "l10n_display": {},
                     "exclude": {},
+                    "title": {
+                      "type": "string",
+                      "description": "Alternative title for Collection in Record Permissions view. Defaults to label."
+                    },
                     "table": {
                       "type": "string",
                       "description": "The custom table name to be used for the new Record Type."
