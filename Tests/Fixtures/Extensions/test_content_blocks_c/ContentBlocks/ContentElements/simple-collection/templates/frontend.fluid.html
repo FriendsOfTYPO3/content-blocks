@@ -1,0 +1,11 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:cb="http://typo3.org/ns/TYPO3/CMS/ContentBlocks/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:asset.css identifier="content-block-css" href="{cb:assetPath()}/Frontend.css"/>
+<f:asset.script identifier="content-block-script" src="{cb:assetPath()}/Frontend.js"/>
+
+<h1>{data.header}</h1>
+<span><f:translate key="{cb:languagePath()}:title"/></span>

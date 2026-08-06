@@ -1,0 +1,33 @@
+group: common
+name: simple/simple-collection
+fields:
+  - identifier: header
+    useExistingField: true
+  - identifier: collection_without_title
+    type: Collection
+    fields:
+      - identifier: header
+        type: Text
+        label: Label in Inline
+        description: Description in Inline
+      - identifier: header2
+        type: Text
+  - identifier: collection_with_yaml_title
+    type: Collection
+    title: My custom yaml collection
+    fields:
+      - identifier: header
+        type: Text
+        label: Label in Inline
+        description: Description in Inline
+      - identifier: header2
+        type: Text
+  - identifier: collection_with_xlf_title
+    type: Collection
+    fields:
+      - identifier: header
+        type: Text
+        label: Label in Inline
+        description: Description in Inline
+      - identifier: header2
+        type: Text

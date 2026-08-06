@@ -164,4 +164,28 @@ final class TcaGeneratorTest extends FunctionalTestCase
             $GLOBALS['TCA']['custom_record']['columns']['type']['config']['default'],
         );
     }
+
+    public function collectionFieldTitleIsNotOverwrittenIfMissingInYamlAndLanguageFile(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-collection/language/labels.xlf:collection_without_title.label',
+            $GLOBALS['TCA']['tx_simple_collection_without_title']['ctrl']['title']
+        );
+    }
+
+    public function collectionFieldTitleIsOverwrittenIfSetInYaml(): void
+    {
+        self::assertSame(
+            'My custom yaml collection',
+            $GLOBALS['TCA']['tx_simple_collection_without_title']['ctrl']['title']
+        );
+    }
+
+    public function collectionFieldTitleIsOverwrittenIfSetInLanguageFile(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-collection/language/labels.xlf:collection_with_xlf_title.title',
+            $GLOBALS['TCA']['tx_simple_collection_without_title']['ctrl']['title']
+        );
+    }
 }
