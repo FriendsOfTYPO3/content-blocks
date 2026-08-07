@@ -284,7 +284,11 @@ final class ContentBlockCompiler
             $languagePathLabel = $languagePathTitle . '.label';
             $languagePathTitle = $languagePathTitle . '.title';
             $languagePathDescription = $languagePathDescription . '.description';
-            $result->contentType->title = $title;
+            // A Collection defining "title" must not be overwritten by the field label.
+            $result->contentType->hasExplicitCollectionTitle = $title !== '';
+            // Without an explicit title, the field label is the title of the Collection's table.
+            // $title itself stays empty, so no automatic language key is generated for it.
+            $result->contentType->title = $title !== '' ? $title : (string)($input->yaml['label'] ?? '');
             $result->contentType->description = $description;
         }
         $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
@@ -397,11 +401,6 @@ final class ContentBlockCompiler
     private function getFieldLabelPath(LanguagePath $languagePath): string
     {
         return $languagePath->getCurrentPath() . '.label';
-    }
-
-    private function getFieldTitlePath(LanguagePath $languagePath): string
-    {
-        return $languagePath->getCurrentPath() . '.title';
     }
 
     private function getFieldDescriptionPath(LanguagePath $languagePath): string
@@ -663,10 +662,6 @@ final class ContentBlockCompiler
         if ($isMM) {
             // Disable sorting as it is already handled in MM table.
             $field['sortable'] = false;
-        }
-        // The Collection's title equals the field label.
-        if (!isset($field['title'])) {
-            $field['title'] = $field['label'];
         }
         // Anonymous Collections can't have a type field.
         $field['typeField'] = null;

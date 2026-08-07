@@ -106,6 +106,11 @@ trait ContentTypeDefinition
         return $this->typeIcon;
     }
 
+    public function hasExplicitCollectionTitle(): bool
+    {
+        return $this->hasExplicitCollectionTitle;
+    }
+
     public function getLanguagePathLabel(): string
     {
         return $this->languagePathLabel;

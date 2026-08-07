@@ -42,6 +42,7 @@ final class ProcessedContentType
     /** @var array<TcaFieldDefinition> */
     public array $overrideColumns = [];
     public string|int $typeName = '';
+    public bool $hasExplicitCollectionTitle = false;
     public string $languagePathLabel = '';
     public string $languagePathTitle = '';
     public string $languagePathDescription = '';
@@ -61,6 +62,7 @@ final class ProcessedContentType
             'vendor' => $vendor,
             'package' => $package,
             'typeName' => $this->typeName,
+            'hasExplicitCollectionTitle' => $this->hasExplicitCollectionTitle,
             'languagePathLabel' => $this->languagePathLabel,
             'languagePathTitle' => $this->languagePathTitle,
             'languagePathDescription' => $this->languagePathDescription,

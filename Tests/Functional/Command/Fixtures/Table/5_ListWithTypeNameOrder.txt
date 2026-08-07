@@ -9,6 +9,7 @@
 | simple         | basics               | tt_content              | simple_basics              | Content Element | test_content_blocks_c |
 | simple         | simple               | tt_content              | simple_simple              | Content Element | test_content_blocks_c |
 | simple         | simple2              | tt_content              | simple_simple2             | Content Element | test_content_blocks_c |
+| simple         | simple-collection    | tt_content              | simple_simplecollection    | Content Element | test_content_blocks_c |
 | simple         | simple-relation      | tt_content              | simple_simplerelation      | Content Element | test_content_blocks_c |
 | typo3tests     | test-record-extend-1 | native_record_with_type | test_record_extend_1       | Record Type     | test_content_blocks_b |
 | typo3tests     | test-record-extend-2 | native_record_with_type | test_record_extend_2       | Record Type     | test_content_blocks_b |

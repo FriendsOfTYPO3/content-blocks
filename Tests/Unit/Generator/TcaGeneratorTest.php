@@ -614,7 +614,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 't3ce_example_collection' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.label',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.title',
                         'label' => 'text2',
                         'label_alt' => 'text',
                         'sortby' => 'sorting',
@@ -726,7 +726,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection2' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection2.label',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection2.title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',
@@ -796,7 +796,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection_mm' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.label',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.collection_mm.title',
                         'label' => 'text',
                         'tstamp' => 'tstamp',
                         'crdate' => 'crdate',
@@ -1533,7 +1533,7 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
                 'collection' => [
                     'ctrl' => [
-                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.label',
+                        'title' => 'LLL:EXT:foo/ContentBlocks/example/language/labels.xlf:collection.title',
                         'label' => 'text',
                         'sortby' => 'sorting',
                         'tstamp' => 'tstamp',

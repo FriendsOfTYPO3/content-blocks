@@ -96,6 +96,7 @@ final class ContentTypeFactory
         $arguments['package'] = $typeDefinition['package'] ?? '';
         $arguments['priority'] = $typeDefinition['priority'] ?? 0;
         $arguments['typeIcon'] = ContentTypeIcon::fromArray($typeDefinition['typeIcon'] ?? []);
+        $arguments['hasExplicitCollectionTitle'] = $typeDefinition['hasExplicitCollectionTitle'] ?? false;
         $arguments['languagePathLabel'] = $typeDefinition['languagePathLabel'] ?? '';
         $arguments['languagePathTitle'] = $typeDefinition['languagePathTitle'] ?? null;
         $arguments['languagePathDescription'] = $typeDefinition['languagePathDescription'] ?? null;
