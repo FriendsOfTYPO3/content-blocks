@@ -92,6 +92,27 @@ Settings
 
        table: tx_vendor_my_custom_table_name
 
+.. confval:: title
+    :name: collection-title
+    :required: false
+    :type: string
+
+    By default title should be defined inside the :file:`labels.xlf` file. But
+    in case there is only one language for the backend you may define titles
+    directly in the YAML configuration. Translation files have precedence over
+    this.
+
+    Alternative title for the Collection in Record Permissions view. Defaults to
+    :yaml:`label`.
+
+    .. code-block:: yaml
+
+       fields:
+         - identifier: my_identifier
+           type: Text
+           label: Static label
+           title: Static title
+
 .. confval:: fields
    :name: collection-fields
    :required: true
