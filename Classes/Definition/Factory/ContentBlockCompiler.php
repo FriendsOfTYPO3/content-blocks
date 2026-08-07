@@ -664,7 +664,9 @@ final class ContentBlockCompiler
             $field['sortable'] = false;
         }
         // The Collection's title equals the field label.
-        $field['title'] = $field['label'];
+        if (!isset($field['title'])) {
+            $field['title'] = $field['label'];
+        }
         // Anonymous Collections can't have a type field.
         $field['typeField'] = null;
         $newInput = new ProcessingInput(
