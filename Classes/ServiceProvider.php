@@ -304,12 +304,16 @@ class ServiceProvider extends AbstractServiceProvider
             $tableDefinition = $tableDefinitionCollection->getTable($table);
             $typeName = $contentBlock->getYaml()['typeName'];
             $typeDefinition = $tableDefinition->contentTypeDefinitionCollection->getType($typeName);
+            $label = $typeDefinition->getTitle();
             $languagePathTitle = $typeDefinition->getLanguagePathTitle();
+            $languagePathLabel = $typeDefinition->getLanguagePathLabel();
             if ($languageFileRegistry->isset($typeDefinition->getName(), $languagePathTitle)) {
+
                 $label = $languagePathTitle;
-            } else {
-                $label = $typeDefinition->getTitle();
+            } elseif ($languageFileRegistry->isset($typeDefinition->getName(), $languagePathLabel)) {
+                $label = $languagePathLabel;
             }
+
             $setDefinition = new SetDefinition(
                 name: $contentBlock->getName(),
                 label: $label,

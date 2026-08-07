@@ -976,14 +976,17 @@ readonly class TcaGenerator
         $capability = $tableDefinition->capability;
         $columns = [];
         $title = $defaultTypeDefinition->getTitle();
-        $title = $title !== '' ? $title : $defaultTypeDefinition->getTable();
         $languagePathTitle = $defaultTypeDefinition->getLanguagePathTitle();
         $languagePathLabel = $defaultTypeDefinition->getLanguagePathLabel();
-        if ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathTitle)) {
-            $title = $languagePathTitle;
-        } elseif ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathLabel)) {
-            $title = $languagePathLabel;
+        $hasExplicitCollectionTitle = $languagePathTitle !== $languagePathLabel && $title !== '';
+        if (!$hasExplicitCollectionTitle) {
+            if ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathTitle)) {
+                $title = $languagePathTitle;
+            } elseif ($this->languageFileRegistry->isset($defaultTypeDefinition->getName(), $languagePathLabel)) {
+                $title = $languagePathLabel;
+            }
         }
+        $title = $title !== '' ? $title : $defaultTypeDefinition->getTable();
         $ctrl = [];
         $ctrl['title'] = $title;
         $labelCapability = $tableDefinition->capability->getLabelCapability();

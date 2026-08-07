@@ -61,6 +61,7 @@ final class ProcessedContentType
             'vendor' => $vendor,
             'package' => $package,
             'typeName' => $this->typeName,
+            'languagePathLabel' => $this->languagePathLabel,
             'languagePathTitle' => $this->languagePathTitle,
             'languagePathDescription' => $this->languagePathDescription,
         ];

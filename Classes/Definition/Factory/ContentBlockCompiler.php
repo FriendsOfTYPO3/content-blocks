@@ -276,13 +276,10 @@ final class ContentBlockCompiler
             $title = $title !== '' ? $title : $input->contentBlock->getName();
             $result->contentType->title = $title;
             $result->contentType->description = $description;
+
             $languagePathTitle = $languagePathTitle . 'title';
-            $languagePathLabel = $languagePathTitle . 'title';
+            $languagePathLabel = $languagePathTitle;
             $languagePathDescription = $languagePathDescription . 'description';
-            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
-            $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
-            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
-            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
         } else {
             $languagePathLabel = $languagePathTitle . '.label';
             $languagePathTitle = $languagePathTitle . '.title';
@@ -290,6 +287,10 @@ final class ContentBlockCompiler
             $result->contentType->title = $title;
             $result->contentType->description = $description;
         }
+        $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
+        $descriptionPathSource = new AutomaticLanguageSource($languagePathDescription, $description);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
+        $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
         $result->contentType->languagePathLabel = $languagePathLabel;
         $result->contentType->languagePathTitle = $languagePathTitle;
         $result->contentType->languagePathDescription = $languagePathDescription;
