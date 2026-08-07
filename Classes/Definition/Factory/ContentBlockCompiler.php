@@ -664,6 +664,10 @@ final class ContentBlockCompiler
             // Disable sorting as it is already handled in MM table.
             $field['sortable'] = false;
         }
+        // The Collection's title equals the field label.
+        if (!isset($field['title'])) {
+            $field['title'] = $field['label'];
+        }
         // Anonymous Collections can't have a type field.
         $field['typeField'] = null;
         $newInput = new ProcessingInput(
