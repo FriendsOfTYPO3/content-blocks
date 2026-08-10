@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Loader;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
@@ -25,6 +26,7 @@ use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\UniqueIdentifierCreator;
+use TYPO3\CMS\ContentBlocks\Event\AfterYamlParseEvent;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
@@ -81,6 +83,7 @@ class ContentBlockLoader
         protected readonly AssetPublisher $assetPublisher,
         protected readonly ContentBlocksYamlParserInterface $contentBlocksYamlLoader,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected readonly EventDispatcherInterface $eventDispatcher,
     ) {}
 
     public function load(): ContentBlockRegistry
@@ -217,7 +220,9 @@ class ContentBlockLoader
                 );
             }
         }
-        return $config;
+        $afterYamlParseEvent = new AfterYamlParseEvent($config);
+        $this->eventDispatcher->dispatch($afterYamlParseEvent);
+        return $afterYamlParseEvent->getContentBlocksConfiguration();
     }
 
     protected function loadSingleContentBlock(
