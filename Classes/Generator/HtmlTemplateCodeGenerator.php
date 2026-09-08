@@ -74,6 +74,9 @@ readonly class HtmlTemplateCodeGenerator
             }
             $lines[] = match ($column->fieldType->getName()) {
                 'Text',
+                'Textarea' => [
+                    '{' . $variable . ' -> f:render.text(field: \'' . $column->uniqueIdentifier . '\')}',
+                ],
                 'Email',
                 'Number',
                 'Color',
@@ -86,14 +89,6 @@ readonly class HtmlTemplateCodeGenerator
                 'Language' => [
                     '{' . $variable . '.' . $identifier . '}',
                 ],
-                'Textarea' => match ($column->getTca()['config']['enableRichtext'] ?? null) {
-                    true => [
-                        '<f:format.raw>{' . $variable . '.' . $identifier . '}</f:format.raw>',
-                    ],
-                    default => [
-                        '<f:format.nl2br>{' . $variable . '.' . $identifier . '}</f:format.nl2br>',
-                    ],
-                },
                 'DateTime' => [
                     '<f:format.date>{' . $variable . '.' . $identifier . '}</f:format.date>',
                 ],
