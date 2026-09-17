@@ -17,10 +17,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\Registry;
 
+use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
-use TYPO3\CMS\Core\Localization\Loader\XliffLoader;
+use TYPO3\CMS\Core\Localization\Exception\FileNotFoundException;
+use TYPO3\CMS\Core\Localization\LabelFileResolver;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -30,7 +32,7 @@ readonly class LanguageFileRegistryFactory
 {
     public function __construct(
         protected ContentBlockRegistry $contentBlockRegistry,
-        protected XliffLoader $xliffLoader,
+        protected LabelFileResolver $labelFileResolver,
     ) {}
 
     public function create(): LanguageFileRegistry
@@ -48,11 +50,26 @@ readonly class LanguageFileRegistryFactory
     protected function parseDefaultLanguageFile(LoadedContentBlock $contentBlock): ?MessageCatalogue
     {
         $languagePath = $contentBlock->getExtPath() . '/' . ContentBlockPathUtility::getLanguageFilePath();
-        $absoluteLanguagePath = GeneralUtility::getFileAbsFileName($languagePath);
-        if (file_exists($absoluteLanguagePath)) {
-            $messageCatalogue = $this->xliffLoader->load($absoluteLanguagePath, 'en');
-            return $messageCatalogue;
+        try {
+            $absoluteLanguagePath = $this->labelFileResolver->resolveFileReference($languagePath, 'default');
+        } catch (FileNotFoundException) {
+            return null;
         }
-        return null;
+        if ($absoluteLanguagePath === null) {
+            return null;
+        }
+        $extension = pathinfo($absoluteLanguagePath, PATHINFO_EXTENSION);
+        $loader = $this->getLoader($extension);
+        return $loader?->load($absoluteLanguagePath, 'en');
+    }
+
+    protected function getLoader(string $extension): ?LoaderInterface
+    {
+        $loaderClass = $GLOBALS['TYPO3_CONF_VARS']['LANG']['loader'][$extension] ?? null;
+        if (!is_string($loaderClass) || !is_a($loaderClass, LoaderInterface::class, true)) {
+            return null;
+        }
+        $loader = GeneralUtility::makeInstance($loaderClass);
+        return $loader instanceof LoaderInterface ? $loader : null;
     }
 }
