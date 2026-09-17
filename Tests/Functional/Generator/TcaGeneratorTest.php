@@ -24,6 +24,7 @@ final class TcaGeneratorTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_c',
+        'typo3conf/ext/content_blocks/Tests/Fixtures/Extensions/test_content_blocks_d',
         'typo3conf/ext/content_blocks',
     ];
 
@@ -39,6 +40,15 @@ final class TcaGeneratorTest extends FunctionalTestCase
         self::assertSame(
             'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple2/language/labels.xlf:header.label',
             $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['columnsOverrides']['header']['label']
+        );
+    }
+
+    #[Test]
+    public function labelsYamlIsLoadedUsingConfiguredTranslationLoader(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_d/ContentBlocks/ContentElements/yaml-labels/language/labels.xlf:header.label',
+            $GLOBALS['TCA']['tt_content']['types']['typo3tests_yamllabels']['columnsOverrides']['header']['label']
         );
     }
 
