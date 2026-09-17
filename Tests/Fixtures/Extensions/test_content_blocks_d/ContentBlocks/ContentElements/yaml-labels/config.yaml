@@ -1,0 +1,6 @@
+name: typo3tests/yaml-labels
+group: common
+prefixFields: true
+fields:
+  - identifier: header
+    useExistingField: true
