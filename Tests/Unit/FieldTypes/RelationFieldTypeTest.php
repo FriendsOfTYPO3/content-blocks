@@ -78,9 +78,6 @@ final class RelationFieldTypeTest extends UnitTestCase
                 'suggestOptions' => [
                     'foo' => 'bar',
                 ],
-                'appearance' => [
-                    'foo' => 'bar',
-                ],
                 'behaviour' => [
                     'foo' => 'bar',
                 ],
@@ -140,9 +137,6 @@ final class RelationFieldTypeTest extends UnitTestCase
                     'suggestOptions' => [
                         'foo' => 'bar',
                     ],
-                    'appearance' => [
-                        'foo' => 'bar',
-                    ],
                 ],
             ],
         ];
@@ -181,7 +175,6 @@ final class RelationFieldTypeTest extends UnitTestCase
                 'foo' => '',
                 'filter' => [],
                 'suggestOptions' => [],
-                'appearance' => [],
                 'fieldWizard' => [],
                 'fieldControl' => [],
                 'fieldInformation' => [],

@@ -59,6 +59,19 @@ jobs:
       - name: Content Blocks Lint
         run: .Build/bin/typo3 content-blocks:lint
 
+      - name: JSON Schema bundles are up to date
+        run: |
+          npm --prefix Build/JsonSchema ci
+          npm --prefix Build/JsonSchema run bundle
+          git diff --exit-code -- JsonSchema/ || {
+            echo "::error::JsonSchema/*.schema.json is out of date. Run 'npm run bundle' in Build/JsonSchema and commit the result."
+            exit 1
+          }
+
+      - name: Documentation sync report
+        continue-on-error: true
+        run: php Build/Scripts/checkDocumentationSync.php
+
   unit_tests:
     name: Unit Tests TYPO3 v${{ matrix.TYPO3 }} PHP ${{ matrix.php }}
     runs-on: ubuntu-latest

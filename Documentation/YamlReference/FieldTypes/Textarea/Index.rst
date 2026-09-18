@@ -224,6 +224,35 @@ Settings
    *  :yaml:`virtual`
    *  :yaml:`off`
 
+.. confval:: format
+   :name: textarea-format
+   :required: false
+   :type: string
+   :default: ''
+
+   Language the code editor should highlight. Only evaluated in combination with
+   :yaml:`renderType: codeEditor`. Possible values are:
+
+   *  :yaml:`css`
+   *  :yaml:`html`
+   *  :yaml:`javascript`
+   *  :yaml:`json`
+   *  :yaml:`php`
+   *  :yaml:`sql`
+   *  :yaml:`typoscript`
+   *  :yaml:`xml`
+
+.. confval:: mode
+   :name: textarea-mode
+   :required: false
+   :type: string
+   :default: ''
+
+   Related to the :yaml:`placeholder` property. The only allowed value is
+   :yaml:`useOrOverridePlaceholder`. When defined, a checkbox is rendered above
+   the field. While unchecked, the field is read-only and :sql:`NULL` is stored.
+   Requires :yaml:`nullable` to be set to :yaml:`true`.
+
 Examples
 ========
 

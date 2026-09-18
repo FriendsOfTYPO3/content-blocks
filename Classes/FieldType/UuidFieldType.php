@@ -26,6 +26,7 @@ final class UuidFieldType extends AbstractFieldType
     use WithCommonProperties;
 
     private int $size = 0;
+    private bool $required = true;
     private bool $enableCopyToClipboard = true;
     private ?int $version = null;
 
@@ -34,6 +35,7 @@ final class UuidFieldType extends AbstractFieldType
         $self = clone $this;
         $self->setCommonProperties($settings);
         $self->size = (int)($settings['size'] ?? $self->size);
+        $self->required = (bool)($settings['required'] ?? $self->required);
         if (array_key_exists('version', $settings)) {
             $self->version = (int)$settings['version'];
         }
@@ -48,6 +50,9 @@ final class UuidFieldType extends AbstractFieldType
         $config['type'] = $this->getTcaType();
         if ($this->size !== 0) {
             $config['size'] = $this->size;
+        }
+        if (!$this->required) {
+            $config['required'] = false;
         }
         if ($this->version !== null) {
             $config['version'] = $this->version;

@@ -29,6 +29,7 @@ final class SelectFieldType extends AbstractFieldType
     private string|int $default = '';
     private bool $readOnly = false;
     private int $size = 0;
+    private int $autoSizeMax = 0;
     private string $MM = '';
     private string $MM_opposite_field = '';
     private array $MM_match_fields = [];
@@ -73,6 +74,7 @@ final class SelectFieldType extends AbstractFieldType
         }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         $self->size = (int)($settings['size'] ?? $self->size);
+        $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
         $self->MM = (string)($settings['MM'] ?? $self->MM);
         $self->MM_opposite_field = (string)($settings['MM_opposite_field'] ?? $self->MM_opposite_field);
         $self->MM_match_fields = (array)($settings['MM_match_fields'] ?? $self->MM_match_fields);
@@ -124,6 +126,9 @@ final class SelectFieldType extends AbstractFieldType
         }
         if ($this->size > 0) {
             $config['size'] = $this->size;
+        }
+        if ($this->autoSizeMax > 0) {
+            $config['autoSizeMax'] = $this->autoSizeMax;
         }
         if ($this->MM !== '') {
             $config['MM'] = $this->MM;

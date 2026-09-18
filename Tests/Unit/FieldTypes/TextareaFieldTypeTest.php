@@ -59,6 +59,12 @@ final class TextareaFieldTypeTest extends UnitTestCase
                 'richtextConfiguration' => 'default',
                 'renderType' => 'foo',
                 'format' => 'foo',
+                'valuePicker' => [
+                    'items' => [
+                        ['label' => 'Label', 'value' => 'Value'],
+                    ],
+                ],
+                'searchable' => true,
                 'behaviour' => [
                     'foo' => 'bar',
                 ],
@@ -97,6 +103,11 @@ final class TextareaFieldTypeTest extends UnitTestCase
                     'enableRichtext' => true,
                     'richtextConfiguration' => 'default',
                     'format' => 'foo',
+                    'valuePicker' => [
+                        'items' => [
+                            ['label' => 'Label', 'value' => 'Value'],
+                        ],
+                    ],
                 ],
             ],
         ];

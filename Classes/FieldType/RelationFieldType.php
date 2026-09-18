@@ -48,7 +48,6 @@ final class RelationFieldType extends AbstractFieldType
     private array $elementBrowserEntryPoints = [];
     private array $filter = [];
     private array $suggestOptions = [];
-    private array $appearance = [];
     private string $relationship = '';
 
     public function createFromArray(array $settings): RelationFieldType
@@ -81,7 +80,6 @@ final class RelationFieldType extends AbstractFieldType
         $self->elementBrowserEntryPoints = (array)($settings['elementBrowserEntryPoints'] ?? $self->elementBrowserEntryPoints);
         $self->filter = (array)($settings['filter'] ?? $self->filter);
         $self->suggestOptions = (array)($settings['suggestOptions'] ?? $self->suggestOptions);
-        $self->appearance = (array)($settings['appearance'] ?? $self->appearance);
         $self->relationship = (string)($settings['relationship'] ?? $self->relationship);
 
         return $self;
@@ -159,9 +157,6 @@ final class RelationFieldType extends AbstractFieldType
         }
         if ($this->suggestOptions !== []) {
             $config['suggestOptions'] = $this->suggestOptions;
-        }
-        if ($this->appearance !== []) {
-            $config['appearance'] = $this->appearance;
         }
         if ($this->relationship !== '') {
             $config['relationship'] = $this->relationship;

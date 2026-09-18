@@ -64,6 +64,50 @@ Settings
           - [ 'Green', '#008000' ]
           - [ 'Blue', '#0000FF' ]
 
+.. confval:: mode
+   :name: color-mode
+   :required: false
+   :type: string
+   :default: ''
+
+   Related to the :yaml:`placeholder` property. The only allowed value is
+   :yaml:`useOrOverridePlaceholder`. When defined, a checkbox is rendered above
+   the field. While unchecked, the field is read-only and :sql:`NULL` is stored.
+   Requires :yaml:`nullable` to be set to :yaml:`true`.
+
+.. confval:: nullable
+   :name: color-nullable
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows :sql:`NULL` values to be stored for this field.
+
+.. confval:: placeholder
+   :name: color-placeholder
+   :required: false
+   :type: string
+   :default: ''
+
+   Placeholder text for the field.
+
+.. confval:: readOnly
+   :name: color-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: size
+   :name: color-size
+   :required: false
+   :type: integer
+   :default: 30
+
+   Abstract value for the width of the `<input>` field. Minimum :yaml:`10`,
+   maximum :yaml:`50`.
+
 Example
 =======
 
