@@ -116,6 +116,23 @@ Settings
         sortItems:
           label: 'desc'
 
+.. confval:: readOnly
+   :name: country-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: size
+   :name: country-size
+   :required: false
+   :type: integer
+   :default: 1
+
+   If set to :yaml:`1` (default), a drop-down is displayed, else a select box of
+   the given size.
+
 Example
 =======
 

@@ -42,6 +42,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'renderType' => 'selectCheckbox',
                 'readOnly' => 1,
                 'size' => 1,
+                'autoSizeMax' => 10,
                 'MM' => 'foo',
                 'MM_opposite_field' => 'foo',
                 'MM_match_fields' => [
@@ -113,6 +114,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                     'default' => 1,
                     'readOnly' => true,
                     'size' => 1,
+                    'autoSizeMax' => 10,
                     'MM' => 'foo',
                     'MM_opposite_field' => 'foo',
                     'MM_match_fields' => [
@@ -179,6 +181,7 @@ final class SelectFieldTypeTest extends UnitTestCase
                 'renderType' => '',
                 'readOnly' => 0,
                 'size' => 0,
+                'autoSizeMax' => 0,
                 'MM' => '',
                 'MM_opposite_field' => '',
                 'MM_match_fields' => [],

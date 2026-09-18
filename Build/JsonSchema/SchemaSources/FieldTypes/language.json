@@ -14,6 +14,20 @@
 		"type": {},
 		"l10n_mode": {},
 		"l10n_display": {},
-		"exclude": {}
+		"exclude": {},
+		"default": {
+			"type": "integer",
+			"description": "Language id, which is pre-selected if a new record is created."
+		},
+		"readOnly": {
+			"type": "boolean",
+			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
+			"default": false
+		},
+		"required": {
+			"type": "boolean",
+			"description": "If set, the field becomes mandatory.",
+			"default": false
+		}
 	}
 }

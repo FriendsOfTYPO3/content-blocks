@@ -5,6 +5,9 @@
 		"identifier": {},
 		"alias": {},
 		"type": {},
-		"useExistingField": {}
+		"useExistingField": {},
+		"default": {
+			"description": "Default value set if a new record is created."
+		}
 	}
 }

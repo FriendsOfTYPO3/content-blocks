@@ -153,6 +153,14 @@ Settings
 
    Renders the field in a way that the user can see the value but cannot edit it.
 
+.. confval:: size
+   :name: datetime-size
+   :required: false
+   :type: integer
+
+   Abstract value for the width of the input field. Defaults to a width derived
+   from :yaml:`format` if not set.
+
 Examples
 ========
 

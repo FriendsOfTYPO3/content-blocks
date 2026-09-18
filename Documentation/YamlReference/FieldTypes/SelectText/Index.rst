@@ -97,6 +97,80 @@ Settings
         </body>
 
 
+..  confval:: authMode
+    :name: select-text-authMode
+    :required: false
+    :type: string
+    :default: ''
+
+    Authorization mode for the selector box. The only allowed value is
+    :yaml:`explicitAllow`: every static item has to be explicitly granted to a
+    backend user group before a non-admin user may select it.
+
+..  confval:: disableNoMatchingValueElement
+    :name: select-text-disableNoMatchingValueElement
+    :required: false
+    :type: boolean
+    :default: false
+
+    If set, no placeholder element is inserted when the stored value does not
+    match any of the configured items.
+
+..  confval:: itemGroups
+    :name: select-text-itemGroups
+    :required: false
+    :type: array
+    :default: []
+
+    Key-value pairs which define groups for the items. The key is the group
+    identifier referenced by an item, the value is the group label. Groups are
+    rendered as :html:`<optgroup>`.
+
+    .. code-block:: yaml
+
+       itemGroups:
+         colors: 'Colors'
+         shapes: 'Shapes'
+
+..  confval:: readOnly
+    :name: select-text-readOnly
+    :required: false
+    :type: boolean
+    :default: false
+
+    Renders the field in a way that the user can see the value but cannot edit it.
+
+..  confval:: size
+    :name: select-text-size
+    :required: false
+    :type: integer
+    :default: 1
+
+    If set to :yaml:`1` (default), a drop-down is displayed, else a select box of
+    the given size.
+
+..  confval:: sortItems
+    :name: select-text-sortItems
+    :required: false
+    :type: array
+    :default: []
+
+    Sort order of the select items. Allowed keys are :yaml:`label` and
+    :yaml:`value`, each with :yaml:`asc` or :yaml:`desc`.
+
+    .. code-block:: yaml
+
+       sortItems:
+         label: asc
+
+..  confval:: dbFieldLength
+    :name: select-text-dbFieldLength
+    :required: false
+    :type: integer
+    :default: 255
+
+    Length of the generated :sql:`varchar` database column.
+
 Example
 =======
 

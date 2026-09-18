@@ -2,6 +2,11 @@
 	"type": "object",
 	"additionalProperties": false,
 	"properties": {
-		"type": {}
+		"type": {},
+		"ignoreIfNotInPalette": {
+			"type": "boolean",
+			"description": "Allows the Linebreak to be defined outside of a Palette, where it is silently dropped instead of throwing an error.",
+			"default": false
+		}
 	}
 }

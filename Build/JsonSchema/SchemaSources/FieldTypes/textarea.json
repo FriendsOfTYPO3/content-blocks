@@ -76,6 +76,20 @@
 			"type": "boolean",
 			"description": "Enables a fixed-width font (monospace) for the text field"
 		},
+		"format": {
+			"type": "string",
+			"description": "Language the code editor should highlight. Only evaluated with renderType \"codeEditor\".",
+			"enum": [
+				"css",
+				"html",
+				"javascript",
+				"json",
+				"php",
+				"sql",
+				"typoscript",
+				"xml"
+			]
+		},
 		"is_in": {
 			"type": "string",
 			"description": "Evaluates whether the text contains this value"
@@ -87,6 +101,13 @@
 		"min": {
 			"type": "integer",
 			"description": "Minimum number of characters required."
+		},
+		"mode": {
+			"type": "string",
+			"description": "Related to the placeholder property. When defined, a checkbox is rendered above the field. Requires nullable to be set to true.",
+			"enum": [
+				"useOrOverridePlaceholder"
+			]
 		},
 		"nullable": {
 			"type": "boolean",

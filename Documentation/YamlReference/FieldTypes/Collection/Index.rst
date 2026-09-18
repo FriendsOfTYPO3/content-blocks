@@ -605,6 +605,16 @@ Settings
                - identifier: custom_field
                  type: Text
 
+.. confval:: localizeReferencesAtParentLocalization
+   :name: collection-localizeReferencesAtParentLocalization
+   :required: false
+   :type: boolean
+   :default: false
+
+   Defines whether referenced records should also be localized when the parent
+   record gets localized. Only evaluated for relations which are stored in an
+   :yaml:`MM` table.
+
 Example
 =======
 

@@ -256,6 +256,126 @@ Field options, which can be defined inside the :yaml:`fields` array.
 
       onChange: reload
 
+.. confval:: l10n_mode
+   :name: field-types-l10n_mode
+   :required: false
+   :type: string
+
+   Controls how the field behaves in localized records. Possible values are
+   :yaml:`exclude` (the value of the default language record is kept and the
+   field is not shown) and :yaml:`prefixLangTitle` (the value is copied and
+   prefixed with the language title on localization). See
+   :ref:`l10n_mode <t3tca:columns-properties-l10n-mode>`.
+
+   .. code-block:: yaml
+
+       fields:
+         - identifier: my_identifier
+           type: Text
+           l10n_mode: exclude
+
+.. confval:: l10n_display
+   :name: field-types-l10n_display
+   :required: false
+   :type: string
+
+   Controls how the field is displayed in localized records. Possible values are
+   :yaml:`hideDiff` (hides the diff view of the default language value) and
+   :yaml:`defaultAsReadonly` (shows the default language value as read-only). See
+   :ref:`l10n_display <t3tca:columns-properties-l10n-display>`.
+
+   .. code-block:: yaml
+
+       fields:
+         - identifier: my_identifier
+           type: Text
+           l10n_display: defaultAsReadonly
+
+.. confval:: exclude
+   :name: field-types-exclude
+   :required: false
+   :type: boolean
+   :default: true
+
+   If set, backend users can only edit this field if their backend user group
+   explicitly allows it. Content Blocks enables this by default, contrary to
+   TCA, where it defaults to :yaml:`false`. See
+   :ref:`exclude <t3tca:columns-properties-exclude>`.
+
+   .. code-block:: yaml
+
+       fields:
+         - identifier: my_identifier
+           type: Text
+           exclude: false
+
+.. confval:: renderType
+   :name: field-types-renderType
+   :required: false
+   :type: string
+
+   Selects an alternative FormEngine element for the field. Only available for
+   the field types which document it, as core TCA only defines render types for
+   a subset of TCA types. See the :ref:`TCA types reference <t3tca:columns-types>` for the render types
+   available per TCA type.
+
+   .. code-block:: yaml
+
+       fields:
+         - identifier: my_identifier
+           type: Textarea
+           renderType: codeEditor
+
+.. confval:: behaviour
+   :name: field-types-behaviour
+   :required: false
+   :type: array
+
+   Field behaviour options. The most commonly used one is
+   :yaml:`allowLanguageSynchronization`, which lets editors choose between a
+   custom value and the value of the default language record. See
+   :ref:`allowLanguageSynchronization <t3tca:tca_property_behaviour_allowLanguageSynchronization>`.
+
+   .. code-block:: yaml
+
+       fields:
+         - identifier: my_identifier
+           type: Text
+           behaviour:
+             allowLanguageSynchronization: true
+
+.. confval:: fieldInformation
+   :name: field-types-fieldInformation
+   :required: false
+   :type: array
+
+   Renders informational text directly above the field. See
+   :ref:`TCA fieldInformation <t3tca:tca_property_fieldInformation>`.
+
+.. confval:: fieldControl
+   :name: field-types-fieldControl
+   :required: false
+   :type: array
+
+   Adds buttons next to the field, for example a link or wizard popup. See
+   :ref:`TCA fieldControl <t3tca:tca_property_fieldControl>`.
+
+.. confval:: fieldWizard
+   :name: field-types-fieldWizard
+   :required: false
+   :type: array
+
+   Renders additional widgets below the field, for example
+   :yaml:`defaultLanguageDifferences` or :yaml:`localizationStateSelector`. See
+   :ref:`TCA fieldWizard <t3tca:tca_property_fieldWizard>`.
+
+..  note::
+
+    :yaml:`renderType`, :yaml:`behaviour`, :yaml:`fieldControl`,
+    :yaml:`fieldInformation` and :yaml:`fieldWizard` are only accepted for the
+    field types whose page lists them. Core TCA evaluates them per TCA type, so
+    the JSON schema mirrors that restriction.
+
 ..  toctree::
     :maxdepth: 1
     :titlesonly:

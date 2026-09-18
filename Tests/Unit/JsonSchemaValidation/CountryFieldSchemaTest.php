@@ -67,14 +67,7 @@ final class CountryFieldSchemaTest extends UnitTestCase
                         'readOnly' => false,
                         'required' => false,
                         'size' => 1,
-                        'valuePicker' => (object)[
-                            'items' => [
-                                (object)[
-                                    'label' => 'Label',
-                                    'value' => 'Value',
-                                ],
-                            ],
-                        ],
+                        'sortItems' => (object)['label' => 'asc'],
                     ],
                 ],
             ],

@@ -61,6 +61,50 @@ Settings
 
    Abstract value for the width of the `<input>` field.
 
+.. confval:: autocomplete
+   :name: password-autocomplete
+   :required: false
+   :type: boolean
+   :default: false
+
+   By default the rendered input field carries :html:`autocomplete="new-password"`.
+   Set this to :yaml:`true` to emit :html:`autocomplete="current-password"` instead.
+
+.. confval:: default
+   :name: password-default
+   :required: false
+   :type: string
+   :default: ''
+
+   Default value set if a new record is created.
+
+.. confval:: mode
+   :name: password-mode
+   :required: false
+   :type: string
+   :default: ''
+
+   Related to the :yaml:`placeholder` property. The only allowed value is
+   :yaml:`useOrOverridePlaceholder`. When defined, a checkbox is rendered above
+   the field. While unchecked, the field is read-only and :sql:`NULL` is stored.
+   Requires :yaml:`nullable` to be set to :yaml:`true`.
+
+.. confval:: nullable
+   :name: password-nullable
+   :required: false
+   :type: boolean
+   :default: false
+
+   Allows :sql:`NULL` values to be stored for this field.
+
+.. confval:: readOnly
+   :name: password-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
 Examples
 ========
 

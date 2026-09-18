@@ -69,6 +69,22 @@ Settings
    standard textarea HTML element.
 
 
+.. confval:: default
+   :name: json-default
+   :required: false
+   :type: string
+   :default: ''
+
+   Default value set if a new record is created.
+
+.. confval:: placeholder
+   :name: json-placeholder
+   :required: false
+   :type: string
+   :default: ''
+
+   Placeholder text for the field.
+
 Examples
 ========
 

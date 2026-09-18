@@ -281,6 +281,20 @@
                   "type": "boolean",
                   "description": "Enables a fixed-width font (monospace) for the text field"
                 },
+                "format": {
+                  "type": "string",
+                  "description": "Language the code editor should highlight. Only evaluated with renderType \"codeEditor\".",
+                  "enum": [
+                    "css",
+                    "html",
+                    "javascript",
+                    "json",
+                    "php",
+                    "sql",
+                    "typoscript",
+                    "xml"
+                  ]
+                },
                 "is_in": {
                   "type": "string",
                   "description": "Evaluates whether the text contains this value"
@@ -292,6 +306,13 @@
                 "min": {
                   "type": "integer",
                   "description": "Minimum number of characters required."
+                },
+                "mode": {
+                  "type": "string",
+                  "description": "Related to the placeholder property. When defined, a checkbox is rendered above the field. Requires nullable to be set to true.",
+                  "enum": [
+                    "useOrOverridePlaceholder"
+                  ]
                 },
                 "nullable": {
                   "type": "boolean",
@@ -1208,8 +1229,9 @@
                   "description": "Size of the select box",
                   "minimum": 1
                 },
-                "valuePicker": {
-                  "$ref": "#/properties/fields/items/allOf/2/then/properties/valuePicker"
+                "sortItems": {
+                  "$ref": "#/properties/fields/items/allOf/12/then/properties/sortItems",
+                  "description": "Sort order of the select items in the country picker."
                 }
               }
             }
@@ -1352,6 +1374,11 @@
                   "type": "boolean",
                   "description": "Enables search functionality for the field",
                   "default": true
+                },
+                "size": {
+                  "type": "integer",
+                  "description": "Abstract value for the width of the input field.",
+                  "minimum": 1
                 }
               }
             }
@@ -1526,8 +1553,8 @@
                 },
                 "required": {
                   "type": "boolean",
-                  "description": "If set, the field becomes mandatory.",
-                  "default": false
+                  "description": "A uuid field is required by default. Set to false to allow saving the record without a valid uuid value.",
+                  "default": true
                 },
                 "searchable": {
                   "type": "boolean",
@@ -3220,7 +3247,21 @@
                 "type": {},
                 "l10n_mode": {},
                 "l10n_display": {},
-                "exclude": {}
+                "exclude": {},
+                "default": {
+                  "type": "integer",
+                  "description": "Language id, which is pre-selected if a new record is created."
+                },
+                "readOnly": {
+                  "type": "boolean",
+                  "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                  "default": false
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "If set, the field becomes mandatory.",
+                  "default": false
+                }
               }
             }
           },
@@ -3242,7 +3283,10 @@
                 "identifier": {},
                 "alias": {},
                 "type": {},
-                "useExistingField": {}
+                "useExistingField": {},
+                "default": {
+                  "description": "Default value set if a new record is created."
+                }
               }
             }
           },
@@ -3730,10 +3774,6 @@
                       "default": false
                     }
                   }
-                },
-                "default": {
-                  "type": "string",
-                  "description": "Default value set if a new record is created."
                 },
                 "eval": {
                   "description": "Configuration of field evaluation",
@@ -4401,7 +4441,12 @@
                           "type": "object",
                           "additionalProperties": false,
                           "properties": {
-                            "type": {}
+                            "type": {},
+                            "ignoreIfNotInPalette": {
+                              "type": "boolean",
+                              "description": "Allows the Linebreak to be defined outside of a Palette, where it is silently dropped instead of throwing an error.",
+                              "default": false
+                            }
                           }
                         },
                         "else": {
@@ -4853,6 +4898,10 @@
                 "foreign_unique": {
                   "type": "string",
                   "description": "Field which must be unique for all children of a parent record."
+                },
+                "localizeReferencesAtParentLocalization": {
+                  "type": "boolean",
+                  "description": "Defines whether referenced records should be localized when the current record gets localized. Only evaluated for relations stored in an MM table."
                 },
                 "maxitems": {
                   "type": "integer",

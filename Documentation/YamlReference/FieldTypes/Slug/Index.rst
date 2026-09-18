@@ -105,13 +105,6 @@ Settings
 
    Allows to select if localization uses custom or default language value.
 
-.. confval:: default
-   :name: slug-default
-   :required: false
-   :type: string
-
-   Default value set if a new record is created.
-
 .. confval:: fallbackCharacter
    :name: slug-fallbackCharacter
    :required: false

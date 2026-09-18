@@ -53,6 +53,52 @@ Settings
    Allows to set one or more roots (category uids), from which the categories
    should be taken from.
 
+.. confval:: default
+   :name: category-default
+   :required: false
+   :type: string
+   :default: ''
+
+   Default value set if a new record is created. If empty, no category gets
+   selected.
+
+.. confval:: exclusiveKeys
+   :name: category-exclusiveKeys
+   :required: false
+   :type: string
+   :default: ''
+
+   Comma separated list of item values which exclude any other selection once
+   chosen. See :ref:`exclusiveKeys <t3tca:columns-category-properties-exclusivekeys>`.
+
+.. confval:: foreign_table_where
+   :name: category-foreign_table_where
+   :required: false
+   :type: string
+   :default: ''
+
+   Additional :sql:`WHERE` clause used to fetch the selectable categories. It
+   replaces the default constraint, so repeat the default when narrowing it
+   further. See
+   :ref:`foreign_table_where <t3tca:columns-category-properties-foreign-table-where>`.
+
+.. confval:: readOnly
+   :name: category-readOnly
+   :required: false
+   :type: boolean
+   :default: false
+
+   Renders the field in a way that the user can see the value but cannot edit it.
+
+.. confval:: size
+   :name: category-size
+   :required: false
+   :type: integer
+   :default: 20
+
+   Maximal number of elements to be displayed in the tree by default. Minimum is
+   :yaml:`5`.
+
 Examples
 ========
 

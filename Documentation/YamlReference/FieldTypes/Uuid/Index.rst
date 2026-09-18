@@ -49,6 +49,15 @@ Settings
 
    If set to false, the button for copying the uuid into the clipboard will not be rendered.
 
+.. confval:: required
+   :name: uuid-required
+   :required: false
+   :type: boolean
+   :default: true
+
+   A :yaml:`Uuid` field is required by default. Set this to :yaml:`false` to allow
+   saving the record without a valid uuid value.
+
 Examples
 ========
 

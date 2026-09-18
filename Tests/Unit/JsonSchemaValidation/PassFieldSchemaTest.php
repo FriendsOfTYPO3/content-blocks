@@ -41,6 +41,21 @@ final class PassFieldSchemaTest extends UnitTestCase
             'valid' => true,
         ];
 
+        yield 'all properties' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'pass',
+                        'alias' => 'myPass',
+                        'type' => 'Pass',
+                        'default' => 'Default value',
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
         yield 'unknown property' => [
             'data' => (object)[
                 'name' => 'json/schema-test',

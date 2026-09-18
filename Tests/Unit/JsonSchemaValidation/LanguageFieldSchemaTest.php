@@ -40,6 +40,44 @@ final class LanguageFieldSchemaTest extends UnitTestCase
             'valid' => true,
         ];
 
+        yield 'all properties' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'language',
+                        'alias' => 'myLanguage',
+                        'type' => 'Language',
+                        'label' => 'Language',
+                        'description' => 'Language of the record',
+                        'displayCond' => 'FIELD:foo:=:1',
+                        'onChange' => 'reload',
+                        'l10n_mode' => 'exclude',
+                        'l10n_display' => 'hideDiff',
+                        'exclude' => true,
+                        'default' => 1,
+                        'readOnly' => true,
+                        'required' => true,
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'default must be an integer' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'language',
+                        'type' => 'Language',
+                        'default' => 'foo',
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
         yield 'unknown property' => [
             'data' => (object)[
                 'name' => 'json/schema-test',

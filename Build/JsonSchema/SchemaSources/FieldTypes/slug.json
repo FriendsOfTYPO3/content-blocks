@@ -36,10 +36,6 @@
 				}
 			}
 		},
-		"default": {
-			"type": "string",
-			"description": "Default value set if a new record is created."
-		},
 		"eval": {
 			"description": "Configuration of field evaluation",
 			"anyOf": [
