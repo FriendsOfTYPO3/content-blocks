@@ -112,6 +112,7 @@ final class CollectionFieldSchemaTest extends UnitTestCase
                         'foreign_table' => 'tx_myext_child',
                         'foreign_table_field' => 'parent_table',
                         'foreign_unique' => 'uid_local',
+                        'localizeReferencesAtParentLocalization' => true,
                         'maxitems' => 5,
                         'minitems' => 1,
                         'MM' => 'tx_myext_mm',

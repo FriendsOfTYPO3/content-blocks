@@ -416,6 +416,10 @@
 			"type": "string",
 			"description": "Field which must be unique for all children of a parent record."
 		},
+		"localizeReferencesAtParentLocalization": {
+			"type": "boolean",
+			"description": "Defines whether referenced records should be localized when the current record gets localized. Only evaluated for relations stored in an MM table."
+		},
 		"maxitems": {
 			"type": "integer",
 			"description": "Maximum number of items allowed in the select field",

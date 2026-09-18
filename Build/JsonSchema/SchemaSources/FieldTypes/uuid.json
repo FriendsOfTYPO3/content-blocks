@@ -53,8 +53,8 @@
 		},
 		"required": {
 			"type": "boolean",
-			"description": "If set, the field becomes mandatory.",
-			"default": false
+			"description": "A uuid field is required by default. Set to false to allow saving the record without a valid uuid value.",
+			"default": true
 		},
 		"searchable": {
 			"type": "boolean",

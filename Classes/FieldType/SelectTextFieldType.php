@@ -24,7 +24,6 @@ namespace TYPO3\CMS\ContentBlocks\FieldType;
 final class SelectTextFieldType extends AbstractFieldType
 {
     use WithCommonProperties;
-    use WithCustomProperties;
 
     private string $default = '';
     private bool $readOnly = false;
@@ -52,7 +51,6 @@ final class SelectTextFieldType extends AbstractFieldType
         $self->items = (array)($settings['items'] ?? $self->items);
         $self->sortItems = (array)($settings['sortItems'] ?? $self->sortItems);
         $self->dbFieldLength = (int)($settings['dbFieldLength'] ?? $self->dbFieldLength);
-        $self->setCustomProperties($settings);
 
         return $self;
     }
@@ -87,7 +85,6 @@ final class SelectTextFieldType extends AbstractFieldType
         if ($this->dbFieldLength !== 0) {
             $config['dbFieldLength'] = $this->dbFieldLength;
         }
-        $config = $this->mergeCustomProperties($config);
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;
     }

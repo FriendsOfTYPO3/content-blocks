@@ -53,7 +53,6 @@ final class SlugFieldSchemaTest extends UnitTestCase
                         'behaviour' => (object)[
                             'allowLanguageSynchronization' => true,
                         ],
-                        'default' => 'default-slug',
                         'eval' => 'uniqueInSite',
                         'fallbackCharacter' => '-',
                         'fieldControl' => (object)['foo' => 'bar'],

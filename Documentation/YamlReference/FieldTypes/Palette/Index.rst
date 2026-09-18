@@ -20,6 +20,27 @@ Elements are available as :ref:`Basics <basics-pre-defined>`.
    Palettes inside :ref:`Basics <field_type_basic>`. Then you can share them,
    while the configuration always stays the same, as they are centrally defined.
 
+Settings
+========
+
+..  confval-menu::
+    :name: confval-palette-options
+    :display: table
+    :type:
+    :default:
+    :required:
+
+.. confval:: fields
+   :name: palette-fields
+   :required: true
+   :type: array
+   :default: []
+
+   The fields which should be grouped inside this Palette. A :yaml:`Linebreak`
+   can be used between them to force a manual line break.
+
+   Nested Palettes, Tabs and Collections are not allowed here.
+
 Labels
 ======
 

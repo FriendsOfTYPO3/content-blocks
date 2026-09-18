@@ -43,6 +43,7 @@ final class TextareaFieldType extends AbstractFieldType
     private bool $enableRichtext = false;
     private string $richtextConfiguration = '';
     private string $format = '';
+    private array $valuePicker = [];
 
     public function createFromArray(array $settings): TextareaFieldType
     {
@@ -66,6 +67,7 @@ final class TextareaFieldType extends AbstractFieldType
         $self->enableRichtext = (bool)($settings['enableRichtext'] ?? $self->enableRichtext);
         $self->richtextConfiguration = (string)($settings['richtextConfiguration'] ?? $self->richtextConfiguration);
         $self->format = (string)($settings['format'] ?? $self->format);
+        $self->valuePicker = (array)($settings['valuePicker'] ?? $self->valuePicker);
 
         return $self;
     }
@@ -128,6 +130,9 @@ final class TextareaFieldType extends AbstractFieldType
         }
         if ($this->format !== '') {
             $config['format'] = $this->format;
+        }
+        if (($this->valuePicker['items'] ?? []) !== []) {
+            $config['valuePicker'] = $this->valuePicker;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

@@ -68,6 +68,7 @@ final class DateTimeFieldSchemaTest extends UnitTestCase
                             'upper' => 1672574400,
                         ],
                         'readOnly' => true,
+                        'size' => 20,
                         'required' => true,
                         'searchable' => false,
                     ],

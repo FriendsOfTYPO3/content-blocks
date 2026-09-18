@@ -98,8 +98,9 @@
 			"description": "Size of the select box",
 			"minimum": 1
 		},
-		"valuePicker": {
-			"$ref": "../Properties/value-picker.json"
+		"sortItems": {
+			"$ref": "../Properties/sort-items.json",
+			"description": "Sort order of the select items in the country picker."
 		}
 	}
 }

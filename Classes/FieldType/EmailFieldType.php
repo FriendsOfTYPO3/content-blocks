@@ -44,6 +44,7 @@ final class EmailFieldType extends AbstractFieldType
         $self->setSearchable($settings);
         $self->setNullableAndDefault($settings, 'string');
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->size = (int)($settings['size'] ?? $self->size);
         $self->required = (bool)(($settings['required'] ?? $self->required));
         $self->mode = (string)($settings['mode'] ?? $self->mode);
         $self->placeholder = (string)($settings['placeholder'] ?? $self->placeholder);
