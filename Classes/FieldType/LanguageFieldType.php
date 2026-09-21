@@ -27,14 +27,12 @@ final class LanguageFieldType extends AbstractFieldType
 
     private int $default = 0;
     private bool $readOnly = false;
-    private bool $required = false;
 
     public function createFromArray(array $settings): LanguageFieldType
     {
         $self = clone $this;
         $self->setCommonProperties($settings);
         $self->default = (int)($settings['default'] ?? $self->default);
-        $self->required = (bool)($settings['required'] ?? $self->required);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
         return $self;
     }
@@ -45,9 +43,6 @@ final class LanguageFieldType extends AbstractFieldType
         $config['type'] = $this->getTcaType();
         if ($this->default !== 0) {
             $config['default'] = $this->default;
-        }
-        if ($this->required) {
-            $config['required'] = true;
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
