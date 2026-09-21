@@ -71,7 +71,7 @@ final class SchemaFieldTypeSyncTest extends UnitTestCase
     private const INTERNAL_PROPERTIES = [
         'FlexForm' => [
             // Injected by ContentBlockCompiler / FlexFormGenerator.
-            'ds', 'flexFormDefinitions',
+            'ds', 'flexFormDefinitions', 'ds_pointerField',
         ],
     ];
 

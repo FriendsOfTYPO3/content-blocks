@@ -1326,11 +1326,6 @@
                       "description": "If set, the field becomes mandatory.",
                       "default": false
                     },
-                    "searchable": {
-                      "type": "boolean",
-                      "description": "Enables search functionality for the field",
-                      "default": true
-                    },
                     "size": {
                       "type": "integer",
                       "description": "Abstract value for the width of the input field.",

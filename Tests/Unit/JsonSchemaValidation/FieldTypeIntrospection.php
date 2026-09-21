@@ -35,7 +35,6 @@ final class FieldTypeIntrospection
     private const SETTINGS_TRAITS = [
         'WithCommonProperties',
         'WithNullableProperty',
-        'WithSearchableProperty',
     ];
 
     public static function rootPath(): string
