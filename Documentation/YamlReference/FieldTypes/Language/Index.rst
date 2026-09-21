@@ -34,14 +34,6 @@ Settings
 
    Renders the field in a way that the user can see the value but cannot edit it.
 
-.. confval:: required
-   :name: language-required
-   :required: false
-   :type: boolean
-   :default: false
-
-   If set, the field becomes mandatory.
-
 Examples
 ========
 
