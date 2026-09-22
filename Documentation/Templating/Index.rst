@@ -138,6 +138,8 @@ Alternatively, you can set :html:`name` manually.
     <f:comment><!-- The name of the Content Block is set explicitly --></f:comment>
     <f:asset.script identifier="myJavascriptIdentifier" href="{cb:assetPath(name: 'vendor/name')}/frontend.js"/>
 
+See also: :ref:`cb:assetPath ViewHelper reference <content_blocks_view_helper_asset_path>`.
+
 .. _language_path_view_helper:
 
 LanguagePath ViewHelper
@@ -155,6 +157,16 @@ You can also set :html:`name` manually:
 .. code-block:: html
 
     <f:translate key="{cb:languagePath(name: 'vendor/name')}:header"/>
+
+See also: :ref:`cb:languagePath ViewHelper reference <content_blocks_view_helper_language_path>`.
+
+ViewHelpers reference
+======================
+
+Besides the asset and language path helpers shown above, Content Blocks also
+ships a :html:`cb:link.editRecord` ViewHelper for backend edit links. See the
+full :ref:`ViewHelpers reference <content_blocks_view_helpers>` for all
+ViewHelpers, their arguments and further examples.
 
 Partials
 ========
@@ -189,3 +201,11 @@ There is the technical possibility to use resources from the whole TYPO3 setup
 recommend to do so. Content Blocks are intended to work independent of external
 resources so they can be easily copy-pasted between projects. Be aware of this
 downside, when you add dependencies to your Content Block.
+
+**Table of Contents**
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   ViewHelpers/Index
