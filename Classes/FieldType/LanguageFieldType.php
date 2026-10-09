@@ -27,6 +27,7 @@ final class LanguageFieldType extends AbstractFieldType
 
     private int $default = 0;
     private bool $readOnly = false;
+    private bool $showIfEmpty = false;
 
     public function createFromArray(array $settings): LanguageFieldType
     {
@@ -34,6 +35,7 @@ final class LanguageFieldType extends AbstractFieldType
         $self->setCommonProperties($settings);
         $self->default = (int)($settings['default'] ?? $self->default);
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->showIfEmpty = (bool)($settings['showIfEmpty'] ?? $self->showIfEmpty);
         return $self;
     }
 
@@ -46,6 +48,9 @@ final class LanguageFieldType extends AbstractFieldType
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
+        }
+        if ($this->showIfEmpty) {
+            $config['showIfEmpty'] = true;
         }
         $tca['config'] = array_replace($tca['config'] ?? [], $config);
         return $tca;

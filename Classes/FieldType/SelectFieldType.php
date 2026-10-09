@@ -28,6 +28,7 @@ final class SelectFieldType extends AbstractFieldType
 
     private string|int $default = '';
     private bool $readOnly = false;
+    private bool $showIfEmpty = false;
     private int $size = 0;
     private int $autoSizeMax = 0;
     private string $MM = '';
@@ -74,6 +75,7 @@ final class SelectFieldType extends AbstractFieldType
             $self->default = $default;
         }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->showIfEmpty = (bool)($settings['showIfEmpty'] ?? $self->showIfEmpty);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->autoSizeMax = (int)($settings['autoSizeMax'] ?? $self->autoSizeMax);
         $self->MM = (string)($settings['MM'] ?? $self->MM);
@@ -125,6 +127,9 @@ final class SelectFieldType extends AbstractFieldType
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
+        }
+        if ($this->showIfEmpty) {
+            $config['showIfEmpty'] = true;
         }
         if ($this->size > 0) {
             $config['size'] = $this->size;

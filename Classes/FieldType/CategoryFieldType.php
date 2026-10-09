@@ -27,6 +27,7 @@ final class CategoryFieldType extends AbstractFieldType
 
     private string|int $default = '';
     private bool $readOnly = false;
+    private bool $showIfEmpty = false;
     private int $size = 0;
     private int $maxitems = 0;
     private int $minitems = 0;
@@ -44,6 +45,7 @@ final class CategoryFieldType extends AbstractFieldType
             $self->default = $default;
         }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->showIfEmpty = (bool)($settings['showIfEmpty'] ?? $self->showIfEmpty);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->maxitems = (int)($settings['maxitems'] ?? $self->maxitems);
         $self->minitems = (int)($settings['minitems'] ?? $self->minitems);
@@ -64,6 +66,9 @@ final class CategoryFieldType extends AbstractFieldType
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
+        }
+        if ($this->showIfEmpty) {
+            $config['showIfEmpty'] = true;
         }
         if ($this->size > 0) {
             $config['size'] = $this->size;

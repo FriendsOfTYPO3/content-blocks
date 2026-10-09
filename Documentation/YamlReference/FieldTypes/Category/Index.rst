@@ -90,6 +90,15 @@ Settings
 
    Renders the field in a way that the user can see the value but cannot edit it.
 
+.. confval:: showIfEmpty
+   :name: category-showIfEmpty
+   :required: false
+   :type: boolean
+   :default: false
+
+   By default, this field is hidden in the backend form if there are no
+   selectable items. Set this option to :yaml:`true` to always render the field.
+
 .. confval:: size
    :name: category-size
    :required: false

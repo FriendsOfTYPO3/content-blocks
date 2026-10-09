@@ -35,6 +35,7 @@ final class LanguageFieldTypeTest extends UnitTestCase
                 'onChange' => 'foo',
                 'exclude' => true,
                 'readOnly' => true,
+                'showIfEmpty' => true,
                 'size' => 30,
                 'default' => 1,
                 'behaviour' => [
@@ -55,6 +56,7 @@ final class LanguageFieldTypeTest extends UnitTestCase
                     'type' => 'language',
                     'default' => 1,
                     'readOnly' => true,
+                    'showIfEmpty' => true,
                 ],
             ],
         ];

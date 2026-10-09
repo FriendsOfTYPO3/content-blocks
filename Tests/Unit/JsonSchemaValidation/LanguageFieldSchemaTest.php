@@ -57,6 +57,7 @@ final class LanguageFieldSchemaTest extends UnitTestCase
                         'exclude' => true,
                         'default' => 1,
                         'readOnly' => true,
+                        'showIfEmpty' => true,
                     ],
                 ],
             ],

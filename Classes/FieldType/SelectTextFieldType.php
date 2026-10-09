@@ -27,6 +27,7 @@ final class SelectTextFieldType extends AbstractFieldType
 
     private string $default = '';
     private bool $readOnly = false;
+    private bool $showIfEmpty = false;
     private int $size = 0;
     private string $authMode = '';
     private bool $disableNoMatchingValueElement = false;
@@ -44,6 +45,7 @@ final class SelectTextFieldType extends AbstractFieldType
             $self->default = $default;
         }
         $self->readOnly = (bool)($settings['readOnly'] ?? $self->readOnly);
+        $self->showIfEmpty = (bool)($settings['showIfEmpty'] ?? $self->showIfEmpty);
         $self->size = (int)($settings['size'] ?? $self->size);
         $self->authMode = (string)($settings['authMode'] ?? $self->authMode);
         $self->disableNoMatchingValueElement = (bool)($settings['disableNoMatchingValueElement'] ?? $self->disableNoMatchingValueElement);
@@ -65,6 +67,9 @@ final class SelectTextFieldType extends AbstractFieldType
         }
         if ($this->readOnly) {
             $config['readOnly'] = true;
+        }
+        if ($this->showIfEmpty) {
+            $config['showIfEmpty'] = true;
         }
         if ($this->size > 0) {
             $config['size'] = $this->size;

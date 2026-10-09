@@ -74,6 +74,11 @@
 			"description": "Renders the field in a way that the user can see the value but cannot edit it.",
 			"default": false
 		},
+		"showIfEmpty": {
+			"type": "boolean",
+			"description": "If set, the field is rendered even if there are no selectable items. By default, such fields are hidden in FormEngine.",
+			"default": false
+		},
 		"relationship": {
 			"type": "string",
 			"enum": ["oneToOne", "oneToMany", "manyToMany"]

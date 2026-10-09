@@ -1865,6 +1865,11 @@
                   "description": "Renders the field in a way that the user can see the value but cannot edit it.",
                   "default": false
                 },
+                "showIfEmpty": {
+                  "type": "boolean",
+                  "description": "If set, the field is rendered even if there are no selectable items. By default, such fields are hidden in FormEngine.",
+                  "default": false
+                },
                 "relationship": {
                   "type": "string",
                   "enum": [
@@ -2098,6 +2103,11 @@
                   "description": "Renders the field in a way that the user can see the value but cannot edit it.",
                   "default": false
                 },
+                "showIfEmpty": {
+                  "type": "boolean",
+                  "description": "If set, the field is rendered even if there are no selectable items. By default, such fields are hidden in FormEngine.",
+                  "default": false
+                },
                 "size": {
                   "type": "integer",
                   "description": "If set to 1 (default), displays a select drop-down, else a select box of given size.",
@@ -2233,6 +2243,11 @@
                 "readOnly": {
                   "type": "boolean",
                   "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                  "default": false
+                },
+                "showIfEmpty": {
+                  "type": "boolean",
+                  "description": "If set, the field is rendered even if there are no selectable items. By default, such fields are hidden in FormEngine.",
                   "default": false
                 },
                 "size": {
@@ -2512,6 +2527,11 @@
                 "readOnly": {
                   "type": "boolean",
                   "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                  "default": false
+                },
+                "showIfEmpty": {
+                  "type": "boolean",
+                  "description": "If set, the field is rendered even if there are no selectable items. By default, such fields are hidden in FormEngine.",
                   "default": false
                 },
                 "relationship": {
@@ -3255,6 +3275,11 @@
                 "readOnly": {
                   "type": "boolean",
                   "description": "Renders the field in a way that the user can see the value but cannot edit it.",
+                  "default": false
+                },
+                "showIfEmpty": {
+                  "type": "boolean",
+                  "description": "If set, the field is rendered even if only one language is available. By default, such fields are hidden in FormEngine.",
                   "default": false
                 }
               }

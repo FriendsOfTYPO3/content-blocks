@@ -92,6 +92,7 @@ final class SelectNumberFieldSchemaTest extends UnitTestCase
                             ],
                         ],
                         'readOnly' => false,
+                        'showIfEmpty' => false,
                         'size' => 1,
                         'sortItems' => (object)[
                             'label' => 'asc',

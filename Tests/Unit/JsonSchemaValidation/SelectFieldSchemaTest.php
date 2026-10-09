@@ -115,6 +115,7 @@ final class SelectFieldSchemaTest extends UnitTestCase
                         'MM_table_where' => 'AND 1=1',
                         'multiple' => true,
                         'readOnly' => false,
+                        'showIfEmpty' => false,
                         'relationship' => 'oneToMany',
                         'renderType' => 'selectSingle',
                         'size' => 1,

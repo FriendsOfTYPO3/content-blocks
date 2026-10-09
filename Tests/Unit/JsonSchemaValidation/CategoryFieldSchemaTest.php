@@ -60,6 +60,7 @@ final class CategoryFieldSchemaTest extends UnitTestCase
                         'minitems' => 1,
                         'maxitems' => 99999,
                         'readOnly' => false,
+                        'showIfEmpty' => false,
                         'relationship' => 'manyToMany',
                         'size' => 20,
                         'treeConfig' => (object)[
