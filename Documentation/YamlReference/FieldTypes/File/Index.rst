@@ -100,6 +100,14 @@ Settings
             width: 0.5
             height: 0.4
 
+   Instead of the inline configuration, a Crop Variant can also reference the
+   identifier of a :ref:`central Crop Variant <crop-variants>`.
+
+   .. code-block:: yaml
+
+    cropVariants:
+      desktop: vendor/desktop-wide
+
 .. confval:: overrideType
    :name: file-overrideType
    :required: false

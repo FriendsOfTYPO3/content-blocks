@@ -33,6 +33,8 @@ fields:
         type: File
         allowed: common-image-types
         relationship: oneToOne
+        cropVariants:
+          default: example/landscape
       - identifier: title
         type: Text
       - identifier: bodytext

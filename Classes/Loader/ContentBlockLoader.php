@@ -21,6 +21,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsLoader;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentTypeIcon;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\PageIconSet;
@@ -42,7 +44,8 @@ use TYPO3\CMS\Core\Resource\FileType;
  * Main bootstrap loader for Content Blocks. This class finds registered
  * Content Blocks in loaded TYPO3 extensions and adds them to the registry.
  * Before that, Content Block Basics are already loaded by BasicsLoader and
- * are applied here for each Content Block. The result is cached in the core
+ * are applied here for each Content Block. Afterwards, references to central
+ * Crop Variants loaded by CropVariantsLoader are resolved. The result is cached in the core
  * cache with the identifier `content-blocks` and is hydrated for new requests.
  *
  * Content Blocks are loaded from these folders inside extensions:
@@ -76,6 +79,8 @@ class ContentBlockLoader
         protected readonly PhpFrontend $cache,
         protected readonly BasicsService $basicsService,
         protected readonly BasicsLoader $basicsLoader,
+        protected readonly CropVariantsService $cropVariantsService,
+        protected readonly CropVariantsLoader $cropVariantsLoader,
         protected readonly PackageManager $packageManager,
         protected readonly IconProcessor $iconProcessor,
         protected readonly AssetPublisher $assetPublisher,
@@ -247,6 +252,8 @@ class ContentBlockLoader
         $table = $yaml['table'];
         $basicsRegistry = $this->basicsLoader->loadUncached();
         $yaml = $this->basicsService->applyBasics($basicsRegistry, $yaml);
+        $cropVariantsRegistry = $this->cropVariantsLoader->loadUncached();
+        $yaml = $this->cropVariantsService->applyCropVariants($cropVariantsRegistry, $yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
         $contentBlockIcon = new ContentTypeIcon();
         $withFallback = true;

@@ -30,6 +30,8 @@ releases accordingly. It is located in the root folder "JsonSchema":
 
                     *   :file:`content-element.schema.json`
 
+                    *   :file:`crop-variant.schema.json`
+
                     *   :file:`file-type.schema.json`
 
                     *   :file:`page-type.schema.json`
@@ -37,7 +39,8 @@ releases accordingly. It is located in the root folder "JsonSchema":
                     *   :file:`record-type.schema.json`
 
 As you can see, each content type brings its own schema. Even :ref:`Basics <basics>`
-have their own schema, as they are separate YAML files.
+and :ref:`Crop Variants <crop-variants>` have their own schema, as they are
+separate YAML files.
 
 Usage
 =====
@@ -91,6 +94,8 @@ Overview:
 +------------------+----------------------------------------+------------------------------------------------+
 | Basics           | JsonSchema/basic.schema.json           | **/ContentBlocks/Basics/*.yaml                 |
 +------------------+----------------------------------------+------------------------------------------------+
+| Crop Variants    | JsonSchema/crop-variant.schema.json    | **/ContentBlocks/CropVariants/*.yaml           |
++------------------+----------------------------------------+------------------------------------------------+
 
 Visual Studio Code
 ++++++++++++++++++
@@ -107,6 +112,7 @@ Visual Studio Code
             "vendor/friendsoftypo3/content-blocks/JsonSchema/page-type.schema.json" : ["**/ContentBlocks/PageTypes/*/config.yaml"],
             "vendor/friendsoftypo3/content-blocks/JsonSchema/record-type.schema.json" : ["**/ContentBlocks/RecordTypes/*/config.yaml"],
             "vendor/friendsoftypo3/content-blocks/JsonSchema/file-type.schema.json" : ["**/ContentBlocks/FileTypes/*/config.yaml"],
-            "vendor/friendsoftypo3/content-blocks/JsonSchema/basic.schema.json" : ["**/ContentBlocks/Basics/*.yaml"]
+            "vendor/friendsoftypo3/content-blocks/JsonSchema/basic.schema.json" : ["**/ContentBlocks/Basics/*.yaml"],
+            "vendor/friendsoftypo3/content-blocks/JsonSchema/crop-variant.schema.json" : ["**/ContentBlocks/CropVariants/*.yaml"]
         }
     }

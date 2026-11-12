@@ -216,4 +216,14 @@ readonly class ContentBlockPathUtility
     {
         return self::getSubDirectoryName() . '/' . self::getBasicsFolder();
     }
+
+    public static function getCropVariantsFolder(): string
+    {
+        return 'CropVariants';
+    }
+
+    public static function getRelativeCropVariantsPath(): string
+    {
+        return self::getSubDirectoryName() . '/' . self::getCropVariantsFolder();
+    }
 }

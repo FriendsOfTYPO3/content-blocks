@@ -20,6 +20,9 @@ let fileTypeSchemaJson = JSON.stringify(fileTypeSchema, null, 2);
 let basicSchema = await $RefParser.bundle(join(__dirname, 'SchemaSources/basic.json'));
 let basicSchemaJson = JSON.stringify(basicSchema, null, 2);
 
+let cropVariantSchema = await $RefParser.bundle(join(__dirname, 'SchemaSources/crop-variant.json'));
+let cropVariantSchemaJson = JSON.stringify(cropVariantSchema, null, 2);
+
 const contentElementOutputPath = join(__dirname, '../../JsonSchema/content-element.schema.json');
 await mkdir(dirname(contentElementOutputPath), { recursive: true });
 await writeFile(contentElementOutputPath, contentElementSchemaJson);
@@ -35,6 +38,10 @@ await writeFile(recordTypeOutputPath, recordTypeSchemaJson);
 const basicOutputPath = join(__dirname, '../../JsonSchema/basic.schema.json');
 await mkdir(dirname(basicOutputPath), { recursive: true });
 await writeFile(basicOutputPath, basicSchemaJson);
+
+const cropVariantOutputPath = join(__dirname, '../../JsonSchema/crop-variant.schema.json');
+await mkdir(dirname(cropVariantOutputPath), { recursive: true });
+await writeFile(cropVariantOutputPath, cropVariantSchemaJson);
 
 const fileTypeOutputPath = join(__dirname, '../../JsonSchema/file-type.schema.json');
 await mkdir(dirname(fileTypeOutputPath), { recursive: true });
