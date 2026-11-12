@@ -43,6 +43,15 @@ Options
 
    Write labels.xlf to all Content Blocks within the given extension.
 
+.. confval:: keep-date
+   :name: language-generate-keep-date
+
+   :Type: bool
+
+   Keep the :xml:`date` attribute of an existing labels.xlf file instead of
+   setting it to the current date. This avoids unnecessary changes in version
+   control. If no labels.xlf file exists yet, the current date is used.
+
 Write up-to-date labels.xlf file for Content Block example/example.
 
 .. code-block:: bash
@@ -54,6 +63,12 @@ Update all labels.xlf files within the extension "site_package".
 .. code-block:: bash
 
    vendor/bin/typo3 content-blocks:language:generate example/example --extension="site_package"
+
+Update labels.xlf for Content Block example/example without changing the date.
+
+.. code-block:: bash
+
+   vendor/bin/typo3 content-blocks:language:generate example/example --keep-date
 
 Print up-to-date labels.xlf content for Content Block example/example.
 

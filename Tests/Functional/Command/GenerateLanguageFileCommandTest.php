@@ -106,6 +106,33 @@ final class GenerateLanguageFileCommandTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function generateWithKeepDateKeepsDateOfExistingLabelsXlf(): void
+    {
+        $languageFolder = $this->instancePath . '/typo3conf/ext/command_test/ContentBlocks/ContentElements/command-test-language-1/language';
+        $labelPath = $languageFolder . '/labels.xlf';
+        $existingDate = '2020-01-01T00:00:00+00:00';
+        GeneralUtility::mkdir_deep($languageFolder);
+        GeneralUtility::writeFile($labelPath, '<?xml version="1.0"?><xliff><file date="' . $existingDate . '"><body></body></file></xliff>');
+
+        $commandTester = new CommandTester($this->get(GenerateLanguageFileCommand::class));
+        $commandTester->execute(
+            [
+                'content-block' => 'typo3tests/command-test-language-1',
+                '--keep-date' => true,
+            ]
+        );
+
+        self::assertSame(0, $commandTester->getStatusCode());
+
+        $languageFileGenerator = $this->get(LanguageFileGenerator::class);
+        $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
+        $contentBlock = $contentBlockRegistry->getContentBlock('typo3tests/command-test-language-1');
+        $expected = $languageFileGenerator->generate($contentBlock, $existingDate);
+
+        self::assertSame($expected, file_get_contents($labelPath));
+    }
+
+    #[Test]
     public function printWithContentBlock(): void
     {
         // Print label.xlf

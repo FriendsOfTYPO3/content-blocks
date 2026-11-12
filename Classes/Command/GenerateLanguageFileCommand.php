@@ -73,6 +73,12 @@ class GenerateLanguageFileCommand extends Command
             InputOption::VALUE_REQUIRED,
             'Define an extension key to process all Content Blocks within.'
         );
+        $this->addOption(
+            'keep-date',
+            null,
+            InputOption::VALUE_NONE,
+            'Keep the date attribute of an existing labels.xlf instead of setting it to the current date.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -80,14 +86,16 @@ class GenerateLanguageFileCommand extends Command
         $contentBlockName = $input->getArgument('content-block');
         $print = (bool)$input->getOption('print');
         $extension = (string)$input->getOption('extension');
+        $keepDate = (bool)$input->getOption('keep-date');
         return $print
-             ? $this->startPrintProcess($contentBlockName, $extension, $output)
-             : $this->startWriteProcess($contentBlockName, $extension, $output);
+             ? $this->startPrintProcess($contentBlockName, $extension, $keepDate, $output)
+             : $this->startWriteProcess($contentBlockName, $extension, $keepDate, $output);
     }
 
     protected function startPrintProcess(
         ?string $contentBlockName,
         string $extension,
+        bool $keepDate,
         OutputInterface $output,
     ): int {
         $valid = $this->validatePrintMode($contentBlockName, $extension, $output);
@@ -95,13 +103,14 @@ class GenerateLanguageFileCommand extends Command
             return Command::INVALID;
         }
         $contentBlockRegistry = $this->loadUncachedContentBlockRegistry();
-        $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $output);
+        $this->printLabelsXlf($contentBlockRegistry, $contentBlockName, $keepDate, $output);
         return Command::SUCCESS;
     }
 
     protected function startWriteProcess(
         ?string $contentBlockName,
         string $extension,
+        bool $keepDate,
         OutputInterface $output,
     ): int {
         $valid = $this->validateWriteMode($contentBlockName, $extension, $output);
@@ -110,10 +119,10 @@ class GenerateLanguageFileCommand extends Command
         }
         $contentBlockRegistry = $this->loadUncachedContentBlockRegistry();
         if ($extension !== '') {
-            return $this->writeForAllInExtension($extension, $contentBlockRegistry, $output);
+            return $this->writeForAllInExtension($extension, $contentBlockRegistry, $keepDate, $output);
         }
         $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
-        $this->writeLabelsXlf($contentBlock);
+        $this->writeLabelsXlf($contentBlock, $keepDate);
         return Command::SUCCESS;
     }
 
@@ -133,6 +142,7 @@ class GenerateLanguageFileCommand extends Command
     protected function writeForAllInExtension(
         string $extension,
         ContentBlockRegistry $contentBlockRegistry,
+        bool $keepDate,
         OutputInterface $output,
     ): int {
         try {
@@ -145,17 +155,18 @@ class GenerateLanguageFileCommand extends Command
             if ($contentBlock->getHostExtension() !== $extension) {
                 continue;
             }
-            $this->writeLabelsXlf($contentBlock);
+            $this->writeLabelsXlf($contentBlock, $keepDate);
         }
         return Command::SUCCESS;
     }
 
-    protected function writeLabelsXlf(LoadedContentBlock $contentBlock): void
+    protected function writeLabelsXlf(LoadedContentBlock $contentBlock, bool $keepDate): void
     {
         $contentBlockPath = GeneralUtility::getFileAbsFileName($contentBlock->getExtPath());
         $labelsFolder = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFolder();
         $labelsXlfPath = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
-        $result = $this->languageFileGenerator->generate($contentBlock);
+        $date = $keepDate ? $this->resolveDateFromLabelsXlf($labelsXlfPath) : null;
+        $result = $this->languageFileGenerator->generate($contentBlock, $date);
         // Avoid writing new labels.xlf if it is identical to the current one.
         if (file_exists($labelsXlfPath)) {
             $current = file_get_contents($labelsXlfPath);
@@ -175,13 +186,33 @@ class GenerateLanguageFileCommand extends Command
         return $result;
     }
 
+    /**
+     * Returns null, if the file or its date attribute does not exist, so the current date is used instead.
+     */
+    protected function resolveDateFromLabelsXlf(string $labelsXlfPath): ?string
+    {
+        if (!file_exists($labelsXlfPath)) {
+            return null;
+        }
+        $xlf = file_get_contents($labelsXlfPath);
+        if (preg_match('/date="([^"]*)"/', $xlf, $matches) !== 1) {
+            return null;
+        }
+        $date = $matches[1];
+        return $date;
+    }
+
     protected function printLabelsXlf(
         ContentBlockRegistry $contentBlockRegistry,
         string $contentBlockName,
+        bool $keepDate,
         OutputInterface $output
     ): void {
         $contentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
-        $result = $this->languageFileGenerator->generate($contentBlock);
+        $contentBlockPath = GeneralUtility::getFileAbsFileName($contentBlock->getExtPath());
+        $labelsXlfPath = $contentBlockPath . '/' . ContentBlockPathUtility::getLanguageFilePath();
+        $date = $keepDate ? $this->resolveDateFromLabelsXlf($labelsXlfPath) : null;
+        $result = $this->languageFileGenerator->generate($contentBlock, $date);
         $output->writeln($result, OutputInterface::OUTPUT_RAW);
     }
 
