@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\JsonSchemaValidation;
 
 use Opis\JsonSchema\ValidationResult;
 use TYPO3\CMS\ContentBlocks\Basics\LoadedBasic;
+use TYPO3\CMS\ContentBlocks\CropVariants\LoadedCropVariant;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 
@@ -51,6 +52,15 @@ readonly class ContentBlockValidator
         $dataJson = json_encode($data);
         $dataObject = json_decode($dataJson);
         $validationResult = $this->jsonSchemaValidator->validateBasic($dataObject);
+        return $validationResult;
+    }
+
+    public function validateCropVariant(LoadedCropVariant $cropVariant): ValidationResult
+    {
+        $data = ['identifier' => $cropVariant->getIdentifier()] + $cropVariant->getConfiguration();
+        $dataJson = json_encode($data);
+        $dataObject = json_decode($dataJson);
+        $validationResult = $this->jsonSchemaValidator->validateCropVariant($dataObject);
         return $validationResult;
     }
 }

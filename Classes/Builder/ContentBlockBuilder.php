@@ -20,6 +20,8 @@ namespace TYPO3\CMS\ContentBlocks\Builder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsService;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsLoader;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsService;
 use TYPO3\CMS\ContentBlocks\Definition\ContentType\ContentType;
 use TYPO3\CMS\ContentBlocks\Definition\Factory\TableDefinitionCollectionFactory;
 use TYPO3\CMS\ContentBlocks\Definition\TableDefinitionCollection;
@@ -47,6 +49,8 @@ readonly class ContentBlockBuilder
         protected SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected BasicsLoader $basicsLoader,
         protected BasicsService $basicsService,
+        protected CropVariantsLoader $cropVariantsLoader,
+        protected CropVariantsService $cropVariantsService,
     ) {}
 
     /**
@@ -102,6 +106,8 @@ readonly class ContentBlockBuilder
     {
         $basicsRegistry = $this->basicsLoader->loadUncached();
         $yaml = $this->basicsService->applyBasics($basicsRegistry, $contentBlock->getYaml());
+        $cropVariantsRegistry = $this->cropVariantsLoader->loadUncached();
+        $yaml = $this->cropVariantsService->applyCropVariants($cropVariantsRegistry, $yaml);
         $expandedContentBlock = new LoadedContentBlock(
             name: $contentBlock->getName(),
             yaml: $yaml,

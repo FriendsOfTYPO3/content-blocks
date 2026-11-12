@@ -1,0 +1,6 @@
+identifier: simple/desktop-wide
+title: Desktop
+allowedAspectRatios:
+  landscape:
+    title: Landscape
+    value: 16 / 9

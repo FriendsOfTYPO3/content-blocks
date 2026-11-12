@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsLoader;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
@@ -44,6 +45,7 @@ class LintContentBlocksCommand extends Command
         protected readonly ContentBlockValidator $contentBlockValidator,
         protected readonly JsonSchemaErrorFormatter $errorFormatter,
         protected readonly BasicsLoader $basicsLoader,
+        protected readonly CropVariantsLoader $cropVariantsLoader,
     ) {
         parent::__construct();
     }
@@ -52,6 +54,7 @@ class LintContentBlocksCommand extends Command
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
         $numberOfErrors = $this->validateBasics($output);
+        $numberOfErrors += $this->validateCropVariants($output);
         if ($numberOfErrors === 0) {
             $numberOfErrors = $this->validateContentBlocks($output);
         }
@@ -73,6 +76,21 @@ class LintContentBlocksCommand extends Command
             $numberOfErrors++;
             $contentBlockYaml = ['identifier' => $basic->getIdentifier(), 'fields' => $basic->getFields()];
             $this->renderError($validationResult, $basic->getIdentifier(), $basic->getHostExtension(), $contentBlockYaml, $output);
+        }
+        return $numberOfErrors;
+    }
+
+    protected function validateCropVariants(OutputInterface $output): int
+    {
+        $numberOfErrors = 0;
+        foreach ($this->cropVariantsLoader->loadUncached()->getAllCropVariants() as $cropVariant) {
+            $validationResult = $this->contentBlockValidator->validateCropVariant($cropVariant);
+            if ($validationResult->hasError() === false) {
+                continue;
+            }
+            $numberOfErrors++;
+            $cropVariantYaml = ['identifier' => $cropVariant->getIdentifier()] + $cropVariant->getConfiguration();
+            $this->renderError($validationResult, $cropVariant->getIdentifier(), $cropVariant->getHostExtension(), $cropVariantYaml, $output);
         }
         return $numberOfErrors;
     }

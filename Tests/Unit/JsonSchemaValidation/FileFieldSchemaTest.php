@@ -367,6 +367,59 @@ final class FileFieldSchemaTest extends UnitTestCase
             ],
             'valid' => false,
         ];
+
+        yield 'Crop Variant reference and inline Crop Variant' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'file',
+                        'type' => 'File',
+                        'cropVariants' => (object)[
+                            'desktop' => 'vendor/desktop',
+                            'mobile' => (object)[
+                                'title' => 'Mobile',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'Empty Crop Variant reference' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'file',
+                        'type' => 'File',
+                        'cropVariants' => (object)[
+                            'desktop' => '',
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'Inline Crop Variant with unknown property' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'fields' => [
+                    (object)[
+                        'identifier' => 'file',
+                        'type' => 'File',
+                        'cropVariants' => (object)[
+                            'desktop' => (object)[
+                                'unknown' => 'unknown',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
     }
 
     #[Test]
