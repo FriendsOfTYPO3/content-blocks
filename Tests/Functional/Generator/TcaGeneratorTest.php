@@ -143,6 +143,30 @@ final class TcaGeneratorTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function basicsOverridesAreAddedToColumnsOverridesOfType(): void
+    {
+        $columnsOverrides = $GLOBALS['TCA']['tt_content']['types']['simple_basics']['columnsOverrides'];
+
+        self::assertSame('ruler-before', $columnsOverrides['frame_class']['config']['default']);
+        self::assertTrue($columnsOverrides['simple_basics_basic_field']['config']['required']);
+    }
+
+    #[Test]
+    public function basicsOverridesLabelIsAddedToColumnsOverridesOfType(): void
+    {
+        self::assertSame(
+            'Frame from override',
+            $GLOBALS['TCA']['tt_content']['types']['simple_basics']['columnsOverrides']['frame_class']['label']
+        );
+    }
+
+    #[Test]
+    public function basicsOverridesDoNotChangeSharedColumn(): void
+    {
+        self::assertSame('default', $GLOBALS['TCA']['tt_content']['columns']['frame_class']['config']['default']);
+    }
+
+    #[Test]
     public function labelOfBasicFieldIsOverriddenByLanguageFileOfContentBlock(): void
     {
         self::assertSame(

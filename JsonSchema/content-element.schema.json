@@ -16,6 +16,7 @@
     "vendorPrefix": {},
     "priority": {},
     "basics": {},
+    "basicsOverrides": {},
     "fields": {},
     "table": {},
     "typeField": {},
@@ -142,6 +143,39 @@
           "uniqueItems": true,
           "items": {
             "type": "string"
+          }
+        },
+        "basicsOverrides": {
+          "type": "object",
+          "description": "Overrides options of fields added by Basics. Keyed by the identifier of a field on root level or inside a root level Palette.",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "default": {
+                "description": "Default value of the field."
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "readOnly": {
+                "type": "boolean"
+              },
+              "minitems": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "maxitems": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
           }
         },
         "fields": {

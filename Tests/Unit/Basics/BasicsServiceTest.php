@@ -806,4 +806,207 @@ final class BasicsServiceTest extends UnitTestCase
 
         self::assertCount(120, $result['fields']);
     }
+
+    public static function basicsOverridesAreAppliedDataProvider(): iterable
+    {
+        yield 'Field on root level added by top level basics array' => [
+            'yaml' => [
+                'name' => 'foo/bar',
+                'basics' => [
+                    'SimpleBasic',
+                ],
+                'basicsOverrides' => [
+                    'background_type' => [
+                        'default' => 1,
+                    ],
+                ],
+            ],
+            'expected' => [
+                'name' => 'foo/bar',
+                'basics' => [
+                    'SimpleBasic',
+                ],
+                'basicsOverrides' => [
+                    'background_type' => [
+                        'default' => 1,
+                    ],
+                ],
+                'fields' => [
+                    [
+                        'identifier' => 'tab',
+                        'type' => 'Tab',
+                    ],
+                    [
+                        'identifier' => 'background_type',
+                        'type' => 'Select',
+                        'default' => 1,
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'Field inside root level Palette added by Basic type' => [
+            'yaml' => [
+                'name' => 'foo/bar',
+                'fields' => [
+                    [
+                        'identifier' => 'palette',
+                        'type' => 'Palette',
+                        'fields' => [
+                            [
+                                'identifier' => 'SimpleBasic',
+                                'type' => 'Basic',
+                            ],
+                        ],
+                    ],
+                ],
+                'basicsOverrides' => [
+                    'background_type' => [
+                        'label' => 'Background',
+                        'default' => 1,
+                        'required' => true,
+                    ],
+                ],
+            ],
+            'expected' => [
+                'name' => 'foo/bar',
+                'fields' => [
+                    [
+                        'identifier' => 'palette',
+                        'type' => 'Palette',
+                        'fields' => [
+                            [
+                                'identifier' => 'tab',
+                                'type' => 'Tab',
+                            ],
+                            [
+                                'identifier' => 'background_type',
+                                'type' => 'Select',
+                                'label' => 'Background',
+                                'default' => 1,
+                                'required' => true,
+                            ],
+                        ],
+                    ],
+                ],
+                'basicsOverrides' => [
+                    'background_type' => [
+                        'label' => 'Background',
+                        'default' => 1,
+                        'required' => true,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('basicsOverridesAreAppliedDataProvider')]
+    public function basicsOverridesAreApplied(array $yaml, array $expected): void
+    {
+        $basicsService = new BasicsService();
+
+        $result = $basicsService->applyBasics($this->createBasicsRegistryForOverrides(), $yaml);
+
+        self::assertSame($expected, $result);
+    }
+
+    public static function invalidBasicsOverridesThrowExceptionDataProvider(): iterable
+    {
+        yield 'Options are not a map' => [
+            'basicsOverrides' => [
+                'background_type' => 1,
+            ],
+            'expectedExceptionCode' => 1794570535,
+        ];
+
+        yield 'Unsupported option' => [
+            'basicsOverrides' => [
+                'background_type' => [
+                    'items' => [],
+                ],
+            ],
+            'expectedExceptionCode' => 1794570536,
+        ];
+
+        yield 'Unknown identifier' => [
+            'basicsOverrides' => [
+                'unknown' => [
+                    'default' => 1,
+                ],
+            ],
+            'expectedExceptionCode' => 1794570537,
+        ];
+
+        yield 'Tab identifier' => [
+            'basicsOverrides' => [
+                'tab' => [
+                    'default' => 1,
+                ],
+            ],
+            'expectedExceptionCode' => 1794570537,
+        ];
+
+        yield 'Field inside Collection' => [
+            'basicsOverrides' => [
+                'collection_field' => [
+                    'default' => 1,
+                ],
+            ],
+            'expectedExceptionCode' => 1794570537,
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('invalidBasicsOverridesThrowExceptionDataProvider')]
+    public function invalidBasicsOverridesThrowException(array $basicsOverrides, int $expectedExceptionCode): void
+    {
+        $yaml = [
+            'name' => 'foo/bar',
+            'basics' => [
+                'SimpleBasic',
+            ],
+            'fields' => [
+                [
+                    'identifier' => 'collection',
+                    'type' => 'Collection',
+                    'fields' => [
+                        [
+                            'identifier' => 'collection_field',
+                            'type' => 'Text',
+                        ],
+                    ],
+                ],
+            ],
+            'basicsOverrides' => $basicsOverrides,
+        ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode($expectedExceptionCode);
+
+        $basicsService = new BasicsService();
+        $basicsService->applyBasics($this->createBasicsRegistryForOverrides(), $yaml);
+    }
+
+    private function createBasicsRegistryForOverrides(): BasicsRegistry
+    {
+        $basicsRegistry = new BasicsRegistry();
+        $basicsRegistry->register(new LoadedBasic(
+            'foo',
+            'SimpleBasic',
+            [
+                [
+                    'identifier' => 'tab',
+                    'type' => 'Tab',
+                ],
+                [
+                    'identifier' => 'background_type',
+                    'type' => 'Select',
+                ],
+            ],
+            'SimpleBasic.yaml',
+        ));
+
+        return $basicsRegistry;
+    }
 }

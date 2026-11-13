@@ -14,6 +14,7 @@
 		"vendorPrefix": {},
 		"priority": {},
 		"basics": {},
+		"basicsOverrides": {},
 		"fields": {},
 		"table": {},
 		"typeField": {},

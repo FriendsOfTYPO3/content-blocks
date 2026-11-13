@@ -28,6 +28,19 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
  */
 readonly class BasicsService
 {
+    /**
+     * Options, which can be changed per Content Block with `basicsOverrides`.
+     */
+    private const OVERRIDABLE_OPTIONS = [
+        'label',
+        'description',
+        'default',
+        'required',
+        'readOnly',
+        'minitems',
+        'maxitems',
+    ];
+
     public function applyBasics(BasicsRegistry $basicsRegistry, array $yaml): array
     {
         if (is_array($yaml['basics'] ?? null)) {
@@ -40,7 +53,101 @@ readonly class BasicsService
             }
         }
         $yaml['fields'] = $this->applyBasicsToSubFields($basicsRegistry, $yaml['fields'] ?? []);
+        if (is_array($yaml['basicsOverrides'] ?? null)) {
+            $yaml['fields'] = $this->applyBasicsOverrides(
+                $yaml['fields'],
+                $yaml['basicsOverrides'],
+                (string)($yaml['name'] ?? '')
+            );
+        }
         return $yaml;
+    }
+
+    /**
+     * Overrides single options of fields after all Basics are applied. This is
+     * meant for fields added by Basics, which can't be changed otherwise. Only
+     * fields on root level or inside a root level Palette can be targeted, so
+     * the overrides are a flat map keyed by field identifier.
+     *
+     * @param array<string|int, mixed> $basicsOverrides
+     */
+    protected function applyBasicsOverrides(array $fields, array $basicsOverrides, string $name): array
+    {
+        foreach ($basicsOverrides as $identifier => $options) {
+            $identifier = (string)$identifier;
+            $this->validateBasicsOverride($fields, $identifier, $options, $name);
+            $fields = $this->overrideField($fields, $identifier, $options);
+        }
+
+        return $fields;
+    }
+
+    protected function validateBasicsOverride(array $fields, string $identifier, mixed $options, string $name): void
+    {
+        if (is_array($options) === false) {
+            throw new \InvalidArgumentException(
+                'The basicsOverrides entry "' . $identifier . '" in Content Block "' . $name . '" must be a map of options.',
+                1794570535
+            );
+        }
+        $unsupportedOptions = array_diff(array_keys($options), self::OVERRIDABLE_OPTIONS);
+        if ($unsupportedOptions !== []) {
+            throw new \InvalidArgumentException(
+                'The basicsOverrides entry "' . $identifier . '" in Content Block "' . $name . '" contains unsupported options "'
+                . implode('", "', $unsupportedOptions) . '". Supported options are "' . implode('", "', self::OVERRIDABLE_OPTIONS) . '".',
+                1794570536
+            );
+        }
+        if ($this->hasOverridableField($fields, $identifier) === false) {
+            throw new \InvalidArgumentException(
+                'The basicsOverrides entry "' . $identifier . '" in Content Block "' . $name . '" does not match any field on root level or inside a root level Palette.',
+                1794570537
+            );
+        }
+    }
+
+    protected function hasOverridableField(array $fields, string $identifier): bool
+    {
+        foreach ($fields as $field) {
+            if ($this->isPalette($field) && $this->hasOverridableField($field['fields'], $identifier)) {
+                return true;
+            }
+            if ($this->isOverridableField($field, $identifier)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function overrideField(array $fields, string $identifier, array $options): array
+    {
+        foreach ($fields as $index => $field) {
+            if ($this->isPalette($field)) {
+                $fields[$index]['fields'] = $this->overrideField($field['fields'], $identifier, $options);
+                continue;
+            }
+            if ($this->isOverridableField($field, $identifier)) {
+                $fields[$index] = array_replace($field, $options);
+            }
+        }
+
+        return $fields;
+    }
+
+    protected function isPalette(array $field): bool
+    {
+        $isPalette = ($field['type'] ?? '') === 'Palette' && is_array($field['fields'] ?? null);
+
+        return $isPalette;
+    }
+
+    protected function isOverridableField(array $field, string $identifier): bool
+    {
+        $isOverridableField = ($field['identifier'] ?? null) === $identifier
+            && in_array($field['type'] ?? '', ['Palette', 'Tab'], true) === false;
+
+        return $isOverridableField;
     }
 
     /**
