@@ -1833,6 +1833,137 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
         ];
+
+        yield 'title palette is not added if title field is placed in custom palette' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'content-blocks/custom-page-type',
+                    'extPath' => 'EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                        'iconIdentifier' => 'pages-1700156757',
+                        'initialized' => true,
+                    ],
+                    'yaml' => [
+                        'table' => 'pages',
+                        'typeField' => 'doktype',
+                        'typeName' => 1700156757,
+                        'fields' => [
+                            [
+                                'identifier' => 'custom_title',
+                                'type' => 'Palette',
+                                'fields' => [
+                                    [
+                                        'identifier' => 'title',
+                                        'useExistingField' => true,
+                                    ],
+                                    [
+                                        'type' => 'Linebreak',
+                                    ],
+                                    [
+                                        'identifier' => 'subtitle',
+                                        'useExistingField' => true,
+                                    ],
+                                    [
+                                        'type' => 'Linebreak',
+                                    ],
+                                    [
+                                        'identifier' => 'slug',
+                                        'useExistingField' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'seoExtensionLoaded' => false,
+            'expected' => [
+                'pages' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            '1700156757' => 'pages-1700156757',
+                        ],
+                    ],
+                    'types' => [
+                        '1700156757' => [
+                            'showitem' => '--div--;core.form.tabs:general,--palette--;;standard,--palette--;;contentblocks_custompagetype_custom_title,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;core.form.tabs:appearance,--palette--;;backend_layout,--palette--;;replace,--div--;core.form.tabs:behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;core.form.tabs:resources,--palette--;;config,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;visibility,--palette--;;access,--div--;core.form.tabs:notes,rowDescription,--div--;core.form.tabs:extended',
+                            'columnsOverrides' => [
+                                'title' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.description',
+                                ],
+                                'subtitle' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:subtitle.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:subtitle.description',
+                                ],
+                                'slug' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:slug.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:slug.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [],
+                    'palettes' => [
+                        'contentblocks_custompagetype_custom_title' => [
+                            'showitem' => 'title,--linebreak--,subtitle,--linebreak--,slug',
+                            'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:palettes.custom_title.label',
+                            'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:palettes.custom_title.description',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'title palette is not added if title field is placed at root level' => [
+            'contentBlocks' => [
+                [
+                    'name' => 'content-blocks/custom-page-type',
+                    'extPath' => 'EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type',
+                    'icon' => [
+                        'iconPath' => '',
+                        'iconProvider' => '',
+                        'iconIdentifier' => 'pages-1700156757',
+                        'initialized' => true,
+                    ],
+                    'yaml' => [
+                        'table' => 'pages',
+                        'typeField' => 'doktype',
+                        'typeName' => 1700156757,
+                        'fields' => [
+                            [
+                                'identifier' => 'title',
+                                'useExistingField' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'seoExtensionLoaded' => false,
+            'expected' => [
+                'pages' => [
+                    'ctrl' => [
+                        'typeicon_classes' => [
+                            '1700156757' => 'pages-1700156757',
+                        ],
+                    ],
+                    'types' => [
+                        '1700156757' => [
+                            'showitem' => '--div--;core.form.tabs:general,--palette--;;standard,title,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata,--palette--;;metatags,--div--;core.form.tabs:appearance,--palette--;;backend_layout,--palette--;;replace,--div--;core.form.tabs:behaviour,--palette--;;links,--palette--;;caching,--palette--;;miscellaneous,--palette--;;module,--div--;core.form.tabs:resources,--palette--;;config,--div--;core.form.tabs:language,--palette--;;language,--div--;core.form.tabs:access,--palette--;;visibility,--palette--;;access,--div--;core.form.tabs:notes,rowDescription,--div--;core.form.tabs:extended',
+                            'columnsOverrides' => [
+                                'title' => [
+                                    'label' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.label',
+                                    'description' => 'LLL:EXT:my_sitepackage/ContentBlocks/PageTypes/custom-page-type/language/labels.xlf:title.description',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'columns' => [],
+                ],
+            ],
+        ];
     }
 
     #[DataProvider('pageTypesGenerateCorrectTcaDataProvider')]
@@ -1853,6 +1984,11 @@ final class TcaGeneratorTest extends UnitTestCase
                 ],
             ],
             'nav_title' => [
+                'config' => [
+                    'type' => 'input',
+                ],
+            ],
+            'subtitle' => [
                 'config' => [
                     'type' => 'input',
                 ],
