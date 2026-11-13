@@ -1,0 +1,22 @@
+name: language/test9
+group: common
+prefixFields: true
+title: Test 9
+fields:
+  - identifier: my_collection
+    type: Collection
+    label: Slides
+    title: Hero Slides
+    description: My Collection description
+    fields:
+      - identifier: text
+        type: Text
+        label: Text in Collection
+      - identifier: my_collection
+        type: Collection
+        label: Links
+        title: Hero Slide Links
+        fields:
+          - identifier: text
+            type: Text
+            label: Text in Collection 2

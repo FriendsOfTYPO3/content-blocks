@@ -97,6 +97,7 @@ final class ContentTypeFactory
         $arguments['priority'] = $typeDefinition['priority'] ?? 0;
         $arguments['typeIcon'] = ContentTypeIcon::fromArray($typeDefinition['typeIcon'] ?? []);
         $arguments['languagePathTitle'] = $typeDefinition['languagePathTitle'] ?? null;
+        $arguments['languagePathTitleFallback'] = $typeDefinition['languagePathTitleFallback'] ?? '';
         $arguments['languagePathDescription'] = $typeDefinition['languagePathDescription'] ?? null;
         $arguments['group'] = $typeDefinition['group'];
         $arguments['labelCapability'] = LabelCapability::createFromArray($typeDefinition);

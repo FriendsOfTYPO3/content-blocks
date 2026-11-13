@@ -111,6 +111,11 @@ trait ContentTypeDefinition
         return $this->languagePathTitle;
     }
 
+    public function getLanguagePathTitleFallback(): string
+    {
+        return $this->languagePathTitleFallback;
+    }
+
     public function getLanguagePathDescription(): string
     {
         return $this->languagePathDescription;

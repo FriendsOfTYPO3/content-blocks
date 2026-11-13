@@ -118,4 +118,15 @@ final class LanguageFileGeneratorTest extends FunctionalTestCase
         $expected = file_get_contents(__DIR__ . '/Fixtures/Language/8_InvalidXmlCharactersAreEscaped.xlf');
         self::assertSame($expected, $result);
     }
+
+    #[Test]
+    public function generateWithCollectionTitles(): void
+    {
+        $languageFileGenerator = $this->get(LanguageFileGenerator::class);
+        $contentBlockRegistry = $this->get(ContentBlockRegistry::class);
+        $contentBlock = $contentBlockRegistry->getContentBlock('language/test9');
+        $result = $languageFileGenerator->generate($contentBlock, '');
+        $expected = file_get_contents(__DIR__ . '/Fixtures/Language/9_CollectionTitles.xlf');
+        self::assertSame($expected, $result);
+    }
 }

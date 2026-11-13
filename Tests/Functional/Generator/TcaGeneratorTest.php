@@ -174,4 +174,49 @@ final class TcaGeneratorTest extends FunctionalTestCase
             $GLOBALS['TCA']['custom_record']['columns']['type']['config']['default'],
         );
     }
+
+    #[Test]
+    public function collectionFieldTitleIsNotOverwrittenIfMissingInYamlAndLanguageFile(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-collection/language/labels.xlf:collection_without_title.label',
+            $GLOBALS['TCA']['simple_simplecollection_collection_without_title']['ctrl']['title']
+        );
+    }
+
+    #[Test]
+    public function collectionFieldTitleIsOverwrittenIfSetInYaml(): void
+    {
+        self::assertSame(
+            'My custom yaml collection',
+            $GLOBALS['TCA']['simple_simplecollection_collection_with_yaml_title']['ctrl']['title']
+        );
+    }
+
+    #[Test]
+    public function collectionFieldTitleIsOverwrittenIfSetInLanguageFile(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-collection/language/labels.xlf:collection_with_xlf_title.title',
+            $GLOBALS['TCA']['simple_simplecollection_collection_with_xlf_title']['ctrl']['title']
+        );
+    }
+
+    #[Test]
+    public function collectionFieldTitleInLanguageFileHasPrecedenceOverYaml(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-collection/language/labels.xlf:collection_with_yaml_and_xlf_title.title',
+            $GLOBALS['TCA']['simple_simplecollection_collection_with_yaml_and_xlf_title']['ctrl']['title']
+        );
+    }
+
+    #[Test]
+    public function nestedCollectionFieldTitleIsOverwrittenIfSetInYaml(): void
+    {
+        self::assertSame(
+            'My custom nested yaml collection',
+            $GLOBALS['TCA']['nested_collection_with_yaml_title']['ctrl']['title']
+        );
+    }
 }

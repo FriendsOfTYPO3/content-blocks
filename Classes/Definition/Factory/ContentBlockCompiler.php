@@ -283,8 +283,17 @@ final class ContentBlockCompiler
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
             $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $descriptionPathSource);
         } else {
-            $languagePathTitle = $languagePathTitle . '.label';
+            $languagePathFieldLabel = $languagePathTitle . '.label';
+            $languagePathTitle = $languagePathTitle . '.title';
             $languagePathDescription = $languagePathDescription . '.description';
+            // The description key is already registered as the description of the Collection field.
+            $languagePathSource = new AutomaticLanguageSource($languagePathTitle, $title);
+            $this->automaticLanguageKeysRegistry->addKey($input->contentBlock, $languagePathSource);
+            // Without an explicit title, the Collection's table is named after the field label.
+            if ($title === '') {
+                $title = (string)($input->yaml['label'] ?? '');
+                $result->contentType->languagePathTitleFallback = $languagePathFieldLabel;
+            }
             $result->contentType->title = $title;
             $result->contentType->description = $description;
         }
@@ -654,8 +663,6 @@ final class ContentBlockCompiler
             // Disable sorting as it is already handled in MM table.
             $field['sortable'] = false;
         }
-        // The Collection's title equals the field label.
-        $field['title'] = $field['label'];
         // Anonymous Collections can't have a type field.
         $field['typeField'] = null;
         $newInput = new ProcessingInput(

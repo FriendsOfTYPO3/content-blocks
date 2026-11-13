@@ -42,6 +42,7 @@ interface ContentTypeInterface
     public function getColumns(): array;
     public function getTypeIcon(): ContentTypeIcon;
     public function getLanguagePathTitle(): string;
+    public function getLanguagePathTitleFallback(): string;
     public function getLanguagePathDescription(): string;
     public function getGroup(): ?string;
     public function getLabelCapability(): LabelCapability;
