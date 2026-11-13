@@ -111,6 +111,24 @@ Common root options
       The **default** loading order is **undefined** and depends on the
       (file-)system and the order, in which extensions are loaded.
 
+.. confval:: tabs
+   :name: root-tabs
+   :required: false
+   :type: array
+
+   Tabs defined as separate YAML files in the local folder :path:`tabs` of the
+   Content Block. They are referenced by their file name without extension
+   and are appended after the :yaml:`fields` array, but before
+   :yaml:`basics`.
+
+   ..  code-block:: yaml
+
+       tabs:
+           - media
+           - settings
+
+   Learn more about :ref:`Tabs <api_tabs>`.
+
 .. confval:: basics
    :name: root-basics
    :required: false

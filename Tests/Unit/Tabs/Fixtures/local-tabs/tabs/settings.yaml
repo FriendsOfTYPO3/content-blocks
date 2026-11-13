@@ -1,0 +1,11 @@
+identifier: options
+label: Options
+fields:
+  - identifier: layout
+    type: Select
+    renderType: selectSingle
+    items:
+      - label: Default
+        value: default
+  - identifier: Vendor/Spacing
+    type: Basic

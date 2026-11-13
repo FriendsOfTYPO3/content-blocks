@@ -25,3 +25,15 @@ Example output:
 
 
      [ERROR] Found 1 errors
+
+:ref:`Basics <basics>` and :ref:`Tabs <api_tabs>` are validated against their
+own JSON Schema as well. Errors in Tab files are reported with the file name
+of the Tab:
+
+.. code-block:: bash
+
+    +------+--------------------------------------------------------------------+
+    | Path | example/card-group tabs/settings.yaml | EXT:content_blocks_examples |
+    +------+--------------------------------------------------------------------+
+    | /    | Additional object properties are not allowed: title                |
+    +------+--------------------------------------------------------------------+

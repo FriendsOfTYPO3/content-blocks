@@ -44,6 +44,14 @@
 				"type": "string"
 			}
 		},
+		"tabs": {
+			"type": "array",
+			"description": "Tabs from the local \"tabs\" folder, which are appended after the fields definition and before Basics. Reference them by file name without extension.",
+			"uniqueItems": true,
+			"items": {
+				"type": "string"
+			}
+		},
 		"fields": {
 			"description": "Define your field types here.",
 			"type": "array",
