@@ -740,4 +740,70 @@ final class BasicsServiceTest extends UnitTestCase
         $basicsService = new BasicsService();
         $basicsService->applyBasics($basicsRegistry, $yaml);
     }
+
+    #[Test]
+    public function nestedBasicsInfiniteLoopInsideCollectionDetected(): void
+    {
+        $basic = new LoadedBasic(
+            'foo',
+            'Basic1',
+            [
+                [
+                    'identifier' => 'collection',
+                    'type' => 'Collection',
+                    'fields' => [
+                        [
+                            'identifier' => 'Basic1',
+                            'type' => 'Basic',
+                        ],
+                    ],
+                ],
+            ],
+            'Basic1.yaml',
+        );
+
+        $yaml = [
+            'basics' => [
+                'Basic1',
+            ],
+        ];
+
+        $basicsRegistry = new BasicsRegistry();
+        $basicsRegistry->register($basic);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionCode(1711291137);
+
+        $basicsService = new BasicsService();
+        $basicsService->applyBasics($basicsRegistry, $yaml);
+    }
+
+    #[Test]
+    public function siblingBasicsDoNotIncreaseNestingDepth(): void
+    {
+        $basicsRegistry = new BasicsRegistry();
+        $fields = [];
+        for ($i = 0; $i < 120; $i++) {
+            $basicsRegistry->register(new LoadedBasic(
+                'foo',
+                'Basic' . $i,
+                [
+                    [
+                        'identifier' => 'field' . $i,
+                        'type' => 'Text',
+                    ],
+                ],
+                'Basic' . $i . '.yaml',
+            ));
+            $fields[] = [
+                'identifier' => 'Basic' . $i,
+                'type' => 'Basic',
+            ];
+        }
+
+        $basicsService = new BasicsService();
+        $result = $basicsService->applyBasics($basicsRegistry, ['fields' => $fields]);
+
+        self::assertCount(120, $result['fields']);
+    }
 }

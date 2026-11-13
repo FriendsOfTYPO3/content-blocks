@@ -22,7 +22,7 @@ namespace TYPO3\CMS\ContentBlocks\Basics;
  * in the config.yaml fields array. Basics are used either globally
  * in the `basics` array (appended at the end of fields) or locally as the
  * field Type `Basic` (in place replacement). Nesting of Basics is allowed for
- * a maximum nesting level of 8.
+ * a maximum nesting level of 99.
  *
  * @internal Not part of TYPO3's public API.
  */
@@ -70,11 +70,11 @@ readonly class BasicsService
         $newFields = [];
         foreach ($fields as $field) {
             if (is_array($field['fields'] ?? null)) {
-                $field['fields'] = $this->applyBasicsToSubFields($basicsRegistry, $field['fields']);
+                $field['fields'] = $this->applyBasicsToSubFields($basicsRegistry, $field['fields'], $depth);
             }
             if (($field['type'] ?? '') === 'Basic') {
                 $basic = $basicsRegistry->getBasic($field['identifier']);
-                $appliedFields = $this->applyBasicsToSubFields($basicsRegistry, $basic->getFields(), ++$depth);
+                $appliedFields = $this->applyBasicsToSubFields($basicsRegistry, $basic->getFields(), $depth + 1);
                 $newFields = array_merge($newFields, $appliedFields);
             } else {
                 $newFields[] = $field;
