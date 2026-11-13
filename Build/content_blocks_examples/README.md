@@ -27,6 +27,10 @@ These examples are some small packages, which show how to use the Content Blocks
 * Record "notype" with only one type
 * "record1" and "record2" show an example with 2 types
 
+### Crop Variants
+
+* "example/landscape" is defined centrally and shared by the Card Group and CTA
+
 ### File Types
 
 * Example override of the image file type

@@ -8,13 +8,10 @@
 
 <div class="cb-cta">
     <f:if condition="{data.backgroundImage}">
-        <f:variable name="backgroundUrl">{f:uri.image(image: data.backgroundImage)}</f:variable>
-        <f:variable name="elementBgId">cb-cta-bg-{data.uid}</f:variable>
-        <f:variable name="backgroundImageStyles">{elementBgId} { background-image: url({backgroundUrl});}</f:variable>
-        <f:asset.css identifier="cb-cta-bg-{data.uid}">
-            #{backgroundImageStyles -> f:format.raw()}
-        </f:asset.css>
-        <div class="cb-cta-bg" id="{elementBgId}"></div>
+        <picture class="cb-cta-bg">
+            <source media="(max-width: 767px)" srcset="{f:uri.image(image: data.backgroundImage, cropVariant: 'mobile', maxWidth: 767)}"/>
+            <f:image image="{data.backgroundImage}" maxWidth="1920" alt=""/>
+        </picture>
     </f:if>
     <div class="overlay">
         <h2>{data.title}</h2>

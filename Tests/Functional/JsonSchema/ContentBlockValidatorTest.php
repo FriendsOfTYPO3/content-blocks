@@ -19,6 +19,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Functional\JsonSchema;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsLoader;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaValidator;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
@@ -35,6 +36,8 @@ class ContentBlockValidatorTest extends FunctionalTestCase
     {
         return [
             ['example/accordion'],
+            ['example/card-group'],
+            ['example/cta'],
             ['example/file-type-image'],
             ['example/example-page-type'],
             ['hov/notype'],
@@ -51,6 +54,18 @@ class ContentBlockValidatorTest extends FunctionalTestCase
 
         $testContentBlock = $contentBlockRegistry->getContentBlock($contentBlockName);
         $result = $contentBlockValidator->validateContentBlock($testContentBlock);
+
+        self::assertFalse($result->hasError());
+    }
+
+    #[Test]
+    public function canValidateCropVariant(): void
+    {
+        $cropVariantsRegistry = $this->get(CropVariantsLoader::class)->loadUncached();
+        $contentBlockValidator = new ContentBlockValidator(new JsonSchemaValidator());
+
+        $cropVariant = $cropVariantsRegistry->getCropVariant('example/landscape');
+        $result = $contentBlockValidator->validateCropVariant($cropVariant);
 
         self::assertFalse($result->hasError());
     }

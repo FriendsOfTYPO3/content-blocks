@@ -27,3 +27,11 @@ fields:
     relationship: oneToOne
     minitems: 1
     allowed: common-image-types
+    cropVariants:
+      default: example/landscape
+      mobile:
+        title: Mobile
+        allowedAspectRatios:
+          '3:4':
+            title: '3:4'
+            value: 3 / 4

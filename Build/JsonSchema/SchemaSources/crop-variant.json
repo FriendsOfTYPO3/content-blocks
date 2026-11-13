@@ -1,0 +1,40 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/crop-variant.json",
+	"title": "Crop Variant",
+	"description": "TYPO3 CMS Content Blocks Crop Variant",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["identifier"],
+	"properties": {
+		"identifier": {
+			"type": "string",
+			"minLength": 1,
+			"description": "Unique identifier for the Crop Variant."
+		},
+		"title": {
+			"$ref": "Properties/crop-variant.json#/properties/title"
+		},
+		"allowedAspectRatios": {
+			"$ref": "Properties/crop-variant.json#/properties/allowedAspectRatios"
+		},
+		"coverAreas": {
+			"$ref": "Properties/crop-variant.json#/properties/coverAreas"
+		},
+		"focusArea": {
+			"$ref": "Properties/crop-variant.json#/properties/focusArea"
+		},
+		"cropArea": {
+			"$ref": "Properties/crop-variant.json#/properties/cropArea"
+		},
+		"selectedRatio": {
+			"$ref": "Properties/crop-variant.json#/properties/selectedRatio"
+		},
+		"excludeFromSync": {
+			"$ref": "Properties/crop-variant.json#/properties/excludeFromSync"
+		},
+		"disabled": {
+			"$ref": "Properties/crop-variant.json#/properties/disabled"
+		}
+	}
+}
