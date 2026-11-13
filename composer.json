@@ -36,7 +36,7 @@
 	},
 	"require": {
 		"php": "^8.2",
-		"opis/json-schema": "^2.6",
+		"opis/json-schema": "^2.6.2",
 		"symfony/console": "^7.2",
 		"symfony/dependency-injection": "^7.2",
 		"symfony/filesystem": "^7.2",

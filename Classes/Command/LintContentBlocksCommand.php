@@ -120,18 +120,11 @@ class LintContentBlocksCommand extends Command
         $errors = $this->errorFormatter->format($validationResult);
         $flatArray = [];
         foreach ($errors as $path => $errorItem) {
+            $resolvedPath = $this->resolveFieldPath($path, $contentBlockYaml);
             foreach ($errorItem as $errorItemError) {
-                foreach (array_keys($flatArray) as $key) {
-                    // Ignore false positives: https://github.com/opis/json-schema/issues/148
-                    if (str_starts_with($key, $path)) {
-                        continue 2;
-                    }
-                }
-                $resolvedPath = $this->resolveFieldPath($path, $contentBlockYaml);
-                $flatArray[$path] = [$resolvedPath, $errorItemError];
+                $flatArray[] = [$resolvedPath, $errorItemError];
             }
         }
-        $flatArray = array_values($flatArray);
         return $flatArray;
     }
 
