@@ -35,6 +35,13 @@ Settings
     All options from :ref:`Record Types <yaml_reference_record_type_options>`
     can be used here as well.
 
+.. note::
+
+    Since TYPO3 v14, a Collection attached to a workspace-aware table like
+    :sql:`tt_content` is always workspace-aware, regardless of the
+    :confval:`workspaceAware <record-type-workspaceAware>` option. See
+    :ref:`Inline relations and workspaces <t3tca:columns-inline-workspaces>`.
+
 ..  confval-menu::
     :name: confval-collection-options
     :display: table

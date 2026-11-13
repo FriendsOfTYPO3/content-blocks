@@ -169,6 +169,18 @@ Here you can find all :ref:`common root options <yaml_reference_common>`.
        # disable workspaces support
        workspaceAware: false
 
+   .. note::
+
+      Since TYPO3 v14, child tables of a workspace-aware parent table must be
+      workspace-aware, too. The automatic TCA migration of TYPO3 adds
+      :php:`versioningWS = true` to affected child tables. This means, tables
+      created by :ref:`Collection <field_type_collection>` fields, which are
+      attached to a workspace-aware table like :sql:`tt_content`, will always
+      receive the workspace related fields. This happens even if
+      :yaml:`workspaceAware` is set to :yaml:`false` or
+      :ref:`EXT:workspaces <t3coreapi:workspaces>` is not installed. See
+      :ref:`Inline relations and workspaces <t3tca:columns-inline-workspaces>`.
+
 .. confval:: editLocking
    :name: record-type-editLocking
    :required: false
