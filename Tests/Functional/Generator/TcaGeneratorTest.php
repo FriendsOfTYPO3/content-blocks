@@ -133,6 +133,24 @@ final class TcaGeneratorTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function labelOfBasicFieldIsOverriddenByLanguageFileOfContentBlock(): void
+    {
+        self::assertSame(
+            'LLL:EXT:test_content_blocks_c/ContentBlocks/ContentElements/simple-with-basics/language/labels.xlf:basic_field.label',
+            $GLOBALS['TCA']['tt_content']['types']['simple_basics']['columnsOverrides']['simple_basics_basic_field']['label']
+        );
+    }
+
+    #[Test]
+    public function descriptionOfBasicFieldFallsBackToBasicIfMissingInLanguageFile(): void
+    {
+        self::assertSame(
+            'Static description from Basic',
+            $GLOBALS['TCA']['tt_content']['types']['simple_basics']['columnsOverrides']['simple_basics_basic_field']['description']
+        );
+    }
+
+    #[Test]
     public function typeFieldSelectAddedForRecordType(): void
     {
         self::assertSame(

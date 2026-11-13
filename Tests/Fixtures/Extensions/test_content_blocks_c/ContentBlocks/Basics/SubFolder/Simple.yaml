@@ -2,3 +2,5 @@ identifier: Simple/Basic
 fields:
   - identifier: basic_field
     type: Text
+    label: Static label from Basic
+    description: Static description from Basic
