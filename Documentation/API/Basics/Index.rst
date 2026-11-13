@@ -13,9 +13,10 @@ to reduce redundancy by sharing them between multiple Content Blocks.
 
     It is important to understand that Basics are a very simple "search & replace"
     kind of mechanic. Once included in your Content Block they act like they were
-    defined there directly. This also means that it is normally required to
-    re-define the label in every Content Block. Hence it is recommended to reference
-    labels with the full **LLL:EXT** path.
+    defined there directly. This also means that labels are resolved from the
+    :file:`labels.xlf` of each Content Block. In order to share the labels
+    between all Content Blocks, it is recommended to reference them with the full
+    **LLL:EXT** path in the Basic. See :ref:`basics-labels`.
 
 .. warning::
 
@@ -117,6 +118,32 @@ which you always need e.g. various header fields.
     Unlike Content Block names, it is not mandatory to provide a vendor name for
     your Basic identifier. However, it is recommended to avoid using too generic
     names to avoid conflicts.
+
+
+.. _basics-labels:
+
+Labels of Basic fields
+======================
+
+Fields of a Basic receive the same :ref:`language keys <api_automatic_language_keys>`
+as fields defined directly in the Content Block. A key in the
+:file:`labels.xlf` of the Content Block takes precedence over the
+:yaml:`label` defined in the Basic. This allows to keep a shared default label in
+the Basic and to adjust it for single Content Blocks. This works the same for
+descriptions, placeholders and item labels.
+
+.. code-block:: xml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/teaser/language/labels.xlf
+
+    <trans-unit id="a_basic_field.label">
+        <source>Teaser specific label</source>
+    </trans-unit>
+    <trans-unit id="a_basic_field.description">
+        <source>Teaser specific description</source>
+    </trans-unit>
+
+All other Content Blocks, which include this Basic, keep using the label from
+the Basic.
 
 
 Nested Basics
