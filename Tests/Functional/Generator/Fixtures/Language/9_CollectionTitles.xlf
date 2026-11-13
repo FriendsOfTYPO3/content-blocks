@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file datatype="plaintext" original="labels.xlf" source-language="en" date="" product-name="language/test9">
+    <header/>
+    <body>
+      <trans-unit id="title">
+        <source>Test 9</source>
+      </trans-unit>
+      <trans-unit id="my_collection.label">
+        <source>Slides</source>
+      </trans-unit>
+      <trans-unit id="my_collection.description">
+        <source>My Collection description</source>
+      </trans-unit>
+      <trans-unit id="my_collection.title">
+        <source>Hero Slides</source>
+      </trans-unit>
+      <trans-unit id="my_collection.text.label">
+        <source>Text in Collection</source>
+      </trans-unit>
+      <trans-unit id="my_collection.my_collection.label">
+        <source>Links</source>
+      </trans-unit>
+      <trans-unit id="my_collection.my_collection.title">
+        <source>Hero Slide Links</source>
+      </trans-unit>
+      <trans-unit id="my_collection.my_collection.text.label">
+        <source>Text in Collection 2</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
