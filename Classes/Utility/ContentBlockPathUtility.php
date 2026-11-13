@@ -182,6 +182,11 @@ readonly class ContentBlockPathUtility
         return 'language';
     }
 
+    public static function getTabsFolder(): string
+    {
+        return 'tabs';
+    }
+
     public static function getHostExtPublicContentBlockBasePath(string $hostExtension): string
     {
         return 'EXT:' . $hostExtension . '/Resources/Public/ContentBlocks';

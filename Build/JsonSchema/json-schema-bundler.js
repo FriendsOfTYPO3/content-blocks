@@ -20,6 +20,9 @@ let fileTypeSchemaJson = JSON.stringify(fileTypeSchema, null, 2);
 let basicSchema = await $RefParser.bundle(join(__dirname, 'SchemaSources/basic.json'));
 let basicSchemaJson = JSON.stringify(basicSchema, null, 2);
 
+let tabSchema = await $RefParser.bundle(join(__dirname, 'SchemaSources/tab.json'));
+let tabSchemaJson = JSON.stringify(tabSchema, null, 2);
+
 const contentElementOutputPath = join(__dirname, '../../JsonSchema/content-element.schema.json');
 await mkdir(dirname(contentElementOutputPath), { recursive: true });
 await writeFile(contentElementOutputPath, contentElementSchemaJson);
@@ -35,6 +38,10 @@ await writeFile(recordTypeOutputPath, recordTypeSchemaJson);
 const basicOutputPath = join(__dirname, '../../JsonSchema/basic.schema.json');
 await mkdir(dirname(basicOutputPath), { recursive: true });
 await writeFile(basicOutputPath, basicSchemaJson);
+
+const tabOutputPath = join(__dirname, '../../JsonSchema/tab.schema.json');
+await mkdir(dirname(tabOutputPath), { recursive: true });
+await writeFile(tabOutputPath, tabSchemaJson);
 
 const fileTypeOutputPath = join(__dirname, '../../JsonSchema/file-type.schema.json');
 await mkdir(dirname(fileTypeOutputPath), { recursive: true });

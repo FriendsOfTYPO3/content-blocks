@@ -1,0 +1,25 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://typo3.org/tab.json",
+	"title": "Tab",
+	"description": "TYPO3 CMS Content Blocks Tab",
+	"additionalProperties": false,
+	"required": ["fields"],
+	"properties": {
+		"identifier": {
+			"type": "string",
+			"description": "Identifier of the Tab. Defaults to the file name."
+		},
+		"label": {
+			"type": "string",
+			"description": "Fallback label of the Tab, if no translation for tabs.<identifier> exists."
+		},
+		"fields": {
+			"description": "Define your field types here.",
+			"type": "array",
+			"items": {
+				"$ref": "field-type.json"
+			}
+		}
+	}
+}

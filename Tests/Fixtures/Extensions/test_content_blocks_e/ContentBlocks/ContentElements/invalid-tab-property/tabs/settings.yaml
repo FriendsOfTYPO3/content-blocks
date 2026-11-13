@@ -1,0 +1,4 @@
+title: Settings
+fields:
+  - identifier: setting
+    type: Text

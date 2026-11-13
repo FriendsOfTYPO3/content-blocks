@@ -29,6 +29,7 @@ use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolverInput;
 use TYPO3\CMS\ContentBlocks\Service\Icon\IconProcessor;
+use TYPO3\CMS\ContentBlocks\Tabs\TabsService;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\ContentBlocks\Validation\ContentBlockNameValidator;
 use TYPO3\CMS\ContentBlocks\Validation\PageTypeNameValidator;
@@ -81,6 +82,7 @@ class ContentBlockLoader
         protected readonly AssetPublisher $assetPublisher,
         protected readonly ContentBlocksYamlParserInterface $contentBlocksYamlLoader,
         protected readonly SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
+        protected readonly TabsService $tabsService,
     ) {}
 
     public function load(): ContentBlockRegistry
@@ -245,6 +247,7 @@ class ContentBlockLoader
             throw new \RuntimeException('Content Block "' . $name . '" does not define required "table".', 1731412650);
         }
         $table = $yaml['table'];
+        $yaml = $this->tabsService->applyTabs($absolutePath, $yaml);
         $basicsRegistry = $this->basicsLoader->loadUncached();
         $yaml = $this->basicsService->applyBasics($basicsRegistry, $yaml);
         $iconIdentifier = ContentBlockPathUtility::getIconNameWithoutFileExtension();
