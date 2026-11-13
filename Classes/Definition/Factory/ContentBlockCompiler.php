@@ -257,7 +257,9 @@ final class ContentBlockCompiler
         }
         if ($contentType === ContentType::PAGE_TYPE) {
             $yamlFields = $yaml['fields'] ?? [];
-            $yamlFields = $this->prependPagesTitlePalette($yamlFields);
+            if ($this->hasPagesTitleField($yamlFields) === false) {
+                $yamlFields = $this->prependPagesTitlePalette($yamlFields);
+            }
             $yaml['fields'] = $yamlFields;
         }
         return $yaml;
@@ -475,6 +477,25 @@ final class ContentBlockCompiler
         ];
         array_unshift($yamlFields, $titlePalette);
         return $yamlFields;
+    }
+
+    private function hasPagesTitleField(array $yamlFields): bool
+    {
+        foreach ($yamlFields as $field) {
+            if (is_array($field) === false) {
+                continue;
+            }
+            $isTitleField = ($field['identifier'] ?? '') === 'title'
+                && ($field['useExistingField'] ?? false) === true;
+            if ($isTitleField) {
+                return true;
+            }
+            $isPalette = SpecialFieldType::tryFrom((string)($field['type'] ?? '')) === SpecialFieldType::PALETTE;
+            if ($isPalette && $this->hasPagesTitleField($field['fields'] ?? [])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function handleRootField(array $rootField, ProcessingInput $input, ProcessedFieldsResult $result): array

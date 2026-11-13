@@ -26,6 +26,46 @@ and drop as usual. Your custom fields will be added after the `nav_title` field.
 SEO fields will be automatically added, if you have the SEO system extension
 installed.
 
+.. _api_page_types_title_palette:
+
+Title palette
+=============
+
+By default, Content Blocks adds a palette with the fields `title`, `slug` and
+`nav_title` at the top of the General tab. This palette is the same as the
+TYPO3 Core `title` palette, but without the `subtitle` field.
+
+To change this palette, place the existing `title` field yourself. As soon as
+your Page Type contains the field `title` with :yaml:`useExistingField: true`,
+either at root level or inside a palette, the default palette is not added.
+You are then free to arrange the title fields as you like.
+
+.. code-block:: yaml
+   :caption: EXT:your_extension/ContentBlocks/PageTypes/blog/config.yaml
+
+    name: example/blog
+    typeName: 1701284006
+    fields:
+      - identifier: title_palette
+        type: Palette
+        label: Title
+        fields:
+          - identifier: title
+            useExistingField: true
+          - type: Linebreak
+          - identifier: subtitle
+            useExistingField: true
+          - type: Linebreak
+          - identifier: slug
+            useExistingField: true
+      - identifier: additional_field
+        type: Text
+
+.. note::
+
+   Fields, which are not placed in your Page Type, are not displayed in the
+   editing form. Make sure to add all title fields you need, e.g. `slug`.
+
 About TYPO3 `doktypes`
 ======================
 
