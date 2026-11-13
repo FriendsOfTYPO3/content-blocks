@@ -151,6 +151,44 @@ final class ContentTypeSchemaTest extends UnitTestCase
             ],
             'valid' => false,
         ];
+
+        yield 'basicsOverrides with all supported options' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'basicsOverrides' => (object)[
+                    'background_type' => (object)[
+                        'label' => 'Background',
+                        'description' => 'Background of the element',
+                        'default' => 1,
+                        'required' => true,
+                        'readOnly' => false,
+                        'minitems' => 0,
+                        'maxitems' => 2,
+                    ],
+                ],
+            ],
+            'valid' => true,
+        ];
+
+        yield 'basicsOverrides not a map' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'basicsOverrides' => ['background_type'],
+            ],
+            'valid' => false,
+        ];
+
+        yield 'basicsOverrides with unsupported option' => [
+            'data' => (object)[
+                'name' => 'json/schema-test',
+                'basicsOverrides' => (object)[
+                    'background_type' => (object)[
+                        'items' => [],
+                    ],
+                ],
+            ],
+            'valid' => false,
+        ];
     }
 
     #[Test]

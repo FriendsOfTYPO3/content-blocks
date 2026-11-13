@@ -4,6 +4,13 @@ basics:
   - TYPO3/Appearance
   - TYPO3/Links
   - TYPO3/Categories
+basicsOverrides:
+  frame_class:
+    label: Frame from override
+    default: ruler-before
+  basic_field:
+    label: Label from override
+    required: true
 fields:
   - identifier: palette
     type: Palette
