@@ -9,6 +9,9 @@
       <trans-unit id="description">
         <source>Simple Content Block description</source>
       </trans-unit>
+      <trans-unit id="basic_field.label">
+        <source>Label from Content Block</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
