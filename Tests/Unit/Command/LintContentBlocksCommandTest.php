@@ -20,6 +20,7 @@ namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Command;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\Command\LintContentBlocksCommand;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsLoader;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaValidator;
@@ -47,6 +48,7 @@ final class LintContentBlocksCommandTest extends UnitTestCase
             new ContentBlockValidator(new JsonSchemaValidator()),
             new JsonSchemaErrorFormatter(),
             $this->createMock(BasicsLoader::class),
+            $this->createMock(CropVariantsLoader::class),
         );
         $validationResult = (new JsonSchemaValidator())->validateBasic(json_decode(json_encode($yaml)));
 
