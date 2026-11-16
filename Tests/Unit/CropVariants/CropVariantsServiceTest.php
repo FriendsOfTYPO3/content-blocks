@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsRegistry;
 use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsService;
+use TYPO3\CMS\ContentBlocks\CropVariants\Exception\CropVariantReferenceException;
 use TYPO3\CMS\ContentBlocks\CropVariants\LoadedCropVariant;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -305,6 +306,7 @@ final class CropVariantsServiceTest extends UnitTestCase
     public function unknownCropVariantReferenceThrowsException(): void
     {
         $yaml = [
+            'name' => 'vendor/name',
             'fields' => [
                 [
                     'identifier' => 'image',
@@ -317,9 +319,42 @@ final class CropVariantsServiceTest extends UnitTestCase
         ];
         $cropVariantsService = new CropVariantsService();
 
-        $this->expectException(\OutOfBoundsException::class);
-        $this->expectExceptionCode(1794501604);
+        $this->expectException(CropVariantReferenceException::class);
+        $this->expectExceptionCode(1794583201);
+        $this->expectExceptionMessage('Crop Variant "vendor/unknown" referenced in "/fields/image/cropVariants/desktop" of Content Block "vendor/name" is not registered.');
 
         $cropVariantsService->applyCropVariants(new CropVariantsRegistry(), $yaml);
+    }
+
+    #[Test]
+    public function unknownCropVariantReferenceExceptionCarriesContentBlockAndPath(): void
+    {
+        $yaml = [
+            'name' => 'vendor/name',
+            'fields' => [
+                [
+                    'identifier' => 'collection',
+                    'type' => 'Collection',
+                    'fields' => [
+                        [
+                            'identifier' => 'image',
+                            'type' => 'File',
+                            'cropVariants' => [
+                                'mobile' => 'vendor/unknown',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $cropVariantsService = new CropVariantsService();
+
+        try {
+            $cropVariantsService->applyCropVariants(new CropVariantsRegistry(), $yaml);
+            self::fail('Expected CropVariantReferenceException');
+        } catch (CropVariantReferenceException $e) {
+            self::assertSame('vendor/name', $e->getContentBlockName());
+            self::assertSame('/fields/image/cropVariants/mobile', $e->getPath());
+        }
     }
 }

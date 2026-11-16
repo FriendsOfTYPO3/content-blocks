@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\ContentBlocks\CropVariants;
 
+use TYPO3\CMS\ContentBlocks\CropVariants\Exception\CropVariantReferenceException;
+
 /**
  * Contains main logic for Crop Variant replacement. Inside the `cropVariants`
  * option of a field, each Crop Variant can either be defined inline or as a
@@ -29,10 +31,17 @@ namespace TYPO3\CMS\ContentBlocks\CropVariants;
  */
 readonly class CropVariantsService
 {
+    /**
+     * @throws CropVariantReferenceException
+     */
     public function applyCropVariants(CropVariantsRegistry $cropVariantsRegistry, array $yaml): array
     {
         if (is_array($yaml['fields'] ?? null)) {
-            $yaml['fields'] = $this->applyCropVariantsToFields($cropVariantsRegistry, $yaml['fields']);
+            try {
+                $yaml['fields'] = $this->applyCropVariantsToFields($cropVariantsRegistry, $yaml['fields']);
+            } catch (CropVariantReferenceException $e) {
+                throw $e->withContentBlockName((string)($yaml['name'] ?? ''));
+            }
         }
         return $yaml;
     }
@@ -50,7 +59,7 @@ readonly class CropVariantsService
     protected function applyCropVariantsToField(CropVariantsRegistry $cropVariantsRegistry, array $field): array
     {
         if (is_array($field['cropVariants'] ?? null)) {
-            $field['cropVariants'] = $this->resolveReferences($cropVariantsRegistry, $field['cropVariants']);
+            $field['cropVariants'] = $this->resolveReferences($cropVariantsRegistry, $field['cropVariants'], (string)($field['identifier'] ?? ''));
         }
         if (is_array($field['fields'] ?? null)) {
             $field['fields'] = $this->applyCropVariantsToFields($cropVariantsRegistry, $field['fields']);
@@ -76,12 +85,16 @@ readonly class CropVariantsService
         return $typeOverrides;
     }
 
-    protected function resolveReferences(CropVariantsRegistry $cropVariantsRegistry, array $cropVariants): array
+    protected function resolveReferences(CropVariantsRegistry $cropVariantsRegistry, array $cropVariants, string $fieldIdentifier): array
     {
         foreach ($cropVariants as $cropVariantName => $cropVariant) {
-            if (is_string($cropVariant)) {
-                $cropVariants[$cropVariantName] = $cropVariantsRegistry->getCropVariant($cropVariant)->getConfiguration();
+            if (!is_string($cropVariant)) {
+                continue;
             }
+            if (!$cropVariantsRegistry->hasCropVariant($cropVariant)) {
+                throw new CropVariantReferenceException($cropVariant, $fieldIdentifier, (string)$cropVariantName);
+            }
+            $cropVariants[$cropVariantName] = $cropVariantsRegistry->getCropVariant($cropVariant)->getConfiguration();
         }
         return $cropVariants;
     }
