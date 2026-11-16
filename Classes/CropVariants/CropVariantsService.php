@@ -63,6 +63,11 @@ readonly class CropVariantsService
 
     protected function applyCropVariantsToTypeOverrides(CropVariantsRegistry $cropVariantsRegistry, array $typeOverrides): array
     {
+        // For tables without a type field, the type keys can be omitted and
+        // the fields are given as a plain list (see ContentBlockCompiler::processTypeOverride()).
+        if (array_is_list($typeOverrides)) {
+            return $this->applyCropVariantsToFields($cropVariantsRegistry, $typeOverrides);
+        }
         foreach ($typeOverrides as $type => $fields) {
             if (is_array($fields)) {
                 $typeOverrides[$type] = $this->applyCropVariantsToFields($cropVariantsRegistry, $fields);

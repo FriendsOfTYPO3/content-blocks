@@ -239,6 +239,45 @@ final class CropVariantsServiceTest extends UnitTestCase
             ],
         ];
 
+        yield 'Reference is resolved inside Type Override in list form' => [
+            'yaml' => [
+                'fields' => [
+                    [
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'foreign_table' => 'tx_vendor_table',
+                        'overrideType' => [
+                            [
+                                'identifier' => 'image',
+                                'type' => 'File',
+                                'cropVariants' => [
+                                    'desktop' => 'vendor/desktop',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'expected' => [
+                'fields' => [
+                    [
+                        'identifier' => 'collection',
+                        'type' => 'Collection',
+                        'foreign_table' => 'tx_vendor_table',
+                        'overrideType' => [
+                            [
+                                'identifier' => 'image',
+                                'type' => 'File',
+                                'cropVariants' => [
+                                    'desktop' => self::DESKTOP_CONFIGURATION,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         yield 'Yaml without fields is returned unchanged' => [
             'yaml' => [
                 'name' => 'vendor/name',
