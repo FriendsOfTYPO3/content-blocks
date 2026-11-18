@@ -444,8 +444,6 @@ readonly class TcaGenerator
             'symmetric_field',
             'symmetric_sortby',
             'exclude',
-            // @todo This should be handled correctly with columnsOverrides in TYPO3 Core FormSlugAjaxController
-            'generatorOptions',
             'behaviour.allowLanguageSynchronization',
             [
                 'type' => 'Number',
