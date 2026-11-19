@@ -49,7 +49,7 @@ final class SchemaFieldTypeSyncTest extends UnitTestCase
             'trackCreationDate', 'trackUpdateDate', 'sortable', 'sortField',
             'internalDescription', 'rootLevelType', 'security', 'adminOnly', 'hideAtCopy',
             'appendLabelAtCopy', 'hideInUi', 'shareAcrossTables', 'shareAcrossFields',
-            'fields', 'overrideType',
+            'fields', 'overrideType', 'title',
         ],
         'File' => [
             'overrideType',

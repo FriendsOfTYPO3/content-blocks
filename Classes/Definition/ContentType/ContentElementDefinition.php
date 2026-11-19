@@ -46,6 +46,7 @@ final readonly class ContentElementDefinition implements ContentTypeInterface
         public int $priority,
         public ContentTypeIcon $typeIcon,
         public string $languagePathTitle,
+        public string $languagePathTitleFallback,
         public string $languagePathDescription,
         public ?string $group,
         public bool $saveAndClose,

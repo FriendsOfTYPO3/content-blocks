@@ -43,6 +43,7 @@ final class ProcessedContentType
     public array $overrideColumns = [];
     public string|int $typeName = '';
     public string $languagePathTitle = '';
+    public string $languagePathTitleFallback = '';
     public string $languagePathDescription = '';
 
     public function toArray(bool $isRootTable, string $identifier, array $processedRawYaml): array
@@ -61,6 +62,7 @@ final class ProcessedContentType
             'package' => $package,
             'typeName' => $this->typeName,
             'languagePathTitle' => $this->languagePathTitle,
+            'languagePathTitleFallback' => $this->languagePathTitleFallback,
             'languagePathDescription' => $this->languagePathDescription,
         ];
         if ($isRootTable) {
