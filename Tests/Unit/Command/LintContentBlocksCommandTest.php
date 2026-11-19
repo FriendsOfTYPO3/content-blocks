@@ -18,8 +18,13 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Unit\Command;
 
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Component\Console\Tester\CommandTester;
 use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
+use TYPO3\CMS\ContentBlocks\Basics\BasicsRegistry;
 use TYPO3\CMS\ContentBlocks\Command\LintContentBlocksCommand;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsLoader;
+use TYPO3\CMS\ContentBlocks\CropVariants\CropVariantsRegistry;
+use TYPO3\CMS\ContentBlocks\CropVariants\Exception\CropVariantReferenceException;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaValidator;
@@ -47,6 +52,7 @@ final class LintContentBlocksCommandTest extends UnitTestCase
             new ContentBlockValidator(new JsonSchemaValidator()),
             new JsonSchemaErrorFormatter(),
             $this->createMock(BasicsLoader::class),
+            $this->createMock(CropVariantsLoader::class),
         );
         $validationResult = (new JsonSchemaValidator())->validateBasic(json_decode(json_encode($yaml)));
 
@@ -57,5 +63,61 @@ final class LintContentBlocksCommandTest extends UnitTestCase
             ['/', 'Additional object properties are not allowed: unknownRootOption'],
         ];
         self::assertSame($expected, $errors);
+    }
+
+    #[Test]
+    public function invalidCropVariantFilesAreReportedAsLintError(): void
+    {
+        $basicsLoader = $this->createMock(BasicsLoader::class);
+        $basicsLoader->method('loadUncached')->willReturn(new BasicsRegistry());
+        $cropVariantsLoader = $this->createMock(CropVariantsLoader::class);
+        $cropVariantsLoader->method('loadUncached')->willThrowException(
+            new \RuntimeException('Invalid Crop Variants file in "EXT:foo/ContentBlocks/CropVariants/Broken.yaml": Cannot find an identifier.', 1794501605)
+        );
+        $contentBlockLoader = $this->createMock(ContentBlockLoader::class);
+        $contentBlockLoader->expects($this->never())->method('loadUncached');
+        $command = new LintContentBlocksCommand(
+            $contentBlockLoader,
+            new ContentBlockValidator(new JsonSchemaValidator()),
+            new JsonSchemaErrorFormatter(),
+            $basicsLoader,
+            $cropVariantsLoader,
+        );
+        $commandTester = new CommandTester($command);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(1, $exitCode);
+        self::assertStringContainsString('Cannot find an identifier', $commandTester->getDisplay());
+        self::assertStringContainsString('Found 1 errors', $commandTester->getDisplay());
+    }
+
+    #[Test]
+    public function unknownCropVariantReferenceIsReportedAsLintError(): void
+    {
+        $basicsLoader = $this->createMock(BasicsLoader::class);
+        $basicsLoader->method('loadUncached')->willReturn(new BasicsRegistry());
+        $cropVariantsLoader = $this->createMock(CropVariantsLoader::class);
+        $cropVariantsLoader->method('loadUncached')->willReturn(new CropVariantsRegistry());
+        $contentBlockLoader = $this->createMock(ContentBlockLoader::class);
+        $contentBlockLoader->method('loadUncached')->willThrowException(
+            new CropVariantReferenceException('vendor/unknown', 'image', 'desktop', 'vendor/teaser')
+        );
+        $command = new LintContentBlocksCommand(
+            $contentBlockLoader,
+            new ContentBlockValidator(new JsonSchemaValidator()),
+            new JsonSchemaErrorFormatter(),
+            $basicsLoader,
+            $cropVariantsLoader,
+        );
+        $commandTester = new CommandTester($command);
+
+        $exitCode = $commandTester->execute([]);
+
+        $display = $commandTester->getDisplay();
+        self::assertSame(1, $exitCode);
+        self::assertStringContainsString('vendor/teaser', $display);
+        self::assertStringContainsString('/fields/image/cropVariants/desktop', $display);
+        self::assertStringContainsString('Found 1 errors', $display);
     }
 }

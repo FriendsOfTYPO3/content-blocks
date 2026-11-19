@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\ContentBlocks\Tests\Functional\Generator;
 
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class TcaGeneratorTest extends FunctionalTestCase
@@ -121,6 +122,62 @@ final class TcaGeneratorTest extends FunctionalTestCase
         self::assertStringContainsString(
             '--div--;My Tab label',
             $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['showitem']
+        );
+    }
+
+    #[Test]
+    public function cropVariantReferenceIsResolvedAndMixedWithInlineCropVariant(): void
+    {
+        $expected = [
+            'desktop' => [
+                'title' => 'Desktop',
+                'allowedAspectRatios' => [
+                    'landscape' => [
+                        'title' => 'Landscape',
+                        'value' => 16 / 9,
+                    ],
+                ],
+            ],
+            'mobile' => [
+                'title' => 'Mobile',
+                'allowedAspectRatios' => [
+                    'square' => [
+                        'title' => 'Square',
+                        'value' => 1.0,
+                    ],
+                ],
+            ],
+        ];
+
+        self::assertSame(
+            $expected,
+            $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['columnsOverrides']['simple_simple2_image']['config']['overrideChildTca']['columns']['crop']['config']['cropVariants']
+        );
+    }
+
+    #[Test]
+    public function cropVariantReferenceIsResolvedInsideTypeOverride(): void
+    {
+        $overrideChildTca = $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['columnsOverrides']['simple_simple2_image']['config']['overrideChildTca'];
+        $previewImageConfig = $overrideChildTca['types']['2']['columnsOverrides']['preview_image']['config'];
+
+        self::assertSame(
+            'Desktop',
+            $previewImageConfig['overrideChildTca']['columns']['crop']['config']['cropVariants']['desktop']['title']
+        );
+    }
+
+    #[Test]
+    public function cropVariantReferenceIsResolvedInsideFlexFormSheet(): void
+    {
+        $dataStructure = GeneralUtility::xml2array(
+            $GLOBALS['TCA']['tt_content']['types']['simple_simple2']['columnsOverrides']['simple_simple2_flex']['config']['ds']
+        );
+        $flexImageConfig = $dataStructure['sheets']['sheet']['ROOT']['el']['flex_image']['config'];
+
+        self::assertSame(
+            'Desktop',
+            $flexImageConfig['overrideChildTca']['columns']['crop']['config']['cropVariants']['desktop']['title']
         );
     }
 

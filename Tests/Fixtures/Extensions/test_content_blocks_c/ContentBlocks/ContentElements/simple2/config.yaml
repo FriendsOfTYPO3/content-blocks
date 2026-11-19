@@ -24,3 +24,29 @@ fields:
         description: Description in Inline
       - identifier: header2
         type: Text
+  - identifier: image
+    type: File
+    cropVariants:
+      desktop: simple/desktop-wide
+      mobile:
+        title: Mobile
+        allowedAspectRatios:
+          square:
+            title: Square
+            value: 1
+    overrideType:
+      image:
+        - identifier: preview_image
+          type: File
+          cropVariants:
+            desktop: simple/desktop-wide
+  - identifier: flex
+    type: FlexForm
+    fields:
+      - identifier: sheet
+        type: Sheet
+        fields:
+          - identifier: flex_image
+            type: File
+            cropVariants:
+              desktop: simple/desktop-wide
