@@ -134,6 +134,15 @@ final class TcaGeneratorTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function localTabsAreAppendedAfterFieldsAndBeforeBasics(): void
+    {
+        self::assertStringContainsString(
+            'header,--div--;media,typo3tests_localtabs_teaser,--div--;Options,typo3tests_localtabs_setting,--div--;core.form.tabs:appearance,--palette--;;typo3tests_localtabs_frames_palette',
+            $GLOBALS['TCA']['tt_content']['types']['typo3tests_localtabs']['showitem']
+        );
+    }
+
+    #[Test]
     public function basicIncludedAsTypeAddedToPalette(): void
     {
         self::assertStringContainsString(

@@ -25,6 +25,10 @@ named **assets**, **templates** and **language**.
 
                     *   :file:`labels.xlf`
 
+                *   :path:`tabs`(:ref:`details <api_tabs>`)
+
+                    *   :file:`settings.yaml`
+
                 *   :path:`templates`(:ref:`details <cb_definition_source>`)
 
                     *   :path:`partials`

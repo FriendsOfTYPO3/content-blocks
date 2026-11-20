@@ -30,6 +30,7 @@ use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
 use TYPO3\CMS\ContentBlocks\Registry\ContentBlockRegistry;
 use TYPO3\CMS\ContentBlocks\Schema\SimpleTcaSchemaFactory;
 use TYPO3\CMS\ContentBlocks\Service\Icon\ContentTypeIconResolver;
+use TYPO3\CMS\ContentBlocks\Tabs\TabsService;
 use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -47,6 +48,7 @@ readonly class ContentBlockBuilder
         protected SimpleTcaSchemaFactory $simpleTcaSchemaFactory,
         protected BasicsLoader $basicsLoader,
         protected BasicsService $basicsService,
+        protected TabsService $tabsService,
     ) {}
 
     /**
@@ -69,7 +71,7 @@ readonly class ContentBlockBuilder
         }
 
         $this->copySkeleton($basePath, $skeletonPath);
-        $tableDefinitionCollection = $this->initializeRegistries($contentBlock);
+        $tableDefinitionCollection = $this->initializeRegistries($contentBlock, $basePath);
 
         // Create base directories for a Content Block.
         $contentType = $contentBlock->getContentType();
@@ -98,10 +100,11 @@ readonly class ContentBlockBuilder
         }
     }
 
-    protected function initializeRegistries(LoadedContentBlock $contentBlock): TableDefinitionCollection
+    protected function initializeRegistries(LoadedContentBlock $contentBlock, string $basePath): TableDefinitionCollection
     {
+        $yaml = $this->tabsService->applyTabs($basePath, $contentBlock->getYaml());
         $basicsRegistry = $this->basicsLoader->loadUncached();
-        $yaml = $this->basicsService->applyBasics($basicsRegistry, $contentBlock->getYaml());
+        $yaml = $this->basicsService->applyBasics($basicsRegistry, $yaml);
         $expandedContentBlock = new LoadedContentBlock(
             name: $contentBlock->getName(),
             yaml: $yaml,

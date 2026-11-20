@@ -28,6 +28,9 @@ use TYPO3\CMS\ContentBlocks\Basics\BasicsLoader;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\ContentBlockValidator;
 use TYPO3\CMS\ContentBlocks\JsonSchemaValidation\JsonSchemaErrorFormatter;
 use TYPO3\CMS\ContentBlocks\Loader\ContentBlockLoader;
+use TYPO3\CMS\ContentBlocks\Loader\LoadedContentBlock;
+use TYPO3\CMS\ContentBlocks\Tabs\TabsService;
+use TYPO3\CMS\ContentBlocks\Utility\ContentBlockPathUtility;
 use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -44,6 +47,7 @@ class LintContentBlocksCommand extends Command
         protected readonly ContentBlockValidator $contentBlockValidator,
         protected readonly JsonSchemaErrorFormatter $errorFormatter,
         protected readonly BasicsLoader $basicsLoader,
+        protected readonly TabsService $tabsService,
     ) {
         parent::__construct();
     }
@@ -81,12 +85,35 @@ class LintContentBlocksCommand extends Command
     {
         $numberOfErrors = 0;
         foreach ($this->contentBlockLoader->loadUncached()->getAll() as $contentBlock) {
+            // Fields of Tabs are part of the Content Block. Skip it to prevent reporting the same errors twice.
+            $numberOfTabErrors = $this->validateTabs($contentBlock, $output);
+            if ($numberOfTabErrors > 0) {
+                $numberOfErrors += $numberOfTabErrors;
+                continue;
+            }
             $validationResult = $this->contentBlockValidator->validateContentBlock($contentBlock);
             if ($validationResult->hasError() === false) {
                 continue;
             }
             $numberOfErrors++;
             $this->renderError($validationResult, $contentBlock->getName(), $contentBlock->getHostExtension(), $contentBlock->getYaml(), $output);
+        }
+        return $numberOfErrors;
+    }
+
+    protected function validateTabs(LoadedContentBlock $contentBlock, OutputInterface $output): int
+    {
+        $numberOfErrors = 0;
+        $absoluteContentBlockPath = GeneralUtility::getFileAbsFileName($contentBlock->getExtPath());
+        foreach ($contentBlock->getYaml()['tabs'] ?? [] as $tabName) {
+            $tabYaml = $this->tabsService->loadTab($absoluteContentBlockPath, $tabName, $contentBlock->getName());
+            $validationResult = $this->contentBlockValidator->validateTab($tabYaml);
+            if ($validationResult->hasError() === false) {
+                continue;
+            }
+            $numberOfErrors++;
+            $name = $contentBlock->getName() . ' ' . ContentBlockPathUtility::getTabsFolder() . '/' . $tabName . '.yaml';
+            $this->renderError($validationResult, $name, $contentBlock->getHostExtension(), $tabYaml, $output);
         }
         return $numberOfErrors;
     }

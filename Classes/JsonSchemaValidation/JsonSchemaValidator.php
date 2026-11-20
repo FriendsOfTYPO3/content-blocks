@@ -60,6 +60,13 @@ readonly class JsonSchemaValidator
         return $result;
     }
 
+    public function validateTab(object $data): ValidationResult
+    {
+        $validator = $this->createValidatorForTab();
+        $result = $validator->validate($data, 'http://typo3.org/tab.json');
+        return $result;
+    }
+
     public function isValidContentElement(object $data): bool
     {
         $result = $this->validateContentElement($data);
@@ -134,6 +141,18 @@ readonly class JsonSchemaValidator
         $validator->resolver()->registerFile(
             'http://typo3.org/basic.json',
             __DIR__ . '/../../JsonSchema/basic.schema.json'
+        );
+        return $validator;
+    }
+
+    protected function createValidatorForTab(): Validator
+    {
+        $validator = (new Validator())
+            ->setStopAtFirstError(false)
+            ->setMaxErrors(100);
+        $validator->resolver()->registerFile(
+            'http://typo3.org/tab.json',
+            __DIR__ . '/../../JsonSchema/tab.schema.json'
         );
         return $validator;
     }

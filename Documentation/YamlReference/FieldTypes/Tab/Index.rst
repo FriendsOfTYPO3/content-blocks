@@ -12,6 +12,9 @@ Prohibited inside `Palettes`.
 Pre-defined tabs as for example the :yaml:`TYPO3/Appearance` tab for Content
 Elements are available as :ref:`Basics <basics-pre-defined>`.
 
+Tabs can also be defined in separate files inside the Content Block. Learn
+more about :ref:`Tabs <api_tabs>`.
+
 Labels
 ======
 

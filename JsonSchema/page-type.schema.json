@@ -14,6 +14,7 @@
     "vendorPrefix": {},
     "priority": {},
     "basics": {},
+    "tabs": {},
     "fields": {},
     "table": {},
     "typeField": {},
@@ -177,6 +178,14 @@
         "basics": {
           "type": "array",
           "description": "Basics which are appended after the fields definition.",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "tabs": {
+          "type": "array",
+          "description": "Tabs from the local \"tabs\" folder, which are appended after the fields definition and before Basics. Reference them by file name without extension.",
           "uniqueItems": true,
           "items": {
             "type": "string"

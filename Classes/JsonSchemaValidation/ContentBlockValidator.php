@@ -53,4 +53,12 @@ readonly class ContentBlockValidator
         $validationResult = $this->jsonSchemaValidator->validateBasic($dataObject);
         return $validationResult;
     }
+
+    public function validateTab(array $tabYaml): ValidationResult
+    {
+        $dataJson = json_encode($tabYaml);
+        $dataObject = json_decode($dataJson);
+        $validationResult = $this->jsonSchemaValidator->validateTab($dataObject);
+        return $validationResult;
+    }
 }

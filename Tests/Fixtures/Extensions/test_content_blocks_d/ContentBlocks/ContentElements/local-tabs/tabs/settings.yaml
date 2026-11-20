@@ -1,0 +1,5 @@
+identifier: options
+label: Options
+fields:
+  - identifier: setting
+    type: Text

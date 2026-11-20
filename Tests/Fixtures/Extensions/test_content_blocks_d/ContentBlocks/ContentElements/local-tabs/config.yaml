@@ -1,0 +1,11 @@
+name: typo3tests/local-tabs
+group: common
+prefixFields: true
+fields:
+  - identifier: header
+    useExistingField: true
+tabs:
+  - media
+  - settings
+basics:
+  - TYPO3/Appearance
