@@ -68,8 +68,9 @@ be done by using the according Basic :yaml:`identifier` and the type
 
 .. note::
 
-   It's not possible to override Basics once they are included as a field type,
-   because they can contain multiple fields, palettes or tabs. If a use case
+   A Basic included as a field type can't be configured as a whole, because it
+   can contain multiple fields, palettes or tabs. Single options of its fields
+   can be changed with :ref:`basicsOverrides <basics-overrides>`. If a use case
    arises, where you need a new "base field", then you probably want to create
    a new :ref:`custom field type <extending-field-types>`. This requires PHP
    code, however.
@@ -144,6 +145,61 @@ descriptions, placeholders and item labels.
 
 All other Content Blocks, which include this Basic, keep using the label from
 the Basic.
+
+.. _basics-overrides:
+
+Override options of Basic fields
+================================
+
+Sometimes a Content Block needs a slightly different configuration for a field
+added by a Basic, e.g. another default value. Instead of copying the whole
+Basic, single options can be changed with :yaml:`basicsOverrides`. The
+overrides are keyed by the identifier of the field.
+
+.. code-block:: yaml
+   :caption: EXT:your_extension/ContentBlocks/ContentElements/teaser/config.yaml
+
+    name: example/teaser
+    basics:
+        - TYPO3/Appearance
+    basicsOverrides:
+        frame_class:
+            default: ruler-before
+        a_basic_field:
+            label: Teaser specific label
+            required: true
+
+The overrides only apply to this Content Block. All other Content Blocks, which
+include the same Basic, keep the original configuration.
+
+The following options can be overridden:
+
+*  :yaml:`label`
+*  :yaml:`description`
+*  :yaml:`default`
+*  :yaml:`required`
+*  :yaml:`readOnly`
+*  :yaml:`minitems`
+*  :yaml:`maxitems`
+
+Only fields on root level or inside a :ref:`Palette <field_type_palette>` on
+root level can be targeted. This includes fields from Basics, which are added
+with the global :yaml:`basics` option or as field type :yaml:`Basic`. Fields
+inside a :ref:`Collection <field_type_collection>` can't be overridden.
+
+An exception is thrown, if the identifier doesn't match any field or if an
+unsupported option is used.
+
+.. note::
+
+    Overridden labels and descriptions behave the same as labels defined in
+    the :file:`config.yaml`. A key in the :file:`labels.xlf` of the Content
+    Block still takes precedence. See :ref:`basics-labels`.
+
+.. note::
+
+    Overriding the items of a select field is not supported. Define the field
+    directly in your Content Block instead, if you need different items.
 
 
 Nested Basics

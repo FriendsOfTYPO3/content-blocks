@@ -130,6 +130,27 @@ Common root options
 
    Learn more about the concept of :ref:`Basics <basics>`.
 
+.. confval:: basicsOverrides
+   :name: root-basicsOverrides
+   :required: false
+   :type: array
+
+   Overrides single options of fields added by :ref:`Basics <basics>`. The
+   overrides are keyed by the identifier of a field on root level or inside a
+   root level Palette. Supported options are :yaml:`label`,
+   :yaml:`description`, :yaml:`default`, :yaml:`required`, :yaml:`readOnly`,
+   :yaml:`minitems` and :yaml:`maxitems`.
+
+   ..  code-block:: yaml
+
+       basics:
+           - TYPO3/Appearance
+       basicsOverrides:
+           frame_class:
+               default: ruler-before
+
+   Learn more about :ref:`overriding Basic fields <basics-overrides>`.
+
 .. confval:: fields
    :name: root-fields
    :required: false
